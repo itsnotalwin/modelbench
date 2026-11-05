@@ -1,12 +1,14 @@
 # Website — benchmark prompt
 
 > **Uploader instruction (do NOT send this header to the model):**
-> Save the model's output and upload it to the `inbox/` folder on GitHub, renamed exactly as:
+> **The model names its folder** (as the prompt below requires — e.g. `the-grey-index/`).
+> **You name the zip.** Zip that model-named folder as-is (don't rename the folder inside),
+> name the zip exactly:
 >
-> `website__{model}__{YYYY-MM-DD}__v1.html` (or `.zip` — zip the model folder; it must contain index.html at its root)
+> `website__{model}__{YYYY-MM-DD}__v1.zip`
 >
-> Example: `website__claude-sonnet-4-5__2026-11-06__v1.html`
-> The GitHub Action (`auto-sort`) then moves it to `runs/{date}_{model}_website_v1/` automatically.
+> Example: `website__claude-sonnet-4-5__2026-11-06__v1.zip`
+> The GitHub Action (`auto-sort`) then moves it to `runs/{date}_{model}_website_v1/{model-folder}/` automatically — the model's folder name is preserved.
 
 ---
 

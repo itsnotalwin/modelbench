@@ -29,7 +29,7 @@ def load_meta(run_dir: Path) -> dict:
     meta.setdefault("path", f"runs/{slug}/index.html")
     meta.setdefault("scores", {"visual": None, "functionality": None, "prompt_following": None})
     meta.setdefault("notes", "")
-    meta.setdefault("files", sorted(p.name for p in run_dir.iterdir() if p.is_file()))
+    meta.setdefault("files", sorted(str(p.relative_to(run_dir)).replace("\\", "/") for p in run_dir.rglob("*") if p.is_file()))
     return meta
 
 

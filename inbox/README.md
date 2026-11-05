@@ -17,12 +17,13 @@ Examples:
 
 | File you upload | Action moves it to |
 |---|---|
-| `website__claude-sonnet-4-5__2026-11-06__v1.zip` | `runs/2026-11-06_claude-sonnet-4-5_website_v1/` |
+| `website__claude-sonnet-4-5__2026-11-06__v1.zip` (contains `the-grey-index/`) | `runs/2026-11-06_claude-sonnet-4-5_website_v1/the-grey-index/` |
 | `game2d__gpt-5__2026-11-06__v1.html` | `runs/2026-11-06_gpt-5_game2d_v1/` |
 | `game3d__grok-4-1__2026-11-07__v2.html` | `runs/2026-11-07_grok-4-1_game3d_v2/` |
 
 Rules:
-- **`.zip`** (website / SaaS folder outputs): zip must contain `index.html` at the root of the folder inside the zip.
+- **The model names its folder, you name the zip.** Zip the model's own named folder as-is — do not rename the folder inside the zip. That folder name is preserved by the Action.
+- **`.zip`** (website / SaaS folder outputs): zip contains the model-named folder, with `index.html` at the root of that folder. The Action unpacks it to `runs/.../{model-folder}/`.
 - **`.html`** (2D / 3D games, or single-file outputs): becomes `runs/.../index.html`.
 - The Action also writes a `meta.json` (scores start empty) and rebuilds `manifest.json`, then commits itself. Takes ~30s.
 - Files with a bad name are left in `inbox/` — rename and re-upload, or run the Action manually (Actions tab → "Auto-sort inbox uploads" → Run workflow).

@@ -9,8 +9,8 @@
       "date": "2026-11-06",
       "version": 1,
       "title": "The Grey Index \u2014 An Atlas from Black to White",
-      "entry": "index.html",
-      "path": "runs/2026-11-06_crouton-alpha_website_v1/index.html",
+      "entry": "the-grey-index/index.html",
+      "path": "runs/2026-11-06_crouton-alpha_website_v1/the-grey-index/index.html",
       "source_file": "WEBTESTCROUTON/the-grey-index/ (uploaded unmodified)",
       "scores": {
         "visual": null,
@@ -19,12 +19,12 @@
       },
       "notes": "",
       "files": [
-        "README.md",
-        "app.js",
-        "favicon.svg",
-        "index.html",
         "meta.json",
-        "styles.css"
+        "the-grey-index/README.md",
+        "the-grey-index/app.js",
+        "the-grey-index/favicon.svg",
+        "the-grey-index/index.html",
+        "the-grey-index/styles.css"
       ]
     },
     {
@@ -45,6 +45,20 @@
       "notes": "Preview shows the single-file HTML edition (clearline-ops.html). Full Python app is in clearline-ops/ subfolder \u2014 run locally with: python clearline-ops/app.py",
       "files": [
         "clearline-ops.html",
+        "clearline-ops/.gitignore",
+        "clearline-ops/README.md",
+        "clearline-ops/app.py",
+        "clearline-ops/clearline/__init__.py",
+        "clearline-ops/clearline/db.py",
+        "clearline-ops/clearline/domain.py",
+        "clearline-ops/clearline/web.py",
+        "clearline-ops/data/.gitkeep",
+        "clearline-ops/requirements.txt",
+        "clearline-ops/run.bat",
+        "clearline-ops/run.sh",
+        "clearline-ops/tests/test_db.py",
+        "clearline-ops/tests/test_domain.py",
+        "clearline-ops/tests/test_web.py",
         "meta.json"
       ]
     },

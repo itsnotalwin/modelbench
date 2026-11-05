@@ -1,12 +1,15 @@
 # SaaS — clearing agents — benchmark prompt
 
 > **Uploader instruction (do NOT send this header to the model):**
-> Save the model's output and upload it to the `inbox/` folder on GitHub, renamed exactly as:
+> **The model names its folder** (as the prompt below requires — e.g. `clearline-ops/`).
+> **You name the zip.** Zip that model-named folder as-is (don't rename the folder inside),
+> name the zip exactly:
 >
-> `saas__{model}__{YYYY-MM-DD}__v1.zip` (zip the model folder; it must contain index.html at its root — or `.html` if the model gave a single file)
+> `saas__{model}__{YYYY-MM-DD}__v1.zip`
 >
 > Example: `saas__claude-sonnet-4-5__2026-11-06__v1.zip`
-> The GitHub Action (`auto-sort`) then moves it to `runs/{date}_{model}_saas_v1/` automatically.
+> The GitHub Action (`auto-sort`) then moves it to `runs/{date}_{model}_saas_v1/{model-folder}/` automatically — the model's folder name is preserved.
+> (If the model gave a single `.html` file instead of a folder, upload that as `saas__{model}__{YYYY-MM-DD}__v1.html`.)
 
 ---
 

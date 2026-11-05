@@ -6,7 +6,9 @@ Accepted inbox filenames (case-insensitive extension):
   {category}__{model}__{YYYY-MM-DD}__v{n}.zip
 Categories: website | saas | game2d | game3d
 Model: lowercase letters, digits, hyphens (e.g. claude-sonnet-4-5, gpt-5, grok-4-1)
-.zip must contain a single top folder (or files at root) with index.html at its root.
+.zip must contain the model's own named folder with index.html at its root.
+The model's folder name is preserved: runs/<slug>/<model-folder>/index.html
+You name the zip (benchmark filename above); the model names the folder inside it.
 """
 import json
 import re
@@ -44,7 +46,7 @@ def slug_for(info) -> str:
     return f"{info['date']}_{info['model']}_{info['category']}_v{info['v']}"
 
 
-def write_meta(run_dir: Path, info, source_name: str) -> None:
+def write_meta(run_dir: Path, info, source_name: str, entry: str = "index.html") -> None:
     meta_path = run_dir / "meta.json"
     if meta_path.exists():
         return
@@ -54,8 +56,8 @@ def write_meta(run_dir: Path, info, source_name: str) -> None:
         "category": info["category"],
         "date": info["date"],
         "version": info["v"],
-        "entry": "index.html",
-        "path": f"runs/{run_dir.name}/index.html",
+        "entry": entry,
+        "path": f"runs/{run_dir.name}/{entry}",
         "source_file": source_name,
         "scores": {"visual": None, "functionality": None, "prompt_following": None},
         "notes": "",
@@ -72,7 +74,10 @@ def safe_extract(zf: zipfile.ZipFile, dest: Path) -> None:
     zf.extractall(dest)
 
 
-def handle_zip(src: Path, run_dir: Path) -> None:
+def handle_zip(src: Path, run_dir: Path) -> str:
+    """Preserve the model's own folder name: runs/<slug>/<model-folder>/index.html.
+    Returns the entry path relative to run_dir. Falls back to flat layout if the
+    zip has files at its root (no top folder)."""
     run_dir.mkdir(parents=True, exist_ok=True)
     tmp = run_dir.parent / (run_dir.name + ".__tmp__")
     if tmp.exists():
@@ -80,21 +85,30 @@ def handle_zip(src: Path, run_dir: Path) -> None:
     tmp.mkdir(parents=True)
     with zipfile.ZipFile(src) as zf:
         safe_extract(zf, tmp)
-    # If zip has a single top-level folder, use its contents; else use root.
     children = [p for p in tmp.iterdir() if not p.name.startswith("__MACOSX")]
     if len(children) == 1 and children[0].is_dir():
-        src_root = children[0]
-    else:
-        src_root = tmp
-    if not (src_root / "index.html").exists():
-        shutil.rmtree(tmp, ignore_errors=True)
-        raise ValueError("zip must contain index.html at the root of its folder")
-    for item in src_root.iterdir():
-        dest = run_dir / item.name
+        # Model-named folder: keep it as a subfolder of the run.
+        folder = children[0]
+        if not (folder / "index.html").exists():
+            shutil.rmtree(tmp, ignore_errors=True)
+            raise ValueError("zip must contain index.html at the root of its folder")
+        entry = f"{folder.name}/index.html"
+        dest = run_dir / folder.name
         if dest.exists():
-            shutil.rmtree(dest) if dest.is_dir() else dest.unlink()
-        shutil.move(str(item), str(dest))
+            shutil.rmtree(dest)
+        shutil.move(str(folder), str(dest))
+    else:
+        if not (tmp / "index.html").exists():
+            shutil.rmtree(tmp, ignore_errors=True)
+            raise ValueError("zip must contain index.html at the root of its folder")
+        entry = "index.html"
+        for item in list(tmp.iterdir()):
+            dest = run_dir / item.name
+            if dest.exists():
+                shutil.rmtree(dest) if dest.is_dir() else dest.unlink()
+            shutil.move(str(item), str(dest))
     shutil.rmtree(tmp, ignore_errors=True)
+    return entry
 
 
 def handle_html(src: Path, run_dir: Path) -> None:
@@ -117,20 +131,21 @@ def main() -> int:
             continue
         slug = slug_for(info)
         run_dir = RUNS / slug
-        if run_dir.exists() and (run_dir / "index.html").exists():
+        if run_dir.exists() and list(run_dir.rglob("index.html")):
             skipped.append(f.name)
             print(f"SKIP (already exists): {slug}")
             continue
         try:
+            entry = "index.html"
             if f.suffix.lower() == ".zip":
-                handle_zip(f, run_dir)
+                entry = handle_zip(f, run_dir)
             else:
                 handle_html(f, run_dir)
         except Exception as e:
             print(f"ERROR {f.name}: {e}")
             skipped.append(f.name)
             continue
-        write_meta(run_dir, info, f.name)
+        write_meta(run_dir, info, f.name, entry)
         f.unlink()
         moved.append(slug)
         print(f"MOVED {f.name} -> runs/{slug}/")
