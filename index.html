@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ModelBench — benchmark inspector</title>
+<style>
+:root{--bg:#0a0a0a;--card:#141414;--line:#262626;--fg:#f5f5f5;--mut:#a3a3a3;--acc:#fff}
+*{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+a{color:var(--fg)}header{padding:22px 20px 14px;border-bottom:1px solid var(--line)}
+h1{margin:0;font-size:22px;letter-spacing:.02em}header p{margin:4px 0 0;color:var(--mut);font-size:13px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;padding:14px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:5}
+.bar select,.bar input{background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:inherit}
+.bar input{min-width:220px;flex:1}.bar button{background:var(--fg);color:#000;border:0;border-radius:8px;padding:8px 14px;font-weight:600;cursor:pointer}
+.stats{display:flex;gap:18px;flex-wrap:wrap;padding:12px 20px;color:var(--mut);font-size:13px}
+.stats b{color:var(--fg)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;padding:6px 20px 28px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer}
+.card:hover{border-color:#555}.card h3{margin:0 0 4px;font-size:16px;word-break:break-word}
+.card .meta{color:var(--mut);font-size:12px;word-break:break-all}
+.tag{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:1px 8px;font-size:11px;margin:6px 6px 0 0;text-transform:uppercase;letter-spacing:.05em}
+.scores{display:flex;gap:12px;margin-top:10px;font-size:12px;color:var(--mut);flex-wrap:wrap}
+.scores b{color:var(--fg)}
+.empty{padding:40px 20px;color:var(--mut)}
+dialog{border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:14px;width:min(1180px,96vw);height:min(860px,94vh);padding:0}
+dialog::backdrop{background:rgba(0,0,0,.7)}
+.dhead{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.dhead h2{margin:0;font-size:17px;flex:1;word-break:break-word}.dhead a,.dhead button{border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;padding:7px 11px;text-decoration:none;cursor:pointer;font:inherit}
+.dbody{display:grid;grid-template-columns:1fr 280px;height:calc(100% - 53px)}
+.dbody iframe{width:100%;height:100%;border:0;background:#fff}
+.side{border-left:1px solid var(--line);padding:14px;overflow:auto;font-size:13px}.side h4{margin:14px 0 6px}.side h4:first-child{margin-top:0}
+.side pre{white-space:pre-wrap;word-break:break-word;color:var(--mut)}
+@media(max-width:820px){.dbody{grid-template-columns:1fr}.side{border-left:0;border-top:1px solid var(--line)}}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px;height:calc(100% - 53px)}
+.cmp iframe{width:100%;height:100%;border:1px solid var(--line);border-radius:10px;background:#fff}
+@media(max-width:820px){.cmp{grid-template-columns:1fr}}
+.chk{margin-left:auto;font-size:12px;color:var(--mut);display:flex;gap:5px;align-items:center}
+</style>
+</head>
+<body>
+<header><h1>ModelBench</h1><p>Benchmark inspector — website · SaaS · 2D game · 3D game. Uploads land in <code>inbox/</code> and are auto-sorted by GitHub Actions into <code>runs/</code>.</p></header>
+<div class="bar">
+  <select id="fCat"><option value="">All prompts</option><option>website</option><option>saas</option><option>game2d</option><option>game3d</option></select>
+  <select id="fModel"><option value="">All models</option></select>
+  <select id="fSort"><option value="date">Newest</option><option value="model">Model A–Z</option><option value="score">Score ↓</option></select>
+  <input id="fSearch" placeholder="Search model, slug, notes…">
+  <button id="btnCompare" disabled>Compare (0)</button>
+</div>
+<div class="stats" id="stats">Loading…</div>
+<main class="grid" id="grid"></main>
+<div class="empty" id="empty" hidden>No runs yet. Upload a file to <code>inbox/</code> named <code>website__your-model__2026-11-06__v1.html</code> (or <code>.zip</code>) — the Action files it into <code>runs/</code> automatically.</div>
+
+<dialog id="dlg"><div class="dhead"><h2 id="dTitle"></h2><a id="dOpen" target="_blank" rel="noopener">Open ↗</a><button id="dClose">Close</button></div>
+<div class="dbody"><iframe id="dFrame" title="preview" sandbox="allow-scripts allow-same-origin"></iframe><aside class="side" id="dSide"></aside></div></dialog>
+<dialog id="dlgCmp"><div class="dhead"><h2>Side-by-side compare</h2><button id="cClose">Close</button></div><div class="cmp" id="cmpBody"></div></dialog>
+
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+let RUNS=[], selected=new Set();
+const avg=r=>{const s=r.scores||{};const v=[s.visual,s.functionality,s.prompt_following].filter(x=>typeof x==="number");return v.length?(v.reduce((a,b)=>a+b,0)/v.length).toFixed(1):null};
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function render(){
+  const cat=$("fCat").value, model=$("fModel").value, q=$("fSearch").value.toLowerCase(), sort=$("fSort").value;
+  let list=RUNS.filter(r=>(!cat||r.category===cat)&&(!model||r.model===model)&&(!q||JSON.stringify(r).toLowerCase().includes(q)));
+  if(sort==="model")list.sort((a,b)=>a.model.localeCompare(b.model));
+  else if(sort==="score")list.sort((a,b)=>(avg(b)||-1)-(avg(a)||-1));
+  else list.sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+  $("empty").hidden=list.length>0;
+  $("grid").innerHTML=list.map(r=>{
+    const s=r.scores||{}, a=avg(r);
+    return `<article class="card" data-slug="${esc(r.slug)}" tabindex="0" role="button" aria-label="Open ${esc(r.slug)}">
+      <h3>${esc(r.model)}</h3><div class="meta">${esc(r.slug)}<br>${esc(r.date||"")} · ${esc(r.path||"")}</div>
+      <span class="tag">${esc(r.category)}</span>${a?`<span class="tag">avg ${a}/10</span>`:""}
+      <div class="scores"><span>Visual <b>${s.visual??"—"}</b></span><span>Function <b>${s.functionality??"—"}</b></span><span>Prompt <b>${s.prompt_following??"—"}</b></span></div>
+      ${r.notes?`<p style="color:var(--mut);font-size:13px">${esc(r.notes)}</p>`:""}
+      <label class="chk"><input type="checkbox" data-cmp="${esc(r.slug)}" ${selected.has(r.slug)?"checked":""}> compare</label></article>`;
+  }).join("");
+  document.querySelectorAll(".card").forEach(c=>{
+    c.addEventListener("click",e=>{if(e.target.matches("[data-cmp]"))return;openRun(c.dataset.slug)});
+    c.addEventListener("keydown",e=>{if(e.key==="Enter")openRun(c.dataset.slug)});
+  });
+  document.querySelectorAll("[data-cmp]").forEach(cb=>cb.addEventListener("change",()=>{
+    cb.checked?selected.add(cb.dataset.cmp):selected.delete(cb.dataset.cmp);
+    if(selected.size>2){selected.delete([...selected][0]);render();return}
+    $("btnCompare").disabled=selected.size!==2;$("btnCompare").textContent=`Compare (${selected.size})`;
+  }));
+  const cats={}; RUNS.forEach(r=>cats[r.category]=(cats[r.category]||0)+1);
+  $("stats").innerHTML=`<span><b>${RUNS.length}</b> runs</span>`+Object.entries(cats).map(([k,v])=>`<span>${esc(k)}: <b>${v}</b></span>`).join("")+`<span>models: <b>${new Set(RUNS.map(r=>r.model)).size}</b></span>`;
+}
+function openRun(slug){
+  const r=RUNS.find(x=>x.slug===slug); if(!r)return;
+  $("dTitle").textContent=`${r.model} — ${r.category}`;
+  $("dOpen").href=r.path; $("dFrame").src=r.path;
+  const s=r.scores||{};
+  $("dSide").innerHTML=`<h4>Run</h4><pre>${esc(r.slug)}\n${esc(r.date||"")}\n${esc(r.path||"")}</pre>
+  <h4>Scores (/10)</h4><pre>Visual: ${s.visual??"—"}\nFunctionality: ${s.functionality??"—"}\nPrompt-following: ${s.prompt_following??"—"}\nAverage: ${avg(r)??"—"}</pre>
+  <h4>Notes</h4><pre>${esc(r.notes||"—")}</pre><h4>Files</h4><pre>${esc((r.files||[]).join("\n")||"—")}</pre>
+  <p style="color:var(--mut)">To score: edit <code>${esc(r.slug)}/meta.json</code> on GitHub, commit — the Action rebuilds the manifest.</p>`;
+  $("dlg").showModal();
+}
+$("dClose").onclick=()=>{$("dlg").close();$("dFrame").src="about:blank"};
+$("cClose").onclick=()=>$("dlgCmp").close();
+$("btnCompare").onclick=()=>{
+  const a=RUNS.find(r=>r.slug===[...selected][0]), b=RUNS.find(r=>r.slug===[...selected][1]);
+  if(!a||!b)return;
+  $("cmpBody").innerHTML=[a,b].map(r=>`<div><p style="margin:4px 2px;font-size:13px"><b>${esc(r.model)}</b> · ${esc(r.category)} · avg ${avg(r)??"—"}/10 <a href="${esc(r.path)}" target="_blank" rel="noopener">open ↗</a></p><iframe title="${esc(r.slug)}" src="${esc(r.path)}" sandbox="allow-scripts allow-same-origin"></iframe></div>`).join("");
+  $("dlgCmp").showModal();
+};
+["fCat","fModel","fSort"].forEach(id=>$(id).addEventListener("change",render));
+$("fSearch").addEventListener("input",render);
+fetch("manifest.json",{cache:"no-store"}).then(r=>r.json()).then(m=>{
+  RUNS=m.runs||[];
+  const models=[...new Set(RUNS.map(r=>r.model))].sort();
+  $("fModel").innerHTML='<option value="">All models</option>'+models.map(x=>`<option>${esc(x)}</option>`).join("");
+  render();
+}).catch(()=>{$("stats").textContent="Could not load manifest.json — serve over http (GitHub Pages or python -m http.server), not file://."});
+</script>
+</body>
+</html>

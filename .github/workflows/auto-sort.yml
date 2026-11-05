@@ -1,0 +1,38 @@
+name: Auto-sort inbox uploads
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "inbox/**"
+      - "runs/**/meta.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: auto-sort
+  cancel-in-progress: false
+
+jobs:
+  sort:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Sort inbox into runs/ and rebuild manifest
+        run: python tools/sort_inbox.py
+      - name: Commit sorted runs (if any)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A runs manifest.json inbox
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Auto-sort: move inbox uploads into runs/"
+            git push
+          fi
