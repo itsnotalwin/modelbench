@@ -32,7 +32,7 @@ Engineering:
 - Sensible project structure, security basics (input validation, auth where appropriate), and tests for the core logic.
 
 Deliverable:
-- Everything inside a single self-contained folder with its own creative, memorable name (lowercase-kebab-case).
+- **NAMING (mandatory):** Everything inside a single self-contained folder named EXACTLY with the benchmark prefix: `{YYYY-MM-DD}_{model-slug}_saas_v1` — for example `2026-11-06_claude-sonnet-4-5_saas_v1`. Use today's date and your own model name in lowercase hyphens. Do NOT use a creative folder name (no `clearline-ops`, no `my-app`).
 - Include a README.md covering what it is, how to run it, the architecture, what is implemented, and known limitations.
 
 Process:

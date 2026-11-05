@@ -24,7 +24,7 @@ Constraints:
 - Static only, no build step, ready to deploy on GitHub Pages as-is. Use relative paths so it works from a repository subfolder. Avoid external dependencies; if one is truly worth it, pin an exact version and justify it.
 
 Deliverable:
-- Everything inside a single self-contained folder with its own creative, memorable name (lowercase-kebab-case). The entry point is index.html at the root of that folder.
+- **NAMING (mandatory):** Everything inside a single self-contained folder named EXACTLY with the benchmark prefix: `{YYYY-MM-DD}_{model-slug}_website_v1` — for example `2026-11-06_claude-sonnet-4-5_website_v1`. Use today's date and your own model name in lowercase hyphens. Do NOT use a creative folder name (no `the-grey-index`, no `my-site`). The entry point is index.html at the root of that folder.
 - Include a short README.md in the folder covering the concept, key design and technical decisions, and what you would improve with more time.
 
 Process:

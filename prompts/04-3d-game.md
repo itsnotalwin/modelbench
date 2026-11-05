@@ -30,3 +30,4 @@ Process:
 - Do not ask me questions. Make every decision yourself.
 - Before finishing, review your code for bugs, runtime errors, soft-locks and balance problems, and fix them.
 - Deliver the finished file (if you cannot create files directly, output it in full in a single code block), followed by a note of under 150 words covering the concept, the controls, and what you are proudest of.
+- **NAMING (mandatory):** State the file name at the top of your reply, named EXACTLY with the benchmark prefix: `game3d__{model-slug}__{YYYY-MM-DD}__v1.html` — for example `game3d__claude-sonnet-4-5__2026-11-06__v1.html`. Use today's date and your own model name in lowercase hyphens. Do NOT use a creative file name.
