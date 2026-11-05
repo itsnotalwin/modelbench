@@ -1,14 +1,13 @@
 # Website — benchmark prompt
 
 > **Uploader instruction (do NOT send this header to the model):**
-> **The model names its folder** (as the prompt below requires — e.g. `the-grey-index/`).
-> **You name the zip.** Zip that model-named folder as-is (don't rename the folder inside),
-> name the zip exactly:
+> **The model creates a folder, but it must be renamed to the benchmark prefix.**
+> Rename the model's folder to `{date}_{model}_{category}_v1`, then zip it and name the zip:
 >
 > `website__{model}__{YYYY-MM-DD}__v1.zip`
 >
-> Example: `website__claude-sonnet-4-5__2026-11-06__v1.zip`
-> The GitHub Action (`auto-sort`) then moves it to `runs/{date}_{model}_website_v1/{model-folder}/` automatically — the model's folder name is preserved.
+> Example: rename `the-grey-index/` → `2026-11-06_claude-sonnet-4-5_website_v1/`, zip it as `website__claude-sonnet-4-5__2026-11-06__v1.zip`
+> The GitHub Action (`auto-sort`) also renames it automatically on upload to `runs/{date}_{model}_website_v1/` — so the repo folder always uses the prefix, never the model's creative name. Contents are untouched.
 
 ---
 

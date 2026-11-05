@@ -9,8 +9,8 @@
       "date": "2026-11-06",
       "version": 1,
       "title": "The Grey Index \u2014 An Atlas from Black to White",
-      "entry": "the-grey-index/index.html",
-      "path": "runs/2026-11-06_crouton-alpha_website_v1/the-grey-index/index.html",
+      "entry": "index.html",
+      "path": "runs/2026-11-06_crouton-alpha_website_v1/index.html",
       "source_file": "WEBTESTCROUTON/the-grey-index/ (uploaded unmodified)",
       "scores": {
         "visual": null,
@@ -19,12 +19,12 @@
       },
       "notes": "",
       "files": [
+        "README.md",
+        "app.js",
+        "favicon.svg",
+        "index.html",
         "meta.json",
-        "the-grey-index/README.md",
-        "the-grey-index/app.js",
-        "the-grey-index/favicon.svg",
-        "the-grey-index/index.html",
-        "the-grey-index/styles.css"
+        "styles.css"
       ]
     },
     {

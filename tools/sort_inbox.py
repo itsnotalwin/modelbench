@@ -6,9 +6,11 @@ Accepted inbox filenames (case-insensitive extension):
   {category}__{model}__{YYYY-MM-DD}__v{n}.zip
 Categories: website | saas | game2d | game3d
 Model: lowercase letters, digits, hyphens (e.g. claude-sonnet-4-5, gpt-5, grok-4-1)
-.zip must contain the model's own named folder with index.html at its root.
-The model's folder name is preserved: runs/<slug>/<model-folder>/index.html
-You name the zip (benchmark filename above); the model names the folder inside it.
+.zip must contain a single top folder with index.html at its root.
+That folder is RENAMED to the benchmark prefix on upload:
+runs/{date}_{model}_{category}_v{n}/index.html
+(e.g. website + claude-sonnet-4-5 + 2026-11-06 + v1 -> 2026-11-06_claude-sonnet-4-5_website_v1/)
+The model's creative folder name is discarded; the contents are untouched.
 """
 import json
 import re
@@ -75,9 +77,9 @@ def safe_extract(zf: zipfile.ZipFile, dest: Path) -> None:
 
 
 def handle_zip(src: Path, run_dir: Path) -> str:
-    """Preserve the model's own folder name: runs/<slug>/<model-folder>/index.html.
-    Returns the entry path relative to run_dir. Falls back to flat layout if the
-    zip has files at its root (no top folder)."""
+    """Rename the model's folder to the benchmark prefix: the folder inside the
+    zip (whatever the model called it) becomes runs/<slug>/, contents untouched.
+    Returns the entry path relative to run_dir (always index.html)."""
     run_dir.mkdir(parents=True, exist_ok=True)
     tmp = run_dir.parent / (run_dir.name + ".__tmp__")
     if tmp.exists():
@@ -87,28 +89,19 @@ def handle_zip(src: Path, run_dir: Path) -> str:
         safe_extract(zf, tmp)
     children = [p for p in tmp.iterdir() if not p.name.startswith("__MACOSX")]
     if len(children) == 1 and children[0].is_dir():
-        # Model-named folder: keep it as a subfolder of the run.
-        folder = children[0]
-        if not (folder / "index.html").exists():
-            shutil.rmtree(tmp, ignore_errors=True)
-            raise ValueError("zip must contain index.html at the root of its folder")
-        entry = f"{folder.name}/index.html"
-        dest = run_dir / folder.name
-        if dest.exists():
-            shutil.rmtree(dest)
-        shutil.move(str(folder), str(dest))
+        src_root = children[0]  # model's folder -> renamed to run_dir (the prefix)
     else:
-        if not (tmp / "index.html").exists():
-            shutil.rmtree(tmp, ignore_errors=True)
-            raise ValueError("zip must contain index.html at the root of its folder")
-        entry = "index.html"
-        for item in list(tmp.iterdir()):
-            dest = run_dir / item.name
-            if dest.exists():
-                shutil.rmtree(dest) if dest.is_dir() else dest.unlink()
-            shutil.move(str(item), str(dest))
+        src_root = tmp
+    if not (src_root / "index.html").exists():
+        shutil.rmtree(tmp, ignore_errors=True)
+        raise ValueError("zip must contain index.html at the root of its folder")
+    for item in list(src_root.iterdir()):
+        dest = run_dir / item.name
+        if dest.exists():
+            shutil.rmtree(dest) if dest.is_dir() else dest.unlink()
+        shutil.move(str(item), str(dest))
     shutil.rmtree(tmp, ignore_errors=True)
-    return entry
+    return "index.html"
 
 
 def handle_html(src: Path, run_dir: Path) -> None:
