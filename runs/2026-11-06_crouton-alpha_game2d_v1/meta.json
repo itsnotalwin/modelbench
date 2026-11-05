@@ -1,0 +1,17 @@
+{
+  "slug": "2026-11-06_crouton-alpha_game2d_v1",
+  "model": "crouton-alpha",
+  "category": "game2d",
+  "date": "2026-11-06",
+  "version": 1,
+  "title": "Kindling Drift",
+  "entry": "index.html",
+  "path": "runs/2026-11-06_crouton-alpha_game2d_v1/index.html",
+  "source_file": "PROMPT3GAME/kindling-drift.html (uploaded unmodified, saved as index.html)",
+  "scores": {
+    "visual": null,
+    "functionality": null,
+    "prompt_following": null
+  },
+  "notes": ""
+}

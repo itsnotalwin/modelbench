@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Grey Index — An Atlas from Black to White</title>
+<meta name="description" content="An interactive monochrome atlas: 256 shades, a contrast lab, a halftone press, a type tester and an archive of greys found in the world.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<header class="site-header">
+  <a class="wordmark" href="#top" aria-label="The Grey Index — home">
+    <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" fill="#000"/><rect x="8" y="8" width="16" height="16" fill="#fff"/><rect x="13" y="13" width="6" height="6" fill="#000"/></svg>
+    <span>The Grey Index</span>
+  </a>
+  <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primaryNav">Menu</button>
+  <nav id="primaryNav" aria-label="Sections">
+    <a href="#ramp">01 Ramp</a>
+    <a href="#contrast">02 Contrast</a>
+    <a href="#halftone">03 Halftone</a>
+    <a href="#type">04 Type</a>
+    <a href="#archive">05 Archive</a>
+    <a href="#essay">06 Essay</a>
+  </nav>
+  <p class="shade-day" id="shadeDay" title="Today's shade, set by the date">Shade of the day —</p>
+</header>
+
+<main id="main">
+  <!-- HERO -->
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <div class="hero-inner">
+      <p class="eyebrow">An interactive atlas · Est. 0—255</p>
+      <h1 id="hero-title"><span class="hero-num" id="heroNum">128</span><span class="hero-arrow" aria-hidden="true">→</span><span class="hero-word">Grey</span></h1>
+      <p class="lede">Between the two certainties — black and white — lies everything worth looking at twice. This index maps all 256 shades between them, and everything the world has made out of them.</p>
+
+      <div class="hero-control">
+        <label for="heroRange">Luminosity <output id="heroOut" for="heroRange">128 · #808080</output></label>
+        <input type="range" id="heroRange" min="0" max="255" step="1" value="128" aria-describedby="heroHint">
+        <p id="heroHint" class="hint">Drag, or use arrow keys when focused. The page background follows. Text flips automatically to stay legible.</p>
+        <div class="hero-actions">
+          <button type="button" id="copyHero" class="btn btn-dark">Copy hex</button>
+          <a class="btn btn-ghost" href="#ramp">Enter the ramp ↓</a>
+        </div>
+      </div>
+
+      <dl class="hero-meta">
+        <div><dt>Shades</dt><dd>256</dd></div>
+        <div><dt>Colour</dt><dd>None</dd></div>
+        <div><dt>Assets</dt><dd>Drawn in code</dd></div>
+        <div><dt>Build</dt><dd>None</dd></div>
+      </dl>
+    </div>
+    <div class="hero-scale" aria-hidden="true"><span>0</span><div class="scale-track"></div><span>255</span></div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track" id="marqueeTrack"></div>
+  </div>
+
+  <!-- 01 RAMP -->
+  <section id="ramp" aria-labelledby="ramp-title" class="section">
+    <header class="section-head">
+      <p class="section-no">01 / The Ramp</p>
+      <h2 id="ramp-title">Every shade, in order.</h2>
+      <p>All 256 greys from black to white. Tab into the grid and use arrow keys to move; <kbd>Enter</kbd> copies the hex value. Click any swatch to inspect it.</p>
+    </header>
+    <div class="ramp-layout">
+      <div class="ramp-grid" id="rampGrid" role="grid" aria-label="256 shades of grey"></div>
+      <aside class="inspector" aria-live="polite" aria-labelledby="inspector-title">
+        <h3 id="inspector-title">Inspector</h3>
+        <div class="inspector-swatch" id="inspSwatch" style="background:#808080"></div>
+        <dl class="inspector-data">
+          <div><dt>Value</dt><dd id="inspValue">128</dd></div>
+          <div><dt>Hex</dt><dd id="inspHex">#808080</dd></div>
+          <div><dt>RGB</dt><dd id="inspRgb">128 · 128 · 128</dd></div>
+          <div><dt>Relative luminance</dt><dd id="inspLum">0.2159</dd></div>
+          <div><dt>Contrast on black</dt><dd id="inspOnBlack">5.32 : 1</dd></div>
+          <div><dt>Contrast on white</dt><dd id="inspOnWhite">3.95 : 1</dd></div>
+          <div><dt>Names</dt><dd id="inspName">—</dd></div>
+        </dl>
+        <div class="row">
+          <button type="button" class="btn btn-dark" id="copyInsp">Copy hex</button>
+          <button type="button" class="btn btn-ghost" id="sendToContrast">Send to Contrast Lab</button>
+        </div>
+        <p class="hint">Named shades are historical Web colour names that happen to be grey.</p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- 02 CONTRAST -->
+  <section id="contrast" aria-labelledby="contrast-title" class="section section-alt">
+    <header class="section-head">
+      <p class="section-no">02 / Contrast Lab</p>
+      <h2 id="contrast-title">Can you read it?</h2>
+      <p>Set a text shade and a background shade. The lab calculates the WCAG contrast ratio and grades it — the same maths your browser and screen reader use.</p>
+    </header>
+    <div class="contrast-grid">
+      <div class="contrast-controls">
+        <fieldset>
+          <legend>Text</legend>
+          <label>Shade <span id="textVal">0</span><input type="range" id="textRange" min="0" max="255" value="0"></label>
+          <label>Hex <input type="text" id="textHex" value="#000000" pattern="#[0-9a-fA-F]{6}" maxlength="7" inputmode="text"></label>
+        </fieldset>
+        <fieldset>
+          <legend>Background</legend>
+          <label>Shade <span id="bgVal">255</span><input type="range" id="bgRange" min="0" max="255" value="255"></label>
+          <label>Hex <input type="text" id="bgHex" value="#ffffff" pattern="#[0-9a-fA-F]{6}" maxlength="7" inputmode="text"></label>
+        </fieldset>
+        <button type="button" class="btn btn-dark" id="swapContrast">Swap text ↔ background</button>
+        <button type="button" class="btn btn-ghost" id="invertContrast">Invert both</button>
+      </div>
+      <div class="contrast-result">
+        <div class="contrast-preview" id="contrastPreview" style="background:#fff;color:#000">
+          <p class="preview-big">Aa</p>
+          <p>The quick fox jumps over the lazy dog. 0123456789</p>
+          <p class="preview-small">Small text at 14px — the hardest test of all.</p>
+        </div>
+        <dl class="contrast-scores">
+          <div><dt>Ratio</dt><dd id="ratioOut">21.00 : 1</dd></div>
+          <div><dt>AA · normal text</dt><dd id="aaOut">Pass</dd></div>
+          <div><dt>AA · large text</dt><dd id="aaLargeOut">Pass</dd></div>
+          <div><dt>AAA · normal text</dt><dd id="aaaOut">Pass</dd></div>
+          <div><dt>AAA · large text</dt><dd id="aaaLargeOut">Pass</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 HALFTONE -->
+  <section id="halftone" aria-labelledby="halftone-title" class="section">
+    <header class="section-head">
+      <p class="section-no">03 / The Halftone Press</p>
+      <h2 id="halftone-title">Pictures made of nothing.</h2>
+      <p>Newspapers once printed photographs using only black ink and white paper, faking tone with dots. This press does the same live, on canvas. Choose a subject, tune the dots, download the result.</p>
+    </header>
+    <div class="halftone-layout">
+      <div class="halftone-controls">
+        <div class="seg" role="group" aria-label="Subject">
+          <button type="button" data-subject="figure" class="seg-btn is-on" aria-pressed="true">Figure</button>
+          <button type="button" data-subject="wave" class="seg-btn" aria-pressed="false">Wave</button>
+          <button type="button" data-subject="word" class="seg-btn" aria-pressed="false">Word</button>
+        </div>
+        <label>Dot spacing <output id="cellOut">10</output><input type="range" id="cellRange" min="4" max="22" step="1" value="10"></label>
+        <label>Screen angle <output id="angleOut">45°</output><input type="range" id="angleRange" min="0" max="90" step="1" value="45"></label>
+        <label>Dot gain <output id="gainOut">100%</output><input type="range" id="gainRange" min="40" max="180" step="5" value="100"></label>
+        <label class="check"><input type="checkbox" id="invertDots"> Invert (white dots on black)</label>
+        <div class="row">
+          <button type="button" class="btn btn-dark" id="downloadHalftone">Download PNG</button>
+          <button type="button" class="btn btn-ghost" id="randomHalftone">Surprise me</button>
+        </div>
+        <p class="hint">Registered at <span id="dotCount">—</span> dots. The “subject” is drawn by code, sampled pixel by pixel, then re-drawn as dots.</p>
+      </div>
+      <div class="halftone-stage">
+        <canvas id="halftoneCanvas" width="640" height="480" aria-label="Halftone rendering generated live by canvas"></canvas>
+        <p class="caption">Fig. 03 — Live halftone. No image file exists anywhere in this page.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 TYPE -->
+  <section id="type" aria-labelledby="type-title" class="section section-alt">
+    <header class="section-head">
+      <p class="section-no">04 / The Type Tester</p>
+      <h2 id="type-title">Set in grey, read in black.</h2>
+      <p>Grey is not just a colour — it is a dial. Adjust size, weight, spacing and leading, then take the CSS with you. Only system typefaces are used; nothing is downloaded.</p>
+    </header>
+    <div class="type-layout">
+      <div class="type-controls">
+        <div class="seg" role="group" aria-label="Typeface">
+          <button type="button" data-font="serif" class="seg-btn is-on" aria-pressed="true">Serif</button>
+          <button type="button" data-font="sans" class="seg-btn" aria-pressed="false">Sans</button>
+          <button type="button" data-font="mono" class="seg-btn" aria-pressed="false">Mono</button>
+        </div>
+        <label>Size <output id="sizeOut">56px</output><input type="range" id="sizeRange" min="16" max="120" step="1" value="56"></label>
+        <label>Weight <output id="weightOut">700</output><input type="range" id="weightRange" min="100" max="900" step="100" value="700"></label>
+        <label>Tracking <output id="trackOut">-0.02em</output><input type="range" id="trackRange" min="-5" max="20" step="1" value="-2"></label>
+        <label>Leading <output id="leadOut">1.00</output><input type="range" id="leadRange" min="80" max="160" step="5" value="100"></label>
+        <label class="check"><input type="checkbox" id="upperToggle"> Uppercase</label>
+        <label>Your text<input type="text" id="typeText" value="Grey is a decision" maxlength="60"></label>
+      </div>
+      <div class="type-stage">
+        <p class="type-preview" id="typePreview">Grey is a decision</p>
+        <pre class="code" id="cssOut" tabindex="0" aria-label="Generated CSS"></pre>
+        <button type="button" class="btn btn-dark" id="copyCss">Copy CSS</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 ARCHIVE -->
+  <section id="archive" aria-labelledby="archive-title" class="section">
+    <header class="section-head">
+      <p class="section-no">05 / The Archive</p>
+      <h2 id="archive-title">Greys found in the world.</h2>
+      <p>Twenty-four specimens collected from stone, skin, sky, silver and soot. Search, filter by kind, sort by darkness — then open any entry for its dossier.</p>
+    </header>
+    <div class="archive-tools">
+      <label class="search">Search<input type="search" id="archiveSearch" placeholder="Try “fog”, “silver”, “elephant”…"></label>
+      <div class="seg seg-wrap" role="group" aria-label="Filter by kind" id="archiveFilters">
+        <button type="button" data-filter="all" class="seg-btn is-on" aria-pressed="true">All</button>
+      </div>
+      <label>Sort
+        <select id="archiveSort">
+          <option value="dark">Darkest first</option>
+          <option value="light">Lightest first</option>
+          <option value="name">Name A–Z</option>
+        </select>
+      </label>
+      <p class="count" id="archiveCount" aria-live="polite">24 of 24 shown</p>
+    </div>
+    <ul class="archive-grid" id="archiveGrid"></ul>
+    <p class="empty" id="archiveEmpty" hidden>No specimens match. Try a shorter search, or clear the filter.</p>
+  </section>
+
+  <!-- 06 ESSAY -->
+  <section id="essay" aria-labelledby="essay-title" class="section section-alt">
+    <header class="section-head">
+      <p class="section-no">06 / The Essay</p>
+      <h2 id="essay-title">In praise of the middle.</h2>
+    </header>
+    <article class="essay">
+      <p class="essay-lede">Colour is a claim. Grey is a confession — it admits the light was never quite enough, and that you looked anyway.</p>
+      <p>Every photograph you have ever loved was, for most of its history, a negotiation in grey. Ansel Adams, developing prints in a darkroom that smelled of vinegar and fixer, did not ask what colour the sky was. He asked how dark he dared make it before the paper held no more information — only grain, only the suggestion of weather. The Zone System he built with Fred Archer was not a theory of colour. It was a map of courage: ten zones from pure black to pure white, and the discipline to choose which zone a thing deserved to live in.</p>
+      <p>Grey is also the colour of honest materials. Granite does not perform. Ash does not flatter. A dolphin’s back is the exact grey of the sea surface it disappears into, and an elephant’s hide is the grey of the road it walks at dusk. Nature rarely uses pure black or pure white outside of a few dramatic exceptions — a zebra, a magpie, the pupil of an eye — because pure values are promises, and the natural world prefers evidence. Grey is what evidence looks like before it is certain.</p>
+      <blockquote>
+        <p>“Black is the colour of things as they are. White is the colour of things as they might be. Grey is the colour of things as they are, being looked at.”</p>
+        <cite>— Studio note, The Grey Index, undated</cite>
+      </blockquote>
+      <p>Architects learned this early. The concrete of a Brutalist façade, the slate of a Welsh roof, the fogged glass of a 1960s office — these surfaces were chosen not despite their greyness but because of it. Grey does not date the way a fashionable colour does. It absorbs change, weather, shadow and time, and asks only that you light it well. A grey wall is a page; what happens on it depends on the hour.</p>
+      <p>And so this index, which contains no colour at all, is not a limitation. It is a controlled experiment. Remove hue, and what remains is structure: value, contrast, texture, legibility — the skeleton of every image and every interface. A designer who can make greys work can make anything work. A photographer who can print in black and white can see. The 256 steps between black and white are not a compromise. They are the whole scale, and everything worth doing happens somewhere along it.</p>
+      <p>Start at 0. End at 255. Live somewhere in between, on purpose.</p>
+      <footer class="essay-foot">
+        <p>Reading time: about 2 minutes. <button type="button" class="linklike" id="markRead">Mark as read</button> <span id="readState" aria-live="polite"></span></p>
+      </footer>
+    </article>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div>
+      <p class="footer-title">The Grey Index</p>
+      <p>An interactive atlas from black to white. Set entirely in system type, drawn entirely in code, coloured entirely in grey.</p>
+    </div>
+    <div>
+      <p class="footer-title">Colophon</p>
+      <ul>
+        <li>No external fonts, images or libraries.</li>
+        <li>All imagery generated with SVG &amp; canvas.</li>
+        <li>Contrast maths follows WCAG 2.x relative luminance.</li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-title">Keyboard</p>
+      <ul>
+        <li><kbd>?</kbd> — shortcuts</li>
+        <li><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> — move in the Ramp</li>
+        <li><kbd>Esc</kbd> — close dialogs</li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-title">Now</p>
+      <p>Local time <time id="clock">--:--:--</time></p>
+      <p><button type="button" class="linklike" id="shortcutsBtn">All shortcuts</button> · <button type="button" class="linklike" id="toTop">Back to top ↑</button></p>
+    </div>
+  </div>
+  <p class="footer-base">© <span id="year"></span> The Grey Index · 0—255 · No colour was harmed, or used.</p>
+</footer>
+
+<dialog id="detailDialog" aria-labelledby="detailTitle">
+  <div class="dialog-head">
+    <h3 id="detailTitle">Specimen</h3>
+    <button type="button" class="dialog-close" data-close aria-label="Close">✕</button>
+  </div>
+  <div id="detailBody"></div>
+</dialog>
+
+<dialog id="shortcutsDialog" aria-labelledby="shortcutsTitle">
+  <div class="dialog-head">
+    <h3 id="shortcutsTitle">Keyboard shortcuts</h3>
+    <button type="button" class="dialog-close" data-close aria-label="Close">✕</button>
+  </div>
+  <table class="shortcuts-table">
+    <tr><th>Key</th><th>Action</th></tr>
+    <tr><td><kbd>Tab</kbd> / <kbd>Shift+Tab</kbd></td><td>Move through controls</td></tr>
+    <tr><td><kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd></td><td>Move within the Ramp grid</td></tr>
+    <tr><td><kbd>Enter</kbd> on a swatch</td><td>Copy its hex value</td></tr>
+    <tr><td><kbd>?</kbd></td><td>Open this list</td></tr>
+    <tr><td><kbd>Esc</kbd></td><td>Close a dialog</td></tr>
+  </table>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -33,13 +33,25 @@ def load_meta(run_dir: Path) -> dict:
     return meta
 
 
+def has_entry(run_dir: Path) -> bool:
+    # Entry is meta.json's "entry" if set (e.g. clearline-ops.html), else index.html.
+    meta_path = run_dir / "meta.json"
+    entry = "index.html"
+    if meta_path.exists():
+        try:
+            entry = json.loads(meta_path.read_text(encoding="utf-8")).get("entry", entry)
+        except Exception:
+            pass
+    return (run_dir / entry).exists()
+
+
 def main() -> None:
     runs = []
     if RUNS.exists():
         for d in sorted(RUNS.iterdir()):
             if not d.is_dir() or d.name.startswith("_") or d.name.startswith("."):
                 continue
-            if not (d / "index.html").exists():
+            if not has_entry(d):
                 continue
             runs.append(load_meta(d))
     runs.sort(key=lambda r: (r.get("date", ""), r.get("category", ""), r.get("model", "")), reverse=True)
