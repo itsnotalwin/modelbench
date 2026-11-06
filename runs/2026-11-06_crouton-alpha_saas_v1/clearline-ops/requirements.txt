@@ -1,2 +1,0 @@
-# Clearline Ops uses only the Python standard library. No dependencies to install.
-# Requires Python 3.10 or newer.
