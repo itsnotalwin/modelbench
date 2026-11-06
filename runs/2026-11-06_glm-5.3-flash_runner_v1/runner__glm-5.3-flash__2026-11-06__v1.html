@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Lane Rush — Endless Runner</title>
+<style>
+  html,body{margin:0;padding:0;height:100%;background:#101828;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Segoe UI',Arial,Helvetica,sans-serif;}
+  canvas{border-radius:10px;box-shadow:0 12px 48px rgba(0,0,0,.55);touch-action:none;cursor:pointer;}
+</style>
+</head>
+<body>
+<canvas id="game" width="800" height="600"></canvas>
+<script>
+'use strict';
+/* ============================================================
+   LANE RUSH — single-file endless runner (vanilla JS + Canvas)
+   Lanes are EXACT X coordinates; character X tweens toward the
+   target lane; ALL collision uses AABB boxes.
+   ============================================================ */
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+const W = 800, H = 600, GROUND = 500;
+
+/* ---- HARD CONSTRAINT: exact lane X coordinates ---- */
+const LANES = { left: 200, center: 400, right: 600 };
+const LANE_LIST = ['left', 'center', 'right'];
+
+/* ---------------- Audio (Web Audio API) ---------------- */
+let AC = null, noiseBuf = null;
+function audioInit(){
+  if(!AC){ try{ AC = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ AC = null; } }
+  if(AC && AC.state === 'suspended') AC.resume();
+  if(AC && !noiseBuf){
+    noiseBuf = AC.createBuffer(1, AC.sampleRate * 0.5, AC.sampleRate);
+    const d = noiseBuf.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i] = Math.random()*2-1;
+  }
+}
+function beep(f0, f1, dur, type, vol, delay){
+  if(!AC) return;
+  const t = AC.currentTime + (delay||0);
+  const o = AC.createOscillator(), g = AC.createGain();
+  o.type = type || 'sine';
+  o.frequency.setValueAtTime(f0, t);
+  if(f1 && f1 !== f0) o.frequency.exponentialRampToValueAtTime(Math.max(1,f1), t+dur);
+  g.gain.setValueAtTime(vol, t);
+  g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+  o.connect(g); g.connect(AC.destination);
+  o.start(t); o.stop(t+dur+0.05);
+}
+function noiseSweep(f0, f1, dur, vol){
+  if(!AC || !noiseBuf) return;
+  const t = AC.currentTime;
+  const src = AC.createBufferSource(); src.buffer = noiseBuf;
+  const bp = AC.createBiquadFilter(); bp.type='bandpass'; bp.Q.value = 1.2;
+  bp.frequency.setValueAtTime(f0, t);
+  bp.frequency.exponentialRampToValueAtTime(f1, t+dur);
+  const g = AC.createGain();
+  g.gain.setValueAtTime(vol, t);
+  g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+  src.connect(bp); bp.connect(g); g.connect(AC.destination);
+  src.start(t); src.stop(t+dur+0.05);
+}
+const sCoin  = ()=>{ beep(1046,1046,0.07,'square',0.14); beep(1568,1568,0.10,'sine',0.12,0.05); };
+const sJump  = ()=>{ noiseSweep(500,1600,0.16,0.22); beep(300,520,0.10,'sine',0.08); };
+const sCrash = ()=>{ beep(120,32,0.45,'sine',0.5); noiseSweep(900,120,0.30,0.35); };
+const sHit   = ()=>{ beep(200,80,0.25,'triangle',0.35); noiseSweep(700,200,0.18,0.2); };
+const sPower = ()=>{ beep(660,660,0.09,'square',0.15); beep(880,880,0.09,'square',0.15,0.09); beep(1320,1320,0.14,'square',0.15,0.18); };
+const sSlide = ()=>{ noiseSweep(1400,300,0.18,0.16); };
+
+/* ---------------- Game state ---------------- */
+const S = {
+  state:'menu',            // menu | playing | over
+  speed:5, dist:0, score:0, coins:0,
+  best:    +(localStorage.getItem('runnerBest')     || 0),
+  bestCoins:+(localStorage.getItem('runnerBestCoins')|| 0),
+  newBest:false,
+  mult:1, combo:0,
+  magnetT:0, shield:false, invT:0,
+  flash:0, overT:0, runT:0, shake:0
+};
+const P = { lane:'center', x:LANES.center, y:GROUND, vy:0,
+            w:36, h:60, jumps:0, slideT:0 };
+
+let obstacles=[], coinsA=[], powers=[], floats=[], parts=[];
+let nextGap=500, powerGap=1200;
+
+/* clouds & skyline (generated once) */
+const clouds=[]; for(let i=0;i<6;i++) clouds.push({x:Math.random()*W, y:40+Math.random()*120, s:0.6+Math.random()*0.9});
+const SKY_W=1800, buildings=[];
+(function(){
+  let x=0;
+  while(x<SKY_W){
+    const w=40+Math.random()*70, h=50+Math.random()*130;
+    buildings.push({x, w, h});
+    x += w + 8 + Math.random()*30;
+  }
+})();
+
+/* ---------------- Helpers ---------------- */
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const rint=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
+function aabb(ax1,ay1,ax2,ay2,bx1,by1,bx2,by2){
+  return ax1 < bx2 && ax2 > bx1 && ay1 < by2 && ay2 > by1;
+}
+function playerTop(){ return P.y - (P.slideT>0 ? 30 : P.h); }
+function pBox(){ const t=playerTop(); return [P.x-18, t, P.x+18, P.y]; }
+
+/* ---------------- Spawning ---------------- */
+function coinLine(lane, x, n, y){
+  for(let i=0;i<n;i++) coinsA.push({lane, x:x+i*44, y, r:11, t:Math.random()*6, taken:false, miss:false});
+}
+function coinArc(x, lane){
+  for(let i=-2;i<=2;i++){
+    const py = GROUND - (70 + 85*Math.max(0, 1-(i/2.2)*(i/2.2)));
+    coinsA.push({lane, x:x+i*48, y:py, r:11, t:Math.random()*6, taken:false, miss:false});
+  }
+}
+function coinDiag(base, lanes){
+  for(let i=0;i<3;i++)
+    coinsA.push({lane:lanes[i], x:base+i*90, y:GROUND-45, r:11, t:Math.random()*6, taken:false, miss:false});
+}
+
+function spawnPattern(){
+  const base = W + 120;
+  const lanes = shuffle(LANE_LIST.slice());
+  const r = Math.random();
+  let wdt = 300;
+  if(r < 0.16){                       // barrier + coin arc over it
+    obstacles.push({type:'barrier', lane:lanes[0], x:base});
+    coinArc(base, lanes[0]); wdt = 320;
+  } else if(r < 0.32){                // two barriers, coin line in the free lane
+    obstacles.push({type:'barrier', lane:lanes[0], x:base});
+    obstacles.push({type:'barrier', lane:lanes[1], x:base});
+    coinLine(lanes[2], base-40, 5, GROUND-45); wdt = 340;
+  } else if(r < 0.48){                // hanging pipe (slide!)
+    obstacles.push({type:'pipe', lane:lanes[0], x:base});
+    coinLine(lanes[1], base-40, 4, GROUND-45); wdt = 300;
+  } else if(r < 0.62){                // tall wall (change lane!)
+    obstacles.push({type:'wall', lane:lanes[0], x:base});
+    coinLine(lanes[1], base-40, 4, GROUND-45); wdt = 300;
+  } else if(r < 0.74){                // pipe + staggered barrier
+    obstacles.push({type:'pipe', lane:lanes[0], x:base});
+    obstacles.push({type:'barrier', lane:lanes[1], x:base+180});
+    coinArc(base+180, lanes[1]); wdt = 460;
+  } else if(r < 0.86){                // diagonal coin trail
+    coinDiag(base, lanes); wdt = 380;
+  } else {                            // wall + coin line
+    obstacles.push({type:'wall', lane:lanes[0], x:base+60});
+    coinLine(lanes[1], base-60, 5, GROUND-45); wdt = 380;
+  }
+  nextGap = wdt + 260 + S.speed*18 + Math.random()*160;
+}
+
+function spawnPower(){
+  const order = shuffle(LANE_LIST.slice());
+  const bx = W + 120;
+  for(const lane of order){
+    let free = true;
+    for(const o of obstacles) if(o.lane===lane && Math.abs(o.x-bx)<260){ free=false; break; }
+    if(free){
+      const type = Math.random()<0.5 ? 'magnet' : 'shield';
+      const y = Math.random()<0.7 ? GROUND-55 : GROUND-120;   // sometimes jump for it
+      powers.push({type, lane, x:bx, y, t:0});
+      powerGap = 900 + Math.random()*900;
+      return;
+    }
+  }
+  powerGap = 300;
+}
+
+/* ---------------- Actions ---------------- */
+function moveLane(dir){
+  if(S.state!=='playing') return;
+  const i = clamp(LANE_LIST.indexOf(P.lane)+dir, 0, 2);
+  P.lane = LANE_LIST[i];
+}
+function doJump(){
+  if(S.state!=='playing') return;
+  if(P.y >= GROUND){ P.vy = -14; P.jumps = 1; P.slideT = 0; sJump(); }
+  else if(P.jumps < 2){ P.vy = -12.5; P.jumps = 2; sJump(); }
+}
+function doSlide(){
+  if(S.state!=='playing') return;
+  if(P.slideT<=0) sSlide();
+  P.slideT = 600;                       // 600 ms
+  if(P.y < GROUND) P.vy = Math.max(P.vy, 8);   // fast-drop into slide
+}
+function startGame(){
+  audioInit();
+  S.state='playing'; S.speed=5; S.dist=0; S.score=0; S.coins=0;
+  S.mult=1; S.combo=0; S.magnetT=0; S.shield=false; S.invT=0;
+  S.flash=0; S.overT=0; S.runT=0; S.shake=0; S.newBest=false;
+  obstacles=[]; coinsA=[]; powers=[]; floats=[]; parts=[];
+  P.lane='center'; P.x=LANES.center; P.y=GROUND; P.vy=0; P.jumps=0; P.slideT=0;
+  nextGap=500; powerGap=1100;
+}
+
+/* ---------------- Update ---------------- */
+function collectCoin(c){
+  c.taken = true;
+  S.coins++; S.combo++;
+  S.mult = Math.min(5, 1 + Math.floor(S.combo/5));
+  S.score += 2 * S.mult;
+  floats.push({x:c.x, y:c.y-8, txt:'+1', life:45, col:'#ffd23f', size:18});
+  for(let k=0;k<6;k++) parts.push({x:c.x, y:c.y, vx:(Math.random()-0.5)*5, vy:(Math.random()-0.5)*5-1,
+    life:20+Math.random()*10, col:'#ffd23f', r:2+Math.random()*2});
+  sCoin();
+}
+
+function update(dt){
+  S.runT += dt;
+  if(S.flash>0) S.flash = Math.max(0, S.flash - 0.04*dt);
+  if(S.shake>0) S.shake = Math.max(0, S.shake - 0.5*dt);
+  for(let i=floats.length-1;i>=0;i--){ const f=floats[i]; f.y-=1.1*dt; f.life-=dt; if(f.life<=0) floats.splice(i,1); }
+  for(let i=parts.length-1;i>=0;i--){ const p=parts[i]; p.x+=p.vx*dt; p.y+=p.vy*dt; p.vy+=0.15*dt; p.life-=dt; if(p.life<=0) parts.splice(i,1); }
+  for(const c of clouds){ c.x -= 0.25*c.s*dt; if(c.x < -120) { c.x = W+120; c.y = 40+Math.random()*120; } }
+
+  if(S.state !== 'playing') return;
+
+  /* speed & score */
+  S.speed += 0.001 * dt;                    // +0.001 per frame (60fps baseline)
+  if(S.speed > 26) S.speed = 26;            // soft cap for playability
+  S.dist  += S.speed * dt;
+  S.score += (S.speed * dt / 100) * S.mult; // metres x combo multiplier
+
+  /* lane tween toward EXACT lane X (≈150 ms feel) */
+  P.x += (LANES[P.lane] - P.x) * (1 - Math.pow(0.70, dt));
+
+  /* jump physics (parabolic) */
+  if(P.y < GROUND || P.vy < 0){
+    P.vy += 0.9 * dt;
+    P.y  += P.vy * dt;
+    if(P.y >= GROUND){ P.y = GROUND; P.vy = 0; P.jumps = 0; }
+  }
+  if(P.slideT > 0) P.slideT -= dt * 16.6667;
+  if(S.magnetT > 0) S.magnetT -= dt;
+  if(S.invT > 0) S.invT -= dt;
+
+  /* dust */
+  if(P.y >= GROUND && Math.random() < 0.25*dt)
+    parts.push({x:P.x-14, y:GROUND-2, vx:-2-Math.random()*2, vy:-1-Math.random()*1.5,
+      life:18, col:'rgba(255,255,255,0.7)', r:2+Math.random()*2});
+
+  /* spawn */
+  nextGap  -= S.speed * dt;
+  if(nextGap <= 0) spawnPattern();
+  powerGap -= S.speed * dt;
+  if(powerGap <= 0) spawnPower();
+
+  /* obstacles */
+  for(let i=obstacles.length-1;i>=0;i--){
+    const o = obstacles[i];
+    o.x -= S.speed * dt;
+    if(o.x < -150){ obstacles.splice(i,1); continue; }
+    let b;
+    if(o.type==='barrier') b=[o.x-30, GROUND-50, o.x+30, GROUND];
+    else if(o.type==='wall') b=[o.x-30, GROUND-140, o.x+30, GROUND];
+    else b=[o.x-35, GROUND-160, o.x+35, GROUND-50];       // pipe (overhead)
+    const pb = pBox();
+    if(S.invT<=0 && aabb(pb[0],pb[1],pb[2],pb[3], b[0],b[1],b[2],b[3])){
+      if(S.shield){
+        S.shield=false; S.invT=60; S.flash=0.45; S.shake=6; S.combo=0; S.mult=1;
+        floats.push({x:P.x, y:playerTop()-16, txt:'SHIELD!', life:40, col:'#4cc9f0', size:16});
+        sHit();
+      } else {
+        S.flash=1; S.shake=12; sCrash();
+        S.state='over'; S.overT=0;
+        S.newBest = Math.floor(S.score) > S.best;
+        if(S.newBest){ S.best=Math.floor(S.score); localStorage.setItem('runnerBest', S.best); }
+        if(S.coins > S.bestCoins){ S.bestCoins=S.coins; localStorage.setItem('runnerBestCoins', S.bestCoins); }
+        return;
+      }
+    }
+  }
+
+  /* coins */
+  const pb = pBox();
+  for(let i=coinsA.length-1;i>=0;i--){
+    const c = coinsA[i];
+    c.x -= S.speed * dt; c.t += 0.12*dt;
+    if(c.taken){ coinsA.splice(i,1); continue; }
+    /* magnet: pull coins within 150 px */
+    if(S.magnetT > 0){
+      const dx = P.x - c.x, dy = (P.y-30) - c.y, d = Math.hypot(dx,dy);
+      if(d < 150 && d > 1){ c.x += dx/d * 9 * dt; c.y += dy/d * 9 * dt; }
+    }
+    /* AABB coin vs player */
+    if(aabb(c.x-10, c.y-10, c.x+10, c.y+10, pb[0],pb[1],pb[2],pb[3])){
+      collectCoin(c); coinsA.splice(i,1); continue;
+    }
+    /* missed coin in own lane breaks the combo chain */
+    if(!c.miss && c.x < P.x - 30){
+      c.miss = true;
+      if(c.lane === P.lane && Math.abs(c.y - (P.y-30)) < 70){
+        S.combo = 0; S.mult = 1;
+        floats.push({x:P.x, y:GROUND-110, txt:'MISS', life:35, col:'#9aa5b1', size:14});
+      }
+    }
+    if(c.x < -40) coinsA.splice(i,1);
+  }
+
+  /* power-ups */
+  for(let i=powers.length-1;i>=0;i--){
+    const pw = powers[i];
+    pw.x -= S.speed * dt; pw.t += 0.08*dt;
+    if(pw.x < -60){ powers.splice(i,1); continue; }
+    if(aabb(pw.x-20, pw.y-20+Math.sin(pw.t)*4, pw.x+20, pw.y+20+Math.sin(pw.t)*4, pb[0],pb[1],pb[2],pb[3])){
+      if(pw.type==='magnet'){ S.magnetT = 300; floats.push({x:pw.x, y:pw.y-20, txt:'MAGNET!', life:45, col:'#ff6b6b', size:16}); }
+      else { S.shield = true; floats.push({x:pw.x, y:pw.y-20, txt:'SHIELD!', life:45, col:'#4cc9f0', size:16}); }
+      for(let k=0;k<8;k++) parts.push({x:pw.x, y:pw.y, vx:(Math.random()-0.5)*6, vy:(Math.random()-0.5)*6,
+        life:22, col: pw.type==='magnet' ? '#ff6b6b' : '#4cc9f0', r:2.5});
+      sPower(); powers.splice(i,1);
+    }
+  }
+}
+
+/* ---------------- Drawing ---------------- */
+function rr(x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+function star(cx,cy,R,r,rot){
+  ctx.beginPath();
+  for(let i=0;i<10;i++){
+    const rad = i%2===0 ? R : r;
+    const a = rot + i*Math.PI/5 - Math.PI/2;
+    const px = cx + Math.cos(a)*rad, py = cy + Math.sin(a)*rad;
+    i===0 ? ctx.moveTo(px,py) : ctx.lineTo(px,py);
+  }
+  ctx.closePath();
+}
+function drawCoin(c){
+  const sx = Math.abs(Math.cos(c.t));
+  ctx.save(); ctx.translate(c.x, c.y); ctx.scale(Math.max(0.15,sx), 1);
+  ctx.fillStyle='#ffc300'; ctx.beginPath(); ctx.arc(0,0,11,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#ffde59'; ctx.beginPath(); ctx.arc(-2,-2,8,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#b8860b'; ctx.lineWidth=1.6; star(0,0,7,3,0); ctx.stroke();
+  ctx.restore();
+}
+function drawMagnetIcon(x,y,s){
+  ctx.save(); ctx.translate(x,y); ctx.scale(s,s);
+  ctx.lineCap='butt';
+  ctx.strokeStyle='#e63946'; ctx.lineWidth=8;
+  ctx.beginPath(); ctx.arc(0,2,10,Math.PI,0); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(-10,2); ctx.lineTo(-10,13);
+  ctx.moveTo(10,2);  ctx.lineTo(10,13); ctx.stroke();
+  ctx.fillStyle='#f1f1f1';
+  ctx.fillRect(-14,11,8,6); ctx.fillRect(6,11,8,6);
+  ctx.restore();
+}
+function drawShieldIcon(x,y,s){
+  ctx.save(); ctx.translate(x,y); ctx.scale(s,s);
+  ctx.fillStyle='#4cc9f0';
+  ctx.beginPath();
+  ctx.moveTo(0,-13); ctx.lineTo(11,-8); ctx.lineTo(11,3);
+  ctx.quadraticCurveTo(11,11,0,15); ctx.quadraticCurveTo(-11,11,-11,3);
+  ctx.lineTo(-11,-8); ctx.closePath(); ctx.fill();
+  ctx.fillStyle='#ffffff66';
+  ctx.beginPath(); ctx.moveTo(0,-13); ctx.lineTo(0,15); ctx.lineTo(-11,3); ctx.lineTo(-11,-8); ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+
+function draw(){
+  ctx.save();
+  if(S.shake>0) ctx.translate((Math.random()-0.5)*S.shake, (Math.random()-0.5)*S.shake);
+
+  /* sky */
+  const sky = ctx.createLinearGradient(0,0,0,GROUND);
+  sky.addColorStop(0,'#4aa8ff'); sky.addColorStop(0.7,'#8fd0ff'); sky.addColorStop(1,'#c9ecff');
+  ctx.fillStyle=sky; ctx.fillRect(-20,-20,W+40,GROUND+20);
+
+  /* sun */
+  ctx.fillStyle='#fff3b0'; ctx.beginPath(); ctx.arc(660,90,44,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#ffe066'; ctx.beginPath(); ctx.arc(660,90,34,0,Math.PI*2); ctx.fill();
+
+  /* clouds */
+  ctx.fillStyle='rgba(255,255,255,0.9)';
+  for(const c of clouds){
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, 18*c.s, 0, Math.PI*2);
+    ctx.arc(c.x+20*c.s, c.y-8*c.s, 14*c.s, 0, Math.PI*2);
+    ctx.arc(c.x+40*c.s, c.y, 16*c.s, 0, Math.PI*2);
+    ctx.fill();
+  }
+
+  /* skyline (parallax) */
+  const off = (S.dist*0.35) % SKY_W;
+  for(const b of buildings){
+    for(const rep of [0, SKY_W]){
+      const bx = b.x - off + rep;
+      if(bx > W+80 || bx+b.w < -80) continue;
+      ctx.fillStyle = '#3d5a80';
+      ctx.fillRect(bx, GROUND-40-b.h, b.w, b.h+40);
+      ctx.fillStyle = '#2c4568';
+      for(let wy=GROUND-30-b.h; wy<GROUND-46; wy+=18)
+        for(let wx=bx+6; wx<bx+b.w-8; wx+=14)
+          ctx.fillRect(wx, wy, 6, 9);
+    }
+  }
+
+  /* hedge line */
+  ctx.fillStyle='#2d6a4f';
+  ctx.fillRect(0, GROUND-46, W, 14);
+  ctx.fillStyle='#40916c';
+  for(let x=-((S.dist*0.8)%40); x<W; x+=40){ ctx.beginPath(); ctx.arc(x+12, GROUND-44, 12, Math.PI, 0); ctx.fill(); }
+
+  /* grass field */
+  ctx.fillStyle='#52b788'; ctx.fillRect(0, GROUND-32, W, H-GROUND+32);
+  ctx.fillStyle='rgba(0,0,0,0.06)';
+  for(let x=-((S.dist)%80); x<W; x+=160) ctx.fillRect(x, GROUND-32, 80, H-GROUND+32);
+
+  /* three lane strips */
+  for(const ln of LANE_LIST){
+    const lx = LANES[ln];
+    ctx.fillStyle = 'rgba(0,90,40,0.22)';
+    rr(lx-72, GROUND-34, 144, H-GROUND+30, 10); ctx.fill();
+    ctx.save();
+    rr(lx-72, GROUND-34, 144, H-GROUND+30, 10); ctx.clip();
+    ctx.fillStyle='rgba(255,255,255,0.35)';
+    for(let y=GROUND-8; y<H; y+=26){
+      for(let x=-((S.dist)%90); x<lx+80; x+=90){
+        if(x > lx-80) ctx.fillRect(x, y, 40, 5);
+      }
+    }
+    ctx.restore();
+    ctx.strokeStyle='rgba(255,255,255,0.5)'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(lx-72, GROUND-34); ctx.lineTo(lx-72, H);
+    ctx.moveTo(lx+72, GROUND-34); ctx.lineTo(lx+72, H); ctx.stroke();
+  }
+
+  /* obstacles */
+  for(const o of obstacles){
+    /* ground shadow */
+    ctx.fillStyle='rgba(0,0,0,0.2)';
+    ctx.beginPath(); ctx.ellipse(o.x, GROUND+4, 34, 7, 0, 0, Math.PI*2); ctx.fill();
+    if(o.type==='barrier'){
+      ctx.fillStyle='#d9480f'; ctx.fillRect(o.x-30, GROUND-50, 60, 50);
+      ctx.fillStyle='#e8590c'; ctx.fillRect(o.x-30, GROUND-50, 60, 10);
+      ctx.fillStyle='#ffd8a8';
+      for(let i=0;i<3;i++){
+        ctx.save(); ctx.beginPath();
+        ctx.rect(o.x-30+i*20, GROUND-40, 20, 36); ctx.clip();
+        ctx.beginPath();
+        ctx.moveTo(o.x-30+i*20-8, GROUND-4); ctx.lineTo(o.x-30+i*20+8, GROUND-4);
+        ctx.lineTo(o.x-30+i*20+18, GROUND-40); ctx.lineTo(o.x-30+i*20+2, GROUND-40);
+        ctx.closePath(); ctx.fill(); ctx.restore();
+      }
+      ctx.strokeStyle='#8c2d0b'; ctx.lineWidth=3; ctx.strokeRect(o.x-30, GROUND-50, 60, 50);
+    } else if(o.type==='wall'){
+      ctx.fillStyle='#c1121f'; ctx.fillRect(o.x-30, GROUND-140, 60, 140);
+      ctx.strokeStyle='#7f0d16'; ctx.lineWidth=2;
+      for(let y=GROUND-140+18; y<GROUND; y+=22){
+        ctx.beginPath(); ctx.moveTo(o.x-30,y); ctx.lineTo(o.x+30,y); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(o.x + ((Math.round((GROUND-y)/22)%2)?-10:5), y); ctx.lineTo(o.x + ((Math.round((GROUND-y)/22)%2)?-10:5), y+22); ctx.stroke();
+      }
+      ctx.fillStyle='#fa5252'; ctx.fillRect(o.x-30, GROUND-140, 60, 10);
+      ctx.strokeStyle='#5c0a10'; ctx.lineWidth=3; ctx.strokeRect(o.x-30, GROUND-140, 60, 140);
+    } else { /* pipe — overhead */
+      const top=GROUND-160, bot=GROUND-50;
+      ctx.fillStyle='#495057';
+      rr(o.x-40, top-14, 80, 16, 6); ctx.fill();          // mount
+      ctx.fillStyle='#e8590c';
+      rr(o.x-35, top, 70, bot-top, 22); ctx.fill();
+      ctx.fillStyle='#ff922b';
+      rr(o.x-35, top+4, 70, 16, 8); ctx.fill();
+      ctx.fillStyle='#d9480f';
+      for(let x=o.x-24; x<o.x+30; x+=24) ctx.fillRect(x, top+26, 10, bot-top-32);
+      ctx.fillStyle='#343a40';
+      rr(o.x-40, top-2, 12, bot-top+4, 5); ctx.fill();
+      rr(o.x+28, top-2, 12, bot-top+4, 5); ctx.fill();
+      ctx.strokeStyle='#8c2d0b'; ctx.lineWidth=2.5;
+      rr(o.x-35, top, 70, bot-top, 22); ctx.stroke();
+    }
+  }
+
+  /* power-ups */
+  for(const pw of powers){
+    const bob = Math.sin(pw.t)*5;
+    ctx.fillStyle='rgba(0,0,0,0.15)';
+    ctx.beginPath(); ctx.ellipse(pw.x, GROUND+4, 20, 5, 0, 0, Math.PI*2); ctx.fill();
+    ctx.save(); ctx.translate(pw.x, pw.y + bob);
+    ctx.fillStyle='rgba(255,255,255,0.85)';
+    ctx.beginPath(); ctx.arc(0,0,24,0,Math.PI*2); ctx.fill();
+    if(pw.type==='magnet') drawMagnetIcon(0,0,1);
+    else drawShieldIcon(0,0,1);
+    ctx.restore();
+  }
+
+  /* coins */
+  for(const c of coinsA) drawCoin(c);
+
+  /* ---- player ---- */
+  const sliding = P.slideT > 0;
+  const legFrame = Math.floor(S.runT/7.5) % 2;
+  const airborne = P.y < GROUND;
+  /* shadow */
+  const sh = clamp(1 - (GROUND-P.y)/180, 0.35, 1);
+  ctx.fillStyle='rgba(0,0,0,0.25)';
+  ctx.beginPath(); ctx.ellipse(P.x, GROUND+4, 22*sh, 6*sh, 0, 0, Math.PI*2); ctx.fill();
+
+  ctx.save();
+  ctx.translate(P.x, P.y);
+  if(sliding){
+    /* slide pose: half height */
+    ctx.fillStyle='#1d3557';
+    ctx.fillRect(-6, -26, 26, 10);                       // legs tucked
+    ctx.fillStyle='#ff5a36'; rr(-14, -30, 30, 22, 6); ctx.fill();  // body
+    ctx.fillStyle='#ffd7b1'; ctx.beginPath(); ctx.arc(22, -22, 11, 0, Math.PI*2); ctx.fill(); // head
+    ctx.fillStyle='#e63946'; ctx.beginPath(); ctx.arc(22, -26, 11, Math.PI, 0); ctx.fill();   // cap
+    ctx.fillStyle='#222'; ctx.beginPath(); ctx.arc(26, -23, 2.2, 0, Math.PI*2); ctx.fill();
+  } else {
+    const bounce = airborne ? 0 : Math.sin(S.runT*0.5)*2;
+    /* legs — 2-frame swap @8fps */
+    ctx.fillStyle='#1d3557';
+    if(airborne){
+      ctx.fillRect(-12, -26, 9, 16); ctx.fillRect(4, -22, 9, 12);
+    } else if(legFrame===0){
+      ctx.fillRect(-12, -26, 9, 26); ctx.fillRect(4, -26, 9, 20);
+    } else {
+      ctx.fillRect(-12, -26, 9, 20); ctx.fillRect(4, -26, 9, 26);
+    }
+    /* body */
+    ctx.fillStyle='#ff5a36';
+    rr(-14, -52+bounce, 28, 28, 6); ctx.fill();
+    ctx.fillStyle='#ffd7b1';
+    /* arms */
+    ctx.save();
+    ctx.translate(-14, -46+bounce);
+    ctx.rotate(legFrame===0 ? 0.5 : -0.5);
+    ctx.fillRect(0, 0, 7, 16); ctx.restore();
+    ctx.save();
+    ctx.translate(8, -46+bounce);
+    ctx.rotate(legFrame===0 ? -0.5 : 0.5);
+    ctx.fillRect(0, 0, 7, 16); ctx.restore();
+    /* head */
+    ctx.beginPath(); ctx.arc(0, -62+bounce, 12, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle='#e63946';
+    ctx.beginPath(); ctx.arc(0, -66+bounce, 12, Math.PI, 0); ctx.fill();
+    ctx.fillRect(-12, -66+bounce, 24, 4);
+    /* face */
+    ctx.fillStyle='#222';
+    ctx.beginPath(); ctx.arc(4, -62+bounce, 2.2, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(-3, -62+bounce, 2.2, 0, Math.PI*2); ctx.fill();
+  }
+  ctx.restore();
+
+  /* shield aura */
+  if(S.shield){
+    const pulse = 1 + Math.sin(S.runT*0.25)*0.08;
+    ctx.save(); ctx.translate(P.x, P.y-30);
+    ctx.strokeStyle='rgba(76,201,240,0.9)'; ctx.lineWidth=3;
+    ctx.beginPath(); ctx.arc(0,0,46*pulse,0,Math.PI*2); ctx.stroke();
+    ctx.fillStyle='rgba(76,201,240,0.15)';
+    ctx.beginPath(); ctx.arc(0,0,46*pulse,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+  }
+  /* invuln blink */
+  if(S.invT>0 && Math.floor(S.runT/4)%2===0){
+    ctx.fillStyle='rgba(255,255,255,0.25)';
+    ctx.beginPath(); ctx.arc(P.x, P.y-30, 30, 0, Math.PI*2); ctx.fill();
+  }
+
+  /* particles */
+  for(const p of parts){
+    ctx.globalAlpha = clamp(p.life/22,0,1);
+    ctx.fillStyle=p.col;
+    ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+  }
+  ctx.globalAlpha=1;
+
+  /* floating texts */
+  ctx.textAlign='center';
+  for(const f of floats){
+    ctx.globalAlpha = clamp(f.life/30,0,1);
+    ctx.font='bold '+f.size+'px Segoe UI, Arial';
+    ctx.strokeStyle='rgba(0,0,0,0.5)'; ctx.lineWidth=3;
+    ctx.strokeText(f.txt, f.x, f.y);
+    ctx.fillStyle=f.col; ctx.fillText(f.txt, f.x, f.y);
+  }
+  ctx.globalAlpha=1;
+
+  /* speed lines */
+  if(S.speed > 9){
+    ctx.strokeStyle='rgba(255,255,255,'+clamp((S.speed-9)/30,0,0.4)+')';
+    ctx.lineWidth=2;
+    for(let i=0;i<6;i++){
+      const y = 60 + i*70 + (i%2)*30;
+      const x = (W - ((S.dist*3 + i*200) % (W+200)));
+      ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x+50+S.speed*4, y); ctx.stroke();
+    }
+  }
+
+  /* ---------------- HUD ---------------- */
+  /* score (distance-based) top-center */
+  ctx.textAlign='center';
+  ctx.font='bold 34px Segoe UI, Arial';
+  ctx.strokeStyle='rgba(0,0,0,0.55)'; ctx.lineWidth=5;
+  const scoreTxt = String(Math.floor(S.score));
+  ctx.strokeText(scoreTxt, W/2, 46);
+  ctx.fillStyle='#ffffff'; ctx.fillText(scoreTxt, W/2, 46);
+  ctx.font='bold 13px Segoe UI, Arial';
+  ctx.strokeText(Math.floor(S.dist/100)+' m', W/2, 66);
+  ctx.fillStyle='#d8f3ff'; ctx.fillText(Math.floor(S.dist/100)+' m', W/2, 66);
+
+  /* combo multiplier under score */
+  ctx.font='bold 16px Segoe UI, Arial';
+  const mcol = S.mult>=5 ? '#ff922b' : S.mult>1 ? '#ffd23f' : '#cfe8ff';
+  ctx.strokeStyle='rgba(0,0,0,0.55)'; ctx.lineWidth=4;
+  ctx.strokeText('COMBO x'+S.mult, W/2, 88);
+  ctx.fillStyle=mcol; ctx.fillText('COMBO x'+S.mult, W/2, 88);
+  /* combo progress (5 coins per step) */
+  const prog = (S.combo % 5)/5;
+  ctx.fillStyle='rgba(0,0,0,0.35)'; rr(W/2-50, 96, 100, 7, 3); ctx.fill();
+  if(prog>0){ ctx.fillStyle='#ffd23f'; rr(W/2-50, 96, 100*prog, 7, 3); ctx.fill(); }
+
+  /* coins top-right */
+  ctx.textAlign='right';
+  drawCoin({x:W-96, y:38, t:1});
+  ctx.font='bold 26px Segoe UI, Arial';
+  ctx.strokeStyle='rgba(0,0,0,0.55)'; ctx.lineWidth=5;
+  ctx.strokeText(String(S.coins), W-52, 47);
+  ctx.fillStyle='#ffd23f'; ctx.fillText(String(S.coins), W-52, 47);
+
+  /* power-up indicators top-left */
+  if(S.magnetT>0){
+    drawMagnetIcon(36, 36, 1.1);
+    ctx.fillStyle='rgba(0,0,0,0.35)'; rr(20, 62, 60, 8, 4); ctx.fill();
+    ctx.fillStyle='#ff6b6b'; rr(20, 62, 60*(S.magnetT/300), 8, 4); ctx.fill();
+  }
+  if(S.shield){
+    drawShieldIcon(S.magnetT>0 ? 96 : 36, 36, 1.1);
+    ctx.font='bold 11px Segoe UI, Arial'; ctx.textAlign='left';
+    ctx.fillStyle='#bde0fe';
+    ctx.fillText('SHIELD', (S.magnetT>0?96:36)-16, 70);
+  }
+
+  /* red flash */
+  if(S.flash>0){
+    ctx.fillStyle='rgba(255,20,20,'+(S.flash*0.55)+')';
+    ctx.fillRect(0,0,W,H);
+  }
+
+  /* ---------------- Overlays ---------------- */
+  ctx.textAlign='center';
+  if(S.state==='menu'){
+    ctx.fillStyle='rgba(10,20,40,0.62)'; ctx.fillRect(0,0,W,H);
+    ctx.font='bold 58px Segoe UI, Arial';
+    ctx.fillStyle='#ffd23f'; ctx.strokeStyle='#1d3557'; ctx.lineWidth=8;
+    ctx.strokeText('LANE RUSH', W/2, 200); ctx.fillText('LANE RUSH', W/2, 200);
+    ctx.font='16px Segoe UI, Arial'; ctx.fillStyle='#e8f4ff';
+    ctx.fillText('Dodge the obstacles. Grab the coins. Chain combos.', W/2, 240);
+    ctx.font='15px Segoe UI, Arial'; ctx.fillStyle='#b8d8ff';
+    ctx.fillText('\u2190 \u2192 / A D  — switch lane      \u2191 / W  — jump (double jump!)      \u2193 / S  — slide', W/2, 285);
+    ctx.fillText('Magnet pulls coins   |   Shield absorbs one crash', W/2, 312);
+    /* PLAY button */
+    ctx.fillStyle='#ffd23f'; rr(W/2-90, 350, 180, 56, 14); ctx.fill();
+    ctx.strokeStyle='#1d3557'; ctx.lineWidth=4; rr(W/2-90, 350, 180, 56, 14); ctx.stroke();
+    ctx.fillStyle='#1d3557'; ctx.font='bold 24px Segoe UI, Arial';
+    ctx.fillText('PLAY', W/2, 387);
+    if(S.best>0){
+      ctx.font='bold 15px Segoe UI, Arial'; ctx.fillStyle='#cfe8ff';
+      ctx.fillText('Best: '+S.best+'   Coins best: '+S.bestCoins, W/2, 445);
+    }
+  }
+  if(S.state==='over' && S.overT > 25){
+    const a = clamp((S.overT-25)/20, 0, 1);
+    ctx.globalAlpha = a;
+    ctx.fillStyle='rgba(10,15,35,0.78)'; ctx.fillRect(0,0,W,H);
+    ctx.font='bold 50px Segoe UI, Arial';
+    ctx.fillStyle='#ff5a5a'; ctx.strokeStyle='#2b0000'; ctx.lineWidth=7;
+    ctx.strokeText('GAME OVER', W/2, 170); ctx.fillText('GAME OVER', W/2, 170);
+    if(S.newBest){
+      ctx.font='bold 20px Segoe UI, Arial'; ctx.fillStyle='#ffd23f';
+      ctx.fillText('\u2605 NEW BEST! \u2605', W/2, 205);
+    }
+    ctx.font='bold 22px Segoe UI, Arial'; ctx.fillStyle='#ffffff';
+    ctx.fillText('Score: '+Math.floor(S.score), W/2, 250);
+    ctx.fillStyle='#ffd23f';
+    ctx.fillText('Coins: '+S.coins, W/2, 282);
+    ctx.fillStyle='#9ec9ff';
+    ctx.fillText('Personal best: '+S.best, W/2, 314);
+    ctx.fillText('Coin record: '+S.bestCoins, W/2, 342);
+    /* Try Again button */
+    ctx.fillStyle='#ffd23f'; rr(W/2-110, 380, 220, 58, 14); ctx.fill();
+    ctx.strokeStyle='#1d3557'; ctx.lineWidth=4; rr(W/2-110, 380, 220, 58, 14); ctx.stroke();
+    ctx.fillStyle='#1d3557'; ctx.font='bold 22px Segoe UI, Arial';
+    ctx.fillText('TRY AGAIN', W/2, 418);
+    ctx.font='14px Segoe UI, Arial'; ctx.fillStyle='#cfe8ff';
+    ctx.fillText('or press Space / Enter', W/2, 470);
+    ctx.globalAlpha = 1;
+  }
+  ctx.restore();
+}
+
+/* ---------------- Main loop (frame-normalised, 60fps baseline) ---------------- */
+let last = performance.now();
+function loop(now){
+  let dt = (now - last) / 16.6667;
+  last = now;
+  dt = clamp(dt, 0, 3);
+  if(S.state==='over') S.overT += dt;
+  update(dt);
+  draw();
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+/* ---------------- Input ---------------- */
+function primaryAction(){
+  if(S.state==='menu') startGame();
+  else if(S.state==='over' && S.overT>25) startGame();
+}
+document.addEventListener('keydown', e=>{
+  if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space'].includes(e.code)) e.preventDefault();
+  switch(e.code){
+    case 'ArrowLeft': case 'KeyA': moveLane(-1); break;
+    case 'ArrowRight': case 'KeyD': moveLane(1); break;
+    case 'ArrowUp': case 'KeyW': doJump(); break;
+    case 'ArrowDown': case 'KeyS': doSlide(); break;
+    case 'Space': case 'Enter': primaryAction(); break;
+  }
+});
+
+/* pointer / touch: tap buttons, swipe to move */
+let pDown=null;
+function canvasPos(e){
+  const r = canvas.getBoundingClientRect();
+  return { x:(e.clientX-r.left)*(W/r.width), y:(e.clientY-r.top)*(H/r.height) };
+}
+canvas.addEventListener('pointerdown', e=>{ audioInit(); pDown = canvasPos(e); });
+canvas.addEventListener('pointerup', e=>{
+  const p = canvasPos(e);
+  if(!pDown){ return; }
+  const dx = p.x-pDown.x, dy = p.y-pDown.y;
+  if(S.state==='playing'){
+    if(Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) moveLane(dx>0 ? 1 : -1);
+    else if(dy < -40) doJump();
+    else if(dy > 40) doSlide();
+  } else {
+    /* button hit tests */
+    if(S.state==='menu' && p.x>W/2-90 && p.x<W/2+90 && p.y>350 && p.y<406) startGame();
+    else if(S.state==='over' && S.overT>25 && p.x>W/2-110 && p.x<W/2+110 && p.y>380 && p.y<438) startGame();
+    else primaryAction();
+  }
+  pDown=null;
+});
+</script>
+</body>
+</html>
