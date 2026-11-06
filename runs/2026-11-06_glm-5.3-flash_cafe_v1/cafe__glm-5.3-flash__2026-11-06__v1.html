@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="KGP Vibes Cafe — Kharagpur's coziest specialty coffee house and kitchen. Fresh brews, wood-fired snacks, and good vibes daily.">
+<title>KGP Vibes Cafe — Coffee, Kitchen &amp; Good Vibes</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+  /* ============================================================
+     DESIGN TOKENS
+     ============================================================ */
+  :root {
+    --bg:        #0A0A0A;
+    --surface:   #141414;
+    --card:      #1C1C1C;
+    --accent:    #C9A84C;
+    --accent-dim: rgba(201, 168, 76, 0.35);
+    --accent-glow: rgba(201, 168, 76, 0.12);
+    --text:      #F5F5F5;
+    --text-2:    #9E9E9E;
+    --radius-card: 12px;
+    --radius-btn:  4px;
+    --transition: 200ms ease-in-out;
+    --nav-h: 68px;
+  }
+
+  /* ============================================================
+     RESET & BASE
+     ============================================================ */
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, .serif {
+    font-family: 'Playfair Display', serif;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+  button { font-family: inherit; cursor: pointer; }
+
+  section { scroll-margin-top: calc(var(--nav-h) + 12px); }
+
+  ::selection { background: var(--accent); color: #0A0A0A; }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: #2A2A2A; border-radius: 5px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent-dim); }
+
+  .container {
+    width: min(1180px, 92%);
+    margin-inline: auto;
+  }
+
+  /* ============================================================
+     NAVBAR
+     ============================================================ */
+  .navbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--nav-h);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    background: rgba(10, 10, 10, 0.55);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(201, 168, 76, 0.12);
+    transition: background var(--transition);
+  }
+
+  .navbar.scrolled {
+    background: rgba(10, 10, 10, 0.9);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: min(1180px, 92%);
+    margin-inline: auto;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .brand .cup {
+    color: var(--accent);
+    font-size: 1.2rem;
+  }
+
+  .brand span.gold { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 34px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-2);
+    position: relative;
+    padding: 6px 0;
+    transition: color var(--transition);
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: 0;
+    width: 0; height: 1.5px;
+    background: var(--accent);
+    transition: width var(--transition);
+  }
+
+  .nav-links a:hover { color: var(--text); }
+  .nav-links a:hover::after,
+  .nav-links a.active::after { width: 100%; }
+  .nav-links a.active { color: var(--accent); }
+
+  .hamburger {
+    display: none;
+    background: none;
+    border: 1px solid rgba(201, 168, 76, 0.3);
+    border-radius: var(--radius-btn);
+    color: var(--accent);
+    font-size: 1.15rem;
+    width: 42px;
+    height: 42px;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--transition), border-color var(--transition);
+  }
+
+  .hamburger:hover { background: var(--accent-glow); border-color: var(--accent); }
+
+  /* ============================================================
+     HERO
+     ============================================================ */
+  .hero {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 60% 45% at 50% 0%, rgba(201, 168, 76, 0.10), transparent 70%),
+      radial-gradient(ellipse 40% 40% at 85% 90%, rgba(201, 168, 76, 0.06), transparent 70%),
+      linear-gradient(180deg, #0A0A0A 0%, #0D0C0A 55%, #0A0A0A 100%);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(201, 168, 76, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201, 168, 76, 0.035) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, black 20%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, black 20%, transparent 75%);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 120px 20px 80px;
+    animation: heroRise 900ms ease-out both;
+  }
+
+  @keyframes heroRise {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 26px;
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: '';
+    width: 36px; height: 1px;
+    background: var(--accent-dim);
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 9vw, 6.2rem);
+    font-weight: 800;
+    letter-spacing: -1px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-tagline {
+    max-width: 560px;
+    margin: 22px auto 42px;
+    color: var(--text-2);
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    font-weight: 300;
+    letter-spacing: 0.3px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 34px;
+    border-radius: var(--radius-btn);
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: #0A0A0A;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: background var(--transition), box-shadow var(--transition), transform var(--transition), color var(--transition);
+  }
+
+  .btn:hover {
+    background: transparent;
+    color: var(--accent);
+    box-shadow: 0 0 32px var(--accent-glow), 0 8px 24px rgba(0, 0, 0, 0.45);
+    transform: translateY(-2px);
+  }
+
+  .btn.ghost {
+    background: transparent;
+    color: var(--accent);
+    border-color: rgba(201, 168, 76, 0.4);
+  }
+
+  .btn.ghost:hover {
+    background: var(--accent);
+    color: #0A0A0A;
+    border-color: var(--accent);
+  }
+
+  .hero-cta-row {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .scroll-cue {
+    position: absolute;
+    bottom: 34px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--text-2);
+    font-size: 1.1rem;
+    animation: bob 2.2s ease-in-out infinite;
+  }
+
+  @keyframes bob {
+    0%, 100% { transform: translate(-50%, 0); opacity: 0.5; }
+    50%      { transform: translate(-50%, 10px); opacity: 1; }
+  }
+
+  /* ============================================================
+     SECTION HEADERS
+     ============================================================ */
+  .section-head {
+    text-align: center;
+    margin-bottom: 52px;
+  }
+
+  .section-head .kicker {
+    display: inline-block;
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+
+  .section-head h2 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+  }
+
+  .section-head p {
+    max-width: 560px;
+    margin: 14px auto 0;
+    color: var(--text-2);
+    font-weight: 300;
+  }
+
+  /* ============================================================
+     TODAY'S SPECIAL BANNER
+     ============================================================ */
+  .special-banner {
+    position: relative;
+    margin-bottom: 56px;
+    background: linear-gradient(135deg, #1A1608 0%, var(--card) 55%, #14110A 100%);
+    border: 1px solid rgba(201, 168, 76, 0.28);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    min-height: 128px;
+  }
+
+  .special-banner::before {
+    content: '';
+    position: absolute;
+    top: -60%; right: -10%;
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(201, 168, 76, 0.16), transparent 65%);
+    pointer-events: none;
+  }
+
+  .special-tag {
+    position: absolute;
+    top: 0; left: 0;
+    z-index: 3;
+    background: var(--accent);
+    color: #0A0A0A;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 6px 16px 6px 14px;
+    clip-path: polygon(0 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+  }
+
+  .special-track {
+    position: relative;
+    height: 100%;
+    min-height: 128px;
+  }
+
+  .special-slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 26px 34px 26px 44px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .special-slide.active {
+    opacity: 1;
+    pointer-events: auto;
+    animation: specialFade 4s ease-in-out both;
+  }
+
+  @keyframes specialFade {
+    0%   { opacity: 0; transform: translateY(10px); }
+    8%   { opacity: 1; transform: translateY(0); }
+    92%  { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-8px); }
+  }
+
+  .special-slide .sp-icon {
+    flex: none;
+    width: 58px; height: 58px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid var(--accent-dim);
+    background: rgba(201, 168, 76, 0.08);
+    color: var(--accent);
+    font-size: 1.3rem;
+  }
+
+  .special-slide .sp-body h3 {
+    font-size: 1.25rem;
+    margin-bottom: 4px;
+  }
+
+  .special-slide .sp-body p {
+    color: var(--text-2);
+    font-size: 0.88rem;
+    font-weight: 300;
+  }
+
+  .special-slide .sp-price {
+    margin-left: auto;
+    flex: none;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .special-dots {
+    position: absolute;
+    bottom: 12px; right: 20px;
+    display: flex;
+    gap: 7px;
+    z-index: 3;
+  }
+
+  .special-dots button {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(201, 168, 76, 0.25);
+    transition: background var(--transition), transform var(--transition);
+  }
+
+  .special-dots button.on {
+    background: var(--accent);
+    transform: scale(1.25);
+  }
+
+  /* ============================================================
+     MENU — STICKY FILTER BAR + GRID
+     ============================================================ */
+  .menu-section {
+    padding: 100px 0 90px;
+    background: var(--bg);
+  }
+
+  .filter-bar {
+    position: sticky;
+    top: var(--nav-h);
+    z-index: 500;
+    background: rgba(10, 10, 10, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    padding: 14px 0;
+    margin-bottom: 54px;
+  }
+
+  .filter-row {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .filter-row::-webkit-scrollbar { display: none; }
+
+  .filter-btn {
+    flex: none;
+    padding: 10px 22px;
+    border-radius: var(--radius-btn);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--surface);
+    color: var(--text-2);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    transition: color var(--transition), border-color var(--transition), background var(--transition), box-shadow var(--transition);
+  }
+
+  .filter-btn:hover {
+    color: var(--text);
+    border-color: var(--accent-dim);
+  }
+
+  .filter-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0A0A0A;
+    box-shadow: 0 4px 18px rgba(201, 168, 76, 0.25);
+  }
+
+  .menu-group {
+    margin-bottom: 58px;
+  }
+
+  .menu-group:last-child { margin-bottom: 0; }
+
+  .group-head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 26px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .group-head h3 {
+    font-size: 1.55rem;
+    font-weight: 700;
+  }
+
+  .group-head .count {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--text-2);
+    text-transform: uppercase;
+  }
+
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .item-card {
+    background: var(--card);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-card);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+  }
+
+  .item-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(201, 168, 76, 0.4);
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(201, 168, 76, 0.08);
+  }
+
+  .item-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .item-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.12rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .price {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .item-desc {
+    color: var(--text-2);
+    font-size: 0.87rem;
+    font-weight: 300;
+    flex: 1;
+  }
+
+  /* Veg / Non-veg badge (Indian standard mark) */
+  .badge {
+    flex: none;
+    width: 18px; height: 18px;
+    display: grid;
+    place-items: center;
+    border: 1.6px solid #4E9A51;
+    border-radius: 3px;
+    background: transparent;
+  }
+
+  .badge::after {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #4E9A51;
+  }
+
+  .badge.non-veg { border-color: #B0443C; }
+
+  .badge.non-veg::after {
+    width: 0; height: 0;
+    border-radius: 0;
+    background: transparent;
+    border-left: 4.5px solid transparent;
+    border-right: 4.5px solid transparent;
+    border-bottom: 8px solid #B0443C;
+  }
+
+  .menu-empty {
+    display: none;
+    text-align: center;
+    color: var(--text-2);
+    font-weight: 300;
+    padding: 40px 0;
+  }
+
+  .menu-empty.show { display: block; }
+
+  /* ============================================================
+     ABOUT
+     ============================================================ */
+  .about-section {
+    padding: 100px 0;
+    background: var(--surface);
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 56px;
+    align-items: center;
+  }
+
+  .about-visual {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-card);
+    background:
+      radial-gradient(circle at 30% 25%, rgba(201, 168, 76, 0.22), transparent 55%),
+      radial-gradient(circle at 75% 80%, rgba(201, 168, 76, 0.10), transparent 50%),
+      linear-gradient(160deg, #232016 0%, #141210 60%, #0E0D0B 100%);
+    border: 1px solid rgba(201, 168, 76, 0.2);
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+
+  .about-visual::before {
+    content: '';
+    position: absolute;
+    inset: 18px;
+    border: 1px solid rgba(201, 168, 76, 0.25);
+    border-radius: 8px;
+    pointer-events: none;
+  }
+
+  .about-logo-mark {
+    text-align: center;
+    padding: 20px;
+  }
+
+  .about-logo-mark .cup-icon {
+    font-size: 2.2rem;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .about-logo-mark h3 {
+    font-size: clamp(1.6rem, 3.2vw, 2.3rem);
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .about-logo-mark h3 em { color: var(--accent); font-style: italic; }
+
+  .about-logo-mark p {
+    margin-top: 8px;
+    font-size: 0.72rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--text-2);
+  }
+
+  .about-copy .kicker {
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .about-copy h2 {
+    font-size: clamp(1.9rem, 4vw, 2.7rem);
+    font-weight: 700;
+    margin: 12px 0 20px;
+  }
+
+  .about-copy p {
+    color: var(--text-2);
+    font-weight: 300;
+    margin-bottom: 18px;
+  }
+
+  .about-stats {
+    display: flex;
+    gap: 38px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+  }
+
+  .stat .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .stat .lbl {
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-2);
+  }
+
+  /* ============================================================
+     GALLERY (masonry)
+     ============================================================ */
+  .gallery-section {
+    padding: 100px 0;
+    background: var(--bg);
+  }
+
+  .masonry {
+    columns: 3;
+    column-gap: 18px;
+  }
+
+  .m-cell {
+    break-inside: avoid;
+    margin-bottom: 18px;
+    position: relative;
+    border-radius: var(--radius-card);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+  }
+
+  .m-cell:hover {
+    transform: translateY(-4px);
+    border-color: rgba(201, 168, 76, 0.35);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5);
+  }
+
+  .m-cell::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 55%, rgba(10, 10, 10, 0.65));
+    pointer-events: none;
+  }
+
+  .m-cell .m-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: rgba(201, 168, 76, 0.5);
+    position: relative;
+    z-index: 2;
+  }
+
+  .m-cell .m-cap {
+    position: absolute;
+    bottom: 14px; left: 16px;
+    z-index: 2;
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-2);
+  }
+
+  /* gradient variety per cell */
+  .m1 { height: 300px; background: linear-gradient(150deg, #2A2415, #12100C 75%); }
+  .m2 { height: 220px; background: linear-gradient(150deg, #1E1B12, #0F0E0B 75%); }
+  .m3 { height: 340px; background: linear-gradient(150deg, #241F13, #100F0C 75%); }
+  .m4 { height: 240px; background: linear-gradient(150deg, #1F1C12, #0E0D0A 75%); }
+  .m5 { height: 320px; background: linear-gradient(150deg, #26200F, #12110B 75%); }
+  .m6 { height: 210px; background: linear-gradient(150deg, #1C1911, #0D0C0A 75%); }
+
+  /* ============================================================
+     CONTACT
+     ============================================================ */
+  .contact-section {
+    padding: 100px 0;
+    background: var(--surface);
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.35fr;
+    gap: 26px;
+  }
+
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .info-card {
+    background: var(--card);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-card);
+    padding: 24px;
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    transition: border-color var(--transition), transform var(--transition);
+  }
+
+  .info-card:hover {
+    border-color: rgba(201, 168, 76, 0.35);
+    transform: translateY(-3px);
+  }
+
+  .info-card .ico {
+    flex: none;
+    width: 46px; height: 46px;
+    display: grid;
+    place-items: center;
+    border-radius: var(--radius-btn);
+    background: rgba(201, 168, 76, 0.1);
+    border: 1px solid rgba(201, 168, 76, 0.25);
+    color: var(--accent);
+    font-size: 1.05rem;
+  }
+
+  .info-card h3 {
+    font-size: 1.05rem;
+    margin-bottom: 4px;
+  }
+
+  .info-card p, .info-card a {
+    color: var(--text-2);
+    font-size: 0.88rem;
+    font-weight: 300;
+  }
+
+  .info-card a:hover { color: var(--accent); }
+
+  .hours-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    color: var(--text-2);
+  }
+
+  .hours-table td {
+    padding: 4px 0;
+  }
+
+  .hours-table td:last-child {
+    text-align: right;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .map-wrap {
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    min-height: 380px;
+    background: var(--card);
+    position: relative;
+  }
+
+  .map-wrap iframe {
+    width: 100%;
+    height: 100%;
+    min-height: 380px;
+    border: 0;
+    display: block;
+    filter: grayscale(0.35) contrast(1.05);
+  }
+
+  /* ============================================================
+     FOOTER
+     ============================================================ */
+  footer {
+    background: var(--bg);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 54px 0 30px;
+    text-align: center;
+  }
+
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .footer-brand em { color: var(--accent); font-style: italic; }
+
+  .footer-tag {
+    color: var(--text-2);
+    font-size: 0.85rem;
+    font-weight: 300;
+    margin-bottom: 26px;
+  }
+
+  .socials {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 30px;
+  }
+
+  .socials a {
+    width: 44px; height: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-2);
+    font-size: 1rem;
+    transition: color var(--transition), border-color var(--transition), background var(--transition), transform var(--transition);
+  }
+
+  .socials a:hover {
+    color: #0A0A0A;
+    background: var(--accent);
+    border-color: var(--accent);
+    transform: translateY(-3px);
+  }
+
+  .copyright {
+    color: var(--text-2);
+    font-size: 0.78rem;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .copyright .gold { color: var(--accent); }
+
+  /* ============================================================
+     SCROLL REVEAL
+     ============================================================ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity 600ms ease-out, transform 600ms ease-out;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .special-slide.active { animation: none; opacity: 1; }
+  }
+
+  /* ============================================================
+     RESPONSIVE
+     ============================================================ */
+  @media (max-width: 900px) {
+    .about-grid { grid-template-columns: 1fr; gap: 36px; }
+    .about-visual { aspect-ratio: 16/10; max-width: 520px; margin-inline: auto; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .masonry { columns: 2; }
+  }
+
+  @media (max-width: 767px) {
+    .hamburger { display: flex; }
+
+    .nav-links {
+      position: absolute;
+      top: var(--nav-h);
+      left: 0; right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      background: rgba(10, 10, 10, 0.97);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 300ms ease-in-out;
+    }
+
+    .nav-links.open { max-height: 340px; }
+
+    .nav-links li { border-top: 1px solid rgba(255, 255, 255, 0.05); }
+    .nav-links li:first-child { border-top: none; }
+
+    .nav-links a {
+      display: block;
+      padding: 16px 6%;
+      font-size: 0.9rem;
+    }
+
+    .nav-links a::after { display: none; }
+
+    .menu-grid { grid-template-columns: 1fr; }
+    .masonry { columns: 1; }
+    .special-slide { flex-direction: column; align-items: flex-start; gap: 12px; padding: 26px 24px 34px 24px; }
+    .special-slide .sp-price { margin-left: 0; }
+    .special-banner, .special-track { min-height: 190px; }
+    .hero h1 { letter-spacing: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== NAVBAR ==================== -->
+<header class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="#home" class="brand">
+      <i class="fa-solid fa-mug-hot cup"></i>
+      KGP <span class="gold">Vibes</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+      <i class="fa-solid fa-bars" id="hamburgerIcon"></i>
+    </button>
+  </div>
+</header>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero" id="home">
+  <div class="hero-content">
+    <span class="hero-eyebrow">Kharagpur's Coffee Corner</span>
+    <h1>KGP <em>Vibes</em> Cafe</h1>
+    <p class="hero-tagline">Where rich espresso meets wood-fired comfort food — brewed slow, served warm, and made for late-night conversations.</p>
+    <div class="hero-cta-row">
+      <a href="#menu" class="btn"><i class="fa-solid fa-book-open"></i> View Menu</a>
+      <a href="#contact" class="btn ghost"><i class="fa-solid fa-location-dot"></i> Find Us</a>
+    </div>
+  </div>
+  <a href="#menu" class="scroll-cue" aria-label="Scroll to menu"><i class="fa-solid fa-chevron-down"></i></a>
+</section>
+
+<!-- ==================== MENU ==================== -->
+<section class="menu-section" id="menu">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Our Offerings</span>
+      <h2>The Menu</h2>
+      <p>Handpicked brews, fresh kitchen favourites and desserts worth saving room for.</p>
+    </div>
+
+    <!-- Today's Special rotating banner -->
+    <div class="special-banner reveal" id="specialBanner">
+      <span class="special-tag"><i class="fa-solid fa-star"></i> Today's Special</span>
+      <div class="special-track" id="specialTrack"></div>
+      <div class="special-dots" id="specialDots"></div>
+    </div>
+
+    <!-- Sticky category filter bar -->
+    <div class="filter-bar" id="filterBar">
+      <div class="container" style="width:100%;">
+        <div class="filter-row" id="filterRow"></div>
+      </div>
+    </div>
+
+    <!-- Menu groups rendered by JS -->
+    <div id="menuRoot"></div>
+    <p class="menu-empty" id="menuEmpty">No items in this category yet — check back soon!</p>
+  </div>
+</section>
+
+<!-- ==================== ABOUT ==================== -->
+<section class="about-section" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-visual reveal">
+        <div class="about-logo-mark">
+          <i class="fa-solid fa-mug-hot cup-icon"></i>
+          <h3>KGP <em>Vibes</em></h3>
+          <p>Est. Kharagpur</p>
+        </div>
+      </div>
+      <div class="about-copy reveal">
+        <span class="kicker">Our Story</span>
+        <h2>Brewed with Love, Served with Vibes</h2>
+        <p>Tucked into the heart of Kharagpur, KGP Vibes Cafe began with a simple idea: a warm, welcoming space where students, families and travellers could slow down over a genuinely great cup of coffee.</p>
+        <p>From single-origin espresso to charcoal-grilled kebabs and sizzling brownies, everything on our menu is made fresh to order. Come for the coffee, stay for the ambience — and leave as a regular.</p>
+        <div class="about-stats">
+          <div class="stat"><div class="num" data-count="40">0</div><div class="lbl">Menu Items</div></div>
+          <div class="stat"><div class="num" data-count="12">0</div><div class="lbl">Coffee Brews</div></div>
+          <div class="stat"><div class="num" data-count="5">0</div><div class="lbl">Years Serving</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== GALLERY ==================== -->
+<section class="gallery-section" id="gallery">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Moments</span>
+      <h2>Gallery</h2>
+      <p>A peek inside our space — the brews, the bites and the buzz.</p>
+    </div>
+    <div class="masonry reveal">
+      <div class="m-cell m1"><span class="m-num">1</span><span class="m-cap">Cozy Corner Seating</span></div>
+      <div class="m-cell m2"><span class="m-num">2</span><span class="m-cap">Signature Brew Bar</span></div>
+      <div class="m-cell m3"><span class="m-num">3</span><span class="m-cap">Chef's Kitchen Counter</span></div>
+      <div class="m-cell m4"><span class="m-num">4</span><span class="m-cap">Late Night Vibes</span></div>
+      <div class="m-cell m5"><span class="m-num">5</span><span class="m-cap">Dessert Showcase</span></div>
+      <div class="m-cell m6"><span class="m-num">6</span><span class="m-cap">Weekend Crowd</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CONTACT ==================== -->
+<section class="contact-section" id="contact">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker">Visit Us</span>
+      <h2>Find Your Vibes</h2>
+      <p>We're easy to spot — follow the aroma of fresh espresso.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="info-card reveal">
+          <div class="ico"><i class="fa-solid fa-location-dot"></i></div>
+          <div>
+            <h3>Address</h3>
+            <p>KGP Vibes Cafe, Malancha Road, Near Tech Market,<br>Kharagpur, West Bengal 721302</p>
+          </div>
+        </div>
+        <div class="info-card reveal">
+          <div class="ico"><i class="fa-solid fa-phone"></i></div>
+          <div>
+            <h3>Phone</h3>
+            <a href="tel:+919000000000">+91 90000 00000</a><br>
+            <a href="mailto:hello@kgpvibescafe.in">hello@kgpvibescafe.in</a>
+          </div>
+        </div>
+        <div class="info-card reveal">
+          <div class="ico"><i class="fa-regular fa-clock"></i></div>
+          <div style="flex:1;">
+            <h3>Hours of Operation</h3>
+            <table class="hours-table">
+              <tr><td>Monday – Friday</td><td>9:00 AM – 10:30 PM</td></tr>
+              <tr><td>Saturday</td><td>9:00 AM – 11:30 PM</td></tr>
+              <tr><td>Sunday</td><td>10:00 AM – 11:00 PM</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="map-wrap reveal">
+        <iframe
+          title="KGP Vibes Cafe location map"
+          src="https://www.google.com/maps?q=Kharagpur,+West+Bengal&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer>
+  <div class="container">
+    <div class="footer-brand">KGP <em>Vibes</em> Cafe</div>
+    <p class="footer-tag">Coffee, Kitchen &amp; Good Vibes — Kharagpur</p>
+    <div class="socials">
+      <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+      <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+      <a href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+    </div>
+    <p class="copyright">© <span id="year"></span> <span class="gold">KGP Vibes Cafe</span> · All rights reserved · Crafted with <i class="fa-solid fa-heart" style="color:var(--accent);font-size:0.7rem;"></i> in Kharagpur</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ============================================================
+     MENU DATA — edit this array to match the printed menu.
+     veg: true = vegetarian (green mark), false = non-veg (red mark)
+     ============================================================ */
+  var MENU = [
+    {
+      category: 'Coffee & Brews',
+      items: [
+        { name: 'Classic Espresso',        desc: 'Single-origin shot with a rich, golden crema.',                    price: '₹120', veg: true },
+        { name: 'Café Latte',              desc: 'Double espresso crowned with silky steamed milk.',                 price: '₹160', veg: true },
+        { name: 'Cappuccino',              desc: 'Espresso, frothed milk and a dusting of cocoa.',                   price: '₹150', veg: true },
+        { name: 'Vietnamese Cold Coffee',  desc: 'Slow-brewed coffee over condensed milk and ice.',                  price: '₹190', veg: true },
+        { name: 'Hazelnut Mocha',          desc: 'Espresso, dark chocolate and roasted hazelnut syrup.',             price: '₹210', veg: true },
+        { name: 'Iced Americano',          desc: 'Chilled double shot poured over crystal-clear ice.',               price: '₹140', veg: true }
+      ]
+    },
+    {
+      category: 'Beverages & Shakes',
+      items: [
+        { name: 'Oreo Thick Shake',        desc: 'Crushed cookies, vanilla ice cream and a whipped top.',            price: '₹220', veg: true },
+        { name: 'Mango Lassi Shake',       desc: 'Alphonso pulp blended with curd and saffron strands.',             price: '₹180', veg: true },
+        { name: 'Masala Chai Latte',       desc: 'House-spiced chai finished with frothed milk.',                    price: '₹90',  veg: true },
+        { name: 'Virgin Mojito',           desc: 'Muddled mint, fresh lime and sparkling soda.',                     price: '₹150', veg: true },
+        { name: 'Cold Coffee Frappe',      desc: 'Blended coffee, ice cream and a chocolate drizzle.',               price: '₹200', veg: true },
+        { name: 'Watermelon Cooler',       desc: 'Fresh-pressed watermelon with mint and a salted rim.',             price: '₹130', veg: true }
+      ]
+    },
+    {
+      category: 'Starters & Snacks',
+      items: [
+        { name: 'Cheesy Garlic Bread',     desc: 'Molten mozzarella, garlic butter and Italian herbs.',              price: '₹170', veg: true },
+        { name: 'Peri Peri Fries',         desc: 'Crispy fries dusted in peri peri with smoked mayo.',               price: '₹140', veg: true },
+        { name: 'Chicken Seekh Kebab',     desc: 'Charcoal-grilled skewers served with mint chutney.',               price: '₹260', veg: false },
+        { name: 'Chilli Paneer Dry',       desc: 'Wok-tossed paneer, peppers and a sticky soy glaze.',               price: '₹220', veg: true },
+        { name: 'Chicken Popcorn',         desc: 'Crunchy bite-sized pieces with smoky BBQ dip.',                    price: '₹230', veg: false },
+        { name: 'Loaded Nachos',           desc: 'Corn chips, salsa, warm cheese sauce and jalapeños.',              price: '₹210', veg: true }
+      ]
+    },
+    {
+      category: 'Burgers & Sandwiches',
+      items: [
+        { name: 'Vibes Classic Burger',    desc: 'Grilled chicken patty, chipotle mayo and pickles.',                price: '₹250', veg: false },
+        { name: 'Paneer Tikka Burger',     desc: 'Tandoori paneer stack with cool mint aioli.',                      price: '₹220', veg: true },
+        { name: 'Club Sandwich',           desc: 'Triple-decker with chicken, egg, greens and mayo.',                price: '₹240', veg: false },
+        { name: 'Grilled Veg Cheese',      desc: 'Garden vegetables and cheddar on buttered sourdough.',             price: '₹180', veg: true },
+        { name: 'Smoky BBQ Burger',        desc: 'BBQ pulled chicken topped with crisp onion rings.',                price: '₹280', veg: false },
+        { name: 'Mushroom Melt',           desc: 'Sautéed mushrooms under a blanket of molten cheese.',              price: '₹210', veg: true }
+      ]
+    },
+    {
+      category: 'Pasta & Mains',
+      items: [
+        { name: 'Alfredo Pasta',           desc: 'Creamy white sauce, herbs, served with garlic bread.',             price: '₹280', veg: true },
+        { name: 'Arrabiata Pasta',         desc: 'Fiery red sauce tossed with parmesan shavings.',                   price: '₹260', veg: true },
+        { name: 'Butter Chicken Bowl',     desc: 'Rich makhani gravy over steamed butter rice.',                     price: '₹320', veg: false },
+        { name: 'Chilli Garlic Noodles',   desc: 'Wok-fried noodles with crunchy seasonal veggies.',                 price: '₹230', veg: true },
+        { name: 'Grilled Chicken Platter', desc: 'Herbed rice, grilled vegetables and house dips.',                  price: '₹340', veg: false },
+        { name: 'Dal Makhani Thali',       desc: 'Slow-cooked dal, rice, roti, salad and a dessert.',                price: '₹260', veg: true }
+      ]
+    },
+    {
+      category: 'Desserts',
+      items: [
+        { name: 'Molten Choco Lava',       desc: 'Warm chocolate core with a vanilla ice cream scoop.',              price: '₹190', veg: true },
+        { name: 'Tiramisu Jar',            desc: 'Espresso-soaked sponge layered with mascarpone.',                  price: '₹230', veg: true },
+        { name: 'Gulab Jamun Cheesecake',  desc: 'Fusion dessert finished with pistachio crumb.',                    price: '₹210', veg: true },
+        { name: 'Brownie Sundae',          desc: 'Fudge brownie, ice cream and toasted nuts.',                       price: '₹220', veg: true },
+        { name: 'Sizzling Brownie',        desc: 'Chocolate sauce poured hot at your table.',                        price: '₹250', veg: true },
+        { name: 'Seasonal Falooda',        desc: 'Rose syrup, vermicelli and basil seeds in a tall glass.',          price: '₹180', veg: true }
+      ]
+    }
+  ];
+
+  /* Featured items for the rotating "Today's Special" banner */
+  var SPECIALS = [
+    { name: 'Signature Vietnamese Cold Coffee', desc: 'Our most-ordered brew — slow-brewed, silky, served over ice.', price: '₹190', icon: 'fa-mug-hot' },
+    { name: 'Molten Choco Lava',                desc: 'Fresh from the oven with a liquid chocolate heart.',           price: '₹190', icon: 'fa-cake-candles' },
+    { name: 'Smoky BBQ Burger',                 desc: 'Pulled chicken, house BBQ glaze and crispy onion rings.',      price: '₹280', icon: 'fa-burger' }
+  ];
+
+  /* ============================================================
+     NAVBAR — scroll state
+     ============================================================ */
+  var navbar = document.getElementById('navbar');
+  function onScroll() {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ============================================================
+     MOBILE HAMBURGER
+     ============================================================ */
+  var hamburger = document.getElementById('hamburger');
+  var navLinks = document.getElementById('navLinks');
+  var hIcon = document.getElementById('hamburgerIcon');
+
+  function closeNav() {
+    navLinks.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    hIcon.className = 'fa-solid fa-bars';
+  }
+
+  hamburger.addEventListener('click', function () {
+    var isOpen = navLinks.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', String(isOpen));
+    hIcon.className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+  });
+
+  navLinks.addEventListener('click', function (e) {
+    if (e.target.tagName === 'A') closeNav();
+  });
+
+  document.addEventListener('click', function (e) {
+    if (window.innerWidth < 768 && !navLinks.contains(e.target) && !hamburger.contains(e.target)) closeNav();
+  });
+
+  /* ============================================================
+     TODAY'S SPECIAL — rotating banner (4s per slide, CSS fade)
+     ============================================================ */
+  var track = document.getElementById('specialTrack');
+  var dotsWrap = document.getElementById('specialDots');
+  var slideEls = [];
+  var dotEls = [];
+  var current = 0;
+  var timer = null;
+
+  SPECIALS.forEach(function (sp, i) {
+    var slide = document.createElement('div');
+    slide.className = 'special-slide';
+    slide.innerHTML =
+      '<div class="sp-icon"><i class="fa-solid ' + sp.icon + '"></i></div>' +
+      '<div class="sp-body"><h3>' + sp.name + '</h3><p>' + sp.desc + '</p></div>' +
+      '<div class="sp-price">' + sp.price + '</div>';
+    track.appendChild(slide);
+    slideEls.push(slide);
+
+    var dot = document.createElement('button');
+    dot.setAttribute('aria-label', 'Show special ' + (i + 1));
+    dot.addEventListener('click', function () { show(i); restart(); });
+    dotsWrap.appendChild(dot);
+    dotEls.push(dot);
+  });
+
+  function show(i) {
+    current = (i + SPECIALS.length) % SPECIALS.length;
+    slideEls.forEach(function (el, n) { el.classList.toggle('active', n === current); });
+    dotEls.forEach(function (el, n) { el.classList.toggle('on', n === current); });
+  }
+
+  function restart() {
+    if (timer) clearInterval(timer);
+    timer = setInterval(function () { show(current + 1); }, 4000);
+  }
+
+  // Pause rotation while the banner is off-screen (saves battery, avoids jank)
+  var banner = document.getElementById('specialBanner');
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      entries[0].isIntersecting ? restart() : (timer && clearInterval(timer));
+    }, { threshold: 0.2 }).observe(banner);
+  } else {
+    restart();
+  }
+  show(0);
+
+  /* ============================================================
+     MENU RENDERING + REAL-TIME FILTER
+     ============================================================ */
+  var menuRoot = document.getElementById('menuRoot');
+  var filterRow = document.getElementById('filterRow');
+  var emptyMsg = document.getElementById('menuEmpty');
+  var groupEls = [];
+
+  MENU.forEach(function (group, gi) {
+    // group block
+    var block = document.createElement('div');
+    block.className = 'menu-group';
+    block.dataset.cat = group.category;
+    block.innerHTML =
+      '<div class="group-head"><h3>' + group.category + '</h3>' +
+      '<span class="count">' + group.items.length + ' items</span></div>';
+
+    var grid = document.createElement('div');
+    grid.className = 'menu-grid';
+
+    group.items.forEach(function (item) {
+      var card = document.createElement('article');
+      card.className = 'item-card';
+      card.dataset.cat = group.category;
+      card.innerHTML =
+        '<div class="item-top">' +
+          '<h4 class="item-name">' + item.name + '</h4>' +
+          '<span class="badge' + (item.veg ? '' : ' non-veg') + '" title="' + (item.veg ? 'Vegetarian' : 'Non-vegetarian') + '"></span>' +
+        '</div>' +
+        '<p class="item-desc">' + item.desc + '</p>' +
+        '<span class="price">' + item.price + '</span>';
+      grid.appendChild(card);
+    });
+
+    block.appendChild(grid);
+    menuRoot.appendChild(block);
+    groupEls.push(block);
+
+    // filter button
+    var btn = document.createElement('button');
+    btn.className = 'filter-btn';
+    btn.dataset.cat = group.category;
+    btn.textContent = group.category;
+    filterRow.appendChild(btn);
+  });
+
+  // "All" button first
+  var allBtn = document.createElement('button');
+  allBtn.className = 'filter-btn active';
+  allBtn.dataset.cat = '__all';
+  allBtn.textContent = 'All Items';
+  filterRow.insertBefore(allBtn, filterRow.firstChild);
+
+  function applyFilter(cat) {
+    var seen = 0;
+    groupEls.forEach(function (block) {
+      var cards = block.querySelectorAll('.item-card');
+      var anyVisible = false;
+      cards.forEach(function (card) {
+        var match = (cat === '__all' || card.dataset.cat === cat);
+        card.style.display = match ? '' : 'none';
+        if (match) anyVisible = true;
+      });
+      block.style.display = anyVisible ? '' : 'none';
+      if (anyVisible) seen++;
+    });
+    emptyMsg.classList.toggle('show', seen === 0);
+  }
+
+  filterRow.addEventListener('click', function (e) {
+    var btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    filterRow.querySelectorAll('.filter-btn').forEach(function (b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    applyFilter(btn.dataset.cat);
+  });
+
+  applyFilter('__all');
+
+  /* ============================================================
+     SCROLL REVEAL + STAT COUNTERS
+     ============================================================ */
+  var revealEls = document.querySelectorAll('.reveal');
+  var counters = document.querySelectorAll('.stat .num');
+
+  function runCounter(el) {
+    var target = parseInt(el.dataset.count, 10) || 0;
+    var start = null;
+    var dur = 1100;
+    function step(ts) {
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + (p === 1 ? '+' : '');
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('visible');
+        entry.target.querySelectorAll('.stat .num').forEach(function (c) {
+          if (!c.dataset.done) { c.dataset.done = '1'; runCounter(c); }
+        });
+        io.unobserve(entry.target);
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(function (el) { io.observe(el); });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add('visible'); });
+    counters.forEach(runCounter);
+  }
+
+  /* ============================================================
+     ACTIVE NAV LINK HIGHLIGHT
+     ============================================================ */
+  var sections = ['home', 'menu', 'about', 'gallery', 'contact'];
+  var anchors = document.querySelectorAll('.nav-links a');
+  if ('IntersectionObserver' in window) {
+    var secIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var id = entry.target.id;
+        anchors.forEach(function (a) { a.classList.toggle('active', a.getAttribute('href') === '#' + id); });
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    sections.forEach(function (id) {
+      var s = document.getElementById(id);
+      if (s) secIO.observe(s);
+    });
+  }
+
+  /* ============================================================
+     FOOTER YEAR
+     ============================================================ */
+  document.getElementById('year').textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
