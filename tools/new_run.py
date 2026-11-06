@@ -13,7 +13,10 @@ RUNS = ROOT / "runs"
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", required=True)
-    ap.add_argument("--category", required=True, choices=["website", "saas", "game2d", "game3d"])
+    ap.add_argument("--category", required=True, choices=[
+        "website", "saas", "game2d", "game3d",
+        "cafe", "engine", "fps", "runner", "os", "cube", "platformer", "cyberpunk",
+    ])
     ap.add_argument("--version", type=int, default=1)
     ap.add_argument("--date", default="")
     args = ap.parse_args()

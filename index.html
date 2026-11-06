@@ -339,8 +339,16 @@ dialog::backdrop{background:rgba(4,4,6,.78);backdrop-filter:blur(6px)}
 <script>
 "use strict";
 const $ = id => document.getElementById(id);
-const CATS = [["website","Website"],["saas","SaaS"],["game2d","2D game"],["game3d","3D game"]];
-const LABEL = {website:"Website", saas:"SaaS", game2d:"2D game", game3d:"3D game"};
+const CATS = [
+  ["website","Website"],["saas","SaaS"],["game2d","2D game"],["game3d","3D game"],
+  ["cafe","Cafe site"],["engine","Engine sim"],["fps","FPS"],["runner","Runner"],
+  ["os","Browser OS"],["cube","Rubik's cube"],["platformer","Platformer"],["cyberpunk","Cyberpunk"],
+];
+const LABEL = {
+  website:"Website", saas:"SaaS", game2d:"2D game", game3d:"3D game",
+  cafe:"Cafe site", engine:"Engine sim", fps:"FPS", runner:"Runner",
+  os:"Browser OS", cube:"Rubik's cube", platformer:"Platformer", cyberpunk:"Cyberpunk",
+};
 const WIDTHS = {desktop:"100%", tablet:"834px", phone:"390px"};
 
 let RUNS = [], selected = new Set(), activeCat = "";

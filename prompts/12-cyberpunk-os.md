@@ -4,10 +4,10 @@
 > The model must deliver one `.html` file and state its name at the top of the reply.
 > Save it as exactly:
 >
-> `game3d__{model}__{YYYY-MM-DD}__v1.html`
+> `cyberpunk__{model}__{YYYY-MM-DD}__v1.html`
 >
-> Example: `game3d__claude-sonnet-4-5__2026-11-06__v1.html`
-> Upload that **.html** (never .rar) to `inbox/`. The Action files it as `runs/{date}_{model}_game3d_v1/`, previewable on the dashboard.
+> Example: `cyberpunk__claude-sonnet-4-5__2026-11-06__v1.html`
+> Upload that **.html** (never .rar) to `inbox/`. The Action files it as `runs/{date}_{model}_cyberpunk_v1/`, previewable on the dashboard.
 
 ---
 
@@ -31,4 +31,4 @@ Build a browser-based cyberpunk open-world simulation in a single HTML file comb
 
 The project should feel like a playable futuristic simulation, not a demo. Prioritize technical sophistication, visual excellence, performance optimization, large-scale architecture, emergent NPC behavior, and player immersion. The experience runs directly in the browser.
 
-**NAMING (mandatory):** State the file name as the first line of your reply, named EXACTLY with the benchmark prefix: `game3d__{model-slug}__{YYYY-MM-DD}__v1.html` — for example `game3d__claude-sonnet-4-5__2026-11-06__v1.html`. Use today's date and your own model name, lowercased, spaces replaced with hyphens. Do not use a creative file name, uppercase or spaces. The file must run by opening it directly — no server, no build step — and work from a static host such as GitHub Pages.
+**NAMING (mandatory):** State the file name as the first line of your reply, named EXACTLY with the benchmark prefix: `cyberpunk__{model-slug}__{YYYY-MM-DD}__v1.html` — for example `cyberpunk__claude-sonnet-4-5__2026-11-06__v1.html`. Use today's date and your own model name, lowercased, spaces replaced with hyphens. Do not use a creative file name, uppercase or spaces. The file must run by opening it directly — no server, no build step — and work from a static host such as GitHub Pages.

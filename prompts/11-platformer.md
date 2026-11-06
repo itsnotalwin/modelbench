@@ -4,10 +4,10 @@
 > The model must deliver one `.html` file and state its name at the top of the reply.
 > Save it as exactly:
 >
-> `game2d__{model}__{YYYY-MM-DD}__v1.html`
+> `platformer__{model}__{YYYY-MM-DD}__v1.html`
 >
-> Example: `game2d__claude-sonnet-4-5__2026-11-06__v1.html`
-> Upload that **.html** (never .rar) to `inbox/`. The Action files it as `runs/{date}_{model}_game2d_v1/`, previewable on the dashboard.
+> Example: `platformer__claude-sonnet-4-5__2026-11-06__v1.html`
+> Upload that **.html** (never .rar) to `inbox/`. The Action files it as `runs/{date}_{model}_platformer_v1/`, previewable on the dashboard.
 
 ---
 
@@ -66,4 +66,4 @@ If variable-height jump is too complex, use a fixed jump impulse. If mushroom lo
 **Difficulty Extension:**
 Add a second level (World 1-2) with an underground theme (black background, grey bricks, no sky): triggered automatically after Level 1 clear. Reuse the tile engine with a new tile array and spawn map.
 
-**NAMING (mandatory):** State the file name as the first line of your reply, named EXACTLY with the benchmark prefix: `game2d__{model-slug}__{YYYY-MM-DD}__v1.html` — for example `game2d__claude-sonnet-4-5__2026-11-06__v1.html`. Use today's date and your own model name, lowercased, spaces replaced with hyphens. Do not use a creative file name, uppercase or spaces. The file must run by opening it directly — no server, no build step — and work from a static host such as GitHub Pages.
+**NAMING (mandatory):** State the file name as the first line of your reply, named EXACTLY with the benchmark prefix: `platformer__{model-slug}__{YYYY-MM-DD}__v1.html` — for example `platformer__claude-sonnet-4-5__2026-11-06__v1.html`. Use today's date and your own model name, lowercased, spaces replaced with hyphens. Do not use a creative file name, uppercase or spaces. The file must run by opening it directly — no server, no build step — and work from a static host such as GitHub Pages.

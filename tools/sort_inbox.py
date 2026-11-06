@@ -22,7 +22,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 INBOX = ROOT / "inbox"
 RUNS = ROOT / "runs"
-CATEGORIES = {"website", "saas", "game2d", "game3d"}
+CATEGORIES = {
+    "website", "saas", "game2d", "game3d",   # prompts 01-04
+    "cafe", "engine", "fps", "runner", "os", "cube", "platformer", "cyberpunk",  # prompts 05-12
+}
 PATTERN = re.compile(
     r"^(?P<category>[a-z0-9]+)__(?P<model>[a-z0-9][a-z0-9\-.]*?)__(?P<date>\d{4}-\d{2}-\d{2})__v(?P<n>\d+)$",
     re.IGNORECASE,

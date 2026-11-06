@@ -4,10 +4,10 @@
 > The model must deliver one `.html` file and state its name at the top of the reply.
 > Save it as exactly:
 >
-> `game3d__{model}__{YYYY-MM-DD}__v1.html`
+> `fps__{model}__{YYYY-MM-DD}__v1.html`
 >
-> Example: `game3d__claude-sonnet-4-5__2026-11-06__v1.html`
-> Upload that **.html** (never .rar) to `inbox/`. The Action files it as `runs/{date}_{model}_game3d_v1/`, previewable on the dashboard.
+> Example: `fps__claude-sonnet-4-5__2026-11-06__v1.html`
+> Upload that **.html** (never .rar) to `inbox/`. The Action files it as `runs/{date}_{model}_fps_v1/`, previewable on the dashboard.
 
 ---
 
@@ -45,4 +45,4 @@ If Three.js gun geometry is too complex, replace with a visible rectangular bloc
 **Difficulty Extension:**
 Add moving targets — 2 of the 5 targets oscillate left/right on a sine wave path. Hitting a moving target awards 1.5× score multiplier.
 
-**NAMING (mandatory):** State the file name as the first line of your reply, named EXACTLY with the benchmark prefix: `game3d__{model-slug}__{YYYY-MM-DD}__v1.html` — for example `game3d__claude-sonnet-4-5__2026-11-06__v1.html`. Use today's date and your own model name, lowercased, spaces replaced with hyphens. Do not use a creative file name, uppercase or spaces. The file must run by opening it directly — no server, no build step — and work from a static host such as GitHub Pages.
+**NAMING (mandatory):** State the file name as the first line of your reply, named EXACTLY with the benchmark prefix: `fps__{model-slug}__{YYYY-MM-DD}__v1.html` — for example `fps__claude-sonnet-4-5__2026-11-06__v1.html`. Use today's date and your own model name, lowercased, spaces replaced with hyphens. Do not use a creative file name, uppercase or spaces. The file must run by opening it directly — no server, no build step — and work from a static host such as GitHub Pages.

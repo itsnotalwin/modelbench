@@ -4,10 +4,10 @@
 > The model must deliver one `.html` file and state its name at the top of the reply.
 > Save it as exactly:
 >
-> `website__{model}__{YYYY-MM-DD}__v1.html`
+> `os__{model}__{YYYY-MM-DD}__v1.html`
 >
-> Example: `website__claude-sonnet-4-5__2026-11-06__v1.html`
-> Upload that **.html** (never .rar) to `inbox/`. The Action files it as `runs/{date}_{model}_website_v1/`, previewable on the dashboard.
+> Example: `os__claude-sonnet-4-5__2026-11-06__v1.html`
+> Upload that **.html** (never .rar) to `inbox/`. The Action files it as `runs/{date}_{model}_os_v1/`, previewable on the dashboard.
 
 ---
 
@@ -80,4 +80,4 @@ If GTA or Flight Simulator are too complex to complete fully, implement them as 
 **Difficulty Extension:**
 Add a File System simulation: Terminal `ls` and `pwd` reflect a virtual file tree. Text Editor `Save` writes to this virtual FS. A `Files` app (like Windows Explorer) shows the virtual file tree and allows double-clicking .txt files to open them in the Text Editor.
 
-**NAMING (mandatory):** State the file name as the first line of your reply, named EXACTLY with the benchmark prefix: `website__{model-slug}__{YYYY-MM-DD}__v1.html` — for example `website__claude-sonnet-4-5__2026-11-06__v1.html`. Use today's date and your own model name, lowercased, spaces replaced with hyphens. Do not use a creative file name, uppercase or spaces. The file must run by opening it directly — no server, no build step — and work from a static host such as GitHub Pages.
+**NAMING (mandatory):** State the file name as the first line of your reply, named EXACTLY with the benchmark prefix: `os__{model-slug}__{YYYY-MM-DD}__v1.html` — for example `os__claude-sonnet-4-5__2026-11-06__v1.html`. Use today's date and your own model name, lowercased, spaces replaced with hyphens. Do not use a creative file name, uppercase or spaces. The file must run by opening it directly — no server, no build step — and work from a static host such as GitHub Pages.
