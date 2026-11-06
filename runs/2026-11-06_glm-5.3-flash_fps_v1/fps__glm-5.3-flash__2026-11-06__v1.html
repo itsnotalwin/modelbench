@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Warehouse Range FPS</title>
+<style>
+  html, body { margin: 0; padding: 0; overflow: hidden; background: #000; font-family: 'Segoe UI', Arial, sans-serif; user-select: none; }
+  canvas { display: block; }
+
+  #hud { position: fixed; inset: 0; pointer-events: none; z-index: 5; }
+
+  #score { position: absolute; top: 16px; left: 16px; color: #ffffff; font-size: 24px; font-weight: 700; text-shadow: 0 0 6px rgba(0,0,0,0.9); letter-spacing: 1px; }
+  #bull  { position: absolute; top: 48px; left: 16px; color: #ff5a5a; font-size: 15px; font-weight: 600; text-shadow: 0 0 6px rgba(0,0,0,0.9); letter-spacing: 1px; }
+
+  #ammo { position: absolute; bottom: 20px; right: 24px; color: #ffffff; font-size: 36px; font-weight: 700; text-shadow: 0 0 8px rgba(0,0,0,0.9); }
+  #ammo.empty { color: #ff4444; }
+  #reloadMsg { position: absolute; bottom: 70px; right: 24px; color: #ffcc44; font-size: 18px; font-weight: 700; letter-spacing: 2px; display: none; text-shadow: 0 0 6px rgba(0,0,0,0.9); }
+
+  #hitmsg { position: absolute; left: 50%; top: 58%; transform: translateX(-50%); color: #ffe066; font-size: 18px; font-weight: 700; letter-spacing: 2px; text-shadow: 0 0 8px rgba(0,0,0,0.9); opacity: 0; transition: opacity 0.4s ease; }
+
+  /* Crosshair */
+  #crosshair { position: absolute; left: 50%; top: 50%; width: 0; height: 0; }
+  #crosshair .bar { position: absolute; background: #e8e8e8; box-shadow: 0 0 3px rgba(0,0,0,0.8); transition: transform 0.12s ease-out; }
+  #crosshair .h { width: 10px; height: 2px; }
+  #crosshair .v { width: 2px; height: 10px; }
+  #crosshair .l { left: -16px; top: -1px; }
+  #crosshair .r { left: 6px;   top: -1px; }
+  #crosshair .t { top: -16px; left: -1px; }
+  #crosshair .b { top: 6px;   left: -1px; }
+  #crosshair.fire .l { transform: translateX(-6px); }
+  #crosshair.fire .r { transform: translateX(6px); }
+  #crosshair.fire .t { transform: translateY(-6px); }
+  #crosshair.fire .b { transform: translateY(6px); }
+
+  /* Overlays */
+  .overlay { position: fixed; inset: 0; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(5, 5, 8, 0.85); color: #fff; text-align: center; cursor: pointer; }
+  .overlay h1 { font-size: 42px; margin: 0 0 12px 0; letter-spacing: 4px; }
+  .overlay p  { font-size: 16px; color: #bbbbcc; margin: 6px 0; }
+  .overlay .keys { color: #ffcc44; font-weight: 600; }
+  #over { display: none; cursor: default; }
+  #over h1 { color: #66ff88; text-shadow: 0 0 20px rgba(102,255,136,0.5); }
+  #finalScore { font-size: 30px; font-weight: 700; margin: 10px 0 20px 0; }
+  #playAgain { pointer-events: auto; background: #66ff88; color: #06280f; border: none; padding: 14px 40px; font-size: 20px; font-weight: 700; letter-spacing: 2px; cursor: pointer; border-radius: 4px; }
+  #playAgain:hover { background: #88ffa5; }
+</style>
+</head>
+<body>
+
+<div id="hud">
+  <div id="score">SCORE 0</div>
+  <div id="bull">BULLSEYES 0 / 5</div>
+  <div id="ammo">30 / 30</div>
+  <div id="reloadMsg">RELOADING...</div>
+  <div id="hitmsg"></div>
+  <div id="crosshair">
+    <div class="bar h l"></div><div class="bar h r"></div>
+    <div class="bar v t"></div><div class="bar v b"></div>
+  </div>
+</div>
+
+<div id="start" class="overlay">
+  <h1>WAREHOUSE RANGE</h1>
+  <p>Hit all 5 bullseyes to clear the range.</p>
+  <p>Two targets move — they pay 1.5&times; score.</p>
+  <p class="keys">WASD move &nbsp;·&nbsp; SPACE jump &nbsp;·&nbsp; LMB fire &nbsp;·&nbsp; R reload</p>
+  <p style="margin-top:24px;font-size:20px;color:#fff;">Click to play</p>
+</div>
+
+<div id="over" class="overlay">
+  <h1>RANGE CLEARED</h1>
+  <p>All 5 bullseyes hit.</p>
+  <div id="finalScore">SCORE 0</div>
+  <button id="playAgain">Play Again</button>
+</div>
+
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+
+/* ============================== SCENE ============================== */
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0a0a0c);
+scene.fog = new THREE.Fog(0x0a0a0c, 12, 48);
+
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.rotation.order = 'YXZ';
+camera.position.set(0, 1.7, 8);
+scene.add(camera);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+document.body.appendChild(renderer.domElement);
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+/* Lights */
+scene.add(new THREE.HemisphereLight(0x9aa0bb, 0x101014, 0.7));
+const lampPositions = [[-6, 5.4, 4], [6, 5.4, 4], [-6, 5.4, -8], [6, 5.4, -8], [0, 5.4, -12]];
+for (const [x, y, z] of lampPositions) {
+  const l = new THREE.PointLight(0xffeecc, 1.1, 22, 1.2);
+  l.position.set(x, y, z);
+  scene.add(l);
+  const lampBox = new THREE.Mesh(
+    new THREE.BoxGeometry(1.2, 0.08, 0.3),
+    new THREE.MeshBasicMaterial({ color: 0xfff3d0 })
+  );
+  lampBox.position.set(x, y + 0.15, z);
+  scene.add(lampBox);
+}
+// small fill light so the gun is always readable
+const gunFill = new THREE.PointLight(0xffffff, 0.5, 4);
+gunFill.position.set(0.2, 0.2, 0);
+camera.add(gunFill);
+
+/* ====================== PROCEDURAL TEXTURES ====================== */
+
+function makeFloorTexture() {
+  const c = document.createElement('canvas');
+  c.width = c.height = 256;
+  const g = c.getContext('2d');
+  g.fillStyle = '#232327';
+  g.fillRect(0, 0, 256, 256);
+  for (let i = 0; i < 9000; i++) {
+    const v = Math.floor(Math.random() * 32);
+    g.fillStyle = `rgba(${38 + v},${38 + v},${42 + v},0.4)`;
+    g.fillRect(Math.random() * 256, Math.random() * 256, 1, 1);
+  }
+  // dark cracks and stains
+  for (let i = 0; i < 22; i++) {
+    g.strokeStyle = `rgba(0,0,0,${0.06 + Math.random() * 0.12})`;
+    g.lineWidth = 1;
+    g.beginPath();
+    let x = Math.random() * 256, y = Math.random() * 256;
+    g.moveTo(x, y);
+    for (let j = 0; j < 4; j++) {
+      x += (Math.random() - 0.5) * 48;
+      y += (Math.random() - 0.5) * 48;
+      g.lineTo(x, y);
+    }
+    g.stroke();
+  }
+  for (let i = 0; i < 8; i++) {
+    g.fillStyle = `rgba(0,0,0,${0.04 + Math.random() * 0.06})`;
+    g.beginPath();
+    g.ellipse(Math.random() * 256, Math.random() * 256, 8 + Math.random() * 26, 6 + Math.random() * 20, Math.random() * Math.PI, 0, Math.PI * 2);
+    g.fill();
+  }
+  const tex = new THREE.CanvasTexture(c);
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  tex.repeat.set(8, 8);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
+function makeBullseyeTexture() {
+  const svg =
+    `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">` +
+    `<rect width="512" height="512" fill="#f2f2ee"/>` +
+    `<circle cx="256" cy="256" r="240" fill="none" stroke="#1c1c1c" stroke-width="10"/>` +
+    `<circle cx="256" cy="256" r="224" fill="none" stroke="#d42a2a" stroke-width="14"/>` +
+    `<circle cx="256" cy="256" r="178" fill="none" stroke="#d42a2a" stroke-width="14"/>` +
+    `<circle cx="256" cy="256" r="140" fill="#d42a2a"/>` +
+    `<circle cx="256" cy="256" r="112" fill="#f2f2ee"/>` +
+    `<circle cx="256" cy="256" r="112" fill="none" stroke="#1c1c1c" stroke-width="6"/>` +
+    `<circle cx="256" cy="256" r="72" fill="#d42a2a"/>` +
+    `<circle cx="256" cy="256" r="72" fill="none" stroke="#1c1c1c" stroke-width="4"/>` +
+    `</svg>`;
+  const img = new Image();
+  img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  const tex = new THREE.Texture(img);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  img.onload = () => { tex.needsUpdate = true; };
+  return tex;
+}
+
+/* ====================== ENVIRONMENT ====================== */
+
+const ROOM = { minX: -10, maxX: 10, minZ: -14, maxZ: 10, height: 6 };
+const envMeshes = [];
+
+const floor = new THREE.Mesh(
+  new THREE.PlaneGeometry(ROOM.maxX - ROOM.minX, ROOM.maxZ - ROOM.minZ),
+  new THREE.MeshStandardMaterial({ map: makeFloorTexture(), roughness: 0.95, metalness: 0.05 })
+);
+floor.rotation.x = -Math.PI / 2;
+floor.position.set(0, 0, (ROOM.minZ + ROOM.maxZ) / 2);
+scene.add(floor);
+envMeshes.push(floor);
+
+const wallMat = new THREE.MeshStandardMaterial({ color: 0x2b2b30, roughness: 0.9, metalness: 0.1 });
+const wallDefs = [
+  { w: 20, d: 0.4, x: 0, z: ROOM.minZ - 0.2 },               // back
+  { w: 20, d: 0.4, x: 0, z: ROOM.maxZ + 0.2 },               // behind player
+  { w: 0.4, d: 24, x: ROOM.minX - 0.2, z: -2 },              // left
+  { w: 0.4, d: 24, x: ROOM.maxX + 0.2, z: -2 }               // right
+];
+for (const w of wallDefs) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w.w, ROOM.height, w.d), wallMat);
+  m.position.set(w.x, ROOM.height / 2, w.z);
+  scene.add(m);
+  envMeshes.push(m);
+}
+
+const ceiling = new THREE.Mesh(
+  new THREE.PlaneGeometry(20, 24),
+  new THREE.MeshStandardMaterial({ color: 0x17171a, roughness: 1 })
+);
+ceiling.rotation.x = Math.PI / 2;
+ceiling.position.set(0, ROOM.height, -2);
+scene.add(ceiling);
+
+// crates for atmosphere
+const crateMat = new THREE.MeshStandardMaterial({ color: 0x3a352c, roughness: 0.85 });
+const crateDefs = [
+  [-8.5, 0.6, 5, 1.2], [-7.3, 0.6, 5.4, 1.2], [-7.9, 1.8, 5.2, 1.2],
+  [8.6, 0.75, 2, 1.5], [8.2, 0.5, -5, 1.0], [-8.4, 0.5, -10, 1.0], [7.8, 0.9, -12, 1.8]
+];
+for (const [x, y, z, s] of crateDefs) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(s, s, s), crateMat);
+  m.position.set(x, y, z);
+  m.rotation.y = Math.random() * 0.5 - 0.25;
+  scene.add(m);
+  envMeshes.push(m);
+}
+
+/* ====================== TARGETS ====================== */
+
+const bullseyeTex = makeBullseyeTexture();
+const targets = [];
+const holeGeo = new THREE.CircleGeometry(0.035, 16);
+const holeMat = new THREE.MeshBasicMaterial({ color: 0x101010 });
+const poleMat = new THREE.MeshStandardMaterial({ color: 0x1c1c20, roughness: 0.7, metalness: 0.5 });
+
+// isMoving: 2 of the 5 targets oscillate on a sine path (1.5x multiplier)
+const targetDefs = [
+  { x: -4, z: 3,   moving: false, amp: 0,   speed: 0   },   // 5 m
+  { x: 3,  z: 0,   moving: false, amp: 0,   speed: 0   },   // 8 m
+  { x: -1, z: -4,  moving: false, amp: 0,   speed: 0   },   // 12 m
+  { x: 4,  z: -6,  moving: true,  amp: 2.4, speed: 1.1 },   // 14 m, moving
+  { x: 0,  z: -12, moving: true,  amp: 3.2, speed: 0.75 }   // 20 m, moving
+];
+
+function makeTarget(def) {
+  const mesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(2, 2),
+    new THREE.MeshBasicMaterial({ map: bullseyeTex })
+  );
+  mesh.position.set(def.x, 1.6, def.z);
+  const flash = new THREE.Mesh(
+    new THREE.PlaneGeometry(2, 2),
+    new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.85 })
+  );
+  flash.position.z = 0.015;
+  flash.visible = false;
+  mesh.add(flash);
+  const pole = new THREE.Mesh(new THREE.BoxGeometry(0.08, 1.6, 0.08), poleMat);
+  pole.position.set(0, -1.6, 0);
+  mesh.add(pole);
+  mesh.userData = {
+    isTarget: true, moving: def.moving, baseX: def.x,
+    amp: def.amp, speed: def.speed, phase: Math.random() * Math.PI * 2,
+    bullseyeHit: false, flash
+  };
+  scene.add(mesh);
+  targets.push(mesh);
+}
+targetDefs.forEach(makeTarget);
+
+/* ====================== GUN ====================== */
+
+const gunMat = new THREE.MeshStandardMaterial({ color: 0x24262b, roughness: 0.35, metalness: 0.85 });
+const gripMat = new THREE.MeshStandardMaterial({ color: 0x141518, roughness: 0.6, metalness: 0.4 });
+
+const gun = new THREE.Group();
+function gunBox(w, h, d, x, y, z, rx = 0, mat = gunMat) {
+  const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+  b.position.set(x, y, z);
+  b.rotation.x = rx;
+  gun.add(b);
+  return b;
+}
+gunBox(0.10, 0.13, 0.42, 0.26, -0.20, -0.60);            // receiver body
+gunBox(0.045, 0.045, 0.36, 0.26, -0.17, -0.92);          // barrel
+gunBox(0.09, 0.20, 0.11, 0.26, -0.32, -0.44, 0.28, gripMat); // grip
+gunBox(0.07, 0.14, 0.09, 0.26, -0.31, -0.60, 0.05, gripMat); // magazine
+gunBox(0.02, 0.03, 0.06, 0.26, -0.12, -0.70);            // front sight
+gunBox(0.03, 0.035, 0.08, 0.26, -0.12, -0.44);           // rear sight
+camera.add(gun);
+
+const muzzleLight = new THREE.PointLight(0xffeeaa, 4, 9, 1.5);
+muzzleLight.position.set(0.26, -0.17, -1.12);
+muzzleLight.visible = false;
+camera.add(muzzleLight);
+
+/* ====================== AUDIO (Web Audio API) ====================== */
+
+let actx = null, noiseBuf = null;
+function initAudio() {
+  if (actx) return;
+  actx = new (window.AudioContext || window.webkitAudioContext)();
+  noiseBuf = actx.createBuffer(1, actx.sampleRate * 0.5, actx.sampleRate);
+  const data = noiseBuf.getChannelData(0);
+  for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+}
+
+function playShot() {
+  if (!actx) return;
+  const t = actx.currentTime;
+  // white noise burst with fast decay
+  const src = actx.createBufferSource();
+  src.buffer = noiseBuf;
+  const g = actx.createGain();
+  g.gain.setValueAtTime(0.5, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
+  const f = actx.createBiquadFilter();
+  f.type = 'lowpass';
+  f.frequency.setValueAtTime(4200, t);
+  f.frequency.exponentialRampToValueAtTime(400, t + 0.2);
+  src.connect(f); f.connect(g); g.connect(actx.destination);
+  src.start(t); src.stop(t + 0.25);
+  // low thump body
+  const o = actx.createOscillator();
+  o.type = 'triangle';
+  o.frequency.setValueAtTime(150, t);
+  o.frequency.exponentialRampToValueAtTime(55, t + 0.1);
+  const g2 = actx.createGain();
+  g2.gain.setValueAtTime(0.4, t);
+  g2.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+  o.connect(g2); g2.connect(actx.destination);
+  o.start(t); o.stop(t + 0.15);
+}
+
+function playReloadClick(freq, when = 0) {
+  if (!actx) return;
+  const t = actx.currentTime + when;
+  const o = actx.createOscillator();
+  o.type = 'square';
+  o.frequency.setValueAtTime(freq, t);
+  const g = actx.createGain();
+  g.gain.setValueAtTime(0.18, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
+  o.connect(g); g.connect(actx.destination);
+  o.start(t); o.stop(t + 0.08);
+}
+function playReload() { playReloadClick(170, 0); playReloadClick(130, 0.14); }
+
+function playHit(high) {
+  if (!actx) return;
+  const t = actx.currentTime;
+  const o = actx.createOscillator();
+  o.type = 'sine';
+  o.frequency.setValueAtTime(high ? 1650 : 1050, t);
+  o.frequency.exponentialRampToValueAtTime(high ? 1900 : 1250, t + 0.05);
+  const g = actx.createGain();
+  g.gain.setValueAtTime(0.28, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
+  o.connect(g); g.connect(actx.destination);
+  o.start(t); o.stop(t + 0.18);
+}
+
+/* ====================== GAME STATE & HUD ====================== */
+
+const MAG_SIZE = 30;
+let ammo = MAG_SIZE;
+let score = 0;
+let reloading = false;
+let gameOver = false;
+let canFire = true;
+
+const elScore = document.getElementById('score');
+const elBull = document.getElementById('bull');
+const elAmmo = document.getElementById('ammo');
+const elReload = document.getElementById('reloadMsg');
+const elHit = document.getElementById('hitmsg');
+const elCross = document.getElementById('crosshair');
+const elStart = document.getElementById('start');
+const elOver = document.getElementById('over');
+const elFinal = document.getElementById('finalScore');
+
+function updateAmmo() {
+  elAmmo.textContent = `${ammo} / ${MAG_SIZE}`;
+  elAmmo.classList.toggle('empty', ammo === 0);
+}
+function updateScore() {
+  elScore.textContent = `SCORE ${score}`;
+  elBull.textContent = `BULLSEYES ${targets.filter(t => t.userData.bullseyeHit).length} / ${targets.length}`;
+}
+let hitTimer = null;
+function showHitMsg(text) {
+  elHit.textContent = text;
+  elHit.style.opacity = '1';
+  clearTimeout(hitTimer);
+  hitTimer = setTimeout(() => { elHit.style.opacity = '0'; }, 600);
+}
+let crossTimer = null;
+function crosshairFire() {
+  elCross.classList.add('fire');
+  clearTimeout(crossTimer);
+  crossTimer = setTimeout(() => elCross.classList.remove('fire'), 100);
+}
+
+/* ====================== INPUT / CONTROLS ====================== */
+
+let locked = false;
+const keys = {};
+let yaw = 0, pitch = 0;
+const PITCH_LIMIT = 1.5;
+
+elStart.addEventListener('click', () => {
+  initAudio();
+  if (actx.state === 'suspended') actx.resume();
+  renderer.domElement.requestPointerLock();
+});
+document.getElementById('playAgain').addEventListener('click', () => {
+  resetGame();
+  renderer.domElement.requestPointerLock();
+});
+
+document.addEventListener('pointerlockchange', () => {
+  locked = document.pointerLockElement === renderer.domElement;
+  if (locked) {
+    elStart.style.display = 'none';
+    elOver.style.display = 'none';
+  } else if (!gameOver) {
+    elStart.style.display = 'flex';
+  }
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (!locked) return;
+  yaw -= e.movementX * 0.0022;
+  pitch -= e.movementY * 0.0022;
+  pitch = Math.max(-PITCH_LIMIT, Math.min(PITCH_LIMIT, pitch));
+});
+
+document.addEventListener('keydown', (e) => {
+  keys[e.code] = true;
+  if (e.code === 'KeyR' && locked) tryReload();
+  if (e.code === 'Space') e.preventDefault();
+});
+document.addEventListener('keyup', (e) => { keys[e.code] = false; });
+
+document.addEventListener('mousedown', (e) => {
+  if (!locked || e.button !== 0) return;
+  shoot();
+});
+
+/* ====================== SHOOTING ====================== */
+
+const raycaster = new THREE.Raycaster();
+const screenCenter = new THREE.Vector2(0, 0);
+const EYE = 1.7;
+let recoilOffset = 0;   // current upward camera kick (radians)
+let recoilStart = -1;   // fire time (seconds) for the 200 ms ease-back
+let gunKick = 0;
+let bobT = 0;
+
+const RECOIL_KICK = 0.05; // radians
+const RECOIL_TIME = 0.2;  // seconds
+
+function shoot() {
+  if (gameOver || reloading || ammo <= 0) return;
+  ammo--;
+  updateAmmo();
+  playShot();
+  crosshairFire();
+
+  // camera recoil: kick up 0.05 rad, ease back over 200 ms
+  recoilOffset = RECOIL_KICK;
+  recoilStart = clock.getElapsedTime();
+  gunKick = 1;
+
+  // muzzle flash: 80 ms
+  muzzleLight.visible = true;
+  setTimeout(() => { muzzleLight.visible = false; }, 80);
+
+  // hit detection: raycast from camera center along camera direction
+  raycaster.setFromCamera(screenCenter, camera);
+  const hits = raycaster.intersectObjects([...targets, ...envMeshes], false);
+  if (hits.length > 0) {
+    const hit = hits[0];
+    if (hit.object.userData.isTarget) handleTargetHit(hit.object, hit);
+  }
+}
+
+function handleTargetHit(target, hit) {
+  // convert world hit point into the target plane's local space
+  const local = target.worldToLocal(hit.point.clone());
+  const d = Math.hypot(local.x, local.y);
+
+  let zone, pts;
+  if (d <= 0.30) { zone = 'BULLSEYE'; pts = 50; target.userData.bullseyeHit = true; }
+  else if (d <= 0.52) { zone = 'INNER RING'; pts = 25; }
+  else { zone = 'OUTER RING'; pts = 10; }
+
+  if (target.userData.moving) pts = Math.round(pts * 1.5);
+
+  score += pts;
+  updateScore();
+
+  addBulletHole(target, local);
+  flashTarget(target);
+  playHit(zone === 'BULLSEYE');
+  showHitMsg((target.userData.moving ? 'MOVING \u00d71.5  ' : '') + `${zone}  +${pts}`);
+
+  checkCleared();
+}
+
+function addBulletHole(target, local) {
+  // persistent decal, parented to the target so it follows moving targets
+  const hole = new THREE.Mesh(holeGeo, holeMat);
+  hole.position.set(local.x, local.y, 0.012 + Math.random() * 0.003);
+  target.add(hole);
+}
+
+function flashTarget(target) {
+  const flash = target.userData.flash;
+  flash.visible = true;
+  setTimeout(() => { flash.visible = false; }, 150);
+}
+
+function checkCleared() {
+  if (targets.every(t => t.userData.bullseyeHit)) {
+    gameOver = true;
+    elFinal.textContent = `SCORE ${score}`;
+    document.exitPointerLock();
+    elOver.style.display = 'flex';
+  }
+}
+
+function tryReload() {
+  if (reloading || ammo === MAG_SIZE || gameOver) return;
+  reloading = true;
+  elReload.style.display = 'block';
+  playReload();
+  setTimeout(() => {
+    ammo = MAG_SIZE;
+    reloading = false;
+    elReload.style.display = 'none';
+    updateAmmo();
+    playReloadClick(150, 0);
+  }, 1500);
+}
+
+function resetGame() {
+  score = 0;
+  ammo = MAG_SIZE;
+  reloading = false;
+  gameOver = false;
+  for (const t of targets) {
+    t.userData.bullseyeHit = false;
+    // remove bullet holes (children that are not the flash or the pole)
+    for (let i = t.children.length - 1; i >= 0; i--) {
+      const c = t.children[i];
+      if (c !== t.userData.flash && c.geometry === holeGeo) t.remove(c);
+    }
+  }
+  elReload.style.display = 'none';
+  elOver.style.display = 'none';
+  updateAmmo();
+  updateScore();
+}
+
+/* ====================== PLAYER MOVEMENT ====================== */
+
+const SPEED = 5.0;
+const GRAVITY = 14;
+const JUMP_VEL = 5.2;
+let velY = 0;
+let onGround = true;
+
+function updatePlayer(dt) {
+  const forward = new THREE.Vector3(-Math.sin(yaw), 0, -Math.cos(yaw));
+  const right = new THREE.Vector3(forward.z, 0, -forward.x);
+
+  const move = new THREE.Vector3(0, 0, 0);
+  if (keys['KeyW']) move.add(forward);
+  if (keys['KeyS']) move.sub(forward);
+  if (keys['KeyD']) move.add(right);
+  if (keys['KeyA']) move.sub(right);
+  if (move.lengthSq() > 0) move.normalize().multiplyScalar(SPEED * dt);
+
+  camera.position.x = Math.max(ROOM.minX + 0.6, Math.min(ROOM.maxX - 0.6, camera.position.x + move.x));
+  camera.position.z = Math.max(ROOM.minZ + 0.6, Math.min(ROOM.maxZ - 0.6, camera.position.z + move.z));
+
+  // single jump (no double jump)
+  if (keys['Space'] && onGround) {
+    velY = JUMP_VEL;
+    onGround = false;
+  }
+  velY -= GRAVITY * dt;
+  camera.position.y += velY * dt;
+  if (camera.position.y <= EYE) {
+    camera.position.y = EYE;
+    velY = 0;
+    onGround = true;
+  }
+
+  // view bob drives subtle gun sway
+  if (move.lengthSq() > 0 && onGround) bobT += dt * 9; else bobT += dt * 1.5;
+}
+
+/* ====================== MAIN LOOP ====================== */
+
+const clock = new THREE.Clock();
+
+function animate() {
+  requestAnimationFrame(animate);
+  const dt = Math.min(clock.getDelta(), 0.05);
+  const now = clock.getElapsedTime();
+
+  if (locked && !gameOver) updatePlayer(dt);
+
+  // recoil: instant kick, ease back over RECOIL_TIME
+  if (recoilStart >= 0) {
+    const t = Math.min((now - recoilStart) / RECOIL_TIME, 1);
+    const eased = t * t * (3 - 2 * t); // smoothstep ease-out
+    recoilOffset = RECOIL_KICK * (1 - eased);
+    if (t >= 1) recoilStart = -1;
+  }
+
+  // moving targets: sine oscillation (bullet holes ride along, they are children)
+  for (const t of targets) {
+    const u = t.userData;
+    if (u.moving) {
+      t.position.x = u.baseX + u.amp * Math.sin(now * u.speed + u.phase);
+    }
+  }
+
+  // gun kick + sway
+  gunKick = Math.max(0, gunKick - dt * 8);
+  gun.position.z = gunKick * 0.06;
+  gun.position.y = Math.sin(bobT) * 0.006;
+  gun.rotation.x = gunKick * 0.06;
+
+  camera.rotation.y = yaw;
+  camera.rotation.x = pitch + recoilOffset;
+
+  renderer.render(scene, camera);
+}
+
+updateAmmo();
+updateScore();
+animate();
+</script>
+</body>
+</html>
