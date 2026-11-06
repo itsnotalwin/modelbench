@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>MONO. — Studio for work without colour</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+
+<nav class="site-nav" aria-label="Primary navigation">
+  <div class="nav-inner">
+    <a class="logo" href="#hero">MONO.</a>
+    <button class="nav-toggle" id="nav-toggle" aria-expanded="false" type="button">Menu</button>
+    <button class="motion-toggle" id="motion-toggle" aria-pressed="true" type="button">Motion: on</button>
+    <ul class="nav-list" id="nav-list" hidden>
+      <li><a href="#work">The work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="site-header" id="hero">
+  <canvas class="flow-canvas" id="hero-canvas" aria-hidden="true"></canvas>
+  <div class="hero-scrim"></div>
+  <div class="hero-wrap">
+    <p class="hero-eyebrow">A studio for work without colour</p>
+    <h1 class="hero-title">Nothing extra.<br>Just grey.</h1>
+    <p class="hero-lead">Generative drawings made with code, type set with system fonts, layouts built with grid and flexbox. Black, white and grey only — in the type, the UI, the imagery, the shadows and the favicon.</p>
+    <a class="button button-invert" href="#work">See the work</a>
+  </div>
+</header>
+
+<main id="content">
+  <section class="section" id="work">
+    <div class="section-head">
+      <h2 class="section-title">The work</h2>
+      <p class="section-deck">Real pieces, each functional. Resize your screen, move your pointer, drag the weight slider.</p>
+    </div>
+    <div class="work-grid">
+      <article class="work-card">
+        <div class="piece weight-stage">
+          <span class="weight-specimen" id="weight-specimen">ABCDEFG</span>
+        </div>
+        <h3 class="piece-title">Weight study</h3>
+        <p class="piece-desc">A single line of type controlled by a real input. Drag the slider — the letterforms redraw between hairline and black using only CSS font-weight and system fonts. No font files are loaded.</p>
+        <label class="weight-control"><span>Font weight</span><input type="range" min="100" max="900" step="50" value="400" id="weight-slider" aria-label="Specimen font weight"></label>
+      </article>
+      <article class="work-card">
+        <div class="piece"><canvas class="flow-canvas" id="piece-field" aria-hidden="true" data-count="500" data-radius="360"></canvas></div>
+        <h3 class="piece-title">Line field</h3>
+        <p class="piece-desc">A generative flow field drawn in canvas. Lines follow a noise-driven current and react to your pointer. Still under reduced motion.</p>
+      </article>
+      <article class="work-card">
+        <div class="piece piece-css">
+          <div class="shape s1"></div>
+          <div class="shape s2"></div>
+          <div class="shape s3"></div>
+          <div class="shape s4"></div>
+        </div>
+        <h3 class="piece-title">CSS composition</h3>
+        <p class="piece-desc">No images, no canvas — only boxes, borders and transforms in greyscale. Built entirely from CSS.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section section-dark" id="about">
+    <div class="section-head">
+      <h2 class="section-title">About</h2>
+    </div>
+    <div class="about-grid">
+      <div>
+        <p class="lead">MONO. is a practice in restraint.</p>
+        <p>Every pixel on this site is black, white or a shade of grey — in the type, the UI, the imagery, the shadows and the favicon. There is no accent colour, ever.</p>
+        <p>Constraints are the point. Without colour to lean on, composition, hierarchy, motion and typography have to do all the work. This site is the demonstration: generative drawings made with code, type set with system fonts, layouts built with grid and flexbox, and zero external dependencies.</p>
+        <p>It is static, responsive, keyboard navigable, and honours your operating system's reduced-motion setting.</p>
+      </div>
+      <div class="about-signature">
+        <canvas id="signature-canvas" role="img" aria-label="Generative signature"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark" id="contact">
+    <div class="section-head">
+      <h2 class="section-title">Contact</h2>
+    </div>
+    <div class="contact-wrap">
+      <p class="contact-lead">Say hello. No forms, no tracking — plain email.</p>
+      <div class="contact-actions">
+        <a class="button" href="mailto:hello@mono.example">hello@mono.example</a>
+        <button class="button button-outline" id="copy-email" type="button">Copy address</button>
+      </div>
+      <p class="contact-fine">Built and maintained by hand. This page contains no external scripts, no web fonts, no images and no cookies.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>&copy; <span id="year"></span> MONO. All imagery generated in code. Keyboard accessible; respects prefers-reduced-motion.</p>
+</footer>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>
