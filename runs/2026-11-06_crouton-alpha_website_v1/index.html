@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en" data-theme="paper">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACHROMA — The Institute for Monochrome</title>
+<meta name="description" content="An interactive museum of the colourless. Zero colour. One hundred and one greys. Halftone, dither, optical illusion and typography labs — built without a single hue.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<script defer src="js/app.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="scroll-progress" aria-hidden="true"><span id="scroll-progress-bar"></span></div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="#top" aria-label="Achroma — back to top">
+      <span class="brand-word">ACHROMA</span>
+      <span class="brand-mark" aria-hidden="true"><i class="sq sq--black"></i><i class="sq sq--white"></i></span>
+      <span class="brand-sub">INSTITUTE FOR MONOCHROME</span>
+    </a>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
+    <nav class="primary-nav" id="primary-nav" aria-label="Primary">
+      <ul class="nav-list">
+        <li><a href="#timeline">01 Exhibits</a></li>
+        <li><a href="#halftone">02 Halftone</a></li>
+        <li><a href="#optical">03 Optical</a></li>
+        <li><a href="#dither">04 Dither</a></li>
+        <li><a href="#scale">05 Greys</a></li>
+        <li><a href="#type">06 Type</a></li>
+      </ul>
+      <div class="theme-switch" role="group" aria-label="Site theme — paper, ash or negative">
+        <span class="theme-switch-label" aria-hidden="true">Paper</span>
+        <button type="button" data-set-theme="paper" aria-pressed="true">Paper</button>
+        <button type="button" data-set-theme="ash" aria-pressed="false">Ash</button>
+        <button type="button" data-set-theme="negative" aria-pressed="false">Negative</button>
+      </div>
+    </nav>
+  </div>
+  <p class="header-note">Monochrome only. No colour was used on this page.</p>
+</header>
+
+<main id="main">
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
+    <div class="hero-inner">
+      <p class="kicker"><span>EXHIBITION Nº 01</span><span aria-hidden="true">/</span><span>OPEN NOW</span><span aria-hidden="true">/</span><span>EST. 2026</span></p>
+      <h1 id="hero-title" aria-label="Achroma">
+        <span aria-hidden="true" class="hero-letters"><span class="hero-letter">A</span><span class="hero-letter">C</span><span class="hero-letter">H</span><span class="hero-letter">R</span><span class="hero-letter">O</span><span class="hero-letter">M</span><span class="hero-letter">A</span></span>
+      </h1>
+      <p class="hero-tagline"><em>Nothing to see here. Exactly.</em></p>
+      <p class="hero-lede">An interactive museum of the colourless — built without a single hue. Every dot, dither and shade on this page is generated in your browser from black, white and the greys between them.</p>
+      <div class="hero-actions">
+        <a class="button button--solid" href="#timeline">Enter the exhibits</a>
+        <a class="button" href="#halftone">Open the halftone lab</a>
+      </div>
+      <dl class="hero-stats" aria-label="Exhibition facts">
+        <div><dt>Colours used</dt><dd>0</dd></div>
+        <div><dt>Greys generated</dt><dd>101</dd></div>
+        <div><dt>External images</dt><dd>None</dd></div>
+        <div><dt>Dependencies</dt><dd>Zero</dd></div>
+      </dl>
+    </div>
+    <figure class="hero-figure">
+      <svg viewBox="0 0 120 120" role="img" aria-label="One circle, half black and half white">
+        <rect x="4" y="4" width="112" height="112" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="60" cy="60" r="44" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M60 16 A44 44 0 0 1 60 104 Z" fill="currentColor"/>
+        <circle cx="60" cy="60" r="6" fill="currentColor"/>
+      </svg>
+      <figcaption>Fig. 00 — One shape, two greys.</figcaption>
+    </figure>
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>BLACK</span><span>WHITE</span><span>GREY</span><span>HALFTONE</span><span>DITHER</span><span>VELVET</span><span>ASH</span><span>SMOKE</span><span>MIST</span><span>PAPER</span>
+        <span>BLACK</span><span>WHITE</span><span>GREY</span><span>HALFTONE</span><span>DITHER</span><span>VELVET</span><span>ASH</span><span>SMOKE</span><span>MIST</span><span>PAPER</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 01 TIMELINE ============ -->
+  <section class="section" id="timeline" aria-labelledby="timeline-title">
+    <div class="section-head">
+      <p class="section-number" aria-hidden="true">01</p>
+      <div>
+        <p class="kicker">EXHIBIT 01 — TIMELINE</p>
+        <h2 id="timeline-title">Invention of <em>grey</em></h2>
+        <p class="section-lede">Before colour, there was tone. Seven moments when black, white and the miles between them did the work of representation — select a year to inspect it.</p>
+      </div>
+    </div>
+    <div class="timeline-layout">
+      <ol class="timeline-list" aria-label="Timeline — choose a year">
+        <li><button type="button" class="timeline-btn is-active" data-index="0" aria-pressed="true"><span class="timeline-year">1826</span><span class="timeline-name">The first photograph</span></button></li>
+        <li><button type="button" class="timeline-btn" data-index="1" aria-pressed="false"><span class="timeline-year">1839</span><span class="timeline-name">Daguerreotype</span></button></li>
+        <li><button type="button" class="timeline-btn" data-index="2" aria-pressed="false"><span class="timeline-year">c. 1881</span><span class="timeline-name">Halftone screen</span></button></li>
+        <li><button type="button" class="timeline-btn" data-index="3" aria-pressed="false"><span class="timeline-year">1928</span><span class="timeline-name">Television in grey</span></button></li>
+        <li><button type="button" class="timeline-btn" data-index="4" aria-pressed="false"><span class="timeline-year">1959</span><span class="timeline-name">The photocopy</span></button></li>
+        <li><button type="button" class="timeline-btn" data-index="5" aria-pressed="false"><span class="timeline-year">1994</span><span class="timeline-name">QR code</span></button></li>
+        <li><button type="button" class="timeline-btn" data-index="6" aria-pressed="false"><span class="timeline-year">2026</span><span class="timeline-name">This website</span></button></li>
+      </ol>
+      <article class="timeline-detail" aria-live="polite" aria-atomic="true">
+        <p class="detail-year" id="detail-year">1826</p>
+        <h3 id="detail-title">The first photograph</h3>
+        <p id="detail-desc">Nicéphore Niépce exposes a pewter plate coated in bitumen for eight hours. The result is not a picture of the world in colour — it is a map of light and dark, grey by necessity.</p>
+        <div class="detail-figure" id="detail-figure" aria-hidden="true">
+          <svg viewBox="0 0 200 120" focusable="false"><rect x="10" y="10" width="180" height="100" fill="none" stroke="currentColor" stroke-width="2"/><rect x="30" y="30" width="60" height="40" fill="currentColor" opacity="0.85"/><rect x="100" y="30" width="30" height="40" fill="currentColor" opacity="0.5"/><rect x="140" y="50" width="30" height="40" fill="currentColor" opacity="0.2"/><line x1="10" y1="90" x2="190" y2="90" stroke="currentColor" stroke-width="1"/></svg>
+        </div>
+        <p class="detail-note"><strong>What you are looking at:</strong> <span id="detail-note">A bitumen plate. Eight hours of sun become four greys.</span></p>
+        <p class="detail-hint">Tip — use arrow keys on the year list to browse.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ 02 HALFTONE ============ -->
+  <section class="section section--inverted" id="halftone" aria-labelledby="halftone-title">
+    <div class="section-head">
+      <p class="section-number" aria-hidden="true">02</p>
+      <div>
+        <p class="kicker">EXHIBIT 02 — LABORATORY</p>
+        <h2 id="halftone-title">The halftone <em>lab</em></h2>
+        <p class="section-lede">Newspapers cannot print grey. They fake it — with dots. Move your pointer across the field, or tune the screen yourself, and watch tone emerge from nothing.</p>
+      </div>
+    </div>
+    <div class="lab-layout">
+      <div class="canvas-frame">
+        <canvas id="halftone-canvas" width="900" height="520" tabindex="0" aria-describedby="halftone-help" role="img" aria-label="Animated halftone dot field. Move the pointer over it to modulate the dots."></canvas>
+        <p class="canvas-caption">Fig. 01 — A field of dots. Where the screen is dense, the eye reads black; where it is sparse, white.</p>
+        <p id="halftone-help" class="canvas-help">Pointer or touch moves over the field to change the ink. Sliders below do the same work by keyboard.</p>
+        <p id="halftone-status" class="visually-hidden" role="status"></p>
+      </div>
+      <div class="controls">
+        <fieldset>
+          <legend>Screen</legend>
+          <div class="control">
+            <label for="halftone-pitch">Dot pitch <output id="halftone-pitch-out">14 px</output></label>
+            <input type="range" id="halftone-pitch" min="6" max="30" step="1" value="14">
+          </div>
+          <div class="control">
+            <label for="halftone-angle">Angle <output id="halftone-angle-out">22°</output></label>
+            <input type="range" id="halftone-angle" min="0" max="90" step="1" value="22">
+          </div>
+          <div class="control">
+            <label for="halftone-ink">Ink density <output id="halftone-ink-out">65%</output></label>
+            <input type="range" id="halftone-ink" min="10" max="100" step="1" value="65">
+          </div>
+        </fieldset>
+        <div class="button-row">
+          <button type="button" class="button button--small" id="halftone-invert" aria-pressed="false">Invert field</button>
+          <button type="button" class="button button--small" id="halftone-animate" aria-pressed="true">Pause motion</button>
+        </div>
+        <div class="button-row">
+          <button type="button" class="button button--small button--solid" id="halftone-random">Generate new field</button>
+          <button type="button" class="button button--small" id="halftone-download">Download PNG</button>
+        </div>
+        <p class="control-note">The canvas is drawn live. Downloading saves exactly what you see, at full resolution.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 03 OPTICAL ============ -->
+  <section class="section" id="optical" aria-labelledby="optical-title">
+    <div class="section-head">
+      <p class="section-number" aria-hidden="true">03</p>
+      <div>
+        <p class="kicker">EXHIBIT 03 — PERCEPTION</p>
+        <h2 id="optical-title">Optical <em>rooms</em></h2>
+        <p class="section-lede">Grey is not only in the ink. It is made by the eye. Three rooms, three deceptions — each with its own controls, so you can break them and rebuild them.</p>
+      </div>
+    </div>
+    <div class="optical-grid">
+      <article class="optical-card" aria-labelledby="mach-title">
+        <p class="card-index">Room A</p>
+        <h3 id="mach-title">Mach bands</h3>
+        <p>A smooth gradient should look smooth. At its edges, the visual system exaggerates the change — and you see bands that are not there.</p>
+        <div class="mach-stage" aria-hidden="true"><div class="mach-bar" id="mach-bar"></div></div>
+        <div class="control">
+          <label for="mach-strength">Edge contrast <output id="mach-strength-out">100%</output></label>
+          <input type="range" id="mach-strength" min="0" max="200" step="5" value="100">
+        </div>
+        <button type="button" class="button button--small" data-explain="mach-explain" aria-expanded="false" aria-controls="mach-explain">How it works</button>
+        <div class="explain" id="mach-explain" hidden><p>Lateral inhibition: neurons next to a bright edge suppress their neighbours. The brain reads a sharp step where the ramp says “almost nothing”. Lower the contrast and the bands vanish — proof they were never in the ink.</p></div>
+      </article>
+
+      <article class="optical-card" aria-labelledby="hermann-title">
+        <p class="card-index">Room B</p>
+        <h3 id="hermann-title">Hermann grid</h3>
+        <p>White corridors cross black squares. Look straight at a crossing and the grey dots vanish; look away and they swim back.</p>
+        <div class="hermann-wrap">
+          <div class="hermann" id="hermann" aria-hidden="true"></div>
+          <div class="hermann-dots" id="hermann-dots" aria-hidden="true"></div>
+        </div>
+        <div class="control">
+          <label for="hermann-gap">Corridor width <output id="hermann-gap-out">6 px</output></label>
+          <input type="range" id="hermann-gap" min="2" max="16" step="1" value="6">
+        </div>
+        <div class="button-row">
+          <button type="button" class="button button--small" id="hermann-dots-toggle" aria-pressed="true">Show intersection dots</button>
+        </div>
+        <button type="button" class="button button--small" data-explain="hermann-explain" aria-expanded="false" aria-controls="hermann-explain">How it works</button>
+        <div class="explain" id="hermann-explain" hidden><p>In the periphery, each crossing is flanked by more white than a point inside the corridor, so inhibition fires unevenly. Fix your gaze on one crossing: it clarifies. The others, in your peripheral vision, stay grey.</p></div>
+      </article>
+
+      <article class="optical-card" aria-labelledby="shadow-title">
+        <p class="card-index">Room C</p>
+        <h3 id="shadow-title">Checker shadow</h3>
+        <p>The two centre squares are the same grey — #808080. One sits on paper-white, one on shadow-black. Your eye insists they differ. It is lying.</p>
+        <div class="shadow-stage" aria-hidden="true">
+          <div class="shadow-tile" id="shadow-tile-a"><span class="shadow-label shadow-label--a">A</span></div>
+          <div class="shadow-tile" id="shadow-tile-b"><span class="shadow-label shadow-label--b">B</span></div>
+        </div>
+        <div class="control">
+          <label for="shadow-opacity">Surround contrast <output id="shadow-opacity-out">45%</output></label>
+          <input type="range" id="shadow-opacity" min="0" max="80" step="1" value="45">
+        </div>
+        <div class="button-row">
+          <button type="button" class="button button--small" id="shadow-reveal" aria-pressed="false">Reveal the truth</button>
+        </div>
+        <p class="shadow-readout" id="shadow-readout">Centre A and centre B are both #808080 — only their surrounds differ.</p>
+        <button type="button" class="button button--small" data-explain="shadow-explain" aria-expanded="false" aria-controls="shadow-explain">How it works</button>
+        <div class="explain" id="shadow-explain" hidden><p>The brain discounts illumination and judges a grey by its neighbours. Adelson’s checker-shadow classic, reduced here to its essence: one grey, two surrounds. Reveal removes the surrounds and the illusion collapses.</p></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ 04 DITHER ============ -->
+  <section class="section section--inverted" id="dither" aria-labelledby="dither-title">
+    <div class="section-head">
+      <p class="section-number" aria-hidden="true">04</p>
+      <div>
+        <p class="kicker">EXHIBIT 04 — LABORATORY</p>
+        <h2 id="dither-title">One-bit <em>engine</em></h2>
+        <p class="section-lede">Only two values allowed: black and white. Dithering spends them wisely, scattering dots so the eye re-mixes them into grey. Choose a scene and an algorithm, then push it to extremes.</p>
+      </div>
+    </div>
+    <div class="lab-layout lab-layout--reverse">
+      <div class="controls">
+        <fieldset>
+          <legend>Scene</legend>
+          <div class="button-row button-row--wrap" role="group" aria-label="Scene">
+            <button type="button" class="button button--small scene-btn" data-scene="hills" aria-pressed="true">Hills</button>
+            <button type="button" class="button button--small scene-btn" data-scene="wave" aria-pressed="false">Wave</button>
+            <button type="button" class="button button--small scene-btn" data-scene="rings" aria-pressed="false">Rings</button>
+            <button type="button" class="button button--small scene-btn" data-scene="grid" aria-pressed="false">Grid</button>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Algorithm</legend>
+          <div class="button-row button-row--wrap" role="group" aria-label="Dither algorithm">
+            <button type="button" class="button button--small dither-btn" data-method="threshold" aria-pressed="false">Threshold</button>
+            <button type="button" class="button button--small dither-btn" data-method="bayer2" aria-pressed="false">Bayer 2×2</button>
+            <button type="button" class="button button--small dither-btn" data-method="bayer4" aria-pressed="true">Bayer 4×4</button>
+            <button type="button" class="button button--small dither-btn" data-method="bayer8" aria-pressed="false">Bayer 8×8</button>
+            <button type="button" class="button button--small dither-btn" data-method="floyd" aria-pressed="false">Floyd–Steinberg</button>
+          </div>
+        </fieldset>
+        <div class="control">
+          <label for="dither-threshold">Threshold <output id="dither-threshold-out">50%</output></label>
+          <input type="range" id="dither-threshold" min="5" max="95" step="1" value="50">
+        </div>
+        <div class="button-row">
+          <button type="button" class="button button--small" id="dither-invert" aria-pressed="false">Invert</button>
+          <button type="button" class="button button--small" id="dither-animate" aria-pressed="true">Pause motion</button>
+        </div>
+        <div class="button-row">
+          <button type="button" class="button button--small button--solid" id="dither-download">Download PNG</button>
+        </div>
+        <p class="control-note">Output is 320 × 200 pixels, enlarged with hard edges — no anti-aliasing, no hidden greys.</p>
+        <p id="dither-status" class="visually-hidden" role="status"></p>
+      </div>
+      <div class="canvas-frame">
+        <canvas id="dither-canvas" width="320" height="200" role="img" aria-label="One-bit dithered rendering of the selected scene. Black and white pixels only."></canvas>
+        <p class="canvas-caption" id="dither-caption">Fig. 02 — Hills, Bayer 4×4. Two inks, infinite suggestion.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 05 GREY SCALE ============ -->
+  <section class="section" id="scale" aria-labelledby="scale-title">
+    <div class="section-head">
+      <p class="section-number" aria-hidden="true">05</p>
+      <div>
+        <p class="kicker">EXHIBIT 05 — INSTRUMENT</p>
+        <h2 id="scale-title">The grey <em>scale</em></h2>
+        <p class="section-lede">One hundred and one greys, from black to white, each measured. Walk the scale, read its contrast, and steal its hex for your own work.</p>
+      </div>
+    </div>
+
+    <div class="scale-instrument">
+      <div class="scale-rail" id="scale-rail" tabindex="0" role="slider" aria-label="Grey value" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="#808080, 50 percent light">
+        <span class="scale-cells" id="scale-cells" aria-hidden="true"></span>
+        <span class="scale-cursor" id="scale-cursor" aria-hidden="true"></span>
+      </div>
+      <p class="scale-keys">Keyboard: <kbd>←</kbd> <kbd>→</kbd> step · <kbd>Shift</kbd>+arrow ×10 · <kbd>Home</kbd> black · <kbd>End</kbd> white · or click any cell.</p>
+      <div class="scale-readout" aria-live="polite">
+        <p class="readout-hex" id="scale-hex">#808080</p>
+        <dl class="readout-grid">
+          <div><dt>Name</dt><dd id="scale-name">Neutral grey</dd></div>
+          <div><dt>Lightness</dt><dd id="scale-light">50%</dd></div>
+          <div><dt>Vs black</dt><dd id="scale-vs-black">5.32 : 1</dd></div>
+          <div><dt>Vs white</dt><dd id="scale-vs-white">3.95 : 1</dd></div>
+          <div><dt>As text on white</dt><dd id="scale-aa-white">AA for large text only</dd></div>
+          <div><dt>As text on black</dt><dd id="scale-aa-black">AA for large text only</dd></div>
+        </dl>
+      </div>
+      <div class="button-row">
+        <button type="button" class="button button--small button--solid" id="scale-copy">Copy hex</button>
+        <button type="button" class="button button--small" id="scale-random">Random grey</button>
+        <button type="button" class="button button--small" id="scale-black">Black</button>
+        <button type="button" class="button button--small" id="scale-white">White</button>
+      </div>
+      <p id="scale-copy-status" class="visually-hidden" role="status"></p>
+    </div>
+
+    <div class="palette-spec">
+      <h3>This site’s own palette — as printed</h3>
+      <p class="section-lede">Eight tokens carry the whole exhibition. No other grey is used in the interface itself.</p>
+      <table class="palette-table">
+        <thead><tr><th scope="col">Token</th><th scope="col">Swatch</th><th scope="col">Hex</th><th scope="col">Use</th></tr></thead>
+        <tbody>
+          <tr><td>Pure black</td><td><span class="swatch" style="background:#000000"></span></td><td><code>#000000</code></td><td>Text, rules, ink</td></tr>
+          <tr><td>Ink</td><td><span class="swatch" style="background:#111111"></span></td><td><code>#111111</code></td><td>Body text</td></tr>
+          <tr><td>Slate</td><td><span class="swatch" style="background:#444444"></span></td><td><code>#444444</code></td><td>Secondary text</td></tr>
+          <tr><td>Ash</td><td><span class="swatch" style="background:#777777"></span></td><td><code>#777777</code></td><td>Captions, muted labels</td></tr>
+          <tr><td>Smoke</td><td><span class="swatch" style="background:#aaaaaa"></span></td><td><code>#AAAAAA</code></td><td>Disabled borders</td></tr>
+          <tr><td>Mist</td><td><span class="swatch" style="background:#dddddd"></span></td><td><code>#DDDDDD</code></td><td>Hairlines, tracks</td></tr>
+          <tr><td>Paper</td><td><span class="swatch" style="background:#f4f4f4"></span></td><td><code>#F4F4F4</code></td><td>Backgrounds</td></tr>
+          <tr><td>Pure white</td><td><span class="swatch" style="background:#ffffff"></span></td><td><code>#FFFFFF</code></td><td>Reversed text, dots</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ 06 TYPE ============ -->
+  <section class="section section--inverted" id="type" aria-labelledby="type-title">
+    <div class="section-head">
+      <p class="section-number" aria-hidden="true">06</p>
+      <div>
+        <p class="kicker">EXHIBIT 06 — WORKSHOP</p>
+        <h2 id="type-title">Type <em>tester</em></h2>
+        <p class="section-lede">Proof that one family, one colour and no decoration can still set a loud page. Bend the type here — size, weight, tracking, leading — and take the CSS with you.</p>
+      </div>
+    </div>
+    <div class="lab-layout">
+      <div class="controls">
+        <div class="control">
+          <label for="type-text">Line to set</label>
+          <textarea id="type-text" rows="3" maxlength="120">Grey is not a colour. It is a decision.</textarea>
+        </div>
+        <div class="button-row button-row--wrap" role="group" aria-label="Preset lines">
+          <button type="button" class="button button--small type-preset" data-preset="Grey is not a colour. It is a decision.">Preset 1</button>
+          <button type="button" class="button button--small type-preset" data-preset="Black, white, and everything the eye invents between.">Preset 2</button>
+          <button type="button" class="button button--small type-preset" data-preset="Set it loud. Set it plain. Set it in grey.">Preset 3</button>
+        </div>
+        <div class="control">
+          <label for="type-size">Size <output id="type-size-out">72 px</output></label>
+          <input type="range" id="type-size" min="16" max="144" step="2" value="72">
+        </div>
+        <div class="control">
+          <label for="type-weight">Weight <output id="type-weight-out">800</output></label>
+          <input type="range" id="type-weight" min="100" max="900" step="50" value="800">
+        </div>
+        <div class="control">
+          <label for="type-tracking">Tracking <output id="type-tracking-out">−0.02 em</output></label>
+          <input type="range" id="type-tracking" min="-5" max="20" step="1" value="-2">
+        </div>
+        <div class="control">
+          <label for="type-leading">Leading <output id="type-leading-out">0.95</output></label>
+          <input type="range" id="type-leading" min="80" max="200" step="5" value="95">
+        </div>
+        <div class="button-row">
+          <button type="button" class="button button--small button--solid" id="type-copy">Copy CSS</button>
+        </div>
+        <p class="control-note">Set in the same system stack as this page: Helvetica / Arial / sans-serif, with Georgia italics for emphasis. No webfont is loaded — that is the point.</p>
+        <p id="type-copy-status" class="visually-hidden" role="status"></p>
+      </div>
+      <div class="type-preview-frame">
+        <p class="canvas-caption">Live specimen — updates as you drag.</p>
+        <p class="type-preview" id="type-preview">Grey is not a colour. It is a decision.</p>
+        <pre class="type-code"><code id="type-css"></code></pre>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer" aria-labelledby="footer-title">
+  <div class="footer-inner">
+    <p class="footer-big" id="footer-title">ACHROMA</p>
+    <div class="footer-columns">
+      <div>
+        <h3>About</h3>
+        <p>A fictional institute and a real website. The museum does not exist; the monochrome does — every pixel above was made without colour, in your browser, from code you can inspect.</p>
+      </div>
+      <div>
+        <h3>Accessibility</h3>
+        <p>Full keyboard operation, visible focus, live announcements for instruments, and a reduced-motion mode that stills every canvas. If your system asks for less motion, the site obeys.</p>
+      </div>
+      <div>
+        <h3>Colophon</h3>
+        <p>Set in Helvetica / Georgia / system mono. One HTML file, one stylesheet, one script. No frameworks, no fonts, no images, no tracking — it opens from disk and from any static host.</p>
+      </div>
+      <div>
+        <h3>Index</h3>
+        <ul class="footer-index">
+          <li><a href="#timeline">01 Invention of grey</a></li>
+          <li><a href="#halftone">02 Halftone lab</a></li>
+          <li><a href="#optical">03 Optical rooms</a></li>
+          <li><a href="#dither">04 One-bit engine</a></li>
+          <li><a href="#scale">05 Grey scale</a></li>
+          <li><a href="#type">06 Type tester</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-actions">
+      <button type="button" class="button" id="back-to-top">Back to top</button>
+      <button type="button" class="button" id="print-page">Print this page</button>
+    </div>
+    <p class="footer-small">© <span id="footer-year">2026</span> ACHROMA — Institute for Monochrome (a work of fiction). All imagery on this page is generated live by code. Black, white and grey only — checked twice.</p>
+  </div>
+</footer>
+
+<noscript><p class="noscript-note">JavaScript is off. You can still read the exhibition, but the live labs (halftone, dither, grey scale and type tester) need it to draw.</p></noscript>
+</body>
+</html>
