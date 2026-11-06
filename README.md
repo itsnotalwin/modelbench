@@ -1,6 +1,6 @@
 # ModelBench
 
-Benchmark inspector for model outputs. Four prompts — **website, SaaS (clearing agents), 2D game, 3D game** — one dashboard to preview, filter, compare and score every attempt.
+Benchmark inspector for model outputs. Twelve prompts — **4 core builds** (website, SaaS for clearing agents, 2D game, 3D game) plus **8 single-file builds** (cafe site, engine simulator, FPS, endless runner, browser OS, Rubik's cube, platformer, cyberpunk OS) — one dashboard to preview, filter, compare and score every attempt.
 
 **Live dashboard:** https://itsnotalwin.github.io/modelbench/
 
