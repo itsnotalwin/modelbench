@@ -26,6 +26,18 @@ CATEGORIES = {
     "website", "saas", "game2d", "game3d",   # prompts 01-04
     "cafe", "engine", "fps", "runner", "os", "cube", "platformer", "cyberpunk",  # prompts 05-12
 }
+# Model slug aliases: normalise variant spellings to one canonical slug so a
+# model's runs always group together in the dashboard.
+MODEL_ALIASES = {
+    "glm-5-3-flash": "glm-5.3-flash",
+}
+
+
+def normalise_model(model: str) -> str:
+    model = model.lower()
+    return MODEL_ALIASES.get(model, model)
+
+
 PATTERN = re.compile(
     r"^(?P<category>[a-z0-9]+)__(?P<model>[a-z0-9][a-z0-9\-.]*?)__(?P<date>\d{4}-\d{2}-\d{2})__v(?P<n>\d+)$",
     re.IGNORECASE,
@@ -41,7 +53,7 @@ def parse(stem: str):
         return None
     return {
         "category": category,
-        "model": m.group("model").lower(),
+        "model": normalise_model(m.group("model")),
         "date": m.group("date"),
         "v": int(m.group("n")),
     }

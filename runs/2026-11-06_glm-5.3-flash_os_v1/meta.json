@@ -1,0 +1,16 @@
+{
+  "slug": "2026-11-06_glm-5.3-flash_os_v1",
+  "model": "glm-5.3-flash",
+  "category": "os",
+  "date": "2026-11-06",
+  "version": 1,
+  "entry": "index.html",
+  "path": "runs/2026-11-06_glm-5.3-flash_os_v1/index.html",
+  "source_file": "os__glm-5-3-flash__2026-11-06__v1.zip (model slug normalised to glm-5.3-flash)",
+  "scores": {
+    "visual": null,
+    "functionality": null,
+    "prompt_following": null
+  },
+  "notes": ""
+}
