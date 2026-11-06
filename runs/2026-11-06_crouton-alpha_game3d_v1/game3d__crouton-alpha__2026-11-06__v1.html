@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="description" content="Mothlight Drift — a tiny deep-cave 3D flight game. Gather motes, thread rings, dodge crystal thorns, reach the Heart of the Cave."/>
+<title>Mothlight Drift — a tiny deep-cave flight</title>
+<style>
+  :root{
+    --ink:#f4ead2; --ink-dim:#c9bdd9; --gold:#ffd27a; --teal:#7ef0d4;
+    --panel:rgba(10,14,34,.72); --panel-line:rgba(255,210,122,.28);
+    --danger:#ff6b81;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; overflow:hidden; background:#050713; color:var(--ink);
+    font-family:ui-sans-system, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    touch-action:none; -webkit-user-select:none; user-select:none;
+  }
+  #stage, #stage canvas{position:fixed; inset:0; width:100%; height:100%; display:block}
+  #vignette{position:fixed; inset:0; pointer-events:none; z-index:3;
+    background:radial-gradient(ellipse at center, transparent 52%, rgba(2,3,12,.55) 100%);}
+  #hitflash{position:fixed; inset:0; pointer-events:none; z-index:4; opacity:0; transition:opacity .18s;
+    background:radial-gradient(ellipse at center, transparent 40%, rgba(255,40,70,.55) 100%);}
+  /* ---------- HUD ---------- */
+  #hud{position:fixed; inset:0; z-index:10; pointer-events:none; text-shadow:0 2px 10px rgba(0,0,0,.7)}
+  .hud-top{position:absolute; top:max(10px, env(safe-area-inset-top)); left:14px; right:14px;
+    display:flex; justify-content:space-between; align-items:flex-start; gap:12px}
+  .hud-box{background:rgba(5,8,22,.45); border:1px solid rgba(255,210,122,.18); border-radius:14px;
+    padding:8px 12px; backdrop-filter:blur(6px)}
+  #hearts{font-size:20px; letter-spacing:2px; color:var(--danger)}
+  #dashWrap{margin-top:6px; width:132px; height:8px; border-radius:99px; background:rgba(255,255,255,.14); overflow:hidden}
+  #dashFill{height:100%; width:100%; border-radius:99px; background:linear-gradient(90deg,var(--teal),var(--gold)); transition:width .08s linear}
+  #dashLabel{font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-dim); margin-top:4px}
+  #zoneVal{font-size:13px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); text-align:center}
+  #scoreVal{font-size:22px; font-weight:800; line-height:1}
+  #distVal{font-size:12px; color:var(--ink-dim); margin-top:3px; text-align:right}
+  .hud-bottom{position:absolute; left:14px; right:14px; bottom:max(12px, env(safe-area-inset-bottom));
+    display:flex; justify-content:space-between; align-items:flex-end; gap:12px}
+  #hint{font-size:11px; color:rgba(244,234,210,.75); max-width:340px; line-height:1.5; margin-left:112px}
+  #motesVal{font-size:14px; color:var(--gold); font-weight:700}
+  #comboVal{font-size:12px; color:var(--teal); min-height:16px}
+  .hud-btn{pointer-events:auto; cursor:pointer; border:1px solid rgba(255,210,122,.35); background:rgba(5,8,22,.55);
+    color:var(--ink); border-radius:12px; padding:8px 12px; font-size:13px; backdrop-filter:blur(6px)}
+  .hud-btn:hover{background:rgba(255,210,122,.18)}
+  #pauseBtn{position:absolute; top:86px; right:14px}
+  #dashBtn{display:none; position:absolute; right:16px; bottom:74px; width:74px; height:74px; border-radius:50%;
+    pointer-events:auto; cursor:pointer; border:2px solid rgba(126,240,212,.5); background:rgba(5,8,22,.5);
+    color:var(--teal); font-weight:800; font-size:13px; letter-spacing:.08em}
+  @media (pointer:coarse){ #dashBtn{display:block} #hint{display:none} }
+  /* ---------- Overlays ---------- */
+  .overlay{position:fixed; inset:0; z-index:20; display:flex; align-items:center; justify-content:center; padding:18px;
+    background:radial-gradient(ellipse at 50% 38%, rgba(28,22,64,.35), rgba(3,4,14,.78) 78%)}
+  .panel{width:min(620px, 94vw); max-height:92vh; overflow:auto; background:var(--panel);
+    border:1px solid var(--panel-line); border-radius:22px; padding:28px 30px; text-align:center;
+    box-shadow:0 24px 80px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.08); backdrop-filter:blur(10px);
+    animation:rise .45s cubic-bezier(.2,.9,.3,1.2)}
+  @keyframes rise{from{transform:translateY(16px) scale(.98); opacity:0} to{transform:none; opacity:1}}
+  .eyebrow{font-size:11px; letter-spacing:.34em; text-transform:uppercase; color:var(--teal); margin:0 0 8px}
+  h1{font-family:Georgia, "Times New Roman", serif; font-weight:600; margin:0 0 8px;
+    font-size:clamp(36px, 7vw, 58px); line-height:1.02; letter-spacing:.01em;
+    background:linear-gradient(180deg,#fff6da,#ffd27a 55%,#ff9d6b); -webkit-background-clip:text; background-clip:text; color:transparent}
+  h2{font-family:Georgia, serif; font-weight:600; font-size:clamp(26px,5vw,38px); margin:0 0 8px}
+  .sub{color:var(--ink-dim); line-height:1.55; margin:0 auto 16px; max-width:46ch; font-size:15px}
+  .controls{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:8px; margin:14px 0 18px; text-align:left}
+  .ctl{background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09); border-radius:12px; padding:9px 11px; font-size:12.5px; color:var(--ink-dim); line-height:1.45}
+  .ctl b{color:var(--ink); display:block; font-size:13px; margin-bottom:2px}
+  kbd{background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.22); border-bottom-width:2px;
+    border-radius:6px; padding:1px 6px; font-size:11px; font-family:inherit; color:var(--ink)}
+  .goal{font-size:13.5px; color:var(--gold); margin:0 0 18px; line-height:1.5}
+  .btn{pointer-events:auto; cursor:pointer; border:0; border-radius:14px; padding:13px 26px; font-size:16px; font-weight:800;
+    color:#231806; background:linear-gradient(180deg,#ffe9ae,#ffb85e); box-shadow:0 8px 26px rgba(255,170,60,.35);
+    transition:transform .12s, box-shadow .12s; margin:4px}
+  .btn:hover{transform:translateY(-2px); box-shadow:0 12px 32px rgba(255,170,60,.5)}
+  .btn:active{transform:translateY(0) scale(.98)}
+  .btn.ghost{background:rgba(255,255,255,.08); color:var(--ink); border:1px solid rgba(255,255,255,.22); box-shadow:none; font-weight:600; font-size:14px}
+  .stats{display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin:16px 0 20px}
+  .stat{background:rgba(255,255,255,.05); border-radius:12px; padding:10px; border:1px solid rgba(255,255,255,.08)}
+  .stat .n{font-size:24px; font-weight:800; color:var(--gold)} .stat .l{font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-dim)}
+  #bestLine{font-size:12.5px; color:var(--ink-dim); margin-top:14px}
+  #muteBtn{position:fixed; left:14px; bottom:max(12px, env(safe-area-inset-bottom)); z-index:40; pointer-events:auto; cursor:pointer;
+    border:1px solid rgba(255,255,255,.22); background:rgba(5,8,22,.55); color:var(--ink); border-radius:99px; padding:7px 13px; font-size:12px}
+  @media (pointer:coarse){ #muteBtn{bottom:158px} }
+  /* ---------- Toasts & popups ---------- */
+  #toast{position:fixed; left:50%; top:22%; transform:translateX(-50%); z-index:15; pointer-events:none;
+    font-size:clamp(15px,2.6vw,20px); font-weight:700; color:var(--ink); text-shadow:0 2px 14px #000; opacity:0; text-align:center; padding:0 12px}
+  #toast.show{animation:toastIn 2.2s ease forwards}
+  @keyframes toastIn{0%{opacity:0; transform:translate(-50%,8px)} 14%{opacity:1; transform:translate(-50%,0)} 78%{opacity:1} 100%{opacity:0}}
+  #zoneBanner{position:fixed; left:50%; top:34%; transform:translate(-50%,-50%); z-index:15; pointer-events:none;
+    font-family:Georgia, serif; font-size:clamp(24px,5vw,40px); color:var(--gold); text-shadow:0 4px 30px rgba(0,0,0,.8); opacity:0; letter-spacing:.06em; text-align:center}
+  #zoneBanner.show{animation:zoneIn 2.6s ease forwards}
+  @keyframes zoneIn{0%{opacity:0; letter-spacing:.3em} 18%{opacity:1} 75%{opacity:1} 100%{opacity:0}}
+  #popups{position:fixed; inset:0; z-index:14; pointer-events:none}
+  .pop{position:absolute; left:50%; top:44%; transform:translate(-50%,-50%); font-weight:800; font-size:17px;
+    text-shadow:0 2px 10px #000; animation:popUp .95s ease-out forwards; white-space:nowrap}
+  @keyframes popUp{0%{opacity:0; margin-top:10px} 18%{opacity:1} 100%{opacity:0; margin-top:-52px}}
+  .hidden{display:none !important}
+  @media (max-width:640px){
+    .panel{padding:20px 16px} .hud-box{padding:6px 10px} #scoreVal{font-size:18px}
+    #zoneVal{font-size:10px} #dashWrap{width:96px}
+  }
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+</head>
+<body>
+<div id="stage"></div>
+<div id="vignette"></div>
+<div id="hitflash"></div>
+
+<div id="hud" class="hidden">
+  <div class="hud-top">
+    <div class="hud-box">
+      <div id="hearts">♥♥♥</div>
+      <div id="dashWrap"><div id="dashFill"></div></div>
+      <div id="dashLabel">Dash ready — Space</div>
+    </div>
+    <div class="hud-box"><div id="zoneVal">Dawn Grotto</div></div>
+    <div class="hud-box"><div id="scoreVal">0</div><div id="distVal">0 m</div></div>
+  </div>
+  <button id="pauseBtn" class="hud-btn" title="Pause (P)">❚❚ Pause</button>
+  <button id="dashBtn">DASH</button>
+  <div class="hud-bottom">
+    <div id="hint">Steer <kbd>WASD</kbd>/<kbd>←↑↓→</kbd> or mouse · <kbd>Space</kbd> dash · <kbd>P</kbd> pause · <kbd>M</kbd> sound</div>
+    <div style="text-align:right">
+      <div id="motesVal">✦ 0 motes</div>
+      <div id="comboVal"></div>
+    </div>
+  </div>
+</div>
+
+<div id="title" class="overlay">
+  <div class="panel">
+    <p class="eyebrow">A tiny deep-cave flight</p>
+    <h1>Mothlight Drift</h1>
+    <p class="sub">You are a lumen-moth, small as a thumbnail, carrying the last lantern of the deep.
+      Drift through a living crystal cave — gather moon-motes, thread the dew-rings, and stay clear of the thorn-crystals.</p>
+    <div class="controls">
+      <div class="ctl"><b>Steer</b><kbd>W A S D</kbd> / arrows, move the mouse, drag on touch, or left stick on a gamepad.</div>
+      <div class="ctl"><b>Dash</b><kbd>Space</kbd> — a burst of speed. Rings recharge it faster. Near-misses pay bonus.</div>
+      <div class="ctl"><b>Pause</b><kbd>P</kbd> or <kbd>Esc</kbd> — also auto-pauses when the tab hides.</div>
+      <div class="ctl"><b>Sound</b><kbd>M</kbd> toggles the synth soundtrack and effects.</div>
+    </div>
+    <p class="goal">Reach <b>2,500 m</b> to find the Heart of the Cave and win. Every 12 motes mends a wing (max 3). The cave narrows and quickens the deeper you go.</p>
+    <button id="playBtn" class="btn">Begin the drift</button>
+    <div id="bestLine">No flights yet — your first drift awaits.</div>
+  </div>
+</div>
+
+<div id="pauseScreen" class="overlay hidden">
+  <div class="panel">
+    <p class="eyebrow">Holding still</p>
+    <h2>Paused</h2>
+    <p class="sub">The cave waits, patient as stone.</p>
+    <button id="resumeBtn" class="btn">Resume</button>
+    <button id="restartBtnP" class="btn ghost">Restart flight</button>
+    <button id="quitBtnP" class="btn ghost">Title screen</button>
+  </div>
+</div>
+
+<div id="overScreen" class="overlay hidden">
+  <div class="panel">
+    <p class="eyebrow">The light goes out…</p>
+    <h2>Your drift ends</h2>
+    <div class="stats">
+      <div class="stat"><div class="n" id="fDist">0</div><div class="l">Metres drifted</div></div>
+      <div class="stat"><div class="n" id="fScore">0</div><div class="l">Score</div></div>
+      <div class="stat"><div class="n" id="fMotes">0</div><div class="l">Motes gathered</div></div>
+      <div class="stat"><div class="n" id="fRings">0</div><div class="l">Rings threaded</div></div>
+    </div>
+    <div id="overBest" style="color:var(--ink-dim);font-size:13px;margin-bottom:12px"></div>
+    <button id="retryBtn" class="btn">Drift again</button>
+    <button id="titleBtnO" class="btn ghost">Title screen</button>
+  </div>
+</div>
+
+<div id="winScreen" class="overlay hidden">
+  <div class="panel">
+    <p class="eyebrow">2,500 metres deep</p>
+    <h2>The Heart of the Cave</h2>
+    <p class="sub">The lantern blooms open. The whole grotto hums your name —
+      a small moth, carrying a very old light, all the way down.</p>
+    <div class="stats">
+      <div class="stat"><div class="n" id="wDist">0</div><div class="l">Metres drifted</div></div>
+      <div class="stat"><div class="n" id="wScore">0</div><div class="l">Score</div></div>
+      <div class="stat"><div class="n" id="wMotes">0</div><div class="l">Motes gathered</div></div>
+      <div class="stat"><div class="n" id="wRings">0</div><div class="l">Rings threaded</div></div>
+    </div>
+    <button id="continueBtn" class="btn">Keep drifting (endless)</button>
+    <button id="againBtnW" class="btn ghost">Fly again</button>
+    <button id="titleBtnW" class="btn ghost">Title screen</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+<div id="zoneBanner"></div>
+<div id="popups"></div>
+<button id="muteBtn">Sound: on</button>
+
+<script type="module">
+import * as THREE from 'three';
+
+/* ================= helpers ================= */
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const rand=(a=1,b)=> b===undefined ? Math.random()*a : a+Math.random()*(b-a);
+const randInt=(a,b)=>Math.floor(rand(a,b+1));
+const TAU=Math.PI*2;
+const $=id=>document.getElementById(id);
+
+/* ================= save data ================= */
+let saved={bestDistance:0,bestScore:0,bestMotes:0,wins:0};
+try{
+  const raw=localStorage.getItem('mothlightDriftSaveV1');
+  if(raw){ const p=JSON.parse(raw); if(p&&typeof p==='object') saved={...saved,...p}; }
+}catch(e){ /* storage unavailable — play without saving */ }
+function persist(){ try{ localStorage.setItem('mothlightDriftSaveV1',JSON.stringify(saved)); }catch(e){} }
+function refreshBestLine(){
+  $('bestLine').textContent = saved.bestDistance>0
+    ? `Best drift ${Math.floor(saved.bestDistance)} m · best score ${saved.bestScore.toLocaleString()} · hearts of the cave found ${saved.wins}`
+    : 'No flights yet — your first drift awaits.';
+}
+refreshBestLine();
+
+/* ================= audio (all synthesised) ================= */
+const AudioSys={
+  ctx:null, master:null, music:null, sfx:null, windGain:null, windFilter:null,
+  muted:false, nextArp:0, nextPad:0, chordIdx:0,
+  chords:[[110,164.81,220,261.63],[87.31,130.81,174.61,220],[98,146.83,196,246.94],[130.81,196,261.63,329.63]],
+  scale:[440,523.25,587.33,659.25,783.99,880,1046.5],
+  init(){
+    if(this.ctx){ if(this.ctx.state==='suspended') this.ctx.resume(); return; }
+    try{
+      const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return;
+      this.ctx=new AC();
+      this.master=this.ctx.createGain(); this.master.gain.value=this.muted?0:0.9; this.master.connect(this.ctx.destination);
+      this.music=this.ctx.createGain(); this.music.gain.value=0.4; this.music.connect(this.master);
+      this.sfx=this.ctx.createGain(); this.sfx.gain.value=0.85; this.sfx.connect(this.master);
+      // looping wind noise
+      const len=this.ctx.sampleRate*2, buf=this.ctx.createBuffer(1,len,this.ctx.sampleRate), d=buf.getChannelData(0);
+      for(let i=0;i<len;i++) d[i]=Math.random()*2-1;
+      const src=this.ctx.createBufferSource(); src.buffer=buf; src.loop=true;
+      this.windFilter=this.ctx.createBiquadFilter(); this.windFilter.type='lowpass'; this.windFilter.frequency.value=380;
+      this.windGain=this.ctx.createGain(); this.windGain.gain.value=0.03;
+      src.connect(this.windFilter); this.windFilter.connect(this.windGain); this.windGain.connect(this.master); src.start();
+      this.noiseBuf=buf;
+      this.nextArp=this.ctx.currentTime+0.6; this.nextPad=this.ctx.currentTime+0.2;
+    }catch(e){ this.ctx=null; }
+  },
+  setMuted(m){ this.muted=m; if(this.master) this.master.gain.setTargetAtTime(m?0:0.9,this.ctx.currentTime,0.05); $('muteBtn').textContent=m?'Sound: off':'Sound: on'; },
+  tone(freq,type,dur,vol,when=0,slideTo=null,dest=null){
+    if(!this.ctx) return; const t=this.ctx.currentTime+when;
+    const o=this.ctx.createOscillator(), g=this.ctx.createGain();
+    o.type=type; o.frequency.setValueAtTime(freq,t);
+    if(slideTo) o.frequency.exponentialRampToValueAtTime(Math.max(20,slideTo),t+dur);
+    g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol,t+0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(g); g.connect(dest||this.sfx); o.start(t); o.stop(t+dur+0.05);
+  },
+  noise(dur,vol,freq=1200,type='lowpass',when=0,slideTo=null){
+    if(!this.ctx||!this.noiseBuf) return; const t=this.ctx.currentTime+when;
+    const s=this.ctx.createBufferSource(); s.buffer=this.noiseBuf; s.loop=true;
+    const f=this.ctx.createBiquadFilter(); f.type=type; f.frequency.setValueAtTime(freq,t);
+    if(slideTo) f.frequency.exponentialRampToValueAtTime(slideTo,t+dur);
+    const g=this.ctx.createGain(); g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    s.connect(f); f.connect(g); g.connect(this.sfx); s.start(t); s.stop(t+dur+0.05);
+  },
+  collect(combo){ const b=660*Math.pow(1.059, Math.min(combo,12)); this.tone(b,'triangle',0.22,0.16); this.tone(b*1.5,'sine',0.3,0.1,0.04); },
+  ring(){ [523.25,659.25,783.99,1046.5].forEach((f,i)=>this.tone(f,'sine',0.5,0.14,i*0.06)); },
+  graze(){ this.tone(392,'sine',0.3,0.1); this.noise(0.2,0.06,900); },
+  near(){ this.noise(0.18,0.08,2400,'bandpass'); this.tone(880,'sine',0.14,0.05); },
+  hit(){ this.noise(0.3,0.3,500); this.tone(110,'sine',0.4,0.35,0,38); },
+  dash(){ this.noise(0.35,0.16,500,'bandpass',0,2600); },
+  ui(){ this.tone(740,'sine',0.12,0.08); },
+  zone(){ this.tone(523.25,'sine',0.7,0.09); this.tone(783.99,'sine',0.9,0.07,0.1); },
+  pad(){
+    if(!this.ctx) return; const ch=this.chords[this.chordIdx++%this.chords.length]; const t=this.ctx.currentTime;
+    ch.forEach(f=>{ [-4,3].forEach(det=>{
+      const o=this.ctx.createOscillator(), g=this.ctx.createGain(), fl=this.ctx.createBiquadFilter();
+      o.type='triangle'; o.frequency.value=f; o.detune.value=det; fl.type='lowpass'; fl.frequency.value=640;
+      g.gain.setValueAtTime(0.0001,t); g.gain.linearRampToValueAtTime(0.05,t+2.2); g.gain.linearRampToValueAtTime(0.0001,t+7.2);
+      o.connect(fl); fl.connect(g); g.connect(this.music); o.start(t); o.stop(t+7.4);
+    });});
+  },
+  update(speedNorm){
+    if(!this.ctx) return; const t=this.ctx.currentTime;
+    if(this.windGain){ this.windGain.gain.setTargetAtTime(0.025+speedNorm*0.075,t,0.2); this.windFilter.frequency.setTargetAtTime(320+speedNorm*700,t,0.2); }
+    if(t>this.nextPad){ this.pad(); this.nextPad=t+7; }
+    if(t>this.nextArp){ if(Math.random()<0.62) this.tone(this.scale[randInt(0,this.scale.length-1)],'sine',0.5,0.05,0, null, this.music); this.nextArp=t+0.42+Math.random()*0.25; }
+  },
+  win(){ [523.25,659.25,783.99,1046.5,1318.5,1568].forEach((f,i)=>this.tone(f,'triangle',0.7,0.14,i*0.09)); this.tone(261.6,'sine',2.2,0.1,0.3); },
+  over(){ [392,329.6,261.6,196].forEach((f,i)=>this.tone(f,'triangle',0.7,0.13,i*0.22)); this.noise(0.8,0.08,300,'lowpass',0.2); }
+};
+
+/* ================= zones ================= */
+const ZONES=[
+  {name:'Dawn Grotto',     bg:0x14253d, crystal:0x7ef0d4, accent:0x7ef0d4, hemiS:0x3a5a8a, hemiG:0x1a2440, dir:0xa8c8ff},
+  {name:'Ember Hollow',    bg:0x33160f, crystal:0xff9d5c, accent:0xffb85e, hemiS:0x8a4a3a, hemiG:0x3a1a12, dir:0xffb27a},
+  {name:'Violet Deep',     bg:0x1c1033, crystal:0xc77dff, accent:0xc77dff, hemiS:0x5a3a8a, hemiG:0x241040, dir:0xc9a8ff},
+  {name:'Starlight Crown', bg:0x0a2540, crystal:0x6fd3ff, accent:0x6fd3ff, hemiS:0x3a7ab0, hemiG:0x0a2038, dir:0xaee6ff},
+  {name:'Heart of the Cave',bg:0x2a1c08, crystal:0xffd27a, accent:0xffe9ae, hemiS:0xa07a3a, hemiG:0x38240a, dir:0xffe2a8},
+].map(z=>({...z, bgC:new THREE.Color(z.bg), crystalC:new THREE.Color(z.crystal), accentC:new THREE.Color(z.accent),
+  hemiSC:new THREE.Color(z.hemiS), hemiGC:new THREE.Color(z.hemiG), dirC:new THREE.Color(z.dir)}));
+const WIN_DISTANCE=2500;
+
+/* ================= renderer / scene ================= */
+const stage=$('stage');
+const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+renderer.setSize(window.innerWidth,window.innerHeight);
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.15;
+stage.appendChild(renderer.domElement);
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(ZONES[0].bg);
+scene.fog=new THREE.FogExp2(ZONES[0].bg,0.0165);
+const camera=new THREE.PerspectiveCamera(62,window.innerWidth/window.innerHeight,0.1,320);
+camera.position.set(0,2.4,8);
+
+const hemi=new THREE.HemisphereLight(ZONES[0].hemiS,ZONES[0].hemiG,0.75); scene.add(hemi);
+const dirLight=new THREE.DirectionalLight(ZONES[0].dir,1.5); dirLight.position.set(4,9,6); scene.add(dirLight);
+const mothLight=new THREE.PointLight(0xffd9a0,26,40,1.7); scene.add(mothLight);
+
+/* procedural glow sprite texture */
+function makeGlowTexture(){
+  const c=document.createElement('canvas'); c.width=c.height=128;
+  const g=c.getContext('2d'); const grad=g.createRadialGradient(64,64,0,64,64,64);
+  grad.addColorStop(0,'rgba(255,255,255,1)'); grad.addColorStop(0.35,'rgba(255,255,255,.55)'); grad.addColorStop(1,'rgba(255,255,255,0)');
+  g.fillStyle=grad; g.fillRect(0,0,128,128);
+  const t=new THREE.CanvasTexture(c); t.colorSpace=THREE.SRGBColorSpace; return t;
+}
+const glowTex=makeGlowTexture();
+function glowSprite(color,scale,opacity=0.8){
+  const m=new THREE.SpriteMaterial({map:glowTex,color,transparent:true,opacity,depthWrite:false,blending:THREE.AdditiveBlending});
+  const s=new THREE.Sprite(m); s.scale.set(scale,scale,1); return s;
+}
+
+/* ================= the moth ================= */
+let moth, wingL, wingR, wingHL, wingHR, scarf, scarfBase, antennaTips=[], mothGlow;
+const wingUniforms={time:{value:0}, colorA:{value:new THREE.Color(0xffe9ae)}, colorB:{value:new THREE.Color(0x7ef0d4)}};
+function makeWingGeo(len,wid){
+  const s=new THREE.Shape();
+  s.moveTo(0,0);
+  s.quadraticCurveTo(len*0.4,wid,len,wid*0.25);
+  s.quadraticCurveTo(len*1.05,-wid*0.35,len*0.55,-wid*0.75);
+  s.quadraticCurveTo(len*0.2,-wid*0.55,0,0);
+  return new THREE.ShapeGeometry(s,10);
+}
+const wingMat=new THREE.ShaderMaterial({
+  uniforms:wingUniforms, transparent:true, side:THREE.DoubleSide, depthWrite:false,
+  vertexShader:`varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+  fragmentShader:`uniform float time; uniform vec3 colorA; uniform vec3 colorB; varying vec2 vUv;
+    void main(){
+      float bands = sin(vUv.x*4.2 + sin(vUv.y*3.0)*1.3 + time*1.6)*0.5+0.5;
+      vec3 col = mix(colorA, colorB, bands*0.65 + vUv.y*0.25);
+      float shimmer = 0.85 + 0.3*sin(time*3.0 + vUv.x*6.0);
+      float alpha = 0.82 * smoothstep(0.0,0.25,vUv.x) ;
+      gl_FragColor = vec4(col*shimmer, alpha);
+    }`
+});
+function buildMoth(){
+  moth=new THREE.Group();
+  const fur=new THREE.MeshStandardMaterial({color:0xf3e2c2,roughness:0.92,emissive:0x241a10,emissiveIntensity:0.5});
+  const dark=new THREE.MeshStandardMaterial({color:0x6b543a,roughness:0.9});
+  const body=new THREE.Mesh(new THREE.SphereGeometry(0.5,20,16),fur);
+  body.scale.set(0.72,0.62,1.25); moth.add(body);
+  const head=new THREE.Mesh(new THREE.SphereGeometry(0.34,18,14),fur);
+  head.position.set(0,0.1,-0.62); moth.add(head);
+  // big glossy eyes
+  const eyeMat=new THREE.MeshStandardMaterial({color:0x14100c,roughness:0.15,metalness:0.4});
+  const hiMat=new THREE.MeshBasicMaterial({color:0xffffff});
+  [[-0.2,0.2,-0.82],[0.2,0.2,-0.82]].forEach(p=>{
+    const e=new THREE.Mesh(new THREE.SphereGeometry(0.13,12,10),eyeMat); e.position.set(...p); moth.add(e);
+    const h=new THREE.Mesh(new THREE.SphereGeometry(0.045,8,6),hiMat); h.position.set(p[0]*0.8,p[1]+0.05,p[2]-0.09); moth.add(h);
+  });
+  // antennae with glowing tips
+  [[-1,1],[1,-1]].forEach(([side])=>{
+    const curve=new THREE.CatmullRomCurve3([
+      new THREE.Vector3(side*0.12,0.28,-0.82),
+      new THREE.Vector3(side*0.3,0.62,-1.1),
+      new THREE.Vector3(side*0.5,0.72,-1.45),
+    ]);
+    const tube=new THREE.Mesh(new THREE.TubeGeometry(curve,12,0.03,6),dark); moth.add(tube);
+    const tip=new THREE.Mesh(new THREE.SphereGeometry(0.07,10,8),new THREE.MeshBasicMaterial({color:0xffe9ae}));
+    tip.position.copy(curve.getPoint(1)); moth.add(tip); antennaTips.push(tip);
+    const g=glowSprite(0xffd27a,0.5,0.75); g.position.copy(tip.position); moth.add(g);
+  });
+  // proboscis
+  const snout=new THREE.Mesh(new THREE.ConeGeometry(0.07,0.3,8),dark);
+  snout.rotation.x=-Math.PI/2; snout.position.set(0,-0.05,-0.98); moth.add(snout);
+  // dangling legs
+  const legs=[];
+  for(let i=0;i<3;i++) for(const side of [-1,1]){
+    const leg=new THREE.Mesh(new THREE.CylinderGeometry(0.03,0.02,0.42,6),dark);
+    leg.position.set(side*0.26,-0.42,-0.3+i*0.3); leg.rotation.z=side*0.5; moth.add(leg); legs.push(leg);
+  }
+  moth.userData.legs=legs;
+  // wings: fore + hind, left + right
+  const foreGeo=makeWingGeo(2.3,0.85), hindGeo=makeWingGeo(1.55,0.62);
+  function makeWingPivot(x,z,geo,mirror){
+    const pivot=new THREE.Group(); pivot.position.set(x,0.16,z);
+    const w=new THREE.Mesh(geo,wingMat); w.rotation.x=-Math.PI/2; if(mirror) w.scale.x=-1;
+    pivot.add(w); moth.add(pivot); return pivot;
+  }
+  wingL =makeWingPivot( 0.16, 0.05, foreGeo,false); wingHL=makeWingPivot( 0.14, 0.45, hindGeo,false);
+  wingR =makeWingPivot(-0.16, 0.05, foreGeo,true ); wingHR=makeWingPivot(-0.14, 0.45, hindGeo,true );
+  // scarf (animated cloth)
+  const scarfGeo=new THREE.PlaneGeometry(0.5,1.5,1,8);
+  scarfBase=scarfGeo.attributes.position.array.slice();
+  scarf=new THREE.Mesh(scarfGeo,new THREE.MeshStandardMaterial({color:0xff6b5e,roughness:0.85,side:THREE.DoubleSide,emissive:0x3a0d08}));
+  scarf.position.set(0,0.28,0.35); scarf.rotation.x=-0.5; moth.add(scarf);
+  // lantern glow
+  mothGlow=glowSprite(0xffd27a,3.2,0.55); mothGlow.position.set(0,0.1,0.4); moth.add(mothGlow);
+  scene.add(moth);
+}
+buildMoth();
+
+/* ================= cave tunnel ================= */
+const crystalMat=new THREE.MeshStandardMaterial({color:ZONES[0].crystal,roughness:0.22,metalness:0.15,emissive:ZONES[0].accent,emissiveIntensity:0.55,flatShading:true});
+const tunnelMat=new THREE.MeshStandardMaterial({vertexColors:true,roughness:0.96,metalness:0,side:THREE.DoubleSide,emissive:0x0a1020,emissiveIntensity:0.35});
+const SEG_COUNT=26, SEG_LEN=6, TUNNEL_LEN=SEG_COUNT*SEG_LEN;
+const crystalGeo=new THREE.ConeGeometry(0.55,2.6,5);
+const segments=[];
+function makeSegGeo(seed){
+  const geo=new THREE.CylinderGeometry(17.5,17.5,SEG_LEN,48,1,true);
+  const pos=geo.attributes.position, colors=[];
+  const cA=new THREE.Color(0x2a3350), cB=new THREE.Color(0x4a3a5c), cC=new THREE.Color(0x1c2638), tmp=new THREE.Color();
+  for(let i=0;i<pos.count;i++){
+    const x=pos.getX(i), z=pos.getZ(i), r=Math.hypot(x,z);
+    if(r>0.1){
+      const a=Math.atan2(z,x);
+      let d=Math.sin(a*7+seed)*0.55+Math.sin(a*13+seed*2.7)*0.4+Math.sin(a*3+seed)*0.5;
+      if(Math.sin(a*23+seed*5.3)>0.86) d+=1.5;               // occasional spike lip
+      const s=(r+d)/r; pos.setX(i,x*s); pos.setZ(i,z*s);
+      tmp.lerpColors(cA,cB,0.5+0.5*Math.sin(a*3+seed)); tmp.lerp(cC,0.4);
+      const v=0.75+Math.random()*0.5; colors.push(tmp.r*v,tmp.g*v,tmp.b*v);
+    } else colors.push(0.2,0.2,0.3);
+  }
+  geo.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
+  geo.computeVertexNormals(); geo.rotateX(Math.PI/2);
+  return geo;
+}
+const segGeos=[makeSegGeo(1.7),makeSegGeo(4.2),makeSegGeo(7.9),makeSegGeo(11.3)];
+function placeCrystals(seg){
+  seg.userData.crystals.forEach(cr=>{
+    const a=rand(TAU), r=15.6;
+    cr.position.set(Math.cos(a)*r,Math.sin(a)*r,rand(-SEG_LEN/2,SEG_LEN/2));
+    const dir=new THREE.Vector3(-Math.cos(a),-Math.sin(a),0).normalize();
+    cr.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir);
+    const s=rand(0.6,1.7); cr.scale.set(s,s*rand(0.8,1.5),s);
+  });
+}
+for(let i=0;i<SEG_COUNT;i++){
+  const g=new THREE.Group();
+  const mesh=new THREE.Mesh(segGeos[i%segGeos.length],tunnelMat); g.add(mesh);
+  const crystals=[];
+  for(let k=0;k<4;k++){ const cr=new THREE.Mesh(crystalGeo,crystalMat); g.add(cr); crystals.push(cr); }
+  g.userData.crystals=crystals; placeCrystals(g);
+  g.position.z=8-i*SEG_LEN; g.rotation.z=rand(TAU);
+  scene.add(g); segments.push(g);
+}
+
+/* portal glow at the cave's heart */
+const portal=glowSprite(ZONES[0].accent,26,0.5); portal.position.set(0,0,-150); portal.material.fog=false; scene.add(portal);
+const portalRing=new THREE.Mesh(new THREE.TorusGeometry(7,0.3,10,48),
+  new THREE.MeshBasicMaterial({color:ZONES[0].accent,transparent:true,opacity:0.75,fog:false}));
+portalRing.position.set(0,0,-148); scene.add(portalRing);
+
+/* ================= dust motes (ambient) ================= */
+const DUST=520, dustPos=new Float32Array(DUST*3);
+function resetDustPoint(i, anywhere){
+  const a=rand(TAU), r=Math.sqrt(Math.random())*16;
+  dustPos[i*3]=Math.cos(a)*r; dustPos[i*3+1]=Math.sin(a)*r;
+  dustPos[i*3+2]= anywhere? rand(-150,8) : rand(-150,-20);
+}
+for(let i=0;i<DUST;i++) resetDustPoint(i,true);
+const dustGeo=new THREE.BufferGeometry();
+dustGeo.setAttribute('position',new THREE.BufferAttribute(dustPos,3).setUsage(THREE.DynamicDrawUsage));
+const dust=new THREE.Points(dustGeo,new THREE.PointsMaterial({size:0.32,map:glowTex,transparent:true,opacity:0.5,color:0xffe9b0,depthWrite:false,blending:THREE.AdditiveBlending}));
+scene.add(dust);
+
+/* moth trail */
+const TRAIL=48, trailPos=new Float32Array(TRAIL*3);
+const trailGeo=new THREE.BufferGeometry();
+trailGeo.setAttribute('position',new THREE.BufferAttribute(trailPos,3).setUsage(THREE.DynamicDrawUsage));
+const trail=new THREE.Points(trailGeo,new THREE.PointsMaterial({size:0.4,map:glowTex,transparent:true,opacity:0.35,color:0xffd27a,depthWrite:false,blending:THREE.AdditiveBlending}));
+scene.add(trail);
+
+/* ================= particle bursts ================= */
+const bursts=[];
+for(let i=0;i<12;i++){
+  const n=26, p=new Float32Array(n*3);
+  const geo=new THREE.BufferGeometry(); geo.setAttribute('position',new THREE.BufferAttribute(p,3).setUsage(THREE.DynamicDrawUsage));
+  const mat=new THREE.PointsMaterial({size:0.5,map:glowTex,transparent:true,opacity:0,color:0xffffff,depthWrite:false,blending:THREE.AdditiveBlending});
+  const pts=new THREE.Points(geo,mat); pts.visible=false; scene.add(pts);
+  bursts.push({pts,vel:new Float32Array(n*3),life:0});
+}
+function spawnBurst(x,y,z,color,count=24,speed=7,size=0.5){
+  const b=bursts.find(b=>b.life<=0)||bursts[0];
+  const p=b.pts.geometry.attributes.position.array;
+  for(let i=0;i<p.length;i+=3){
+    p[i]=x; p[i+1]=y; p[i+2]=z;
+    let dx=rand(-1,1),dy=rand(-1,1),dz=rand(-1,1); const l=Math.hypot(dx,dy,dz)||1;
+    const s=speed*rand(0.3,1); b.vel[i]=dx/l*s; b.vel[i+1]=dy/l*s; b.vel[i+2]=dz/l*s;
+  }
+  b.pts.geometry.attributes.position.needsUpdate=true;
+  b.pts.material.color.set(color); b.pts.material.size=size; b.pts.material.opacity=1;
+  b.pts.visible=true; b.life=1;
+}
+function updateBursts(dt){
+  for(const b of bursts){
+    if(b.life<=0) continue;
+    b.life-=dt*1.25; const p=b.pts.geometry.attributes.position.array;
+    for(let i=0;i<p.length;i+=3){ p[i]+=b.vel[i]*dt; p[i+1]+=b.vel[i+1]*dt; p[i+2]+=b.vel[i+2]*dt;
+      b.vel[i]*=(1-dt*1.6); b.vel[i+1]*=(1-dt*1.6); b.vel[i+2]*=(1-dt*1.6); }
+    b.pts.geometry.attributes.position.needsUpdate=true;
+    b.pts.material.opacity=Math.max(0,b.life);
+    if(b.life<=0) b.pts.visible=false;
+  }
+}
+
+/* ================= entity pools ================= */
+function makePool(n,builder){ const arr=[]; for(let i=0;i<n;i++){ const o=builder(); o.active=false; o.obj.visible=false; scene.add(o.obj); arr.push(o);} return arr; }
+const moteGeo=new THREE.SphereGeometry(0.42,12,10);
+const moteMat=new THREE.MeshStandardMaterial({color:0xffd27a,roughness:0.25,emissive:0xffb340,emissiveIntensity:2.2});
+const motes=makePool(70,()=>{ const g=new THREE.Group();
+  const m=new THREE.Mesh(moteGeo,moteMat); g.add(m); const gl=glowSprite(0xffd27a,2.2,0.7); g.add(gl);
+  return {obj:g,phase:rand(TAU),nearAwarded:false}; });
+const thornMat=new THREE.MeshStandardMaterial({color:0x303148,roughness:0.5,emissive:0xd63384,emissiveIntensity:0.7,flatShading:true});
+const thornGeo=new THREE.ConeGeometry(0.72,3.6,6);
+const thorns=makePool(22,()=>{ const g=new THREE.Group();
+  const c1=new THREE.Mesh(thornGeo,thornMat); c1.rotation.x=Math.PI; g.add(c1);
+  const c2=new THREE.Mesh(thornGeo,thornMat); c2.scale.setScalar(0.62); c2.position.set(0.7,0.4,0.5); c2.rotation.z=0.5; g.add(c2);
+  const c3=new THREE.Mesh(thornGeo,thornMat); c3.scale.setScalar(0.5); c3.position.set(-0.65,0.3,-0.4); c3.rotation.z=-0.45; g.add(c3);
+  g.add(glowSprite(0xd63384,2.6,0.35));
+  return {obj:g,nearAwarded:false}; });
+const orbMat=new THREE.MeshStandardMaterial({color:0x1a1026,roughness:0.35,emissive:0x2a0a3a,emissiveIntensity:0.6});
+const orbs=makePool(12,()=>{ const g=new THREE.Group();
+  const b=new THREE.Mesh(new THREE.SphereGeometry(1.05,16,12),orbMat); g.add(b);
+  const eye=new THREE.Mesh(new THREE.SphereGeometry(0.3,10,8),new THREE.MeshBasicMaterial({color:0xff3355}));
+  eye.position.set(0,0.08,0.92); g.add(eye);
+  const eye2=eye.clone(); eye2.position.set(0.4,-0.05,0.85); eye2.scale.setScalar(0.55); g.add(eye2);
+  g.add(glowSprite(0x7a2bff,3.4,0.4));
+  return {obj:g,baseX:0,baseY:0,phase:rand(TAU)}; });
+const ringMat=new THREE.MeshStandardMaterial({color:ZONES[0].accent,roughness:0.25,emissive:ZONES[0].accent,emissiveIntensity:1.4});
+const rings=makePool(6,()=>{ const g=new THREE.Group();
+  const t=new THREE.Mesh(new THREE.TorusGeometry(3.2,0.2,10,40),ringMat); g.add(t);
+  const disc=new THREE.Mesh(new THREE.CircleGeometry(3.05,32),new THREE.MeshBasicMaterial({color:ZONES[0].accent,transparent:true,opacity:0.1,side:THREE.DoubleSide,depthWrite:false}));
+  g.add(disc); g.add(glowSprite(ZONES[0].accent,8,0.3));
+  return {obj:g,nearAwarded:false}; });
+function activate(pool,x,y,z){ const o=pool.find(o=>!o.active); if(!o) return null;
+  o.active=true; o.obj.visible=true; o.obj.position.set(x,y,z); o.nearAwarded=false; return o; }
+function deactivate(o){ o.active=false; o.obj.visible=false; }
+
+/* ================= game state ================= */
+let state='title'; // title | playing | paused | over | win
+let distance=0, score=0, hearts=3, motesCollected=0, ringsPassed=0;
+let worldSpeed=9, baseSpeedVal=15, time=0, invuln=0, shake=0, combo=0, comboTimer=0;
+let dashTime=0, dashCd=0, surgeTime=0, dashQueued=false, wonYet=false, endless=false;
+let nextSpawn=30, lastRingAt=-999, zoneIdx=0, lastZoneAnnounced=0;
+let mothPos=new THREE.Vector3(), mothVel=new THREE.Vector3();
+let lookTarget=new THREE.Vector3(0,0,-10), fovVal=62;
+const WIN_AT=WIN_DISTANCE;
+
+function zoneIndex(){ return clamp(Math.floor(distance/500),0,ZONES.length-1); }
+function boundRadius(){ return Math.max(7.4, 9.6-zoneIdx*0.55); }
+function computeBaseSpeed(){ return clamp(15+distance*0.004+zoneIdx*2.2,15,38); }
+
+function resetWorld(){
+  distance=0; score=0; hearts=3; motesCollected=0; ringsPassed=0;
+  invuln=0; shake=0; combo=0; comboTimer=0; dashTime=0; dashCd=0; surgeTime=0; dashQueued=false;
+  wonYet=false; endless=false; nextSpawn=26; lastRingAt=-999; zoneIdx=0; lastZoneAnnounced=0;
+  mothPos.set(0,0,0); mothVel.set(0,0,0);
+  moth.rotation.set(0,0,0); moth.position.set(0,0,0); moth.visible=true;
+  for(const p of [motes,thorns,orbs,rings]) for(const o of p) deactivate(o);
+  for(const b of bursts){ b.life=0; b.pts.visible=false; }
+  segments.forEach((g,i)=>{ g.position.z=8-i*SEG_LEN; g.rotation.z=rand(TAU); placeCrystals(g); });
+  for(let i=0;i<DUST;i++) resetDustPoint(i,true);
+  applyZoneColors(1); updateHUD(true);
+}
+function applyZoneColors(snap){
+  const z=ZONES[zoneIdx], k=snap?1:0.03;
+  scene.background.lerp(z.bgC,k); scene.fog.color.lerp(z.bgC,k);
+  crystalMat.color.lerp(z.crystalC,k); crystalMat.emissive.lerp(z.accentC,k);
+  ringMat.color.lerp(z.accentC,k); ringMat.emissive.lerp(z.accentC,k);
+  hemi.color.lerp(z.hemiSC,k); hemi.groundColor.lerp(z.hemiGC,k);
+  dirLight.color.lerp(z.dirC,k); mothLight.color.lerp(z.accentC,k);
+  portal.material.color.lerp(z.accentC,k); portalRing.material.color.lerp(z.accentC,k);
+  wingUniforms.colorB.value.lerp(z.accentC,k);
+}
+
+/* ================= spawning ================= */
+function spawnMoteCluster(){
+  const b=boundRadius()-1.2, bx=rand(-b,b), by=rand(-b,b);
+  const arc=Math.random()<0.5;
+  for(let k=0;k<6;k++){
+    let x,y; if(arc){ const t=k/5; x=lerp(-b,b,t); y=clamp(by+Math.sin(t*Math.PI)*2.2,-b,b); }
+    else { x=clamp(bx+Math.sin(k*1.2)*0.6,-b,b); y=clamp(by+Math.cos(k*1.2)*0.6,-b,b); }
+    activate(motes,x,y,-118-k*3);
+  }
+}
+function spawnThorns(){
+  const b=boundRadius()-1.6, n=randInt(1, 1+(zoneIdx>=2?2:zoneIdx>=1?1:0));
+  const placed=[];
+  for(let i=0;i<n;i++){
+    for(let tries=0;tries<8;tries++){
+      const a=rand(TAU), r=rand(0,b), x=Math.cos(a)*r, y=Math.sin(a)*r;
+      if(placed.every(p=>Math.hypot(p.x-x,p.y-y)>4)){ placed.push({x,y}); activate(thorns,x,y,-122); break; }
+    }
+  }
+}
+function spawnRing(){
+  const b=boundRadius()-3, a=rand(TAU), r=rand(0,b*0.8);
+  activate(rings,Math.cos(a)*r,Math.sin(a)*r,-126); lastRingAt=distance;
+}
+function spawnOrb(){
+  const b=boundRadius()-2, a=rand(TAU), r=rand(0,b*0.85);
+  const o=activate(orbs,Math.cos(a)*r,Math.sin(a)*r,-124);
+  if(o){ o.baseX=o.obj.position.x; o.baseY=o.obj.position.y; }
+}
+function spawnEvent(passive){
+  const r=Math.random();
+  if(passive){ Math.random()<0.7?spawnMoteCluster():spawnThorns(); return; }
+  if(r<0.36) spawnMoteCluster();
+  else if(r<0.66) spawnThorns();
+  else if(r<0.83 && distance-lastRingAt>170) spawnRing();
+  else if(r<0.83) spawnMoteCluster();
+  else if(distance>320) spawnOrb(); else spawnMoteCluster();
+}
+
+/* ================= UI helpers ================= */
+let toastTimer=null;
+function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.remove('show'); void t.offsetWidth; t.classList.add('show'); }
+function zoneBanner(name){ const z=$('zoneBanner'); z.textContent=name; z.classList.remove('show'); void z.offsetWidth; z.classList.add('show'); }
+function popup(text,color='#ffd27a',left){
+  const d=document.createElement('div'); d.className='pop'; d.textContent=text; d.style.color=color;
+  d.style.marginLeft=(left??rand(-40,40))+'px'; $('popups').appendChild(d);
+  setTimeout(()=>d.remove(),1000);
+}
+function updateHUD(force){
+  $('hearts').textContent='♥'.repeat(Math.max(0,hearts))+'♡'.repeat(Math.max(0,3-hearts));
+  $('scoreVal').textContent=Math.floor(score).toLocaleString();
+  $('distVal').textContent=Math.floor(distance)+' m'+(endless?' · endless':' / '+WIN_AT+' m');
+  $('motesVal').textContent='✦ '+motesCollected+' motes';
+  $('zoneVal').textContent=ZONES[zoneIdx].name;
+  $('comboVal').textContent=combo>=3?`Combo ×${(1+Math.min(combo,20)*0.1).toFixed(1)}`:'';
+  $('dashFill').style.width=(dashCd<=0?100:(1-dashCd/2.8)*100)+'%';
+  $('dashLabel').textContent=dashCd<=0?'DASH READY — Space':'Dash recharging…';
+}
+function fillStats(prefix){
+  $(prefix+'Dist').textContent=Math.floor(distance)+' m';
+  $(prefix+'Score').textContent=Math.floor(score).toLocaleString();
+  $(prefix+'Motes').textContent=motesCollected;
+  $(prefix+'Rings').textContent=ringsPassed;
+}
+function saveBest(){
+  saved.bestDistance=Math.max(saved.bestDistance,distance);
+  saved.bestScore=Math.max(saved.bestScore,Math.floor(score));
+  saved.bestMotes=Math.max(saved.bestMotes,motesCollected);
+  persist(); refreshBestLine();
+}
+
+/* ================= state transitions ================= */
+function show(id){ $(id).classList.remove('hidden'); }
+function hide(id){ $(id).classList.add('hidden'); }
+function startGame(){
+  AudioSys.init(); AudioSys.ui(); resetWorld();
+  state='playing'; hide('title'); hide('overScreen'); hide('winScreen'); hide('pauseScreen'); show('hud');
+  toast('Gather motes · thread the rings · dodge the thorns');
+}
+function pauseGame(){
+  if(state!=='playing') return; state='paused'; show('pauseScreen'); saveBest();
+}
+function resumeGame(){ if(state!=='paused') return; state='playing'; hide('pauseScreen'); AudioSys.ui(); }
+function quitToTitle(){
+  state='title'; resetWorld(); hide('pauseScreen'); hide('overScreen'); hide('winScreen'); hide('hud'); show('title'); refreshBestLine();
+}
+function gameOver(){
+  state='over'; invuln=0; saveBest(); fillStats('f');
+  $('overBest').textContent=`Best drift ${Math.floor(saved.bestDistance)} m · best score ${saved.bestScore.toLocaleString()}`;
+  AudioSys.over(); show('overScreen');
+}
+function gameWin(){
+  state='win'; invuln=0; wonYet=true; saved.wins++; saveBest(); fillStats('w');
+  AudioSys.win();
+  for(let i=0;i<5;i++) spawnBurst(rand(-4,4),rand(-3,3),-6+i*2,[0xffd27a,0x7ef0d4,0xc77dff,0xff9d5c,0xffe9ae][i],40,10,0.7);
+  show('winScreen');
+}
+function continueEndless(){
+  endless=true; state='playing'; hide('winScreen'); toast('Endless drift — how far can the light go?'); AudioSys.ui();
+}
+function toggleMute(){ AudioSys.init(); AudioSys.setMuted(!AudioSys.muted); }
+
+/* ================= collisions / pickups ================= */
+function hitPlayer(){
+  if(invuln>0||state!=='playing') return;
+  hearts--; invuln=1.6; shake=1; combo=0; comboTimer=0;
+  spawnBurst(mothPos.x,mothPos.y,0,0xff6b81,36,9,0.6);
+  const hf=$('hitflash'); hf.style.opacity='1'; setTimeout(()=>hf.style.opacity='0',160);
+  AudioSys.hit(); updateHUD(true);
+  if(hearts<=0){ gameOver(); }
+  else toast(hearts===1?'One wing left — careful!':'Wing nicked! 12 motes mend a wing.');
+}
+function collectMote(){
+  motesCollected++; combo++; comboTimer=2.2;
+  const mult=1+Math.min(combo,20)*0.1;
+  score+=Math.round(25*mult);
+  spawnBurst(mothPos.x,mothPos.y,0,0xffd27a,12,4.5,0.4);
+  AudioSys.collect(combo);
+  if(combo>0&&combo%10===0) popup(`Combo ×${mult.toFixed(1)}`,'#7ef0d4');
+  if(motesCollected%12===0){
+    if(hearts<3){ hearts++; popup('Wing mended ♥','#ff9db0'); toast('A wing mends itself in the light.'); }
+    else { score+=150; popup('+150 bonus','#ffd27a'); }
+  }
+  updateHUD(true);
+}
+function passRing(){
+  ringsPassed++; score+=150; dashCd=Math.max(0,dashCd-1.2); surgeTime=1.1;
+  spawnBurst(mothPos.x,mothPos.y,0,ZONES[zoneIdx].accent,30,8,0.55);
+  popup('+150 Ring!','#7ef0d4'); AudioSys.ring(); updateHUD(true);
+}
+function nearMiss(){
+  score+=25; popup('Near miss +25','#ffe9ae',rand(-70,70)); AudioSys.near(); updateHUD(true);
+}
+
+/* ================= input ================= */
+const keys=new Set();
+let mouseNX=0, mouseNY=0, mouseSteer=false, pointerDown=false;
+let gpPrevStart=false, gpPrevA=false;
+window.addEventListener('keydown',e=>{
+  const k=e.key.toLowerCase();
+  if(['arrowup','arrowdown','arrowleft','arrowright',' '].includes(k)) e.preventDefault();
+  if(e.repeat) return;
+  keys.add(k);
+  if(k==='m'){ toggleMute(); return; }
+  if(k==='p'||k==='escape'){ if(state==='playing') pauseGame(); else if(state==='paused') resumeGame(); return; }
+  if(k==='enter'||k===' '){
+    if(state==='title'){ startGame(); return; }
+    if(state==='over'){ startGame(); return; }
+    if(state==='win'){ continueEndless(); return; }
+  }
+  if((k===' '||k==='shift')&&state==='playing'){ dashQueued=true; }
+});
+window.addEventListener('keyup',e=>keys.delete(e.key.toLowerCase()));
+const cvs=renderer.domElement;
+cvs.addEventListener('pointermove',e=>{
+  mouseNX=(e.clientX/window.innerWidth)*2-1; mouseNY=(e.clientY/window.innerHeight)*2-1;
+  if(e.pointerType==='mouse'||pointerDown) mouseSteer=true;
+});
+cvs.addEventListener('pointerdown',e=>{
+  mouseNX=(e.clientX/window.innerWidth)*2-1; mouseNY=(e.clientY/window.innerHeight)*2-1;
+  if(e.pointerType!=='mouse') pointerDown=true; else mouseSteer=true;
+});
+window.addEventListener('pointerup',()=>pointerDown=false);
+window.addEventListener('pointercancel',()=>pointerDown=false);
+function pollGamepad(){
+  let x=0,y=0;
+  try{
+    const gps=navigator.getGamepads?navigator.getGamepads():[];
+    for(const gp of gps){ if(!gp) continue;
+      const ax=gp.axes[0]||0, ay=gp.axes[1]||0;
+      if(Math.abs(ax)>0.15||Math.abs(ay)>0.15){ x=ax; y=ay; }
+      const start=gp.buttons[9]&&gp.buttons[9].pressed, a=gp.buttons[0]&&gp.buttons[0].pressed;
+      if(start&&!gpPrevStart){ if(state==='playing') pauseGame(); else if(state==='paused') resumeGame(); }
+      if(a&&!gpPrevA&&state==='playing') dashQueued=true;
+      gpPrevStart=!!start; gpPrevA=!!a;
+    }
+  }catch(e){}
+  return {x,y};
+}
+/* buttons */
+$('playBtn').addEventListener('click',startGame);
+$('retryBtn').addEventListener('click',startGame);
+$('resumeBtn').addEventListener('click',resumeGame);
+$('restartBtnP').addEventListener('click',startGame);
+$('quitBtnP').addEventListener('click',quitToTitle);
+$('titleBtnO').addEventListener('click',quitToTitle);
+$('continueBtn').addEventListener('click',continueEndless);
+$('againBtnW').addEventListener('click',startGame);
+$('titleBtnW').addEventListener('click',quitToTitle);
+$('pauseBtn').addEventListener('click',()=>{ if(state==='playing') pauseGame(); else if(state==='paused') resumeGame(); });
+$('muteBtn').addEventListener('click',toggleMute);
+$('dashBtn').addEventListener('pointerdown',e=>{ e.stopPropagation(); if(state==='playing') dashQueued=true; });
+document.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>b.blur()));
+
+/* ================= movement / steering ================= */
+function steerMoth(dt){
+  let ix=0,iy=0;
+  if(keys.has('a')||keys.has('arrowleft')) ix-=1;
+  if(keys.has('d')||keys.has('arrowright')) ix+=1;
+  if(keys.has('w')||keys.has('arrowup')) iy+=1;
+  if(keys.has('s')||keys.has('arrowdown')) iy-=1;
+  const gp=pollGamepad(); if(gp.x||gp.y){ ix+=gp.x; iy+=-gp.y; }
+  const mag=Math.hypot(ix,iy);
+  const b=boundRadius();
+  if(mag>0.05){
+    const n=Math.min(1,mag); ix=ix/(mag||1)*n; iy=iy/(mag||1)*n;
+    mothVel.x=lerp(mothVel.x,ix*17,1-Math.exp(-dt*8));
+    mothVel.y=lerp(mothVel.y,iy*17,1-Math.exp(-dt*8));
+  } else if(mouseSteer){
+    const tx=mouseNX*b, ty=-mouseNY*b;
+    mothVel.x=clamp((tx-mothPos.x)*5,-17,17);
+    mothVel.y=clamp((ty-mothPos.y)*5,-17,17);
+    mothVel.x=lerp(mothVel.x,clamp((tx-mothPos.x)*5,-17,17),1-Math.exp(-dt*10));
+    mothVel.y=lerp(mothVel.y,clamp((ty-mothPos.y)*5,-17,17),1-Math.exp(-dt*10));
+  } else {
+    mothVel.x=lerp(mothVel.x,0,1-Math.exp(-dt*4)); mothVel.y=lerp(mothVel.y,0,1-Math.exp(-dt*4));
+  }
+  mothPos.x+=mothVel.x*dt; mothPos.y+=mothVel.y*dt;
+  const len=Math.hypot(mothPos.x,mothPos.y);
+  if(len>b){ mothPos.x*=b/len; mothPos.y*=b/len; }
+  moth.position.set(mothPos.x,mothPos.y+Math.sin(time*2.1)*0.14,0);
+  moth.rotation.z=lerp(moth.rotation.z,clamp(-mothVel.x*0.032,-0.7,0.7),1-Math.exp(-dt*7));
+  moth.rotation.x=lerp(moth.rotation.x,clamp(-mothVel.y*0.02,-0.45,0.45),1-Math.exp(-dt*7));
+  moth.rotation.y=lerp(moth.rotation.y,clamp(-mothVel.x*0.02,-0.4,0.4),1-Math.exp(-dt*7));
+}
+function animateMoth(dt){
+  const flap=Math.sin(time*(state==='playing'?21:13));
+  const amp=state==='playing'?0.55:0.4;
+  wingL.rotation.z= 0.28+flap*amp;  wingR.rotation.z=-(0.28+flap*amp);
+  wingHL.rotation.z=0.28+Math.sin(time*21-0.6)*amp*0.8; wingHR.rotation.z=-(0.28+Math.sin(time*21-0.6)*amp*0.8);
+  wingUniforms.time.value=time;
+  // scarf wave
+  const p=scarf.geometry.attributes.position;
+  for(let i=0;i<p.count;i++){
+    const x=scarfBase[i*3], y=scarfBase[i*3+1];
+    p.setZ(i,Math.sin(time*6+y*3+x*2)*0.09*(0.4-y/1.5));
+  }
+  p.needsUpdate=true;
+  antennaTips.forEach((t,i)=>{ const s=1+Math.sin(time*4+i*2)*0.25; t.scale.setScalar(s); });
+  mothGlow.material.opacity=0.45+Math.sin(time*3.2)*0.12;
+  mothLight.position.set(mothPos.x,mothPos.y+0.6,1.2);
+  moth.userData.legs.forEach((l,i)=>{ l.rotation.x=Math.sin(time*10+i)*0.25; });
+  // invulnerability flicker
+  moth.visible = invuln>0 ? (Math.floor(time*14)%2===0) : true;
+  // trail
+  const tp=trailGeo.attributes.position.array;
+  for(let i=0;i<TRAIL;i++){
+    tp[i*3]=mothPos.x+Math.sin(time*3+i*0.55)*0.07*(i/TRAIL);
+    tp[i*3+1]=mothPos.y+Math.cos(time*2.6+i*0.5)*0.07*(i/TRAIL);
+    tp[i*3+2]=0.7+i*0.13;
+  }
+  trailGeo.attributes.position.needsUpdate=true;
+}
+
+/* ================= world update ================= */
+function updateWorld(dt,collide){
+  // tunnel segments
+  for(const g of segments){
+    g.position.z+=worldSpeed*dt;
+    if(g.position.z>12){ g.position.z-=TUNNEL_LEN; g.rotation.z=rand(TAU); placeCrystals(g); }
+  }
+  // dust
+  const dp=dustGeo.attributes.position.array;
+  for(let i=0;i<DUST;i++){
+    dp[i*3+2]+=worldSpeed*dt*0.92;
+    if(dp[i*3+2]>9) resetDustPoint(i,false);
+  }
+  dustGeo.attributes.position.needsUpdate=true;
+  portal.position.z=-150+Math.sin(time*0.4)*2; portalRing.position.z=-148;
+  portalRing.rotation.z+=dt*0.25;
+  const ps=23+Math.sin(time*1.4)*2.5; portal.scale.set(ps,ps,1);
+
+  // pools
+  const step=worldSpeed*dt;
+  function movePool(pool,fn){
+    for(const o of pool){
+      if(!o.active) continue;
+      const prevZ=o.obj.position.z;
+      o.obj.position.z+=step;
+      fn(o,prevZ);
+      if(o.obj.position.z>13) deactivate(o);
+    }
+  }
+  movePool(motes,(o,prevZ)=>{
+    o.obj.rotation.y+=dt*3; o.obj.rotation.x+=dt*1.4;
+    const s=1+Math.sin(time*5+o.phase)*0.18; o.obj.scale.setScalar(s);
+    if(collide&&state==='playing'){
+      const dx=mothPos.x-o.obj.position.x, dy=mothPos.y-o.obj.position.y, dz=-o.obj.position.z;
+      const d=Math.hypot(dx,dy,dz);
+      if(d<5&&o.obj.position.z<2){ o.obj.position.x+=dx*dt*6; o.obj.position.y+=dy*dt*6; }
+    }
+    if(collide&&state==='playing'&&prevZ<0&&o.obj.position.z>=0){
+      const d=Math.hypot(mothPos.x-o.obj.position.x,mothPos.y-o.obj.position.y);
+      if(d<2.15){ deactivate(o); collectMote(); }
+    }
+  });
+  movePool(thorns,(o,prevZ)=>{
+    o.obj.rotation.y+=dt*0.6;
+    if(collide&&state==='playing'&&prevZ<0&&o.obj.position.z>=0){
+      const d=Math.hypot(mothPos.x-o.obj.position.x,mothPos.y-o.obj.position.y);
+      if(d<1.7){ hitPlayer(); }
+      else if(d<3.4&&!o.nearAwarded){ o.nearAwarded=true; nearMiss(); }
+    }
+  });
+  movePool(orbs,(o,prevZ)=>{
+    o.obj.position.x=o.baseX+Math.sin(time*1.4+o.phase)*1.3;
+    o.obj.position.y=o.baseY+Math.cos(time*1.1+o.phase)*1.1;
+    o.obj.rotation.y+=dt*1.2;
+    if(collide&&state==='playing'&&prevZ<0&&o.obj.position.z>=0){
+      const d=Math.hypot(mothPos.x-o.obj.position.x,mothPos.y-o.obj.position.y);
+      if(d<1.95){ hitPlayer(); }
+      else if(d<3.6&&!o.nearAwarded){ o.nearAwarded=true; nearMiss(); }
+    }
+  });
+  movePool(rings,(o,prevZ)=>{
+    o.obj.rotation.z+=dt*0.7;
+    if(collide&&state==='playing'&&prevZ<0&&o.obj.position.z>=0){
+      const d=Math.hypot(mothPos.x-o.obj.position.x,mothPos.y-o.obj.position.y);
+      if(d<2.7){ passRing(); }
+      else if(d<4.7&&!o.nearAwarded){ o.nearAwarded=true; score+=50; popup('Grazed +50','#ffe9ae'); AudioSys.graze(); updateHUD(true); }
+    }
+  });
+  updateBursts(dt);
+}
+
+/* ================= camera ================= */
+function updateCamera(dt){
+  const speedNorm=clamp((worldSpeed-12)/28,0,1);
+  const desired=new THREE.Vector3(mothPos.x*0.55,mothPos.y*0.55+2.3,7.6);
+  camera.position.lerp(desired,1-Math.exp(-dt*6));
+  lookTarget.x=lerp(lookTarget.x,mothPos.x*0.85,1-Math.exp(-dt*7));
+  lookTarget.y=lerp(lookTarget.y,mothPos.y*0.85+0.4,1-Math.exp(-dt*7));
+  lookTarget.z=-12;
+  camera.lookAt(lookTarget);
+  shake=Math.max(0,shake-dt*2.4);
+  if(shake>0){
+    camera.position.x+=rand(-1,1)*shake*0.5; camera.position.y+=rand(-1,1)*shake*0.5;
+    camera.rotation.z+=rand(-1,1)*shake*0.06;
+  }
+  camera.rotation.z+=clamp(-mothVel.x*0.012,-0.22,0.22);
+  const targetFov=60+speedNorm*10+(dashTime>0?6:0);
+  if(Math.abs(targetFov-fovVal)>0.05){ fovVal=lerp(fovVal,targetFov,1-Math.exp(-dt*4)); camera.fov=fovVal; camera.updateProjectionMatrix(); }
+}
+
+/* ================= main loop ================= */
+let lastT=performance.now();
+function loop(now){
+  requestAnimationFrame(loop);
+  let dt=Math.min(0.05,(now-lastT)/1000); lastT=now;
+  if(state==='paused'){ renderer.render(scene,camera); return; }
+  time+=dt;
+  applyZoneColors(false);
+  AudioSys.update(clamp((worldSpeed-12)/28,0,1));
+
+  if(state==='title'){
+    worldSpeed=lerp(worldSpeed,8.5,dt);
+    distance+=worldSpeed*dt;
+    mothPos.x=Math.sin(time*0.7)*3.2; mothPos.y=Math.sin(time*1.1)*1.6;
+    mothVel.set(Math.cos(time*0.7)*2,0,0);
+    moth.position.set(mothPos.x,mothPos.y,0);
+    moth.rotation.z=Math.sin(time*0.7)*0.25;
+    if(distance>nextSpawn){ spawnEvent(true); nextSpawn=distance+rand(22,34); }
+    updateWorld(dt,false);
+    animateMoth(dt);
+  } else if(state==='playing'){
+    if(dashQueued){ dashQueued=false; if(dashCd<=0){ dashTime=0.5; dashCd=2.8; AudioSys.dash();
+      spawnBurst(mothPos.x,mothPos.y,1,0x7ef0d4,18,6,0.45); popup('DASH!','#7ef0d4'); } }
+    dashTime=Math.max(0,dashTime-dt); dashCd=Math.max(0,dashCd-dt); surgeTime=Math.max(0,surgeTime-dt);
+    baseSpeedVal=computeBaseSpeed();
+    worldSpeed=baseSpeedVal+(dashTime>0?13:0)+(surgeTime>0?5:0);
+    distance+=worldSpeed*dt;
+    score+=worldSpeed*dt*0.6;
+    comboTimer-=dt; if(comboTimer<=0) combo=0;
+    invuln=Math.max(0,invuln-dt);
+    // zones
+    const zi=zoneIndex();
+    if(zi!==zoneIdx){ zoneIdx=zi; if(zi>lastZoneAnnounced){ lastZoneAnnounced=zi; zoneBanner(ZONES[zi].name); AudioSys.zone(); saveBest(); } }
+    // win check
+    if(!endless&&!wonYet&&distance>=WIN_AT){ gameWin(); }
+    // spawning
+    if(distance>nextSpawn){ spawnEvent(false); nextSpawn=distance+Math.max(11.5,rand(16,24)-zoneIdx*1.6); }
+    steerMoth(dt);
+    updateWorld(dt,true);
+    animateMoth(dt);
+    updateHUD(false);
+  } else if(state==='over'){
+    worldSpeed=lerp(worldSpeed,2.5,dt);
+    moth.rotation.x+=dt*3.2; moth.position.y=Math.max(-5,moth.position.y-dt*1.4); moth.visible=true;
+    updateWorld(dt,false); animateMoth(dt);
+  } else if(state==='win'){
+    worldSpeed=lerp(worldSpeed,6,dt);
+    moth.rotation.y+=dt*1.4; moth.position.y=Math.sin(time*1.6)*0.5;
+    if(Math.random()<dt*2) spawnBurst(rand(-5,5),rand(-4,4),-8,0xffd27a,20,7,0.5);
+    updateWorld(dt,false); animateMoth(dt);
+  }
+  updateCamera(dt);
+  renderer.render(scene,camera);
+}
+
+/* ================= resize / visibility ================= */
+window.addEventListener('resize',()=>{
+  renderer.setSize(window.innerWidth,window.innerHeight);
+  camera.aspect=window.innerWidth/window.innerHeight; camera.updateProjectionMatrix();
+});
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden&&state==='playing') pauseGame();
+});
+
+/* ================= go ================= */
+resetWorld();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
