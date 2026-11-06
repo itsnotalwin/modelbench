@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rubik's Cube — 3D</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; height: 100%; overflow: hidden;
+    background: #000000; color: #e8e8ea;
+    font-family: ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    user-select: none;
+  }
+  canvas.scene { position: fixed; inset: 0; cursor: grab; }
+  canvas.scene:active { cursor: grabbing; }
+
+  .panel {
+    position: fixed; z-index: 10;
+    background: rgba(16, 17, 20, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 14px;
+    backdrop-filter: blur(8px);
+    padding: 14px;
+  }
+  #topbar { top: 16px; left: 16px; padding: 12px 16px; }
+  .title { font-weight: 700; letter-spacing: 0.18em; font-size: 15px; color: #ffffff; }
+  .stats { margin-top: 6px; font-size: 13px; color: #9aa0a8; }
+  #moveCount { color: #FFD700; font-weight: 600; }
+  #hintText { margin-top: 6px; font-size: 12px; color: #7fd48a; max-width: 280px; min-height: 15px; }
+
+  #panel { right: 16px; top: 50%; transform: translateY(-50%); width: 236px; }
+  .moves-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  button {
+    padding: 8px 0; font-weight: 600; font-size: 13px;
+    background: #1b1e24; border: 1px solid #2c313a; color: #e8e8ea;
+    border-radius: 8px; cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    font-family: inherit;
+  }
+  button:hover { background: #262b33; border-color: #3d4450; }
+  button:active { transform: scale(0.94); }
+  .flash { animation: flash 0.5s ease 3; }
+  @keyframes flash {
+    50% { background: #FFD700; color: #000; border-color: #FFD700;
+          box-shadow: 0 0 18px rgba(255, 215, 0, 0.7); transform: scale(1.12); }
+  }
+  .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 10px; }
+  .legend {
+    position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%);
+    font-size: 11.5px; color: #6c727b; text-align: center;
+    pointer-events: none; z-index: 10; max-width: 90vw;
+  }
+
+  #solvedOverlay {
+    position: fixed; inset: 0; z-index: 20;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(0, 0, 0, 0.55); cursor: pointer;
+  }
+  #solvedOverlay.hidden { display: none; }
+  .solved-card {
+    background: rgba(18, 20, 24, 0.92);
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    padding: 28px 46px; border-radius: 16px; text-align: center;
+    box-shadow: 0 0 60px rgba(255, 215, 0, 0.15);
+  }
+  .solved-card .big { font-size: 34px; font-weight: 800; color: #FFD700; }
+  .solved-card .info { margin-top: 8px; font-size: 15px; color: #d8d8dc; }
+  .solved-card .dim { margin-top: 10px; font-size: 11px; color: #6c727b; }
+
+  #confetti { position: fixed; inset: 0; pointer-events: none; z-index: 30; }
+
+  @media (max-width: 680px) {
+    #panel { right: 8px; left: auto; width: 210px; }
+    #legend { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="topbar" class="panel">
+  <div class="title">RUBIK'S CUBE</div>
+  <div class="stats">Moves: <span id="moveCount">0</span></div>
+  <div id="hintText"></div>
+</div>
+
+<div id="panel" class="panel">
+  <div class="moves-grid" id="movesGrid"></div>
+  <div class="actions">
+    <button id="scrambleBtn">Scramble</button>
+    <button id="undoBtn">Undo</button>
+    <button id="resetBtn">Reset</button>
+    <button id="hintBtn">Hint</button>
+  </div>
+</div>
+
+<div class="legend">
+  Drag = orbit view &nbsp;·&nbsp; Scroll / pinch = zoom &nbsp;·&nbsp;
+  Keys U D R L F B — capital = clockwise, lowercase = counter-clockwise
+</div>
+
+<div id="solvedOverlay" class="hidden">
+  <div class="solved-card">
+    <div class="big">SOLVED! 🎉</div>
+    <div class="info" id="solvedInfo"></div>
+    <div class="dim">click anywhere to continue</div>
+  </div>
+</div>
+<canvas id="confetti"></canvas>
+
+<script type="module">
+const CDN = 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+let THREE;
+try {
+  THREE = await import(CDN);
+} catch (err) {
+  document.getElementById('hintText').textContent =
+    'Failed to load Three.js from CDN — check your internet connection and reload.';
+  throw err;
+}
+
+/* ============================== constants ============================== */
+
+const MOVE_MS = 300;            // face rotation animation duration
+const SCRAMBLE_MS = 150;        // scramble move animation duration
+const SCRAMBLE_GAP = 150;       // delay between scramble moves
+const SCRAMBLE_LEN = 20;
+
+// Face key -> sticker colour. Centres never move, so face key == centre colour id.
+const COLORS = { U: 0xFFFFFF, D: 0xFFD700, F: 0x009B48, B: 0x0047AB, R: 0xCC0000, L: 0xFF6600 };
+
+// Clockwise angle when looking at that face from outside (right-hand rule).
+const AXES = {
+  x: new THREE.Vector3(1, 0, 0),
+  y: new THREE.Vector3(0, 1, 0),
+  z: new THREE.Vector3(0, 0, 1),
+};
+const FACE_DEFS = {
+  U: { axis: 'y', layer:  1, angle: -Math.PI / 2 },
+  D: { axis: 'y', layer: -1, angle:  Math.PI / 2 },
+  R: { axis: 'x', layer:  1, angle: -Math.PI / 2 },
+  L: { axis: 'x', layer: -1, angle:  Math.PI / 2 },
+  F: { axis: 'z', layer:  1, angle: -Math.PI / 2 },
+  B: { axis: 'z', layer: -1, angle:  Math.PI / 2 },
+};
+const MOVE_NAMES = ['U', "U'", 'D', "D'", 'R', "R'", 'L', "L'", 'F', "F'", 'B', "B'"];
+
+// Precompute per-move rotation quaternion + parsed data.
+const MOVES = {};
+for (const name of MOVE_NAMES) {
+  const prime = name.endsWith("'");
+  const face = name[0];
+  const def = FACE_DEFS[face];
+  const angle = prime ? -def.angle : def.angle;
+  MOVES[name] = {
+    face, prime, def, angle,
+    axisVec: AXES[def.axis],
+    quat: new THREE.Quaternion().setFromAxisAngle(AXES[def.axis], angle),
+  };
+}
+const invertMove = name => name.endsWith("'") ? name[0] : name + "'";
+
+/* ============================== scene ============================== */
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000000);
+
+const camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 0.1, 100);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.domElement.classList.add('scene');
+document.body.appendChild(renderer.domElement);
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+const sun = new THREE.DirectionalLight(0xffffff, 1.0);
+sun.position.set(6, 10, 8);
+scene.add(sun);
+const fill = new THREE.DirectionalLight(0xffffff, 0.3);
+fill.position.set(-6, -3, -6);
+scene.add(fill);
+
+/* ============================== cube build ============================== */
+
+const cubeGroup = new THREE.Group();
+scene.add(cubeGroup);
+
+const SIZE = 0.95;             // cubie size; spacing is 1.0 -> 0.05 gap
+const bodyGeo = new THREE.BoxGeometry(SIZE, SIZE, SIZE);
+const bodyMat = new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.55, metalness: 0.15 });
+const stickerGeo = new THREE.PlaneGeometry(SIZE * 0.88, SIZE * 0.88);
+const stickerMats = {};
+for (const f of Object.keys(COLORS)) {
+  stickerMats[f] = new THREE.MeshStandardMaterial({
+    color: COLORS[f], roughness: 0.3, metalness: 0.1,
+  });
+}
+
+// local sticker normal per face key
+const STICKER_DIRS = {
+  R: [1, 0, 0], L: [-1, 0, 0], U: [0, 1, 0], D: [0, -1, 0], F: [0, 0, 1], B: [0, 0, -1],
+};
+const STICKER_ROT = {
+  R: [0, Math.PI / 2, 0], L: [0, -Math.PI / 2, 0],
+  U: [-Math.PI / 2, 0, 0], D: [Math.PI / 2, 0, 0],
+  F: [0, 0, 0], B: [0, Math.PI, 0],
+};
+
+const allCubies = [];
+for (let x = -1; x <= 1; x++)
+for (let y = -1; y <= 1; y++)
+for (let z = -1; z <= 1; z++) {
+  const cubie = new THREE.Group();
+  cubie.add(new THREE.Mesh(bodyGeo, bodyMat));
+  const stickers = [];
+  for (const [f, [dx, dy, dz]] of Object.entries(STICKER_DIRS)) {
+    const outer = (dx !== 0 && x === dx) || (dy !== 0 && y === dy) || (dz !== 0 && z === dz);
+    if (!outer) continue;
+    const st = new THREE.Mesh(stickerGeo, stickerMats[f]);
+    st.position.set(dx * (SIZE / 2 + 0.004), dy * (SIZE / 2 + 0.004), dz * (SIZE / 2 + 0.004));
+    st.rotation.set(...STICKER_ROT[f]);
+    cubie.add(st);
+    stickers.push({ face: f, n: new THREE.Vector3(dx, dy, dz) });
+  }
+  cubie.position.set(x, y, z);
+  cubie.userData.pos = new THREE.Vector3(x, y, z);     // logical grid position
+  cubie.userData.home = new THREE.Vector3(x, y, z);
+  cubie.userData.stickers = stickers;                  // local normals + colour ids
+  cubeGroup.add(cubie);
+  allCubies.push(cubie);
+}
+
+// Snap a cubie back onto the exact integer lattice after a baked rotation.
+const QSNAPS = [0, 0.5, Math.SQRT1_2, 1];
+function snapCubie(c) {
+  c.position.set(Math.round(c.position.x), Math.round(c.position.y), Math.round(c.position.z));
+  c.userData.pos.copy(c.position);
+  const q = c.quaternion;
+  for (const k of ['x', 'y', 'z', 'w']) {
+    const v = q[k], s = v < 0 ? -1 : 1, a = Math.abs(v);
+    let best = QSNAPS[0], bd = Infinity;
+    for (const sv of QSNAPS) { const d = Math.abs(a - sv); if (d < bd) { bd = d; best = sv; } }
+    q[k] = s * best;
+  }
+  q.normalize();
+}
+
+/* ============================== tween engine ============================== */
+
+const tweens = [];
+const easeInOutCubic = k => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
+function addTween(dur, onUpdate, onDone) {
+  tweens.push({ t0: performance.now(), dur, onUpdate, onDone });
+}
+function updateTweens(now) {
+  for (let i = tweens.length - 1; i >= 0; i--) {
+    const tw = tweens[i];
+    let k = (now - tw.t0) / tw.dur;
+    if (k >= 1) k = 1;
+    tw.onUpdate(easeInOutCubic(k));
+    if (k === 1) { tweens.splice(i, 1); tw.onDone && tw.onDone(); }
+  }
+}
+const tweenP = (dur, fn) => new Promise(res => addTween(dur, fn, res));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+/* ============================== sound ============================== */
+
+let actx = null;
+function audio() {
+  if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} }
+  if (actx && actx.state === 'suspended') actx.resume();
+  return actx;
+}
+// short mechanical click: 440 Hz sine burst, 80 ms, fast decay
+function playClick() {
+  const a = audio(); if (!a) return;
+  const t = a.currentTime;
+  const o = a.createOscillator(), g = a.createGain();
+  o.type = 'sine'; o.frequency.value = 440;
+  g.gain.setValueAtTime(0.22, t);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.08);
+  o.connect(g).connect(a.destination);
+  o.start(t); o.stop(t + 0.09);
+}
+// ascending chime C4 -> E4 -> G4 -> C5, 150 ms apart
+function playChime() {
+  const a = audio(); if (!a) return;
+  const notes = [261.63, 329.63, 392.00, 523.25];
+  notes.forEach((f, i) => {
+    const t = a.currentTime + i * 0.15;
+    const o = a.createOscillator(), g = a.createGain();
+    o.type = 'sine'; o.frequency.value = f;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.25, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.28);
+    o.connect(g).connect(a.destination);
+    o.start(t); o.stop(t + 0.3);
+  });
+}
+
+/* ============================== logical state ============================== */
+// Each cubie carries userData.pos (integer grid position) and its quaternion.
+// Stickers are fixed local normals + colour ids; world direction of a sticker
+// is n rotated by the cubie quaternion. The solve detector and hint solver
+// read ONLY this data — never visual colours.
+
+function faceFromNormal(v) {
+  const ax = Math.abs(v.x), ay = Math.abs(v.y), az = Math.abs(v.z);
+  if (ax >= ay && ax >= az) return v.x > 0 ? 'R' : 'L';
+  if (ay >= ax && ay >= az) return v.y > 0 ? 'U' : 'D';
+  return v.z > 0 ? 'F' : 'B';
+}
+
+function logicalSnapshot() {
+  return allCubies
+    .filter(c => c.userData.stickers.length)
+    .map(c => ({ p: c.userData.pos.clone(), q: c.quaternion.clone(), st: c.userData.stickers }));
+}
+function cloneState(s) {
+  return s.map(r => ({ p: r.p.clone(), q: r.q.clone(), st: r.st }));
+}
+function applyLogical(state, name) {
+  const m = MOVES[name];
+  const ax = m.def.axis, layer = m.def.layer;
+  for (const r of state) {
+    if (Math.round(r.p[ax]) !== layer) continue;
+    r.p.applyQuaternion(m.quat).round();
+    r.q.premultiply(m.quat);
+  }
+}
+function hashState(s) {
+  return s.map(r =>
+    r.p.x + ',' + r.p.y + ',' + r.p.z + '|' +
+    r.q.x.toFixed(2) + ',' + r.q.y.toFixed(2) + ',' + r.q.z.toFixed(2) + ',' + r.q.w.toFixed(2)
+  ).join(';');
+}
+function stateSolved(state) {
+  const sets = { U: new Set(), D: new Set(), F: new Set(), B: new Set(), R: new Set(), L: new Set() };
+  for (const r of state)
+    for (const s of r.st)
+      sets[faceFromNormal(s.n.clone().applyQuaternion(r.q))].add(s.face);
+  return Object.values(sets).every(set => set.size === 1);
+}
+const isSolvedLive = () => stateSolved(logicalSnapshot());
+
+/* ============================== queue / moves ============================== */
+
+const queue = [];
+let busy = false;
+function enqueue(item) { queue.push(item); pump(); }
+async function pump() {
+  if (busy) return;
+  const item = queue.shift();
+  if (!item) return;
+  busy = true;
+  try {
+    if (item.type === 'move') await doMove(item);
+    else if (item.type === 'reset') await doReset();
+    else if (item.type === 'wait') await sleep(item.ms);
+  } finally {
+    busy = false;
+    if (queue.length) pump();
+  }
+}
+
+let moveCount = 0;
+const history = []; // user move names, undoable stack
+const hudMoves = document.getElementById('moveCount');
+const hintText = document.getElementById('hintText');
+const setMoves = n => { moveCount = n; hudMoves.textContent = n; };
+
+async function doMove(item) {
+  const m = MOVES[item.name];
+  const layer = allCubies.filter(c => Math.round(c.userData.pos[m.def.axis]) === m.def.layer);
+  const pivot = new THREE.Group();
+  cubeGroup.add(pivot);
+  layer.forEach(c => pivot.attach(c));
+
+  await tweenP(item.dur ?? MOVE_MS, k => {
+    pivot.setRotationFromAxisAngle(m.axisVec, m.angle * k);
+  });
+
+  // bake: return cubies to the cube, snap onto exact lattice, update logical state
+  layer.forEach(c => { cubeGroup.attach(c); snapCubie(c); });
+  cubeGroup.remove(pivot);
+  playClick();
+
+  if (item.count) {
+    hideSolved();
+    setMoves(moveCount + 1);
+  }
+  if (!item.scramble) checkSolved();
+  if (item.delayAfter) await sleep(item.delayAfter);
+}
+
+function userMove(name) {
+  hideSolved();
+  enqueue({ type: 'move', name, count: true });
+  history.push(name);
+}
+function undo() {
+  if (!history.length) { hintText.textContent = 'Nothing to undo.'; return; }
+  hintText.textContent = '';
+  const name = invertMove(history.pop());
+  enqueue({ type: 'move', name, count: true, isUndo: true });
+}
+function scramble() {
+  hideSolved();
+  hintText.textContent = '';
+  history.length = 0;
+  setMoves(0);
+  const faces = 'UDRLFB';
+  let prev = '';
+  for (let i = 0; i < SCRAMBLE_LEN; i++) {
+    let f;
+    do { f = faces[Math.floor(Math.random() * 6)]; } while (f === prev);
+    prev = f;
+    const name = f + (Math.random() < 0.5 ? '' : "'");
+    enqueue({ type: 'move', name, count: false, scramble: true, dur: SCRAMBLE_MS, delayAfter: SCRAMBLE_GAP });
+  }
+}
+
+/* ============================== reset ============================== */
+
+function doReset() {
+  return new Promise(res => {
+    hideSolved();
+    hintText.textContent = '';
+    playClick();
+    const scatter = allCubies.map(() => ({
+      axis: new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize(),
+      spin: (Math.random() * 2 - 1) * Math.PI * 1.2,
+    }));
+    const q0 = allCubies.map(c => c.quaternion.clone());
+    // dissolve: fly outward, shrink, tumble (250 ms)
+    addTween(250, k => {
+      allCubies.forEach((c, i) => {
+        c.position.copy(c.userData.home).multiplyScalar(1 + 0.9 * k);
+        c.scale.setScalar(Math.max(1 - k, 0.001));
+        c.quaternion.copy(q0[i]);
+        c.rotateOnAxis(scatter[i].axis, scatter[i].spin * k);
+      });
+    }, () => {
+      // reassemble at solved state (250 ms) — total ~500 ms
+      allCubies.forEach(c => {
+        c.position.copy(c.userData.home);
+        c.quaternion.identity();
+        c.userData.pos.copy(c.userData.home);
+        c.scale.setScalar(0.001);
+      });
+      history.length = 0;
+      setMoves(0);
+      addTween(250, k => {
+        allCubies.forEach(c => c.scale.setScalar(Math.max(k, 0.001)));
+      }, () => {
+        allCubies.forEach(c => c.scale.setScalar(1));
+        playClick();
+        res();
+      });
+    });
+  });
+}
+
+/* ============================== solve detector ============================== */
+
+let celebrating = false;
+const solvedOverlay = document.getElementById('solvedOverlay');
+const solvedInfo = document.getElementById('solvedInfo');
+solvedOverlay.addEventListener('click', hideSolved);
+
+function showSolved() {
+  if (celebrating) return;
+  celebrating = true;
+  solvedInfo.textContent = `Solved in ${moveCount} move${moveCount === 1 ? '' : 's'}`;
+  solvedOverlay.classList.remove('hidden');
+  launchConfetti();
+  playChime();
+}
+function hideSolved() {
+  celebrating = false;
+  solvedOverlay.classList.add('hidden');
+}
+function checkSolved() {
+  if (isSolvedLive()) showSolved();
+}
+
+/* ============================== confetti ============================== */
+
+const cCanvas = document.getElementById('confetti');
+const cctx = cCanvas.getContext('2d');
+let confetti = [], confettiRunning = false;
+const CONFETTI_COLORS = ['#FFFFFF', '#FFD700', '#CC0000', '#FF6600', '#0047AB', '#009B48'];
+
+function launchConfetti() {
+  cCanvas.width = innerWidth;
+  cCanvas.height = innerHeight;
+  for (let i = 0; i < 180; i++) {
+    confetti.push({
+      x: Math.random() * cCanvas.width,
+      y: -20 - Math.random() * cCanvas.height * 0.6,
+      w: 5 + Math.random() * 6, h: 8 + Math.random() * 8,
+      vx: (Math.random() - 0.5) * 2, vy: 2 + Math.random() * 3,
+      rot: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.2,
+      color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+    });
+  }
+  if (!confettiRunning) { confettiRunning = true; confettiLoop(); }
+}
+function confettiLoop() {
+  cctx.clearRect(0, 0, cCanvas.width, cCanvas.height);
+  for (const p of confetti) {
+    p.x += p.vx; p.y += p.vy; p.vy += 0.03; p.rot += p.vr;
+    cctx.save();
+    cctx.translate(p.x, p.y);
+    cctx.rotate(p.rot);
+    cctx.fillStyle = p.color;
+    cctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+    cctx.restore();
+  }
+  confetti = confetti.filter(p => p.y < cCanvas.height + 40);
+  if (confetti.length) requestAnimationFrame(confettiLoop);
+  else { confettiRunning = false; cctx.clearRect(0, 0, cCanvas.width, cCanvas.height); }
+}
+
+/* ============================== hint (white cross) ============================== */
+// Beginner's method step 1: solve the white cross. BFS up to depth 4 over the
+// logical state, scoring white edges correctly placed on U (white up, side
+// colour matching its centre). Returns the shortest improving sequence found.
+
+function scoreCross(state) {
+  let correct = 0, onU = 0;
+  for (const r of state) {
+    if (r.st.length !== 2) continue;
+    const w = r.st.find(s => s.face === 'U');
+    if (!w) continue;
+    const wn = w.n.clone().applyQuaternion(r.q);
+    if (wn.y > 0.9) {
+      onU++;
+      const o = r.st.find(s => s !== w);
+      if (faceFromNormal(o.n.clone().applyQuaternion(r.q)) === o.face) correct++;
+    }
+  }
+  return 10 * correct + onU;
+}
+
+function findHint() {
+  const start = logicalSnapshot();
+  if (stateSolved(start)) return { solved: true };
+  const startScore = scoreCross(start);
+  let best = null;
+  let frontier = [{ state: start, seq: [] }];
+  const visited = new Set([hashState(start)]);
+  for (let depth = 1; depth <= 4; depth++) {
+    const next = [];
+    for (const node of frontier) {
+      for (const name of MOVE_NAMES) {
+        const st = cloneState(node.state);
+        applyLogical(st, name);
+        const h = hashState(st);
+        if (visited.has(h)) continue;
+        visited.add(h);
+        const seq = [...node.seq, name];
+        const sc = scoreCross(st);
+        if (!best || sc > best.score) best = { seq, score: sc };
+        if (sc === 40) return best; // full white cross
+        if (depth < 4) next.push({ state: st, seq });
+      }
+    }
+    frontier = next;
+    if (!frontier.length) break;
+  }
+  return best && best.score > startScore ? best : (best || null);
+}
+
+const buttonByName = {};
+function showHint() {
+  const r = findHint();
+  if (!r) { hintText.textContent = 'No quick hint found — try more moves.'; return; }
+  if (r.solved) { hintText.textContent = 'Cube is already solved! 🎉'; return; }
+  hintText.textContent = 'White cross hint: ' + r.seq.join(' ');
+  const btn = buttonByName[r.seq[0]];
+  if (btn) {
+    btn.classList.remove('flash');
+    void btn.offsetWidth; // restart animation
+    btn.classList.add('flash');
+    setTimeout(() => btn.classList.remove('flash'), 1600);
+  }
+}
+
+/* ============================== UI wiring ============================== */
+
+const movesGrid = document.getElementById('movesGrid');
+for (const name of MOVE_NAMES) {
+  const b = document.createElement('button');
+  b.textContent = name;
+  b.dataset.move = name;
+  b.addEventListener('click', () => { audio(); userMove(name); });
+  movesGrid.appendChild(b);
+  buttonByName[name] = b;
+}
+document.getElementById('scrambleBtn').addEventListener('click', () => { audio(); scramble(); });
+document.getElementById('undoBtn').addEventListener('click', () => { audio(); undo(); });
+document.getElementById('resetBtn').addEventListener('click', () => { audio(); enqueue({ type: 'reset' }); });
+document.getElementById('hintBtn').addEventListener('click', () => { audio(); showHint(); });
+
+window.addEventListener('keydown', e => {
+  if (e.key.length !== 1) return;
+  const up = e.key.toUpperCase();
+  if (!'UDRLFB'.includes(up)) return;
+  e.preventDefault();
+  audio();
+  const prime = e.key !== up; // lowercase = counter-clockwise
+  userMove(up + (prime ? "'" : ''));
+});
+
+/* ============================== orbit controls (custom) ============================== */
+
+const sph = { theta: Math.PI / 4, phi: 1.05, r: 9 };
+function updateCamera() {
+  camera.position.set(
+    sph.r * Math.sin(sph.phi) * Math.sin(sph.theta),
+    sph.r * Math.cos(sph.phi),
+    sph.r * Math.sin(sph.phi) * Math.cos(sph.theta)
+  );
+  camera.lookAt(0, 0, 0);
+}
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+
+const el = renderer.domElement;
+el.style.touchAction = 'none';
+const pointers = new Map();
+let lastPinch = 0;
+
+el.addEventListener('pointerdown', e => {
+  audio();
+  el.setPointerCapture(e.pointerId);
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+});
+el.addEventListener('pointermove', e => {
+  const p = pointers.get(e.pointerId);
+  if (!p) return;
+  if (pointers.size === 1) {
+    sph.theta -= (e.clientX - p.x) * 0.006;
+    sph.phi = clamp(sph.phi - (e.clientY - p.y) * 0.006, 0.15, Math.PI - 0.15);
+  }
+  p.x = e.clientX; p.y = e.clientY;
+  if (pointers.size === 2) {
+    const [a, b] = [...pointers.values()];
+    const d = Math.hypot(a.x - b.x, a.y - b.y);
+    if (lastPinch) sph.r = clamp(sph.r * lastPinch / d, 5, 20);
+    lastPinch = d;
+  }
+});
+const endPointer = e => { pointers.delete(e.pointerId); lastPinch = 0; };
+el.addEventListener('pointerup', endPointer);
+el.addEventListener('pointercancel', endPointer);
+el.addEventListener('wheel', e => {
+  e.preventDefault();
+  sph.r = clamp(sph.r * (1 + e.deltaY * 0.001), 5, 20);
+}, { passive: false });
+
+window.addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+/* ============================== main loop ============================== */
+
+renderer.setAnimationLoop(() => {
+  updateTweens(performance.now());
+  updateCamera();
+  renderer.render(scene, camera);
+});
+updateCamera();
+</script>
+</body>
+</html>
