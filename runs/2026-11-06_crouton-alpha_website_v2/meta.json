@@ -12,5 +12,5 @@
     "functionality": null,
     "prompt_following": null
   },
-  "notes": "No index.html in this output \u2014 entry is website__crouton-alpha__2026-11-06__v1.html. If this is a Python/Node SaaS app, clone the repo and run it locally per its README."
+  "notes": "Single-file build (Prompt 06 \u2014 engine simulation). Entry is the model-given .html file name, not index.html."
 }

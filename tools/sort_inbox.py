@@ -62,7 +62,7 @@ def write_meta(run_dir: Path, info, source_name: str, entry: str = "index.html")
         "path": f"runs/{run_dir.name}/{entry}",
         "source_file": source_name,
         "scores": {"visual": None, "functionality": None, "prompt_following": None},
-        "notes": "" if entry == "index.html" else f"No index.html in this output — entry is {entry}. If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
+        "notes": "" if entry == "index.html" else f"Entry is {entry} (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
     }
     meta_path.write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
 
