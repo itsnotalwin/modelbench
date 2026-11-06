@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GRAIN — A Specimen Book of Dithering</title>
+<meta name="description" content="An interactive specimen book of dithering: seven algorithms for persuading two colours to behave like a thousand. Every plate is computed live in your browser — black ink, white paper, nothing in between but arrangement.">
+<meta property="og:title" content="GRAIN — A Specimen Book of Dithering">
+<meta property="og:description" content="Seven algorithms for persuading two colours to behave like a thousand. Every plate is computed live in your browser.">
+<meta property="og:type" content="website">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f4f4">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f0f0f">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='white'/%3E%3Cpath d='M0 0h4v4H0zM8 0h4v4H8zM4 4h4v4H4zM12 4h4v4h-4zM0 8h4v4H0zM8 8h4v4H8zM4 12h4v4H4zM12 12h4v4h-4z' fill='%23111111'/%3E%3C/svg%3E">
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('grain-theme');
+    if (t !== 'dark' && t !== 'light') {
+      t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.documentElement.dataset.theme = t;
+  } catch (e) { document.documentElement.dataset.theme = 'light'; }
+})();
+</script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <a class="wordmark" href="#top">GRAIN<span class="wordmark-mark" aria-hidden="true">&#9632;</span></a>
+  <p class="site-tag">A specimen book of dithering</p>
+  <nav class="site-nav" aria-label="Sections">
+    <a href="#manifesto" data-spy="manifesto">Manifesto</a>
+    <a href="#specimens" data-spy="specimens">Specimens</a>
+    <a href="#lineup" data-spy="lineup">Line-Up</a>
+    <a href="#plate-room" data-spy="plate-room">Plate Room</a>
+    <a href="#history" data-spy="history">History</a>
+    <a href="#colophon" data-spy="colophon">Colophon</a>
+  </nav>
+  <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
+    <svg class="icon-moon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M13.5 9.7A5.8 5.8 0 0 1 6.3 2.5a5.8 5.8 0 1 0 7.2 7.2Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+    <svg class="icon-sun" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 .8v1.9M8 13.3v1.9M.8 8h1.9M13.3 8h1.9M2.9 2.9l1.4 1.4M11.7 11.7l1.4 1.4M13.1 2.9l-1.4 1.4M4.3 11.7l-1.4 1.4" stroke="currentColor" stroke-width="1.3"/></svg>
+    <span class="visually-hidden">Switch colour scheme</span>
+  </button>
+</header>
+
+<main id="main">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow reveal">Plate 00 &mdash; Live specimen</p>
+        <h1 id="hero-title" class="hero-title reveal">GRAIN</h1>
+        <p class="lede reveal">Seven algorithms for persuading two colours to behave like a thousand.
+        Every plate in this book is drawn live in your browser &mdash; black ink, white paper,
+        nothing in between but arrangement.</p>
+        <div class="hero-actions reveal">
+          <a class="btn btn-solid" href="#plate-room">Enter the plate room</a>
+          <a class="btn" href="#manifesto">Read the manifesto</a>
+        </div>
+        <p class="hero-meta reveal" aria-label="Edition details">Vol.&nbsp;I &nbsp;&middot;&nbsp; Seven specimens &nbsp;&middot;&nbsp; Two colours &nbsp;&middot;&nbsp; Zero photographs</p>
+      </div>
+      <figure class="hero-plate reveal">
+        <div class="plate-frame plate-frame--marks">
+          <canvas data-plate='{"scene":"moon","algo":"floyd","cell":3.6,"levels":2,"light":135,"seed":11}' role="img" aria-label="A procedural moon, halftoned live with Floyd–Steinberg dithering: black ink dots on white paper. The light follows your pointer."></canvas>
+        </div>
+        <figcaption class="plate-caption">Plate 00 &mdash; &ldquo;Moon, waning&rdquo; &middot; Floyd&ndash;Steinberg &middot; steer the light with your pointer</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <canvas class="grain-divider" data-plate='{"scene":"ramp","algo":"bayer2","cell":2,"levels":2,"seed":1}' aria-hidden="true"></canvas>
+
+  <!-- ================= 01 MANIFESTO ================= -->
+  <section class="section" id="manifesto" aria-labelledby="manifesto-title">
+    <div class="container">
+      <header class="sec-head reveal">
+        <span class="sec-no" aria-hidden="true">01</span>
+        <h2 id="manifesto-title">Manifesto</h2>
+        <span class="sec-tag">Two colours, honestly kept</span>
+      </header>
+      <div class="prose reveal">
+        <p>Every plate in this book is printed with a single honest material: ink that is either
+        present or absent. No colour, no anti-aliased compromise &mdash; two states, arranged with
+        such patience that the eye gives up counting and starts believing.</p>
+        <p>Dithering is the name of that arrangement: deliberate noise, added so the eye reads what
+        isn&rsquo;t there. It was born on the printing press in the 1880s, drafted into computing
+        during the space race, and it survives today in e-readers, thermal receipts and every
+        display that ever faked a grey it could not afford.</p>
+        <p>This book is its field guide. Seven methods, each with a temperament &mdash; some
+        orderly, some restless, one that simply rolls the dice. Read the specimens, compare them
+        line by line, then take the controls in the Plate Room and steer the light yourself.</p>
+      </div>
+      <blockquote class="pull-quote reveal">
+        <p>Noise is the lubricant of perception.</p>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- ================= 02 SPECIMENS ================= -->
+  <section class="section" id="specimens" aria-labelledby="specimens-title">
+    <div class="container">
+      <header class="sec-head reveal">
+        <span class="sec-no" aria-hidden="true">02</span>
+        <h2 id="specimens-title">The Specimens</h2>
+        <span class="sec-tag">Seven temperaments of grain</span>
+      </header>
+      <p class="section-intro reveal">Each plate below is rendered as you arrive, from mathematics
+      alone. None of these images exist anywhere but in your browser&rsquo;s memory.</p>
+
+      <div class="specimen-grid">
+
+        <article class="specimen reveal">
+          <div class="plate">
+            <canvas data-plate='{"scene":"ramp","algo":"threshold","cell":4,"levels":2,"seed":1}' role="img" aria-label="A smooth gradient rendered with no dithering at all, collapsing into hard bands of black and white."></canvas>
+          </div>
+          <div class="spec-meta">
+            <header class="spec-head">
+              <span class="spec-no">No. 01</span>
+              <h3>Threshold</h3>
+              <span class="spec-year">&mdash;</span>
+            </header>
+            <p class="spec-body">No dither at all. Each pixel is asked one question &mdash; past
+            half? &mdash; and answers without consulting its neighbours. Perfectly honest, perfectly
+            banded: this is the cliff edge that dithering exists to repair.</p>
+            <dl class="spec-list">
+              <dt>Method</dt><dd>Fixed threshold</dd>
+              <dt>Origin</dt><dd>Arithmetic</dd>
+              <dt>Memory</dt><dd>None</dd>
+            </dl>
+            <p class="spec-character">&ldquo;Cliffs.&rdquo;</p>
+            <button class="btn btn-small" type="button" data-open-plate data-scene="ramp" data-algo="threshold">Open in plate room<span aria-hidden="true"> &rarr;</span></button>
+          </div>
+        </article>
+
+        <article class="specimen reveal">
+          <div class="plate">
+            <canvas data-plate='{"scene":"sphere","algo":"bayer4","cell":4,"levels":2,"seed":1}' role="img" aria-label="A shaded sphere rendered with Bayer ordered dithering: a calm crosshatch pattern of black dots on white."></canvas>
+          </div>
+          <div class="spec-meta">
+            <header class="spec-head">
+              <span class="spec-no">No. 02</span>
+              <h3>Bayer 4&times;4</h3>
+              <span class="spec-year">1973</span>
+            </header>
+            <p class="spec-body">Sixteen thresholds laid in a crosshatch, tiled forever. Fast,
+            memoryless and mechanical &mdash; the dither of fax machines and 1980s paint programs,
+            calm as graph paper.</p>
+            <dl class="spec-list">
+              <dt>Method</dt><dd>Ordered</dd>
+              <dt>Origin</dt><dd>Bryce Bayer, Kodak</dd>
+              <dt>Screen</dt><dd>4&times;4 matrix</dd>
+            </dl>
+            <p class="spec-character">&ldquo;Graph paper.&rdquo;</p>
+            <button class="btn btn-small" type="button" data-open-plate data-scene="sphere" data-algo="bayer4">Open in plate room<span aria-hidden="true"> &rarr;</span></button>
+          </div>
+        </article>
+
+        <article class="specimen reveal">
+          <div class="plate">
+            <canvas data-plate='{"scene":"moon","algo":"cluster8","cell":4,"levels":2,"seed":11}' role="img" aria-label="A procedural moon rendered with a clustered-dot halftone screen, like a vintage newspaper photograph."></canvas>
+          </div>
+          <div class="spec-meta">
+            <header class="spec-head">
+              <span class="spec-no">No. 03</span>
+              <h3>Clustered dot</h3>
+              <span class="spec-year">c.&nbsp;1882</span>
+            </header>
+            <p class="spec-body">Thresholds arranged in concentric rings, so ink gathers into dots
+            like a newspaper photograph. Older than computing itself &mdash; the pressroom ghost
+            that started all of this.</p>
+            <dl class="spec-list">
+              <dt>Method</dt><dd>Ordered</dd>
+              <dt>Origin</dt><dd>The pressrooms</dd>
+              <dt>Screen</dt><dd>8&times;8 rosette</dd>
+            </dl>
+            <p class="spec-character">&ldquo;Rosettes.&rdquo;</p>
+            <button class="btn btn-small" type="button" data-open-plate data-scene="moon" data-algo="cluster8">Open in plate room<span aria-hidden="true"> &rarr;</span></button>
+          </div>
+        </article>
+
+        <article class="specimen reveal">
+          <div class="plate">
+            <canvas data-plate='{"scene":"waves","algo":"noise","cell":4,"levels":2,"seed":5}' role="img" aria-label="A sea at night rendered with white-noise dithering: random grain, correct on average but chaotic in detail."></canvas>
+          </div>
+          <div class="spec-meta">
+            <header class="spec-head">
+              <span class="spec-no">No. 04</span>
+              <h3>White noise</h3>
+              <span class="spec-year">&mdash;</span>
+            </header>
+            <p class="spec-body">Every pixel rolls its own dice. Correct on average, chaotic in
+            detail &mdash; film grain without the romance, static with ambition.</p>
+            <dl class="spec-list">
+              <dt>Method</dt><dd>Stochastic</dd>
+              <dt>Origin</dt><dd>Chance</dd>
+              <dt>Screen</dt><dd>Per-pixel dice</dd>
+            </dl>
+            <p class="spec-character">&ldquo;Static.&rdquo;</p>
+            <button class="btn btn-small" type="button" data-open-plate data-scene="waves" data-algo="noise">Open in plate room<span aria-hidden="true"> &rarr;</span></button>
+          </div>
+        </article>
+
+        <article class="specimen reveal">
+          <div class="plate">
+            <canvas data-plate='{"scene":"terrain","algo":"atkinson","cell":4,"levels":2,"seed":4}' role="img" aria-label="Hill country rendered with Atkinson dithering: bright, luminous grain."></canvas>
+          </div>
+          <div class="spec-meta">
+            <header class="spec-head">
+              <span class="spec-no">No. 05</span>
+              <h3>Atkinson</h3>
+              <span class="spec-year">1984</span>
+            </header>
+            <p class="spec-body">Floyd&ndash;Steinberg&rsquo;s brighter cousin: it spreads error to
+            six neighbours but spends only three-quarters of it, leaving highlights luminous. It
+            shipped with the Macintosh and looked like optimism.</p>
+            <dl class="spec-list">
+              <dt>Method</dt><dd>Error diffusion</dd>
+              <dt>Origin</dt><dd>Bill Atkinson</dd>
+              <dt>Kernel</dt><dd>6-tap, &frac34; error</dd>
+            </dl>
+            <p class="spec-character">&ldquo;Luminous.&rdquo;</p>
+            <button class="btn btn-small" type="button" data-open-plate data-scene="terrain" data-algo="atkinson">Open in plate room<span aria-hidden="true"> &rarr;</span></button>
+          </div>
+        </article>
+
+        <article class="specimen reveal">
+          <div class="plate">
+            <canvas data-plate='{"scene":"sphere","algo":"floyd","cell":4,"levels":2,"seed":1}' role="img" aria-label="A shaded sphere rendered with Floyd–Steinberg error diffusion: organic, restless grain."></canvas>
+          </div>
+          <div class="spec-meta">
+            <header class="spec-head">
+              <span class="spec-no">No. 06</span>
+              <h3>Floyd&ndash;Steinberg</h3>
+              <span class="spec-year">1976</span>
+            </header>
+            <p class="spec-body">Quantisation error is not discarded; it is passed downhill to four
+            neighbours like a debt, left to right, serpentine. Restless, organic, and everywhere
+            between 1976 and 1995.</p>
+            <dl class="spec-list">
+              <dt>Method</dt><dd>Error diffusion</dd>
+              <dt>Origin</dt><dd>R.&nbsp;Floyd &amp; L.&nbsp;Steinberg</dd>
+              <dt>Kernel</dt><dd>4-tap, serpentine</dd>
+            </dl>
+            <p class="spec-character">&ldquo;Restless.&rdquo;</p>
+            <button class="btn btn-small" type="button" data-open-plate data-scene="sphere" data-algo="floyd">Open in plate room<span aria-hidden="true"> &rarr;</span></button>
+          </div>
+        </article>
+
+        <article class="specimen specimen--wide reveal">
+          <div class="plate">
+            <canvas data-plate='{"scene":"moon","algo":"blue","cell":4,"levels":2,"seed":11}' role="img" aria-label="A procedural moon rendered with a blue-noise void-and-cluster screen: even, film-like grain with no visible pattern."></canvas>
+          </div>
+          <div class="spec-meta">
+            <header class="spec-head">
+              <span class="spec-no">No. 07</span>
+              <h3>Blue noise <span class="spec-sub">(void-and-cluster)</span></h3>
+              <span class="spec-year">1993</span>
+            </header>
+            <p class="spec-body">The diplomat. Ulichney&rsquo;s void-and-cluster algorithm builds a
+            threshold screen with the evenness of Bayer and the organic grain of diffusion &mdash;
+            no visible pattern, no banding, grain like slow film. It is what &ldquo;tasteful&rdquo;
+            looks like when it is computed. The screen on this very plate was generated in your
+            browser a moment ago, dot by dot, always filling the largest emptiness first.</p>
+            <dl class="spec-list">
+              <dt>Method</dt><dd>Stochastic screen</dd>
+              <dt>Origin</dt><dd>Robert Ulichney</dd>
+              <dt>Screen</dt><dd>32&times;32, generated live</dd>
+            </dl>
+            <p class="spec-character">&ldquo;Grain like film.&rdquo;</p>
+            <button class="btn btn-small" type="button" data-open-plate data-scene="moon" data-algo="blue">Open in plate room<span aria-hidden="true"> &rarr;</span></button>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <canvas class="grain-divider" data-plate='{"scene":"ramp","algo":"noise","cell":2,"levels":2,"seed":1}' aria-hidden="true"></canvas>
+
+  <!-- ================= 03 LINE-UP ================= -->
+  <section class="section" id="lineup" aria-labelledby="lineup-title">
+    <div class="container">
+      <header class="sec-head reveal">
+        <span class="sec-no" aria-hidden="true">03</span>
+        <h2 id="lineup-title">The Line-Up</h2>
+        <span class="sec-tag">One gradient, five opinions</span>
+      </header>
+      <p class="section-intro reveal">The same smooth gradient, rendered five ways. Drag the
+      exposure and watch each method hold or fail: the threshold breaks first, Bayer ripples,
+      error diffusion buzzes &mdash; and blue noise simply changes its mind gracefully.</p>
+
+      <div class="lu-control reveal">
+        <label for="lu-exposure">Exposure</label>
+        <input type="range" id="lu-exposure" min="-1.5" max="1.5" step="0.05" value="0">
+        <output id="lu-exposure-value" for="lu-exposure">+0.00&nbsp;EV</output>
+      </div>
+
+      <div class="lu-rows reveal">
+        <div class="lu-row">
+          <div class="lu-label"><span class="lu-no">a.</span> Threshold <span class="lu-note">no dither</span></div>
+          <canvas data-plate data-lu="threshold" data-plate-opts='{"scene":"ramp","algo":"threshold","cell":3.2,"levels":2,"seed":1}' role="img" aria-label="Gradient strip rendered with a hard threshold, showing severe banding."></canvas>
+        </div>
+        <div class="lu-row">
+          <div class="lu-label"><span class="lu-no">b.</span> Bayer 4&times;4 <span class="lu-note">ordered, 1973</span></div>
+          <canvas data-plate data-lu="bayer4" data-plate-opts='{"scene":"ramp","algo":"bayer4","cell":3.2,"levels":2,"seed":1}' role="img" aria-label="Gradient strip rendered with Bayer ordered dithering, showing a crosshatch texture."></canvas>
+        </div>
+        <div class="lu-row">
+          <div class="lu-label"><span class="lu-no">c.</span> Floyd&ndash;Steinberg <span class="lu-note">diffusion, 1976</span></div>
+          <canvas data-plate data-lu="floyd" data-plate-opts='{"scene":"ramp","algo":"floyd","cell":3.2,"levels":2,"seed":1}' role="img" aria-label="Gradient strip rendered with Floyd–Steinberg error diffusion, showing organic scattered grain."></canvas>
+        </div>
+        <div class="lu-row">
+          <div class="lu-label"><span class="lu-no">d.</span> Atkinson <span class="lu-note">diffusion, 1984</span></div>
+          <canvas data-plate data-lu="atkinson" data-plate-opts='{"scene":"ramp","algo":"atkinson","cell":3.2,"levels":2,"seed":1}' role="img" aria-label="Gradient strip rendered with Atkinson dithering, showing bright airy grain."></canvas>
+        </div>
+        <div class="lu-row">
+          <div class="lu-label"><span class="lu-no">e.</span> Blue noise <span class="lu-note">void-and-cluster, 1993</span></div>
+          <canvas data-plate data-lu="blue" data-plate-opts='{"scene":"ramp","algo":"blue","cell":3.2,"levels":2,"seed":1}' role="img" aria-label="Gradient strip rendered with a blue-noise void-and-cluster screen, showing even film-like grain."></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 04 PLATE ROOM ================= -->
+  <section class="section" id="plate-room" aria-labelledby="plate-room-title" tabindex="-1">
+    <div class="container">
+      <header class="sec-head reveal">
+        <span class="sec-no" aria-hidden="true">04</span>
+        <h2 id="plate-room-title">The Plate Room</h2>
+        <span class="sec-tag">Take the controls</span>
+      </header>
+      <p class="section-intro reveal">A working press. Choose a subject and a method, then pull the
+      light around the scene. Every change re-inks the plate in real time.</p>
+
+      <div class="pr-grid">
+        <form class="pr-controls reveal" id="pr-form">
+          <div class="ctrl">
+            <label for="ctl-scene">Subject</label>
+            <select id="ctl-scene" name="scene">
+              <option value="ramp">Gradient ramp</option>
+              <option value="sphere">Sphere</option>
+              <option value="moon" selected>Moon</option>
+              <option value="waves">Open sea</option>
+              <option value="terrain">Hill country</option>
+            </select>
+          </div>
+          <div class="ctrl">
+            <label for="ctl-algo">Method</label>
+            <select id="ctl-algo" name="algo">
+              <option value="threshold">Threshold (no dither)</option>
+              <option value="bayer2">Bayer 2&times;2</option>
+              <option value="bayer4">Bayer 4&times;4</option>
+              <option value="bayer8">Bayer 8&times;8</option>
+              <option value="cluster8">Clustered dot 8&times;8</option>
+              <option value="noise">White noise</option>
+              <option value="blue">Blue noise (void-and-cluster)</option>
+              <option value="floyd" selected>Floyd&ndash;Steinberg</option>
+              <option value="atkinson">Atkinson</option>
+              <option value="sierra">Sierra Lite</option>
+            </select>
+          </div>
+          <div class="ctrl">
+            <label for="ctl-grain">Grain <output id="out-grain" for="ctl-grain">fine</output></label>
+            <input type="range" id="ctl-grain" name="grain" min="2" max="8" step="0.5" value="3.6">
+          </div>
+          <div class="ctrl">
+            <label for="ctl-shades">Shades <output id="out-shades" for="ctl-shades">2 &mdash; pure black &amp; white</output></label>
+            <input type="range" id="ctl-shades" name="shades" min="2" max="6" step="1" value="2">
+          </div>
+          <div class="ctrl">
+            <label for="ctl-light">Light <output id="out-light" for="ctl-light">135&deg;</output></label>
+            <input type="range" id="ctl-light" name="light" min="0" max="360" step="1" value="135">
+          </div>
+          <div class="ctrl">
+            <label for="ctl-ev">Exposure <output id="out-ev" for="ctl-ev">+0.00&nbsp;EV</output></label>
+            <input type="range" id="ctl-ev" name="ev" min="-1.5" max="1.5" step="0.05" value="0">
+          </div>
+          <div class="pr-actions">
+            <button class="btn" type="button" id="ctl-reseed">Reseed subject</button>
+            <button class="btn btn-solid" type="button" id="ctl-download">Download plate</button>
+          </div>
+        </form>
+
+        <figure class="pr-plate reveal">
+          <div class="plate-frame plate-frame--marks">
+            <canvas id="plate-canvas" data-plate='{"scene":"moon","algo":"floyd","cell":3.6,"levels":2,"light":135,"seed":11}' role="img" aria-label="Interactive dithering plate. Currently showing a procedural moon rendered with the chosen method."></canvas>
+          </div>
+          <figcaption class="plate-caption" id="plate-readout" aria-live="polite">Plate 88 &middot; Moon &times; Floyd&ndash;Steinberg &middot; 2 shades &middot; grain fine &middot; light 135&deg; &middot; +0.00&nbsp;EV</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 05 HISTORY ================= -->
+  <section class="section" id="history" aria-labelledby="history-title">
+    <div class="container">
+      <header class="sec-head reveal">
+        <span class="sec-no" aria-hidden="true">05</span>
+        <h2 id="history-title">A Brief History</h2>
+        <span class="sec-tag">A hundred and forty years of noise</span>
+      </header>
+
+      <div class="timeline">
+        <article class="tl-item reveal">
+          <p class="tl-year">1882</p>
+          <div>
+            <h3>The halftone screen</h3>
+            <p>Georg Meisenbach patents a process for breaking photographs into dots small enough
+            for a printing press. From here on, every &ldquo;continuous-tone&rdquo; picture in a
+            newspaper is actually thousands of black dots &mdash; dithering, before the word
+            existed.</p>
+          </div>
+        </article>
+        <article class="tl-item reveal">
+          <p class="tl-year">1940s</p>
+          <div>
+            <h3>Dither, the word</h3>
+            <p>The story goes that engineers fighting sticky gyroscope bearings found that a small,
+            deliberate vibration kept them moving. The trick &mdash; noise as lubricant &mdash; was
+            filed away, waiting for computers with too few colours.</p>
+          </div>
+        </article>
+        <article class="tl-item reveal">
+          <p class="tl-year">1973</p>
+          <div>
+            <h3>Bayer&rsquo;s matrix</h3>
+            <p>At Kodak, Bryce Bayer publishes <cite>An optimum method for two-level rendition of
+            continuous-tone pictures</cite>. Sixteen thresholds in a crosshatch: ordered dithering
+            as we know it.</p>
+          </div>
+        </article>
+        <article class="tl-item reveal">
+          <p class="tl-year">1976</p>
+          <div>
+            <h3>Error, passed along</h3>
+            <p>Robert Floyd and Louis Steinberg show that quantisation error can be pushed downhill
+            to a pixel&rsquo;s neighbours instead of being thrown away. The look of every printer
+            and early web GIF quietly changes.</p>
+          </div>
+        </article>
+        <article class="tl-item reveal">
+          <p class="tl-year">1984</p>
+          <div>
+            <h3>Grain for everyone</h3>
+            <p>Bill Atkinson&rsquo;s dithering ships with the Apple Macintosh, and millions of
+            people meet Floyd&ndash;Steinberg&rsquo;s brighter cousin without ever learning its
+            name.</p>
+          </div>
+        </article>
+        <article class="tl-item reveal">
+          <p class="tl-year">1993</p>
+          <div>
+            <h3>Blue noise</h3>
+            <p>Robert Ulichney&rsquo;s void-and-cluster algorithm manufactures threshold screens
+            with the evenness of ordered dither and the organic grain of error diffusion &mdash;
+            the best of both temperaments.</p>
+          </div>
+        </article>
+        <article class="tl-item reveal">
+          <p class="tl-year">Now</p>
+          <div>
+            <h3>The two-colour renaissance</h3>
+            <p>E-ink pages, thermal receipts, pixel-art revivals and one-bit design trends keep
+            dithering honest. Two colours remain the cheapest, sharpest and most characterful way
+            to show a shade.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 06 COLOPHON ================= -->
+  <section class="section" id="colophon" aria-labelledby="colophon-title">
+    <div class="container">
+      <header class="sec-head reveal">
+        <span class="sec-no" aria-hidden="true">06</span>
+        <h2 id="colophon-title">Colophon</h2>
+        <span class="sec-tag">How this book was set</span>
+      </header>
+      <div class="colophon-grid">
+        <div class="reveal">
+          <h3>Composition</h3>
+          <p>Hand-written HTML, CSS and JavaScript. No frameworks, no build step, no external
+          requests &mdash; deploy the folder anywhere static and it simply prints.</p>
+        </div>
+        <div class="reveal">
+          <h3>Type</h3>
+          <p>Set from the system shelf: a serif with bookish manners for reading, a monospace for
+          measurement. If your machine carries finer faces than these, this page quietly borrows
+          them.</p>
+        </div>
+        <div class="reveal">
+          <h3>Plates</h3>
+          <p>Every image is procedural &mdash; spheres, moons, seas and hills computed from noise,
+          then halftoned live at your screen&rsquo;s resolution. Nothing was photographed; nothing
+          was downloaded.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="container site-foot-row">
+    <p>GRAIN &mdash; printed in two colours since 1882, allegedly.</p>
+    <p>&copy; 2026 GRAIN Press &middot; reprint freely</p>
+    <a class="foot-top" href="#top">Back to top <span aria-hidden="true">&uarr;</span></a>
+  </div>
+</footer>
+
+<noscript>
+  <div class="noscript-note">
+    <p>This book is printed live in JavaScript. The text is all here, but the plates need
+    scripting to be inked &mdash; enable JavaScript to see the grain.</p>
+  </div>
+</noscript>
+
+<script src="js/grain.js" defer></script>
+</body>
+</html>

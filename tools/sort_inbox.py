@@ -5,7 +5,7 @@ Accepted inbox filenames (case-insensitive extension):
   {category}__{model}__{YYYY-MM-DD}__v{n}.html
   {category}__{model}__{YYYY-MM-DD}__v{n}.zip
 Categories: website | saas | game2d | game3d
-Model: lowercase letters, digits, hyphens (e.g. claude-sonnet-4-5, gpt-5, grok-4-1)
+Model: lowercase letters, digits, hyphens and dots (e.g. claude-sonnet-4-5, glm-5.3-flash, gpt-5, grok-4-1)
 .zip must contain a single top folder with index.html at its root.
 That folder is RENAMED to the benchmark prefix on upload:
 runs/{date}_{model}_{category}_v{n}/index.html
@@ -24,7 +24,7 @@ INBOX = ROOT / "inbox"
 RUNS = ROOT / "runs"
 CATEGORIES = {"website", "saas", "game2d", "game3d"}
 PATTERN = re.compile(
-    r"^(?P<category>[a-z0-9]+)__(?P<model>[a-z0-9][a-z0-9\-]*)__(?P<date>\d{4}-\d{2}-\d{2})__v(?P<n>\d+)$",
+    r"^(?P<category>[a-z0-9]+)__(?P<model>[a-z0-9][a-z0-9\-.]*?)__(?P<date>\d{4}-\d{2}-\d{2})__v(?P<n>\d+)$",
     re.IGNORECASE,
 )
 
