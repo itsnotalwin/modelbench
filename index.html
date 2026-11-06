@@ -105,13 +105,7 @@ select:focus{border-color:var(--line-2)}
   .search{flex:1 1 100%}
   .search input{width:100%}
   select{flex:1 1 0;min-width:0;font-size:13px;padding:8px 26px 8px 10px}
-  #btnCompare{
-    position:fixed;left:14px;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));
-    z-index:60;display:none;padding:13px;font-size:14px;border-radius:11px;
-    box-shadow:0 18px 44px -14px rgba(0,0,0,.85);
-  }
-  #btnCompare.show{display:block}
-  body.cmp-armed{padding-bottom:78px}
+  #btnCompare{flex:0 0 auto;padding:8px 11px;font-size:12.5px;border-radius:9px}
   .masthead{padding-top:26px;padding-bottom:18px}
   .masthead h1{font-size:clamp(28px,8.2vw,36px)}
   .lede{font-size:13.8px;margin-top:14px;max-width:34ch}
@@ -445,9 +439,7 @@ function render(){
 function updateCompareBtn(){
   const b = $("btnCompare");
   b.disabled = selected.size !== 2;
-  b.textContent = selected.size ? `Compare ${selected.size} runs` : "Compare";
-  b.classList.toggle("show", selected.size === 2);
-  document.body.classList.toggle("cmp-armed", selected.size === 2);
+  b.textContent = selected.size === 2 ? "Compare 2" : "Compare";
 }
 
 function renderTally(){
