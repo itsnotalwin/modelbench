@@ -1,12 +1,13 @@
 # 3D game — benchmark prompt
 
 > **Uploader instruction (do NOT send this header to the model):**
-> Save the model's output and upload it to the `inbox/` folder on GitHub, renamed exactly as:
+> The model must deliver one HTML file and state its name at the top of the reply.
+> Save that file as the name the model gave, or name it yourself exactly:
 >
 > `game3d__{model}__{YYYY-MM-DD}__v1.html`
 >
 > Example: `game3d__claude-sonnet-4-5__2026-11-06__v1.html`
-> The GitHub Action (`auto-sort`) then moves it to `runs/{date}_{model}_game3d_v1/` automatically.
+> Upload that **.html** (never .rar) to `inbox/`. The Action files it as `runs/{date}_{model}_game3d_v1/index.html`, which the dashboard previews.
 
 ---
 
@@ -18,7 +19,7 @@ Hard rules:
 - Everything lives in ONE .html file (HTML, CSS and JS inline). No external asset files of any kind: no images, models, textures, audio or font files.
 - All 3D models, textures and sounds must be created by you in code: procedural geometry, custom meshes, shaders, synthesised audio (Web Audio). Models should be recognisable, characterful and built with care, not default primitives scattered about.
 - A 3D library is allowed only if loaded from a CDN at an exact pinned version. Raw WebGL/WebGPU is welcome if you can do it better.
-- It must run by opening the file in a current evergreen browser.
+- It must run by opening the file directly in a current evergreen browser, with no server, no build step and no install — and must also work when served from a static host such as GitHub Pages from a subfolder. Use no absolute paths.
 
 Game quality:
 - A complete game loop: title screen, clear onboarding, core gameplay, escalating challenge or progression, fail/win state, restart, and saved high score or progress (guard storage access with try/catch).
@@ -26,8 +27,13 @@ Game quality:
 - Game feel: lighting, camera work, animation, particles, feedback effects, sound and music. Stable framerate, delta-time based movement, handles window resize and tab visibility changes.
 - No placeholders, TODOs or unfinished mechanics. It should be fun for at least a few minutes.
 
+Deliverable — **naming is mandatory, read it twice:**
+- One file only, named exactly: `game3d__{model-slug}__{YYYY-MM-DD}__v1.html`
+  Example: `game3d__claude-sonnet-4-5__2026-11-06__v1.html`
+  Use today's date (YYYY-MM-DD) and your own model name, lowercased, spaces replaced with hyphens. Do not use a creative file name, uppercase or spaces.
+- State that exact file name as the first line of your reply.
+
 Process:
 - Do not ask me questions. Make every decision yourself.
 - Before finishing, review your code for bugs, runtime errors, soft-locks and balance problems, and fix them.
-- Deliver the finished file (if you cannot create files directly, output it in full in a single code block), followed by a note of under 150 words covering the concept, the controls, and what you are proudest of.
-- **NAMING (mandatory):** State the file name at the top of your reply, named EXACTLY with the benchmark prefix: `game3d__{model-slug}__{YYYY-MM-DD}__v1.html` — for example `game3d__claude-sonnet-4-5__2026-11-06__v1.html`. Use today's date and your own model name in lowercase hyphens. Do NOT use a creative file name.
+- Output the complete file in a single code block, followed by a note of under 150 words covering the concept, the controls, and what you are proudest of.

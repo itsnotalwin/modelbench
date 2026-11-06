@@ -9,9 +9,13 @@ Rename each file **exactly** like this before uploading:
 {category}__{model}__{YYYY-MM-DD}__v{n}.zip
 ```
 
+- `category` FIRST, then model, then date, then version — separated by **double** underscores
 - `category`: `website` | `saas` | `game2d` | `game3d`
-- `model`: lowercase, hyphens only — e.g. `claude-sonnet-4-5`, `gpt-5`, `grok-4-1`
+- `model`: lowercase, hyphens and dots — e.g. `claude-sonnet-4-5`, `glm-5.3-flash`, `gpt-5`
 - `v{n}`: attempt number — `v1`, `v2`, …
+
+> **Do not use the run-folder name here.** `2026-11-06_glm-5.3-flash_website_v1.zip` is WRONG and gets skipped — it must be `website__glm-5.3-flash__2026-11-06__v1.zip`.
+> **Only `.zip` or `.html`.** A `.rar` is always skipped.
 
 Examples:
 
@@ -23,7 +27,7 @@ Examples:
 
 Rules:
 - **The folder must be renamed to the benchmark prefix.** Rename the model's folder to `{date}_{model}_{category}_v{n}` before zipping (e.g. `the-grey-index/` → `2026-11-06_claude-sonnet-4-5_website_v1/`). The Action also renames it automatically on upload, so the repo folder always uses the prefix — never the model's creative name. Contents are untouched.
-- **`.zip`** (website / SaaS folder outputs): zip contains a single folder with `index.html` at its root. The Action unpacks it to `runs/{date}_{model}_{category}_v{n}/`.
+- **`.zip`** (website / SaaS folder outputs): the zip contains one folder with **`index.html` at its root** — the dashboard previews that file, so an output with no root `index.html` cannot be compared online. (The sorter still files a README-only app so nothing is lost, but that run shows no preview.) The Action unpacks it to `runs/{date}_{model}_{category}_v{n}/`.
 - **`.html`** (2D / 3D games, or single-file outputs): becomes `runs/.../index.html`.
 - The Action also writes a `meta.json` (scores start empty) and rebuilds `manifest.json`, then commits itself. Takes ~30s.
 - Files with a bad name are left in `inbox/` — rename and re-upload, or run the Action manually (Actions tab → "Auto-sort inbox uploads" → Run workflow).

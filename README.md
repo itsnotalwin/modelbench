@@ -6,12 +6,13 @@ Benchmark inspector for model outputs. Four prompts — **website, SaaS (clearin
 
 ## How to add a test (30 seconds, no terminal)
 
+All four prompts already require the model to self-name its output and to put a runnable `index.html` at the root, so uploads are previewable and comparable online.
+
 1. Generate the output with a model using a prompt in [`prompts/`](prompts/).
-   **Rename the model's folder to the benchmark prefix** `{date}_{model}_{category}_v{n}` (e.g. `2026-11-06_claude-sonnet-4-5_website_v1/`) — the Action does this automatically on upload too.
-2. Zip it and name the zip exactly as shown at the top of that prompt file, e.g.
-   `game2d__claude-sonnet-4-5__2026-11-06__v1.html` or `website__gpt-5__2026-11-06__v1.zip`
-3. On GitHub, open [`inbox/`](inbox/) → **Add file → Upload files** → upload.
-4. The **Auto-sort** Action moves it to `runs/{date}_{model}_{category}_v{n}/` (folder renamed to the prefix, contents untouched), writes `meta.json`, rebuilds `manifest.json` and commits. The dashboard updates on GitHub Pages (allow ~1 min).
+2. Zip the folder (website / SaaS) or take the single `.html` (games). If the model ignored the naming rule, rename the folder to `{date}_{model}_{category}_v{n}` yourself.
+3. Name the upload **category first, double underscores** — e.g. `website__glm-5.3-flash__2026-11-06__v1.zip`, `game2d__crouton-alpha__2026-11-06__v2.html`. Never `.rar`, never the run-folder name.
+4. On GitHub, open [`inbox/`](inbox/) → **Add file → Upload files** → upload.
+5. The **Auto-sort** Action moves it to `runs/{date}_{model}_{category}_v{n}/`, writes `meta.json`, rebuilds `manifest.json` and commits. The dashboard updates on GitHub Pages (allow ~1 min). Check the Action log if a file does not appear.
 
 Full naming rules: [`inbox/README.md`](inbox/README.md).
 
