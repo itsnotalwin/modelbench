@@ -62,7 +62,7 @@ def write_meta(run_dir: Path, info, source_name: str, entry: str = "index.html")
         "path": f"runs/{run_dir.name}/{entry}",
         "source_file": source_name,
         "scores": {"visual": None, "functionality": None, "prompt_following": None},
-        "notes": "",
+        "notes": "" if entry == "index.html" else f"No index.html in this output — entry is {entry}. If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
     }
     meta_path.write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
 
@@ -76,10 +76,12 @@ def safe_extract(zf: zipfile.ZipFile, dest: Path) -> None:
     zf.extractall(dest)
 
 
-def handle_zip(src: Path, run_dir: Path) -> str:
+def handle_zip(src: Path, run_dir: Path, category: str = "") -> str:
     """Rename the model's folder to the benchmark prefix: the folder inside the
     zip (whatever the model called it) becomes runs/<slug>/, contents untouched.
-    Returns the entry path relative to run_dir (always index.html)."""
+    Entry priority: index.html > any root .html > README.md (SaaS python
+    apps with no html still land in the dashboard, previewing their README).
+    Returns the entry path relative to run_dir."""
     run_dir.mkdir(parents=True, exist_ok=True)
     tmp = run_dir.parent / (run_dir.name + ".__tmp__")
     if tmp.exists():
@@ -92,16 +94,30 @@ def handle_zip(src: Path, run_dir: Path) -> str:
         src_root = children[0]  # model's folder -> renamed to run_dir (the prefix)
     else:
         src_root = tmp
-    if not (src_root / "index.html").exists():
-        shutil.rmtree(tmp, ignore_errors=True)
-        raise ValueError("zip must contain index.html at the root of its folder")
+    # Pick the entry file before moving anything.
+    entry = None
+    if (src_root / "index.html").exists():
+        entry = "index.html"
+    else:
+        htmls = sorted(p.name for p in src_root.iterdir() if p.is_file() and p.suffix.lower() in {".html", ".htm"})
+        if htmls:
+            entry = htmls[0]
+        elif (src_root / "README.md").exists() or (src_root / "readme.md").exists():
+            entry = "README.md" if (src_root / "README.md").exists() else "readme.md"
+        elif category == "saas":
+            # SaaS python/node app with no html at all: still accept it so the
+            # run shows up; the dashboard will preview the file list via meta.
+            entry = "README.md"
+        if entry is None or not (src_root / entry).exists():
+            shutil.rmtree(tmp, ignore_errors=True)
+            raise ValueError("zip must contain index.html (or a root .html / README.md) at the root of its folder")
     for item in list(src_root.iterdir()):
         dest = run_dir / item.name
         if dest.exists():
             shutil.rmtree(dest) if dest.is_dir() else dest.unlink()
         shutil.move(str(item), str(dest))
     shutil.rmtree(tmp, ignore_errors=True)
-    return "index.html"
+    return entry
 
 
 def handle_html(src: Path, run_dir: Path) -> None:
@@ -118,20 +134,24 @@ def main() -> int:
         if f.is_dir() or f.name.startswith(".") or f.name.lower() == "readme.md":
             continue
         info = parse(f.stem)
-        if not info or f.suffix.lower() not in {".html", ".htm", ".zip"}:
+        if f.suffix.lower() not in {".html", ".htm", ".zip"}:
             skipped.append(f.name)
-            print(f"SKIP (bad name): {f.name}")
+            print(f"SKIP (unsupported extension, use .zip not .rar): {f.name}")
+            continue
+        if not info:
+            skipped.append(f.name)
+            print(f"SKIP (bad name, want {{category}}__{{model}}__{{date}}__v{{n}}): {f.name}")
             continue
         slug = slug_for(info)
         run_dir = RUNS / slug
-        if run_dir.exists() and list(run_dir.rglob("index.html")):
+        if run_dir.exists() and (run_dir / "meta.json").exists():
             skipped.append(f.name)
             print(f"SKIP (already exists): {slug}")
             continue
         try:
             entry = "index.html"
             if f.suffix.lower() == ".zip":
-                entry = handle_zip(f, run_dir)
+                entry = handle_zip(f, run_dir, info["category"])
             else:
                 handle_html(f, run_dir)
         except Exception as e:
