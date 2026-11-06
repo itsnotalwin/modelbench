@@ -1,0 +1,16 @@
+{
+  "slug": "2026-11-06_hermes-agent_game3d_v1",
+  "model": "hermes-agent",
+  "category": "game3d",
+  "date": "2026-11-06",
+  "version": 1,
+  "entry": "game3d__hermes-agent__2026-11-06__v1.html",
+  "path": "runs/2026-11-06_hermes-agent_game3d_v1/game3d__hermes-agent__2026-11-06__v1.html",
+  "source_file": "game3d__hermes-agent__2026-11-06__v1.zip",
+  "scores": {
+    "visual": null,
+    "functionality": null,
+    "prompt_following": null
+  },
+  "notes": "No index.html in this output \u2014 entry is game3d__hermes-agent__2026-11-06__v1.html. If this is a Python/Node SaaS app, clone the repo and run it locally per its README."
+}
