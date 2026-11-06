@@ -1,28 +1,39 @@
-# Prompts
+# ModelBench prompt set v2
 
-All prompts enforce two hard rules so runs can be compared online:
+Prompts 01-04 are unchanged from the original set. Prompts 05-12 are rewritten (version v2) and 13-20 are new (version v1).
+Every prompt uses the same structure: an open concept, "the bar" (quality), hard rules, what "real" means, craft, engineering, mandatory naming, and process.
 
-2. **Naming:** every prompt has its own unique category slug, so runs from different prompts can never collide
-   - Folder-based (`01`, `02`): `{YYYY-MM-DD}_{model-slug}_{category}_v1/` containing `index.html` at its root
-   - Single-file (`03`–`12`): `{category}__{model-slug}__{YYYY-MM-DD}__v1.html`
-   - `model-slug` = the model's name, lowercased, spaces → hyphens (dots allowed, e.g. `glm-5.3-flash`)
-3. **Entry point**: everything runs with no server, no build step and no install, from `file://` or a static host. All paths relative.
+| # | Prompt | Prefix | Version | Output |
+|---|--------|--------|---------|--------|
+| 01 | Website | website | v1 | folder zip |
+| 02 | SaaS (clearing agents) | saas | v1 | folder zip |
+| 03 | 2D game | game2d | v1 | html |
+| 04 | 3D game | game3d | v1 | html |
+| 05 | Restaurant website | cafe | v2 | html |
+| 06 | Machine explainer | engine | v2 | html |
+| 07 | First-person game | fps | v2 | html |
+| 08 | Arcade game | runner | v2 | html |
+| 09 | Browser OS | os | v2 | html |
+| 10 | Rubik's Cube + solver | cube | v2 | html |
+| 11 | Original platformer | platformer | v2 | html |
+| 12 | Living 3D world | world | v2 | html |
+| 13 | Data story | datastory | v1 | html |
+| 14 | Generative art | generative | v1 | html |
+| 15 | Music instrument | synth | v1 | html |
+| 16 | Creative tool | tool | v1 | html |
+| 17 | Emergent simulation | sim | v1 | html |
+| 18 | Strategy game + AI | strategy | v1 | html |
+| 19 | Spreadsheet | spreadsheet | v1 | html |
+| 20 | Physics engine + playground | physics | v1 | html |
 
-Send the model everything below the `## Model prompt` line. Do not send the uploader header.
+Note: new prefixes (world, datastory, generative, synth, tool, sim, strategy, spreadsheet, physics) must be registered in the upload Action and dashboard. Prompts 05-12 changed concept, so v2 results should not be compared with old v1 runs.
 
-| # | File | Category | Output type |
-|---|---|---|---|
-| 01 | `01-website.md` | `website` | folder + `index.html` |
-| 02 | `02-saas.md` | `saas` | folder + server-free `index.html` |
-| 03 | `03-2d-game.md` | `game2d` | single `.html` |
-| 04 | `04-3d-game.md` | `game3d` | single `.html` |
-| 05 | `05-cafe-website.md` | `cafe` | single `.html` |
-| 06 | `06-engine-sim.md` | `engine` | single `.html` |
-| 07 | `07-fps.md` | `fps` | single `.html` |
-| 08 | `08-runner.md` | `runner` | single `.html` |
-| 09 | `09-os-sim.md` | `os` | single `.html` |
-| 10 | `10-rubiks-cube.md` | `cube` | single `.html` |
-| 11 | `11-platformer.md` | `platformer` | single `.html` |
-| 12 | `12-cyberpunk-os.md` | `cyberpunk` | single `.html` |
+## Scoring (0-5 each)
+- Completeness: every promised feature present and working
+- Robustness: runs first try, no console errors, no soft-locks, handles edge cases
+- Craft: how pretty and polished it is, art direction, motion, sound
+- Depth: how much real engineering and design thinking is inside
+- Originality: a point of view, not a template
+- Performance: holds its framerate, loads fast
 
-Upload to `inbox/` with the matching inbox filename — see [`../inbox/README.md`](../inbox/README.md).
+Also log: ran on first open (yes/no), console errors, FPS on a mid-range laptop, and file size.

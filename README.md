@@ -1,6 +1,8 @@
 # ModelBench
 
-Benchmark inspector for model outputs. Twelve prompts, each with its own **unique category slug** so runs never collide by category — **4 core builds** (website, SaaS for clearing agents, 2D game, 3D game) plus **8 single-file builds** (cafe site, engine sim, FPS, endless runner, browser OS, Rubik's cube, platformer, cyberpunk OS) — one dashboard to preview, filter, compare and score every attempt.
+Benchmark inspector for model outputs. Twenty prompts, each with its own **unique category slug** so runs never collide by category — **4 core builds** (website, SaaS for clearing agents, 2D game, 3D game), **8 single-file builds v2** (restaurant site, machine explainer, first-person game, arcade game, browser OS, Rubik's cube + solver, original platformer, living 3D world), and **8 new builds** (data story, generative art, music instrument, creative tool, emergent sim, strategy game + AI, spreadsheet, physics engine) — one dashboard to preview, filter, compare and score every attempt.
+
+**Scoring (0–5 each):** completeness, robustness, craft, depth, originality, performance — plus a log of whether it ran on first open, console errors, FPS and file size. The rubric is in [`prompts/README.md`](prompts/README.md); the dashboard reads the same six axes from each run's `meta.json`.
 
 **Live dashboard:** https://itsnotalwin.github.io/modelbench/
 

@@ -12,11 +12,20 @@
       "path": "runs/2026-11-06_glm-5.3-flash_website_v1/index.html",
       "source_file": "website__glm-5.3-flash__2026-11-06__v1.zip",
       "scores": {
-        "visual": null,
-        "functionality": null,
-        "prompt_following": null
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
       },
       "notes": "",
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
       "files": [
         "README.md",
         "css/style.css",
@@ -35,11 +44,20 @@
       "path": "runs/2026-11-06_claude-opus-4-5_website_v1/index.html",
       "source_file": "website__claude-opus-4-5__2026-11-06__v1.zip",
       "scores": {
-        "visual": null,
-        "functionality": null,
-        "prompt_following": null
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
       },
       "notes": "",
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
       "files": [
         "README.md",
         "index.html",
@@ -56,9 +74,18 @@
       "path": "runs/2026-11-06_glm-5.3-flash_saas_v1/index.html",
       "source_file": "saas__glm-5.3-flash__2026-11-06__v1.zip",
       "scores": {
-        "visual": null,
-        "functionality": null,
-        "prompt_following": null
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
       },
       "notes": "",
       "files": [
@@ -84,11 +111,20 @@
       "path": "runs/2026-11-06_glm-5.3-flash_runner_v1/runner__glm-5.3-flash__2026-11-06__v1.html",
       "source_file": "runner__glm-5.3-flash__2026-11-06__v1.zip",
       "scores": {
-        "visual": null,
-        "functionality": null,
-        "prompt_following": null
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
       },
       "notes": "Entry is runner__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
       "files": [
         "meta.json",
         "runner__glm-5.3-flash__2026-11-06__v1.html"
@@ -124,11 +160,20 @@
       "path": "runs/2026-11-06_glm-5.3-flash_os_v1/index.html",
       "source_file": "os__glm-5-3-flash__2026-11-06__v1.zip (model slug normalised to glm-5.3-flash)",
       "scores": {
-        "visual": null,
-        "functionality": null,
-        "prompt_following": null
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
       },
       "notes": "",
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
       "files": [
         "index.html",
         "meta.json"
@@ -144,11 +189,20 @@
       "path": "runs/2026-11-06_glm-5.3-flash_game3d_v1/index.html",
       "source_file": "game3d__glm-5-3-flash__2026-11-06__v1.zip (model slug normalised to glm-5.3-flash)",
       "scores": {
-        "visual": null,
-        "functionality": null,
-        "prompt_following": null
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
       },
       "notes": "",
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
       "files": [
         "index.html",
         "meta.json"
@@ -164,11 +218,20 @@
       "path": "runs/2026-11-06_glm-5.3-flash_game2d_v1/game2d__glm-5.3-flash__2026-11-06__v1.html",
       "source_file": "game2d__glm-5.3-flash__2026-11-06__v1.zip",
       "scores": {
-        "visual": null,
-        "functionality": null,
-        "prompt_following": null
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
       },
       "notes": "Entry is game2d__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
       "files": [
         "game2d__glm-5.3-flash__2026-11-06__v1.html",
         "meta.json"
@@ -184,11 +247,20 @@
       "path": "runs/2026-11-06_glm-5.3-flash_fps_v1/fps__glm-5.3-flash__2026-11-06__v1.html",
       "source_file": "fps__glm-5.3-flash__2026-11-06__v1.zip",
       "scores": {
-        "visual": null,
-        "functionality": null,
-        "prompt_following": null
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
       },
       "notes": "Entry is fps__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
       "files": [
         "fps__glm-5.3-flash__2026-11-06__v1.html",
         "meta.json"
@@ -204,11 +276,20 @@
       "path": "runs/2026-11-06_glm-5.3-flash_engine_v1/engine__glm-5.3-flash__2026-11-06__v1.html",
       "source_file": "engine__glm-5.3-flash__2026-11-06__v1.zip",
       "scores": {
-        "visual": null,
-        "functionality": null,
-        "prompt_following": null
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
       },
       "notes": "Entry is engine__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
       "files": [
         "engine__glm-5.3-flash__2026-11-06__v1.html",
         "meta.json"
@@ -244,11 +325,20 @@
       "path": "runs/2026-11-06_glm-5.3-flash_cube_v1/cube__glm-5.3-flash__2026-11-06__v1.html",
       "source_file": "cube__glm-5.3-flash__2026-11-06__v1.zip",
       "scores": {
-        "visual": null,
-        "functionality": null,
-        "prompt_following": null
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
       },
       "notes": "Entry is cube__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
       "files": [
         "cube__glm-5.3-flash__2026-11-06__v1.html",
         "meta.json"
@@ -264,11 +354,20 @@
       "path": "runs/2026-11-06_glm-5.3-flash_cafe_v1/cafe__glm-5.3-flash__2026-11-06__v1.html",
       "source_file": "cafe__glm-5.3-flash__2026-11-06__v1.zip",
       "scores": {
-        "visual": null,
-        "functionality": null,
-        "prompt_following": null
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
       },
       "notes": "Entry is cafe__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
       "files": [
         "cafe__glm-5.3-flash__2026-11-06__v1.html",
         "meta.json"

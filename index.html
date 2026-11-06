@@ -295,7 +295,7 @@ dialog::backdrop{background:rgba(4,4,6,.78);backdrop-filter:blur(6px)}
 </main>
 
 <footer class="wrap foot">
-  <span>Scores live in each run's <code>meta.json</code> — edit it on GitHub and the Action rebuilds the manifest.</span>
+  <span>Scores (0–5) live in each run's <code>meta.json</code> — rubric: <a href="prompts/README.md">prompts/README.md</a> — edit it on GitHub and the Action rebuilds the manifest.</span>
   <span style="margin-left:auto"><a href="inbox/README.md">Upload rules</a> · <a href="manifest.json">manifest.json</a></span>
 </footer>
 
@@ -342,12 +342,12 @@ const $ = id => document.getElementById(id);
 const CATS = [
   ["website","Website"],["saas","SaaS"],["game2d","2D game"],["game3d","3D game"],
   ["cafe","Cafe site"],["engine","Engine sim"],["fps","FPS"],["runner","Runner"],
-  ["os","Browser OS"],["cube","Rubik's cube"],["platformer","Platformer"],["cyberpunk","Cyberpunk"],
+  ["os","Browser OS"],["cube","Rubik's cube"],["platformer","Platformer"],["world","Living world"],["datastory","Data story"],["generative","Generative art"],["synth","Music synth"],["tool","Creative tool"],["sim","Emergent sim"],["strategy","Strategy"],["spreadsheet","Spreadsheet"],["physics","Physics"],
 ];
 const LABEL = {
   website:"Website", saas:"SaaS", game2d:"2D game", game3d:"3D game",
   cafe:"Cafe site", engine:"Engine sim", fps:"FPS", runner:"Runner",
-  os:"Browser OS", cube:"Rubik's cube", platformer:"Platformer", cyberpunk:"Cyberpunk",
+  os:"Browser OS", cube:"Rubik's cube", platformer:"Platformer", world:"Living world", datastory:"Data story", generative:"Generative art", synth:"Music synth", tool:"Creative tool", sim:"Emergent sim", strategy:"Strategy", spreadsheet:"Spreadsheet", physics:"Physics",
 };
 const WIDTHS = {desktop:"100%", tablet:"834px", phone:"390px"};
 
@@ -356,7 +356,7 @@ let RUNS = [], selected = new Set(), activeCat = "";
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const avg = r => {
   const s = r.scores || {};
-  const v = [s.visual, s.functionality, s.prompt_following].filter(x => typeof x === "number");
+  const v = [s.completeness, s.robustness, s.craft, s.depth, s.originality, s.performance].filter(x => typeof x === "number");
   return v.length ? (v.reduce((a,b) => a+b, 0) / v.length) : null;
 };
 const fmtAvg = r => { const a = avg(r); return a === null ? null : a.toFixed(1); };
@@ -364,7 +364,7 @@ const isPreviewable = r => /\.html?$/i.test(r.entry || r.path || "");
 const titleOf = r => r.title || r.slug;
 
 function meterRow(label, value){
-  const pct = typeof value === "number" ? Math.max(0, Math.min(100, value * 10)) : 0;
+  const pct = typeof value === "number" ? Math.max(0, Math.min(100, value * 20)) : 0;
   return `<div class="meter"><span>${label}</span><i><em style="width:${pct}%"></em></i><b>${typeof value === "number" ? value : "—"}</b></div>`;
 }
 
@@ -400,14 +400,17 @@ function render(){
       <div class="card-top">
         <span class="cat${preview ? "" : " warn"}" title="${preview ? esc(r.entry || "") : "No HTML entry — cannot preview"}">${esc(LABEL[r.category] || r.category)}</span>
         ${r.version > 1 ? `<span class="ver">v${esc(r.version)}</span>` : ""}
-        ${a ? `<span class="avg"><b>${a}</b>/10</span>` : `<span class="avg">unscored</span>`}
+        ${a ? `<span class="avg"><b>${a}</b>/5</span>` : `<span class="avg">unscored</span>`}
       </div>
       <h3>${esc(r.model)}</h3>
       <p class="sub">${esc(r.title || r.slug)}</p>
       <div class="meters">
-        ${meterRow("Visual", s.visual)}
-        ${meterRow("Function", s.functionality)}
-        ${meterRow("Prompt", s.prompt_following)}
+        ${meterRow("Complete", s.completeness)}
+        ${meterRow("Robust", s.robustness)}
+        ${meterRow("Craft", s.craft)}
+        ${meterRow("Depth", s.depth)}
+        ${meterRow("Orig.", s.originality)}
+        ${meterRow("Perf.", s.performance)}
       </div>
       <div class="card-foot">
         <span class="date">${esc(r.date || "")}</span>
@@ -493,11 +496,14 @@ function openRun(slug){
       <pre>${esc(r.slug)}</pre>
     </section>
     <section>
-      <h4>Scores / 10</h4>
-      <div class="score-row"><span>Visual</span><b>${s.visual ?? "—"}</b></div>
-      <div class="score-row"><span>Functionality</span><b>${s.functionality ?? "—"}</b></div>
-      <div class="score-row"><span>Prompt-following</span><b>${s.prompt_following ?? "—"}</b></div>
-      <div class="score-row"><span>Average</span><b>${a ?? "—"}</b></div>
+      <h4>Scores / 5</h4>
+      <div class="score-row"><span>Completeness</span><b>${s.completeness ?? "—"}</b></div>
+      <div class="score-row"><span>Robustness</span><b>${s.robustness ?? "—"}</b></div>
+      <div class="score-row"><span>Craft</span><b>${s.craft ?? "—"}</b></div>
+      <div class="score-row"><span>Depth</span><b>${s.depth ?? "—"}</b></div>
+      <div class="score-row"><span>Originality</span><b>${s.originality ?? "—"}</b></div>
+      <div class="score-row"><span>Performance</span><b>${s.performance ?? "—"}</b></div>
+      <div class="score-row"><span>Average /5</span><b>${a ?? "—"}</b></div>
     </section>
     ${r.notes ? `<section><h4>Notes</h4><p>${esc(r.notes)}</p></section>` : ""}
     <section>
@@ -534,7 +540,7 @@ $("btnCompare").onclick = () => {
       <div class="pane-head">
         <span class="cat">${esc(LABEL[r.category] || r.category)}</span>
         <h3>${esc(r.model)}</h3>
-        <span class="avg">${av ? `<b>${av}</b>/10` : "unscored"}</span>
+        <span class="avg">${av ? `<b>${av}</b>/5` : "unscored"}</span>
       </div>
       ${preview
         ? `<iframe title="${esc(titleOf(r))}" src="${esc(r.path)}" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" loading="lazy"></iframe>`

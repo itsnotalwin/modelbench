@@ -1,60 +1,56 @@
-# Rubik's Cube (3D) — benchmark prompt
+# Rubik's Cube with a working solver — benchmark prompt
 
 > **Uploader instruction (do NOT send this header to the model):**
 > The model must deliver one `.html` file and state its name at the top of the reply.
 > Save it as exactly:
 >
-> `cube__{model}__{YYYY-MM-DD}__v1.html`
+> `cube__{model}__{YYYY-MM-DD}__v2.html`
 >
-> Example: `cube__claude-sonnet-4-5__2026-11-06__v1.html`
-> Upload that **.html** (never .rar) to `inbox/`. The Action files it as `runs/{date}_{model}_cube_v1/`, previewable on the dashboard.
+> Example: `cube__claude-sonnet-4-5__2026-11-06__v2.html`
+> Upload that **.html** (never .rar) to `inbox/`. The Action files it as `runs/{date}_{model}_cube_v2/`, previewable on the dashboard.
 
 ---
 
 ## Model prompt (send everything below this line)
 
-You are a 3D browser graphics engineer.
+Build the best Rubik's Cube ever made for the browser: 3D, physically convincing, beautiful to look at and satisfying to use, with a solver that actually solves it. Presentation (materials, environment, lighting, camera, interface) is entirely up to you.
 
-Build a fully interactive 3D Rubik's Cube in a single HTML file using Three.js (CDN: https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js).
+The bar:
+- This is a test of the absolute ceiling of what you can build in one response. Not a demo, not a prototype, not a tech showcase: a finished product with the polish of work from a top studio.
+- Be ambitious in scope AND exacting in execution. If you must choose, depth beats breadth, but nothing you include may be half-built. Every control works, every state is handled, nothing is a placeholder.
+- Art direction comes first. Before writing code, decide the visual identity (palette, type, motion language, sound) and hold to it with taste. Avoid anything that looks default, templated or generic.
+- Include at least one detail that rewards a closer look, something a user only discovers by playing with it and thinks "they thought of that".
 
-**Primary Goal:** A beautiful, smooth, fully functional 3D Rubik's Cube that the user can rotate face-by-face with keyboard or on-screen buttons, with satisfying sound effects and a solve detector.
+Hard rules:
+- Everything lives in ONE .html file (HTML, CSS and JS inline). No external asset files of any kind: no images, models, textures, audio or font files.
+- All visuals and all sound are created by you in code (canvas, SVG, CSS, WebGL/shaders, Web Audio). They need deliberate art direction and visible craft, not placeholder shapes.
+- No library is required. If you use one, load it from a CDN at an exact pinned version only.
+- It must run by opening the file directly in a current evergreen browser, with no server, no build step and no install, and must also work when served from a static host such as GitHub Pages from a subfolder. Relative paths only.
+- Guard every storage access (localStorage/IndexedDB) with try/catch.
 
-**Visual Direction:**
-- Black background (#000000)
-- Cube pieces: dark grey (#222) base, colored face stickers with slight gloss (MeshStandardMaterial with roughness: 0.3, metalness: 0.1)
-- Standard Rubik's colors: White=#FFFFFF, Yellow=#FFD700, Red=#CC0000, Orange=#FF6600, Blue=#0047AB, Green=#009B48
-- Ambient light: soft white. Directional light from top-right
-- Small gap (0.05 units) between cubie faces for visual depth
-- Smooth face rotation: 300ms ease-in-out animation (no instant snapping)
+What "real" means here (all of it must genuinely work):
+- A correct 3×3×3 model where the internal data structure (cubie permutation and orientation, or an equivalent) is the single source of truth and the visuals derive from it; the solved check reads from that state
+- Direct manipulation: drag a face to turn it, drag the background to orbit, full touch support; plus full move notation including slices, wide moves, rotations and double turns, from keyboard and on-screen controls
+- Scramble (always a valid, solvable state), undo and redo, and a speedcubing timer with inspection phase, single, ao5 and ao12 stats persisted between sessions
+- A solver that solves ANY valid scramble (any method you like), shows the solution in standard notation, and animates it step by step with play, pause, step and speed controls
+- Stretch: other sizes from 2×2 up to 5×5
 
-**Required Features:**
-1. **3×3×3 cube** — 27 cubies correctly assembled. Each face has 9 stickers in the correct color
-2. **Orbit controls** — Click and drag to rotate the whole cube view (implement OrbitControls or equivalent without importing from examples — use mousedown/mousemove/mouseup on the renderer)
-3. **Face moves (keyboard):**
-   - U / u = Up face clockwise / counter-clockwise
-   - D / d = Down face clockwise / counter-clockwise
-   - R / r = Right face clockwise / counter-clockwise
-   - L / l = Left face clockwise / counter-clockwise
-   - F / f = Front face clockwise / counter-clockwise
-   - B / b = Back face clockwise / counter-clockwise
-4. **On-screen move buttons** — Panel showing all 12 moves (U, U', D, D', R, R', L, L', F, F', B, B') as clickable buttons
-5. **Scramble button** — Applies 20 random valid moves with animation (executes them sequentially with 150ms delay between moves)
-6. **Move counter** — Displays total moves made since last scramble
-7. **Solve detector** — After every move, check if all 9 stickers on each face share the same color. If solved, show a "SOLVED! 🎉" overlay with move count and a confetti particle effect (Canvas 2D overlay)
-8. **Sound effects (Web Audio API):**
-   - Face move: a short mechanical "click" (short sine wave burst at 440Hz, 80ms duration, fast decay)
-   - Scramble: rapid sequence of clicks
-   - Solve: ascending 4-note chime (C4→E4→G4→C5, 150ms each)
-9. **Undo button** — Reverses the last move (stores move history as a stack)
-10. **Reset button** — Returns cube to solved state with a 500ms dissolve/reassemble animation
+Craft:
+- Plastic that looks like plastic: bevelled cubies, rounded stickers, soft shadows, reflections, subtle imperfections
+- Turning feels physical: easing with a touch of overshoot, a satisfying click sound, settings for themes and colour schemes
 
-**Hard Technical Constraint:**
-Face rotation must correctly update the cubie positions in a data structure — not just rotate visuals. After every move, the internal state (which cubie is at which position with which orientation) must be updated. The solve detector must read from this state, not from the visual colors.
+Engineering:
+- Stable framerate (delta-time or fixed timestep as appropriate), crisp at any resolution and devicePixelRatio, handles window resize and tab visibility changes, no console errors, no memory leaks.
+- Keyboard accessible where it makes sense, respects prefers-reduced-motion, sensible touch support.
 
-**Fallback Instruction:**
-If cubie orientation tracking becomes too complex, track color state as a 6×3×3 array (6 faces, 3 rows, 3 cols) and derive solved state from it. Visuals can be rebuilt from this array on each move.
+Deliverable: **naming is mandatory, read it twice:**
+- One file only, named exactly: `cube__{model-slug}__{YYYY-MM-DD}__v2.html`
+  Example: `cube__claude-sonnet-4-5__2026-11-06__v2.html`
+  Use today's date (YYYY-MM-DD) and your own model name, lowercased, spaces replaced with hyphens. Do not use a creative file name, uppercase or spaces.
+- State that exact file name as the first line of your reply.
 
-**Difficulty Extension:**
-Add a **Solve Hint** button — highlight the next best move using a simplified beginner's method (at minimum: detect and solve the white cross as step 1, highlight the relevant face button).
-
-**NAMING (mandatory):** State the file name as the first line of your reply, named EXACTLY with the benchmark prefix: `cube__{model-slug}__{YYYY-MM-DD}__v1.html` — for example `cube__claude-sonnet-4-5__2026-11-06__v1.html`. Use today's date and your own model name, lowercased, spaces replaced with hyphens. Do not use a creative file name, uppercase or spaces. The file must run by opening it directly — no server, no build step — and work from a static host such as GitHub Pages.
+Process:
+- Do not ask me questions. Make every decision yourself.
+- Before finishing, review your code for bugs, runtime errors, soft-locks, performance problems and edge cases, and fix them.
+- Output the complete file in a single code block. Never truncate, abbreviate or write "rest unchanged".
+- Follow it with a note of under 150 words covering the concept, the controls, and what you are proudest of.

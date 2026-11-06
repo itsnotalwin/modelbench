@@ -10,7 +10,7 @@ Rename each file **exactly** like this before uploading:
 ```
 
 - `category` FIRST, then model, then date, then version — separated by **double** underscores
-- `category`: one per prompt — `website` (01), `saas` (02), `game2d` (03), `game3d` (04), `cafe` (05), `engine` (06), `fps` (07), `runner` (08), `os` (09), `cube` (10), `platformer` (11), `cyberpunk` (12)
+- `category`: one per prompt — `website` (01), `saas` (02), `game2d` (03), `game3d` (04), `cafe` (05), `engine` (06), `fps` (07), `runner` (08), `os` (09), `cube` (10), `platformer` (11), `world` (12), `datastory` (13), `generative` (14), `synth` (15), `tool` (16), `sim` (17), `strategy` (18), `spreadsheet` (19), `physics` (20)
 - `model`: lowercase, hyphens and dots — e.g. `claude-sonnet-4-5`, `glm-5.3-flash`, `gpt-5`
 - `v{n}`: attempt number — `v1`, `v2`, …
 

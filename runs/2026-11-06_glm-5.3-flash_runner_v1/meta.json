@@ -8,9 +8,18 @@
   "path": "runs/2026-11-06_glm-5.3-flash_runner_v1/runner__glm-5.3-flash__2026-11-06__v1.html",
   "source_file": "runner__glm-5.3-flash__2026-11-06__v1.zip",
   "scores": {
-    "visual": null,
-    "functionality": null,
-    "prompt_following": null
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
   },
-  "notes": "Entry is runner__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README."
+  "notes": "Entry is runner__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
 }

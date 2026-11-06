@@ -1,69 +1,54 @@
-# Super Mario-style platformer (2D) — benchmark prompt
+# Original 2D platformer — benchmark prompt
 
 > **Uploader instruction (do NOT send this header to the model):**
 > The model must deliver one `.html` file and state its name at the top of the reply.
 > Save it as exactly:
 >
-> `platformer__{model}__{YYYY-MM-DD}__v1.html`
+> `platformer__{model}__{YYYY-MM-DD}__v2.html`
 >
-> Example: `platformer__claude-sonnet-4-5__2026-11-06__v1.html`
-> Upload that **.html** (never .rar) to `inbox/`. The Action files it as `runs/{date}_{model}_platformer_v1/`, previewable on the dashboard.
+> Example: `platformer__claude-sonnet-4-5__2026-11-06__v2.html`
+> Upload that **.html** (never .rar) to `inbox/`. The Action files it as `runs/{date}_{model}_platformer_v2/`, previewable on the dashboard.
 
 ---
 
 ## Model prompt (send everything below this line)
 
-You are a browser game developer specializing in 2D platformers.
+Build a complete original 2D platformer as one single HTML file. Do not clone an existing franchise: invent your own character, world, theme and one mechanic twist that makes it feel new. Choose something you can make feel excellent rather than familiar and safe.
 
-Build a complete classic Super Mario Bros.-style platformer game in a single HTML file using HTML5 Canvas and vanilla JavaScript only. No libraries, no external assets — all graphics are drawn programmatically using Canvas 2D API.
+The bar:
+- This is a test of the absolute ceiling of what you can build in one response. Not a demo, not a prototype, not a tech showcase: a finished product with the polish of work from a top studio.
+- Be ambitious in scope AND exacting in execution. If you must choose, depth beats breadth, but nothing you include may be half-built. Every control works, every state is handled, nothing is a placeholder.
+- Art direction comes first. Before writing code, decide the visual identity (palette, type, motion language, sound) and hold to it with taste. Avoid anything that looks default, templated or generic.
+- Include at least one detail that rewards a closer look, something a user only discovers by playing with it and thinks "they thought of that".
 
-**Primary Goal:** A fully playable Mario-style platformer with responsive controls, multiple tile types, enemies, coins, a flagpole finish, and sound effects — all in one HTML file.
+Hard rules:
+- Everything lives in ONE .html file (HTML, CSS and JS inline). No external asset files of any kind: no images, models, textures, audio or font files.
+- All visuals and all sound are created by you in code (canvas, SVG, CSS, WebGL/shaders, Web Audio). They need deliberate art direction and visible craft, not placeholder shapes.
+- No library is required. If you use one, load it from a CDN at an exact pinned version only.
+- It must run by opening the file directly in a current evergreen browser, with no server, no build step and no install, and must also work when served from a static host such as GitHub Pages from a subfolder. Relative paths only.
+- Guard every storage access (localStorage/IndexedDB) with try/catch.
 
-**Visual Direction:**
-- Classic NES-style pixel art rendered as colored rectangles and shapes (no image files)
-- Sky blue background (#5C94FC)
-- Ground tiles: brown (#8B4513) fill, darker border
-- Pipes: green (#00A800) with dark border
-- Mario: red cap (rectangle), blue overalls, skin-colored face — animated with 2-frame walk cycle
-- Coins: gold circles with spinning animation (scale X between 1 and 0.2 at 8fps)
-- Enemies (Goomba): dark brown rectangle with feet, walking left
-- Question blocks: gold (#FFD700) with "?" text, animate when hit
-- Flagpole: grey pole, green flag at top
+What "real" means here (all of it must genuinely work):
+- Movement that feels fantastic: acceleration curves, variable-height jump, coyote time, input buffering, wall or air mechanics if you choose them; tile collision that is rock solid (no tunnelling, no corner-catching, fixed timestep)
+- At least four distinct levels that teach, combine and escalate your mechanic, enemies with distinct behaviours, a boss, checkpoints, collectibles, a level select with persisted progress
+- Title, onboarding that teaches by playing, pause, restart, settings, keyboard, touch and gamepad controls
 
-**Required Features:**
-1. **Level layout** — Tile-based level defined as a 2D array. At minimum: 3 platform gaps (player must jump across), 2 pipes, 5 question blocks (3 contain coins, 1 contains a mushroom, 1 is empty), 8 goombas spread across the level, 1 flagpole at the end
-2. **Mario physics:**
-   - Gravity: constant downward acceleration (~0.5px/frame²)
-   - Run: left/right arrow or A/D keys, max speed 6px/frame, acceleration 0.8, deceleration 1.2 when key released
-   - Jump: Up arrow, W, or Space — variable height jump (hold longer = jump higher, max 300ms)
-   - Coyote time: 80ms grace window to jump after walking off a platform
-3. **Camera** — Horizontal scroll follows Mario. Camera locks at left edge (Mario can't go left of screen) and stops at level end
-4. **Coin collection** — Walking into a coin removes it and triggers: +1 counter, floating "+1" text (rises and fades), coin sound
-5. **Enemy AI (Goomba):**
-   - Walks left at constant speed
-   - Reverses direction on hitting a wall or edge
-   - Stomping from above kills it (flatten animation for 500ms, then remove)
-   - Side collision with Mario → Mario dies
-6. **Question blocks** — Jumping from below triggers the block: bounce animation (moves up 8px, bounces back), spawns coin or mushroom from above
-7. **Mushroom** — Slides right, falls with gravity. Mario collecting it grows Mario (scale 1.5×) and grants one extra hit
-8. **Mario death** — On enemy side-hit (or falling into a pit): death animation (jump up then fall off screen), respawn at start, lives counter decrements. 3 lives total. Game over screen after 0 lives
-9. **Flagpole finish** — Reaching the pole end triggers a slide-down animation, then "Level Clear!" screen with score + time bonus
-10. **HUD** — Coin count, lives remaining, score, timer (counting down from 400), world label (1-1)
-11. **Sound effects (Web Audio API — no files):**
-    - Jump: mid-frequency rising chirp
-    - Coin: high-pitch "ding" (A5, 100ms)
-    - Stomp: low thud
-    - Death: descending chromatic run (4 notes, 150ms each)
-    - Power-up: 8-note ascending arpeggio
-    - Level clear: 6-note jingle
+Craft:
+- Fully coded art direction: layered parallax, dynamic lighting, character animation with personality, particles, weather or ambience, distinct looks per world
+- Adaptive synthesised music and sound design that responds to what the player is doing; camera that anticipates the action
 
-**Hard Technical Constraint:**
-Physics must be tile-based: collision detection checks against the tile map array, not against other game objects' bounding boxes. Mario's AABB must resolve collision on each axis independently (X first, then Y) to prevent corner-catching bugs.
+Engineering:
+- Stable framerate (delta-time or fixed timestep as appropriate), crisp at any resolution and devicePixelRatio, handles window resize and tab visibility changes, no console errors, no memory leaks.
+- Keyboard accessible where it makes sense, respects prefers-reduced-motion, sensible touch support.
 
-**Fallback Instruction:**
-If variable-height jump is too complex, use a fixed jump impulse. If mushroom logic becomes unstable, replace with a star that grants temporary invincibility (simpler state). Do not remove any enemy or level structure.
+Deliverable: **naming is mandatory, read it twice:**
+- One file only, named exactly: `platformer__{model-slug}__{YYYY-MM-DD}__v2.html`
+  Example: `platformer__claude-sonnet-4-5__2026-11-06__v2.html`
+  Use today's date (YYYY-MM-DD) and your own model name, lowercased, spaces replaced with hyphens. Do not use a creative file name, uppercase or spaces.
+- State that exact file name as the first line of your reply.
 
-**Difficulty Extension:**
-Add a second level (World 1-2) with an underground theme (black background, grey bricks, no sky): triggered automatically after Level 1 clear. Reuse the tile engine with a new tile array and spawn map.
-
-**NAMING (mandatory):** State the file name as the first line of your reply, named EXACTLY with the benchmark prefix: `platformer__{model-slug}__{YYYY-MM-DD}__v1.html` — for example `platformer__claude-sonnet-4-5__2026-11-06__v1.html`. Use today's date and your own model name, lowercased, spaces replaced with hyphens. Do not use a creative file name, uppercase or spaces. The file must run by opening it directly — no server, no build step — and work from a static host such as GitHub Pages.
+Process:
+- Do not ask me questions. Make every decision yourself.
+- Before finishing, review your code for bugs, runtime errors, soft-locks, performance problems and edge cases, and fix them.
+- Output the complete file in a single code block. Never truncate, abbreviate or write "rest unchanged".
+- Follow it with a note of under 150 words covering the concept, the controls, and what you are proudest of.

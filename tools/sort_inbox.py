@@ -24,7 +24,8 @@ INBOX = ROOT / "inbox"
 RUNS = ROOT / "runs"
 CATEGORIES = {
     "website", "saas", "game2d", "game3d",   # prompts 01-04
-    "cafe", "engine", "fps", "runner", "os", "cube", "platformer", "cyberpunk",  # prompts 05-12
+    "cafe", "engine", "fps", "runner", "os", "cube", "platformer", "world",  # prompts 05-12
+    "datastory", "generative", "synth", "tool", "sim", "strategy", "spreadsheet", "physics",  # prompts 13-20
 }
 # Model slug aliases: normalise variant spellings to one canonical slug so a
 # model's runs always group together in the dashboard.
@@ -76,7 +77,15 @@ def write_meta(run_dir: Path, info, source_name: str, entry: str = "index.html")
         "entry": entry,
         "path": f"runs/{run_dir.name}/{entry}",
         "source_file": source_name,
-        "scores": {"visual": None, "functionality": None, "prompt_following": None},
+        "scores": {
+            "completeness": None,
+            "robustness": None,
+            "craft": None,
+            "depth": None,
+            "originality": None,
+            "performance": None,
+        },
+        "log": {"ran_first_try": None, "console_errors": None, "fps": None, "file_size_kb": None},
         "notes": "" if entry == "index.html" else f"Entry is {entry} (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
     }
     meta_path.write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")

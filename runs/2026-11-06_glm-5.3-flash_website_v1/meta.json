@@ -8,9 +8,18 @@
   "path": "runs/2026-11-06_glm-5.3-flash_website_v1/index.html",
   "source_file": "website__glm-5.3-flash__2026-11-06__v1.zip",
   "scores": {
-    "visual": null,
-    "functionality": null,
-    "prompt_following": null
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
   },
-  "notes": ""
+  "notes": "",
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
 }
