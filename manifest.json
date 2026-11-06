@@ -1,6 +1,6 @@
 {
   "generated_from": "runs/",
-  "count": 9,
+  "count": 10,
   "runs": [
     {
       "slug": "2026-11-06_nemotron-3-5-super-vl_website_v1",
@@ -72,6 +72,46 @@
         "index.html",
         "meta.json",
         "styles.css"
+      ]
+    },
+    {
+      "slug": "2026-11-06_nemotron-3-5-super-vl_saas_v1",
+      "model": "nemotron-3-5-super-vl",
+      "category": "saas",
+      "date": "2026-11-06",
+      "version": 1,
+      "entry": "README.md",
+      "path": "runs/2026-11-06_nemotron-3-5-super-vl_saas_v1/README.md",
+      "source_file": "saas__nemotron-3-5-super-vl__2026-11-06__v1.zip",
+      "scores": {
+        "visual": null,
+        "functionality": null,
+        "prompt_following": null
+      },
+      "notes": "No index.html in this output \u2014 entry is README.md. If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
+      "files": [
+        "README.md",
+        "app.py",
+        "calc.py",
+        "db.py",
+        "documents.py",
+        "instance/clearance.db",
+        "meta.json",
+        "requirements.txt",
+        "seeds.py",
+        "static/css/style.css",
+        "static/js/app.js",
+        "templates/base.html",
+        "templates/error.html",
+        "templates/index.html",
+        "templates/login.html",
+        "templates/parties.html",
+        "templates/party_form.html",
+        "templates/register.html",
+        "templates/shipment.html",
+        "templates/shipment_form.html",
+        "templates/shipments.html",
+        "tests/test_calculations.py"
       ]
     },
     {

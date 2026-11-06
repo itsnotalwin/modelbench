@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Dashboard &mdash; ClearOps{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Dashboard</h1>
+  <div class="actions">
+    <a href="{{ url_for('shipment_new') }}" class="btn">New shipment</a>
+    <a href="{{ url_for('shipments_list') }}" class="btn secondary">All shipments</a>
+  </div>
+</div>
+
+<div class="stat-grid">
+  <div class="stat">
+    <div class="big">{{ total }}</div>
+    <div class="label">Total shipments</div>
+  </div>
+  {% for key in STATUSES %}
+  <div class="stat">
+    <div class="big">{{ counts.get(key, 0) }}</div>
+    <div class="label">{{ STATUS_LABELS[key] }}</div>
+  </div>
+  {% endfor %}
+</div>
+
+{% if alerts %}
+<div class="card">
+  <h3 style="font-size:1rem; margin-bottom:0.75rem;">Demurrage alerts &mdash; billable days accrued</h3>
+  <div class="alert-list">
+    {% for a in alerts %}
+    <div class="alert-item">
+      <div class="text">
+        <strong>{{ a.shipment.reference }}</strong> &mdash; {{ a.shipment.description }}
+        <br><span style="color:#666; font-size:12px;">{{ a.shipment.bl_number }} &middot; arrived {{ a.shipment.actual_arrival }} &middot; status: {{ STATUS_LABELS[a.shipment.status] }}</span>
+      </div>
+      <div class="charge">
+        {{ a.demurrage.billable_days }} billable day{% if a.demurrage.billable_days != 1 %}s{% endif %}
+        <br><span style="font-size:11.5px; color:#666;">charge {{ "%.2f"|format(a.demurrage.charge) }}</span>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+<div class="card">
+  <h3 style="font-size:1rem; margin-bottom:0.75rem;">Recent shipments</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Reference</th>
+          <th>BL / AWB</th>
+          <th>Importer</th>
+          <th>Status</th>
+          <th>ETA</th>
+          <th>Total payable</th>
+          <th style="width:180px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if shipments %}
+          {% for s in shipments %}
+          <tr>
+            <td><a href="{{ url_for('shipment_detail', shipment_id=s.id) }}" style="text-decoration:none; font-weight:600;">{{ s.reference }}</a></td>
+            <td class="mono">{{ s.bl_number or "&mdash;" }}</td>
+            <td>{{ s.importer_name or "&mdash;" }}</td>
+            <td><span class="badge {{ s.status }}">{{ STATUS_LABELS[s.status] }}</span></td>
+            <td>{{ s.eta or "&mdash;" }}</td>
+            <td class="numeric">{{ "%.2f"|format(s.total_payable or 0) }}</td>
+            <td>
+              <a href="{{ url_for('shipment_detail', shipment_id=s.id) }}" class="btn ghost small">View</a>
+            </td>
+          </tr>
+          {% endfor %}
+        {% else %}
+        <tr><td colspan="7" class="empty-state">No shipments yet. Create your first shipment to get started.</td></tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

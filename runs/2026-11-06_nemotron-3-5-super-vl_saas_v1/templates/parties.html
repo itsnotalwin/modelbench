@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Parties &mdash; ClearOps{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Parties</h1>
+  <a href="{{ url_for('party_new') }}" class="btn">New party</a>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Address</th>
+        <th>Contact</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Tax ID</th>
+        <th style="width:150px;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if parties %}
+        {% for p in parties %}
+        <tr>
+          <td><strong>{{ p.name }}</strong></td>
+          <td><span class="badge {{ p.type }}">{{ p.type }}</span></td>
+          <td>{{ p.address or "&mdash;" }}</td>
+          <td>{{ p.contact_person or "&mdash;" }}</td>
+          <td>{{ p.email or "&mdash;" }}</td>
+          <td>{{ p.phone or "&mdash;" }}</td>
+          <td class="mono">{{ p.tax_id or "&mdash;" }}</td>
+          <td>
+            <div style="display:flex; gap:0.35rem;">
+              <a href="{{ url_for('party_edit', party_id=p.id) }}" class="btn ghost small">Edit</a>
+              <form method="post" action="{{ url_for('party_delete', party_id=p.id) }}" style="display:inline;" onsubmit="return confirm('Delete this party?');">
+                <button class="btn secondary small" type="submit">Delete</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      {% else %}
+      <tr><td colspan="8" class="empty-state">No parties yet. Add importers, exporters, consignees, agents or carriers.</td></tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

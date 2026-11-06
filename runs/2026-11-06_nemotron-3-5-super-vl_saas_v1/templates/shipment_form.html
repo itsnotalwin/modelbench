@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% block title %}{{ "New shipment" if mode == "create" else "Edit shipment" }} &mdash; ClearOps{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>{{ "New shipment" if mode == "create" else "Edit shipment" }}</h1>
+  <a href="{{ url_for('shipments_list') }}" class="btn ghost small">Back to list</a>
+</div>
+
+<div class="card" style="max-width: 940px;">
+  <form method="post" action="{{ url_for('shipment_edit', shipment_id=shipment_id) if mode == 'edit' else url_for('shipment_new') }}">
+    <div class="field full">
+      <label>Reference <span style="font-weight:400; color:#999;">(unique, e.g. IMP-2026-0047)</span></label>
+      <input name="reference" value="{{ shipment.reference if shipment else '' }}" required autofocus>
+      {% if errors.reference %}<div class="invalid">{{ errors.reference }}</div>{% endif %}
+    </div>
+
+    <div class="field">
+      <label>BL / AWB number</label>
+      <input name="bl_number" value="{{ shipment.bl_number if shipment else '' }}" required>
+      {% if errors.bl_number %}<div class="invalid">{{ errors.bl_number }}</div>{% endif %}
+    </div>
+    <div class="field">
+      <label>Vessel / flight</label>
+      <input name="vessel_flight" value="{{ shipment.vessel_flight if shipment else '' }}" required>
+      {% if errors.vessel_flight %}<div class="invalid">{{ errors.vessel_flight }}</div>{% endif %}
+    </div>
+    <div class="field">
+      <label>Port of loading</label>
+      <input name="port_of_loading" value="{{ shipment.port_of_loading if shipment else '' }}" required>
+      {% if errors.port_of_loading %}<div class="invalid">{{ errors.port_of_loading }}</div>{% endif %}
+    </div>
+    <div class="field">
+      <label>Port of discharge</label>
+      <input name="port_of_discharge" value="{{ shipment.port_of_discharge if shipment else '' }}" required>
+      {% if errors.port_of_discharge %}<div class="invalid">{{ errors.port_of_discharge }}</div>{% endif %}
+    </div>
+    <div class="field">
+      <label>ETA (YYYY-MM-DD)</label>
+      <input name="eta" type="date" value="{{ shipment.eta if shipment else '' }}">
+      {% if errors.eta %}<div class="invalid">{{ errors.eta }}</div>{% endif %}
+    </div>
+    <div class="field">
+      <label>Actual arrival (YYYY-MM-DD)</label>
+      <input name="actual_arrival" type="date" value="{{ shipment.actual_arrival if shipment else '' }}">
+      {% if errors.actual_arrival %}<div class="invalid">{{ errors.actual_arrival }}</div>{% endif %}
+    </div>
+
+    <div class="field full">
+      <label>HS code</label>
+      <input name="hs_code" value="{{ shipment.hs_code if shipment else '' }}" placeholder="e.g. 8708.99" required>
+      {% if errors.hs_code %}<div class="invalid">{{ errors.hs_code }}</div>{% endif %}
+    </div>
+    <div class="field full">
+      <label>Description of goods</label>
+      <input name="description" value="{{ shipment.description if shipment else '' }}" required>
+      {% if errors.description %}<div class="invalid">{{ errors.description }}</div>{% endif %}
+    </div>
+
+    <h3 style="font-size:1rem; margin:1.25rem 0 0.5rem; text-transform:uppercase; letter-spacing:0.04em; font-weight:700; color:#666; font-size:11px;">Parties</h3>
+    <div class="field">
+      <label>Importer</label>
+      <select name="importer_id">
+        <option value="">Select&hellip;</option>
+        {% for p in parties if p.type == 'importer' %}
+        <option value="{{ p.id }}" {% if shipment and shipment.importer_id == p.id %}selected{% endif %}>{{ p.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label>Exporter</label>
+      <select name="exporter_id">
+        <option value="">Select&hellip;</option>
+        {% for p in parties if p.type == 'exporter' %}
+        <option value="{{ p.id }}" {% if shipment and shipment.exporter_id == p.id %}selected{% endif %}>{{ p.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label>Consignee</label>
+      <select name="consignee_id">
+        <option value="">Select&hellip;</option>
+        {% for p in parties if p.type == 'consignee' %}
+        <option value="{{ p.id }}" {% if shipment and shipment.consignee_id == p.id %}selected{% endif %}>{{ p.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label>Carrier</label>
+      <select name="carrier_id">
+        <option value="">Select&hellip;</option>
+        {% for p in parties if p.type == 'carrier' %}
+        <option value="{{ p.id }}" {% if shipment and shipment.carrier_id == p.id %}selected{% endif %}>{{ p.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <h3 style="font-size:1rem; margin:1.25rem 0 0.5rem; text-transform:uppercase; letter-spacing:0.04em; font-weight:700; color:#666; font-size:11px;">Commercial values</h3>
+    <div class="field">
+      <label>Quantity</label>
+      <input name="quantity" type="number" min="0" step="1" value="{{ shipment.quantity if shipment else '' }}" required>
+      {% if errors.quantity %}<div class="invalid">{{ errors.quantity }}</div>{% endif %}
+    </div>
+    <div class="field">
+      <label>Unit</label>
+      <input name="unit" value="{{ shipment.unit if shipment else 'pcs' }}">
+    </div>
+    <div class="field">
+      <label>Unit price</label>
+      <input name="unit_price" type="number" min="0" step="0.01" value="{{ shipment.unit_price if shipment else '' }}" required>
+      {% if errors.unit_price %}<div class="invalid">{{ errors.unit_price }}</div>{% endif %}
+    </div>
+    <div class="field">
+      <label>Currency</label>
+      <input name="currency" value="{{ shipment.currency if shipment else 'USD' }}" maxlength="3">
+    </div>
+    <div class="field">
+      <label>Freight</label>
+      <input name="freight" type="number" min="0" step="0.01" value="{{ shipment.freight if shipment else '' }}" required>
+      {% if errors.freight %}<div class="invalid">{{ errors.freight }}</div>{% endif %}
+    </div>
+    <div class="field">
+      <label>Insurance</label>
+      <input name="insurance" type="number" min="0" step="0.01" value="{{ shipment.insurance if shipment else '' }}" required>
+      {% if errors.insurance %}<div class="invalid">{{ errors.insurance }}</div>{% endif %}
+    </div>
+
+    <h3 style="font-size:1rem; margin:1.25rem 0 0.5rem; text-transform:uppercase; letter-spacing:0.04em; font-weight:700; color:#666; font-size:11px;">Duty &amp; tax rates (%)</h3>
+    <div class="field">
+      <label>Customs duty rate</label>
+      <input name="duty_rate" type="number" min="0" step="0.01" value="{{ shipment.duty_rate if shipment else '' }}" required>
+      {% if errors.duty_rate %}<div class="invalid">{{ errors.duty_rate }}</div>{% endif %}
+    </div>
+    <div class="field">
+      <label>Cess rate</label>
+      <input name="cess_rate" type="number" min="0" step="0.01" value="{{ shipment.cess_rate if shipment else '' }}" required>
+      {% if errors.cess_rate %}<div class="invalid">{{ errors.cess_rate }}</div>{% endif %}
+    </div>
+    <div class="field">
+      <label>IGST / VAT rate</label>
+      <input name="igst_rate" type="number" min="0" step="0.01" value="{{ shipment.igst_rate if shipment else '' }}" required>
+      {% if errors.igst_rate %}<div class="invalid">{{ errors.igst_rate }}</div>{% endif %}
+    </div>
+    <div class="field">
+      <label>Free days (demurrage)</label>
+      <input name="free_days" type="number" min="0" step="1" value="{{ shipment.free_days if shipment else 7 }}" required>
+      {% if errors.free_days %}<div class="invalid">{{ errors.free_days }}</div>{% endif %}
+    </div>
+    <div class="field">
+      <label>Demurrage per day</label>
+      <input name="demurrage_per_day" type="number" min="0" step="0.01" value="{{ shipment.demurrage_per_day if shipment else '' }}" required>
+      {% if errors.demurrage_per_day %}<div class="invalid">{{ errors.demurrage_per_day }}</div>{% endif %}
+    </div>
+
+    <div class="field">
+      <label>Initial status</label>
+      <select name="status" required>
+        {% for st in STATUSES %}
+        <option value="{{ st }}" {% if shipment and shipment.status == st %}selected{% endif %}>{{ STATUS_LABELS[st] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-actions">
+      {% if mode == 'edit' %}
+        <a href="{{ url_for('shipment_detail', shipment_id=shipment_id) }}" class="btn ghost small">Cancel</a>
+      {% endif %}
+      <button class="btn" type="submit">{{ "Create shipment" if mode == 'create' else "Save changes" }}</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

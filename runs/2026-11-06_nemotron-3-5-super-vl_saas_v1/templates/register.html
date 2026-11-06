@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Register &mdash; ClearOps{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Create an account</h1>
+  <a href="{{ url_for('login') }}" class="btn ghost small">Already have an account?</a>
+</div>
+<div class="card" style="max-width: 460px;">
+  <form method="post" action="{{ url_for('register') }}">
+    <div class="field">
+      <label for="username">Username</label>
+      <input id="username" name="username" required autofocus maxlength="30">
+    </div>
+    <div class="field">
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" required minlength="6">
+    </div>
+    <div class="field">
+      <label for="confirm">Confirm password</label>
+      <input id="confirm" name="confirm" type="password" required minlength="6">
+    </div>
+    <div class="form-actions">
+      <button class="btn" type="submit">Create account</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

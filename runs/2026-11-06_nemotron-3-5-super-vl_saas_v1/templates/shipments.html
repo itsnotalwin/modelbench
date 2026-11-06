@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Shipments &mdash; ClearOps{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Shipments</h1>
+  <div class="actions">
+    <a href="{{ url_for('shipment_new') }}" class="btn">New shipment</a>
+  </div>
+</div>
+
+<div class="card" style="max-width: 900px;">
+  <form method="get" action="{{ url_for('shipments_list') }}" style="display:flex; gap:0.5rem; align-items:flex-end; margin-bottom:1rem; flex-wrap:wrap;">
+    <div class="field" style="margin-bottom:0; flex:1;">
+      <label style="font-size:10px;">Search</label>
+      <input name="q" value="{{ q }}" placeholder="reference, BL, description, importer">
+    </div>
+    <div class="field" style="margin-bottom:0; min-width:160px;">
+      <label style="font-size:10px;">Status</label>
+      <select name="status">
+        <option value="">All</option>
+        {% for st in STATUSES %}
+        <option value="{{ st }}" {% if status == st %}selected{% endif %}>{{ STATUS_LABELS[st] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field" style="margin-bottom:0; min-width:160px;">
+      <label style="font-size:10px;">Importer type</label>
+      <select name="party">
+        <option value="">All</option>
+        {% for p in parties %}
+        <option value="{{ p.type }}" {% if party_type == p.type %}selected{% endif %}>{{ p.type }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button class="btn" type="submit">Filter</button>
+    <a href="{{ url_for('shipments_list') }}" class="btn secondary small">Reset</a>
+  </form>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Reference</th>
+        <th>BL / AWB</th>
+        <th>Vessel / Flight</th>
+        <th>Loading &rarr; Discharge</th>
+        <th>ETA</th>
+        <th>Arrival</th>
+        <th>Importer</th>
+        <th>Status</th>
+        <th class="numeric">Total payable</th>
+        <th style="width:150px;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if shipments %}
+        {% for s in shipments %}
+        <tr>
+          <td><a href="{{ url_for('shipment_detail', shipment_id=s.id) }}" style="text-decoration:none; font-weight:600; font-family:var(--mono);">{{ s.reference }}</a></td>
+          <td class="mono">{{ s.bl_number or "&mdash;" }}</td>
+          <td>{{ s.vessel_flight or "&mdash;" }}</td>
+          <td>{{ s.port_of_loading or "&mdash;" }} &rarr; {{ s.port_of_discharge or "&mdash;" }}</td>
+          <td>{{ s.eta or "&mdash;" }}</td>
+          <td>{{ s.actual_arrival or "&mdash;" }}</td>
+          <td>{{ s.importer_name or "&mdash;" }}</td>
+          <td><span class="badge {{ s.status }}">{{ STATUS_LABELS[s.status] }}</span></td>
+          <td class="numeric">{{ "%.2f"|format(s.total_payable or 0) }}</td>
+          <td>
+            <div style="display:flex; gap:0.35rem;">
+              <a href="{{ url_for('shipment_detail', shipment_id=s.id) }}" class="btn ghost small">View</a>
+              <a href="{{ url_for('shipment_edit', shipment_id=s.id) }}" class="btn secondary small">Edit</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      {% else %}
+      <tr><td colspan="10" class="empty-state">No shipments match your filters.</td></tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{
+  "slug": "2026-11-06_nemotron-3-5-super-vl_saas_v1",
+  "model": "nemotron-3-5-super-vl",
+  "category": "saas",
+  "date": "2026-11-06",
+  "version": 1,
+  "entry": "README.md",
+  "path": "runs/2026-11-06_nemotron-3-5-super-vl_saas_v1/README.md",
+  "source_file": "saas__nemotron-3-5-super-vl__2026-11-06__v1.zip",
+  "scores": {
+    "visual": null,
+    "functionality": null,
+    "prompt_following": null
+  },
+  "notes": "No index.html in this output \u2014 entry is README.md. If this is a Python/Node SaaS app, clone the repo and run it locally per its README."
+}

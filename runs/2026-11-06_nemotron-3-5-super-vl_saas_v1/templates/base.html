@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}ClearOps{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="topbar">
+  <a href="{{ url_for('dashboard') }}" class="brand">ClearOps</a>
+  <nav>
+    {% if current_user %}
+      <a href="{{ url_for('shipments_list') }}" class="{% if request.endpoint == 'shipments_list' %}active{% endif %}">Shipments</a>
+      <a href="{{ url_for('parties_list') }}" class="{% if request.endpoint in ('parties_list','party_new','party_edit') %}active{% endif %}">Parties</a>
+    {% endif %}
+  </nav>
+  <div class="user">
+    {% if current_user %}
+      <span>{{ current_user.username }}</span>
+      <a href="{{ url_for('logout') }}">Sign out</a>
+    {% else %}
+      <a href="{{ url_for('login') }}">Sign in</a>
+    {% endif %}
+  </div>
+</div>
+
+<div class="container">
+  <main class="main">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+</div>
+
+<footer style="padding:1rem 1rem 2rem; color:#666; font-size:11px; border-top:1px solid #ccc;">
+  ClearOps &mdash; customs clearance workflow for clearing agents. Local-first, no external services.
+</footer>
+</body>
+</html>
