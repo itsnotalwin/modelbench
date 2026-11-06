@@ -21,5 +21,7 @@
     "console_errors": null,
     "fps": null,
     "file_size_kb": null
-  }
+  },
+  "prompt": "",
+  "prompt_label": ""
 }

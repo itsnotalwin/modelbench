@@ -26,6 +26,8 @@
         "file_size_kb": null
       },
       "notes": "Entry is world__glm-5-3-flash__2026-11-06__v2.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
+      "prompt": "12",
+      "prompt_label": "Living 3D world",
       "files": [
         "meta.json",
         "world__glm-5-3-flash__2026-11-06__v2.html"
@@ -55,6 +57,8 @@
         "fps": null,
         "file_size_kb": null
       },
+      "prompt": "01",
+      "prompt_label": "Website",
       "files": [
         "README.md",
         "css/style.css",
@@ -120,6 +124,8 @@
         "fps": null,
         "file_size_kb": null
       },
+      "prompt": "01",
+      "prompt_label": "Website",
       "files": [
         "README.md",
         "index.html",
@@ -150,6 +156,8 @@
         "file_size_kb": null
       },
       "notes": "Entry is tool__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
+      "prompt": "16",
+      "prompt_label": "Creative tool",
       "files": [
         "meta.json",
         "tool__glm-5.3-flash__2026-11-06__v1.html"
@@ -179,6 +187,8 @@
         "file_size_kb": null
       },
       "notes": "Entry is synth__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
+      "prompt": "15",
+      "prompt_label": "Music instrument",
       "files": [
         "meta.json",
         "synth__glm-5.3-flash__2026-11-06__v1.html"
@@ -208,6 +218,8 @@
         "file_size_kb": null
       },
       "notes": "",
+      "prompt": "02",
+      "prompt_label": "SaaS (clearing agents)",
       "files": [
         "README.md",
         "index.html",
@@ -245,6 +257,8 @@
         "fps": null,
         "file_size_kb": null
       },
+      "prompt": "08",
+      "prompt_label": "Arcade game",
       "files": [
         "meta.json",
         "runner__glm-5.3-flash__2026-11-06__v1.html"
@@ -274,6 +288,8 @@
         "fps": null,
         "file_size_kb": null
       },
+      "prompt": "11",
+      "prompt_label": "Original platformer",
       "files": [
         "meta.json",
         "platformer__glm-5.3-flash__2026-11-06__v1.html"
@@ -303,6 +319,8 @@
         "fps": null,
         "file_size_kb": null
       },
+      "prompt": "09",
+      "prompt_label": "Browser OS",
       "files": [
         "index.html",
         "meta.json"
@@ -332,6 +350,8 @@
         "file_size_kb": null
       },
       "notes": "Entry is generative__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
+      "prompt": "14",
+      "prompt_label": "Generative art",
       "files": [
         "generative__glm-5.3-flash__2026-11-06__v1.html",
         "meta.json"
@@ -361,6 +381,8 @@
         "fps": null,
         "file_size_kb": null
       },
+      "prompt": "04",
+      "prompt_label": "3D game",
       "files": [
         "index.html",
         "meta.json"
@@ -390,6 +412,8 @@
         "file_size_kb": null
       },
       "notes": "Entry is game3d__crouton-alpha__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
+      "prompt": "04",
+      "prompt_label": "3D game",
       "files": [
         "game3d__crouton-alpha__2026-11-06__v1.html",
         "meta.json"
@@ -419,6 +443,8 @@
         "fps": null,
         "file_size_kb": null
       },
+      "prompt": "03",
+      "prompt_label": "2D game",
       "files": [
         "game2d__glm-5.3-flash__2026-11-06__v1.html",
         "meta.json"
@@ -448,6 +474,8 @@
         "file_size_kb": null
       },
       "notes": "Entry is game2d__crouton-alpha__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
+      "prompt": "03",
+      "prompt_label": "2D game",
       "files": [
         "game2d__crouton-alpha__2026-11-06__v1.html",
         "meta.json"
@@ -477,6 +505,8 @@
         "fps": null,
         "file_size_kb": null
       },
+      "prompt": "07",
+      "prompt_label": "First-person game",
       "files": [
         "fps__glm-5.3-flash__2026-11-06__v1.html",
         "meta.json"
@@ -506,6 +536,8 @@
         "fps": null,
         "file_size_kb": null
       },
+      "prompt": "06",
+      "prompt_label": "Machine explainer",
       "files": [
         "engine__glm-5.3-flash__2026-11-06__v1.html",
         "meta.json"
@@ -535,6 +567,8 @@
         "file_size_kb": null
       },
       "notes": "Entry is datastory__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
+      "prompt": "13",
+      "prompt_label": "Data story",
       "files": [
         "datastory__glm-5.3-flash__2026-11-06__v1.html",
         "meta.json"
@@ -564,6 +598,8 @@
         "fps": null,
         "file_size_kb": null
       },
+      "prompt": "",
+      "prompt_label": "",
       "files": [
         "cyberpunk__glm-5.3-flash__2026-11-06__v1.html",
         "meta.json"
@@ -593,6 +629,8 @@
         "fps": null,
         "file_size_kb": null
       },
+      "prompt": "10",
+      "prompt_label": "Rubik's Cube + solver",
       "files": [
         "cube__glm-5.3-flash__2026-11-06__v1.html",
         "meta.json"
@@ -622,6 +660,8 @@
         "fps": null,
         "file_size_kb": null
       },
+      "prompt": "05",
+      "prompt_label": "Restaurant website",
       "files": [
         "cafe__glm-5.3-flash__2026-11-06__v1.html",
         "meta.json"
@@ -651,6 +691,8 @@
         "file_size_kb": null
       },
       "notes": "",
+      "prompt": "05",
+      "prompt_label": "Restaurant website",
       "files": [
         "index.html",
         "meta.json"

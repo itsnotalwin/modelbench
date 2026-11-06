@@ -21,5 +21,7 @@
     "fps": null,
     "file_size_kb": null
   },
-  "notes": "Entry is world__glm-5-3-flash__2026-11-06__v2.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README."
+  "notes": "Entry is world__glm-5-3-flash__2026-11-06__v2.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
+  "prompt": "12",
+  "prompt_label": "Living 3D world"
 }

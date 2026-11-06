@@ -27,6 +27,20 @@ CATEGORIES = {
     "cafe", "engine", "fps", "runner", "os", "cube", "platformer", "world",  # prompts 05-12
     "datastory", "generative", "synth", "tool", "sim", "strategy", "spreadsheet", "physics",  # prompts 13-20
 }
+
+# Each category slug maps 1:1 to a benchmark prompt number.
+PROMPT_OF_CATEGORY = {
+    "website": ("01", "Website"), "saas": ("02", "SaaS (clearing agents)"),
+    "game2d": ("03", "2D game"), "game3d": ("04", "3D game"),
+    "cafe": ("05", "Restaurant website"), "engine": ("06", "Machine explainer"),
+    "fps": ("07", "First-person game"), "runner": ("08", "Arcade game"),
+    "os": ("09", "Browser OS"), "cube": ("10", "Rubik's Cube + solver"),
+    "platformer": ("11", "Original platformer"), "world": ("12", "Living 3D world"),
+    "datastory": ("13", "Data story"), "generative": ("14", "Generative art"),
+    "synth": ("15", "Music instrument"), "tool": ("16", "Creative tool"),
+    "sim": ("17", "Emergent simulation"), "strategy": ("18", "Strategy game + AI"),
+    "spreadsheet": ("19", "Spreadsheet"), "physics": ("20", "Physics engine + playground"),
+}
 # Model slug aliases: normalise variant spellings to one canonical slug so a
 # model's runs always group together in the dashboard.
 MODEL_ALIASES = {
@@ -68,10 +82,13 @@ def write_meta(run_dir: Path, info, source_name: str, entry: str = "index.html")
     meta_path = run_dir / "meta.json"
     if meta_path.exists():
         return
+    prompt_no, prompt_label = PROMPT_OF_CATEGORY.get(info["category"], ("", ""))
     meta = {
         "slug": run_dir.name,
         "model": info["model"],
         "category": info["category"],
+        "prompt": prompt_no,
+        "prompt_label": prompt_label,
         "date": info["date"],
         "version": info["v"],
         "entry": entry,

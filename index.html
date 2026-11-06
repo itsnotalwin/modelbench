@@ -193,13 +193,29 @@ dialog::backdrop{background:rgba(4,4,6,.78);backdrop-filter:blur(6px)}
 .icon:hover{border-color:var(--line-2);color:var(--fg)}
 .vbody{display:grid;grid-template-columns:minmax(0,1fr) 320px;height:calc(100% - 57px);min-height:0}
 .stage{
-  position:relative;display:grid;place-items:center;background:
-    linear-gradient(#0a0a0d,#0a0a0d) padding-box,
-    repeating-linear-gradient(45deg,#0d0d10 0 8px,#0b0b0e 8px 16px);
-  padding:0;overflow:hidden;min-height:0;
+  position:relative;display:grid;place-items:center;background:#0a0a0d;padding:clamp(10px,2vw,26px);overflow:hidden;min-height:0;
 }
-.frame{width:100%;height:100%;max-width:100%;background:#fff;transition:width .25s ease,max-width .25s ease;box-shadow:0 0 0 1px var(--line)}
-.frame iframe{width:100%;height:100%;border:0;background:#fff;display:block}
+.stage::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle,#1c1c22 1px,transparent 1px);background-size:14px 14px;
+  -webkit-mask-image:radial-gradient(70% 70% at 50% 40%,#000 30%,transparent 100%);
+          mask-image:radial-gradient(70% 70% at 50% 40%,#000 30%,transparent 100%);
+}
+.frame{
+  position:relative;width:100%;height:100%;max-width:100%;background:#fff;border-radius:10px;overflow:hidden;
+  border:1px solid var(--line-2);box-shadow:0 24px 60px -30px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.04);
+  transition:width .25s ease,max-width .25s ease;
+}
+.frame iframe{width:100%;height:100%;border:0;background:#fff;display:block;opacity:0;transition:opacity .35s ease}
+.frame iframe.ready{opacity:1}
+.loadspin{
+  position:absolute;left:50%;top:50%;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;
+  border:2px solid var(--line-2);border-top-color:var(--fg);animation:spin .8s linear infinite;z-index:2;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.loadspin{animation:none}}
+.vbody.no-info{grid-template-columns:minmax(0,1fr)}
+.vbody.no-info .info{display:none}
 .noprev{
   max-width:420px;text-align:center;color:var(--fg-2);padding:28px;border:1px dashed var(--line-2);
   border-radius:12px;background:rgba(17,17,20,.85);font-size:13.5px
@@ -277,6 +293,7 @@ dialog::backdrop{background:rgba(4,4,6,.78);backdrop-filter:blur(6px)}
       <select id="fSort" aria-label="Sort runs">
         <option value="date">Newest first</option>
         <option value="oldest">Oldest first</option>
+        <option value="prompt">Prompt 01→20</option>
         <option value="model">Model A–Z</option>
         <option value="score">Highest score</option>
       </select>
@@ -318,12 +335,21 @@ dialog::backdrop{background:rgba(4,4,6,.78);backdrop-filter:blur(6px)}
           <svg viewBox="0 0 16 16"><rect x="4.5" y="1.5" width="7" height="13" rx="1.6"/><path d="M7.2 12.4h1.6"/></svg>
         </button>
       </div>
+      <button class="icon" id="vReload" title="Reload preview" aria-label="Reload preview">
+        <svg viewBox="0 0 16 16"><path d="M13.5 8A5.5 5.5 0 1 1 8 2.5c1.9 0 3.4.95 4.4 2.4M13.6 2.2v3h-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="icon" id="vPanel" title="Show or hide the details panel" aria-label="Toggle details panel" aria-pressed="false">
+        <svg viewBox="0 0 16 16"><rect x="1.5" y="2.5" width="13" height="11" rx="1.6"/><path d="M10.5 2.5v11" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
       <a id="vOpen" target="_blank" rel="noopener">Open ↗</a>
       <button class="icon" id="vClose" aria-label="Close preview">✕</button>
     </div>
   </div>
   <div class="vbody">
-    <div class="stage" id="stage"><div class="frame" id="frameWrap"><iframe id="vFrame" title="Run preview" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe></div></div>
+    <div class="stage" id="stage">
+      <div class="loadspin" id="loadSpin" aria-hidden="true"></div>
+      <div class="frame" id="frameWrap"><iframe id="vFrame" title="Run preview" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe></div>
+    </div>
     <aside class="info" id="vInfo"></aside>
   </div>
 </dialog>
@@ -352,6 +378,19 @@ const LABEL = {
 };
 const WIDTHS = {desktop:"100%", tablet:"834px", phone:"390px"};
 
+// Each category slug maps 1:1 to a benchmark prompt number (01-20).
+const PROMPT = {
+  website:"01", saas:"02", game2d:"03", game3d:"04",
+  cafe:"05", engine:"06", fps:"07", runner:"08", os:"09", cube:"10",
+  platformer:"11", world:"12", datastory:"13", generative:"14", synth:"15",
+  tool:"16", sim:"17", strategy:"18", spreadsheet:"19", physics:"20",
+};
+const promptLabel = (cat, fallback) => {
+  const no = PROMPT[cat];
+  const label = fallback || LABEL[cat] || cat;
+  return no ? `P${no} ${label}` : label;
+};
+
 let RUNS = [], selected = new Set(), activeCat = "";
 
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -375,7 +414,7 @@ function renderCats(){
   Object.keys(counts).forEach(k => { if (!known.has(k)) known.set(k, LABEL[k] || k); });
   const items = [["", "All", RUNS.length], ...[...known.entries()].filter(([k]) => (counts[k]||0) > 0).map(([k,l]) => [k, l, counts[k]||0])];
   $("segCats").innerHTML = items.map(([k,l,n]) =>
-    `<button role="tab" data-cat="${k}" aria-selected="${k === activeCat}">${l}<span class="n">${n}</span></button>`
+    `<button role="tab" data-cat="${k}" aria-selected="${k === activeCat}">${promptLabel(k, l)}<span class="n">${n}</span></button>`
   ).join("");
   $("segCats").querySelectorAll("button").forEach(b => b.onclick = () => { activeCat = b.dataset.cat; renderCats(); render(); });
 }
@@ -385,23 +424,24 @@ function render(){
   let list = RUNS.filter(r =>
     (!activeCat || r.category === activeCat) &&
     (!model || r.model === model) &&
-    (!q || [r.model, r.title, r.slug, r.notes, r.category].join(" ").toLowerCase().includes(q))
+    (!q || [r.model, r.title, r.slug, r.notes, r.category, r.prompt, r.prompt_label, PROMPT[r.category], LABEL[r.category]].join(" ").toLowerCase().includes(q))
   );
-  if (sort === "model") list = list.slice().sort((a,b) => a.model.localeCompare(b.model) || String(b.date).localeCompare(String(a.date)));
+  if (sort === "prompt") list = list.slice().sort((a,b) => (PROMPT[a.category]||"").localeCompare(PROMPT[b.category]||"") || String(b.date).localeCompare(String(a.date)));
+  else if (sort === "model") list = list.slice().sort((a,b) => a.model.localeCompare(b.model) || String(b.date).localeCompare(String(a.date)));
   else if (sort === "score") list = list.slice().sort((a,b) => (avg(b) ?? -1) - (avg(a) ?? -1));
   else if (sort === "oldest") list = list.slice().sort((a,b) => String(a.date).localeCompare(String(b.date)));
   else list = list.slice().sort((a,b) => String(b.date).localeCompare(String(a.date)));
 
   $("empty").hidden = list.length > 0;
   $("resultLine").textContent = RUNS.length
-    ? `${list.length} of ${RUNS.length} run${RUNS.length === 1 ? "" : "s"}${activeCat ? " · " + LABEL[activeCat] : ""}`
+    ? `${list.length} of ${RUNS.length} run${RUNS.length === 1 ? "" : "s"}${activeCat ? " · " + promptLabel(activeCat) : ""}`
     : "No runs yet";
 
   $("grid").innerHTML = list.map(r => {
     const s = r.scores || {}, a = fmtAvg(r), preview = isPreviewable(r);
     return `<article class="card" data-slug="${esc(r.slug)}" tabindex="0" role="button" aria-label="Open ${esc(titleOf(r))}">
       <div class="card-top">
-        <span class="cat${preview ? "" : " warn"}" title="${preview ? esc(r.entry || "") : "No HTML entry — cannot preview"}">${esc(LABEL[r.category] || r.category)}</span>
+        <span class="cat${preview ? "" : " warn"}" title="${preview ? esc(r.entry || "") : "No HTML entry — cannot preview"}">${esc(promptLabel(r.category))}</span>
         ${r.version > 1 ? `<span class="ver">v${esc(r.version)}</span>` : ""}
         ${a ? `<span class="avg"><b>${a}</b>/5</span>` : `<span class="avg">unscored</span>`}
       </div>
@@ -468,7 +508,7 @@ function renderTally(){
 function openRun(slug){
   const r = RUNS.find(x => x.slug === slug); if (!r) return;
   const s = r.scores || {}, preview = isPreviewable(r), a = fmtAvg(r);
-  $("vCat").textContent = LABEL[r.category] || r.category;
+  $("vCat").textContent = promptLabel(r.category);
   $("vCat").className = "cat" + (preview ? "" : " warn");
   $("vModel").textContent = r.model + (r.version > 1 ? ` · v${r.version}` : "");
   $("vTitle").textContent = r.title || r.slug;
@@ -477,6 +517,8 @@ function openRun(slug){
   setWidth("desktop");
 
   if (preview) {
+    $("vFrame").classList.remove("ready");
+    $("loadSpin").style.opacity = "1";
     $("frameWrap").hidden = false;
     $("stage").querySelectorAll(".noprev").forEach(n => n.remove());
     const f = $("vFrame");
@@ -493,6 +535,10 @@ function openRun(slug){
   }
 
   $("vInfo").innerHTML = `
+    <section>
+      <h4>Prompt</h4>
+      <p>${esc(promptLabel(r.category))}${r.version ? ` · v${r.version}` : ""}</p>
+    </section>
     <section>
       <h4>Run</h4>
       <p>${esc(r.model)}</p>
@@ -530,6 +576,13 @@ function setWidth(mode){
 }
 
 $("vClose").onclick = () => { $("viewer").close(); $("vFrame").src = "about:blank"; };
+$("vFrame").addEventListener("load", () => { $("vFrame").classList.add("ready"); $("loadSpin").style.opacity = "0"; });
+$("vReload").onclick = () => { const f = $("vFrame"); if (!f.getAttribute("src")) return; f.classList.remove("ready"); $("loadSpin").style.opacity = "1"; f.src = f.getAttribute("src"); };
+$("vPanel").onclick = () => {
+  const b = $("viewer").querySelector(".vbody");
+  const hidden = b.classList.toggle("no-info");
+  $("vPanel").setAttribute("aria-pressed", String(hidden));
+};
 $("cClose").onclick = () => { $("compare").close(); $("cmpBody").innerHTML = ""; };
 document.querySelectorAll(".devices button").forEach(b => b.onclick = () => setWidth(b.dataset.w));
 
@@ -541,7 +594,7 @@ $("btnCompare").onclick = () => {
     const preview = isPreviewable(r), av = fmtAvg(r);
     return `<div class="pane">
       <div class="pane-head">
-        <span class="cat">${esc(LABEL[r.category] || r.category)}</span>
+        <span class="cat">${esc(promptLabel(r.category))}</span>
         <h3>${esc(r.model)}</h3>
         <span class="avg">${av ? `<b>${av}</b>/5` : "unscored"}</span>
       </div>
