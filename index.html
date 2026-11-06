@@ -346,6 +346,7 @@ const CATS = [
 ];
 const LABEL = {
   website:"Website", saas:"SaaS", game2d:"2D game", game3d:"3D game",
+  cyberpunk:"Cyberpunk (old P12)",
   cafe:"Cafe site", engine:"Engine sim", fps:"FPS", runner:"Runner",
   os:"Browser OS", cube:"Rubik's cube", platformer:"Platformer", world:"Living world", datastory:"Data story", generative:"Generative art", synth:"Music synth", tool:"Creative tool", sim:"Emergent sim", strategy:"Strategy", spreadsheet:"Spreadsheet", physics:"Physics",
 };
@@ -370,7 +371,9 @@ function meterRow(label, value){
 
 function renderCats(){
   const counts = {}; RUNS.forEach(r => counts[r.category] = (counts[r.category]||0)+1);
-  const items = [["", "All", RUNS.length], ...CATS.map(([k,l]) => [k, l, counts[k]||0])];
+  const known = new Map(CATS);
+  Object.keys(counts).forEach(k => { if (!known.has(k)) known.set(k, k); });
+  const items = [["", "All", RUNS.length], ...[...known.entries()].filter(([, n]) => n > 0).map(([k,l]) => [k, l, counts[k]||0])];
   $("segCats").innerHTML = items.map(([k,l,n]) =>
     `<button role="tab" data-cat="${k}" aria-selected="${k === activeCat}">${l}<span class="n">${n}</span></button>`
   ).join("");
