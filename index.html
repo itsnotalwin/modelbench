@@ -373,7 +373,7 @@ function renderCats(){
   const counts = {}; RUNS.forEach(r => counts[r.category] = (counts[r.category]||0)+1);
   const known = new Map(CATS);
   Object.keys(counts).forEach(k => { if (!known.has(k)) known.set(k, k); });
-  const items = [["", "All", RUNS.length], ...[...known.entries()].filter(([, n]) => n > 0).map(([k,l]) => [k, l, counts[k]||0])];
+  const items = [["", "All", RUNS.length], ...[...known.entries()].filter(([k]) => (counts[k]||0) > 0).map(([k,l]) => [k, l, counts[k]||0])];
   $("segCats").innerHTML = items.map(([k,l,n]) =>
     `<button role="tab" data-cat="${k}" aria-selected="${k === activeCat}">${l}<span class="n">${n}</span></button>`
   ).join("");
