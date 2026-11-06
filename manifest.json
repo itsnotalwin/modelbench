@@ -1,6 +1,6 @@
 {
   "generated_from": "runs/",
-  "count": 10,
+  "count": 12,
   "runs": [
     {
       "slug": "2026-11-06_nemotron-3-5-super-vl_website_v1",
@@ -50,6 +50,29 @@
       ]
     },
     {
+      "slug": "2026-11-06_gemini-3-1-pro_website_v1",
+      "model": "gemini-3-1-pro",
+      "category": "website",
+      "date": "2026-11-06",
+      "version": 1,
+      "entry": "index.html",
+      "path": "runs/2026-11-06_gemini-3-1-pro_website_v1/index.html",
+      "source_file": "website__gemini-3-1-pro__2026-11-06__v1.zip",
+      "scores": {
+        "visual": null,
+        "functionality": null,
+        "prompt_following": null
+      },
+      "notes": "",
+      "files": [
+        "README.md",
+        "index.html",
+        "js/app.js",
+        "meta.json",
+        "styles.css"
+      ]
+    },
+    {
       "slug": "2026-11-06_crouton-alpha_website_v1",
       "model": "crouton-alpha",
       "category": "website",
@@ -72,6 +95,27 @@
         "index.html",
         "meta.json",
         "styles.css"
+      ]
+    },
+    {
+      "slug": "2026-11-06_claude-opus-4-5_website_v1",
+      "model": "claude-opus-4-5",
+      "category": "website",
+      "date": "2026-11-06",
+      "version": 1,
+      "entry": "index.html",
+      "path": "runs/2026-11-06_claude-opus-4-5_website_v1/index.html",
+      "source_file": "website__claude-opus-4-5__2026-11-06__v1.zip",
+      "scores": {
+        "visual": null,
+        "functionality": null,
+        "prompt_following": null
+      },
+      "notes": "",
+      "files": [
+        "README.md",
+        "index.html",
+        "meta.json"
       ]
     },
     {

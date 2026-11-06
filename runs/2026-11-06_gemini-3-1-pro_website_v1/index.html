@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="paper">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SENSITOMETRY &amp; SILVER — Monograph No. 04: The 256-Step Scale</title>
+  <meta name="description" content="An interactive achromatic monograph and darkroom sensitometry instrument exploring silver-halide photochemistry, the 11-zone exposure scale, and 1-bit halftone dithering.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000000'/%3E%3Ccircle cx='16' cy='16' r='10' fill='none' stroke='%23ffffff' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='4.5' fill='%23808080'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to monograph content</a>
+
+  <!-- Top Telemetry & Navigation Bar -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#spectrum-section" class="brand-mark" aria-label="Sensitometry and Silver Monograph Home">
+        <span class="brand-wedge" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+        </span>
+        <span>MONOGRAPH 04 // 00–FF</span>
+      </a>
+
+      <nav id="primary-nav" class="primary-nav" aria-label="Monograph sections">
+        <a href="#spectrum-section" class="nav-link is-active">I. Spectrum</a>
+        <a href="#plates-section" class="nav-link">II. Plates</a>
+        <a href="#darkroom-section" class="nav-link">III. Darkroom</a>
+        <a href="#physics-section" class="nav-link">IV. Sensitometry</a>
+        <a href="#chronology-section" class="nav-link">V. Chronology</a>
+      </nav>
+
+      <div class="header-actions">
+        <div class="density-readout" title="Scroll Optical Density Position" aria-hidden="true">
+          <span>D-POS</span>
+          <strong id="header-density-val">0.00 logD</strong>
+        </div>
+
+        <button type="button" id="motion-toggle-btn" class="utility-btn" aria-pressed="false" title="Toggle live optical field motion (M)">
+          Field: Live
+        </button>
+
+        <button type="button" id="theme-toggle-btn" class="utility-btn" aria-pressed="false" title="Invert Paper / Darkroom polarity (I)">
+          Polarity: Paper
+        </button>
+
+        <button type="button" id="shortcuts-open-btn" class="utility-btn" aria-haspopup="dialog" title="Keyboard shortcuts (?)">
+          Keys [?]
+        </button>
+
+        <button type="button" id="mobile-menu-btn" class="utility-btn mobile-menu-btn" aria-expanded="false" aria-controls="primary-nav">
+          Index
+        </button>
+      </div>
+    </div>
+    <div class="scroll-progress-track" aria-hidden="true">
+      <div id="scroll-progress-bar" class="scroll-progress-bar"></div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- ====================================================================
+         SECTION I: HERO & LIVE ACHROMATIC STEP-WEDGE
+         ==================================================================== -->
+    <section id="spectrum-section" class="hero" aria-labelledby="hero-heading">
+      <div class="container">
+        <div class="hero-grid">
+          <div>
+            <div class="hero-meta-strip">
+              <span>EDITION IV · ACHROMATIC ARCHIVE</span>
+              <span>λ 380–740 NM INTEGRATED</span>
+              <span>0.00 – 3.20 LOG D</span>
+            </div>
+
+            <h1 id="hero-heading" class="hero-title">
+              SENSITOMETRY &amp; SILVER
+              <span class="hero-title-sub">An Interactive Monograph on the 256-Step Achromatic Scale</span>
+            </h1>
+
+            <p class="hero-statement">
+              Stripped of chromatic distraction, photography reduces to pure physics: incident photon flux, logarithmic silver-halide density, and spatial grain architecture. Inspect eight procedurally synthesized large-format plates, calibrate split-grade contrast curves in a live darkroom enlarger, and expose camera-less photograms directly onto virtual baryta paper.
+            </p>
+
+            <div class="hero-cta-row">
+              <a href="#plates-section" class="btn-primary">
+                Inspect Exhibition Plates (08)
+                <span aria-hidden="true">→</span>
+              </a>
+              <a href="#darkroom-section" class="btn-secondary">
+                Enter Darkroom Enlarger
+              </a>
+            </div>
+          </div>
+
+          <figure class="hero-optical-frame">
+            <div class="hero-canvas-wrap">
+              <canvas id="hero-canvas" width="480" height="360" role="img" aria-label="Interactive silver-halide optical slit-scan interference field responding to pointer position and Zone System bias"></canvas>
+              <div class="optical-reticle" aria-hidden="true">
+                <div class="optical-reticle-row">
+                  <span>SLIT-SCAN INTERFEROMETER // LIVE</span>
+                  <span id="reticle-coords">X:52% · Y:44%</span>
+                </div>
+                <div class="optical-reticle-row">
+                  <span id="reticle-luminance">0x80 · 1.60 D</span>
+                  <span id="reticle-zone">ZONE V</span>
+                </div>
+              </div>
+            </div>
+            <figcaption class="hero-optical-caption">
+              <span>FIG. 0.1 — Move pointer across aperture to modulate optical path difference</span>
+              <span class="mono">R = G = B · STRICT MONOCHROME</span>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <!-- Interactive 11-Zone Step-Wedge Dock -->
+      <div class="zone-wedge-dock" role="region" aria-label="Interactive 11-Zone Exposure Step Wedge">
+        <div class="zone-wedge-header">
+          <div class="zone-telemetry-bar" aria-live="polite">
+            <div class="zone-telemetry-item">
+              <strong id="zone-readout-roman">ZONE V</strong>
+            </div>
+            <div class="zone-telemetry-item">
+              <span id="zone-readout-title">18% Middle Grey Reference Anchor</span>
+            </div>
+            <div class="zone-telemetry-item">
+              <span>REFLECTANCE</span>
+              <strong id="zone-readout-reflectance">18.0%</strong>
+            </div>
+            <div class="zone-telemetry-item">
+              <span>OPTICAL DENSITY</span>
+              <strong id="zone-readout-density">0.74 logD</strong>
+            </div>
+            <div class="zone-telemetry-item">
+              <span>EXPOSURE</span>
+              <strong id="zone-readout-ev">0.0 EV</strong>
+            </div>
+            <div class="zone-telemetry-item">
+              <span>8-BIT</span>
+              <strong id="zone-readout-hex">#808080</strong>
+            </div>
+          </div>
+          <span class="kicker">Select Zone 0–X (Arrow Keys)</span>
+        </div>
+
+        <div id="zone-steps-grid" class="zone-steps-grid"></div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SECTION II: EXHIBITION PLATES (8 PROCEDURAL SILVER-GELATIN WORKS)
+         ==================================================================== -->
+    <section id="plates-section" class="band" aria-labelledby="plates-heading">
+      <div class="container">
+        <div class="band-header">
+          <div>
+            <span class="kicker">Section II · Large-Format &amp; Optical Plates</span>
+            <h2 id="plates-heading" class="band-title">The Exhibition Contact Sheet</h2>
+          </div>
+          <p class="band-lead">
+            Every plate below is synthesized mathematically in real time from fractional Brownian terrain fields, Voronoi geological fractures, caustic optics, and interferometric gratings. Select any work to open the 2.6× optical loupe and live sensitometric analyzer.
+          </p>
+        </div>
+
+        <div class="gallery-toolbar">
+          <div class="filter-group" role="group" aria-label="Filter plates by tonal key">
+            <button type="button" class="filter-btn" data-gallery-filter="all" aria-pressed="true">All Plates (08)</button>
+            <button type="button" class="filter-btn" data-gallery-filter="full-scale" aria-pressed="false">Full-Scale [I–IX]</button>
+            <button type="button" class="filter-btn" data-gallery-filter="high-key" aria-pressed="false">High-Key [IV–X]</button>
+            <button type="button" class="filter-btn" data-gallery-filter="low-key" aria-pressed="false">Low-Key [0–VII]</button>
+          </div>
+
+          <div class="filter-group" role="group" aria-label="Switch gallery layout">
+            <button type="button" class="filter-btn" data-gallery-view="grid" aria-pressed="true">Contact Grid</button>
+            <button type="button" class="filter-btn" data-gallery-view="folio" aria-pressed="false">Folio Index</button>
+          </div>
+        </div>
+
+        <div id="plates-grid" class="plates-grid"></div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SECTION III: DARKROOM ENLARGER & PHOTOGRAM LIGHT-PAINTING TRAY
+         ==================================================================== -->
+    <section id="darkroom-section" class="band" aria-labelledby="darkroom-heading">
+      <div class="container">
+        <div class="band-header">
+          <div>
+            <span class="kicker">Section III · Wet-Bench Optical Simulator</span>
+            <h2 id="darkroom-heading" class="band-title">Enlarger &amp; Photogram Tray</h2>
+          </div>
+          <p class="band-lead">
+            Modulate Hurter–Driffield paper contrast grades (00 to 5), enlarger timer exposure, edge burning, silver halide grain, and 1-bit halftone screening—or switch to unexposed silver-gelatin paper to paint camera-less photograms directly with collimated light.
+          </p>
+        </div>
+
+        <div class="darkroom-workbench">
+          <!-- Left Stage: Enlarger Easel & Photogram Tray -->
+          <div class="enlarger-stage">
+            <div class="enlarger-topbar">
+              <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+                <label for="enlarger-source-select" class="mono" style="font-size:0.74rem;text-transform:uppercase;letter-spacing:0.06em;">
+                  Negative / Paper Carrier:
+                </label>
+                <select id="enlarger-source-select" class="mono-select" style="width:auto;min-width:240px;">
+                  <option value="vercors">Plate 01 — Solstice at Vercors</option>
+                  <option value="cantilever">Plate 02 — Cantilever Study IV</option>
+                  <option value="rayograph">Plate 03 — Rayograph: Allium &amp; Glass</option>
+                  <option value="tidal">Plate 04 — Tidal Standing Wave</option>
+                  <option value="moire">Plate 05 — Moiré Interferogram 19°</option>
+                  <option value="basalt">Plate 06 — Basalt Columnar Fracture</option>
+                  <option value="pendulum">Plate 07 — Chronophotograph: Pendulum</option>
+                  <option value="nucleation">Plate 08 — Silver Crystal Nucleation</option>
+                  <option value="photogram">★ Camera-Less Photogram Paper (Draw Light)</option>
+                </select>
+              </div>
+
+              <button type="button" id="enlarger-invert-btn" class="utility-btn" aria-pressed="false">
+                Invert Negative / Positive
+              </button>
+            </div>
+
+            <div id="enlarger-canvas-container" class="enlarger-canvas-container" tabindex="0" aria-label="Enlarger easel canvas. In Photogram mode, drag with pointer or use arrow keys plus Space to expose silver-gelatin paper.">
+              <canvas id="enlarger-canvas" width="720" height="540"></canvas>
+              <div id="tray-status-pill" class="tray-status-pill" aria-live="polite">
+                PLATE 01 · CONTINUOUS
+              </div>
+            </div>
+
+            <!-- Photogram Light-Painting Toolbar (Visible when Photogram Paper is active) -->
+            <div id="photogram-palette" class="photogram-palette" hidden>
+              <div class="filter-group" role="group" aria-label="Photogram optical light tools">
+                <button type="button" class="filter-btn" data-photogram-tool="torch" aria-pressed="true">Gaussian Torch</button>
+                <button type="button" class="filter-btn" data-photogram-tool="slit" aria-pressed="false">Optical Slit</button>
+                <button type="button" class="filter-btn" data-photogram-tool="ring" aria-pressed="false">Annular Ring</button>
+                <button type="button" class="filter-btn" data-photogram-tool="dodge" aria-pressed="false">Opaque Mask</button>
+              </div>
+
+              <div class="filter-group">
+                <button type="button" id="photogram-clear-btn" class="utility-btn">Fresh Sheet</button>
+                <button type="button" id="photogram-develop-btn" class="btn-primary" style="padding:0.45rem 0.9rem;font-size:0.72rem;">
+                  Develop in Tray
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Panel: Sensitometric Controls & Live D-logE Curve -->
+          <div class="enlarger-controls">
+            <div class="control-block">
+              <div class="control-header">
+                <label for="enlarger-grade-slider">Multigrade Paper Contrast</label>
+                <span id="enlarger-grade-val" class="control-value">Grade 2.5</span>
+              </div>
+              <input id="enlarger-grade-slider" class="mono-slider" type="range" min="0" max="5" step="0.5" value="2.5">
+            </div>
+
+            <div class="control-block">
+              <div class="control-header">
+                <label for="enlarger-ev-slider">Enlarger Timer Exposure</label>
+                <span id="enlarger-ev-val" class="control-value">+0.00 EV (16.0s)</span>
+              </div>
+              <input id="enlarger-ev-slider" class="mono-slider" type="range" min="-1.5" max="1.5" step="0.05" value="0">
+            </div>
+
+            <div class="control-block">
+              <div class="control-header">
+                <label for="enlarger-vignette-slider">Perimeter Edge Burn</label>
+                <span id="enlarger-vignette-val" class="control-value">15%</span>
+              </div>
+              <input id="enlarger-vignette-slider" class="mono-slider" type="range" min="0" max="1" step="0.05" value="0.15">
+            </div>
+
+            <div class="control-block">
+              <div class="control-header">
+                <label for="enlarger-grain-slider">Silver Halide Grain Clumping</label>
+                <span id="enlarger-grain-val" class="control-value">14%</span>
+              </div>
+              <input id="enlarger-grain-slider" class="mono-slider" type="range" min="0" max="1" step="0.02" value="0.14">
+            </div>
+
+            <div class="control-block">
+              <div class="control-header">
+                <label for="enlarger-raster-select">Output Screening / Halftone Engine</label>
+              </div>
+              <select id="enlarger-raster-select" class="mono-select">
+                <option value="continuous">Continuous Silver Emulsion (8-Bit)</option>
+                <option value="floyd-steinberg">Floyd–Steinberg 2D Error Diffusion (1-Bit)</option>
+                <option value="bayer">Ordered Bayer 8×8 Threshold Matrix (1-Bit)</option>
+                <option value="halftone">45° Crossline Halftone Dot Screen (1-Bit)</option>
+                <option value="engraving">Guilloché Undulating Line Engraving (1-Bit)</option>
+              </select>
+            </div>
+
+            <!-- Live Hurter-Driffield Curve & 11-Zone Distribution -->
+            <div class="telemetry-panels">
+              <div class="telemetry-card">
+                <h3 class="telemetry-card-title">
+                  <span>H&amp;D Curve</span>
+                  <span>D / log E</span>
+                </h3>
+                <svg id="hd-curve-svg" class="telemetry-svg" viewBox="0 0 220 100" aria-label="Live Hurter-Driffield Characteristic Curve"></svg>
+              </div>
+
+              <div class="telemetry-card">
+                <h3 class="telemetry-card-title">
+                  <span>Zone Spread</span>
+                  <span>0 → X</span>
+                </h3>
+                <svg id="zone-dist-svg" class="telemetry-svg" viewBox="0 0 220 100" aria-label="Live 11-Zone Pixel Distribution Histogram"></svg>
+              </div>
+            </div>
+
+            <div class="enlarger-actions">
+              <button type="button" id="enlarger-download-btn" class="btn-primary" style="flex:1;justify-content:center;">
+                Export Archival Print (.PNG)
+              </button>
+              <button type="button" id="enlarger-reset-btn" class="btn-secondary">
+                Reset
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SECTION IV: THE PHYSICS OF GREY — 3 INTERACTIVE SENSITOMETRY LABS
+         ==================================================================== -->
+    <section id="physics-section" class="band" aria-labelledby="physics-heading">
+      <div class="container">
+        <div class="band-header">
+          <div>
+            <span class="kicker">Section IV · Psychophysics &amp; Halftone Geometry</span>
+            <h2 id="physics-heading" class="band-title">The Mathematics of Grey</h2>
+          </div>
+          <p class="band-lead">
+            Achromatic perception is governed by logarithmic sensory compression, lateral inhibition across tonal boundaries, and spatial integration of binary ink dots. Experiment directly with the three foundational laws below.
+          </p>
+        </div>
+
+        <div class="labs-grid">
+          <!-- Lab 4.1 -->
+          <article class="lab-card">
+            <span class="lab-index">EXPERIMENT 4.1 · WEBER–FECHNER LAW</span>
+            <h3 class="lab-title">Perceptual Gamma (γ = 2.2) vs. Linear Radiance</h3>
+            <p class="lab-essay">
+              Human vision perceives brightness logarithmically: doubling physical photon flux feels like a single constant step. Encoding 8-bit grey linearly wastes half of all 256 values on the brightest stop, starving shadows into visible contour bands and Mach-band illusions.
+            </p>
+            <div class="lab-canvas-box">
+              <canvas id="lab-gamma-canvas" width="420" height="170" role="img" aria-label="Dual ramp comparing perceptual gamma 2.2 encoding against linear radiance across selectable bit depths"></canvas>
+            </div>
+            <div class="lab-controls">
+              <div class="control-header">
+                <span>Quantization Bit Depth</span>
+                <span id="lab-gamma-readout" class="control-value">8-bit (256 discrete grey steps)</span>
+              </div>
+              <div class="filter-group" role="group" aria-label="Select quantization bit depth">
+                <button type="button" class="filter-btn" data-bit-depth="256" aria-pressed="true">8-Bit</button>
+                <button type="button" class="filter-btn" data-bit-depth="32" aria-pressed="false">5-Bit</button>
+                <button type="button" class="filter-btn" data-bit-depth="16" aria-pressed="false">4-Bit</button>
+                <button type="button" class="filter-btn" data-bit-depth="8" aria-pressed="false">3-Bit</button>
+                <button type="button" class="filter-btn" data-bit-depth="4" aria-pressed="false">2-Bit</button>
+                <button type="button" class="filter-btn" data-bit-depth="2" aria-pressed="false">1-Bit</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Lab 4.2 -->
+          <article class="lab-card">
+            <span class="lab-index">EXPERIMENT 4.2 · ZONE SYSTEM ANCHORS</span>
+            <h3 class="lab-title">The 11-Zone Surface Material Atlas</h3>
+            <p class="lab-essay">
+              Each Zone represents a 1-stop (2×) change in scene luminance, anchored around Zone V (18% neutral reflectance). Full physical texture exists only between Zones II and VIII; Zones 0–I and IX–X mark the thresholds of pure silver black and baryta paper base.
+            </p>
+            <div class="lab-canvas-box">
+              <canvas id="lab-zone-canvas" width="420" height="150" role="img" aria-label="Procedural silver-gelatin surface texture swatch calibrated to the selected Zone"></canvas>
+            </div>
+            <div class="lab-controls">
+              <label for="lab-zone-select" class="mono" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em;">
+                Inspect Zone Calibration:
+              </label>
+              <select id="lab-zone-select" class="mono-select"></select>
+              <div id="zone-atlas-detail" class="zone-atlas-detail" aria-live="polite"></div>
+            </div>
+          </article>
+
+          <!-- Lab 4.3 -->
+          <article class="lab-card">
+            <span class="lab-index">EXPERIMENT 4.3 · 1-BIT SPATIAL HALFTONING</span>
+            <h3 class="lab-title">Simulating Continuous Tone with Pure Black &amp; White</h3>
+            <p class="lab-essay">
+              Lithographic presses and e-ink matrices possess only two states: 0% ink and 100% ink. By dispersing quantization residuals across neighboring pixels (Floyd–Steinberg) or modulating periodic dot radii (Ives screen), the retina integrates binary patterns into smooth grey.
+            </p>
+            <div class="lab-canvas-box">
+              <canvas id="lab-halftone-canvas" width="420" height="170" role="img" aria-label="2x magnified 1-bit dithering and halftone comparison on a shaded sphere"></canvas>
+            </div>
+            <div class="lab-controls">
+              <span class="mono" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em;">
+                2× Nearest-Neighbor Pixel Microscope:
+              </span>
+              <div class="filter-group" role="group" aria-label="Select 1-bit halftoning algorithm">
+                <button type="button" class="filter-btn" data-halftone-algo="floyd-steinberg" aria-pressed="true">Floyd–Steinberg</button>
+                <button type="button" class="filter-btn" data-halftone-algo="bayer" aria-pressed="false">Bayer 8×8</button>
+                <button type="button" class="filter-btn" data-halftone-algo="halftone" aria-pressed="false">45° Screen</button>
+                <button type="button" class="filter-btn" data-halftone-algo="threshold" aria-pressed="false">50% Cutoff</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SECTION V: CHRONOLOGY OF ACHROMATIC LIGHT (1839–2012)
+         ==================================================================== -->
+    <section id="chronology-section" class="band" aria-labelledby="chronology-heading">
+      <div class="container">
+        <div class="band-header">
+          <div>
+            <span class="kicker">Section V · Historical Lineage</span>
+            <h2 id="chronology-heading" class="band-title">Chronology of Achromatic Light</h2>
+          </div>
+          <p class="band-lead">
+            From nineteenth-century mercury-developed silver daguerreotypes to filterless monochrome CMOS silicon, every technical leap refined how human instruments measure and render pure luminance.
+          </p>
+        </div>
+
+        <div class="gallery-toolbar">
+          <div class="filter-group" role="group" aria-label="Filter chronology by discipline">
+            <button type="button" class="filter-btn" data-chronology-filter="all" aria-pressed="true">All Milestones (07)</button>
+            <button type="button" class="filter-btn" data-chronology-filter="photochemistry" aria-pressed="false">Photochemistry</button>
+            <button type="button" class="filter-btn" data-chronology-filter="sensitometry" aria-pressed="false">Sensitometry</button>
+            <button type="button" class="filter-btn" data-chronology-filter="halftone" aria-pressed="false">Halftone &amp; Digital</button>
+          </div>
+        </div>
+
+        <div id="chronology-list" class="chronology-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Colophon Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h2 class="footer-heading">Colophon &amp; Achromatic Specification</h2>
+          <p class="footer-copy">
+            <strong>Sensitometry &amp; Silver (Monograph No. 04)</strong> is a zero-dependency static exhibition rendered exclusively in pure neutral luminance (R = G = B across all UI tokens, procedural canvas shaders, SVG telemetry plots, and optical reticles). All eight plates are synthesized client-side using deterministic fractional Brownian motion, Voronoi cellular fields, and Hurter–Driffield characteristic curves.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="footer-heading">Monograph Index</h2>
+          <ul class="footer-list">
+            <li><a href="#spectrum-section">I. Achromatic Spectrum &amp; Step-Wedge</a></li>
+            <li><a href="#plates-section">II. Exhibition Contact Sheet (08 Plates)</a></li>
+            <li><a href="#darkroom-section">III. Darkroom Enlarger &amp; Photogram Tray</a></li>
+            <li><a href="#physics-section">IV. Mathematics of Grey Labs</a></li>
+            <li><a href="#chronology-section">V. Chronology (1839–2012)</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="footer-heading">Optical Controls</h2>
+          <ul class="footer-list">
+            <li><button type="button" data-trigger-click="theme-toggle-btn">Invert Paper / Darkroom Polarity [I]</button></li>
+            <li><button type="button" data-trigger-click="motion-toggle-btn">Toggle Optical Field Motion [M]</button></li>
+            <li><button type="button" data-trigger-click="shortcuts-open-btn">Keyboard Command Sheet [?]</button></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>MONOGRAPH NO. 04 · STRICT MONOCHROME (0x00 – 0xFF) · NO EXTERNAL ASSETS</span>
+        <span>FILE:// &amp; GITHUB PAGES READY · ACCESSIBLE &amp; REDUCED-MOTION COMPLIANT</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ====================================================================
+       OPTICAL INSPECTION LIGHTBOX & 2.6X LOUPE MODAL
+       ==================================================================== -->
+  <div id="lightbox-backdrop" class="modal-backdrop" hidden>
+    <div id="lightbox-dialog" class="lightbox-dialog" role="dialog" aria-modal="true" aria-labelledby="lightbox-title">
+      <div class="lightbox-header">
+        <div style="display:flex;align-items:center;gap:0.75rem;">
+          <span id="lightbox-kicker" class="mono" style="font-size:0.76rem;letter-spacing:0.08em;text-transform:uppercase;">PLATE 01 / 08</span>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <button type="button" id="lightbox-loupe-btn" class="utility-btn" aria-pressed="true" title="Toggle 2.6x optical loupe (L)">
+            Loupe 2.6×: ON
+          </button>
+          <button type="button" id="lightbox-prev-btn" class="utility-btn" aria-label="Previous plate">
+            ← Prev
+          </button>
+          <button type="button" id="lightbox-next-btn" class="utility-btn" aria-label="Next plate">
+            Next →
+          </button>
+          <button type="button" id="lightbox-close-btn" class="utility-btn" aria-label="Close inspection lightbox">
+            Close [ESC]
+          </button>
+        </div>
+      </div>
+
+      <div class="lightbox-body">
+        <div class="lightbox-stage">
+          <div id="lightbox-canvas-wrap" class="lightbox-canvas-wrap loupe-active" tabindex="0" aria-label="High-resolution plate inspection viewport. Move pointer or use arrow keys to position the 2.6x optical magnifier.">
+            <canvas id="lightbox-canvas" width="800" height="600"></canvas>
+            <div id="optical-loupe" class="optical-loupe" aria-hidden="true">
+              <canvas id="loupe-canvas" width="156" height="156"></canvas>
+              <div class="loupe-crosshair"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lightbox-sidebar">
+          <div>
+            <h2 id="lightbox-title" class="lightbox-title">Solstice at Vercors</h2>
+            <p id="lightbox-desc" class="plate-desc" style="margin-top:0.5rem;"></p>
+          </div>
+
+          <div class="lightbox-specs-grid">
+            <div><span>Negative Format</span><strong id="lb-spec-format">8×10 Sheet Film</strong></div>
+            <div><span>Optical Lens</span><strong id="lb-spec-lens">300mm f/5.6</strong></div>
+            <div><span>Chemistry</span><strong id="lb-spec-dev">Rodinal 1:50</strong></div>
+            <div><span>Tonal Span</span><strong id="lb-spec-zones">Zones I – IX</strong></div>
+          </div>
+
+          <div class="control-block">
+            <div class="control-header">
+              <label for="lb-grade-slider">Inspection Paper Grade</label>
+              <span id="lb-grade-val" class="control-value">Grade 2.5</span>
+            </div>
+            <input id="lb-grade-slider" class="mono-slider" type="range" min="0" max="5" step="0.5" value="2.5">
+          </div>
+
+          <div class="control-block">
+            <div class="control-header">
+              <label for="lb-ev-slider">Exposure Bias (EV)</label>
+              <span id="lb-ev-val" class="control-value">+0.00 EV</span>
+            </div>
+            <input id="lb-ev-slider" class="mono-slider" type="range" min="-1.5" max="1.5" step="0.05" value="0">
+          </div>
+
+          <div class="control-block">
+            <div class="control-header">
+              <label for="lb-raster-select">Screening Mode</label>
+            </div>
+            <select id="lb-raster-select" class="mono-select">
+              <option value="continuous">Continuous Silver Emulsion</option>
+              <option value="floyd-steinberg">Floyd–Steinberg 1-Bit Dither</option>
+              <option value="bayer">Bayer 8×8 Ordered Matrix</option>
+              <option value="halftone">45° Halftone Dot Screen</option>
+              <option value="engraving">Guilloché Line Engraving</option>
+            </select>
+          </div>
+
+          <div class="telemetry-panels">
+            <div class="telemetry-card">
+              <h3 class="telemetry-card-title"><span>Luminance Histogram</span><span>0–255</span></h3>
+              <svg id="lightbox-histogram-svg" class="telemetry-svg" viewBox="0 0 240 86" style="height:78px;"></svg>
+            </div>
+            <div class="telemetry-card">
+              <h3 class="telemetry-card-title"><span>H&amp;D Transfer</span><span>γ Curve</span></h3>
+              <svg id="lightbox-hd-svg" class="telemetry-svg" viewBox="0 0 220 100" style="height:78px;"></svg>
+            </div>
+          </div>
+
+          <div class="enlarger-actions">
+            <button type="button" id="lightbox-export-btn" class="btn-primary" style="flex:1;justify-content:center;">
+              Export PNG
+            </button>
+            <button type="button" id="lightbox-send-darkroom-btn" class="btn-secondary">
+              Open in Enlarger →
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       KEYBOARD SHORTCUTS MODAL
+       ==================================================================== -->
+  <div id="shortcuts-backdrop" class="modal-backdrop" hidden>
+    <div class="shortcuts-dialog" role="dialog" aria-modal="true" aria-labelledby="shortcuts-title">
+      <div class="lightbox-header">
+        <h2 id="shortcuts-title" class="mono" style="margin:0;font-size:0.85rem;letter-spacing:0.08em;text-transform:uppercase;">
+          Optical Instrument Keyboard Shortcuts
+        </h2>
+        <button type="button" id="shortcuts-close-btn" class="utility-btn">Close [ESC]</button>
+      </div>
+      <div class="shortcuts-list">
+        <div class="shortcut-row">
+          <span>Invert Polarity (Baryta Paper ↔ Darkroom Obsidian)</span>
+          <span class="kbd">I</span>
+        </div>
+        <div class="shortcut-row">
+          <span>Pause / Resume Live Slit-Scan Optical Field</span>
+          <span class="kbd">M</span>
+        </div>
+        <div class="shortcut-row">
+          <span>Toggle 2.6× Optical Loupe (Inside Lightbox)</span>
+          <span class="kbd">L</span>
+        </div>
+        <div class="shortcut-row">
+          <span>Move Loupe / Navigate 11-Zone Step-Wedge</span>
+          <span class="kbd">← ↑ ↓ →</span>
+        </div>
+        <div class="shortcut-row">
+          <span>Open / Close Keyboard Reference</span>
+          <span class="kbd">?</span>
+        </div>
+        <div class="shortcut-row" style="border-bottom:none;padding-bottom:0;">
+          <span>Close Active Modal Dialog</span>
+          <span class="kbd">ESC</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
