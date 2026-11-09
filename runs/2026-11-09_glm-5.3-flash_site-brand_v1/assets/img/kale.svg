@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Line drawing of a long savoyed kale leaf">
+  <g fill="none" stroke="#26331F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M80 150 C70 144 62 134 60 124 C56 126 52 120 54 112 C58 110 56 102 52 98 C56 94 54 86 58 82 C56 74 60 66 64 62 C62 54 66 44 70 38 C72 32 76 26 80 20 C84 26 88 32 90 38 C94 44 98 54 96 62 C100 66 104 74 102 82 C106 86 104 94 108 98 C104 102 106 110 102 112 C104 120 100 126 96 124 C94 134 88 144 80 150"/>
+    <path d="M80 144 C80 110 80 60 80 24"/>
+    <path d="M80 122 C70 118 63 111 60 102"/>
+    <path d="M80 122 C90 118 97 111 100 102"/>
+    <path d="M80 96 C71 92 65 85 63 77"/>
+    <path d="M80 96 C89 92 95 85 97 77"/>
+    <path d="M80 70 C73 66 69 60 67 54"/>
+    <path d="M80 70 C87 66 91 60 93 54"/>
+  </g>
+</svg>

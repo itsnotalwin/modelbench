@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Line drawing of two bean pods and a leaf">
+  <g fill="none" stroke="#26331F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 112 C40 88 62 68 88 60 C104 55 118 60 118 70 C118 80 104 84 90 86 C68 90 50 100 40 114 C37 118 33 118 32 112"/>
+    <path d="M60 80 C62 86 68 88 74 86"/>
+    <path d="M78 72 C80 78 86 80 92 78"/>
+    <path d="M54 44 C64 30 84 22 104 24 C114 26 118 34 112 40 C106 46 92 46 80 50 C68 54 58 54 54 44"/>
+    <path d="M40 118 C36 104 36 90 41 74"/>
+    <path d="M28 34 C20 24 8 24 6 34 C4 42 14 50 26 48 C24 56 30 64 40 60 C50 56 50 42 40 38 C36 36 31 34 28 34"/>
+  </g>
+</svg>

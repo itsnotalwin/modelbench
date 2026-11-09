@@ -1,6 +1,6 @@
 {
   "generated_from": "runs/",
-  "count": 5,
+  "count": 6,
   "catalog": [
     {
       "no": "01",
@@ -191,6 +191,68 @@
       },
       "files": [
         "assets/hero-room.svg",
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "glm-5.3-flash",
+      "category": "site-brand",
+      "date": "2026-11-09",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "01",
+      "prompt_label": "Brand & Business Website",
+      "notes": "Sallow & Fen \u2014 a fictional heritage vegetable seed nursery on the Norfolk fen edge. Single-page site with: annotated botanical hero plate (hand-drawn inline SVG with stroke-draw animation), three-part argument with stats band, a 12-variety seed library with real horticultural data (prices, sow windows, germination percentages, batch numbers) and type/month filtering, a month-by-month sowing calendar wired to both the calendar panel and the filters, a five-step process section with a germination-certificate artefact, a \u00a345/yr subscription with four-parcel timeline and sold-out status, three named founders, a seven-question FAQ, and a consultation/booking enquiry flow with human validation messages, error summary, character counter, conditional postcode field, localStorage draft autosave with restore banner, browser-only sent-enquiry records, print-copy and reset paths. Three policy dialogs (native <dialog>). All assets local: self-hosted Fraunces/Archivo/IBM Plex Mono woff2, 12 hand-authored botanical SVGs, favicon, og.png (1200x630, composed live from the page). SEO: single H1, semantic sections, descriptive meta/OG/Twitter tags, JSON-LD @graph (Organization+Store, WebSite, Product for the subscription, three Services matching the booking options, FAQPage matching the visible FAQ). Verified in-browser at 1440/768/390 (layout screenshots, no horizontal overflow at 390, mobile nav, scrollspy, calendar month switching, filters incl. empty state, full enquiry flow: empty-submit errors, bad postcode error, draft restore after an unplanned reload, successful submission with reference, sent list, privacy dialog). Keyboard: skip link, logical tab order audited, JS focus management on errors/success; trusted key events could not be dispatched by the embedded test browser, so button/radio activation was verified through the same click/submit event paths rather than raw key presses. prefers-reduced-motion is handled in CSS (animations/transitions/reveals/plate draw all collapse) but could not be emulated at runtime in this browser. Zero console errors observed across a full page walk; no external network requests. file:// was not directly openable by the embedded browser; the page uses no fetch/modules/CDN so it is expected to work from file:// (localStorage guarded with try/catch either way). Known limitations: enquiry/subscription are client-side only by design (storage-backed, nothing is transmitted); testimonials omitted deliberately in favour of verifiable process claims.",
+      "slug": "2026-11-09_glm-5.3-flash_site-brand_v1",
+      "path": "runs/2026-11-09_glm-5.3-flash_site-brand_v1/index.html",
+      "source_file": "site-brand__glm-5.3-flash__2026-11-09__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "assets/css/style.css",
+        "assets/favicon.svg",
+        "assets/fonts/archivo-var.woff2",
+        "assets/fonts/fraunces-var-italic.woff2",
+        "assets/fonts/fraunces-var.woff2",
+        "assets/fonts/plexmono-400.woff2",
+        "assets/fonts/plexmono-500.woff2",
+        "assets/fonts/plexmono-600.woff2",
+        "assets/img/bean.svg",
+        "assets/img/beetroot.svg",
+        "assets/img/carrot.svg",
+        "assets/img/chard.svg",
+        "assets/img/kale.svg",
+        "assets/img/leek.svg",
+        "assets/img/lettuce.svg",
+        "assets/img/nasturtium.svg",
+        "assets/img/pea.svg",
+        "assets/img/radish.svg",
+        "assets/img/squash.svg",
+        "assets/img/tomato.svg",
+        "assets/js/main.js",
+        "assets/og.png",
         "icons/icon-192.png",
         "icons/icon-512.png",
         "index.html",
