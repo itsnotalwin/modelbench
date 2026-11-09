@@ -4,7 +4,7 @@
 Own the canonical one-shot challenge briefs and the catalog that drives dashboard challenge labels and ZIP intake category validation.
 
 ## Key files
-- catalog.json — ten category slugs, titles, summaries, acceptance summaries and output count.
+- catalog.json — fifteen category slugs, titles, summaries, acceptance summaries and output count.
 - Numbered Markdown files — standalone model prompts with run parameters, requirements, acceptance checks and metadata contract.
 - README.md — suite index, evaluation philosophy, sources and submission process.
 

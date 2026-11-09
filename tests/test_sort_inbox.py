@@ -6,6 +6,7 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = ROOT
 SPEC = importlib.util.spec_from_file_location("sort_inbox_under_test", ROOT / "tools" / "sort_inbox.py")
 sorter = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(sorter)
@@ -223,6 +224,35 @@ class ZipMetadataRoutingTests(unittest.TestCase):
         self.assertEqual(sorter.parse("site-brand__gpt-6__2026-11-09__v1"), {
             "category": "site-brand", "model": "gpt-6", "date": "2026-11-09", "v": 1
         })
+
+
+class PromptCatalogIntegrityTests(unittest.TestCase):
+    def test_fifteen_one_shot_prompts_match_the_catalog(self):
+        catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
+        prompts = catalog["prompts"]
+        self.assertEqual(catalog["version"], 7)
+        self.assertEqual(catalog["outputs_per_prompt"], 1)
+        self.assertEqual(len(prompts), 15)
+        self.assertEqual([p["no"] for p in prompts], [f"{n:02d}" for n in range(1, 16)])
+        self.assertEqual(len({p["slug"] for p in prompts}), 15)
+        self.assertTrue(all(p["min_outputs"] == 1 for p in prompts))
+        new_files = {
+            "11": ("mosslight-isles", "11-mosslight-isles.md"),
+            "12": ("voxel-wilds", "12-voxel-wilds.md"),
+            "13": ("neon-alley", "13-neon-alley.md"),
+            "14": ("skyline-circuit", "14-skyline-circuit.md"),
+            "15": ("lantern-below", "15-lantern-below.md"),
+        }
+        by_number = {p["no"]: p for p in prompts}
+        for number, (slug, filename) in new_files.items():
+            challenge = by_number[number]
+            self.assertEqual(challenge["slug"], slug)
+            body = (REPO_ROOT / "prompts" / filename).read_text(encoding="utf-8")
+            self.assertIn(f'"category": "{slug}"', body)
+            self.assertIn(f'"prompt": "{number}"', body)
+            self.assertIn(f'"prompt_label": "{challenge["title"]}"', body)
+            self.assertIn("exactly one folder", body)
+            self.assertIn("meta.json", body)
 
 
 if __name__ == "__main__":

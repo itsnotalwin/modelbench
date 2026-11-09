@@ -4,7 +4,7 @@
 Hold regression tests for ModelBench import behavior and dashboard state utilities.
 
 ## Key files
-- test_sort_inbox.py — ZIP metadata routing, validation, collision safety and legacy HTML filename parsing.
+- test_sort_inbox.py — ZIP metadata routing, validation, collision safety, legacy HTML parsing and fifteen-prompt catalog integrity.
 - dashboard-ratings.test.js and test_dashboard_ui.py — existing dashboard rating and UI checks.
 
 ## Connections

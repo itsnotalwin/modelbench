@@ -1,8 +1,8 @@
 # ModelBench · One-shot build suite
 
-ModelBench now contains **10 one-shot build challenges**. Each prompt asks a model to create one substantial, usable product in one pass. One prompt produces one project folder; one ZIP contains that one project; its **meta.json** is the routing source of truth.
+ModelBench now contains **15 one-shot build challenges**. Each prompt asks a model to create one substantial, usable product in one pass. One prompt produces one project folder; one ZIP contains that one project; its **meta.json** is the routing source of truth.
 
-## The ten challenges
+## The fifteen challenges
 
 | # | Challenge | Category slug | Primary capability tested | Prompt |
 |---|---|---|---|---|
@@ -16,6 +16,17 @@ ModelBench now contains **10 one-shot build challenges**. Each prompt asks a mod
 | 08 | Living Systems Simulator | sim | Numerical modelling, coupled state, reproducibility and scientific communication | 08-simulation-lab.md |
 | 09 | Poster Foundry — Creative Production Studio | creative-studio | Direct manipulation, layers, editing history and real file export | 09-creative-studio.md |
 | 10 | Pulse Loom — Browser Music Workstation | music | Web Audio, sequencer timing, sound design, persistence and WAV export | 10-music-studio.md |
+| 11 | Mosslight Isles — 3D Colony Builder | mosslight-isles | 3D settlement simulation, worker AI, pathfinding and production logistics | 11-mosslight-isles.md |
+| 12 | Voxel Wilds — Block Survival Sandbox | voxel-wilds | Editable voxel rendering, first-person controls, crafting and persistent world state | 12-voxel-wilds.md |
+| 13 | Neon Alley '94 — 16-bit Beat-'em-up | neon-alley | Arcade combat, hitboxes, combos, enemy AI and boss telegraphs | 13-neon-alley.md |
+| 14 | Skyline Circuit — 3D Arcade Racer | skyline-circuit | 3D track, vehicle physics, rival AI, checkpoints and lap timing | 14-skyline-circuit.md |
+| 15 | The Lantern Below — Action Roguelite | lantern-below | Seeded dungeons, combat systems, enemy AI, relic builds and boss phases | 15-lantern-below.md |
+
+## Game-development focus
+
+The suite now contains **7 game challenges out of 15**. The five additions test distinct disciplines: a living 3D colony simulation, editable voxel survival, a 16-bit side-scrolling brawler, a 3D arcade racer and a seeded action roguelite. The broader web, data, productivity, simulation and creative challenges remain in the suite.
+
+The 3D colony brief uses broad settlement-simulation ideas: visible production chains, autonomous inhabitants, readable buildings, logistics and fog-shrouded islands. It is an original setting and implementation brief, not a request to reproduce another game's characters, art, levels or proprietary content. Background reference: [Pioneers of Pagonia official overview](https://www.pioneersofpagonia.com/) and [developer discussion of building art and readability](https://steamcommunity.com/games/2155180/announcements/detail/693094122829905929).
 
 ## Benchmark design principles and research
 
@@ -60,7 +71,7 @@ The importer uses model, category, date and version from the JSON. A ZIP filenam
 
 ## Shared ModelBench scorecard
 
-Keep these organizer-owned dimensions stable across all ten challenges:
+Keep these organizer-owned dimensions stable across all fifteen challenges:
 
 - **Completeness** — required features and acceptance criteria are genuinely present.
 - **Robustness** — edge cases, error states, persistence and state consistency.
