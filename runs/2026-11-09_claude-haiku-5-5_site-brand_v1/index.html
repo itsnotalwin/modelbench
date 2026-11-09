@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Burr &amp; Bevel: hand-honed knife sharpening, returned in seven days</title>
+<meta name="description" content="Burr &amp; Bevel hand-sharpens home and professional kitchen knives on water stones, checks every edge under magnification and returns them within seven days. Prices, process and pickup booking.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Burr &amp; Bevel">
+<meta property="og:title" content="Burr &amp; Bevel: hand-honed knives, returned in seven days">
+<meta property="og:description" content="Water-stone knife sharpening with a magnified edge check on every blade, and courier collection both ways.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M2 22L22 2v7L9 22z' fill='%23c23b22'/%3E%3C/svg%3E">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Burr & Bevel","slogan":"Hand-honed knives, returned in seven days","description":"Water-stone knife sharpening for home cooks and working kitchens, with courier collection and return included in every price."}</script>
+<style>
+:root{--mist:#e4e8e5;--slate:#1b2a2e;--steel:#56666b;--tomato:#c23b22;--deep:#142022;--rule:#b3bfbb;--d:"Franklin Gothic Medium","Franklin Gothic","Arial Narrow",Arial,sans-serif;--b:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif}
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--mist);color:var(--slate);font:400 1.0625rem/1.7 var(--b);-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--d);font-weight:400;line-height:1.02;letter-spacing:-.015em;margin:0}
+h1{font-size:clamp(2.7rem,6.6vw,6rem);max-width:12ch}
+h2{font-size:clamp(2rem,3.8vw,3.3rem);max-width:20ch;margin-bottom:20px}
+h3{font-size:1.5rem;letter-spacing:0;line-height:1.15;margin-bottom:10px}
+p{margin:0 0 1em}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--tomato);outline-offset:3px}
+.skip{position:absolute;left:-999px;top:0}
+.skip:focus{left:12px;top:12px;z-index:9;background:var(--slate);color:var(--mist);padding:10px 14px}
+.wrap{width:min(1180px,calc(100% - 48px));margin:0 auto}
+section{padding:clamp(72px,10vw,128px) 0;border-top:1px solid var(--rule)}
+.hero,.band{border-top:0}
+.lead{font-size:1.22rem;color:var(--steel);max-width:52ch}
+.btn{display:inline-block;font:600 1rem/1 var(--d);background:var(--tomato);color:#fff;border:0;border-radius:4px;padding:17px 24px;text-decoration:none;cursor:pointer;transition:background .2s}
+.btn:hover{background:#a52f19}
+.btn.sm{padding:11px 16px;font-size:.92rem}
+.btn.line{background:none;color:var(--slate);box-shadow:inset 0 0 0 1.5px var(--slate)}
+.btn.line:hover{background:var(--slate);color:var(--mist)}
+.text-link{font:600 1rem/1.2 var(--b);color:var(--slate);text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1.5px;background:none;border:0;padding:0;cursor:pointer}
+.text-link:hover{text-decoration-thickness:3px}
+.ctas{display:flex;flex-wrap:wrap;gap:16px 22px;align-items:center;margin-top:36px}
+header{position:sticky;top:0;z-index:5;background:var(--mist);border-bottom:1px solid var(--rule)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:14px 24px;flex-wrap:wrap;padding:14px 0}
+.mark{display:flex;align-items:center;gap:10px;font:400 1.5rem/1 var(--d);letter-spacing:-.01em;text-decoration:none}
+nav{min-width:0}
+nav ul{display:flex;gap:26px;align-items:center;list-style:none;margin:0;padding:6px 0;overflow-x:auto;white-space:nowrap;font-size:.95rem}
+nav a{color:var(--steel);text-decoration:none}
+nav a:hover{color:var(--slate);text-decoration:underline;text-underline-offset:4px}
+.hero{padding:clamp(56px,8vw,112px) 0 clamp(72px,9vw,120px)}
+.hero-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(40px,6vw,96px);align-items:center}
+figure{margin:0}
+.diagram{display:block;width:100%;height:auto}
+.edge{fill:none;stroke:var(--tomato);stroke-width:3.5;stroke-dasharray:100;animation:draw 1.2s .25s ease-out both}
+.axis{stroke:var(--steel);stroke-width:1.2;stroke-dasharray:4 6}
+.lbl{font:500 15px var(--d);fill:var(--slate)}
+.cap{font-size:.9rem;color:var(--steel);margin:18px 0 0}
+.spec{margin:14px 0 0;border-top:2px solid var(--slate)}
+.spec div{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--rule)}
+.spec dt{color:var(--steel)}
+.spec dd{margin:0;text-align:right}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}}
+@keyframes draw{from{stroke-dashoffset:100}}
+.hero h1{animation:rise .8s ease-out both}
+.hero .lead{animation:rise .8s .12s ease-out both}
+.hero .ctas{animation:rise .8s .24s ease-out both}
+.steps{list-style:none;padding:0;margin:56px 0 0;display:grid;grid-template-columns:repeat(4,1fr);gap:0 28px}
+.steps li{border-top:2px solid var(--slate);padding-top:22px}
+.step-no{display:block;font:400 2.6rem/1 var(--d);color:var(--tomato);margin-bottom:16px}
+.steps p{color:var(--steel);margin:0}
+.offers{margin-top:52px;border-top:2px solid var(--slate)}
+.offer{display:grid;grid-template-columns:1fr auto;gap:12px 40px;padding:30px 0;border-bottom:1px solid var(--rule);align-items:start}
+.offer p{color:var(--steel);max-width:60ch;margin:0}
+.offer .amt{color:var(--slate);font:400 2.8rem/1 var(--d);white-space:nowrap;text-align:right;margin:0}
+.amt small{font:400 1rem/1.4 var(--b);color:var(--steel);margin-left:4px}
+.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:44px;margin-top:56px}
+blockquote{margin:0;border-top:1px solid var(--slate);padding-top:24px}
+blockquote p{font:400 1.32rem/1.35 var(--d);letter-spacing:-.005em;margin:0 0 18px}
+cite{font-style:normal;color:var(--steel);font-size:.95rem}
+.band{background:var(--deep);color:var(--mist)}
+.band h2{color:var(--mist)}
+.band p,.band li{color:#c6d0cc}
+.about{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(40px,6vw,96px);align-items:start}
+.rules{list-style:none;margin:0;padding:0}
+.rules li{border-top:1px solid #3d5055;padding:24px 0}
+.rules strong{display:block;font:400 1.4rem/1.2 var(--d);color:var(--mist);margin-bottom:8px}
+.rules p{margin:0}
+.faq{margin-top:48px;max-width:860px}
+details{border-top:1px solid var(--rule);padding:24px 0}
+details:last-child{border-bottom:1px solid var(--rule)}
+summary{cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:24px;list-style:none;font:400 1.4rem/1.25 var(--d)}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"";flex:none;width:11px;height:11px;margin-top:10px;border-right:2px solid var(--slate);border-bottom:2px solid var(--slate);transform:rotate(45deg);transition:transform .2s}
+details[open] summary::after{transform:rotate(225deg)}
+details p{color:var(--steel);max-width:62ch;margin:14px 0 0}
+.book{display:grid;grid-template-columns:1fr 1.6fr;gap:clamp(40px,6vw,96px);align-items:start}
+.book > div > p{color:var(--steel)}
+form{display:grid;grid-template-columns:1fr 1fr;gap:22px 20px}
+.f{display:flex;flex-direction:column;gap:7px;min-width:0}
+.full{grid-column:1/-1}
+label,legend{font:600 .98rem/1.3 var(--d);letter-spacing:.01em}
+legend{padding:0;margin-bottom:8px}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+input,select,textarea{font:inherit;font-size:1rem;color:var(--slate);background:#f3f6f4;border:1.5px solid #7f8f8b;border-radius:4px;padding:12px 14px;width:100%}
+textarea{resize:vertical;min-height:96px}
+[aria-invalid="true"]{border-color:#9b2c1a;background:#fbeeea}
+.err{min-height:1.4em;margin:0;color:#9b2c1a;font-size:.92rem;line-height:1.35}
+.hint{color:var(--steel);font-size:.92rem;margin:0}
+.choices{display:flex;flex-wrap:wrap;gap:10px}
+.choices label{font:400 1rem/1.2 var(--b);display:inline-flex;align-items:center;gap:8px;padding:11px 14px;border:1.5px solid #7f8f8b;border-radius:4px;background:#f3f6f4;cursor:pointer}
+.choices label:has(input:checked){border-color:var(--slate);box-shadow:inset 0 0 0 1px var(--slate);background:#fff}
+.choices input{width:auto;accent-color:var(--tomato)}
+.foot-row{grid-column:1/-1;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px 28px;margin-top:6px}
+.agree{display:flex;gap:10px;align-items:flex-start;font:400 .98rem/1.5 var(--b);max-width:50ch;cursor:pointer}
+.agree input{width:auto;margin-top:6px;accent-color:var(--tomato)}
+.errbox{grid-column:1/-1;border:2px solid #9b2c1a;background:#fbeeea;padding:16px 18px;border-radius:4px}
+.errbox strong{display:block;margin-bottom:6px}
+.errbox ul{margin:0;padding-left:20px}
+.errbox a{color:#7d2214}
+.done{border-top:2px solid var(--slate);padding-top:28px}
+.done h3{font-size:2rem;max-width:22ch;margin-bottom:14px}
+.done .ctas{margin-top:28px}
+.foot{padding:48px 0 56px;border-top:1px solid var(--rule);font-size:.95rem}
+.foot p{margin:0 0 6px}
+.fine{color:var(--steel);font-size:.9rem;max-width:70ch}
+@media (max-width:1000px){.hero-grid,.about,.book{grid-template-columns:1fr}.steps{grid-template-columns:1fr 1fr;row-gap:44px}.quotes{grid-template-columns:1fr;gap:40px}}
+@media (max-width:720px){.wrap{width:calc(100% - 36px)}.bar .btn{order:2}nav{order:3;flex:1 1 100%}.mark{font-size:1.3rem}form{grid-template-columns:1fr}.steps{grid-template-columns:1fr}.offer{grid-template-columns:1fr}.offer .amt{text-align:left}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header>
+  <div class="wrap bar">
+    <a class="mark" href="#top"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 22L22 2v7L9 22z" fill="#c23b22"/></svg>Burr &amp; Bevel</a>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#prices">Prices</a></li>
+        <li><a href="#stories">Stories</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#questions">Questions</a></li>
+      </ul>
+    </nav>
+    <a class="btn sm" href="#book">Book a pickup</a>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <h1>Your kitchen knives are duller than you think.</h1>
+      <p class="lead">We hand-sharpen home and professional kitchen knives on water stones, check every edge under 20&times; magnification, and return them within seven days. The courier collects and brings them back at no extra charge, and we never reshape a blade you didn&rsquo;t ask us to touch.</p>
+      <div class="ctas">
+        <a class="btn" href="#book">Book a free pickup</a>
+        <a class="text-link" href="#prices">See prices</a>
+      </div>
+    </div>
+    <figure>
+      <svg class="diagram" viewBox="0 0 480 300" role="img" aria-labelledby="bt bd">
+        <title id="bt">Bevel angle</title>
+        <desc id="bd">Cross-section of a knife edge with the bevel angled 15 degrees from the centreline.</desc>
+        <line class="axis" x1="240" y1="24" x2="240" y2="262"/>
+        <path class="edge" pathLength="100" d="M240 260L286.6 86"/>
+        <path d="M240 210A50 50 0 0 1 252.9 211.7" fill="none" stroke="#1b2a2e" stroke-width="1.5"/>
+        <text class="lbl" x="232" y="40" text-anchor="end">centreline</text>
+        <text class="lbl" x="264" y="236">15&deg;</text>
+        <text class="lbl" x="250" y="284">edge</text>
+        <text class="lbl" x="300" y="78">bevel, 15&deg; per side</text>
+      </svg>
+      <figcaption class="cap">Example work order, WO-2041</figcaption>
+      <dl class="spec">
+        <div><dt>Knife</dt><dd>Gyuto, 240 mm, carbon steel</dd></div>
+        <div><dt>Edge after stones</dt><dd>Burr removed, checked at 20&times;</dd></div>
+        <div><dt>Paper-slice test</dt><dd>Pass</dd></div>
+        <div><dt>Back to you</dt><dd>Day 6</dd></div>
+      </dl>
+    </figure>
+  </div>
+</section>
+
+<section id="how" aria-labelledby="how-h">
+  <div class="wrap">
+    <h2 id="how-h">Four steps, one blade at a time.</h2>
+    <p class="lead">Every knife follows the same routine, from a $9 paring knife to a hand-forged santoku. Nothing is ground on a belt, and nothing goes back without a test cut.</p>
+    <ol class="steps">
+      <li><span class="step-no">1</span><h3>Book</h3><p>Tell us how many knives are coming and the earliest day the courier can collect. We confirm the slot within one working day.</p></li>
+      <li><span class="step-no">2</span><h3>Assess</h3><p>We look at each edge under magnification, note chips and rust, and tell you before we start about anything we can&rsquo;t fix.</p></li>
+      <li><span class="step-no">3</span><h3>Hone</h3><p>We set the bevel by hand on stones from 1000 to 6000 grit, then strop the edge to remove the wire burr.</p></li>
+      <li><span class="step-no">4</span><h3>Return</h3><p>Each knife is tested on printer paper and a ripe tomato, photographed, and boxed for the courier back to you.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section id="prices" aria-labelledby="prices-h">
+  <div class="wrap">
+    <h2 id="prices-h">Priced by the job, not by the blade.</h2>
+    <p class="lead">Every price includes courier collection and return, the stone work, and a written edge report with photos. All prices are in US dollars.</p>
+    <div class="offers">
+      <div class="offer">
+        <div><h3>Edge refresh</h3><p>For knives still in good shape that need their edge back. We keep the existing profile and bevel angle.</p></div>
+        <p class="amt">$12<small>per knife</small></p>
+      </div>
+      <div class="offer">
+        <div><h3>Full restore</h3><p>Chips, rolled edges and blades thinned by years of honing. We repair on a diamond plate, reset the bevel and tighten loose handles.</p></div>
+        <p class="amt">$28<small>per knife</small></p>
+      </div>
+      <div class="offer">
+        <div><h3>Kitchen rotation</h3><p>Up to four knives collected every six weeks on a standing slot, with a rust check on every visit. Pause or cancel with 24 hours&rsquo; notice.</p></div>
+        <p class="amt">$65<small>per month</small></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stories" aria-labelledby="stories-h">
+  <div class="wrap">
+    <h2 id="stories-h">Written by the people who cook with them.</h2>
+    <div class="quotes">
+      <blockquote>
+        <p>&ldquo;My santoku came back the same shape it went in, with an edge that bites into tomato skin instead of skating off it. Six days door to door.&rdquo;</p>
+        <cite>Dev R., line cook</cite>
+      </blockquote>
+      <blockquote>
+        <p>&ldquo;I&rsquo;d put off a full restore on my grandmother&rsquo;s chef&rsquo;s knife for two years. The report with photos made the decision, and the chip in the heel is gone.&rdquo;</p>
+        <cite>Marisol A., home cook</cite>
+      </blockquote>
+      <blockquote>
+        <p>&ldquo;Booked on a Tuesday, courier came Thursday, knives back the following Tuesday. I like that they tell you what they won&rsquo;t do.&rdquo;</p>
+        <cite>Jun T., caterer</cite>
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="band" aria-labelledby="about-h">
+  <div class="wrap about">
+    <div>
+      <h2 id="about-h">Tomas Reyes sharpens every knife himself.</h2>
+      <p>Tomas spent eleven years on restaurant lines before he learned to set a bevel by hand. Burr &amp; Bevel started in a converted garage with two stones and a loupe, and every edge still gets done in the same room, on the same stones.</p>
+      <p>One sharpener, one routine. That is deliberate: you always know who has your knives, and the same person checks the edge before it leaves.</p>
+    </div>
+    <ul class="rules">
+      <li><strong>We won&rsquo;t reshape a blade you didn&rsquo;t ask us to.</strong><p>Thinning or grinding costs steel, and steel doesn&rsquo;t grow back.</p></li>
+      <li><strong>We&rsquo;ll tell you before we start if a knife is past saving.</strong><p>Nothing is charged until you approve the work, and damaged blades go back to you as they arrived.</p></li>
+    </ul>
+  </div>
+</section>
+
+<section id="questions" aria-labelledby="q-h">
+  <div class="wrap">
+    <h2 id="q-h">The questions people ask before they post a knife.</h2>
+    <div class="faq">
+      <details>
+        <summary>Will you change the shape of my knife?</summary>
+        <p>Only if you ask. An edge refresh keeps the existing profile. If the blade is thinned or chipped, we give you the cost of restoring the shape before we start.</p>
+      </details>
+      <details>
+        <summary>Do you sharpen serrated or ceramic knives?</summary>
+        <p>We don&rsquo;t sharpen serrations. The scallops need a tapered rod and a steady hand that a stone can&rsquo;t give. Ceramic can&rsquo;t be honed on stones, so we tell you at assessment whether it is worth sending elsewhere.</p>
+      </details>
+      <details>
+        <summary>What happens if a knife can&rsquo;t be saved?</summary>
+        <p>We stop, send you photos of the damage, and return the knife as it arrived. You pay nothing for the assessment or the return.</p>
+      </details>
+      <details>
+        <summary>How are the knives packed?</summary>
+        <p>Each blade is wrapped in a paper sleeve with the edge covered, then boxed with cardboard guards. Knives longer than 250 mm travel in their own box.</p>
+      </details>
+      <details>
+        <summary>Can I cancel a booking?</summary>
+        <p>Yes, free of charge, up to 24 hours before the courier slot. Quote the reference from your booking summary when you get in touch.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section id="book" aria-labelledby="book-h">
+  <div class="wrap book">
+    <div>
+      <h2 id="book-h">Tell us what&rsquo;s coming.</h2>
+      <p class="lead">It takes about two minutes. Your booking is saved in this browser, and you can download a summary to keep with your knives.</p>
+      <p>Courier collection is free, and we confirm the slot within one working day.</p>
+    </div>
+    <div>
+      <form id="booking" novalidate>
+        <div id="errs" class="errbox" role="alert" hidden>
+          <strong>Fix these before we can book:</strong>
+          <ul id="errs-list"></ul>
+        </div>
+
+        <div class="f">
+          <label for="name">Full name</label>
+          <input id="name" name="name" autocomplete="name">
+          <p class="err" id="name-e"></p>
+        </div>
+        <div class="f">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email">
+          <p class="err" id="email-e"></p>
+        </div>
+        <div class="f">
+          <label for="postal">Postal code</label>
+          <input id="postal" name="postal" autocomplete="postal-code">
+          <p class="err" id="postal-e"></p>
+        </div>
+        <div class="f">
+          <label for="count">Number of knives</label>
+          <select id="count" name="count"><option value="">Choose a number</option></select>
+          <p class="err" id="count-e"></p>
+        </div>
+
+        <fieldset class="f full" id="svc">
+          <legend>Service</legend>
+          <div class="choices">
+            <label><input type="radio" name="service" value="refresh"> Edge refresh</label>
+            <label><input type="radio" name="service" value="restore"> Full restore</label>
+            <label><input type="radio" name="service" value="rotation"> Kitchen rotation</label>
+          </div>
+          <p class="err" id="svc-e"></p>
+        </fieldset>
+
+        <div class="f">
+          <label for="date">Earliest pickup day</label>
+          <input id="date" name="date" type="date">
+          <p class="err" id="date-e"></p>
+        </div>
+        <div class="f">
+          <label for="notes">Notes for the sharpener (optional)</label>
+          <textarea id="notes" name="notes" rows="3" maxlength="300" aria-describedby="notes-h"></textarea>
+          <p class="hint" id="notes-h"><span id="cnt">0</span> of 300 characters. Mention chips, loose handles or anything we should know.</p>
+        </div>
+
+        <div class="foot-row">
+          <label class="agree"><input type="checkbox" id="terms" name="terms"> I understand nothing is charged until I approve the work.</label>
+          <button class="btn" type="submit">Book pickup</button>
+        </div>
+        <p class="err full" id="terms-e"></p>
+      </form>
+
+      <div id="done" class="done" hidden tabindex="-1">
+        <h3>Booked. Your reference is <span id="ref"></span>.</h3>
+        <p id="done-msg"></p>
+        <div class="ctas">
+          <button class="btn line" type="button" id="dl">Download summary</button>
+          <button class="text-link" type="button" id="again">Book another</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p><strong>Burr &amp; Bevel</strong>, hand-honed knives returned in seven days.</p>
+    <p class="fine">Bookings are stored only in this browser, and clearing site data removes them. This page sends nothing to a server.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var KEY = 'burr-bevel-bookings';
+  var form = document.getElementById('booking');
+  var count = document.getElementById('count');
+  var date = document.getElementById('date');
+  var notes = document.getElementById('notes');
+  var current = null;
+  var tried = false;
+  function $(id) { return document.getElementById(id); }
+
+  for (var i = 1; i <= 10; i++) {
+    var o = document.createElement('option');
+    o.value = i;
+    o.textContent = i + (i === 1 ? ' knife' : ' knives');
+    count.appendChild(o);
+  }
+
+  var t = new Date();
+  t.setMinutes(t.getMinutes() - t.getTimezoneOffset());
+  var today = t.toISOString().slice(0, 10);
+  date.min = today;
+
+  notes.addEventListener('input', function () { $('cnt').textContent = notes.value.length; });
+
+  var RULES = [
+    ['name', 'Add your name so we know whose knives these are.', function () { return $('name').value.trim().length > 1; }],
+    ['email', 'That email doesn\u2019t look right. Check for a missing @ or a typo after the last dot.', function () { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test($('email').value.trim()); }],
+    ['postal', 'Postal codes use letters, numbers, spaces or dashes, usually 3 to 10 characters.', function () { return /^[A-Za-z0-9][A-Za-z0-9 -]{1,8}[A-Za-z0-9]$/.test($('postal').value.trim()); }],
+    ['count', 'Choose how many knives are coming, from 1 to 10.', function () { return count.value !== ''; }],
+    ['svc', 'Choose the service you want. We can change it after we assess the blades.', function () { return !!form.querySelector('input[name=service]:checked'); }],
+    ['date', 'Pick a day from today onwards, when the courier can collect.', function () { return date.value !== '' && date.value >= today; }],
+    ['terms', 'Tick the box to confirm you\u2019re happy with the terms.', function () { return $('terms').checked; }]
+  ];
+
+  function check() {
+    var bad = [];
+    RULES.forEach(function (r) {
+      var ok = r[2]();
+      var el = $(r[0]);
+      $(r[0] + '-e').textContent = ok ? '' : r[1];
+      if (el && el.tagName !== 'FIELDSET') el.setAttribute('aria-invalid', ok ? 'false' : 'true');
+      if (!ok) bad.push(r);
+    });
+    return bad;
+  }
+
+  form.addEventListener('input', function () { if (tried) check(); });
+  form.addEventListener('change', function () { if (tried) check(); });
+
+  function makeRef() {
+    return 'BB-' + (Date.now().toString(36) + Math.random().toString(36).slice(2)).slice(-5).toUpperCase();
+  }
+
+  function summaryText(b) {
+    return [
+      'Burr & Bevel: booking summary', '',
+      'Reference: ' + b.ref,
+      'Name: ' + b.name,
+      'Email: ' + b.email,
+      'Postal code: ' + b.postal,
+      'Knives: ' + b.knives,
+      'Service: ' + b.service,
+      'Earliest pickup day: ' + b.pickup,
+      'Notes: ' + (b.notes || 'none'),
+      'Booked: ' + b.booked, '',
+      'Courier collection and return are included in the price. Keep this with your knives.'
+    ].join('\n');
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    tried = true;
+    var bad = check();
+    var box = $('errs');
+    var list = $('errs-list');
+    if (bad.length) {
+      list.innerHTML = '';
+      bad.forEach(function (r) {
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.href = '#' + r[0];
+        a.textContent = r[1];
+        li.appendChild(a);
+        list.appendChild(li);
+      });
+      box.hidden = false;
+      var first = $(bad[0][0]);
+      (first.tagName === 'FIELDSET' ? form.querySelector('input[name=service]') : first).focus();
+      return;
+    }
+    box.hidden = true;
+
+    var checked = form.querySelector('input[name=service]:checked');
+    var b = {
+      ref: makeRef(),
+      name: $('name').value.trim(),
+      email: $('email').value.trim(),
+      postal: $('postal').value.trim().toUpperCase(),
+      knives: count.value,
+      service: checked.labels[0].textContent.trim(),
+      pickup: date.value,
+      notes: notes.value.trim(),
+      booked: new Date().toISOString()
+    };
+
+    var saved = true;
+    try {
+      var stored = JSON.parse(localStorage.getItem(KEY) || '[]');
+      stored.push(b);
+      localStorage.setItem(KEY, JSON.stringify(stored));
+    } catch (err) {
+      saved = false;
+    }
+
+    current = b;
+    $('ref').textContent = b.ref;
+    $('done-msg').textContent = saved
+      ? 'Your booking is saved in this browser. Download the summary to keep a copy with your knives.'
+      : 'This browser blocked saving, so the booking exists only on this page. Download the summary now, before you leave.';
+    form.hidden = true;
+    $('done').hidden = false;
+    $('done').focus();
+  });
+
+  $('dl').addEventListener('click', function () {
+    if (!current) return;
+    try {
+      var url = URL.createObjectURL(new Blob([summaryText(current)], { type: 'text/plain' }));
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = current.ref + '.txt';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+    } catch (err) {
+      $('done-msg').textContent = 'Your browser blocked the download. Write down the reference above.';
+    }
+  });
+
+  $('again').addEventListener('click', function () {
+    form.reset();
+    form.hidden = false;
+    $('done').hidden = true;
+    current = null;
+    tried = false;
+    $('cnt').textContent = '0';
+    date.min = today;
+    document.querySelectorAll('[aria-invalid]').forEach(function (el) { el.removeAttribute('aria-invalid'); });
+    document.querySelectorAll('.err').forEach(function (p) { p.textContent = ''; });
+    $('errs').hidden = true;
+    $('name').focus();
+  });
+})();
+</script>
+</body>
+</html>
