@@ -12,52 +12,67 @@ Use the resolved values in both the output folder and `meta.json`. Do not pause 
 
 ## The challenge
 
-Create one extraordinary, original, complete, browser-playable story-driven game. This is the highest-difficulty challenge in the suite. You are the creative director, writer, narrative designer, game designer, art director, sound designer and engineer. Choose the genre, perspective (2D, 3D, isometric or another suitable form), setting, tone, player fantasy, mechanics and presentation yourself. Do not assume a puzzle game or any other default genre. Invent a distinctive game that you can bring all the way from its opening scene to a satisfying ending.
+Produce a complete, original, story-driven game from title screen to credits: an original, coherent storyline, a playable protagonist with wants and flaws, a supporting cast with their own arcs, a plot with a shape, playable systems that carry the themes, authored content that rewards attention, and a complete ending that resolves what the story opened.
 
-**Use the full capability of your environment.** Proactively use every relevant tool and resource actually available to you: coding and execution, asset creation, image or illustration generation, audio or music generation, browser testing, and other supported creative or development tools. Create bespoke assets when those tools are available. If a capability is unavailable, do not pretend to have used it: produce a strong local alternative using code, SVG/canvas/geometry, procedural illustration or Web Audio. Do not ask the organiser to enable tools or approve ordinary creative decisions. Do not make the finished game depend on remote services or unavailable tools.
+You invent everything — genre, setting, characters, conflict, tone, art direction, audio language, progression and length. The target is a small but genuinely finished game: a short story you can play, not a demo with a plot attached.
 
-## Quality bar
+## Who you are building for — mobile first
 
-Treat this as a complete game production, not a prototype or a collection of disconnected features.
+Assume a real person opens this on a phone, one hand, half-engaged, on a patchy connection, and has never seen your work before. That person is the primary user; the desktop is the second screen.
 
-**Narrative and characters**
-- Write an original, coherent storyline with a strong opening, escalation, turning point, climax and satisfying ending. Structure it into at least three meaningful acts, chapters or equivalent story movements.
-- Create a playable protagonist with a clear identity, motivation, conflict and character development.
-- Create a memorable supporting cast. Give important characters distinct voices, motivations, relationships and arcs. Their actions should matter to the story or gameplay.
-- Write actual dialogue and scenes. Use conversations, environmental storytelling, discoveries, journals, cinematic moments or other genre-appropriate methods. Avoid lorem ipsum and generic placeholder dialogue.
-- Include meaningful player choices or decisions whose consequences affect relationships, events, available paths, resources or the ending. Do not fake branching with cosmetic dialogue buttons.
-- Build a world with history, places, factions, culture or internal logic appropriate to the story. Reveal it through play rather than dumping an encyclopedia on the player.
+- Design the phone layout first at 390 x 844, then scale up. Nothing may break at 320px; nothing may feel like a stretched phone at 1440px.
+- Nothing important may live behind hover. Every action needs a touch path, tap targets at least 44 x 44px with breathing room between them, and gestures that do not fight the browser.
+- Use dynamic viewport units (`100dvh`), respect safe-area insets, keep scrolling native, and never trap the page inside a fixed-height container.
+- Type must be readable at arm's length without zooming: body text at least 16px, line lengths roughly 45-75 characters, contrast at WCAG AA or better in both light and dark contexts you create.
+- Assume a mid-range Android rather than a workstation: keep the first load small, defer what is not needed, and stay smooth while scrolling and while animating.
 
-**Gameplay and structure**
-- Design a compelling core loop that supports the story and player fantasy.
-- Implement at least four substantial gameplay systems that interact with one another. Choose systems appropriate to the genre: examples include traversal, combat, stealth, investigation, dialogue, relationships, crafting, resource management, tactics, abilities, exploration, environmental simulation, vehicles, rhythm or world events. These are examples, not a prescribed feature list.
-- Include at least three authored missions, quests, chapters, major encounters or equivalent playable story beats.
-- Make progression meaningful. Unlocks, abilities, discoveries and character/story developments should change what the player can do or how the world responds.
-- Provide a complete arc from onboarding through the middle and climax to an actual ending. Deliver a complete ending that resolves the central story. Include failure/recovery, restart and replay handling appropriate to the design.
+## The bar
 
-**Art, sound and presentation**
-- Establish a distinctive visual identity and carry it consistently through characters, environments, animation, interface and narrative presentation.
-- Use bespoke art assets where possible. Give characters readable silhouettes and expressive animation; make environments feel authored, varied and alive.
-- Create atmosphere through lighting, composition, particles, camera work, transitions and effects where appropriate.
-- Include intentional music, ambience and sound effects. Provide mute and volume controls; respect browser audio policies and remain playable without sound.
-- Design menus, dialogue, journal/quest log, inventory, HUD, settings and ending screens as one coherent interface system, including only the components the game genuinely needs.
+- A complete narrative arc with a beginning, a middle that complicates, and an ending that pays off. Setup, escalation, reversal, climax, resolution — visible in what the player does, not only in text.
+- A protagonist worth following and a supporting cast with their own wants, each with an arc that moves because of what happens. Write actual dialogue and scenes that sound like people, with subtext, and at least one moment that lands emotionally because the mechanics caused it.
+- The design must carry at least four substantial gameplay systems that reinforce the story — dialogue with choices and consequences, inventory or resources, relationships or reputation, quests or chapters, combat or traversal, crafting or upgrading, a journal or codex, day/night or time pressure. They must talk to each other, not sit in separate panels.
+- Authored content with real structure: at least three authored missions or chapters that each have a shape, optional discoveries, environmental storytelling, and reasons to explore that are not just collectible counters.
+- Presentation as authorship: a visual direction carried through UI, typography, colour scripting, transitions and effects; an audio language of music and feedback built in code; pacing that breathes.
+- Persistence and flow: save and load of meaningful state, chapter resumes, settings, pause, restart, and a credits or epilogue that closes the loop.
+- A finished ending. Not "to be continued", not a fade to black with an apology.
 
-**Reliability and finish**
-- Save meaningful progress, choices, settings and unlocks locally. Validate/version saved data and recover safely from missing or malformed saves.
-- Make every control and interaction functional. Keep the game responsive and usable on desktop and mobile with genre-appropriate controls.
-- Keep the experience self-contained for static hosting. Do not require a backend, private API, secret key, account or manual build step.
-- Test the actual play experience, including a representative story path, meaningful choice, progression, save/reload and ending when browser tools are available. Report honestly what you did and did not test.
+## Creative freedom — the concept is yours
 
-The final result should feel like a small but complete game release with a world worth inhabiting, characters worth remembering and a story that reaches its conclusion. Scope intelligently: a focused, beautifully realised experience beats an enormous unfinished promise.
+We are scoring execution, not obedience. Choose the subject, the people, the tone, the structure, the visual language and the implementation yourself. Do not ask questions, do not offer a menu of options, do not wait for approval: commit to one strong direction and carry it all the way through.
+
+Then avoid anything that smells templated: no stock hero-plus-three-cards landing page, no framework demo aesthetic, no lorem ipsum, no "your text here", no fake logos in a trust bar, no icon soup. Have a point of view, and hold it consistently across every screen, state and error message.
+
+## Work like a studio — use everything your environment gives you
+
+Use the full capability of your environment — not just text generation — and work like a studio shipping a product:
+
+- **Files.** Write real files to disk; never paste the deliverable into chat.
+- **Shell.** If you have a terminal, use it: scaffold, count assets, serve the build locally, check total payload size.
+- **Browser.** If you have a browser, devtools, a screenshot tool or automation, use them: load the real build, watch the console, click through every flow, resize to phone width, look at what renders, and fix what you see. A build you have not looked at is not finished.
+- **Tooling.** If you have linters, formatters, type checkers or test runners, run them and fix what they report.
+- **Generation.** If you can synthesise or generate assets — SVG, canvas, WebGL/shaders, procedural textures, fonts, audio, images, video — or optimise them, do it deliberately. Production-grade assets you made beat grey placeholder boxes every time.
+- **Measurement.** If you can measure load time, layout shift, paint and frame rate, measure them, then improve the numbers you do not like.
+
+Verify, fix, re-verify. Report only what you actually observed; if a capability was unavailable, say so plainly in the `meta.json` notes instead of implying a test you did not run.
+
+## Acceptance — a reviewer will check
+
+1. One folder, `index.html` plays cold in a current browser, no console errors.
+2. Title, opening hook, playable middle, climax, resolution, credits.
+3. A cast with arcs and dialogue with consequences.
+4. Four or more systems that visibly interact.
+5. Save/load returns the player to a coherent state.
+6. Art, sound and pacing are cohesive enough to feel authored by one mind.
 
 ## Technical and delivery expectations
 
-- Build a browser-first project that runs from `index.html` on static hosting. Use local files and dependable dependencies.
-- Do not require a backend, private API, secret key, account, build service or manual setup for the core experience.
-- Include only files required by this one finished project. Keep assets local; do not make essential functionality depend on fragile remote services.
-- Make the interface responsive, keyboard-usable, accessible and respectful of reduced-motion preferences.
-- Every visible control must work. Avoid dead buttons, fake interactions, placeholder panels and unimplemented claims.
-- Test the actual experience in a browser when available. Otherwise perform a careful code-level smoke check and disclose the limitation honestly. Never claim tests that were not run.
+- One browser-first project that runs from `index.html` on static hosting — no server, build step, secret key, paid API, external account or manual setup for the core experience.
+- Self-contained and portable: local assets, relative paths, works from a repository subfolder and, where the browser allows, from `file://`.
+- No placeholder content, dead controls, fake interactions or console errors. Every visible control produces a real outcome.
+- Accessible by default: semantic landmarks, labelled controls, visible focus, a keyboard path through every flow, reduced-motion support, and colour that never carries meaning alone.
+- Every asset earns its bytes. State a payload budget for the first view and hold it.
+- Robust under abuse: empty data, huge data, rapid input, interrupted storage, resized window, backgrounded tab, lost connection. Guard storage access with `try/catch` and never lose the user's work silently.
+- Test the actual experience in a browser when available. Otherwise do a careful code-level smoke check and disclose the limitation honestly. Never claim a test you did not run.
 
 ## Submission contract — mandatory
 

@@ -12,20 +12,66 @@ Use the resolved values in both the output folder and `meta.json`. Do not pause 
 
 ## The challenge
 
-Create one complete, original, browser-playable 3D game. You choose the genre, subgenre, premise, world, player role, tone, art direction, camera, mechanics, controls, objective and progression. Any genre is valid: do not assume exploration, racing, combat, survival, building or any other particular format. The result must be a genuinely interactive 3D game, not a 3D scene with a token control.
+Design and build one complete original 3D game that could not be flattened into 2D without losing something essential. Genre, premise, world, player role, tone, art direction, camera model, mechanics, objective and progression are yours. Exploration, racing, combat, stealth, survival, building, physics play, spatial puzzle, flight — or something stranger. Do not assume a familiar format and do not offer alternatives: decide and build.
 
-## Quality bar
+This must be a game, not a 3D scene with a camera attached.
 
-Build a real three-dimensional environment with convincing scale, depth, composition, lighting and meaningful spatial design. Implement responsive player interaction and a camera appropriate to your chosen genre. The world must contain authored content and meaningful things to do. Create a playable objective and progression, useful feedback, appropriate start/pause/restart/completion states and reliable input. Use 3D geometry and interaction as core gameplay, not just a decorative background. Support desktop and touch where practical, handle resizing and rendering failures, and keep performance stable.
+## Who you are building for — mobile first
+
+Assume a real person opens this on a phone, one hand, half-engaged, on a patchy connection, and has never seen your work before. That person is the primary user; the desktop is the second screen.
+
+- Design the phone layout first at 390 x 844, then scale up. Nothing may break at 320px; nothing may feel like a stretched phone at 1440px.
+- Nothing important may live behind hover. Every action needs a touch path, tap targets at least 44 x 44px with breathing room between them, and gestures that do not fight the browser.
+- Use dynamic viewport units (`100dvh`), respect safe-area insets, keep scrolling native, and never trap the page inside a fixed-height container.
+- Type must be readable at arm's length without zooming: body text at least 16px, line lengths roughly 45-75 characters, contrast at WCAG AA or better in both light and dark contexts you create.
+- Assume a mid-range Android rather than a workstation: keep the first load small, defer what is not needed, and stay smooth while scrolling and while animating.
+
+## The bar
+
+- A real three-dimensional space with deliberate composition: scale that reads, landmarks you navigate by, depth cues, lighting that defines mood, and geometry that suggests a place rather than a test level.
+- A movement and camera model that feels good before anything else happens: acceleration and damping, collision that respects the environment, a camera that never fights the player, and input that works with keyboard, pointer and touch.
+- A purposeful objective with visible progress, meaningful things to find or do, authored content (encounters, hazards, collectibles, puzzles, routes), and an ending state worth reaching.
+- 3D as mechanics, not decoration: spatial reasoning, line of sight, momentum, height, occlusion or physics in the core loop.
+- Rendering that holds up: stable frame rate on a mid-range machine with an adaptive quality path, correct aspect and pixel ratio handling, no z-fighting soup, no unlit default-material look, graceful behaviour on resize or context loss.
+- Sound and interface that support immersion: positional or reactive audio, a HUD that says only what is needed, and a pause/restart flow that is always available.
+
+## Creative freedom — the concept is yours
+
+We are scoring execution, not obedience. Choose the subject, the people, the tone, the structure, the visual language and the implementation yourself. Do not ask questions, do not offer a menu of options, do not wait for approval: commit to one strong direction and carry it all the way through.
+
+Then avoid anything that smells templated: no stock hero-plus-three-cards landing page, no framework demo aesthetic, no lorem ipsum, no "your text here", no fake logos in a trust bar, no icon soup. Have a point of view, and hold it consistently across every screen, state and error message.
+
+## Work like a studio — use everything your environment gives you
+
+You are not writing an answer, you are shipping a product. Use every capability you actually have, in this order of preference:
+
+- **Files.** Write real files to disk; never paste the deliverable into chat.
+- **Shell.** If you have a terminal, use it: scaffold, count assets, serve the build locally, check total payload size.
+- **Browser.** If you have a browser, devtools, a screenshot tool or automation, use them: load the real build, watch the console, click through every flow, resize to phone width, look at what renders, and fix what you see. A build you have not looked at is not finished.
+- **Tooling.** If you have linters, formatters, type checkers or test runners, run them and fix what they report.
+- **Generation.** If you can synthesise or generate assets — SVG, canvas, WebGL/shaders, procedural textures, fonts, audio, images, video — or optimise them, do it deliberately. Production-grade assets you made beat grey placeholder boxes every time.
+- **Measurement.** If you can measure load time, layout shift, paint and frame rate, measure them, then improve the numbers you do not like.
+
+Verify, fix, re-verify. Report only what you actually observed; if a capability was unavailable, say so plainly in the `meta.json` notes instead of implying a test you did not run.
+
+## Acceptance — a reviewer will check
+
+1. One folder, `index.html` plays cold in a current browser, no console errors.
+2. The 3D is genuine: camera, depth, collision, spatial content.
+3. Movement and camera feel controlled on desktop and on a phone.
+4. A clear objective with progress and a completion state.
+5. Frame rate holds; the scene does not look like default primitives.
+6. It reads as a game, not a tech demo.
 
 ## Technical and delivery expectations
 
-- Build a browser-first project that runs from `index.html` on static hosting. Use local files and dependable dependencies.
-- Do not require a backend, private API, secret key, account, build service or manual setup for the core experience.
-- Include only files required by this one finished project. Keep assets local; do not make essential functionality depend on fragile remote services.
-- Make the interface responsive, keyboard-usable, accessible and respectful of reduced-motion preferences.
-- Every visible control must work. Avoid dead buttons, fake interactions, placeholder panels and unimplemented claims.
-- Test the actual experience in a browser when available. Otherwise perform a careful code-level smoke check and disclose the limitation honestly. Never claim tests that were not run.
+- One browser-first project that runs from `index.html` on static hosting — no server, build step, secret key, paid API, external account or manual setup for the core experience.
+- Self-contained and portable: local assets, relative paths, works from a repository subfolder and, where the browser allows, from `file://`.
+- No placeholder content, dead controls, fake interactions or console errors. Every visible control produces a real outcome.
+- Accessible by default: semantic landmarks, labelled controls, visible focus, a keyboard path through every flow, reduced-motion support, and colour that never carries meaning alone.
+- Every asset earns its bytes. State a payload budget for the first view and hold it.
+- Robust under abuse: empty data, huge data, rapid input, interrupted storage, resized window, backgrounded tab, lost connection. Guard storage access with `try/catch` and never lose the user's work silently.
+- Test the actual experience in a browser when available. Otherwise do a careful code-level smoke check and disclose the limitation honestly. Never claim a test you did not run.
 
 ## Submission contract — mandatory
 

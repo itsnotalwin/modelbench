@@ -12,20 +12,66 @@ Use the resolved values in both the output folder and `meta.json`. Do not pause 
 
 ## The challenge
 
-Create one complete, original, browser-playable 2D game. You choose the genre and subgenre, premise, setting, tone, art style, perspective, core activity, mechanics, controls, content structure and progression. Any game genre is valid. Do not default to puzzles or assume a platformer, shooter, action game, strategy game, simulation, racing game or any other familiar format. Choose one direction independently and make it coherent. Do not ask the organiser to choose or present multiple concepts.
+Design and build one complete original 2D game. You choose the genre and subgenre, premise, setting, tone, art style, perspective, controls, mechanics, content structure and progression — all of it is yours. Any game genre is valid. Puzzle, platformer, shooter, tactics, racing, rhythm, management, roguelike, sports, survival, narrative, or something without a name yet — all are welcome. Do not default to puzzles, do not default to the obvious, and do not present options: choose one direction and commit to it completely.
 
-## Quality bar
+The game must be playable within ten seconds of opening it, understandable without a manual, and worth a second run.
 
-Build a complete playable loop with a clear goal, meaningful decisions, rules that actually work and a satisfying outcome. Include enough designed content to demonstrate the chosen genre. Make movement, interaction, collision, simulation or opponent behaviour reliable wherever relevant. Give important actions immediate visual and/or audio feedback. Include a deliberate start/gameplay/pause/restart/result flow appropriate to the design. Choose controls that suit the game and support desktop and mobile sensibly. Persist progress, settings or results where appropriate. A small finished game is better than a large unfinished prototype.
+## Who you are building for — mobile first
+
+Assume a real person opens this on a phone, one hand, half-engaged, on a patchy connection, and has never seen your work before. That person is the primary user; the desktop is the second screen.
+
+- Design the phone layout first at 390 x 844, then scale up. Nothing may break at 320px; nothing may feel like a stretched phone at 1440px.
+- Nothing important may live behind hover. Every action needs a touch path, tap targets at least 44 x 44px with breathing room between them, and gestures that do not fight the browser.
+- Use dynamic viewport units (`100dvh`), respect safe-area insets, keep scrolling native, and never trap the page inside a fixed-height container.
+- Type must be readable at arm's length without zooming: body text at least 16px, line lengths roughly 45-75 characters, contrast at WCAG AA or better in both light and dark contexts you create.
+- Assume a mid-range Android rather than a workstation: keep the first load small, defer what is not needed, and stay smooth while scrolling and while animating.
+
+## The bar
+
+- A complete loop: a title or attract state, teaching that happens by playing, a core activity with real decisions, escalation that changes how you play, a fail or win state, and an instant restart. One run should feel finished, not truncated.
+- Mechanics that are actually simulated: movement with weight and acceleration, collision that never tunnels or snags, deterministic timing, delta-time everywhere, and rules the player can learn and exploit.
+- Game feel as a feature: hit-stop, easing, screen shake used with restraint, particles, squash and stretch, transitional animation, and audio feedback on every meaningful event. Synthesised sound is enough; silence is not.
+- Authored content and a coherent identity: a palette, a typeface or lettering treatment, character or object design, and a world with a point of view. Procedural content is welcome but must be seeded and shaped, not random noise.
+- Controls that suit the design: keyboard and pointer on desktop, real touch controls on phones (no "play on desktop" walls), and a pause that always works, including on tab blur.
+- Persistence of what matters: best score, progress, settings, with storage guarded and a clear reset.
+
+## Creative freedom — the concept is yours
+
+We are scoring execution, not obedience. Choose the subject, the people, the tone, the structure, the visual language and the implementation yourself. Do not ask questions, do not offer a menu of options, do not wait for approval: commit to one strong direction and carry it all the way through.
+
+Then avoid anything that smells templated: no stock hero-plus-three-cards landing page, no framework demo aesthetic, no lorem ipsum, no "your text here", no fake logos in a trust bar, no icon soup. Have a point of view, and hold it consistently across every screen, state and error message.
+
+## Work like a studio — use everything your environment gives you
+
+You are not writing an answer, you are shipping a product. Use every capability you actually have, in this order of preference:
+
+- **Files.** Write real files to disk; never paste the deliverable into chat.
+- **Shell.** If you have a terminal, use it: scaffold, count assets, serve the build locally, check total payload size.
+- **Browser.** If you have a browser, devtools, a screenshot tool or automation, use them: load the real build, watch the console, click through every flow, resize to phone width, look at what renders, and fix what you see. A build you have not looked at is not finished.
+- **Tooling.** If you have linters, formatters, type checkers or test runners, run them and fix what they report.
+- **Generation.** If you can synthesise or generate assets — SVG, canvas, WebGL/shaders, procedural textures, fonts, audio, images, video — or optimise them, do it deliberately. Production-grade assets you made beat grey placeholder boxes every time.
+- **Measurement.** If you can measure load time, layout shift, paint and frame rate, measure them, then improve the numbers you do not like.
+
+Verify, fix, re-verify. Report only what you actually observed; if a capability was unavailable, say so plainly in the `meta.json` notes instead of implying a test you did not run.
+
+## Acceptance — a reviewer will check
+
+1. One folder, `index.html` plays cold in a current browser, no console errors.
+2. The genre is model-chosen and coherent; the loop is complete and winnable or losable.
+3. Collision, timing and controls are reliable; no soft-locks, no frame-rate dependence.
+4. Feedback on every action: motion, particles, sound, UI response.
+5. Touch controls genuinely playable at 390px, keyboard on desktop.
+6. It is fun for at least five minutes, which is the whole point.
 
 ## Technical and delivery expectations
 
-- Build a browser-first project that runs from `index.html` on static hosting. Use local files and dependable dependencies.
-- Do not require a backend, private API, secret key, account, build service or manual setup for the core experience.
-- Include only files required by this one finished project. Keep assets local; do not make essential functionality depend on fragile remote services.
-- Make the interface responsive, keyboard-usable, accessible and respectful of reduced-motion preferences.
-- Every visible control must work. Avoid dead buttons, fake interactions, placeholder panels and unimplemented claims.
-- Test the actual experience in a browser when available. Otherwise perform a careful code-level smoke check and disclose the limitation honestly. Never claim tests that were not run.
+- One browser-first project that runs from `index.html` on static hosting — no server, build step, secret key, paid API, external account or manual setup for the core experience.
+- Self-contained and portable: local assets, relative paths, works from a repository subfolder and, where the browser allows, from `file://`.
+- No placeholder content, dead controls, fake interactions or console errors. Every visible control produces a real outcome.
+- Accessible by default: semantic landmarks, labelled controls, visible focus, a keyboard path through every flow, reduced-motion support, and colour that never carries meaning alone.
+- Every asset earns its bytes. State a payload budget for the first view and hold it.
+- Robust under abuse: empty data, huge data, rapid input, interrupted storage, resized window, backgrounded tab, lost connection. Guard storage access with `try/catch` and never lose the user's work silently.
+- Test the actual experience in a browser when available. Otherwise do a careful code-level smoke check and disclose the limitation honestly. Never claim a test you did not run.
 
 ## Submission contract — mandatory
 
