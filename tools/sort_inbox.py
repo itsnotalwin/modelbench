@@ -11,7 +11,7 @@ import stat
 import sys
 import tempfile
 import zipfile
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -40,10 +40,15 @@ class IntakeError(ValueError):
 
 
 def normalise_model(model: str) -> str:
-    """Turn a display-style model label into a stable lowercase slug."""
-    model = re.sub(r"[^a-z0-9.-]+", "-", model.strip().lower())
-    model = re.sub(r"-{2,}", "-", model).strip(".-")
-    return MODEL_ALIASES.get(model, model)
+    """Turn a display label into a slug, preferring a canonical provider/model suffix."""
+    label = model.strip().lower()
+    provider_slug = re.search(r"\((?:[^)]*/)([a-z0-9][a-z0-9.-]*)\)\s*$", label)
+    if provider_slug:
+        label = provider_slug.group(1)
+    else:
+        label = re.sub(r"[^a-z0-9.-]+", "-", label)
+    label = re.sub(r"-{2,}", "-", label).strip(".-")
+    return MODEL_ALIASES.get(label, label)
 
 
 def parse(stem: str):
@@ -66,6 +71,34 @@ def slug_for(info) -> str:
     return f"{info['date']}_{info['model']}_{info['category']}_v{info['v']}"
 
 
+def infer_from_matching_legacy_artifact(project_root: Path, model: str, run_date: str):
+    """Infer challenge/version only when the ZIP entry exactly matches a named legacy artifact."""
+    entry_path = project_root / "index.html"
+    if not entry_path.is_file():
+        return None
+    try:
+        entry_bytes = entry_path.read_bytes()
+    except OSError:
+        return None
+
+    matches = []
+    for candidate in ROOT.glob("*.html"):
+        info = parse(candidate.stem)
+        if not info or info["model"] != model or info["date"] != run_date:
+            continue
+        try:
+            if candidate.read_bytes() == entry_bytes:
+                matches.append((info, candidate.name))
+        except OSError:
+            continue
+
+    unique = {(item["category"], item["v"]) for item, _ in matches}
+    if len(unique) != 1:
+        return None
+    info, filename = matches[0]
+    return {**info, "matched_file": filename}
+
+
 def validate_metadata(project_root: Path):
     """Read meta.json and return canonical routing info plus its parsed object."""
     meta_path = project_root / "meta.json"
@@ -82,50 +115,69 @@ def validate_metadata(project_root: Path):
 
     raw_model = meta.get("model")
     if not isinstance(raw_model, str):
-        raise IntakeError("meta.json field 'model' must be a model slug")
+        raise IntakeError("meta.json field 'model' must be a model name or slug")
     model = normalise_model(raw_model)
     if not MODEL_PATTERN.fullmatch(model):
-        raise IntakeError("meta.json model must use lowercase letters, digits, hyphens and dots")
+        raise IntakeError("meta.json model could not be converted into a safe model slug")
+
+    raw_date = meta.get("date")
+    date_source = "date"
+    if raw_date is None and isinstance(meta.get("submittedAt"), str):
+        try:
+            submitted = meta["submittedAt"].strip().replace("Z", "+00:00")
+            raw_date = datetime.fromisoformat(submitted).date().isoformat()
+            date_source = "submittedAt"
+        except ValueError:
+            raw_date = None
+    if not isinstance(raw_date, str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", raw_date):
+        raise IntakeError("meta.json date must use YYYY-MM-DD or include a valid submittedAt timestamp")
+    try:
+        parsed_date = date.fromisoformat(raw_date)
+    except ValueError as exc:
+        raise IntakeError("meta.json date is not a real calendar date") from exc
+    if parsed_date.isoformat() != raw_date:
+        raise IntakeError("meta.json date must use canonical YYYY-MM-DD format")
 
     def resolve_category(value):
         if isinstance(value, bool) or value is None:
             return None
-        candidate = None
         if isinstance(value, int):
             prompt_no = str(value).zfill(2)
-            candidate = next((slug for slug, prompt in PROMPTS.items() if prompt.get("no") == prompt_no), None)
-        elif isinstance(value, str):
+            return next((slug for slug, prompt in PROMPTS.items() if prompt.get("no") == prompt_no), None)
+        if isinstance(value, str):
             label = value.strip()
             folded = label.casefold()
             if folded in CATEGORIES:
-                candidate = folded
-            else:
-                candidate = next(
-                    (slug for slug, prompt in PROMPTS.items()
-                     if str(prompt.get("title", "")).casefold() == folded),
-                    None,
-                )
-                if candidate is None and label.isdigit():
-                    prompt_no = label.zfill(2)
-                    candidate = next(
-                        (slug for slug, prompt in PROMPTS.items() if prompt.get("no") == prompt_no),
-                        None,
-                    )
-        return candidate
+                return folded
+            by_title = next(
+                (slug for slug, prompt in PROMPTS.items()
+                 if str(prompt.get("title", "")).casefold() == folded),
+                None,
+            )
+            if by_title:
+                return by_title
+            if label.isdigit():
+                prompt_no = label.zfill(2)
+                return next((slug for slug, prompt in PROMPTS.items() if prompt.get("no") == prompt_no), None)
+        return None
 
     category_from_field = resolve_category(meta.get("category"))
     category_from_prompt = resolve_category(meta.get("prompt"))
     category_from_label = resolve_category(meta.get("prompt_label"))
-    if category_from_field and category_from_prompt and category_from_field != category_from_prompt:
-        raise IntakeError(
-            f"meta.json category conflicts with prompt number: "
-            f"{meta.get('category')!r} vs {meta.get('prompt')!r}"
-        )
     resolved = [value for value in (category_from_field, category_from_prompt, category_from_label) if value]
     if resolved and any(value != resolved[0] for value in resolved[1:]):
         raise IntakeError("meta.json category, prompt and prompt_label identify different challenges")
 
     category = category_from_field or category_from_prompt or category_from_label
+    routing_source = "meta.json"
+    matched_artifact = None
+    if category is None:
+        matched = infer_from_matching_legacy_artifact(project_root, model, raw_date)
+        if matched:
+            category = matched["category"]
+            matched_artifact = matched["matched_file"]
+            routing_source = "exact_match_to_existing_artifact"
+
     if category is None:
         hints = {
             key: meta.get(key)
@@ -139,33 +191,37 @@ def validate_metadata(project_root: Path):
             if key in meta
         }
         raise IntakeError(
-            "meta.json category could not be resolved; provide a catalog slug, challenge title, "
-            f"or prompt number (category={meta.get('category')!r}, prompt={meta.get('prompt')!r}, "
+            "meta.json does not identify a ModelBench challenge; include category or prompt "
+            f"(category={meta.get('category')!r}, prompt={meta.get('prompt')!r}, "
             f"prompt_label={meta.get('prompt_label')!r}, other_identity_fields={hints!r}, "
-            f"project_identity={project_identity!r}, "
-            f"available_keys={sorted(meta.keys())!r})"
+            f"project_identity={project_identity!r})"
         )
 
-    raw_date = meta.get("date")
-    if not isinstance(raw_date, str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", raw_date):
-        raise IntakeError("meta.json date must use YYYY-MM-DD")
-    try:
-        parsed_date = date.fromisoformat(raw_date)
-    except ValueError as exc:
-        raise IntakeError("meta.json date is not a real calendar date") from exc
-    if parsed_date.isoformat() != raw_date:
-        raise IntakeError("meta.json date must use canonical YYYY-MM-DD format")
-
     version = meta.get("version")
+    if version is None and matched_artifact:
+        version = matched["v"]
+    if version is None:
+        version = 1
     if isinstance(version, bool) or not isinstance(version, int) or version < 1:
         raise IntakeError("meta.json version must be a positive integer")
+
     if meta.get("entry", "index.html") != "index.html":
         raise IntakeError("meta.json entry must be index.html at the project root")
     if not (project_root / "index.html").is_file():
         raise IntakeError("ZIP must contain index.html beside meta.json at the project root")
 
-    return {"category": category, "model": model, "date": raw_date, "v": version}, meta
-
+    info = {
+        "category": category,
+        "model": model,
+        "date": raw_date,
+        "v": version,
+        "routing_source": routing_source,
+    }
+    if date_source != "date":
+        info["date_source"] = date_source
+    if matched_artifact:
+        info["matched_artifact"] = matched_artifact
+    return info, meta
 
 def safe_extract(zf: zipfile.ZipFile, dest: Path) -> None:
     """Validate and extract entries, normalising safe Windows ZIP separators."""
@@ -263,6 +319,12 @@ def canonicalise_metadata(meta: dict, info: dict, run_dir: Path, source_name: st
         "scores": {axis: None for axis in SCORE_AXES},
         "log": {"ran_first_try": None, "console_errors": None, "fps": None, "file_size_kb": None},
     })
+    if info.get("routing_source") != "meta.json":
+        result["routing_inference"] = info["routing_source"]
+    if info.get("matched_artifact"):
+        result["matched_artifact"] = info["matched_artifact"]
+    if info.get("date_source"):
+        result["date_source"] = info["date_source"]
     if not isinstance(result.get("notes"), str):
         result["notes"] = ""
     for key in ("rating", "evaluation", "self_score"):
