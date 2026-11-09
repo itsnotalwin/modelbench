@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "glm-5.3-flash",
+  "category": "web-app",
+  "date": "2026-11-09",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "03",
+  "prompt_label": "Complete Web Application",
+  "notes": "Galley \u2014 a story desk for a small newsroom (The Calder Weekly sample paper): a kanban desk moves stories pitch\u2192assigned\u2192draft\u2192edit\u2192ready\u2192slotted with an enforced state machine that rejects illegal moves in plain language; an edition desk slots ready stories into sectioned print slots with holds that block publishing and a checklist-gated publish pass; a people desk manages writers with workload bars and enforced deactivation/reassignment rules; plus a ledger with search, filters, section chips, sorting, saved views (built-in + user), pagination and bulk actions (status, reassign, due bump, kill, archive), story drawer with notes, field history and validation, global undo/redo, command palette, full keyboard layer (g-chords, j/k, x, /, n, ?), activity log, archive with restore/delete-forever, first-run onboarding, JSON export/import (merge or replace with per-record conflict resolution) and CSV export, localStorage persistence with try/catch guards, debounced saves, a schema migration ladder with defensive repair, cross-tab BroadcastChannel change detection, and reset/wipe flows that offer a backup first. Fraunces and Inter variable fonts (SIL OFL) are bundled locally; no network is used at runtime. Verified in Chromium (in-app browser) at 1600px and 390px: all views render, full CRUD + rules battery passed, export/import round-trip passed, keyboard shortcuts passed, zero console errors observed during the sweep, storage survival across reload confirmed. Limitations: file:// operation was not verified in a live browser (scripts are classic non-module scripts and assets are relative, so it is expected to work); HTML5 drag-and-drop was verified via synthetic drag events rather than a physical pointer drag (the menu-based move path, used on touch and keyboard, was tested end to end); entrance animations can appear frozen in backgrounded/background-throttled tabs.",
+  "slug": "2026-11-09_glm-5.3-flash_web-app_v1",
+  "path": "runs/2026-11-09_glm-5.3-flash_web-app_v1/index.html",
+  "source_file": "web-app__glm-5.3-flash__2026-11-09__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}
