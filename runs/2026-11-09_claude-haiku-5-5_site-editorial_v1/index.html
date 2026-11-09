@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Whose Noon Is It? How the World Agreed on Time</title>
+<meta name="description" content="How towns, railways and governments agreed on one shared clock, one meridian at a time.">
+<style>
+:root{--paper:#e9ece6;--ink:#17232e;--mute:#4d5963;--rule:#b5beba;--card:#dce3dc;--brass:#8a5d00}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:4.5rem}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 1.0625rem/1.72 Charter,"Iowan Old Style",Georgia,serif}
+:focus-visible{outline:3px solid var(--brass);outline-offset:3px}
+.skip{position:absolute;left:-999px;top:0;background:var(--ink);color:var(--paper);padding:.5rem .8rem;z-index:40}
+.skip:focus{left:1rem;top:1rem}
+.progress{position:fixed;left:0;top:0;height:3px;width:100%;background:var(--brass);transform:scaleX(0);transform-origin:0 50%;z-index:30}
+.shell{display:block}
+.rail{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--rule);padding:.7rem clamp(1rem,4vw,2rem)}
+.rail-inner{display:flex;align-items:center;gap:.6rem 1.4rem;flex-wrap:wrap}
+.brand{font:700 1rem/1 system-ui,sans-serif;color:var(--ink);text-decoration:none;margin-right:auto}
+.rail ul{display:flex;flex-wrap:wrap;gap:.2rem 1rem;list-style:none;margin:0;padding:0;font:.9rem/1.2 system-ui,sans-serif}
+.rail a{color:var(--mute);text-decoration:none;display:inline-block;padding:.35rem 0;border-bottom:2px solid transparent}
+.rail a:hover,.rail a[aria-current="true"]{color:var(--ink);border-color:var(--brass)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 clamp(1.1rem,4vw,3rem)}
+.hero{padding:clamp(2.5rem,7vw,5.5rem) clamp(1.1rem,4vw,3rem) 1rem}
+h1{font-size:clamp(2.8rem,8vw,6.8rem);line-height:.94;letter-spacing:-.03em;margin:0;font-weight:700;max-width:12ch}
+.deck{font:400 clamp(1.15rem,2vw,1.4rem)/1.5 system-ui,sans-serif;color:var(--mute);max-width:38ch;margin:1.4rem 0 0}
+figure{margin:2.8rem 0 0}
+#art{display:block;width:100%;height:auto;background:var(--card);border:1px solid var(--rule)}
+figcaption,.note{font:.88rem/1.55 system-ui,sans-serif;color:var(--mute);margin:.75rem 0 0;max-width:72ch}
+section{padding:clamp(2.6rem,6vw,4.75rem) 0;border-top:1px solid var(--rule)}
+h2{font-size:clamp(1.9rem,4.2vw,3rem);line-height:1.06;letter-spacing:-.02em;margin:0 0 1.2rem;font-weight:700}
+.prose{max-width:64ch}
+.prose p{margin:0 0 1.15rem}
+a.term{color:var(--ink);text-decoration:underline;text-decoration-color:var(--brass);text-decoration-thickness:2px;text-underline-offset:3px}
+blockquote{margin:2.4rem 0;padding:.2rem 0 .2rem 1.3rem;border-left:4px solid var(--brass);font-size:clamp(1.35rem,2.8vw,1.9rem);line-height:1.28;max-width:28ch;font-style:italic}
+.lab{background:var(--card);border:1px solid var(--rule);padding:clamp(1.2rem,3vw,2.2rem);margin:2.4rem 0;display:grid;gap:1rem;max-width:880px}
+.lab h3{font:700 1.1rem/1.3 system-ui,sans-serif;margin:0}
+.lab label{font:600 .95rem/1.4 system-ui,sans-serif}
+input[type=range]{width:100%;min-height:44px;accent-color:var(--brass)}
+.big{font:700 clamp(2.2rem,5vw,3.2rem)/1 system-ui,sans-serif;font-variant-numeric:tabular-nums;margin:0;letter-spacing:-.01em}
+.row{display:flex;flex-wrap:wrap;gap:.5rem}
+button{font:600 .92rem/1 system-ui,sans-serif;min-height:44px;padding:.6rem 1rem;background:var(--ink);color:var(--paper);border:1px solid var(--ink);cursor:pointer}
+button.alt{background:transparent;color:var(--ink)}
+button[aria-pressed="true"]{background:var(--brass);border-color:var(--brass);color:#fff}
+button.ok{box-shadow:inset 0 0 0 2px var(--ink)}
+.ticks{display:flex;justify-content:space-between;font:.8rem/1 system-ui,sans-serif;color:var(--mute);font-variant-numeric:tabular-nums}
+.inl{display:inline;font-weight:400;color:var(--mute)}
+.q{border:1px solid var(--rule);background:var(--card);padding:1.2rem 1.3rem;margin:0 0 1.1rem;max-width:880px;min-width:0}
+legend{padding:0;font:600 1.05rem/1.4 system-ui,sans-serif;margin-bottom:.8rem}
+.fb{min-height:1.6em;margin:.8rem 0 0;font:.96rem/1.5 system-ui,sans-serif}
+dl{margin:0;max-width:64ch}
+.gl{padding:.95rem 0;border-bottom:1px solid var(--rule);scroll-margin-top:5rem}
+.gl:target{background:var(--card);outline:2px solid var(--brass)}
+.gl dt{font:700 1rem/1.4 system-ui,sans-serif}
+.gl dd{margin:.25rem 0 0}
+footer{padding:2.4rem 0 3.5rem;border-top:1px solid var(--rule);font:.88rem/1.6 system-ui,sans-serif;color:var(--mute)}
+footer p{max-width:72ch;margin:0}
+@media (min-width:1100px){
+ .shell{display:grid;grid-template-columns:250px minmax(0,1fr)}
+ .rail{height:100vh;border-bottom:0;border-right:1px solid var(--rule);padding:2.6rem 1.6rem}
+ .rail-inner{flex-direction:column;align-items:flex-start;gap:2.2rem}
+ .rail ul{flex-direction:column;gap:.45rem}
+ .brand{margin-right:0}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#towns">Skip to the first chapter</a>
+<div class="progress" id="progress" aria-hidden="true"></div>
+<div class="shell">
+<aside class="rail">
+ <div class="rail-inner">
+  <a class="brand" href="#top">Whose noon?</a>
+  <nav aria-label="Chapters">
+   <ul>
+    <li><a href="#towns">Towns</a></li>
+    <li><a href="#railways">Railways</a></li>
+    <li><a href="#two-noons">Two noons</a></li>
+    <li><a href="#meridian">Meridian</a></li>
+    <li><a href="#today">Zones today</a></li>
+    <li><a href="#quiz">Quiz</a></li>
+    <li><a href="#glossary">Glossary</a></li>
+   </ul>
+  </nav>
+ </div>
+</aside>
+<main id="top">
+
+<div class="hero">
+<h1>Whose noon is it?</h1>
+<p class="deck">How towns, railways and governments argued their way to one shared clock, one meridian at a time.</p>
+<figure>
+<svg id="art" viewBox="0 0 1000 300" role="img" aria-labelledby="artTitle artDesc">
+<title id="artTitle">Meridian grid with a place marker</title>
+<desc id="artDesc">Twenty-five lines, one every fifteen degrees of longitude, with markers for the place chosen in the explorer and the centre of its time zone.</desc>
+<g id="lines"></g>
+<line id="gap" x1="500" y1="150" x2="500" y2="150" stroke="#8a5d00" stroke-width="3"/>
+<circle id="zone" cx="500" cy="150" r="6" fill="#8a5d00"/>
+<circle id="place" cx="500" cy="150" r="7" fill="#17232e"/>
+<text id="pinLabel" x="500" y="126" text-anchor="middle" font-family="system-ui,sans-serif" font-size="15" fill="#17232e">0.0° E</text>
+</svg>
+<figcaption>Each line marks fifteen degrees of longitude, the distance the sun crosses in one hour. The dark marker is the place chosen in the explorer below, and the brass marker is the centre of its time zone. The gap between them is the error the clock hides.</figcaption>
+</figure>
+</div>
+
+<section id="towns"><div class="wrap">
+<h2>Every town had its own noon</h2>
+<div class="prose">
+<p>For most of history, time was local. A town set its clocks by the sun, and when the sun stood at its highest, it was noon. The sun crosses the sky from east to west, so a town a few hundred kilometres further west, on a different <a class="term" href="#g-meridian">meridian</a>, reached <a class="term" href="#g-solar-noon">solar noon</a> a little later. Nobody needed a common clock to open a market or plough a field.</p>
+<p>The arithmetic is simple and surprising. The Earth turns through 360 degrees in about 24 hours, so each degree of longitude is roughly four minutes of solar time. A journey of a few hundred kilometres east or west can move noon by many minutes. Towns therefore kept <a class="term" href="#g-mean">local mean time</a>, an average solar day that smoothed out the sun's uneven pace, and it still differed from one town to the next.</p>
+<blockquote>Ten minutes between two towns hardly mattered on foot. It mattered a great deal once a train ran between them.</blockquote>
+</div>
+
+<div class="lab" aria-labelledby="exH">
+<h3 id="exH">What the clock hides</h3>
+<label for="lon">Longitude <output id="lonOut" for="lon">2.6° W</output></label>
+<input id="lon" type="range" min="-180" max="180" step="0.1" value="-2.6">
+<div class="row" role="group" aria-label="Preset places">
+<button type="button" class="alt" data-lon="-2.6">Bristol</button>
+<button type="button" class="alt" data-lon="2.35">Paris</button>
+<button type="button" class="alt" data-lon="31.2">Cairo</button>
+<button type="button" class="alt" data-lon="-74">New York</button>
+<button type="button" class="alt" data-lon="-105">Denver</button>
+<button type="button" class="alt" data-lon="139.7">Tokyo</button>
+<button type="button" class="alt" data-lon="151.2">Sydney</button>
+</div>
+<p class="big" id="noonOut">12:10</p>
+<p class="note" id="noonNote" aria-live="polite">Noon falls 10 minutes after 12:00 on the clock of this zone, centred on 0°.</p>
+<p class="note">Uses mean solar time, so it ignores the equation of time, which can move the real sun's noon by about sixteen minutes. Within one 15-degree zone, noon can drift up to half an hour either side of 12:00.</p>
+</div>
+</div></section>
+
+<section id="railways"><div class="wrap">
+<h2>The railway needed one clock</h2>
+<div class="prose">
+<p>Railways changed the arithmetic. A timetable printed in one town had to make sense in the next, and a station clock had to agree with the train it served. Lines that kept their own local times produced a tangle of conflicting schedules. In 1840 the Great Western Railway began running its timetables on London time, and other companies gradually followed. At first a railway clock was a private agreement, but it proved useful enough that others copied it.</p>
+<p>By the late 1840s most British railway companies had settled on Greenwich time, while many towns kept their own time for years longer. The gap between a station clock and a church clock could be the gap between catching a train and missing it.</p>
+</div>
+<div class="lab">
+<h3>Scrub the timeline</h3>
+<label for="tl">Milestone <span class="inl">(spaced evenly, not to scale)</span></label>
+<input id="tl" type="range" min="0" max="5" step="1" value="0">
+<div class="ticks" aria-hidden="true"><span>1840</span><span>1847</span><span>1883</span><span>1884</span><span>1924</span><span>1972</span></div>
+<p class="big" id="tlYear">1840</p>
+<h3 id="tlTitle">Timetables go to London time</h3>
+<p id="tlBody">The Great Western Railway runs its timetables on London time, a company rule that other lines soon copy.</p>
+</div>
+</div></section>
+
+<section id="two-noons"><div class="wrap">
+<h2>Two noons in one day</h2>
+<div class="prose">
+<p>In the United States the problem was continental. Cities and railroads ran on hundreds of local and company times, and a traveller could cross several of them in a single afternoon. On 18 November 1883 the major railroads switched to five standard zones, and many cities reset their clocks to match. In some towns clocks were set back, so noon came round twice, which is why the day is remembered as the day of two noons.</p>
+<p>The zones were a railway arrangement before they were law. Congress did not make standard time official until 1918, long after the railroads had made the change.</p>
+</div>
+</div></section>
+
+<section id="meridian"><div class="wrap">
+<h2>A meridian for the world</h2>
+<div class="prose">
+<p>The world needed a single reference line. In October 1884 an International Meridian Conference in Washington, D.C., recommended the meridian through Greenwich as the <a class="term" href="#g-prime">prime meridian</a>, the zero line of longitude, and recommended a day that begins at midnight. Its decisions were recommendations rather than binding treaties, so countries adopted them at their own pace.</p>
+<p>Radio made the shared clock audible. From 1924 the BBC broadcast the Greenwich time signal, the six pips, and listeners set their watches by it. In 1972 <a class="term" href="#g-utc">Coordinated Universal Time</a> began, a scale based on atomic clocks and adjusted with occasional leap seconds so that it stays close to the Earth's rotation.</p>
+</div>
+</div></section>
+
+<section id="today"><div class="wrap">
+<h2>Zones, offsets and half-hours</h2>
+<div class="prose">
+<p>The map of <a class="term" href="#g-zone">time zones</a> is still an argument that never quite ended. Zones follow borders and economies as much as meridians, so a country can sit far from its own solar noon. China keeps a single time across roughly sixty degrees of longitude. Nepal's clocks sit at UTC+5:45 and India's at UTC+5:30, so neither follows a whole-hour line, and both choices show that the map is political as well as astronomical.</p>
+<p>Some places move their clocks each spring and autumn, and others never do. Each change is a decision somebody had to make, and that somebody is usually a government rather than the sun.</p>
+</div>
+</div></section>
+
+<section id="quiz"><div class="wrap">
+<h2>Check your clock sense</h2>
+<div class="prose"><p>Two questions. Choose an answer and the explanation follows.</p></div>
+<fieldset class="q" data-why="The sun crosses 360 degrees in about 24 hours, which is fifteen degrees an hour. The answer is 15°.">
+<legend>How far does the sun appear to move across the sky in one hour?</legend>
+<div class="row">
+<button type="button" class="alt" data-ok="0">7.5°</button>
+<button type="button" class="alt" data-ok="1">15°</button>
+<button type="button" class="alt" data-ok="0">30°</button>
+<button type="button" class="alt" data-ok="0">60°</button>
+</div>
+<p class="fb" aria-live="polite"></p>
+</fieldset>
+<fieldset class="q" data-why="Sixty minutes divided by fifteen degrees an hour gives four minutes per degree. The answer is 4.">
+<legend>Roughly how many minutes of solar time does one degree of longitude represent?</legend>
+<div class="row">
+<button type="button" class="alt" data-ok="0">1</button>
+<button type="button" class="alt" data-ok="1">4</button>
+<button type="button" class="alt" data-ok="0">15</button>
+<button type="button" class="alt" data-ok="0">60</button>
+</div>
+<p class="fb" aria-live="polite"></p>
+</fieldset>
+</div></section>
+
+<section id="glossary"><div class="wrap">
+<h2>Glossary</h2>
+<dl>
+<div class="gl" id="g-solar-noon"><dt>Solar noon</dt><dd>The moment the sun crosses a place's meridian and stands at its highest point in the sky.</dd></div>
+<div class="gl" id="g-meridian"><dt>Meridian</dt><dd>An imaginary line of constant longitude, running from pole to pole.</dd></div>
+<div class="gl" id="g-mean"><dt>Local mean time</dt><dd>Clock time based on the average solar day at a given longitude, which evens out the sun's uneven pace through the year.</dd></div>
+<div class="gl" id="g-prime"><dt>Prime meridian</dt><dd>The meridian chosen as zero longitude. The 1884 conference recommended the one through Greenwich.</dd></div>
+<div class="gl" id="g-zone"><dt>Time zone</dt><dd>A region that keeps one clock time, usually an offset from a reference time and set by law as often as by longitude.</dd></div>
+<div class="gl" id="g-utc"><dt>UTC</dt><dd>Coordinated Universal Time, the reference scale behind most clocks today. It rests on atomic standards and uses occasional leap seconds.</dd></div>
+</dl>
+</div></section>
+
+<footer><div class="wrap">
+<p><strong>Sources and notes.</strong> Background draws on Ian R. Bartky, <em>Selling the True Time</em> (2000), and Peter Galison, <em>Einstein's Clocks, Poincaré's Maps</em> (2003), together with standard accounts of railway and standard-time history. Dates are the commonly reported ones. The explorer is an illustrative calculation using mean solar time, not a survey of real clocks. Every place named on this page is real.</p>
+</div></footer>
+
+</main>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (s) { return document.querySelector(s); };
+  var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+
+  /* Generated art: one meridian per fifteen degrees, plus latitude-style arcs */
+  var svg = '';
+  for (var i = 0; i <= 24; i++) {
+    var x = 40 + i * (920 / 24);
+    var major = i % 6 === 0;
+    svg += '<line x1="' + x + '" y1="30" x2="' + x + '" y2="270" stroke="' + (major ? '#17232e' : '#7d8a86') + '" stroke-width="' + (major ? 1.5 : 0.8) + '"/>';
+  }
+  for (var k = 1; k <= 3; k++) {
+    var y = 30 + k * 60;
+    svg += '<path d="M40 ' + y + ' Q500 ' + (y - k * 18) + ' 960 ' + y + '" fill="none" stroke="#7d8a86" stroke-dasharray="2 7"/>';
+  }
+  $('#lines').innerHTML = svg;
+
+  /* Solar noon explorer: the sun's noon falls 4 minutes per degree away from the zone centre */
+  var lon = $('#lon'), lonOut = $('#lonOut'), noonOut = $('#noonOut'), noonNote = $('#noonNote');
+  var place = $('#place'), zone = $('#zone'), gap = $('#gap'), pinLabel = $('#pinLabel');
+  function xOf(l) { return 40 + (l + 180) / 360 * 920; }
+  function clock(m) {
+    var t = ((Math.round(m) % 1440) + 1440) % 1440;
+    var h = Math.floor(t / 60), mm = t % 60;
+    return (h < 10 ? '0' : '') + h + ':' + (mm < 10 ? '0' : '') + mm;
+  }
+  function update() {
+    var L = parseFloat(lon.value);
+    var z = Math.round(L / 15) * 15;
+    var off = (z - L) * 4;
+    var r = Math.round(off);
+    var label = Math.abs(L).toFixed(1) + '° ' + (L < 0 ? 'W' : 'E');
+    lonOut.textContent = label;
+    pinLabel.textContent = label;
+    noonOut.textContent = clock(720 + off);
+    noonNote.textContent = r === 0
+      ? 'Noon falls at 12:00 on the clock of this zone, centred on ' + z + '°.'
+      : 'Noon falls ' + Math.abs(r) + ' minutes ' + (r > 0 ? 'after' : 'before') + ' 12:00 on the clock of this zone, centred on ' + z + '°.';
+    var px = xOf(L), zx = xOf(z);
+    place.setAttribute('cx', px);
+    zone.setAttribute('cx', zx);
+    gap.setAttribute('x1', px);
+    gap.setAttribute('x2', zx);
+    pinLabel.setAttribute('x', px);
+  }
+  lon.addEventListener('input', update);
+  $$('[data-lon]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      lon.value = b.getAttribute('data-lon');
+      update();
+    });
+  });
+  update();
+
+  /* Timeline scrub */
+  var EV = [
+    [1840, 'Timetables go to London time', 'The Great Western Railway runs its timetables on London time, a company rule that other lines soon copy.'],
+    [1847, 'Railway time spreads', 'Most British railway companies have adopted Greenwich time, though many towns keep their own clocks for years longer.'],
+    [1883, 'Five zones across the United States', 'Railroads switch to five standard zones on 18 November, and many cities reset their clocks in a single day.'],
+    [1884, 'The meridian conference', 'Delegates in Washington, D.C. recommend the meridian through Greenwich as the zero line of longitude.'],
+    [1924, 'Six pips on the radio', 'The BBC broadcasts the Greenwich time signal, so listeners can set their clocks by radio.'],
+    [1972, 'Coordinated Universal Time', 'UTC begins, based on atomic clocks and adjusted with occasional leap seconds.']
+  ];
+  var tl = $('#tl');
+  function tlUpdate() {
+    var e = EV[Number(tl.value)];
+    $('#tlYear').textContent = e[0];
+    $('#tlTitle').textContent = e[1];
+    $('#tlBody').textContent = e[2];
+  }
+  tl.addEventListener('input', tlUpdate);
+  tlUpdate();
+
+  /* Two-question quiz with immediate feedback */
+  $$('.q').forEach(function (q) {
+    var fb = q.querySelector('.fb');
+    var buttons = Array.prototype.slice.call(q.querySelectorAll('button'));
+    buttons.forEach(function (b) {
+      b.addEventListener('click', function () {
+        if (q.getAttribute('data-done')) return;
+        q.setAttribute('data-done', '1');
+        var ok = b.getAttribute('data-ok') === '1';
+        b.setAttribute('aria-pressed', 'true');
+        buttons.forEach(function (x) {
+          if (x.getAttribute('data-ok') === '1') x.classList.add('ok');
+        });
+        fb.textContent = (ok ? 'Correct. ' : 'Not quite. ') + q.getAttribute('data-why');
+      });
+    });
+  });
+
+  /* Scroll progress and chapter highlight */
+  var bar = $('#progress');
+  function onScroll() {
+    var el = document.documentElement;
+    var max = el.scrollHeight - el.clientHeight;
+    var p = max > 0 ? el.scrollTop / max : 0;
+    bar.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  if ('IntersectionObserver' in window) {
+    var links = $$('.rail a[href^="#"]');
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        links.forEach(function (a) {
+          a.setAttribute('aria-current', a.getAttribute('href') === '#' + en.target.id ? 'true' : 'false');
+        });
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    $$('main section[id]').forEach(function (s) { io.observe(s); });
+  }
+})();
+</script>
+</body>
+</html>
