@@ -6,7 +6,7 @@ Upload one ZIP package per model run here using GitHub's web interface: open thi
 
 A ZIP contains exactly one completed project. Do not put multiple prompts, multiple model outputs or v1/v2/v3 variants into one archive.
 
-The ZIP filename is not used for routing. Name it anything convenient, as long as it ends in .zip. The importer reads the JSON inside the archive. Category can be the canonical slug, exact challenge title or prompt number; conflicts are rejected. ZIP entry paths created on Windows are normalised safely, so ordinary backslash folder separators are supported. Display-style model names are converted into stable lowercase slugs and the original label is retained as model_label. The auto-sort workflow runs the dedicated ZIP-import regression suite before processing uploads. Unsupported or contradictory category metadata is reported and the original ZIP remains available for correction.
+The ZIP filename is not used for routing. Name it anything convenient, as long as it ends in .zip. The importer reads the JSON inside the archive. Category can be the canonical slug, exact challenge title or prompt number; conflicts are rejected. ZIP entry paths created on Windows are normalised safely, so ordinary backslash folder separators are supported. Display-style model names are converted into stable lowercase slugs and the original label is retained as model_label. The auto-sort workflow runs the dedicated ZIP-import regression suite before processing uploads. Unsupported or contradictory category metadata is reported with the available identity keys, and the original ZIP remains available for correction.
 
 ## Required ZIP structure
 
