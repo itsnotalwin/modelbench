@@ -1,6 +1,6 @@
 {
   "generated_from": "runs/",
-  "count": 0,
+  "count": 1,
   "catalog": [
     {
       "no": "01",
@@ -19,7 +19,7 @@
       "title": "Interactive Editorial Feature",
       "family": "Editorial",
       "summary": "A substantial editorial experience combining original storytelling, evidence, data visualisation and meaningful interaction.",
-      "requirement": "800–1,100 words; 3 linked visualisations; transparent sources and methodology; accessible data view; responsive scrollytelling",
+      "requirement": "800\u20131,100 words; 3 linked visualisations; transparent sources and methodology; accessible data view; responsive scrollytelling",
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
       "hue": 18
@@ -176,5 +176,46 @@
     "originality",
     "performance"
   ],
-  "runs": []
+  "runs": [
+    {
+      "schema_version": 1,
+      "model": "crouton-alpha",
+      "category": "site-brand",
+      "date": "2026-11-09",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "01",
+      "prompt_label": "Original Brand Website",
+      "notes": "Complete fictional Loamline acoustic-panel site with five-plus sections, three systems, estimator and validated localStorage quote flow in a single file. Tested in the browser over a local static server: tabs, estimator, invalid and valid quote submission and saved-request storage all passed with no console errors.",
+      "slug": "2026-11-09_crouton-alpha_site-brand_v1",
+      "path": "runs/2026-11-09_crouton-alpha_site-brand_v1/index.html",
+      "source_file": "site-brand__crouton-alpha__2026-11-09__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    }
+  ]
 }
