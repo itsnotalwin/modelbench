@@ -1,32 +1,34 @@
 # ModelBench · One-shot build suite
 
-ModelBench now contains **15 one-shot build challenges**. Each prompt asks a model to create one substantial, usable product in one pass. One prompt produces one project folder; one ZIP contains that one project; its **meta.json** is the routing source of truth.
+ModelBench contains **15 one-shot build challenges**. Each prompt asks a model to create one substantial, usable product in one pass. One prompt produces one project folder; one ZIP contains that one project; its **meta.json** is the sole routing source of truth.
 
 ## The fifteen challenges
 
 | # | Challenge | Category slug | Primary capability tested | Prompt |
 |---|---|---|---|---|
-| 01 | Flagship Brand Experience | site-brand | Visual identity, conversion design, product detail and validated form flow | 01-site-brand.md |
-| 02 | Interactive Editorial Investigation | site-editorial | Editorial craft, evidence, data visualisation and scrollytelling | 02-interactive-editorial.md |
-| 03 | Commerce and Booking Marketplace | site-store | Search, filtering, inventory, cart maths and transactional state | 03-marketplace.md |
-| 04 | Operations Command Centre | dashboard | Dense information design, linked metrics, drill-downs and event simulation | 04-command-centre.md |
-| 05 | Project Operations Workspace | workspace | CRUD, synchronized views, planning, persistence and data integrity | 05-project-workspace.md |
-| 06 | 2D Puzzle Game | game-2d | Original puzzle design, state, level design and input handling | 06-game-2d.md |
-| 07 | 3D Exploration Game | game-3d | 3D environments, navigation, interaction and exploration | 07-spatial-world.md |
-| 08 | Living Systems Simulator | sim | Numerical modelling, coupled state, reproducibility and scientific communication | 08-simulation-lab.md |
-| 09 | Poster Foundry — Creative Production Studio | creative-studio | Direct manipulation, layers, editing history and real file export | 09-creative-studio.md |
-| 10 | Pulse Loom — Browser Music Workstation | music | Web Audio, sequencer timing, sound design, persistence and WAV export | 10-music-studio.md |
-| 11 | 3D Colony Builder | game-colony | Settlement systems, agents, construction and logistics | 11-3d-colony-builder.md |
-| 12 | Voxel Survival Sandbox | game-voxel | Editable voxel worlds, building, crafting and world state | 12-voxel-survival-game.md |
-| 13 | 2D Beat-'em-up | game-brawler | Arcade movement, combat, enemy behaviour and progression | 13-2d-beat-em-up.md |
-| 14 | 3D Racing Game | game-racer | Vehicle handling, course design and competition systems | 14-3d-racing-game.md |
-| 15 | Action Roguelite | game-roguelite | Replayable runs, combat, upgrades and enemy design | 15-action-roguelite.md |
+| 01 | Original Brand Website | site-brand | Distinct identity and offer | 01-site-brand.md |
+| 02 | Interactive Editorial Feature | site-editorial | 800–1,100 words | 02-interactive-editorial.md |
+| 03 | Commerce Marketplace | site-store | 10+ coherent catalogue items | 03-marketplace.md |
+| 04 | Interactive Data Dashboard | dashboard | 24+ coherent records | 04-command-centre.md |
+| 05 | Project Workspace | workspace | 3 projects and 15+ work items | 05-project-workspace.md |
+| 06 | 2D Puzzle Game | game-2d | Original mechanic | 06-game-2d.md |
+| 07 | 3D Exploration Game | game-3d | Real 3D environment | 07-spatial-world.md |
+| 08 | Interactive System Simulation | sim | 4+ coupled state variables | 08-simulation-lab.md |
+| 09 | Creative Design Studio | creative-studio | Editable composition | 09-creative-studio.md |
+| 10 | Browser Music Studio | music | 4 distinct sound sources or voices | 10-music-studio.md |
+| 11 | 3D Colony Builder | game-colony | Explorable 3D world | 11-3d-colony-builder.md |
+| 12 | Voxel Sandbox Game | game-voxel | Editable 3D voxel terrain | 12-voxel-survival-game.md |
+| 13 | 2D Action Brawler | game-brawler | Playable character | 13-2d-beat-em-up.md |
+| 14 | 3D Racing Game | game-racer | Real 3D vehicle and course | 14-3d-racing-game.md |
+| 15 | Action Roguelite | game-roguelite | Replayable run structure | 15-action-roguelite.md |
 
-## Game-development focus
+## Creative freedom and benchmark fairness
 
-Seven of the fifteen challenges are games. Each game prompt defines a genre and a quality bar, not a pre-written concept. Models are free to invent the title, setting, characters, mechanics, level design, visual direction, tone and moment-to-moment experience. The prompts avoid fixed lore, prescribed art styles and named fictional worlds so creative decisions become part of what we evaluate.
+Every prompt defines a capability area and a demanding quality bar, not a pre-written concept. Models choose their own subject, identity, names, content, data, setting, mechanics, characters, visual direction and implementation wherever those choices are not essential to the category being tested. The prompt suite deliberately avoids supplied fictional brands, named worlds, preset characters, prescribed lore, exact product catalogues and fixed art directions.
 
-The five additional game genres are 3D colony building, voxel sandbox/survival, 2D beat-'em-up, 3D racing and action roguelite. The earlier game prompts cover 2D puzzle design and 3D exploration.
+The challenge boundary remains consistent across models: one finished artifact, the same core acceptance checks and the same submission contract. This lets us compare creative judgement as well as implementation quality, without handing every model the same solution.
+
+Seven challenges focus on games: 2D puzzle design, 3D exploration, 3D colony building, voxel sandbox design, 2D action brawling, 3D racing and action roguelite systems. They test different game-development skills while leaving the creative concept open.
 
 ## Benchmark design principles and research
 
@@ -41,7 +43,7 @@ These original prompts borrow task-design and evaluation lessons from public ben
 
 ## How to run a challenge
 
-1. Choose exactly one prompt and fill in MODEL_SLUG, RUN_DATE and VERSION at the top.
+1. Choose exactly one prompt and replace MODEL_SLUG, RUN_DATE and VERSION with the run values supplied by the organiser.
 2. Run every model from a clean, isolated workspace with equivalent tool access. Do not provide other models' submissions or repair the first output during a one-shot run.
 3. The model creates one folder named CATEGORY__MODEL_SLUG__DATE__vN. It contains index.html, meta.json and only essential runtime assets.
 4. ZIP that folder and upload the ZIP to inbox/. The ZIP filename may be anything. The importer reads and validates meta.json to determine category, model, date and version.
@@ -62,7 +64,7 @@ Required metadata:
   "version": 1,
   "entry": "index.html",
   "prompt": "01",
-  "prompt_label": "Flagship Brand Experience",
+  "prompt_label": "Original Brand Website",
   "notes": "One or two honest sentences describing the build and known limitations."
 }
 ~~~

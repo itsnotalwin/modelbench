@@ -1,69 +1,63 @@
-# 01 · Flagship Brand Experience
+# 01 · Original Brand Website
 
 ## Run parameters
-Set these three values before starting the run. They must be the same values written into the output folder and metadata.
 
-- MODEL_SLUG: [model-slug]
-- RUN_DATE: [YYYY-MM-DD]
-- VERSION: 1
+Replace these placeholders with the exact values supplied for this run. They must match the output folder and metadata exactly.
 
-If a value is still bracketed, stop and ask the organizer to fill it in. Do not invent the model identifier or date.
+- MODEL_SLUG: MODEL_SLUG
+- RUN_DATE: RUN_DATE
+- VERSION: VERSION
 
-## The brief
+Do not guess missing run parameters. If any value has not been supplied, ask the organiser before creating files.
 
-Build the complete flagship website for **Nearwild**, a premium small-group day-adventure company. Nearwild helps people trade a predictable weekend for a carefully hosted day outdoors. Its voice is observant, confident, warm and quietly adventurous. It is not an extreme-sports brand and must not look like a generic travel template.
+## The challenge
 
-The site must help a first-time visitor understand the offer, compare three trips, trust the operator and submit a realistic booking request. The brand, art direction, page composition and implementation are yours to decide. Make it feel like a real business ready to launch, not a mood board.
+Invent an original business, product, service or organisation and build its complete public-facing website. You choose the field, audience, proposition, identity, voice, content, structure and visual direction. Nothing is supplied beyond the requirement to create a convincing website that explains its offer and moves a visitor towards a meaningful next step. Treat it as a real launch-quality experience, not a template or static mood board.
 
-Use these fixed experiences and prices:
-- **Saltline Walk** — 3 hours — easy coastal route — **R590 per person**.
-- **Fynbos Table** — 4 hours — guided botanical walk with a hosted picnic — **R820 per person**.
-- **First Light Ridge** — 5 hours — moderate sunrise hike — **R690 per person**.
+## What the build must deliver
 
-These are fictional benchmark products. Do not claim real availability, customer reviews, certifications or partnerships.
-
-## Product requirements
-
-1. Create a distinct visual identity with a considered wordmark or symbol, a compact colour system, deliberate typography, and a consistent spacing and component system. Create the hero artwork and supporting illustrations with inline SVG, CSS or canvas. Do not use remote stock photos, externally hosted fonts or placeholder image boxes.
-2. Build a persuasive page with at least six genuinely useful sections: a clear hero, the three experiences, a detailed itinerary or “what the day feels like” section, what is included, the hosting philosophy or safety approach, practical questions, and a strong final booking invitation. Sections may be combined only when the information hierarchy stays clear.
-3. Each experience must open a meaningful detail view showing duration, difficulty, inclusions, price and a sample itinerary. The detail view must be closable with Escape and must work by keyboard and touch.
-4. Add a working booking-request flow. Visitors choose an experience, a date, and a party size. The estimated total must update immediately and correctly. Validate required fields, reject past dates and unreasonable party sizes, show useful inline errors, and display a confirmation summary. This is a local demo, not a real reservation.
-5. Persist the booking draft and selected experience across a reload. Provide a clear way to start a fresh request. Never imply that the request was sent to a real operator.
-6. Include a useful mobile navigation pattern, visible focus states, reduced-motion support and a responsive layout that is intentionally designed for both a 1440px desktop and a 390px phone.
-7. Write specific, believable copy. No lorem ipsum, fake testimonials, meaningless metrics, “coming soon” sections or dead buttons.
+1. Create a memorable visual identity with a considered wordmark or symbol, typography, colour system, spacing and reusable interface patterns. Develop original visual material with code, inline SVG, canvas or included local assets. Do not rely on empty image placeholders or remote stock imagery.
+2. Build at least five genuinely useful sections. Explain the proposition quickly, establish relevance and trust, present the core offer clearly, answer practical questions and guide visitors towards an appropriate action. Choose the sections that make sense for your invented concept.
+3. Show at least three coherent offerings, features, plans or service options. Give each useful detail and a clear relationship to the overall proposition. You decide their names, content and any fictional demo pricing.
+4. Implement one complete enquiry, booking, quote or conversion flow appropriate to the concept. Include sensible fields, validation, clear errors, a success state and a way to review or retain the submitted demo request locally.
+5. Avoid invented real-world endorsements, customer claims, certifications, partnerships or statistics. Clearly label any illustrative business information as demonstration content.
 
 ## Quality bar
 
-The page should have a recognisable art direction and memorable composition. Establish a strong visual reading order, credible product presentation, comfortable text measure, balanced whitespace, precise details and restrained motion. Do not rely on a giant gradient, floating glass cards or a standard SaaS hero as a substitute for design. The booking flow must be obvious without making the whole site look like a form.
+Make the result feel like a finished, intentionally designed product. Make strong creative and technical decisions independently; do not ask the organiser to choose the concept, visual direction, content, mechanics or implementation. Use a distinctive identity and a consistent visual language. Prioritise clarity, responsiveness, satisfying interaction and meaningful detail over decorative complexity.
 
-Use semantic HTML, labelled controls, appropriate heading order, sufficient contrast and touch targets. Avoid unnecessary JavaScript, console errors and layout shifts. Keep the page fast and self-contained.
+Every visible control must work. Every important interaction must create a real state change and give appropriate feedback. Avoid placeholder sections, dead buttons, fake charts, non-functional menus, empty world geometry and features that only look interactive. A smaller coherent experience is better than a large collection of unfinished systems.
 
 ## Acceptance checklist
 
-Before finishing, verify that:
-- All three experience cards show the correct fixed names, durations, difficulty and prices.
-- A visitor can open and close each experience detail view.
-- Changing experience, date or party size updates the booking total accurately.
-- Invalid booking input is prevented and explained beside the relevant field.
-- A valid request reaches a visible confirmation state and survives reload as a saved draft/record.
-- Navigation, modal/dialog and form work with keyboard as well as pointer/touch.
-- The desktop and phone layouts have no clipped content or horizontal overflow.
-- There are no placeholder links, fake service calls or non-functional controls.
+- [ ] The website communicates a coherent original proposition within a few seconds.
+- [ ] At least five useful sections are complete and meaningfully connected.
+- [ ] Offerings have useful details and the visitor can navigate between them.
+- [ ] The main conversion flow validates input and reaches a clear success state.
+- [ ] The visual identity is coherent and the layout works at desktop and mobile widths.
+- [ ] Keyboard navigation, focus visibility, contrast and reduced-motion preferences are considered.
+
+## Technical expectations
+
+- Deliver a browser-first project that runs from its index.html entry point on a static host. Use an appropriate client-side implementation and include only dependencies that are genuinely needed.
+- Do not require a backend, private API, secret key, build service or manual setup to demonstrate the core experience.
+- Handle browser storage, invalid input, empty states, errors and reloads deliberately wherever relevant to the product.
+- Use semantic structure, accessible labels, visible keyboard focus, sensible contrast, keyboard support and reduced-motion preferences.
+- Make the experience responsive. Do not sacrifice core usability on smaller screens.
+- Test the actual experience in a browser when possible. If browser testing is unavailable, perform a careful code-level smoke check and report that limitation honestly.
+- Do not claim that something was tested unless it was actually tested.
 
 ## Submission contract — mandatory
 
-Create exactly one output folder at the workspace root named:
+Create exactly one folder at the workspace root named:
 
 **site-brand__MODEL_SLUG__RUN_DATE__vVERSION**
 
-Inside it, put:
-- **index.html** — the complete runnable website. Keep CSS and JavaScript inline.
-- **meta.json** — the metadata below.
-- **assets/** only if an essential runtime asset cannot reasonably be embedded.
+At the folder root include **index.html** and **meta.json**. Include an **assets/** folder only for essential local runtime assets. Keep all files for this one finished project inside this folder.
 
-Do not create multiple concepts, three versions, extra HTML pages, a README, an audit report, screenshots, package files, node_modules or build output. Do not paste the source code into chat. Create the files in the workspace and verify that they exist.
+Do not create multiple concepts, alternate versions, separate projects, additional HTML pages, README or audit files, screenshots, dependency folders, package files or build output. Do not create files outside the required project folder. Do not paste source code into chat.
 
-The metadata file must be valid UTF-8 JSON and contain exactly these required fields (you may add a concise optional description field, but do not add scores):
+The metadata file must contain this structure with the exact values for this run:
 
 ~~~json
 {
@@ -74,11 +68,11 @@ The metadata file must be valid UTF-8 JSON and contain exactly these required fi
   "version": VERSION,
   "entry": "index.html",
   "prompt": "01",
-  "prompt_label": "Flagship Brand Experience",
+  "prompt_label": "Original Brand Website",
   "notes": "One or two honest sentences describing the completed build and any known limitations."
 }
 ~~~
 
-The folder name and metadata values must use the exact run parameters above. The folder is what the organizer will ZIP. The ZIP filename is not used to identify the run.
+The folder and metadata must use the exact run parameters. The organiser will ZIP this one folder and upload it to ModelBench. The ZIP filename is not a routing key. Do not include scores or self-awarded evaluations in meta.json.
 
-Finally, open and test the page in a browser if one is available. Otherwise perform a code-level smoke check and say so in the final one-line status. Report only the created folder path and whether the acceptance checklist passed. Do not claim tests you did not run.
+When finished, report only the project folder path and an honest test status.

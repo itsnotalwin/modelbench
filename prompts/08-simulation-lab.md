@@ -1,64 +1,52 @@
-# 08 · Living Systems Simulator
+# 08 · Interactive System Simulation
 
 ## Run parameters
-Set these three values before starting the run. They must be the same values written into the output folder and metadata.
 
-- MODEL_SLUG: [model-slug]
-- RUN_DATE: [YYYY-MM-DD]
-- VERSION: 1
+Replace these placeholders with the exact values supplied for this run. They must match the output folder and metadata exactly.
 
-If a value is still bracketed, stop and ask the organizer to fill it in. Do not invent the model identifier or date.
+- MODEL_SLUG: MODEL_SLUG
+- RUN_DATE: RUN_DATE
+- VERSION: VERSION
 
-## The brief
+Do not guess missing run parameters. If any value has not been supplied, ask the organiser before creating files.
 
-Build a rigorous, interactive **Living Systems Lab** that lets a user explore how a small grassland ecosystem changes over time. This is a simulation tool, not an animated illustration. The model must update numerical state, expose its assumptions and show the consequences of changing the environment.
+## The challenge
 
-Use four state variables:
-- **B** — grass biomass index, bounded from 0 to 100.
-- **H** — herbivore population index, bounded from 0 to 100.
-- **P** — predator population index, bounded from 0 to 50.
-- **W** — water availability index, bounded from 0 to 1.
+Choose a dynamic system and build an interactive simulation that helps a user understand how it behaves over time. The subject, variables, rules, assumptions, scenarios and visual explanation are yours to devise. Choose a system with enough interacting parts to make experimentation interesting, and expose the model instead of hiding it behind decorative animation.
 
-Use the following baseline dynamics. Let **R** be the rainfall target, between 0.2 and 1.0.
+## What the build must deliver
 
-- dB/dt = 0.65 × B × (1 − B/100) − 0.008 × H × B − 0.45 × (1 − W) × B
-- dH/dt = 0.035 × H × (B/(B+20)) − 0.055 × H − 0.015 × P × H
-- dP/dt = 0.022 × P × (H/(H+10)) − 0.04 × P
-- dW/dt = 0.18 × (R − W) − 0.0005 × H × W
-
-The baseline initial state is B=65, H=32, P=8, W=0.7. These equations form a simplified fictional teaching model, not a scientifically calibrated prediction of a real ecosystem. Use the equations as written and label state units as indices.
-
-## Product requirements
-
-1. Build a clear simulation workspace with a live ecosystem view, readable controls, model status and a concise explanation of what each state variable means.
-2. Implement a real numerical integrator. Prefer RK4 with a fixed time step and stable substeps. Explain the chosen method and step size in the UI. Clamp state variables to their stated bounds and handle non-finite values safely.
-3. Provide controls for rainfall target R and at least two scenario presets. Include **Balanced**, **Drought** and **Wet recovery** presets with clearly stated parameter and initial-state differences. A preset must reset the simulation to its documented state.
-4. Include play, pause, single-step, reset and simulation-speed controls. The simulation must be deterministic for the same starting state, parameters and step sequence.
-5. Show four live time-series plots for B, H, P and W, with axes, units/indices and a visible current time. Charts must reflect the underlying simulation state.
-6. Show at least one meaningful relationship or phase plot, such as herbivores versus biomass. It must use actual simulation samples, not decorative data.
-7. Add visible event markers or annotations for notable transitions such as a population collapse, low-water threshold or recovery. State the threshold rule used.
-8. Allow CSV export of the simulation history, including time, all state variables and the active rainfall parameter. Provide a way to clear/restart the history.
-9. Include a short explanation of limitations and a “what happens if?” exploration area that helps users formulate and compare scenarios.
-10. Make the interface responsive and accessible. Avoid animation that makes graph labels or numerical changes impossible to inspect.
+1. Define at least four state variables that interact meaningfully. Explain their units, interpretation, valid ranges and how they influence one another.
+2. Implement a deterministic time-evolution model using a numerically appropriate method. Explain the important equations and assumptions in the interface. Clamp or handle invalid states deliberately rather than concealing numerical instability.
+3. Provide at least three contrasting scenarios or parameter presets and controls for changing meaningful inputs. Reset must restore a known initial state.
+4. Show at least four live plots or equivalent analytical views derived from the same simulation state. Keep axes, units, legends and scales readable.
+5. Support pause, resume, step, reset and adjustable simulation speed. Repeated runs with the same settings should produce the same results.
+6. Provide a history or snapshot view and valid CSV export of the simulated data.
 
 ## Quality bar
 
-The mathematics must be implemented consistently with the equations above. Controls must alter the actual dynamics. Charts must be honest and legible, and scenario labels must correspond to the underlying initial conditions and parameters. The user should be able to pause, inspect a moment, change a parameter and repeat a run.
+Make the result feel like a finished, intentionally designed product. Make strong creative and technical decisions independently; do not ask the organiser to choose the concept, visual direction, content, mechanics or implementation. Use a distinctive identity and a consistent visual language. Prioritise clarity, responsiveness, satisfying interaction and meaningful detail over decorative complexity.
 
-Use a self-contained HTML file with inline CSS/JS. No remote APIs, libraries, fonts or images. Draw the charts with canvas or SVG. Use semantic controls, keyboard access, sufficient contrast, reduced-motion support and no console errors.
+Every visible control must work. Every important interaction must create a real state change and give appropriate feedback. Avoid placeholder sections, dead buttons, fake charts, non-functional menus, empty world geometry and features that only look interactive. A smaller coherent experience is better than a large collection of unfinished systems.
 
 ## Acceptance checklist
 
-Before finishing, verify that:
-- The four derivatives match the equations in the brief.
-- The fixed-step integrator advances all four variables and clamps them safely.
-- Play/pause/single-step/reset/speed and scenario presets work.
-- The same initial state and step sequence produce the same results.
-- All five plots update from simulation data and display useful axes/labels.
-- CSV export contains the actual simulated history and correct headers.
-- Threshold events use documented rules and are not hard-coded decoration.
-- The limitations of the simplified fictional model are stated clearly.
-- Desktop and phone layouts are functional.
+- [ ] At least four coupled state variables are visible and explained.
+- [ ] The simulation evolves using a defensible numerical method and remains stable in its intended range.
+- [ ] At least three scenarios produce meaningfully different outcomes.
+- [ ] Analytical views update from the same state and display correct units.
+- [ ] Pause, step, speed, reset and deterministic replay behave correctly.
+- [ ] CSV export contains valid, labelled history data.
+
+## Technical expectations
+
+- Deliver a browser-first project that runs from its index.html entry point on a static host. Use an appropriate client-side implementation and include only dependencies that are genuinely needed.
+- Do not require a backend, private API, secret key, build service or manual setup to demonstrate the core experience.
+- Handle browser storage, invalid input, empty states, errors and reloads deliberately wherever relevant to the product.
+- Use semantic structure, accessible labels, visible keyboard focus, sensible contrast, keyboard support and reduced-motion preferences.
+- Make the experience responsive. Do not sacrifice core usability on smaller screens.
+- Test the actual experience in a browser when possible. If browser testing is unavailable, perform a careful code-level smoke check and report that limitation honestly.
+- Do not claim that something was tested unless it was actually tested.
 
 ## Submission contract — mandatory
 
@@ -66,9 +54,11 @@ Create exactly one folder at the workspace root named:
 
 **sim__MODEL_SLUG__RUN_DATE__vVERSION**
 
-Inside, include **index.html**, **meta.json**, and only essential runtime files in **assets/** if needed. Do not create multiple simulations, three variants, extra pages, README/audit files, screenshots, package files, dependencies or build output. Keep the app in one HTML page with inline CSS/JS. Create the files in the workspace; do not paste code into chat.
+At the folder root include **index.html** and **meta.json**. Include an **assets/** folder only for essential local runtime assets. Keep all files for this one finished project inside this folder.
 
-The valid UTF-8 metadata must contain:
+Do not create multiple concepts, alternate versions, separate projects, additional HTML pages, README or audit files, screenshots, dependency folders, package files or build output. Do not create files outside the required project folder. Do not paste source code into chat.
+
+The metadata file must contain this structure with the exact values for this run:
 
 ~~~json
 {
@@ -79,9 +69,11 @@ The valid UTF-8 metadata must contain:
   "version": VERSION,
   "entry": "index.html",
   "prompt": "08",
-  "prompt_label": "Living Systems Simulator",
+  "prompt_label": "Interactive System Simulation",
   "notes": "One or two honest sentences describing the completed build and any known limitations."
 }
 ~~~
 
-Use the exact run parameters. The organizer ZIPs the folder; the ZIP filename is not used for routing. Test the simulation in a browser if available. Otherwise perform a code-level smoke check and disclose it. Report only the folder path and honest test status.
+The folder and metadata must use the exact run parameters. The organiser will ZIP this one folder and upload it to ModelBench. The ZIP filename is not a routing key. Do not include scores or self-awarded evaluations in meta.json.
+
+When finished, report only the project folder path and an honest test status.

@@ -1,72 +1,64 @@
-# 02 · Interactive Editorial Investigation
+# 02 · Interactive Editorial Feature
 
 ## Run parameters
-Set these three values before starting the run. They must be the same values written into the output folder and metadata.
 
-- MODEL_SLUG: [model-slug]
-- RUN_DATE: [YYYY-MM-DD]
-- VERSION: 1
+Replace these placeholders with the exact values supplied for this run. They must match the output folder and metadata exactly.
 
-If a value is still bracketed, stop and ask the organizer to fill it in. Do not invent the model identifier or date.
+- MODEL_SLUG: MODEL_SLUG
+- RUN_DATE: RUN_DATE
+- VERSION: VERSION
 
-## The brief
+Do not guess missing run parameters. If any value has not been supplied, ask the organiser before creating files.
 
-Create a long-form interactive editorial feature for a fictional publication called **The Common Current**. The feature is titled **“The Hidden Shape of a City's Water”**. It investigates how household water use differs across six fictional districts and how leaks complicate the picture.
+## The challenge
 
-This is a designed reading experience, not a dashboard with an article attached. The story should guide a reader from a compelling opening question through evidence, interpretation and a thoughtful conclusion. You control the editorial voice, visual language and layout, but the supplied data is fixed. Do not invent real-world claims or imply that this synthetic dataset describes an actual city.
+Create one polished, interactive editorial feature about a subject you choose. You decide the subject, angle, central question, thesis, structure, voice, visual language and supporting data. The result should feel like a serious digital publication feature: worth reading as an article, rewarding to explore, and transparent about what its evidence can and cannot establish.
 
-## The fixed dataset
+## What the build must deliver
 
-All values below are synthetic. Water use is litres per person per day. Leak rate is a percentage estimate for the fictional district.
-
-| District | Summer use | Winter use | Leak rate |
-|---|---:|---:|---:|
-| North Quay | 192 | 148 | 9.2% |
-| Old Town | 236 | 171 | 14.8% |
-| Glassworks | 178 | 139 | 6.1% |
-| South Gardens | 214 | 163 | 11.3% |
-| Hillline | 163 | 132 | 4.7% |
-| East Market | 228 | 180 | 12.6% |
-
-The dataset contains six districts only. All charts, tables, callouts and comparisons must be calculated from these exact values. Clearly label the data as fictional/synthetic.
-
-## Editorial and interaction requirements
-
-1. Write a coherent feature of approximately 800–1,100 words. Give it a real thesis, a beginning, a middle and an ending. Distinguish what the data shows from what it cannot establish. Do not assert that leak rate causes higher use or invent explanations unsupported by the dataset.
-2. Design a distinctive publication identity: masthead, issue/date treatment, typographic hierarchy, colour logic, captions, pull quotes and a strong reading rhythm. Avoid a generic centered-column blog template.
-3. Build at least three meaningful data visualisations using SVG or canvas: a district comparison, a summer-versus-winter comparison, and a leak-rate view. Axes, units, legends and labels must be readable. Values must be derived from the supplied dataset, not manually contradicted in markup.
-4. Make the visualisations interactive. A reader can select a district, compare seasons, sort districts by a selected measure, and inspect exact values. The article's related callouts should update coherently when the selection changes.
-5. Add a scrollytelling or chapter-navigation structure with a visible reading-progress indicator. It must work without scroll-jacking. Include an accessible data table as an alternative to charts.
-6. Add expandable methodology and evidence notes that explain the synthetic dataset, units and limits. The reading experience must remain understandable if the reader never touches an interactive control.
-7. Make the layout responsive and deliberate at desktop and phone widths. Charts must reflow or scroll accessibly without clipping labels. Respect reduced-motion preferences.
+1. Write approximately 800–1,100 words of original, edited feature content with a clear argument or narrative arc. Use strong headings, captions, pull-outs and pacing where they improve comprehension.
+2. Build at least three data visualisations that genuinely support the story. Choose suitable chart forms and make them readable, labelled and responsive. Visualisations must represent the underlying data accurately.
+3. Make at least two meaningful interactions connect to the article or visualisations. These may include filtering, highlighting, comparing, stepping through a narrative or inspecting a data point. Choose the approach yourself.
+4. Provide an accessible tabular or equivalent text view of the important data. Explain the dataset, units, definitions, limitations and methodology in concise editorial notes.
+5. Be honest about evidence. Cite verifiable sources when using external factual claims. Never invent publications, links, quotations or source attributions. When using constructed or illustrative data, label it clearly and do not present it as observed fact.
+6. Create a distinctive editorial art direction with deliberate type hierarchy, image treatment, chart styling, spacing and responsive reading widths. Use original or locally included visual assets; do not leave empty image boxes.
 
 ## Quality bar
 
-The piece should feel commissioned by an excellent independent magazine: a confident art direction, original graphic language, typographic craft, carefully paced sections and copy that rewards attention. Use original inline SVG/CSS/canvas artwork rather than remote images. Every control must have a meaningful result. A chart that is decorative or disconnected from the supplied numbers fails the brief.
+Make the result feel like a finished, intentionally designed product. Make strong creative and technical decisions independently; do not ask the organiser to choose the concept, visual direction, content, mechanics or implementation. Use a distinctive identity and a consistent visual language. Prioritise clarity, responsiveness, satisfying interaction and meaningful detail over decorative complexity.
 
-Use semantic structure, keyboard-accessible controls, visible focus, sufficient contrast and no console errors. Do not add external APIs, analytics, backend services or remote fonts.
+Every visible control must work. Every important interaction must create a real state change and give appropriate feedback. Avoid placeholder sections, dead buttons, fake charts, non-functional menus, empty world geometry and features that only look interactive. A smaller coherent experience is better than a large collection of unfinished systems.
 
 ## Acceptance checklist
 
-Before finishing, verify that:
-- The exact six districts and all 18 supplied values are represented correctly.
-- The three visualisations are calculated from the same underlying dataset.
-- Selecting a district and changing sort/season controls updates the intended views.
-- Exact values can be inspected and an equivalent accessible data table is available.
-- Reading progress/navigation works without blocking normal scrolling.
-- The methodology clearly labels the dataset as synthetic and avoids unsupported causal claims.
-- The long-form narrative is complete, not placeholder copy.
-- Desktop and phone layouts remain readable with no horizontal page overflow.
+- [ ] The article is substantial, coherent and within the requested approximate word range.
+- [ ] All visualisations render from the stated data and use appropriate scales, labels and units.
+- [ ] Interactions change or reveal meaningful information rather than acting as decoration.
+- [ ] The data can also be understood without relying on colour or pointer hover alone.
+- [ ] Sources, constructed data and methodological limits are represented honestly.
+- [ ] The feature remains readable and usable on narrow screens and with keyboard navigation.
+
+## Technical expectations
+
+- Deliver a browser-first project that runs from its index.html entry point on a static host. Use an appropriate client-side implementation and include only dependencies that are genuinely needed.
+- Do not require a backend, private API, secret key, build service or manual setup to demonstrate the core experience.
+- Handle browser storage, invalid input, empty states, errors and reloads deliberately wherever relevant to the product.
+- Use semantic structure, accessible labels, visible keyboard focus, sensible contrast, keyboard support and reduced-motion preferences.
+- Make the experience responsive. Do not sacrifice core usability on smaller screens.
+- Test the actual experience in a browser when possible. If browser testing is unavailable, perform a careful code-level smoke check and report that limitation honestly.
+- Do not claim that something was tested unless it was actually tested.
 
 ## Submission contract — mandatory
 
-Create exactly one output folder at the workspace root named:
+Create exactly one folder at the workspace root named:
 
 **site-editorial__MODEL_SLUG__RUN_DATE__vVERSION**
 
-Inside it, put **index.html** (the complete experience, with inline CSS/JS), **meta.json**, and an **assets/** folder only when an essential runtime asset cannot be embedded. Do not create multiple stories, three variants, extra HTML pages, README/audit files, screenshots, dependency folders or build output. Do not paste code into chat; create the files in the workspace.
+At the folder root include **index.html** and **meta.json**. Include an **assets/** folder only for essential local runtime assets. Keep all files for this one finished project inside this folder.
 
-The valid UTF-8 metadata file must contain:
+Do not create multiple concepts, alternate versions, separate projects, additional HTML pages, README or audit files, screenshots, dependency folders, package files or build output. Do not create files outside the required project folder. Do not paste source code into chat.
+
+The metadata file must contain this structure with the exact values for this run:
 
 ~~~json
 {
@@ -77,11 +69,11 @@ The valid UTF-8 metadata file must contain:
   "version": VERSION,
   "entry": "index.html",
   "prompt": "02",
-  "prompt_label": "Interactive Editorial Investigation",
+  "prompt_label": "Interactive Editorial Feature",
   "notes": "One or two honest sentences describing the completed build and any known limitations."
 }
 ~~~
 
-Use the exact run parameters in both the folder name and metadata. The organizer ZIPs the folder; the ZIP filename itself is not used for routing.
+The folder and metadata must use the exact run parameters. The organiser will ZIP this one folder and upload it to ModelBench. The ZIP filename is not a routing key. Do not include scores or self-awarded evaluations in meta.json.
 
-Open the page in a browser and test it if possible. Otherwise perform a code-level smoke check and disclose that. Report only the folder path and honest test status. Do not claim checks you did not run.
+When finished, report only the project folder path and an honest test status.

@@ -1,63 +1,52 @@
-# 03 · Commerce and Booking Marketplace
+# 03 · Commerce Marketplace
 
 ## Run parameters
-Set these three values before starting the run. They must be the same values written into the output folder and metadata.
 
-- MODEL_SLUG: [model-slug]
-- RUN_DATE: [YYYY-MM-DD]
-- VERSION: 1
+Replace these placeholders with the exact values supplied for this run. They must match the output folder and metadata exactly.
 
-If a value is still bracketed, stop and ask the organizer to fill it in. Do not invent the model identifier or date.
+- MODEL_SLUG: MODEL_SLUG
+- RUN_DATE: RUN_DATE
+- VERSION: VERSION
 
-## The brief
+Do not guess missing run parameters. If any value has not been supplied, ask the organiser before creating files.
 
-Build **KitLoop**, a polished peer-to-peer equipment rental marketplace for people who need useful gear for a day or a weekend without buying it. The product should feel trustworthy, practical and easy to scan. It is a complete front-end booking demo with realistic local state, not a static product grid.
+## The challenge
 
-Use this fixed inventory. Prices are per day in ZAR. All availability is fictional demo data.
+Invent a commerce concept and build a complete browser-based marketplace around it. Choose what is being offered, who it serves, the catalogue, pricing model, brand identity, tone and shopping experience. The concept should be coherent enough to feel like a product someone could genuinely use, while all inventory and transactions remain clearly simulated.
 
-| Item | Category | Price/day | Available units |
-|---|---|---:|---:|
-| Mirrorless camera body | Camera | R550 | 2 |
-| Portrait lens, 50mm | Camera | R240 | 3 |
-| Travel tripod | Camera | R90 | 4 |
-| Portable LED light kit | Camera | R180 | 2 |
-| Field audio recorder | Audio | R210 | 2 |
-| Wireless lavalier pair | Audio | R160 | 3 |
-| Compact projector | Event | R300 | 1 |
-| Portable PA speaker | Event | R280 | 2 |
-| Two-person hiking tent | Outdoor | R190 | 3 |
-| Compact camp stove | Outdoor | R80 | 4 |
-| Inflatable SUP board | Outdoor | R350 | 2 |
-| Waterproof dry bag | Outdoor | R45 | 5 |
+## What the build must deliver
 
-## Product requirements
-
-1. Create a complete marketplace shell with clear navigation, useful trust/help information, a strong search surface, category navigation and a consistent visual identity.
-2. Render all 12 inventory items from one structured data source. Each item needs a clear name, category, price, availability and a meaningful visual treatment. Generate product illustrations or icons with inline SVG/CSS; do not rely on remote product photography.
-3. Implement working search, category filters, availability filtering, price sorting and a useful empty state. Filters must compose rather than overwrite one another.
-4. Each item opens a detail view with description, rental conditions, quantity selection and a date range. Calculate rental duration and line totals correctly, including validation of end date after start date and quantity not exceeding stock.
-5. Build a cart that supports quantity changes and removal, calculates subtotals and a transparent demo service fee, and preserves its contents after reload. Changing dates must recalculate the total.
-6. Implement a multi-step demo booking flow: renter details, booking review and confirmation. Validate fields inline. No real payments, identity checks, email or third-party booking calls. The confirmation must clearly state that this is a local demo and no real reservation was made.
-7. On confirmed demo bookings, update local demo availability consistently. Provide an organizer-friendly way to reset the seeded demo state.
-8. Make the experience responsive, keyboard-accessible and touch-friendly. Dialogs must close with Escape and return focus to the invoking control.
+1. Create at least ten coherent catalogue entries with useful titles, descriptions, categories, imagery or visual treatments, and consistent prices or other relevant purchase terms. You decide the product domain and the content.
+2. Implement search and composable filters or sorting that operate on the actual catalogue. Include useful empty states and a way to reset filters.
+3. Provide a meaningful item detail view with the information needed to make a choice. Navigation between catalogue and detail views must preserve context.
+4. Implement a working cart, basket, quote list or equivalent transaction state. Quantities, subtotals, discounts or fees, and totals must recalculate correctly whenever relevant values change.
+5. Create a complete simulated checkout or request flow with input validation, review, clear confirmation and safe handling of invalid or unavailable items. Do not collect real payment information or imply that a real order has been placed.
+6. Persist useful catalogue preferences and cart state locally. Include clear feedback for add, remove, quantity changes, empty cart and successful demo completion.
 
 ## Quality bar
 
-This should feel like a credible product that could be handed to a small business, not a generic e-commerce template. Make browsing, comparison, booking and recovery states intentional. Use meaningful copy and consistent product data. Avoid fake reviews, fake partner logos, fake payment success and controls that do nothing.
+Make the result feel like a finished, intentionally designed product. Make strong creative and technical decisions independently; do not ask the organiser to choose the concept, visual direction, content, mechanics or implementation. Use a distinctive identity and a consistent visual language. Prioritise clarity, responsiveness, satisfying interaction and meaningful detail over decorative complexity.
 
-Keep the implementation self-contained in one HTML file with inline CSS/JS. Use no external APIs, remote images, fonts, payment services, build tools or third-party dependencies. Persist only non-sensitive demo data locally. Use semantic HTML, good contrast, visible focus and reduced-motion support.
+Every visible control must work. Every important interaction must create a real state change and give appropriate feedback. Avoid placeholder sections, dead buttons, fake charts, non-functional menus, empty world geometry and features that only look interactive. A smaller coherent experience is better than a large collection of unfinished systems.
 
 ## Acceptance checklist
 
-Before finishing, verify that:
-- Exactly the 12 specified inventory items appear, with correct category, daily price and starting stock.
-- Search, category, availability and price sorting work together.
-- Rental dates and quantity produce correct line totals and reject invalid ranges/stock.
-- Cart edits, removal, subtotal and fee calculations update correctly.
-- Reloading preserves the cart and draft booking.
-- A complete demo booking produces a clear confirmation and updates local availability.
-- A reset returns the demo to its original inventory.
-- No real-payment or external-service claim is made; mobile and desktop layouts work.
+- [ ] The catalogue is coherent and contains at least ten usable entries.
+- [ ] Search, filters and sorting operate correctly together and can be cleared.
+- [ ] Detail views show useful item information and return to the catalogue cleanly.
+- [ ] Cart calculations are accurate after adding, removing and changing quantities.
+- [ ] The simulated transaction validates input and reaches an explicit demo confirmation.
+- [ ] State survives reload where expected, and the experience works on desktop and mobile.
+
+## Technical expectations
+
+- Deliver a browser-first project that runs from its index.html entry point on a static host. Use an appropriate client-side implementation and include only dependencies that are genuinely needed.
+- Do not require a backend, private API, secret key, build service or manual setup to demonstrate the core experience.
+- Handle browser storage, invalid input, empty states, errors and reloads deliberately wherever relevant to the product.
+- Use semantic structure, accessible labels, visible keyboard focus, sensible contrast, keyboard support and reduced-motion preferences.
+- Make the experience responsive. Do not sacrifice core usability on smaller screens.
+- Test the actual experience in a browser when possible. If browser testing is unavailable, perform a careful code-level smoke check and report that limitation honestly.
+- Do not claim that something was tested unless it was actually tested.
 
 ## Submission contract — mandatory
 
@@ -65,9 +54,11 @@ Create exactly one folder at the workspace root named:
 
 **site-store__MODEL_SLUG__RUN_DATE__vVERSION**
 
-It must contain **index.html**, **meta.json**, and only essential runtime files in **assets/** if needed. The application belongs in one runnable HTML page with inline CSS/JS. Do not produce three storefronts, several HTML files, a README, audit report, screenshot, package manifest, dependencies or build output. Create files in the workspace; do not paste the source into chat.
+At the folder root include **index.html** and **meta.json**. Include an **assets/** folder only for essential local runtime assets. Keep all files for this one finished project inside this folder.
 
-Use this valid UTF-8 metadata:
+Do not create multiple concepts, alternate versions, separate projects, additional HTML pages, README or audit files, screenshots, dependency folders, package files or build output. Do not create files outside the required project folder. Do not paste source code into chat.
+
+The metadata file must contain this structure with the exact values for this run:
 
 ~~~json
 {
@@ -78,11 +69,11 @@ Use this valid UTF-8 metadata:
   "version": VERSION,
   "entry": "index.html",
   "prompt": "03",
-  "prompt_label": "Commerce and Booking Marketplace",
+  "prompt_label": "Commerce Marketplace",
   "notes": "One or two honest sentences describing the completed build and any known limitations."
 }
 ~~~
 
-Use the exact run parameters above. The organizer ZIPs the folder. The ZIP filename is not used to determine the run.
+The folder and metadata must use the exact run parameters. The organiser will ZIP this one folder and upload it to ModelBench. The ZIP filename is not a routing key. Do not include scores or self-awarded evaluations in meta.json.
 
-Test the actual page in a browser when available; otherwise perform a code-level smoke check and say so. Report only the folder path and honest test status.
+When finished, report only the project folder path and an honest test status.

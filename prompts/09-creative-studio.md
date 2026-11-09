@@ -1,50 +1,52 @@
-# 09 · Poster Foundry — Creative Production Studio
+# 09 · Creative Design Studio
 
 ## Run parameters
-Set these three values before starting the run. They must be the same values written into the output folder and metadata.
 
-- MODEL_SLUG: [model-slug]
-- RUN_DATE: [YYYY-MM-DD]
-- VERSION: 1
+Replace these placeholders with the exact values supplied for this run. They must match the output folder and metadata exactly.
 
-If a value is still bracketed, stop and ask the organizer to fill it in. Do not invent the model identifier or date.
+- MODEL_SLUG: MODEL_SLUG
+- RUN_DATE: RUN_DATE
+- VERSION: VERSION
 
-## The brief
+Do not guess missing run parameters. If any value has not been supplied, ask the organiser before creating files.
 
-Build **Poster Foundry**, a compact browser-based design studio for creating a strong typographic event poster. The user should be able to start with a blank canvas, add and arrange objects, refine a composition and export a real image. This is an editing tool, not a static poster pretending to be interactive.
+## The challenge
 
-The tool should ship with one attractive starter composition for a fictional event called **Night Market Radio**. The starter design is only a starting point; all included elements must be editable.
+Invent and build a browser-based creative tool for making and editing one kind of visual composition. You choose the creative discipline, intended user, design language, canvas format, starter content and the editor's workflow. It must be a genuine working tool, not a showcase page with inert controls. The creative output and the interface should both demonstrate strong visual judgement.
 
-## Product requirements
+## What the build must deliver
 
-1. Create a professional editor shell with a central canvas/artboard, a clear top toolbar, an object/layer panel and context-sensitive properties. On a phone, adapt into a touch-friendly editing layout rather than shrinking a desktop UI until it breaks.
-2. Support adding, selecting, moving, resizing and rotating text objects and at least four vector shape types. Include fill and stroke controls, opacity and alignment/position controls.
-3. Provide editable text properties: content, size, weight, alignment, line spacing and letter spacing. Use system fonts only; do not load remote fonts.
-4. Implement a real layer list with visibility toggle, lock toggle, rename and reorder. Layer selection must match canvas selection.
-5. Provide undo and redo for meaningful edit operations. Include keyboard shortcuts and clear feedback when an action cannot be undone.
-6. Add alignment tools, snap guides or grid snapping, canvas zoom and pan, plus a safe reset-to-starter action.
-7. Export the actual composition as SVG and PNG at the chosen output size. The export must include the current visible objects and omit hidden layers. Do not export a screenshot of the editor chrome.
-8. Save the document locally across reloads. Provide a named save/load or JSON export/import path. Imported data must be validated before replacing the current document.
-9. Include a useful starter design, at least two canvas sizes or aspect ratios, and sensible empty-selection states. Every visible tool must perform its advertised action.
+1. Provide a usable canvas or artboard with a coherent, editable document model. Support text and multiple visual object types or similarly meaningful editable elements appropriate to the chosen discipline.
+2. Build a layer or object panel that stays synchronized with canvas selection. Support selection, visibility, locking, renaming, reordering and deletion where appropriate.
+3. Implement practical transform and style controls, such as position, size, rotation, alignment, colour, typography or other controls relevant to the creative format.
+4. Provide reliable undo and redo. Include zoom and pan or another practical way to work with the composition at different scales.
+5. Persist the editable document locally and support validated project export/import. Provide a genuine final export in at least two useful formats, including SVG and PNG when the chosen output is vector-compatible.
+6. Include one editable starter composition that demonstrates the tool without dictating the user's creative direction. It must be made from editable document elements, not a flattened image.
 
 ## Quality bar
 
-The editor should feel like a small but thoughtfully made creative product. Make direct manipulation pleasant, selection handles clear, controls visually calm and hierarchy obvious. Avoid the appearance of a generic admin dashboard. The starter poster should demonstrate strong type composition, spacing and shape rhythm while remaining easy to change.
+Make the result feel like a finished, intentionally designed product. Make strong creative and technical decisions independently; do not ask the organiser to choose the concept, visual direction, content, mechanics or implementation. Use a distinctive identity and a consistent visual language. Prioritise clarity, responsiveness, satisfying interaction and meaningful detail over decorative complexity.
 
-Use inline SVG/canvas and vanilla JavaScript in one HTML file. No external drawing libraries, image services, fonts, backend or build step. Use accessible labels, keyboard alternatives for drag-only actions, visible focus and reduced-motion support. Protect against malformed imports and corrupted saved state.
+Every visible control must work. Every important interaction must create a real state change and give appropriate feedback. Avoid placeholder sections, dead buttons, fake charts, non-functional menus, empty world geometry and features that only look interactive. A smaller coherent experience is better than a large collection of unfinished systems.
 
 ## Acceptance checklist
 
-Before finishing, verify that:
-- Text and all supported shapes can be added, selected, transformed and styled.
-- Canvas selection and layer-panel selection remain synchronized.
-- Visibility, lock, rename and reorder work.
-- Undo/redo restores the document accurately.
-- Alignment/snapping and zoom/pan work without losing the artboard.
-- SVG and PNG export match the current visible composition.
-- Save/reload and JSON export/import round-trip the editable document.
-- Invalid import is rejected without destroying the current document.
-- The editor remains usable at desktop and phone widths.
+- [ ] The editor opens into an actual editable document and not a static mockup.
+- [ ] Canvas and layer/object selection remain synchronized.
+- [ ] Core object creation, transformation and styling work.
+- [ ] History accurately restores prior document states.
+- [ ] Save/reload and project export/import preserve editability.
+- [ ] Final exports contain the current composition and are usable files.
+
+## Technical expectations
+
+- Deliver a browser-first project that runs from its index.html entry point on a static host. Use an appropriate client-side implementation and include only dependencies that are genuinely needed.
+- Do not require a backend, private API, secret key, build service or manual setup to demonstrate the core experience.
+- Handle browser storage, invalid input, empty states, errors and reloads deliberately wherever relevant to the product.
+- Use semantic structure, accessible labels, visible keyboard focus, sensible contrast, keyboard support and reduced-motion preferences.
+- Make the experience responsive. Do not sacrifice core usability on smaller screens.
+- Test the actual experience in a browser when possible. If browser testing is unavailable, perform a careful code-level smoke check and report that limitation honestly.
+- Do not claim that something was tested unless it was actually tested.
 
 ## Submission contract — mandatory
 
@@ -52,9 +54,11 @@ Create exactly one folder at the workspace root named:
 
 **creative-studio__MODEL_SLUG__RUN_DATE__vVERSION**
 
-At its root, put **index.html** and **meta.json**. Include **assets/** only if an essential runtime asset is required. Do not output multiple posters as separate products, three variants, additional HTML pages, README/audit files, screenshots, dependency folders or build output. The single starter poster belongs inside the editor as editable data. Create files in the workspace; do not paste source code into chat.
+At the folder root include **index.html** and **meta.json**. Include an **assets/** folder only for essential local runtime assets. Keep all files for this one finished project inside this folder.
 
-Use this valid UTF-8 metadata:
+Do not create multiple concepts, alternate versions, separate projects, additional HTML pages, README or audit files, screenshots, dependency folders, package files or build output. Do not create files outside the required project folder. Do not paste source code into chat.
+
+The metadata file must contain this structure with the exact values for this run:
 
 ~~~json
 {
@@ -65,9 +69,11 @@ Use this valid UTF-8 metadata:
   "version": VERSION,
   "entry": "index.html",
   "prompt": "09",
-  "prompt_label": "Poster Foundry — Creative Production Studio",
+  "prompt_label": "Creative Design Studio",
   "notes": "One or two honest sentences describing the completed build and any known limitations."
 }
 ~~~
 
-The folder and metadata must use the exact run parameters. The organizer ZIPs the folder; ZIP filename is ignored. Test core editing and export flows in a browser if available. Otherwise perform and disclose a code-level smoke check. Report only folder path and honest test status.
+The folder and metadata must use the exact run parameters. The organiser will ZIP this one folder and upload it to ModelBench. The ZIP filename is not a routing key. Do not include scores or self-awarded evaluations in meta.json.
+
+When finished, report only the project folder path and an honest test status.

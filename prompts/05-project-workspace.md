@@ -1,58 +1,52 @@
-# 05 · Project Operations Workspace
+# 05 · Project Workspace
 
 ## Run parameters
-Set these three values before starting the run. They must be the same values written into the output folder and metadata.
 
-- MODEL_SLUG: [model-slug]
-- RUN_DATE: [YYYY-MM-DD]
-- VERSION: 1
+Replace these placeholders with the exact values supplied for this run. They must match the output folder and metadata exactly.
 
-If a value is still bracketed, stop and ask the organizer to fill it in. Do not invent the model identifier or date.
+- MODEL_SLUG: MODEL_SLUG
+- RUN_DATE: RUN_DATE
+- VERSION: VERSION
 
-## The brief
+Do not guess missing run parameters. If any value has not been supplied, ask the organiser before creating files.
 
-Build **Tandem**, a local-first project workspace for a small creative studio managing several client projects at once. A project lead needs to plan work, assign ownership, spot overloaded people, and understand what is at risk without opening five different tools.
+## The challenge
 
-This is a complete, single-user working application with realistic seeded data. It must not pretend to be a connected team service.
+Invent and build a focused workspace that helps people organise and move meaningful work forward. Choose the workflow, intended user, information model, visual identity and interface structure. The product should feel like one coherent tool, not a generic dashboard with disconnected sample widgets.
 
-## Starting workspace
+## What the build must deliver
 
-Seed three projects:
-- **Northstar identity refresh** — brand strategy and website handoff.
-- **Field Kit launch** — campaign assets and product launch preparation.
-- **Customer onboarding rebuild** — improve the first-use experience.
-
-Seed at least 15 distinct tasks across those projects. Every task needs a title, project, status, priority, assignee, due date and estimate in hours. Include a mix of completed, active, blocked and unstarted work. Use a few overdue tasks so the risk and workload views have something real to show. Use fictional team members with clear names.
-
-## Product requirements
-
-1. Build a coherent application shell with project navigation, a global search, clear workspace identity and a useful summary/home view.
-2. Provide at least three genuinely useful ways to inspect work: a Kanban board, a sortable/filterable task table, and a calendar or timeline view. They must all read from and update the same task records.
-3. Support create, edit, delete, duplicate and status-change actions for projects and tasks. Include confirmation before destructive deletion and a way to undo the most recent destructive action.
-4. Kanban cards must be draggable between columns with a keyboard-accessible alternative. A task's status must stay in sync with every other view.
-5. Provide filters for project, status, priority, assignee and due-date state. Include a search that matches task title and relevant task details. Filters must compose and have a clear reset.
-6. The overview must calculate workload by person, completion by project and overdue/blocked work from the task data. Provide a useful detail view for any selected task with an activity history.
-7. Persist projects, tasks, preferences and activity history across reloads using localStorage or IndexedDB. Include export to JSON and validated import from JSON so users can back up or restore their workspace.
-8. Add thoughtful empty states, form validation, success feedback, keyboard shortcuts for common actions and a responsive mobile layout. No control may be decorative-only.
+1. Seed at least three projects or work areas and fifteen meaningful work items. Choose the fields that fit your workflow, such as status, priority, owner, dates, tags or dependencies.
+2. Provide at least three genuinely useful views of the same underlying data, including a board-style view, a structured table and a calendar or timeline. Changes in one view must appear in the others.
+3. Implement create, view, edit and delete actions for core records. Support status changes by drag-and-drop and provide an accessible keyboard alternative.
+4. Add composable search and filters, clear empty states, sensible sorting and useful detail views.
+5. Record an activity history for important changes. Make it clear what changed and when within the local session or persisted history.
+6. Persist workspace data locally and support validated JSON export and import. Invalid imports must be rejected without destroying the current workspace.
 
 ## Quality bar
 
-The result should feel like a focused product with a recognisable visual system, not a Trello clone or generic admin template. Make dense information scannable without making it tiny. Keep navigation, view switching, edit forms and detail panels consistent. Provide sensible defaults and guard against accidental data loss.
+Make the result feel like a finished, intentionally designed product. Make strong creative and technical decisions independently; do not ask the organiser to choose the concept, visual direction, content, mechanics or implementation. Use a distinctive identity and a consistent visual language. Prioritise clarity, responsiveness, satisfying interaction and meaningful detail over decorative complexity.
 
-Use a self-contained HTML page with inline CSS and JavaScript. No backend, authentication service, remote API, external framework, remote font or stock-image dependency. Use semantic controls, accessible labels, visible focus, sufficient contrast and reduced-motion support.
+Every visible control must work. Every important interaction must create a real state change and give appropriate feedback. Avoid placeholder sections, dead buttons, fake charts, non-functional menus, empty world geometry and features that only look interactive. A smaller coherent experience is better than a large collection of unfinished systems.
 
 ## Acceptance checklist
 
-Before finishing, verify that:
-- Three projects and at least 15 complete task records are present on first launch.
-- A task created or edited in one view is correct in the other two views.
-- Dragging and keyboard status changes both update shared task state.
-- Search and all filters work together.
-- Workload, completion and overdue metrics recalculate after edits.
-- Delete confirmation and undo behave correctly.
-- Reload restores the workspace; JSON export and valid import round-trip the data.
-- Invalid imported data is rejected without destroying the current workspace.
-- The application remains usable at desktop and phone widths.
+- [ ] The seeded workspace contains at least three projects or work areas and fifteen work items.
+- [ ] Core records can be created, edited, viewed and deleted.
+- [ ] Board, table and calendar/timeline views stay synchronized.
+- [ ] Drag actions have an accessible keyboard alternative.
+- [ ] Search, filters, sorting and activity history operate on real workspace data.
+- [ ] JSON export/import round-trips correctly and invalid imports preserve existing data.
+
+## Technical expectations
+
+- Deliver a browser-first project that runs from its index.html entry point on a static host. Use an appropriate client-side implementation and include only dependencies that are genuinely needed.
+- Do not require a backend, private API, secret key, build service or manual setup to demonstrate the core experience.
+- Handle browser storage, invalid input, empty states, errors and reloads deliberately wherever relevant to the product.
+- Use semantic structure, accessible labels, visible keyboard focus, sensible contrast, keyboard support and reduced-motion preferences.
+- Make the experience responsive. Do not sacrifice core usability on smaller screens.
+- Test the actual experience in a browser when possible. If browser testing is unavailable, perform a careful code-level smoke check and report that limitation honestly.
+- Do not claim that something was tested unless it was actually tested.
 
 ## Submission contract — mandatory
 
@@ -60,9 +54,11 @@ Create exactly one folder at the workspace root named:
 
 **workspace__MODEL_SLUG__RUN_DATE__vVERSION**
 
-Place **index.html** and **meta.json** at its root. Add an **assets/** folder only for essential runtime assets. Do not create multiple applications or versions, extra HTML pages, README/audit documents, screenshots, package files, dependencies or build output. Create the files in the workspace and do not paste source code into chat.
+At the folder root include **index.html** and **meta.json**. Include an **assets/** folder only for essential local runtime assets. Keep all files for this one finished project inside this folder.
 
-The valid UTF-8 metadata must contain:
+Do not create multiple concepts, alternate versions, separate projects, additional HTML pages, README or audit files, screenshots, dependency folders, package files or build output. Do not create files outside the required project folder. Do not paste source code into chat.
+
+The metadata file must contain this structure with the exact values for this run:
 
 ~~~json
 {
@@ -73,9 +69,11 @@ The valid UTF-8 metadata must contain:
   "version": VERSION,
   "entry": "index.html",
   "prompt": "05",
-  "prompt_label": "Project Operations Workspace",
+  "prompt_label": "Project Workspace",
   "notes": "One or two honest sentences describing the completed build and any known limitations."
 }
 ~~~
 
-The folder and metadata must use the exact run parameters. The organizer ZIPs the folder; do not rely on the ZIP filename. Test in a browser if available, otherwise perform and disclose a code-level smoke check. Report only the folder path and honest test status.
+The folder and metadata must use the exact run parameters. The organiser will ZIP this one folder and upload it to ModelBench. The ZIP filename is not a routing key. Do not include scores or self-awarded evaluations in meta.json.
+
+When finished, report only the project folder path and an honest test status.

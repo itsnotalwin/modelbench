@@ -1,50 +1,52 @@
-# 04 · Operations Command Centre
+# 04 · Interactive Data Dashboard
 
 ## Run parameters
-Set these three values before starting the run. They must be the same values written into the output folder and metadata.
 
-- MODEL_SLUG: [model-slug]
-- RUN_DATE: [YYYY-MM-DD]
-- VERSION: 1
+Replace these placeholders with the exact values supplied for this run. They must match the output folder and metadata exactly.
 
-If a value is still bracketed, stop and ask the organizer to fill it in. Do not invent the model identifier or date.
+- MODEL_SLUG: MODEL_SLUG
+- RUN_DATE: RUN_DATE
+- VERSION: VERSION
 
-## The brief
+Do not guess missing run parameters. If any value has not been supplied, ask the organiser before creating files.
 
-Build **Switchyard**, an operations command centre for a fictional regional delivery company. A shift manager uses it to answer four questions quickly: what is moving, what is late, where are problems clustering, and what should the team investigate next?
+## The challenge
 
-This is an operational tool, not a decorative dashboard. Supply a believable synthetic dataset in the application itself. Do not call external APIs or claim to show live real-world data.
+Choose a domain with meaningful operational or analytical questions and build a polished interactive dashboard for it. Invent a coherent sample dataset and decide what a user needs to monitor, investigate and act on. The topic, metrics, labels, visual language and operational scenario are entirely yours. Make the data feel like one connected system rather than a collection of unrelated charts.
 
-## Product requirements
+## What the build must deliver
 
-1. Create a clear desktop-first command-centre layout that still works on a 390px phone. Establish hierarchy between urgent exceptions, current operating metrics and supporting analysis. Avoid a wall of identical KPI cards.
-2. Seed at least 24 distinct shipment records across at least four named regions and five status values. Each record must contain a stable ID, destination/region, created time or date, promised delivery time, current status, and a numeric service or order value. Use a single source of truth for all summaries and charts.
-3. Show meaningful headline metrics: active shipments, delivered today, late shipments, on-time rate and total value in motion. Calculate them from the records. Include a clear “as of” timestamp that identifies the data as simulated.
-4. Build at least three different visualisations, such as throughput over time, regional performance and status composition. All chart values must be calculated from the data, with labels, legends, tooltips or an accessible equivalent.
-5. Add working filters for date window, region and status. Filters must compose. Selecting a chart segment or region should apply a matching filter and update the rest of the dashboard.
-6. Selecting a shipment opens a useful detail panel with its timeline, current state, service target and available manager actions. Provide safe demo actions to advance an eligible shipment status, add an internal note and acknowledge an alert.
-7. Create an exceptions panel with prioritised alerts and clear reasons. Alert counts and severity must follow the dataset and state; no hard-coded warning badges that contradict the records.
-8. Add a “Simulate next hour” control that advances a deterministic, clearly labelled demo feed. New events must update KPIs, charts, alerts and shipment details from the same state. Include pause/reset controls.
-9. Provide CSV export of the currently filtered records. Persist manager changes and simulation state locally across reloads. Include a reset-to-seed-data action.
+1. Seed at least 24 internally consistent records with enough fields to support useful comparisons and filtering. Clearly identify the records as sample or simulated data.
+2. Show a well-chosen set of summary KPIs. Their values must reconcile with the underlying records and update when the active filters or data change.
+3. Include at least three charts or other visual analyses. They must derive from the same data model and respond correctly to relevant filters or selections.
+4. Provide composable filters, search and useful drill-down into an individual record or grouped detail. Include empty, loading or error states where appropriate.
+5. Add a deterministic event stream, live-style simulation or controlled data update mechanism that changes real application state. Users must be able to understand, pause or reset it.
+6. Support export of the current relevant data to a valid CSV file. Give clear feedback and preserve useful user settings locally.
 
 ## Quality bar
 
-A real shift manager should understand the current situation in seconds and be able to investigate a specific problem without hunting through the page. Use disciplined information design, legible density, clear status language and restrained live-update motion. Design empty, loading, selected and alert states. Include a small explanation of how the synthetic metrics are calculated.
+Make the result feel like a finished, intentionally designed product. Make strong creative and technical decisions independently; do not ask the organiser to choose the concept, visual direction, content, mechanics or implementation. Use a distinctive identity and a consistent visual language. Prioritise clarity, responsiveness, satisfying interaction and meaningful detail over decorative complexity.
 
-Use semantic HTML, accessible chart labels or tables, keyboard-accessible controls, visible focus, high contrast and reduced-motion support. Do not use external charts, remote fonts, fake network traffic or meaningless random numbers that change on every render.
+Every visible control must work. Every important interaction must create a real state change and give appropriate feedback. Avoid placeholder sections, dead buttons, fake charts, non-functional menus, empty world geometry and features that only look interactive. A smaller coherent experience is better than a large collection of unfinished systems.
 
 ## Acceptance checklist
 
-Before finishing, verify that:
-- All seeded shipments have valid, unique IDs and appear consistently across views.
-- KPI totals reconcile with the underlying shipment records.
-- Date, region and status filters compose and update all charts and lists.
-- Chart selection drills into the corresponding records.
-- Shipment detail actions update the same underlying state and produce a timestamped activity record.
-- Simulation advances data coherently and can be paused/reset.
-- CSV export contains the active filtered dataset and correct headers.
-- Reload preserves local state; reset restores the original seed.
-- The layout remains usable on desktop and phone with no page-level horizontal overflow.
+- [ ] At least 24 coherent sample records are present and the data model is understandable.
+- [ ] KPIs reconcile with records and active filters.
+- [ ] Charts derive from the same data source and respond to user selections.
+- [ ] Filters can be combined, cleared and used to reach useful drill-down details.
+- [ ] The event simulation changes application state predictably and can be controlled.
+- [ ] CSV export is valid and the dashboard remains legible at desktop and mobile sizes.
+
+## Technical expectations
+
+- Deliver a browser-first project that runs from its index.html entry point on a static host. Use an appropriate client-side implementation and include only dependencies that are genuinely needed.
+- Do not require a backend, private API, secret key, build service or manual setup to demonstrate the core experience.
+- Handle browser storage, invalid input, empty states, errors and reloads deliberately wherever relevant to the product.
+- Use semantic structure, accessible labels, visible keyboard focus, sensible contrast, keyboard support and reduced-motion preferences.
+- Make the experience responsive. Do not sacrifice core usability on smaller screens.
+- Test the actual experience in a browser when possible. If browser testing is unavailable, perform a careful code-level smoke check and report that limitation honestly.
+- Do not claim that something was tested unless it was actually tested.
 
 ## Submission contract — mandatory
 
@@ -52,9 +54,11 @@ Create exactly one folder at the workspace root named:
 
 **dashboard__MODEL_SLUG__RUN_DATE__vVERSION**
 
-The folder contains **index.html**, **meta.json**, and only essential runtime files in **assets/** if required. Keep the app self-contained in one HTML file with inline CSS/JS. Do not generate multiple dashboards, three variants, extra pages, README/audit files, screenshots, dependency folders or build output. Do not paste source code into chat.
+At the folder root include **index.html** and **meta.json**. Include an **assets/** folder only for essential local runtime assets. Keep all files for this one finished project inside this folder.
 
-The valid UTF-8 metadata must contain:
+Do not create multiple concepts, alternate versions, separate projects, additional HTML pages, README or audit files, screenshots, dependency folders, package files or build output. Do not create files outside the required project folder. Do not paste source code into chat.
+
+The metadata file must contain this structure with the exact values for this run:
 
 ~~~json
 {
@@ -65,9 +69,11 @@ The valid UTF-8 metadata must contain:
   "version": VERSION,
   "entry": "index.html",
   "prompt": "04",
-  "prompt_label": "Operations Command Centre",
+  "prompt_label": "Interactive Data Dashboard",
   "notes": "One or two honest sentences describing the completed build and any known limitations."
 }
 ~~~
 
-Use the exact run parameters above. The organizer ZIPs this folder; ZIP filename is ignored for routing. Test in a browser if possible; otherwise state that only a code-level smoke check was performed. Report only the folder path and honest test status.
+The folder and metadata must use the exact run parameters. The organiser will ZIP this one folder and upload it to ModelBench. The ZIP filename is not a routing key. Do not include scores or self-awarded evaluations in meta.json.
+
+When finished, report only the project folder path and an honest test status.
