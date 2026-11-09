@@ -267,6 +267,8 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
         self.assertNotIn("three separate outputs", dashboard)
         self.assertIn("one complete project folder", dashboard)
         self.assertIn("One run, one ZIP", dashboard)
+        self.assertIn("Six open-ended challenges", dashboard)
+        self.assertIn("three web-development challenges and three game-development challenges", dashboard)
 
 
     def test_catalog_is_three_web_and_three_game_challenges(self):
