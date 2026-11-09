@@ -304,6 +304,9 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
         self.assertNotIn("undo/restart", body.lower())
         self.assertIn('"prompt_label": "Original 2D Game"', body)
         self.assertNotIn("puzzle", challenge["requirement"].lower())
+        guide = (REPO_ROOT / "prompts" / "README.md").read_text(encoding="utf-8")
+        self.assertIn("| 06 | Original 2D Game | game-2d |", guide)
+        self.assertNotIn("| 06 | 2D Puzzle Game |", guide)
 
     def test_numbered_prompts_match_the_catalog(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
