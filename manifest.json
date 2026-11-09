@@ -1,6 +1,6 @@
 {
   "generated_from": "runs/",
-  "count": 16,
+  "count": 17,
   "catalog": [
     {
       "no": "01",
@@ -719,6 +719,52 @@
         "index.html",
         "manifest.webmanifest",
         "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "glm-5.3-flash",
+      "category": "game-2d",
+      "date": "2026-11-09",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "04",
+      "prompt_label": "Original 2D Game",
+      "notes": "HIVEMOTHER \u2014 an original swarmkeeping game: you are a queen bee; a boids-flocked worker swarm follows your cursor/keys, gathers nectar from seeded flower clusters inside your scent ring, and ferries pollen to the hive while wasps raid (they chase, lunge, leave after feeding, and give up after two pulse-stuns). Complete 7-day season loop: per-day quota before dusk, night interlude with hatching, golden blossoms (double pollen), wind gusts from day 4, honey-bank economy funding a decoy ability; lose by empty comb at dusk or a scattered swarm; win screen, instant restart, seeded per-day meadows, best-score persistence with guarded localStorage, pause on P/Esc/blur, WebAudio-synth SFX and ambience, reduced-motion support, keyboard+pointer+touch controls, DOM HUD with live quota/sun-track/cooldowns. Balance verified by scripted full-season simulations across multiple seeds (winnable, losable, near-miss finishes). Tested in the environment's embedded Chromium: console clean at boot and through title/run/dusk/night/end/pause flows, storage-corruption guard verified, letterbox resize verified, synthetic frame cost ~0.7 ms at 1586x892 (60 fps headroom). Limitations: the embedded test page never fires requestAnimationFrame (reports visibilityState hidden), so frame pacing was exercised via a ?tick=1 timer path and real-rAF pacing relies on code review; touch buttons were verified by coarse-pointer emulation only, not on physical hardware; audio was verified error-free by instrumentation, not by listening.",
+      "slug": "2026-11-09_glm-5.3-flash_game-2d_v1",
+      "path": "runs/2026-11-09_glm-5.3-flash_game-2d_v1/index.html",
+      "source_file": "game-2d__glm-5.3-flash__2026-11-09__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "js/audio.js",
+        "js/main.js",
+        "js/render.js",
+        "js/sim.js",
+        "js/world.js",
+        "manifest.webmanifest",
+        "meta.json",
+        "style.css",
         "sw.js"
       ]
     },
