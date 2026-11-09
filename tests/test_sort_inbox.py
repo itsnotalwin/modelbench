@@ -227,6 +227,13 @@ class ZipMetadataRoutingTests(unittest.TestCase):
 
 
 class PromptCatalogIntegrityTests(unittest.TestCase):
+
+    def test_dashboard_describes_one_artifact_per_prompt(self):
+        dashboard = (REPO_ROOT / "index.html").read_text(encoding="utf-8")
+        self.assertNotIn("three separate outputs", dashboard)
+        self.assertIn("one complete project folder", dashboard)
+        self.assertIn("One run, one ZIP", dashboard)
+
     def test_fifteen_one_shot_prompts_match_the_catalog(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
         prompts = catalog["prompts"]
