@@ -1,24 +1,31 @@
 # ModelBench
 
-ModelBench is an open-ended one-shot AI build benchmark. It compares model-created websites, data products, applications, games, simulations and creative tools in one installable dashboard. The sixteen challenges test different product-building skills, and each model run is a single finished artifact.
+ModelBench is a one-shot AI build benchmark focused on **web development and game development**. It contains six demanding challenges: three web projects and three games. Each model run is one finished artifact.
 
 **Live dashboard:** https://itsnotalwin.github.io/modelbench/
 
 ## How submissions work
 
-Each challenge is one prompt and each model run is **one project folder inside one ZIP**. Do not generate three versions or multiple concepts from one prompt.
-
-1. Choose one of the 16 challenges in [Prompts](prompts/README.md).
-2. The prompt automatically identifies the executing model, uses the current system date and sets version to `1`. You do not need to supply or confirm these values.
-3. The model creates one folder named CATEGORY__MODEL__YYYY-MM-DD__v1 containing index.html, meta.json and only essential runtime assets.
+1. Choose one of the six challenges in [Prompts](prompts/README.md).
+2. The prompt identifies the executing model, uses the current system date and fixes version to `1`. No organiser input is required.
+3. The model creates one folder named `CATEGORY__MODEL__YYYY-MM-DD__v1` containing `index.html`, `meta.json` and essential local assets only.
 4. ZIP that folder.
-5. Upload the ZIP to [inbox/](inbox/README.md). The ZIP filename may be anything ending in .zip; the importer reads meta.json inside the archive to determine the destination.
+5. Upload the ZIP to [inbox/](inbox/README.md). The importer routes from `meta.json`, not the ZIP filename.
 
-### meta.json contract
+## The six challenges
 
-Every ZIP must contain a valid UTF-8 meta.json at the project root:
+- **01 Brand & Business Website** — responsive brand website and enquiry flow.
+- **02 Interactive Content Website** — rich content, storytelling and useful interactions.
+- **03 Complete Web Application** — connected workflows and persistent application state.
+- **04 Original 2D Game** — genre and creative direction chosen by the model.
+- **05 Original 3D Game** — model-chosen genre with genuine 3D gameplay.
+- **06 End-to-End Game Masterpiece** — original world, characters, full storyline, dialogue, choices, quests, interconnected gameplay, art, sound and a complete ending.
 
-~~~json
+## Metadata contract
+
+Every ZIP must contain a UTF-8 `meta.json` at its project root:
+
+```json
 {
   "schema_version": 1,
   "model": "gpt-6",
@@ -27,54 +34,49 @@ Every ZIP must contain a valid UTF-8 meta.json at the project root:
   "version": 1,
   "entry": "index.html",
   "prompt": "01",
-  "prompt_label": "Original Brand Website",
-  "notes": "A concise description of the build and any known limitations."
+  "prompt_label": "Brand & Business Website",
+  "notes": "A concise, honest description of the build and known limitations."
 }
-~~~
+```
 
-- model is the lowercase model slug using letters, digits, hyphens and dots.
-- category must match one of the sixteen slugs in prompts/catalog.json.
-- date must be a real ISO date in YYYY-MM-DD format.
-- version is always the integer `1` for prompt-generated runs. Do not ask for or increment the version.
-- entry must be index.html at the project root.
-- prompt and prompt_label identify the selected challenge.
-- notes is a short, honest description. Scores and evaluation logs are organizer-owned and must not be supplied by the model.
+- `model`: runtime model slug, lowercase.
+- `category`: one of the six canonical slugs.
+- `date`: real ISO date in `YYYY-MM-DD`.
+- `version`: always integer `1`; never ask or increment it.
+- `entry`: `index.html` at project root.
+- `prompt` and `prompt_label`: challenge number and title.
+- `notes`: honest description and known limitations.
 
-**Metadata is authoritative.** The ZIP filename and internal folder name do not determine routing. The sorter validates the metadata, derives runs/{date}_{model}_{category}_v{n}/, and preserves the project files. If metadata is missing or invalid, the ZIP remains in inbox/ with an actionable error. A destination that already exists is never overwritten. Since prompt-generated runs always use version 1, submit a given model/category/date combination only once; a duplicate is safely rejected rather than replacing the first result.
+The sorter validates metadata, safely extracts the ZIP and creates `runs/{date}_{model}_{category}_v{n}/`. Invalid archives remain in inbox with actionable errors. Existing runs are never overwritten.
 
-## Dashboard ratings
+## Ratings
 
-Open a run, score the six axes from 0 to 5, and select **Save rating**. Ratings are stored in the current browser on this device, not committed to GitHub or synced to other devices. Use **Export ratings** to back up your ratings as JSON and **Import ratings** to restore or merge them in another browser. Importing ratings does not modify model artifacts or meta.json.
+The six-axis rating system remains unchanged: completeness, robustness, craft, depth, originality and performance. Ratings are organizer-owned and stored in the current browser; export/import remains available.
 
 ## Repository map
 
-~~~text
-index.html                    dashboard UI (unchanged by prompt updates)
-manifest.json                 generated dashboard data and challenge catalog
-prompts/catalog.json          canonical sixteen-challenge catalog
-prompts/*.md                  standalone one-shot build prompts
-prompts/README.md             suite guide and research basis
-inbox/README.md               ZIP upload instructions
-inbox/                        incoming ZIP packages
-runs/<run-slug>/              accepted build, metadata and generated PWA assets
-tools/sort_inbox.py           validates ZIP metadata, safely unpacks and routes runs
-tools/build_manifest.py       builds manifest.json from runs/*/meta.json
-tools/pwa.py                  generates run and dashboard PWA assets
-tools/new_run.py              prints the output-folder and metadata contract
-tests/                         importer and dashboard tests
+```text
+index.html                    dashboard UI
+manifest.json                 generated dashboard data and six-challenge catalog
+prompts/catalog.json          canonical challenge catalog
+prompts/01-*.md … 06-*.md     six standalone mega-prompts
+inbox/                        incoming ZIP packages and archived prior uploads
+runs/<run-slug>/              accepted submissions
+tools/sort_inbox.py           safe ZIP intake and routing
+tools/build_manifest.py       generates manifest.json
+tools/pwa.py                  dashboard and run install assets
+tests/                         regression and dashboard tests
 .github/workflows/auto-sort.yml
-                               sorts inbox uploads and commits generated run data
-~~~
+                               inbox automation
+```
 
 ## Local maintenance
 
-~~~bash
+```bash
 python -m unittest discover -s tests -v
+node --test tests/dashboard-ratings.test.js
 python tools/sort_inbox.py
 python tools/build_manifest.py
 python tools/pwa.py
-python tools/new_run.py --category site-brand
 python -m http.server 8000
-~~~
-
-Open http://localhost:8000 for a local dashboard preview. The dashboard visual implementation is deliberately kept separate from challenge prompt/catalog data.
+```

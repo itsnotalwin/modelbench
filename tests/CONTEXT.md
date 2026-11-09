@@ -1,14 +1,11 @@
 # Test suite context
 
 ## Purpose
-Hold regression tests for ModelBench import behavior and dashboard state utilities.
+Hold regression tests for importer behavior, the six-prompt catalogue and dashboard interactions.
 
 ## Key files
-- test_sort_inbox.py — ZIP metadata routing, validation, collision safety, legacy HTML parsing, catalogue-driven prompt integrity, genre-agnostic 2D game direction, Masterpiece Game capstone coverage, automatic run identity and partial-success/rejection behavior.
-- dashboard-ratings.test.js and test_dashboard_ui.py — existing dashboard rating and UI checks.
-
-## Connections
-Importer tests load tools/sort_inbox.py and replace its filesystem paths/catalog with isolated temporary fixtures. They must not touch the real inbox or runs directory.
+- `test_sort_inbox.py` — ZIP metadata routing, validation, collision safety, legacy HTML parsing, exact three-Web/three-Games prompt integrity, automatic run identity and fixed version 1.
+- `dashboard-ratings.test.js` and `test_dashboard_ui.py` — rating and dashboard UI checks, including the empty state after a reset.
 
 ## Change and verify
-Run python -m unittest discover -s tests -v and node tests/dashboard-ratings.test.js where Node is available. Add regression tests for every intake or metadata bug, including preservation of rejected ZIPs when other uploads succeed, prompt auto-identification and fixed version 1.
+Run `python -m unittest discover -s tests -v` and `node --test tests/dashboard-ratings.test.js`. Add regression tests for intake and metadata changes. Do not treat the empty run set as a failure.

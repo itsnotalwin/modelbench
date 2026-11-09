@@ -254,6 +254,14 @@ class ZipMetadataRoutingTests(unittest.TestCase):
 
 class PromptCatalogIntegrityTests(unittest.TestCase):
 
+
+    def test_catalog_is_three_web_and_three_game_challenges(self):
+        catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
+        self.assertEqual(len(catalog["prompts"]), 6)
+        self.assertEqual(sum(p["family"] == "Web" for p in catalog["prompts"]), 3)
+        self.assertEqual(sum(p["family"] == "Games" for p in catalog["prompts"]), 3)
+        self.assertEqual([p["no"] for p in catalog["prompts"]], ["01","02","03","04","05","06"])
+
     def test_dashboard_describes_one_artifact_per_prompt(self):
         dashboard = (REPO_ROOT / "index.html").read_text(encoding="utf-8")
         self.assertNotIn("three separate outputs", dashboard)
@@ -265,14 +273,9 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
         prompts = {p["no"]: p for p in catalog["prompts"]}
         game_categories = {
-            "06": "game-2d",
-            "07": "game-3d",
-            "11": "game-colony",
-            "12": "game-voxel",
-            "13": "game-brawler",
-            "14": "game-racer",
-            "15": "game-roguelite",
-            "16": "game-masterpiece",
+            "04": "game-2d",
+            "05": "game-3d",
+            "06": "game-masterpiece",
         }
         for number, slug in game_categories.items():
             challenge = prompts[number]
@@ -293,42 +296,42 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
 
 
 
-    def test_masterpiece_game_is_the_open_ended_final_boss_challenge(self):
+    def test_end_to_end_game_masterpiece_requires_full_story_production(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
-        challenge = next(p for p in catalog["prompts"] if p["no"] == "16")
+        challenge = next(p for p in catalog["prompts"] if p["no"] == "06")
         self.assertEqual(challenge["slug"], "game-masterpiece")
-        self.assertEqual(challenge["title"], "Masterpiece Game")
-        body = (REPO_ROOT / "prompts" / "16-masterpiece-game.md").read_text(encoding="utf-8")
-        self.assertIn("You choose everything that defines the game", body)
-        self.assertIn("Any genre is valid.", body)
-        self.assertIn("at least **four substantial gameplay systems**", body)
-        self.assertIn("at least three meaningfully different playable situations", body)
-        self.assertIn("at least three meaningful progression milestones", body)
-        self.assertIn("Exceptional visual craft", body)
-        self.assertIn("Sound and feedback", body)
-        self.assertIn('"prompt": "16"', body)
+        self.assertEqual(challenge["title"], "End-to-End Game Masterpiece")
+        body = (REPO_ROOT / "prompts" / "06-end-to-end-game-masterpiece.md").read_text(encoding="utf-8")
+        self.assertIn("Use the full capability of your environment", body)
+        self.assertIn("original, coherent storyline", body)
+        self.assertIn("playable protagonist", body)
+        self.assertIn("supporting cast", body)
+        self.assertIn("actual dialogue and scenes", body)
+        self.assertIn("at least three meaningful", body)
+        self.assertIn("at least four substantial gameplay systems", body)
+        self.assertIn("complete ending", body)
+        self.assertIn('"prompt": "06"', body)
         self.assertIn('"category": "game-masterpiece"', body)
-        self.assertNotIn("Do not default to or assume a puzzle game", body)
         guide = (REPO_ROOT / "prompts" / "README.md").read_text(encoding="utf-8")
-        self.assertIn("| 16 | Masterpiece Game | game-masterpiece |", guide)
+        self.assertIn("| 06 | End-to-End Game Masterpiece | game-masterpiece |", guide)
 
 
     def test_2d_game_prompt_leaves_genre_and_concept_to_the_model(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
-        challenge = next(p for p in catalog["prompts"] if p["no"] == "06")
+        challenge = next(p for p in catalog["prompts"] if p["no"] == "04")
         self.assertEqual(challenge["title"], "Original 2D Game")
-        body = (REPO_ROOT / "prompts" / "06-game-2d.md").read_text(encoding="utf-8")
+        body = (REPO_ROOT / "prompts" / "04-original-2d-game.md").read_text(encoding="utf-8")
         self.assertIn("You choose the genre and subgenre", body)
         self.assertIn("Any game genre is valid.", body)
-        self.assertIn("Do not default to or assume a puzzle game", body)
+        self.assertIn("Do not default to puzzles", body)
         self.assertNotIn("puzzle mechanic", body.lower())
         self.assertNotIn("six designed, solvable stages", body.lower())
         self.assertNotIn("undo/restart", body.lower())
         self.assertIn('"prompt_label": "Original 2D Game"', body)
         self.assertNotIn("puzzle", challenge["requirement"].lower())
         guide = (REPO_ROOT / "prompts" / "README.md").read_text(encoding="utf-8")
-        self.assertIn("| 06 | Original 2D Game | game-2d |", guide)
-        self.assertNotIn("| 06 | 2D Puzzle Game |", guide)
+        self.assertIn("| 04 | Original 2D Game | game-2d |", guide)
+        self.assertNotIn("puzzle", challenge["requirement"].lower())
 
     def test_numbered_prompts_match_the_catalog(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))

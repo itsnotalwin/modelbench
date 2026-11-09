@@ -89,7 +89,7 @@ class DashboardUI(unittest.TestCase):
         self.assertEqual(page.locator('#tests-grid').inner_html(), '')
         page.get_by_role('link', name='Leaderboard').click()
         self.assertGreater(page.locator('#board-table tbody tr').count(), 0)
-        page.get_by_role('link', name='The sixteen tests').click()
+        page.get_by_role('link', name='The six challenges').click()
         page.locator('#tests-grid .test').first.wait_for()
         self.assertEqual(page.locator('#tests-grid .test').count(), len(MANIFEST['catalog']))
         context.close()

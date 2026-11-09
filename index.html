@@ -384,7 +384,7 @@ footer.foot-site{color:var(--muted)}
     <nav class="tabs" aria-label="Sections">
       <a href="#runs" data-view="runs">Runs</a>
       <a href="#board" data-view="board">Leaderboard</a>
-      <a href="#tests" data-view="tests">The sixteen tests</a>
+      <a href="#tests" data-view="tests">The six challenges</a>
       <a href="#submit" data-view="submit">Submit</a>
     </nav>
   </div>
@@ -435,7 +435,7 @@ footer.foot-site{color:var(--muted)}
 
   <section id="view-tests" data-view="tests" hidden>
     <div class="section-head">
-      <div><h2>The sixteen tests</h2><p>Each prompt asks for one complete project folder with index.html and meta.json. One run, one ZIP. Each prompt defines a capability and quality bar while leaving creative direction to the model wherever the challenge allows. The Masterpiece Game is the ultimate open-ended game-development capstone.</p></div>
+      <div><h2>The sixteen tests</h2><p>Six mega-prompts: three web-development challenges and three game-development challenges. Each prompt produces one finished project folder and one ZIP. The final challenge is a full story-driven game production, from original characters and storyline to a complete playable ending.</p></div>
     </div>
     <div class="tests" id="tests-grid"></div>
   </section>
@@ -445,11 +445,11 @@ footer.foot-site{color:var(--muted)}
       <div><h2>Submit a run</h2><p>Uploads go to <code>inbox/</code>. The Action files them into <code>runs/</code> and rebuilds this dashboard within about a minute.</p></div>
     </div>
     <div class="steps">
-      <div class="step"><b>STEP 01</b><h3>Pick the test</h3><p>Use the test's slug, for example <code>game-2d</code> or <code>idea</code>. The slug is in the prompt header and on the tests page.</p></div>
+      <div class="step"><b>STEP 01</b><h3>Pick the test</h3><p>Use the challenge's category slug, such as <code>site-brand</code>, <code>web-app</code> or <code>game-masterpiece</code>. The slug is in the prompt header and on the challenges page.</p></div>
       <div class="step"><b>STEP 02</b><h3>Name the file</h3><p>The model writes its exact file name on its first line. If it did not, rename the file to this pattern:</p>
         <div class="pattern"><code id="pattern">{test}__{model}__{YYYY-MM-DD}__v1.html</code><button class="copy" data-copy="#pattern">Copy</button></div>
       </div>
-      <div class="step"><b>STEP 03</b><h3>Upload to inbox/</h3><p>Each test gives three <code>.html</code> files: <code>v1</code>, <code>v2</code>, <code>v3</code>. Never a <code>.rar</code>. A retest starts at <code>v4</code>; existing runs are never overwritten.</p></div>
+      <div class="step"><b>STEP 03</b><h3>Upload to inbox/</h3><p>Each challenge produces one project folder and one <code>.zip</code>. Model/date/version are resolved automatically, and version is always <code>v1</code>. Existing runs are never overwritten.</p></div>
       <div class="step"><b>STEP 04</b><h3>Score it</h3><p>Open a run and score its six axes. Ratings stay in this browser; use Export ratings to back them up or move them to another device. They are not published to GitHub.</p></div>
     </div>
   </section>
