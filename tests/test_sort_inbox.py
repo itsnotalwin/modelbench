@@ -326,12 +326,18 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
         guide = (REPO_ROOT / "prompts" / "README.md").read_text(encoding="utf-8")
         self.assertIn("| 04 | Original 2D Game | game-2d |", guide)
 
-    def test_reset_manifest_has_no_runs_and_matches_six_prompt_catalog(self):
+    def test_manifest_matches_runs_directory_and_six_prompt_catalog(self):
+        """The manifest must always describe exactly what is in runs/ — the old
+        zero-runs assertion only held before the first submission landed."""
         manifest = json.loads((REPO_ROOT / "manifest.json").read_text(encoding="utf-8"))
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
-        self.assertEqual(manifest["count"], 0)
-        self.assertEqual(manifest["runs"], [])
         self.assertEqual(manifest["catalog"], catalog["prompts"])
+        self.assertEqual(manifest["count"], len(manifest["runs"]))
+        run_dirs = sorted(
+            p.name for p in (REPO_ROOT / "runs").iterdir()
+            if p.is_dir() and not p.name.startswith(".")
+        )
+        self.assertEqual(sorted(r["slug"] for r in manifest["runs"]), run_dirs)
 
     def test_numbered_prompts_match_the_catalog(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
