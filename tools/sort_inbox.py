@@ -115,16 +115,29 @@ def validate_metadata(project_root: Path):
 
     category_from_field = resolve_category(meta.get("category"))
     category_from_prompt = resolve_category(meta.get("prompt"))
+    category_from_label = resolve_category(meta.get("prompt_label"))
     if category_from_field and category_from_prompt and category_from_field != category_from_prompt:
         raise IntakeError(
             f"meta.json category conflicts with prompt number: "
             f"{meta.get('category')!r} vs {meta.get('prompt')!r}"
         )
-    category = category_from_field or category_from_prompt
+    resolved = [value for value in (category_from_field, category_from_prompt, category_from_label) if value]
+    if resolved and any(value != resolved[0] for value in resolved[1:]):
+        raise IntakeError("meta.json category, prompt and prompt_label identify different challenges")
+
+    category = category_from_field or category_from_prompt or category_from_label
     if category is None:
+        hints = {
+            key: meta.get(key)
+            for key in ("challenge", "challenge_slug", "category_slug", "test", "test_id",
+                        "prompt_id", "prompt_name", "prompt_title", "task", "suite")
+            if key in meta
+        }
         raise IntakeError(
             "meta.json category could not be resolved; provide a catalog slug, challenge title, "
-            f"or prompt number (category={meta.get('category')!r}, prompt={meta.get('prompt')!r})"
+            f"or prompt number (category={meta.get('category')!r}, prompt={meta.get('prompt')!r}, "
+            f"prompt_label={meta.get('prompt_label')!r}, other_identity_fields={hints!r}, "
+            f"available_keys={sorted(meta.keys())!r})"
         )
 
     raw_date = meta.get("date")
