@@ -11,7 +11,7 @@ ModelBench contains **15 one-shot build challenges**. Each prompt asks a model t
 | 03 | Commerce Marketplace | site-store | 10+ coherent catalogue items | 03-marketplace.md |
 | 04 | Interactive Data Dashboard | dashboard | 24+ coherent records | 04-command-centre.md |
 | 05 | Project Workspace | workspace | 3 projects and 15+ work items | 05-project-workspace.md |
-| 06 | 2D Puzzle Game | game-2d | Original mechanic | 06-game-2d.md |
+| 06 | Original 2D Game | game-2d | Independent genre and game design | Complete playable game; model-chosen genre and core loop; coherent content; working rules and feedback; appropriate controls | 06-game-2d.md |
 | 07 | 3D Exploration Game | game-3d | Real 3D environment | 07-spatial-world.md |
 | 08 | Interactive System Simulation | sim | 4+ coupled state variables | 08-simulation-lab.md |
 | 09 | Creative Design Studio | creative-studio | Editable composition | 09-creative-studio.md |
