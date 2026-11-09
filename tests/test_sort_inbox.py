@@ -290,6 +290,21 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
             self.assertIn(f'"prompt": "{number}"', body)
             self.assertIn(f'"prompt_label": "{challenge["title"]}"', body)
 
+
+    def test_2d_game_prompt_leaves_genre_and_concept_to_the_model(self):
+        catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
+        challenge = next(p for p in catalog["prompts"] if p["no"] == "06")
+        self.assertEqual(challenge["title"], "Original 2D Game")
+        body = (REPO_ROOT / "prompts" / "06-game-2d.md").read_text(encoding="utf-8")
+        self.assertIn("You choose the genre and subgenre", body)
+        self.assertIn("Any game genre is valid.", body)
+        self.assertIn("Do not default to or assume a puzzle game", body)
+        self.assertNotIn("puzzle mechanic", body.lower())
+        self.assertNotIn("six designed, solvable stages", body.lower())
+        self.assertNotIn("undo/restart", body.lower())
+        self.assertIn('"prompt_label": "Original 2D Game"', body)
+        self.assertNotIn("puzzle", challenge["requirement"].lower())
+
     def test_numbered_prompts_match_the_catalog(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
         prompts = catalog["prompts"]
