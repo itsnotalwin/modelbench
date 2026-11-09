@@ -27,7 +27,7 @@ Every ZIP must contain a valid UTF-8 meta.json at the project root:
   "version": 1,
   "entry": "index.html",
   "prompt": "01",
-  "prompt_label": "Flagship Brand Experience",
+  "prompt_label": "Original Brand Website",
   "notes": "A concise description of the build and any known limitations."
 }
 ~~~
