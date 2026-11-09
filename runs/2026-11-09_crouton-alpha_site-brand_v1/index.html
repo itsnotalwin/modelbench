@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ember Box — Wood-fired sauna on farms in the Calder Valley</title>
+<meta name="description" content="Ember Box is a wood-fired sauna in a converted horsebox, parked on working farms around Hebden Bridge. Fifty minutes per set, £24 per person. Book a set — no payment until you arrive.">
+<meta name="theme-color" content="#191410">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ember Box — Wood-fired sauna on farms in the Calder Valley">
+<meta property="og:description" content="Fifty minutes of real heat, a cold plunge in the yard, and home before the fire's out. £24 per person. Book your set.">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ember Box — Wood-fired sauna on farms in the Calder Valley">
+<meta name="twitter:description" content="A wood-fired sauna parked on working farms. Fifty minutes, £24 per person, no payment until you arrive.">
+<!-- Payload budget: first view under 100 KB total (HTML+CSS+JS inline, no network, no fonts). No external requests by design. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HealthAndBeautyBusiness",
+  "name": "Ember Box",
+  "description": "Wood-fired sauna in a converted horsebox, parked on working farms in the Calder Valley. Fifty-minute sets from £24 per person.",
+  "email": "hello@emberbox.example",
+  "priceRange": "£24 - £120",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Hebden Bridge",
+    "addressRegion": "West Yorkshire",
+    "postalCode": "HX7",
+    "addressCountry": "GB"
+  },
+  "geo": { "@type": "GeoCoordinates", "latitude": 53.743, "longitude": -1.912 },
+  "openingHoursSpecification": [
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"], "opens": "07:00", "closes": "21:30" }
+  ],
+  "makesOffer": [
+    { "@type": "Offer", "name": "The 50 — per person", "price": "24", "priceCurrency": "GBP", "description": "Fifty minutes in the box, bench space for up to four, cold plunge and rest yard included." },
+    { "@type": "Offer", "name": "Private Box — up to six", "price": "95", "priceCurrency": "GBP", "description": "The whole box and yard to yourselves for fifty minutes." },
+    { "@type": "Offer", "name": "Farm Card — six sets", "price": "120", "priceCurrency": "GBP", "description": "Six guest sets to use across a season. Pay on arrival; card held, never charged until you come." }
+  ]
+}
+</script>
+<style>
+:root{
+  --bone:#F2EADF; --paper:#FBF7EF; --card:#FFFDF8;
+  --ink:#191410; --ink-soft:#3D352D; --muted:#5C5148;
+  --ember:#9C3410; --ember-deep:#7A280E; --ember-bright:#D65F28;
+  --cedar:#6B3F22; --sage:#3F4C3C; --sage-bg:#E8E9DC;
+  --line:#D9CDBB; --line-dark:#4A4036;
+  --error:#9F1D1D; --error-bg:#FDF0EE;
+  --ok:#2E5B34; --ok-bg:#EDF3E8;
+  --radius:14px; --radius-sm:10px;
+  --serif:Georgia,"Iowan Old Style","Palatino Linotype",serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"Cascadia Mono","SFMono-Regular",Consolas,monospace;
+  --pad:clamp(18px,5vw,56px);
+  --maxw:1160px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+body{
+  margin:0; background:var(--bone); color:var(--ink);
+  font-family:var(--sans); font-size:16px; line-height:1.6;
+  -webkit-text-size-adjust:100%; overflow-x:clip;
+}
+h1,h2,h3{font-family:var(--serif); line-height:1.08; margin:0; font-weight:700; letter-spacing:-.01em}
+h2{font-size:clamp(1.75rem,4.5vw,2.6rem)}
+h3{font-size:1.15rem}
+p{margin:.6em 0; max-width:68ch}
+a{color:var(--ember-deep); text-decoration-thickness:1.5px; text-underline-offset:3px}
+a:hover{color:var(--ink)}
+:focus-visible{outline:3px solid var(--ember); outline-offset:3px; border-radius:4px}
+.skip{position:absolute; left:12px; top:-60px; z-index:99; background:var(--ink); color:var(--bone); padding:12px 18px; border-radius:8px; font-weight:700; transition:top .18s}
+.skip:focus{top:12px; color:var(--bone)}
+.wrap{width:100%; max-width:var(--maxw); margin:0 auto; padding-left:var(--pad); padding-right:var(--pad)}
+.eyebrow{font-family:var(--mono); font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ember); margin:0 0 10px}
+.eyebrow::before{content:"— "}
+.lede{font-size:clamp(1.06rem,2.6vw,1.25rem); color:var(--ink-soft)}
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:48px; padding:12px 22px; border-radius:999px; border:2px solid var(--ink); background:var(--ink); color:var(--bone); font-weight:700; font-size:1rem; text-decoration:none; cursor:pointer; transition:transform .15s, background .15s}
+.btn:hover{background:var(--ember-deep); border-color:var(--ember-deep)}
+.btn.ghost{background:transparent; color:var(--ink)}
+.btn.ghost:hover{background:var(--ink); color:var(--bone)}
+.btn.small{min-height:44px; padding:9px 18px; font-size:.95rem}
+.btn[disabled]{opacity:.6; cursor:not-allowed}
+section{padding:clamp(44px,8vw,88px) 0}
+.sec-head{max-width:720px; margin-bottom:28px}
+.sec-head p{color:var(--ink-soft)}
+
+/* Header */
+header.site{position:sticky; top:0; z-index:50; background:rgba(251,247,239,.96); border-bottom:2px solid var(--ink); backdrop-filter:blur(6px)}
+.bar{display:flex; align-items:center; justify-content:space-between; gap:12px; min-height:64px; padding-top:6px; padding-bottom:6px}
+.brand{display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink)}
+.wordmark{font-family:var(--serif); font-size:1.35rem; letter-spacing:.02em; line-height:1}
+.wordmark em{font-style:normal; color:var(--ember)}
+.mark{width:40px; height:40px; flex:0 0 auto}
+.tagline-mini{display:none; font-family:var(--mono); font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted)}
+@media(min-width:620px){ .tagline-mini{display:block} }
+@media(max-width:480px){
+  .bar{flex-wrap:wrap; row-gap:2px}
+  .brand{min-width:0; flex:1 1 auto}
+  .mark{width:32px; height:32px}
+  nav.main{flex:0 0 auto}
+  .menu-btn{padding:8px 10px; font-size:.9rem}
+  .bar .btn{padding:9px 12px; font-size:.9rem}
+}
+nav.main{display:flex; align-items:center; gap:8px}
+.menu-btn{display:inline-flex; align-items:center; gap:8px; min-height:44px; min-width:44px; padding:8px 14px; border:2px solid var(--ink); border-radius:999px; background:var(--card); font-weight:700; font-size:.95rem; cursor:pointer}
+.navlist{list-style:none; margin:0; padding:0; display:none; position:absolute; left:0; right:0; top:100%; background:var(--paper); border-bottom:2px solid var(--ink); padding:10px var(--pad) 18px}
+.navlist.open{display:block}
+.navlist li{margin:4px 0}
+.navlist a{display:flex; align-items:center; min-height:44px; padding:8px 10px; border-radius:8px; color:var(--ink); text-decoration:none; font-weight:600}
+.navlist a:hover{background:var(--bone)}
+.bar .btn{white-space:nowrap}
+@media(min-width:900px){
+  .menu-btn{display:none}
+  .navlist{display:flex; position:static; gap:2px; border:0; background:transparent; padding:0}
+  .navlist a{min-height:44px; padding:8px 12px; font-size:.95rem}
+  .navlist a:hover{background:var(--bone)}
+}
+/* Hero */
+.hero{background:var(--ink); color:var(--bone); min-height:92dvh; display:flex; flex-direction:column; justify-content:center; padding-top:clamp(28px,6vw,64px); padding-bottom:clamp(28px,6vw,64px); padding-bottom:max(clamp(28px,6vw,64px), env(safe-area-inset-bottom))}
+.hero .eyebrow{color:#F0A36B}
+.hero h1{font-size:clamp(2.3rem,7.5vw,4.4rem); max-width:14ch}
+.hero h1 .heat{color:#F0A36B}
+.hero-grid{display:grid; gap:28px}
+@media(min-width:960px){ .hero-grid{grid-template-columns:1.05fr .95fr; align-items:center} }
+.hero p.lede{color:#E9DFCE}
+.hero-actions{display:flex; flex-wrap:wrap; gap:12px; margin-top:22px}
+.hero .btn{background:var(--bone); color:var(--ink); border-color:var(--bone)}
+.hero .btn:hover{background:var(--ember-bright); border-color:var(--ember-bright); color:var(--ink)}
+.hero .btn.ghost{background:transparent; color:var(--bone); border-color:#8A7D6B}
+.hero .btn.ghost:hover{background:#2B241D; border-color:var(--bone)}
+.hero-facts{list-style:none; padding:0; margin:22px 0 0; display:grid; gap:8px}
+.hero-facts li{display:flex; gap:10px; align-items:baseline; color:#E9DFCE}
+.hero-facts b{color:var(--bone)}
+.fact-key{font-family:var(--mono); font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:#F0A36B; flex:0 0 112px}
+.hero-fig{background:#241D16; border:2px solid #4A4036; border-radius:var(--radius); padding:14px}
+.hero-fig svg{width:100%; height:auto; display:block; border-radius:8px}
+figcaption{font-family:var(--mono); font-size:.74rem; line-height:1.5; color:#CBBEA6; padding-top:10px}
+.scroll-cue{margin-top:26px; font-family:var(--mono); font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:#CBBEA6}
+.scroll-cue a{color:var(--bone)}
+
+/* Offer */
+.price-grid{display:grid; gap:16px}
+@media(min-width:820px){ .price-grid{grid-template-columns:repeat(3,1fr)} }
+.price-card{background:var(--card); border:2px solid var(--ink); border-radius:var(--radius); padding:22px; display:flex; flex-direction:column}
+.price-card.featured{background:var(--sage); border-color:var(--sage); color:#F4F2E6}
+.price-card.featured p,.price-card.featured li{color:#E2E4D2}
+.price-card h3{font-size:1.3rem}
+.price{font-family:var(--serif); font-size:2.15rem; line-height:1; margin:10px 0 4px}
+.price small{font-family:var(--mono); font-size:.72rem; letter-spacing:.08em; text-transform:uppercase}
+.price-card ul{padding-left:20px; margin:12px 0}
+.price-card li{margin:6px 0}
+.price-card .note{margin-top:auto; font-size:.92rem; color:var(--muted)}
+.price-card.featured .note{color:#C9CCB5}
+.included{display:grid; gap:18px; margin-top:28px}
+@media(min-width:820px){ .included{grid-template-columns:1fr 1fr} }
+.panel{background:var(--paper); border:2px solid var(--line); border-radius:var(--radius); padding:20px}
+.panel h3{margin-bottom:8px}
+.panel ul{padding-left:20px; margin:8px 0}
+.panel li{margin:5px 0}
+.not-included{border-style:dashed}
+
+/* Timeline */
+.how{background:var(--paper); border-top:2px solid var(--ink); border-bottom:2px solid var(--ink)}
+.timeline{list-style:none; margin:24px 0 0; padding:0; display:grid; gap:14px}
+@media(min-width:900px){ .timeline{grid-template-columns:repeat(5,1fr)} }
+.timeline li{background:var(--card); border:2px solid var(--ink); border-radius:var(--radius); padding:16px; position:relative}
+.timeline li::after{content:"↓"; position:absolute; left:50%; bottom:-16px; transform:translateX(-50%); font-weight:800; color:var(--ember)}
+.timeline li:last-child::after{content:"●"; color:var(--sage)}
+@media(min-width:900px){ .timeline li::after{content:"→"; left:auto; right:-14px; bottom:auto; top:50%; transform:translateY(-50%)} .timeline li:last-child::after{content:"●"} }
+.t-time{font-family:var(--mono); font-size:.74rem; letter-spacing:.1em; color:var(--ember); display:block; margin-bottom:6px}
+.timeline h3{margin-bottom:6px}
+.timeline p{font-size:.95rem; color:var(--ink-soft); margin:0}
+.heat-note{margin-top:18px; background:var(--error-bg); border:2px solid var(--error); border-radius:var(--radius); padding:16px 18px}
+.heat-note p{margin:0; color:#5A1414}
+
+/* Where */
+.farm-list{display:grid; gap:14px}
+@media(min-width:900px){ .farm-list{grid-template-columns:1fr 1fr} }
+.farm{background:var(--card); border:2px solid var(--ink); border-radius:var(--radius); padding:20px}
+.farm h3{font-size:1.25rem}
+.farm .days{font-family:var(--mono); font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ember-deep)}
+.farm p{color:var(--ink-soft)}
+.farm ul{padding-left:20px; margin:8px 0}
+.mapwrap{margin-top:20px; background:var(--card); border:2px solid var(--ink); border-radius:var(--radius); padding:14px}
+.mapwrap svg{width:100%; height:auto; display:block}
+.access{margin-top:16px}
+
+/* Proof */
+.proof{background:var(--ink); color:var(--bone)}
+.proof .eyebrow{color:#F0A36B}
+.proof .sec-head p{color:#E9DFCE}
+.quotes{display:grid; gap:16px}
+@media(min-width:900px){ .quotes{grid-template-columns:repeat(3,1fr)} }
+blockquote{margin:0; background:#241D16; border:2px solid #4A4036; border-radius:var(--radius); padding:20px; display:flex; flex-direction:column}
+blockquote p{color:#E9DFCE}
+blockquote footer{margin-top:auto; padding-top:14px; font-size:.92rem; color:#CBBEA6}
+blockquote footer b{color:var(--bone)}
+.stars{letter-spacing:2px; color:#F0A36B; font-size:.95rem}
+.fieldnotes{margin-top:22px; background:#241D16; border:2px solid #4A4036; border-radius:var(--radius); padding:20px; min-width:0}
+.fieldnotes table{display:block; width:100%; border-collapse:collapse; font-size:.95rem; overflow-x:auto; -webkit-overflow-scrolling:touch}
+.fieldnotes table > *{min-width:480px}
+.fieldnotes th,.fieldnotes td{text-align:left; padding:9px 8px; border-bottom:1px solid #4A4036; color:#E9DFCE; vertical-align:top}
+.fieldnotes th{font-family:var(--mono); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:#F0A36B}
+.fieldnotes td strong{color:var(--bone)}
+
+/* About */
+.about-grid{display:grid; gap:22px}
+@media(min-width:900px){ .about-grid{grid-template-columns:.9fr 1.1fr; align-items:start} }
+.portrait{background:var(--card); border:2px solid var(--ink); border-radius:var(--radius); padding:14px}
+.portrait svg{width:100%; height:auto; display:block; border-radius:8px}
+.portrait figcaption{color:var(--muted)}
+
+/* FAQ */
+details{background:var(--card); border:2px solid var(--ink); border-radius:var(--radius); margin:10px 0; padding:0 20px}
+summary{cursor:pointer; min-height:44px; display:flex; align-items:center; gap:12px; padding:14px 0; font-weight:700; font-size:1.02rem; list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+"; margin-left:auto; font-family:var(--mono); font-size:1.3rem; color:var(--ember); flex:0 0 auto}
+details[open] summary::after{content:"−"}
+details .body{padding:0 0 18px; color:var(--ink-soft)}
+details .body p{max-width:68ch}
+
+/* Booking */
+.book{background:var(--paper); border-top:2px solid var(--ink)}
+.book-grid{display:grid; gap:22px}
+@media(min-width:960px){ .book-grid{grid-template-columns:1.25fr .75fr; align-items:start} }
+form.booking{background:var(--card); border:2px solid var(--ink); border-radius:var(--radius); padding:22px}
+.field{margin-bottom:18px}
+label,.legend{font-weight:700; display:block; margin-bottom:6px}
+.hint{font-size:.9rem; color:var(--muted); margin:2px 0 6px}
+input[type=text],input[type=email],input[type=tel],input[type=date],select,textarea{
+  width:100%; min-height:48px; padding:11px 14px; border:2px solid var(--ink); border-radius:var(--radius-sm);
+  font:inherit; font-size:1rem; background:#fff; color:var(--ink);
+}
+textarea{min-height:96px; resize:vertical}
+fieldset{border:2px solid var(--line); border-radius:var(--radius-sm); padding:14px; margin:0 0 18px}
+legend{padding:0 8px}
+.radio-grid,.check-grid{display:grid; gap:8px}
+.radio-grid label,.check-grid label{display:flex; gap:10px; align-items:flex-start; font-weight:500; min-height:44px; border:2px solid var(--line); border-radius:var(--radius-sm); padding:11px 12px; cursor:pointer; background:#fff}
+.radio-grid label:has(input:checked),.check-grid label:has(input:checked){border-color:var(--ink); background:var(--sage-bg)}
+.radio-grid input,.check-grid input{width:20px; height:20px; margin-top:3px; flex:0 0 auto; accent-color:var(--ember-deep)}
+.opt-price{margin-left:auto; font-family:var(--mono); font-size:.85rem; color:var(--ember-deep); white-space:nowrap}
+.two-col{display:grid; gap:14px}
+@media(min-width:620px){ .two-col{grid-template-columns:1fr 1fr} }
+.err{display:none; color:var(--error); font-weight:600; margin-top:6px; font-size:.95rem}
+.err.show{display:block}
+input[aria-invalid="true"],select[aria-invalid="true"],textarea[aria-invalid="true"]{border-color:var(--error); background:var(--error-bg)}
+.err-summary{display:none; border:2px solid var(--error); background:var(--error-bg); border-radius:var(--radius-sm); padding:14px 16px; margin-bottom:18px}
+.err-summary.show{display:block}
+.err-summary h3{color:var(--error); margin-bottom:4px}
+.err-summary ul{margin:6px 0 0; padding-left:20px}
+.err-summary a{color:var(--error)}
+.draft-note{display:none; background:var(--sage-bg); border:2px solid var(--sage); border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:16px}
+.draft-note.show{display:block}
+.draft-note button{margin-top:8px}
+.storage-warn{display:none; background:#FFF6DE; border:2px solid #8A6D1B; border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:16px}
+.storage-warn.show{display:block}
+.summary-card{background:var(--sage); color:#F4F2E6; border-radius:var(--radius); padding:20px; position:sticky; top:84px}
+.summary-card h3{color:#fff}
+.summary-card table{display:block; width:100%; border-collapse:collapse; margin:12px 0; overflow-x:auto; -webkit-overflow-scrolling:touch}
+.summary-card td{padding:7px 0; border-bottom:1px solid rgba(255,255,255,.22); vertical-align:top}
+.summary-card td:last-child{text-align:right; font-family:var(--mono); overflow-wrap:anywhere}
+.summary-card .total{font-family:var(--serif); font-size:1.9rem}
+.summary-card p{color:#E2E4D2; font-size:.95rem}
+.summary-card .fine{font-size:.85rem; color:#C9CCB5}
+.form-actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:8px}
+.success{display:none; background:var(--ok-bg); border:2px solid var(--ok); border-radius:var(--radius); padding:22px}
+.success.show{display:block}
+.success h3{color:var(--ok); font-size:1.5rem}
+.success table{display:block; width:100%; border-collapse:collapse; margin:14px 0; overflow-x:auto; -webkit-overflow-scrolling:touch}
+.success td{padding:8px 0; border-bottom:1px solid #C9D8C0; vertical-align:top; overflow-wrap:anywhere}
+.success td:first-child{font-weight:700; width:42%}
+.refcode{font-family:var(--mono); font-size:1.25rem; letter-spacing:.06em; background:#fff; border:2px dashed var(--ok); padding:10px 14px; border-radius:8px; display:inline-block; margin:8px 0}
+noscript .nojs{display:block; background:#FFF6DE; border:2px solid #8A6D1B; border-radius:var(--radius-sm); padding:14px; margin-top:14px}
+
+/* Footer */
+footer.site{background:var(--ink); color:var(--bone); padding:44px 0 calc(44px + env(safe-area-inset-bottom))}
+footer.site a{color:#F0A36B}
+footer.site .cols{display:grid; gap:22px}
+@media(min-width:820px){ footer.site .cols{grid-template-columns:1.2fr .8fr .8fr} }
+footer.site h3{color:var(--bone); margin-bottom:8px}
+footer.site p,footer.site li{color:#E9DFCE; font-size:.95rem}
+footer.site ul{padding-left:20px}
+.footbar{border-top:1px solid #4A4036; margin-top:26px; padding-top:16px; font-size:.85rem; color:#CBBEA6; display:flex; flex-wrap:wrap; gap:12px 24px}
+
+/* Reveal — subtle, disabled for reduced motion */
+.reveal{opacity:0; transform:translateY(14px); transition:opacity .6s ease, transform .6s ease}
+.reveal.is-visible{opacity:1; transform:none}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1; transform:none; transition:none}
+  *,*::before,*::after{animation:none !important; transition:none !important}
+}
+@media(max-width:359px){
+  .wordmark{font-size:1.15rem}
+  .bar .btn{padding:9px 14px; font-size:.9rem}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the good bit — straight to the content</a>
+
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="#top" aria-label="Ember Box Wood-fired sauna · Calder Valley — home">
+      <svg class="mark" viewBox="0 0 48 48" role="img" aria-label="Ember Box logo: a little box with three heat waves">
+        <rect x="4" y="18" width="40" height="24" rx="4" fill="#191410"/>
+        <rect x="4" y="18" width="40" height="24" rx="4" fill="none" stroke="#F2EADF" stroke-width="2"/>
+        <path d="M14 12c0-3 3-3 3-6M22 12c0-3 3-3 3-6M30 12c0-3 3-3 3-6" fill="none" stroke="#D65F28" stroke-width="2.4" stroke-linecap="round"/>
+        <circle cx="15" cy="30" r="2.2" fill="#D65F28"/><circle cx="24" cy="30" r="2.2" fill="#F2EADF"/><circle cx="33" cy="30" r="2.2" fill="#D65F28"/>
+      </svg>
+      <span>
+        <span class="wordmark">EMBER <em>BOX</em></span><br>
+        <span class="tagline-mini">Wood-fired sauna · Calder Valley</span>
+      </span>
+    </a>
+    <nav class="main" aria-label="Main">
+      <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="navlist" aria-haspopup="true">
+        <span aria-hidden="true">☰</span> Menu
+      </button>
+      <ul class="navlist" id="navlist">
+        <li><a href="#offer">The offer</a></li>
+        <li><a href="#how">Fifty minutes</a></li>
+        <li><a href="#where">Where it parks</a></li>
+        <li><a href="#proof">Proof</a></li>
+        <li><a href="#faq">Fair questions</a></li>
+      </ul>
+      <a class="btn small" href="#book">Book a set</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<!-- HERO -->
+<section class="hero" id="top" aria-labelledby="hero-title">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">A sauna that parks on the farm</p>
+      <h1 id="hero-title">Wood-fired heat on a working farm. <span class="heat">Fifty minutes.</span> No signal.</h1>
+      <p class="lede">Ember Box is a cedar sauna in a converted horsebox. We park it in farmyards around Hebden Bridge, Haworth and Todmorden, light the ash fire an hour before you come, and look after you while you get properly, usefully warm.</p>
+      <div class="hero-actions">
+        <a class="btn" href="#book">Hold my set — £24 a head</a>
+        <a class="btn ghost" href="#where">See where it parks first</a>
+      </div>
+      <ul class="hero-facts">
+        <li><span class="fact-key">The heat</span><span><b>82–88°C</b> on the top bench. You choose how high you sit.</span></li>
+        <li><span class="fact-key">The cold</span><span>A spring-fed plunge barrel in the yard — <b>about 8°C</b>, always.</span></li>
+        <li><span class="fact-key">The cost</span><span><b>No payment now.</b> We hold your set and you pay when you arrive.</span></li>
+      </ul>
+    </div>
+    <figure class="hero-fig">
+      <svg viewBox="0 0 560 380" role="img" aria-labelledby="hero-svg-title hero-svg-desc">
+        <title id="hero-svg-title">Side view of the Ember Box horsebox sauna, with a plunge barrel and a pile of split ash</title>
+        <desc id="hero-svg-desc">A dark horsebox with a glowing door, steam rising, a wooden barrel for cold water, and stacked logs.</desc>
+        <rect width="560" height="380" rx="10" fill="#1F1913"/>
+        <path d="M0 300 Q140 275 280 292 T560 288 V380 H0 Z" fill="#2E2417"/>
+        <g>
+          <rect x="70" y="120" width="300" height="170" rx="12" fill="#3A2B1A" stroke="#7A5A38" stroke-width="3"/>
+          <rect x="70" y="120" width="300" height="170" rx="12" fill="none" stroke="#F2EADF" stroke-width="1.5" opacity=".25"/>
+          <path d="M190 175 q8-28 0-44 M230 175 q8-28 0-44 M270 175 q8-28 0-44" stroke="#D65F28" stroke-width="4" fill="none" stroke-linecap="round" opacity=".9"/>
+          <rect x="120" y="195" width="110" height="75" rx="6" fill="#9C3410"/>
+          <rect x="126" y="201" width="98" height="63" rx="4" fill="#191410"/>
+          <circle cx="215" cy="233" r="4" fill="#F2EADF"/>
+          <rect x="260" y="205" width="84" height="14" rx="7" fill="#F2EADF" opacity=".9"/>
+          <rect x="260" y="232" width="84" height="14" rx="7" fill="#F2EADF" opacity=".55"/>
+          <rect x="82" y="290" width="276" height="10" rx="5" fill="#111"/>
+        </g>
+        <circle cx="120" cy="305" r="20" fill="#111" stroke="#8A7D6B" stroke-width="3"/><circle cx="320" cy="305" r="20" fill="#111" stroke="#8A7D6B" stroke-width="3"/>
+        <g>
+          <path d="M405 235 h70 v55 h-70 Z" fill="#6B3F22" stroke="#F2EADF" stroke-width="2"/>
+          <ellipse cx="440" cy="235" rx="35" ry="9" fill="#9C7B54" stroke="#F2EADF" stroke-width="2"/>
+          <ellipse cx="440" cy="235" rx="27" ry="6" fill="#3EA6C9" opacity=".8"/>
+        </g>
+        <g stroke="#8A6A45" stroke-width="9" stroke-linecap="round">
+          <path d="M408 312 l58-14"/><path d="M410 318 l54-4"/><path d="M412 324 l50 6"/>
+        </g>
+        <text x="70" y="102" fill="#CBBEA6" font-family="ui-monospace,monospace" font-size="13" letter-spacing="2">EMBER BOX · HORSEBOX No.1</text>
+        <text x="70" y="345" fill="#F0A36B" font-family="ui-monospace,monospace" font-size="12" letter-spacing="2">TOP BENCH 86°C · PLUNGE 8°C</text>
+      </svg>
+      <figcaption>The box at Birch Hill Farm, Hebden Bridge. Cedar benches inside, ash fire underneath, spring water in the barrel outside. Nothing electric, nothing amplified.</figcaption>
+    </figure>
+  </div>
+  <div class="wrap"><p class="scroll-cue">Scroll for the offer, the fifty minutes, and where we park →</p></div>
+</section>
+
+<!-- OFFER -->
+<section id="offer" aria-labelledby="offer-title">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">The offer, plainly</p>
+      <h2 id="offer-title">One price. Everything warm is included.</h2>
+      <p>Every set is fifty minutes in the box and yard. The fire, the plunge, the bench tea, and someone who knows when to talk and when to leave you alone — all in the price. Pick how you want to sit it.</p>
+    </div>
+    <div class="price-grid">
+      <article class="price-card reveal">
+        <p class="eyebrow">For one, two, or a few</p>
+        <h3>The 50 — per person</h3>
+        <p class="price">£24 <small>per person / 50 min</small></p>
+        <ul>
+          <li>Fifty minutes, in and out as you like</li>
+          <li>Shared bench, maximum four guests per set</li>
+          <li>Cold plunge + rest yard with tea and blankets</li>
+          <li>Good for trying it, or for a regular slot</li>
+        </ul>
+        <p class="note">That is the one to pick if it is your first time. Most people book it twice before they book anything else.</p>
+        <p><a class="btn ghost small" href="#book">Book The 50</a></p>
+      </article>
+      <article class="price-card featured reveal">
+        <p class="eyebrow">Just your people</p>
+        <h3>Private Box — up to six</h3>
+        <p class="price">£95 <small>flat / 50 min</small></p>
+        <ul>
+          <li>The whole box and yard to yourselves</li>
+          <li>Up to six people, all ages in one party</li>
+          <li>We set the heat to your liking and stay out of the way</li>
+          <li>Best for birthdays, hard weeks, and quiet natters</li>
+        </ul>
+        <p class="note">£95 flat however many of the six come. Over six? Send us a note — we will talk you through a bigger farmyard.</p>
+        <p><a class="btn small" href="#book">Hold the Private Box</a></p>
+      </article>
+      <article class="price-card reveal">
+        <p class="eyebrow">For the regulars</p>
+        <h3>Farm Card — six sets</h3>
+        <p class="price">£120 <small>six guest sets</small></p>
+        <ul>
+          <li>Six sets at The 50 rate, for £120 not £144</li>
+          <li>Use them any time in the season, Thu–Sun</li>
+          <li>One set = up to two people in the box</li>
+          <li>We stamp your card in ink. Properly.</li>
+        </ul>
+        <p class="note">No expiry panic. The card runs to the end of the season you buy it in. Lost card? We keep the record — just ask.</p>
+        <p><a class="btn ghost small" href="#book">Get a Farm Card</a></p>
+      </article>
+    </div>
+    <div class="included">
+      <div class="panel reveal">
+        <h3>What is in the price</h3>
+        <ul>
+          <li>The wood fire, lit an hour early, and the ash cleared after you</li>
+          <li>Two cedar benches — lower and cooler, upper and serious</li>
+          <li>The plunge barrel, cleaned and refilled between sets</li>
+          <li>Hot tea (always), blankets, and a windbreak you can sit behind</li>
+          <li>Mara or Jon tending the heat, plus a honest word if you are new</li>
+        </ul>
+      </div>
+      <div class="panel not-included reveal">
+        <h3>What is not in the price — so there are no surprises</h3>
+        <ul>
+          <li><b>No shower.</b> You get a cold jug, a bucket, and dignity. Most people like it better.</li>
+          <li><b>No music, no phones inside.</b> The yard has a bench and the valley does the rest.</li>
+          <li><b>No towels in the price.</b> Hire one for £3, or bring your own (they get damp, that is fine).</li>
+          <li><b>No changing rooms.</b> Arrive ready. You change by the box or in your car, like the old days.</li>
+        </ul>
+        <p><b>Add-ons:</b> Towel hire £3 · Robe hire £5 · Birch branch for a beating £4 · Extra tea and cake tin £6 a head. You can add them when you book — or just ask on the day.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section id="how" class="how" aria-labelledby="how-title">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">How it works</p>
+      <h2 id="how-title">Fifty minutes, held to heat.</h2>
+      <p>We run it the way the old farm saunas ran it: steady fire, honest water, no itinerary. This is roughly what yours will feel like, minute by minute. You do not have to follow it — it is a shape to lean on.</p>
+    </div>
+    <ol class="timeline">
+      <li class="reveal"><span class="t-time">MIN 0–5 · ARRIVE</span><h3>Say hello, strip to comfort</h3><p>You park in the yard, find us by the smoke, hang your things on the line. Towels go on the bench. No faff, no forms unless you need us to know something.</p></li>
+      <li class="reveal"><span class="t-time">MIN 5–15 · FIRST HEAT</span><h3>Sit low, breathe slow</h3><p>Start on the lower bench — about 62°C. Let your shoulders come down. Doors open often. The tin cups sweat and so will you.</p></li>
+      <li class="reveal"><span class="t-time">MIN 15–25 · UP, THEN OUT</span><h3>Top bench, then cold</h3><p>When you are ready, the top bench — 82 to 88°C. Five minutes, or ten if you are steady. Then out to the plunge, in for ten seconds, no longer.</p></li>
+      <li class="reveal"><span class="t-time">MIN 25–40 · THE MIDDLE</span><h3>Round two, your way</h3><p>Back in, hotter or cooler as you like it. Jon or Mara will have eased the fire. Some people do three rounds. Some do one long sit and a lot of tea. Both count.</p></li>
+      <li class="reveal"><span class="t-time">MIN 40–50 · COOL AND GO</span><h3>Blanket, tea, valley air</h3><p>Last plunge if you fancy it, then the blanket bench behind the windbreak. Glow for an hour afterwards. Drive home the long way — people usually do.</p></li>
+    </ol>
+    <div class="heat-note reveal">
+      <p><strong>A word on heat, because we owe you one:</strong> If you are pregnant, have a heart condition, or have been told to avoid heat or cold plunges, please do not come — or talk to your GP first and tell us in your booking notes. Feeling dizzy or odd at any point? Come out, sit down, tell us. We will think you sensible, not dramatic.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHERE -->
+<section id="where" aria-labelledby="where-title">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Where it parks</p>
+      <h2 id="where-title">Four farms. One box. No fixed address.</h2>
+      <p>We do not own land and we are not going to pretend otherwise. Each farm lets us a corner of the yard for the season, and we park where the firewood is dry and the view is honest. Full directions, parking notes and a what3words pin come with your confirmation email — we do not put farm lanes on a public map.</p>
+    </div>
+    <div class="farm-list">
+      <article class="farm reveal">
+        <p class="days">Thu–Sun · Dawn to dusk sets</p>
+        <h3>Birch Hill Farm — Hebden Bridge</h3>
+        <p>Our home yard. Ash trees over the plunge, sheep in the next field, and the hill doing its weather right in front of you.</p>
+        <ul><li>Parking: farmyard, marked “Ember Box”</li><li>Walk from Hebden Bridge station: 25 min, or the 587 bus to the gate</li><li>Tea: from the farm kitchen when the shutter is up</li></ul>
+      </article>
+      <article class="farm reveal">
+        <p class="days">Thu–Sun · Sets from 09:30</p>
+        <h3>High Winder — Haworth</h3>
+        <p>A working dairy farm with a beck running past the box. The coldest plunge we have and the best tea tin in the valley.</p>
+        <ul><li>Parking: by the milking parlour, follow the signs</li><li>Walk: 15 min from Haworth Main Street</li><li>Dogs: welcome on leads in the yard, not in the box</li></ul>
+      </article>
+      <article class="farm reveal">
+        <p class="days">Fri–Sun · Dusk sets popular</p>
+        <h3>Walsden Gate — Todmorden</h3>
+        <p>The quietest yard. Stones wall on three sides, no streetlights, and stars that genuinely look like a mistake.</p>
+        <ul><li>Parking: turning circle by the barn</li><li>Walk: 20 min from Todmorden station via the canal</li><li>Dusk sets: bring a headtorch for the lane back</li></ul>
+      </article>
+      <article class="farm reveal">
+        <p class="days">Sat–Sun · Farm Card Fridays</p>
+        <h3>Askwith Grange — Ilkley</h3>
+        <p>On the edge of the moor. Wind can be a character here — we have the windbreak up in ten minutes and it holds.</p>
+        <ul><li>Parking: car park at the walkers’ gate</li><li>Walk: 30 min from Ilkley station (a proper stretch)</li><li>On Fridays, Farm Card holders get first pick of dusk sets</li></ul>
+      </article>
+    </div>
+    <div class="mapwrap reveal">
+      <svg viewBox="0 0 800 260" role="img" aria-labelledby="map-title map-desc">
+        <title id="map-title">Sketch map of the four Ember Box farm yards in the Calder Valley</title>
+        <desc id="map-desc">Four dots in a rough line from Ilkley in the north to Todmorden in the south, with Hebden Bridge and Haworth between.</desc>
+        <rect width="800" height="260" rx="10" fill="#E9E2D2"/>
+        <path d="M60 220 C200 180 320 170 420 120 S640 60 760 40" fill="none" stroke="#9C3410" stroke-width="3" stroke-dasharray="8 7"/>
+        <g font-family="ui-monospace,monospace" font-size="13" fill="#191410">
+          <circle cx="640" cy="88" r="10" fill="#9C3410"/><text x="658" y="93">ASKWITH GRANGE · ILKLEY</text>
+          <circle cx="470" cy="132" r="10" fill="#9C3410"/><text x="488" y="137">HIGH WINDER · HAWORTH</text>
+          <circle cx="330" cy="176" r="10" fill="#191410"/><text x="348" y="181">BIRCH HILL · HEBDEN BRIDGE</text>
+          <circle cx="170" cy="206" r="10" fill="#9C3410"/><text x="188" y="211">WALSDEN GATE · TODMORDEN</text>
+        </g>
+        <text x="40" y="38" font-family="ui-monospace,monospace" font-size="12" fill="#5C5148" letter-spacing="2">SKETCH ONLY — DIRECTIONS SENT ON BOOKING</text>
+      </svg>
+      <p class="access"><strong>Getting there without a car:</strong> Hebden Bridge, Haworth and Todmorden are all on the Caldervale line. Birch Hill and Walsden Gate are a proper walk (25–20 min) — good warm-up, poor in trainers. Tell us in the booking notes if you are coming on foot and we will leave the low gate unlocked and the kettle on.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<section id="proof" class="proof" aria-labelledby="proof-title">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Proof, not promises</p>
+      <h2 id="proof-title">What people actually say when they come back.</h2>
+      <p>We keep the guest book by the door — paper, pencil, no stars unless people insist. These are copied word for word. The field notes underneath are our own logs, because heat is easy to claim and boring to fake.</p>
+    </div>
+    <div class="quotes">
+      <blockquote class="reveal">
+        <p class="stars" aria-label="Five out of five">★★★★★</p>
+        <p>“I came for a sore shoulder before a half marathon and stayed for the quiet. Jon did not fuss. The plunge is colder than you think and the tea is hotter. I slept like a log that night.”</p>
+        <footer><b>Priya S., Leeds</b> · The 50 at Birch Hill · Booked 4 times</footer>
+      </blockquote>
+      <blockquote class="reveal">
+        <p class="stars" aria-label="Five out of five">★★★★★</p>
+        <p>“Booked the Private Box for my dad’s 70th. He had never done a sauna in his life and was a bit daft about the cold barrel. Twenty minutes later he was in and out three times, grinning like a lad. He keeps the birch branch on his mantel.”</p>
+        <footer><b>Tom W., Todmorden</b> · Private Box at Walsden Gate</footer>
+      </blockquote>
+      <blockquote class="reveal">
+        <p class="stars" aria-label="Four out of five">★★★★☆</p>
+        <p>“Would have liked a shower, still would — but Mara was right, the jug is enough and the yard is the shower. Docked a star for no hot water, added it back for the view. We are back on Sunday.”</p>
+        <footer><b>Ellie and Marcus, Hebden Bridge</b> · The 50 at Birch Hill</footer>
+      </blockquote>
+    </div>
+    <div class="fieldnotes reveal">
+      <h3 style="color:#fff; margin-bottom:6px">Field notes from the log book</h3>
+      <p style="color:#CBBEA6">We write the weather down, because the fire behaves differently in it. A small honest sample:</p>
+      <table>
+        <thead><tr><th scope="col">Date</th><th scope="col">Yard</th><th scope="col">Top bench</th><th scope="col">Plunge</th><th scope="col">Note</th></tr></thead>
+        <tbody>
+          <tr><td><strong>12 Nov</strong></td><td>Birch Hill</td><td><strong>87°C</strong></td><td><strong>8°C</strong></td><td>NE wind, fire keen, three rounds easy. Plunge refilled twice.</td></tr>
+          <tr><td><strong>26 Oct</strong></td><td>High Winder</td><td><strong>84°C</strong></td><td><strong>6°C</strong></td><td>Beck cold after rain. Two guests declined the plunge — sensible. Tea extra.</td></tr>
+          <tr><td><strong>04 Oct</strong></td><td>Walsden Gate</td><td><strong>88°C</strong></td><td><strong>9°C</strong></td><td>Dusk set. Stars out before 19:00. Private Box of six, stayed on for blankets.</td></tr>
+          <tr><td><strong>14 Sep</strong></td><td>Askwith Grange</td><td><strong>82°C</strong></td><td><strong>10°C</strong></td><td>Moor wind all day. Windbreak held. Lower bench the popular one, as usual.</td></tr>
+        </tbody>
+      </table>
+      <p style="color:#CBBEA6; margin-top:12px">Since 2022 we have held <strong style="color:#fff">2,300+ sets</strong> and lost zero guests to the cold. That second number is the one we care about.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" aria-labelledby="about-title">
+  <div class="wrap about-grid">
+    <figure class="portrait reveal">
+      <svg viewBox="0 0 480 360" role="img" aria-labelledby="portrait-title portrait-desc">
+        <title id="portrait-title">Illustration of Mara Ellison, founder of Ember Box, stacking ash logs by the sauna</title>
+        <desc id="portrait-desc">A woman in work boots and a thick jumper throwing a log onto a pile beside the horsebox sauna, with steam rising.</desc>
+        <rect width="480" height="360" rx="10" fill="#E9E2D2"/>
+        <rect x="40" y="90" width="240" height="150" rx="10" fill="#3A2B1A"/>
+        <path d="M150 130 q7-24 0-38 M190 130 q7-24 0-38" stroke="#D65F28" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <rect x="90" y="155" width="80" height="55" rx="5" fill="#9C3410"/>
+        <circle cx="310" cy="170" r="28" fill="#C98B5E"/>
+        <path d="M282 160 a28 28 0 0 1 56 0 l4 26 h-64 Z" fill="#191410"/>
+        <path d="M285 200 q25 10 50 0 l8 90 h-66 Z" fill="#3F4C3C"/>
+        <path d="M335 215 l30 35" stroke="#3F4C3C" stroke-width="16" stroke-linecap="round"/>
+        <g stroke="#8A6A45" stroke-width="10" stroke-linecap="round"><path d="M350 260 l50-10"/><path d="M352 272 l46-2"/></g>
+        <path d="M290 290 h10 l12 40 h-30 Z M325 290 h10 l12 40 h-30 Z" fill="#191410"/>
+      </svg>
+      <figcaption>Mara, tending the fire the way she was taught: a little and often, and never trust a pile of damp ash.</figcaption>
+    </figure>
+    <div class="reveal">
+      <p class="eyebrow">Who is behind it</p>
+      <h2 id="about-title">A joiner, a horsebox, and a borrowed yard.</h2>
+      <p>I am Mara Ellison, I am 44, and until 2021 I fitted kitchens for a living. In 2020 my dad died and left me the horsebox he had meant to restore “one day”. I could not bear to sell it, so I lined it, built two benches, cut a step into the side, and had a sauna inspector tell me, kindly, that it was the best bad idea he had ever signed off.</p>
+      <p>We lit the first fire in a borrowed corner of Birch Hill Farm in October 2021. Six neighbours came. Two had never done a sauna, one was my mum, and the plunge barrel iced over before the end of the third set. I knew then it was not a business plan — it was a thing people wanted to come back to.</p>
+      <p>Jon — my brother, ex-postie, back man — looks after the fire on the days I cannot. He is better at it than I am, and he writes the weather in the log book in pencil so you can see where he changed his mind. Between us we still split every log, still refill the barrel between sets, and still think you should sit low first. If we ever get too posh for that, sell the box and buy us a boat.</p>
+      <p><strong>Our promise, in writing:</strong> if the fire goes out or the heat is not right, your set is free or rebooked — your call. If we cannot hold your set for any reason, we tell you the same day, not the same evening.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" aria-labelledby="faq-title" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Fair questions</p>
+      <h2 id="faq-title">Asked at the door, answered straight.</h2>
+    </div>
+    <details class="reveal">
+      <summary>Is it mixed? Can I book a set without strangers?</summary>
+      <div class="body"><p>The 50 is shared — up to four guests, mixed or not, whatever turns up. If you want no strangers, book the Private Box (£95); it is just your party. We never mix a Private Box with anyone else, not even for five minutes. If you book The 50 and the set is already full, we tell you straight away and offer another time.</p></div>
+    </details>
+    <details class="reveal">
+      <summary>What do I bring? What do I wear?</summary>
+      <div class="body"><p>Bring a towel (or hire ours for £3) and something to change into. Inside the box, most people wear swimwear; some wear nothing at all. Both are fine and nobody keeps score. Leave rings and watches in the car — metal gets hot. We have hooks but they are plastic for a reason.</p></div>
+    </details>
+    <details class="reveal">
+      <summary>What if it rains, or the wind is awful?</summary>
+      <div class="body"><p>We run in most weather — the box is warm and dry and the plunge does not mind rain one bit. If a set would be unsafe (high wind, lightning close by, flood on the lane) we cancel it and email you the same day with a free rebook or refund. Askwith Grange on a moor wind is the one to watch; we will always tell you if we are worried.</p></div>
+    </details>
+    <details class="reveal">
+      <summary>Can I get a shower afterwards?</summary>
+      <div class="body"><p>Not properly, no. You get the cold jug, a bucket, and the yard. Most people say they prefer it by the second visit — the sweat rinses off, the pores shut, and you are done. If you need a proper wash before work, come to an early set and use the farm’s tap by the parlour (Birch Hill and High Winder only).</p></div>
+    </details>
+    <details class="reveal">
+      <summary>What is the cancellation and payment policy?</summary>
+      <div class="body"><p>You pay on arrival — cash or card (the reader lives in the cab, not in the field, so give it a minute in April). Cancel or move up to 24 hours before your set and nothing is owed. Inside 24 hours we ask for half the set price, because there is a fire laid and a bench that could have sold. If we cancel, you owe nothing and get first pick of the next week. Farm Cards are stamped, not charged, on the day.</p></div>
+    </details>
+    <details class="reveal">
+      <summary>I am pregnant / have a heart condition / take drugs that affect heat. Can I come?</summary>
+      <div class="body"><p>Honestly: probably not, and we would rather you asked us than guessed. Sauna heat and cold plunges put real strain on the heart and blood pressure, and pregnancy changes the picture again. If any of that applies, talk to your GP first and tell us in the booking notes what they said. We will happily hold your money for a later visit, or give it back — no paperwork, no fuss.</p></div>
+    </details>
+    <details class="reveal">
+      <summary>Are children allowed? Are dogs?</summary>
+      <div class="body"><p>Children over 12 are welcome in a Private Box with an adult, at the same price — the heat is real and we do not take younger ones in the box. Dogs on a lead are welcome in the yards (they usually prefer the blanket bench to the plunge) but not in the box. If your dog is nervous of steam, they will tell you before we do.</p></div>
+    </details>
+  </div>
+</section>
+
+<!-- BOOK -->
+<section id="book" class="book" aria-labelledby="book-title">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Book your set</p>
+      <h2 id="book-title">Hold a set. We confirm by email. You pay when you arrive.</h2>
+      <p>Fill this in and we hold the bench. No account, no card details, no making you log in. We reply within one working day — usually quicker, because Jon checks his email with his tea. If you are in a hurry, write to <a href="mailto:hello@emberbox.example">hello@emberbox.example</a> with the same details.</p>
+    </div>
+    <div class="book-grid">
+      <div>
+        <div class="draft-note" id="draft-note" role="status">
+          <strong>Welcome back.</strong> We filled in the details you left last time so you do not have to type them again. If they are not yours, or someone else is using this phone, please clear them now — they are sitting in this browser only.
+          <br><button type="button" class="btn ghost small" id="clear-draft">Clear my saved details</button>
+        </div>
+        <div class="storage-warn" id="storage-warn" role="status">
+          <strong>Your browser is blocking saved drafts.</strong> That is fine — your booking will still work. You just will not be auto-filled next time, and nothing of yours will be kept on this device.
+        </div>
+        <div class="err-summary" id="err-summary" tabindex="-1">
+          <h3>Not quite yet — a couple of things to fix</h3>
+          <p>Nothing is lost. Your answers are still here. Just check these:</p>
+          <ul id="err-list"></ul>
+        </div>
+
+        <form class="booking" id="booking-form" novalidate>
+          <div class="two-col">
+            <div class="field">
+              <label for="name">Your full name</label>
+              <p class="hint" id="name-hint">How we should say hello when you arrive.</p>
+              <input type="text" id="name" name="name" autocomplete="name" required aria-describedby="name-hint name-err">
+              <p class="err" id="name-err"></p>
+            </div>
+            <div class="field">
+              <label for="email">Email address</label>
+              <p class="hint" id="email-hint">This is where the directions and confirmation go.</p>
+              <input type="email" id="email" name="email" autocomplete="email" required aria-describedby="email-hint email-err">
+              <p class="err" id="email-err"></p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="phone">Mobile number <span style="font-weight:400">(optional)</span></label>
+            <p class="hint" id="phone-hint">Only if you want a text if the lane floods. We never share it.</p>
+            <input type="tel" id="phone" name="phone" autocomplete="tel" aria-describedby="phone-hint phone-err">
+            <p class="err" id="phone-err"></p>
+          </div>
+
+          <div class="two-col">
+            <div class="field">
+              <label for="location">Where do you want to sit it?</label>
+              <p class="hint" id="location-hint">Pick the farm. Full directions come by email after.</p>
+              <select id="location" name="location" required aria-describedby="location-hint location-err">
+                <option value="">Choose a farm…</option>
+                <option value="Birch Hill Farm — Hebden Bridge">Birch Hill Farm — Hebden Bridge (Thu–Sun)</option>
+                <option value="High Winder — Haworth">High Winder — Haworth (Thu–Sun)</option>
+                <option value="Walsden Gate — Todmorden">Walsden Gate — Todmorden (Fri–Sun)</option>
+                <option value="Askwith Grange — Ilkley">Askwith Grange — Ilkley (Sat–Sun)</option>
+              </select>
+              <p class="err" id="location-err"></p>
+            </div>
+            <div class="field">
+              <label for="date">Which day?</label>
+              <p class="hint" id="date-hint">Any day from today. We will confirm the set time by email.</p>
+              <input type="date" id="date" name="date" required aria-describedby="date-hint date-err">
+              <p class="err" id="date-err"></p>
+            </div>
+          </div>
+
+          <div class="two-col">
+            <div class="field">
+              <label for="slot">Arrival window</label>
+              <p class="hint" id="slot-hint">Arrive in the window; the fire will be ready.</p>
+              <select id="slot" name="slot" required aria-describedby="slot-hint slot-err">
+                <option value="">Choose a window…</option>
+                <option value="07:00">07:00 — Dawn set (quiet, empty lanes)</option>
+                <option value="09:30">09:30 — Morning set</option>
+                <option value="12:00">12:00 — Midday set</option>
+                <option value="14:30">14:30 — Afternoon set</option>
+                <option value="17:00">17:00 — Late set</option>
+                <option value="19:30">19:30 — Dusk set (stars, if kind)</option>
+              </select>
+              <p class="err" id="slot-err"></p>
+            </div>
+            <div class="field">
+              <label for="party">How many coming?</label>
+              <p class="hint" id="party-hint">Including you. Max six in the box.</p>
+              <select id="party" name="party" required aria-describedby="party-hint party-err">
+                <option value="">How many…</option>
+                <option value="1">1 — just me</option>
+                <option value="2">2 people</option>
+                <option value="3">3 people</option>
+                <option value="4">4 people</option>
+                <option value="5">5 people</option>
+                <option value="6">6 people (Private Box max)</option>
+              </select>
+              <p class="err" id="party-err"></p>
+            </div>
+          </div>
+
+          <fieldset>
+            <legend class="legend">What are you booking?</legend>
+            <p class="hint" id="session-hint">You pay on arrival. Pick one — the total updates as you choose.</p>
+            <div class="radio-grid">
+              <label><input type="radio" name="session" value="the50" required> <span>The 50 — per person <span style="color:var(--muted)">(shared, up to four)</span></span> <span class="opt-price">£24 a head</span></label>
+              <label><input type="radio" name="session" value="private"> <span>Private Box — up to six <span style="color:var(--muted)">(just your people)</span></span> <span class="opt-price">£95 flat</span></label>
+              <label><input type="radio" name="session" value="farmcard"> <span>Farm Card — six sets <span style="color:var(--muted)">(for the season)</span></span> <span class="opt-price">£120 flat</span></label>
+            </div>
+            <p class="err" id="session-err"></p>
+          </fieldset>
+
+          <fieldset>
+            <legend class="legend">Add-ons <span style="font-weight:400">(optional — pay on arrival)</span></legend>
+            <div class="check-grid">
+              <label><input type="checkbox" name="addon" value="Towel hire" data-price="3"> <span>Towel hire <span style="color:var(--muted)">— per person</span></span> <span class="opt-price">£3</span></label>
+              <label><input type="checkbox" name="addon" value="Robe hire" data-price="5"> <span>Robe hire <span style="color:var(--muted)">— per person</span></span> <span class="opt-price">£5</span></label>
+              <label><input type="checkbox" name="addon" value="Birch branch" data-price="4"> <span>Birch branch beating <span style="color:var(--muted)">— per person</span></span> <span class="opt-price">£4</span></label>
+              <label><input type="checkbox" name="addon" value="Tea and cake tin" data-price="6"> <span>Tea and cake tin <span style="color:var(--muted)">— per person</span></span> <span class="opt-price">£6</span></label>
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label for="notes">Anything we should know? <span style="font-weight:400">(optional)</span></label>
+            <p class="hint" id="notes-hint">Pregnancy, heart trouble, coming on foot, a lift needed, a birthday — tell us here. <span id="notes-count">0</span>/500 characters.</p>
+            <textarea id="notes" name="notes" maxlength="500" aria-describedby="notes-hint" placeholder="e.g. Coming on foot from Hebden Bridge station — please leave the low gate open."></textarea>
+          </div>
+
+          <div class="field">
+            <label style="display:flex; gap:10px; align-items:flex-start; font-weight:500; min-height:44px">
+              <input type="checkbox" id="rules" name="rules" required style="width:20px; height:20px; margin-top:3px; flex:0 0 auto; accent-color:var(--ember-deep)">
+              <span>I have read the heat note above and I understand sauna and cold plunges are not for everyone. I will come out if I feel unwell, and I will tell Mara or Jon.</span>
+            </label>
+            <p class="err" id="rules-err"></p>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn" id="submit-btn">Hold my set — no payment now</button>
+            <button type="reset" class="btn ghost" id="reset-btn">Start again</button>
+          </div>
+          <p class="hint" style="margin-top:12px">By holding a set you agree to our <a href="#faq">cancellation policy</a>: free to move or cancel up to 24 hours before. After that, half the set price, because the fire is laid either way.</p>
+          <noscript><span class="nojs"><strong>This booking form needs JavaScript to work in your browser.</strong> If it is off, please email <a href="mailto:hello@emberbox.example">hello@emberbox.example</a> with your name, farm, day, arrival window, party size and which session you want. We will hold it the same way.</span></noscript>
+        </form>
+
+        <div class="success" id="success" role="status" aria-live="polite">
+          <h3>Your set is held. See you at the fire.</h3>
+          <p>We have kept your place in the book. A confirmation with directions is on its way to <b id="success-email"></b> — give it a few minutes, and check your spam if it is shy. You pay on arrival, cash or card.</p>
+          <p>Your reference — keep this, it is how we find you in the log book:</p>
+          <p><span class="refcode" id="refcode"></span></p>
+          <table id="success-table" aria-label="Your held set"></table>
+          <p style="color:var(--ink-soft)">Need to move it? Reply to the confirmation email or write to <a href="mailto:hello@emberbox.example">hello@emberbox.example</a> with your reference. Free to move up to 24 hours before.</p>
+          <div class="form-actions">
+            <button type="button" class="btn" id="book-another">Book another set</button>
+            <button type="button" class="btn ghost" id="clear-all">Clear my saved details</button>
+          </div>
+        </div>
+      </div>
+
+      <aside class="summary-card reveal" aria-label="Your booking so far">
+        <h3>Your set so far</h3>
+        <p>This updates as you fill the form. Nothing is charged now.</p>
+        <table>
+          <tr><td>Farm</td><td id="sum-location">—</td></tr>
+          <tr><td>Day</td><td id="sum-date">—</td></tr>
+          <tr><td>Window</td><td id="sum-slot">—</td></tr>
+          <tr><td>Session</td><td id="sum-session">—</td></tr>
+          <tr><td>People</td><td id="sum-party">—</td></tr>
+          <tr><td>Add-ons</td><td id="sum-addons">None yet</td></tr>
+        </table>
+        <p>To pay on arrival</p>
+        <p class="total" id="sum-total">£0</p>
+        <p class="fine" id="sum-note">Pick a session type and party size and we will add it up honestly. Farm Card holders: you pay £120 on collection, and each set is stamped — nothing is charged per visit after that.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h3>Ember Box</h3>
+        <p>A wood-fired sauna in a converted horsebox, parked on working farms in the Calder Valley. Built by Mara Ellison, fired by Mara and Jon, kept warm by ash and stubbornness since 2021.</p>
+        <p><a href="mailto:hello@emberbox.example">hello@emberbox.example</a></p>
+      </div>
+      <div>
+        <h3>Good to know</h3>
+        <ul>
+          <li>Sets Thu–Sun, 07:00–21:30 (farm permitting)</li>
+          <li>Pay on arrival. Free to move up to 24h before.</li>
+          <li>No shower, no music. Bring a towel or hire one.</li>
+          <li>Dogs on leads in the yard. Children 12+ in Private Box.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Find us</h3>
+        <p>Birch Hill Farm, Hebden Bridge HX7<br>
+        High Winder, Haworth BD22<br>
+        Walsden Gate, Todmorden OL14<br>
+        Askwith Grange, Ilkley LS29<br>
+        Full directions come with your booking.</p>
+      </div>
+    </div>
+    <div class="footbar">
+      <span>© <span id="year">2026</span> Ember Box. All the heat is our fault.</span>
+      <span><a href="#book">Book a set</a></span>
+      <span><a href="#faq">Cancellation &amp; safety</a></span>
+      <span><a href="#where">Where it parks</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  /* Year */
+  try { document.getElementById("year").textContent = String(new Date().getFullYear()); } catch(e){}
+
+  /* Mobile menu */
+  var menuBtn = document.getElementById("menu-btn");
+  var navList = document.getElementById("navlist");
+  function closeMenu(){ navList.classList.remove("open"); menuBtn.setAttribute("aria-expanded","false"); }
+  menuBtn.addEventListener("click", function(){
+    var open = navList.classList.toggle("open");
+    menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  navList.addEventListener("click", function(e){ if(e.target.closest("a")) closeMenu(); });
+  document.addEventListener("keydown", function(e){ if(e.key === "Escape") closeMenu(); });
+
+  /* Scroll reveals */
+  var revealEls = document.querySelectorAll(".reveal");
+  if(!("IntersectionObserver" in window) || (prefersReduced && prefersReduced.matches)){
+    revealEls.forEach(function(el){ el.classList.add("is-visible"); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ en.target.classList.add("is-visible"); io.unobserve(en.target); }
+      });
+    }, {threshold: 0.12});
+    revealEls.forEach(function(el){ io.observe(el); });
+  }
+
+  /* Safe storage */
+  var DRAFT_KEY = "emberbox-draft-v1";
+  var LAST_KEY = "emberbox-last-booking-v1";
+  var storageOK = true;
+  function safeGet(k){ try { return window.localStorage.getItem(k); } catch(e){ storageOK = false; return null; } }
+  function safeSet(k,v){ try { window.localStorage.setItem(k,v); return true; } catch(e){ storageOK = false; return false; } }
+  function safeRemove(k){ try { window.localStorage.removeItem(k); } catch(e){ storageOK = false; } }
+
+  var form = document.getElementById("booking-form");
+  var success = document.getElementById("success");
+  var errSummary = document.getElementById("err-summary");
+  var errList = document.getElementById("err-list");
+  var submitBtn = document.getElementById("submit-btn");
+
+  /* Date minimum = today (local) */
+  var dateInput = document.getElementById("date");
+  function todayISO(){
+    try {
+      var d = new Date();
+      var m = String(d.getMonth()+1).padStart(2,"0");
+      var day = String(d.getDate()).padStart(2,"0");
+      return d.getFullYear() + "-" + m + "-" + day;
+    } catch(e){ return ""; }
+  }
+  if(dateInput){ dateInput.min = todayISO(); }
+
+  /* Notes counter */
+  var notes = document.getElementById("notes");
+  var notesCount = document.getElementById("notes-count");
+  function updateCount(){ notesCount.textContent = String(notes.value.length); }
+  notes.addEventListener("input", updateCount);
+  updateCount();
+
+  /* Draft restore */
+  var draftNote = document.getElementById("draft-note");
+  var storageWarn = document.getElementById("storage-warn");
+  function collectDraft(){
+    var data = {};
+    data.name = document.getElementById("name").value;
+    data.email = document.getElementById("email").value;
+    data.phone = document.getElementById("phone").value;
+    data.location = document.getElementById("location").value;
+    data.date = document.getElementById("date").value;
+    data.slot = document.getElementById("slot").value;
+    data.party = document.getElementById("party").value;
+    var sess = form.querySelector('input[name="session"]:checked');
+    data.session = sess ? sess.value : "";
+    var addons = form.querySelectorAll('input[name="addon"]:checked');
+    data.addons = Array.prototype.map.call(addons, function(cb){ return cb.value; });
+    data.notes = document.getElementById("notes").value;
+    return data;
+  }
+  function saveDraft(){
+    if(!safeSet(DRAFT_KEY, JSON.stringify(collectDraft()))){ showStorageWarn(); }
+  }
+  function showStorageWarn(){ storageWarn.classList.add("show"); }
+  var saveTimer = null;
+  form.addEventListener("input", function(){
+    updateSummary();
+    if(saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveDraft, 300);
+  });
+  form.addEventListener("change", function(){ updateSummary(); saveDraft(); });
+
+  function restoreDraft(){
+    var raw = safeGet(DRAFT_KEY);
+    if(!storageOK){ showStorageWarn(); return; }
+    if(!raw) return;
+    var d; try { d = JSON.parse(raw); } catch(e){ return; }
+    if(!d || typeof d !== "object") return;
+    var hasContent = (d.name||d.email||d.location||d.date||d.session);
+    if(!hasContent) return;
+    if(d.name) document.getElementById("name").value = d.name;
+    if(d.email) document.getElementById("email").value = d.email;
+    if(d.phone) document.getElementById("phone").value = d.phone;
+    if(d.location) document.getElementById("location").value = d.location;
+    if(d.date) document.getElementById("date").value = d.date;
+    if(d.slot) document.getElementById("slot").value = d.slot;
+    if(d.party) document.getElementById("party").value = d.party;
+    if(d.session){ var r = form.querySelector('input[name="session"][value="'+CSS.escape(d.session)+'"]'); if(r) r.checked = true; }
+    if(Array.isArray(d.addons)){ d.addons.forEach(function(v){ var c = form.querySelector('input[name="addon"][value="'+CSS.escape(v)+'"]'); if(c) c.checked = true; }); }
+    if(d.notes) document.getElementById("notes").value = String(d.notes).slice(0,500);
+    updateCount();
+    draftNote.classList.add("show");
+  }
+  restoreDraft();
+
+  document.getElementById("clear-draft").addEventListener("click", function(){
+    form.reset(); updateCount(); updateSummary(); safeRemove(DRAFT_KEY); draftNote.classList.remove("show");
+    document.getElementById("name").focus();
+  });
+  document.getElementById("clear-all").addEventListener("click", function(){
+    safeRemove(DRAFT_KEY); safeRemove(LAST_KEY);
+    form.reset(); updateCount(); updateSummary(); hideErrors();
+    success.classList.remove("show"); form.style.display = ""; draftNote.classList.remove("show");
+    form.scrollIntoView({behavior: prefersReduced.matches ? "auto" : "smooth"});
+    document.getElementById("name").focus();
+  });
+
+  /* Summary + pricing */
+  var PRICES = { the50: 24, private: 95, farmcard: 120 };
+  var SESSION_LABELS = { the50: "The 50", private: "Private Box", farmcard: "Farm Card" };
+  function partyNum(){ var v = parseInt(document.getElementById("party").value, 10); return isNaN(v) ? 0 : v; }
+  function selectedSession(){ var s = form.querySelector('input[name="session"]:checked'); return s ? s.value : ""; }
+  function selectedAddons(){
+    return Array.prototype.slice.call(form.querySelectorAll('input[name="addon"]:checked'));
+  }
+  function calcTotal(){
+    var sess = selectedSession();
+    var party = partyNum();
+    if(!sess) return { total: 0, base: 0, addons: 0 };
+    var base = 0;
+    if(sess === "the50") base = PRICES.the50 * party;
+    if(sess === "private") base = PRICES.private;
+    if(sess === "farmcard") base = PRICES.farmcard;
+    var addonTotal = 0;
+    selectedAddons().forEach(function(cb){ addonTotal += parseInt(cb.getAttribute("data-price"),10) * Math.max(party,1); });
+    return { total: base + addonTotal, base: base, addons: addonTotal };
+  }
+  function fmtGBP(n){ return "£" + n; }
+  function updateSummary(){
+    var loc = document.getElementById("location").value || "—";
+    var dt = document.getElementById("date").value || "—";
+    if(dt && dt !== "—"){
+      try { dt = new Date(dt + "T12:00:00").toLocaleDateString("en-GB", { weekday:"short", day:"numeric", month:"long", year:"numeric" }); } catch(e){}
+    }
+    var slot = document.getElementById("slot").value || "—";
+    var party = partyNum();
+    var sess = selectedSession();
+    document.getElementById("sum-location").textContent = loc;
+    document.getElementById("sum-date").textContent = dt;
+    document.getElementById("sum-slot").textContent = slot;
+    document.getElementById("sum-session").textContent = sess ? SESSION_LABELS[sess] : "—";
+    document.getElementById("sum-party").textContent = party ? String(party) : "—";
+    var addons = selectedAddons();
+    document.getElementById("sum-addons").textContent = addons.length ? addons.map(function(cb){ return cb.value; }).join(", ") : "None yet";
+    var c = calcTotal();
+    document.getElementById("sum-total").textContent = fmtGBP(c.total);
+    var note = document.getElementById("sum-note");
+    if(sess === "the50" && party){ note.textContent = "That is £24 × " + party + " people = " + fmtGBP(c.base) + (c.addons ? ", plus " + fmtGBP(c.addons) + " in add-ons." : ". No add-ons yet.") + " You pay on arrival."; }
+    else if(sess === "private"){ note.textContent = "£95 flat for your party of " + (party || "up to six") + "." + (c.addons ? " Add-ons: " + fmtGBP(c.addons) + "." : "") + " You pay on arrival."; }
+    else if(sess === "farmcard"){ note.textContent = "£120 on collection for six sets. Each visit is stamped, not charged. " + (c.addons ? "Add-ons today: " + fmtGBP(c.addons) + ", paid on arrival." : ""); }
+    else { note.textContent = "Pick a session type and party size and we will add it up honestly. Farm Card holders: you pay £120 on collection, and each set is stamped — nothing is charged per visit after that."; }
+  }
+  updateSummary();
+
+  /* Validation */
+  function setErr(id, fieldEl, msg){
+    var errEl = document.getElementById(id);
+    errEl.textContent = msg;
+    errEl.classList.add("show");
+    if(fieldEl) fieldEl.setAttribute("aria-invalid","true");
+  }
+  function clearErr(id, fieldEl){
+    var errEl = document.getElementById(id);
+    errEl.textContent = "";
+    errEl.classList.remove("show");
+    if(fieldEl) fieldEl.removeAttribute("aria-invalid");
+  }
+  function showSummary(errors){
+    errList.innerHTML = "";
+    errors.forEach(function(e){
+      var li = document.createElement("li");
+      var a = document.createElement("a");
+      a.href = "#" + e.focusId;
+      a.textContent = e.msg;
+      a.addEventListener("click", function(){
+        var t = document.getElementById(e.focusId);
+        if(t){ setTimeout(function(){ t.focus(); }, 50); }
+      });
+      li.appendChild(a); errList.appendChild(li);
+    });
+    errSummary.classList.add("show");
+    errSummary.focus();
+  }
+  function hideErrors(){
+    errSummary.classList.remove("show");
+    ["name-err","email-err","phone-err","location-err","date-err","slot-err","party-err","session-err","rules-err"].forEach(function(id){
+      var el = document.getElementById(id); el.textContent=""; el.classList.remove("show");
+    });
+    form.querySelectorAll("[aria-invalid]").forEach(function(el){ el.removeAttribute("aria-invalid"); });
+  }
+
+  form.addEventListener("input", function(e){
+    var t = e.target;
+    if(t.id === "name") clearErr("name-err", t);
+    if(t.id === "email") clearErr("email-err", t);
+    if(t.id === "phone") clearErr("phone-err", t);
+    if(t.id === "location") clearErr("location-err", t);
+    if(t.id === "date") clearErr("date-err", t);
+    if(t.id === "slot") clearErr("slot-err", t);
+    if(t.id === "party") clearErr("party-err", t);
+    if(t.name === "session") clearErr("session-err", null);
+    if(t.id === "rules") clearErr("rules-err", t);
+  });
+
+  document.getElementById("reset-btn").addEventListener("click", function(){
+    hideErrors(); setTimeout(updateSummary, 0);
+  });
+
+  function validate(){
+    var errors = [];
+    var name = document.getElementById("name");
+    var email = document.getElementById("email");
+    var phone = document.getElementById("phone");
+    var location = document.getElementById("location");
+    var date = document.getElementById("date");
+    var slot = document.getElementById("slot");
+    var party = document.getElementById("party");
+    var rules = document.getElementById("rules");
+
+    clearErr("name-err", name); clearErr("email-err", email); clearErr("phone-err", phone);
+    clearErr("location-err", location); clearErr("date-err", date); clearErr("slot-err", slot);
+    clearErr("party-err", party); clearErr("session-err", null); clearErr("rules-err", rules);
+
+    var nameV = name.value.trim();
+    if(nameV.length < 2){
+      var m1 = "Your name, please — we cannot hold a set without knowing whose bench it is.";
+      setErr("name-err", name, m1); errors.push({focusId:"name", msg:m1});
+    } else if(nameV.length > 80){
+      var m1b = "That name is a bit long for our log book — could you shorten it to about 80 letters?";
+      setErr("name-err", name, m1b); errors.push({focusId:"name", msg:m1b});
+    }
+
+    var emailV = email.value.trim();
+    var emailOK = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailV);
+    if(!emailV){
+      var m2 = "We need your email — that is where the directions and confirmation go. No email, no set.";
+      setErr("email-err", email, m2); errors.push({focusId:"email", msg:m2});
+    } else if(!emailOK){
+      var m2b = "That email looks like it is missing the “@” bit, or the ending after the dot. Mind checking it once?";
+      setErr("email-err", email, m2b); errors.push({focusId:"email", msg:m2b});
+    }
+
+    var phoneV = phone.value.trim();
+    if(phoneV && !/^[+\d][\d\s().-]{6,19}$/.test(phoneV)){
+      var m3 = "That number looks a bit short or jumbled — is there a missing digit? Or leave it blank, we can manage without it.";
+      setErr("phone-err", phone, m3); errors.push({focusId:"phone", msg:m3});
+    }
+
+    if(!location.value){
+      var m4 = "Pick a farm — Birch Hill, High Winder, Walsden Gate or Askwith Grange. The fire is only laid in one place at a time.";
+      setErr("location-err", location, m4); errors.push({focusId:"location", msg:m4});
+    }
+
+    var dateV = date.value;
+    if(!dateV){
+      var m5 = "Which day are you hoping for? Even a rough day helps us keep the bench warm.";
+      setErr("date-err", date, m5); errors.push({focusId:"date", msg:m5});
+    } else if(dateV < todayISO()){
+      var m5b = "That day has already been and gone — the fire was lovely, but it is out now. Pick a day from today onwards.";
+      setErr("date-err", date, m5b); errors.push({focusId:"date", msg:m5b});
+    }
+
+    if(!slot.value){
+      var m6 = "Choose an arrival window. Dawn (07:00) is quietest; dusk (19:30) is the prettiest.";
+      setErr("slot-err", slot, m6); errors.push({focusId:"slot", msg:m6});
+    }
+
+    var partyV = parseInt(party.value, 10);
+    if(!party.value || isNaN(partyV) || partyV < 1 || partyV > 6){
+      var m7 = "Tell us how many are coming, between 1 and 6. Over six, we need a bigger yard — email us.";
+      setErr("party-err", party, m7); errors.push({focusId:"party", msg:m7});
+    }
+
+    var sess = selectedSession();
+    if(!sess){
+      var m8 = "Pick what you are booking — The 50 (£24 a head), Private Box (£95) or Farm Card (£120). You still pay on arrival.";
+      setErr("session-err", null, m8); errors.push({focusId:"session-hint-figure", msg:m8});
+      /* focus first radio */
+      errors[errors.length-1].focusId = "party";
+    }
+
+    if(!rules.checked){
+      var m9 = "We need you to tick the heat note — it keeps you and us safe, and it means you have actually seen it.";
+      setErr("rules-err", rules, m9); errors.push({focusId:"rules", msg:m9});
+    }
+
+    return errors;
+  }
+
+  function makeRef(){
+    var chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+    var s = "";
+    for(var i=0;i<4;i++){ s += chars[Math.floor(Math.random()*chars.length)]; }
+    var d = todayISO().replace(/-/g,"").slice(2);
+    return "EB-" + d + "-" + s;
+  }
+  function prettyDate(iso){
+    try { return new Date(iso + "T12:00:00").toLocaleDateString("en-GB", { weekday:"long", day:"numeric", month:"long", year:"numeric" }); }
+    catch(e){ return iso; }
+  }
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    hideErrors();
+    var errors = validate();
+    if(errors.length){
+      showSummary(errors);
+      return;
+    }
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Holding your bench…";
+    /* Simulated hold — local only, no server. */
+    setTimeout(function(){
+      var ref = makeRef();
+      var c = calcTotal();
+      var booking = {
+        ref: ref,
+        name: document.getElementById("name").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        location: document.getElementById("location").value,
+        date: document.getElementById("date").value,
+        datePretty: prettyDate(document.getElementById("date").value),
+        slot: document.getElementById("slot").value,
+        party: partyNum(),
+        session: SESSION_LABELS[selectedSession()],
+        addons: selectedAddons().map(function(cb){ return cb.value; }),
+        notes: document.getElementById("notes").value.trim(),
+        total: fmtGBP(c.total),
+        created: new Date().toISOString()
+      };
+      safeSet(LAST_KEY, JSON.stringify(booking));
+      safeRemove(DRAFT_KEY);
+
+      document.getElementById("success-email").textContent = booking.email;
+      document.getElementById("refcode").textContent = ref;
+      var tbl = document.getElementById("success-table");
+      tbl.innerHTML = "";
+      [["Name", booking.name],
+       ["Farm", booking.location],
+       ["Day", booking.datePretty],
+       ["Window", booking.slot],
+       ["Session", booking.session],
+       ["People", String(booking.party)],
+       ["Add-ons", booking.addons.length ? booking.addons.join(", ") : "None"],
+       (booking.notes ? ["Notes", booking.notes] : null),
+       ["To pay on arrival", booking.total]
+      ].filter(Boolean).forEach(function(row){
+        var tr = document.createElement("tr");
+        var td1 = document.createElement("td"); td1.textContent = row[0];
+        var td2 = document.createElement("td");
+        /* escape via textContent only — safe */
+        td2.textContent = row[1];
+        tr.appendChild(td1); tr.appendChild(td2); tbl.appendChild(tr);
+      });
+
+      form.style.display = "none";
+      success.classList.add("show");
+      draftNote.classList.remove("show");
+      success.scrollIntoView({behavior: prefersReduced.matches ? "auto" : "smooth", block: "start"});
+      document.getElementById("success").setAttribute("tabindex","-1");
+      document.getElementById("success").focus({preventScroll:true});
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Hold my set — no payment now";
+    }, 650);
+  });
+
+  document.getElementById("book-another").addEventListener("click", function(){
+    success.classList.remove("show");
+    form.style.display = "";
+    form.reset(); updateCount(); updateSummary(); hideErrors();
+    /* Keep contact details for speed, clear the rest */
+    var lastRaw = safeGet(LAST_KEY);
+    if(lastRaw){
+      try {
+        var last = JSON.parse(lastRaw);
+        document.getElementById("name").value = last.name || "";
+        document.getElementById("email").value = last.email || "";
+        document.getElementById("phone").value = last.phone || "";
+      } catch(e){}
+    }
+    document.getElementById("date").focus();
+  });
+})();
+</script>
+</body>
+</html>

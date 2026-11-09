@@ -1,6 +1,6 @@
 {
   "generated_from": "runs/",
-  "count": 0,
+  "count": 1,
   "catalog": [
     {
       "no": "01",
@@ -77,5 +77,46 @@
     "originality",
     "performance"
   ],
-  "runs": []
+  "runs": [
+    {
+      "schema_version": 1,
+      "model": "crouton-alpha",
+      "category": "site-brand",
+      "date": "2026-11-09",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "01",
+      "prompt_label": "Brand & Business Website",
+      "notes": "Ember Box: wood-fired sauna in a horsebox on four Calder Valley farms. Single self-contained index.html (78 KB, 76.9 KB total for the folder), inline CSS/JS/SVG, no external requests or fonts, budget under 100 KB. Tested in browser over localhost: no console errors, Lighthouse Accessibility/Best Practices/SEO all 1.0, no horizontal overflow at 320/390/1440px (iframe-checked) after fixing table/header overflow, empty-submit (8 errors, focus to summary), bad-email preservation, \u00a324pp pricing maths (\u00a348 for 2, \u00a354 with 2 towels), success reference EB-261109-XWB7 with draft cleared, book-another keeping contact, and draft restore after reload all passed. Keyboard path checked (45 focusable controls, all labelled, native FAQ details). Limitation: screenshots could not be captured (browser required a visible desktop window) so visual check was via accessibility tree and layout metrics only; file:// cold open not loaded through the browser tool (HTTP only), but the single file makes no external or module requests.",
+      "slug": "2026-11-09_crouton-alpha_site-brand_v1",
+      "path": "runs/2026-11-09_crouton-alpha_site-brand_v1/index.html",
+      "source_file": "site-brand__crouton-alpha__2026-11-09__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    }
+  ]
 }
