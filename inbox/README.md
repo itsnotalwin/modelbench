@@ -42,11 +42,13 @@ The archive may also contain index.html, meta.json and assets/ directly at its r
 }
 ~~~
 
+Prompt-generated runs fill these values automatically: the model slug comes from the executing model's runtime identity, the date comes from the current system/runtime date, and version is always `1`. The model must not ask the organiser for these values. If model identity is unavailable, use `unknown-model` and disclose that limitation in notes.
+
 The fields have these rules:
 - model: model slug, lowercase letters, digits, hyphens and dots only.
 - category: exact slug from prompts/catalog.json.
 - date: valid ISO date (YYYY-MM-DD).
-- version: positive integer, starting at 1.
+- version: always the integer `1` for prompt-generated runs.
 - entry: must be index.html at the project root.
 - prompt: prompt number, such as "01".
 - prompt_label: challenge title.
@@ -68,4 +70,4 @@ The importer reads and validates meta.json and uses its model, category, date an
 - Do not include credentials, API keys, private user data, node_modules, build output or dependency caches.
 - The importer rejects path traversal, symbolic links, encrypted archives, duplicate paths, oversized archives and suspicious compression ratios.
 - Do not include model-authored scores or claim a test passed unless it was actually run.
-- For a retest, increment the positive version in meta.json and the output-folder name. Never overwrite a previous run.
+- Do not increment version for prompt-generated runs. A model/category/date identity can be accepted only once at v1; a repeated upload with the same identity remains rejected as a duplicate. Existing runs are never overwritten.

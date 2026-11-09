@@ -1,5 +1,8 @@
 import importlib.util
 import json
+import os
+import subprocess
+import sys
 import tempfile
 import unittest
 import zipfile
@@ -316,6 +319,53 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
             self.assertIn(f'"category": "{challenge["slug"]}"', body, relative_path)
             self.assertIn(f'"prompt": "{number}"', body, relative_path)
             self.assertIn(f'"prompt_label": "{challenge["title"]}"', body, relative_path)
+
+    def test_every_prompt_resolves_model_and_date_and_fixes_version_one(self):
+        catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
+        for challenge in catalog["prompts"]:
+            matches = list((REPO_ROOT / "prompts").glob(f"{challenge['no']}-*.md"))
+            self.assertEqual(len(matches), 1)
+            path = matches[0]
+            body = path.read_text(encoding="utf-8")
+            self.assertIn("Automatic run identity", body, path.name)
+            self.assertIn("Never ask the organiser", body, path.name)
+            self.assertIn("Never ask the user", body, path.name)
+            self.assertIn("current calendar date", body, path.name)
+            self.assertIn("`unknown-model`", body, path.name)
+            self.assertIn("Always use the integer `1`", body, path.name)
+            self.assertIn('"version": 1', body, path.name)
+            self.assertRegex(body, r"__[A-Z_]+__v1\*\*")
+            self.assertNotIn("Do not guess missing run parameters", body, path.name)
+            self.assertNotIn('"version": VERSION', body, path.name)
+
+    def test_new_run_helper_does_not_require_model_and_always_uses_version_one(self):
+        env = os.environ.copy()
+        for key in ("MODELBENCH_MODEL", "MODEL_ID", "OPENAI_MODEL", "ANTHROPIC_MODEL", "GEMINI_MODEL", "GOOGLE_MODEL"):
+            env.pop(key, None)
+        result = subprocess.run(
+            [sys.executable, str(REPO_ROOT / "tools" / "new_run.py"), "--category", "site-brand"],
+            check=True, capture_output=True, text=True, env=env,
+        )
+        self.assertRegex(result.stdout, r"site-brand__unknown-model__\d{4}-\d{2}-\d{2}__v1/")
+        metadata_text = result.stdout.split("Required metadata:\n", 1)[1]
+        metadata = json.loads(metadata_text)
+        self.assertEqual(metadata["model"], "unknown-model")
+        self.assertEqual(metadata["version"], 1)
+        self.assertRegex(metadata["date"], r"^\d{4}-\d{2}-\d{2}$")
+        self.assertIn("Version is fixed at 1.", result.stdout)
+
+    def test_new_run_helper_uses_detected_model_environment(self):
+        env = os.environ.copy()
+        for key in ("MODEL_ID", "OPENAI_MODEL", "ANTHROPIC_MODEL", "GEMINI_MODEL", "GOOGLE_MODEL"):
+            env.pop(key, None)
+        env["MODELBENCH_MODEL"] = "provider/GPT 6 Thinking"
+        result = subprocess.run(
+            [sys.executable, str(REPO_ROOT / "tools" / "new_run.py"), "--category", "site-brand"],
+            check=True, capture_output=True, text=True, env=env,
+        )
+        metadata = json.loads(result.stdout.split("Required metadata:\n", 1)[1])
+        self.assertEqual(metadata["model"], "gpt-6-thinking")
+        self.assertEqual(metadata["version"], 1)
 
     def test_generated_manifest_catalog_matches_source_catalog(self):
         source = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))

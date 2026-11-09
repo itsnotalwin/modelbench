@@ -43,9 +43,9 @@ These original prompts borrow task-design and evaluation lessons from public ben
 
 ## How to run a challenge
 
-1. Choose exactly one prompt and replace MODEL_SLUG, RUN_DATE and VERSION with the run values supplied by the organiser.
-2. Run every model from a clean, isolated workspace with equivalent tool access. Do not provide other models' submissions or repair the first output during a one-shot run.
-3. The model creates one folder named CATEGORY__MODEL_SLUG__DATE__vN. It contains index.html, meta.json and only essential runtime assets.
+1. Choose exactly one prompt. The executing model resolves its own model identifier and the current system date automatically; version is always 1. No run details need to be supplied by the organiser.
+2. Run every model from a clean, isolated workspace with equivalent tool access. Do not provide other models' submissions or repair the first output during a one-shot run. If the runtime exposes no model identity, the prompt uses `unknown-model` and records that limitation rather than asking for a value.
+3. The model creates one folder named CATEGORY__MODEL_SLUG__YYYY-MM-DD__v1. The model slug and date are resolved automatically. It contains index.html, meta.json and only essential runtime assets.
 4. ZIP that folder and upload the ZIP to inbox/. The ZIP filename may be anything. The importer reads and validates meta.json to determine category, model, date and version.
 5. Independently review the rendered app and exercise its acceptance checklist. A model's self-reported test result is not proof.
 
@@ -69,7 +69,7 @@ Required metadata:
 }
 ~~~
 
-The importer uses model, category, date and version from the JSON. A ZIP filename or internal folder name cannot override them. Categories must match prompts/catalog.json. Invalid ZIPs stay in the inbox with a clear error; an existing run is never overwritten. Do not put ratings or self-awarded scores in model-authored metadata.
+The importer uses model, category, date and version from the JSON. Every new prompt run uses version 1. A ZIP filename or internal folder name cannot override them. Categories must match prompts/catalog.json. Invalid ZIPs stay in the inbox with a clear error; an existing run is never overwritten. Do not put ratings or self-awarded scores in model-authored metadata.
 
 ## Shared ModelBench scorecard
 

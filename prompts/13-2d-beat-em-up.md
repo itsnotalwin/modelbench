@@ -1,16 +1,14 @@
 # 13 · 2D Action Brawler
 
-## Run parameters
+## Automatic run identity — never ask the organiser
 
-Replace these placeholders with the exact values supplied for this run. They must match the output folder and metadata exactly.
+Resolve these three values yourself before creating the project. They are run metadata, not questions for the user.
 
-- MODEL_SLUG: MODEL_SLUG
-- RUN_DATE: RUN_DATE
-- VERSION: VERSION
+1. **MODEL_SLUG:** Identify the model that is actually executing this prompt from the active system/runtime model identifier. Prefer the exact model identifier, including its variant, when exposed; otherwise use the public model name supplied by the environment. If it is provider-qualified (for example, `provider/model-name`), keep the model portion. Convert it to lowercase and replace spaces, underscores and other characters with hyphens; retain only letters, digits, dots and hyphens, collapse repeated hyphens and remove leading/trailing punctuation. Do not use the benchmark category, prompt title, organiser's name or an assumed model. Never ask the user. If the runtime exposes no model identity at all, use `unknown-model` and disclose that limitation briefly in `meta.json` notes rather than inventing an identity.
+2. **RUN_DATE:** Use the current calendar date supplied by your system/runtime context, formatted as `YYYY-MM-DD`. If that context does not provide a date, use the current UTC calendar date from the runtime. Do not use the prompt's edit date or a file timestamp. Never ask the user.
+3. **VERSION:** Always use the integer `1`. This is fixed. Do not ask, infer, increment or substitute another version.
 
-Do not guess missing run parameters. If any value has not been supplied, ask the organiser before creating files.
-
-## The challenge
+Use the resolved values consistently in the output folder and `meta.json`. Do not pause for confirmation and do not leave literal placeholders in the finished files.## The challenge
 
 Create one original 2D side-scrolling action brawler. You choose the setting, cast, visual direction, tone, combat identity, enemy designs, stages and narrative approach. The focus is responsive close-range action with readable decisions and a satisfying sense of impact. Make it your own rather than reproducing an existing game's characters, moves or stages.
 
@@ -52,13 +50,15 @@ Every visible control must work. Every important interaction must create a real 
 
 Create exactly one folder at the workspace root named:
 
-**game-brawler__MODEL_SLUG__RUN_DATE__vVERSION**
+**game-brawler__MODEL_SLUG__RUN_DATE__v1**
+
+Before creating it, replace `MODEL_SLUG` and `RUN_DATE` using the automatic run-identity rules above. The suffix must always be `v1`.
 
 At the folder root include **index.html** and **meta.json**. Include an **assets/** folder only for essential local runtime assets. Keep all files for this one finished project inside this folder.
 
 Do not create multiple concepts, alternate versions, separate projects, additional HTML pages, README or audit files, screenshots, dependency folders, package files or build output. Do not create files outside the required project folder. Do not paste source code into chat.
 
-The metadata file must contain this structure with the exact values for this run:
+The metadata file must contain this structure with the exact automatically resolved model slug and date. Keep `version` as the JSON number `1`:
 
 ~~~json
 {
@@ -66,7 +66,7 @@ The metadata file must contain this structure with the exact values for this run
   "model": "MODEL_SLUG",
   "category": "game-brawler",
   "date": "RUN_DATE",
-  "version": VERSION,
+  "version": 1,
   "entry": "index.html",
   "prompt": "13",
   "prompt_label": "2D Action Brawler",
@@ -74,6 +74,6 @@ The metadata file must contain this structure with the exact values for this run
 }
 ~~~
 
-The folder and metadata must use the exact run parameters. The organiser will ZIP this one folder and upload it to ModelBench. The ZIP filename is not a routing key. Do not include scores or self-awarded evaluations in meta.json.
+Replace the two metadata tokens with the values you resolved yourself. Do not ask the organiser for them and do not submit unresolved placeholder text. The folder and metadata must agree exactly. The organiser will ZIP this one folder and upload it to ModelBench. The ZIP filename is not a routing key. Do not include scores or self-awarded evaluations in `meta.json`.
 
 When finished, report only the project folder path and an honest test status.
