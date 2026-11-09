@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "crouton-alpha",
+  "category": "game-masterpiece",
+  "date": "2026-11-09",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "06",
+  "prompt_label": "End-to-End Game Masterpiece",
+  "notes": "The Drowned Atlas: single-file story RPG in Siltmarsh. 3 chapters, 7 districts, 4 interacting systems (dialogue/trust, daylight/tide time pressure, survey/craft charts, journal/discoveries), 5 endings, save/load via localStorage, synthesised WebAudio music/SFX, responsive parchment chart-table UI with keyboard shortcuts (1-7,S,H,C,J,Esc), WCAG-focused labels/focus/reduced-motion/large-text. Single ~54KB HTML, no external assets/build/network. Performance: DOM-only map (7 nodes), no per-frame loops except 1.4s music timer, renders on state change only. Verified in Chromium from file:// after fixes: cold title, game visible (display block), map nodes sized/no overlap/no horizontal overflow, automated full playthrough Day1-3 through all 3 crafts to finished ending + credits, ending gating (shared/honest/ordered/hidden/narrow), mid-game and finished save/load coherence, pause/settings/help, keyboard travel/locking, corrupted/huge save clamping, rapid-input single-spend \u2014 0 console errors in final runs. Screenshot capture unavailable (needs visible desktop window), so visual check was via live DOM geometry, not pixels.",
+  "slug": "2026-11-09_crouton-alpha_game-masterpiece_v1",
+  "path": "runs/2026-11-09_crouton-alpha_game-masterpiece_v1/index.html",
+  "source_file": "game-masterpiece__crouton-alpha__2026-11-09__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}
