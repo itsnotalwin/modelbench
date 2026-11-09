@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1e3d2f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>Plough &amp; Pulse — Weekly regenerative boxes for professional kitchens</title>
+<meta name="description" content="Plough & Pulse: seasonal farm boxes built for chefs, not foodies.">
+<style>
+:root{--forest:#1e3d2f;--moss:#3a5f4a;--oat:#f2e7c9;--paper:#fbf6e9;--beet:#a83232;--line:#d8cdb0}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:16px;line-height:1.65;background:var(--paper);color:var(--forest);overflow-x:hidden}
+h1,h2,h3{font-family:Georgia,"Times New Roman",Times,serif;line-height:1.07;margin:0 0 12px;letter-spacing:-.02em}
+h1{font-size:clamp(2.3rem,6.5vw,4.4rem)}h2{font-size:clamp(1.9rem,4.5vw,2.8rem)}
+p{margin:0 0 12px;max-width:68ch}
+a{color:var(--beet)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--beet);outline-offset:2px}
+.skip{position:absolute;left:-9999px;top:0;background:var(--forest);color:#fff;padding:12px 16px}
+.skip:focus{left:12px;top:12px}
+.wrap{width:min(1080px,100%);margin:0 auto;padding:0 18px}
+header{background:var(--forest);color:var(--paper);position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top)}
+.top{display:flex;align-items:center;gap:12px;padding:12px 18px;width:min(1080px,100%);margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--paper);font-weight:800;letter-spacing:.04em}
+.brand small{display:block;font-weight:400}
+nav.d{display:none;margin-left:auto;gap:14px}nav.d a{color:var(--paper);text-decoration:none;padding:10px 4px;border-bottom:2px solid transparent}nav.d a:hover{border-color:var(--beet)}
+.bnav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--forest);padding-bottom:env(safe-area-inset-bottom);z-index:30}
+.bnav a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:56px;min-width:44px;color:var(--paper);text-decoration:none;font-size:.72rem;font-weight:700;touch-action:manipulation}
+.bnav a svg{width:22px;height:22px;margin-bottom:2px}
+.hero{min-height:100vh;min-height:100dvh;background:var(--oat);display:flex;flex-direction:column;justify-content:center;padding:56px 0 44px}
+.k{letter-spacing:.2em;text-transform:uppercase;font-size:.78rem;color:var(--beet);font-weight:800}
+.lede{font-size:1.12rem;max-width:60ch}
+section{padding:52px 0;scroll-margin-top:76px}.alt{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.grid{display:grid;gap:16px}.cards{display:grid;gap:12px;margin-top:18px}.card{background:#fff;border:2px solid var(--forest);border-radius:10px;padding:16px}
+figure{margin:0}figcaption{font-size:.9rem;color:#5b6b60;margin-top:8px}svg{max-width:100%;height:auto;display:block}
+.boxcfg{background:var(--forest);color:var(--paper);border-radius:10px;padding:18px}
+.boxcfg label{font-weight:800;display:block;margin-top:14px;color:#fff}
+.boxcfg input[type=range]{width:100%;min-height:44px;accent-color:var(--beet)}
+.boxcfg select,.boxcfg input{width:100%;min-height:44px;padding:10px 12px;border:2px solid var(--paper);border-radius:6px;font:inherit;margin-top:6px;font-size:16px;background:var(--paper);color:var(--forest)}
+.out{background:var(--paper);color:var(--forest);border-radius:8px;padding:14px;margin-top:14px;font-weight:700}
+table{width:100%;border-collapse:collapse;margin-top:14px}th,td{border:1px solid var(--forest);padding:10px;text-align:left}th{background:var(--oat)}
+form{display:grid;gap:14px;background:#fff;border:2px solid var(--forest);padding:18px;border-radius:10px}
+label{font-weight:700;display:block}input,select,textarea{width:100%;min-height:44px;padding:12px;border:2px solid var(--forest);border-radius:6px;font:inherit;margin-top:6px;background:var(--paper);font-size:16px}
+textarea{min-height:88px}.error{color:#8c1a1a;font-size:.9rem;min-height:1.2em;margin:4px 0 0}.success{display:none;border:2px solid var(--moss);background:#eef4ea;padding:14px;border-radius:8px}.success.show{display:block}
+.btn{min-height:48px;border:2px solid var(--forest);background:var(--beet);color:#fff;padding:12px 18px;font-weight:800;cursor:pointer;touch-action:manipulation;border-radius:999px;font-size:16px}
+.cta{position:sticky;bottom:0;background:var(--forest);padding:10px 18px calc(10px + env(safe-area-inset-bottom));display:flex;gap:10px;align-items:center;z-index:15}.cta p{margin:0;color:var(--paper);flex:1;font-size:.92rem}
+footer{background:var(--forest);color:#b7c9bd;padding:28px 0 calc(96px + env(safe-area-inset-bottom))}footer a{color:#fff}
+.rv{opacity:0;transform:translateY(14px);transition:opacity .55s ease,transform .55s ease}.rv.in{opacity:1;transform:none}
+@media(min-width:880px){nav.d{display:flex}.bnav{display:none}.grid2{grid-template-columns:1.1fr .9fr}.cards{grid-template-columns:repeat(3,1fr)}footer{padding-bottom:36px}.cta{position:static}.hero{min-height:0;padding:72px 0 56px}}
+@media(orientation:landscape){.hero{min-height:0}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}.rv{opacity:1;transform:none}}
+</style>
+<noscript><style>.rv{opacity:1!important;transform:none!important}</style></noscript>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header><div class="top">
+<a class="brand" href="#top"><svg width="44" height="44" viewBox="0 0 44 44" role="img" aria-label="Plough and Pulse logo"><title>Plough and Pulse logo</title><desc>Furrow and a beet pulse line.</desc><rect x="6" y="6" width="32" height="32" rx="4" fill="none" stroke="#f2e7c9" stroke-width="3"/><path d="M10 28c4-6 8 2 12-4s8 2 12-4" stroke="#a83232" stroke-width="3" fill="none"/><path d="M12 12h20M12 18h14" stroke="#f2e7c9" stroke-width="3"/></svg><span>Plough &amp; Pulse<small>regenerative farm boxes for kitchens</small></span></a>
+<nav class="d" aria-label="Primary"><a href="#why">Why chefs</a><a href="#grown">Grown</a><a href="#proof">Proof</a><a href="#box">Box builder</a><a href="#faq">FAQ</a><a href="#order">Order</a></nav>
+</div></header>
+<nav class="bnav" aria-label="Mobile"><a href="#why"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v7M16 5v7M8 12h8v7" stroke="#f2e7c9" stroke-width="2" fill="none"/></svg>Why</a><a href="#grown"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V9M12 9C12 6 9 4 6 4c0 3 2 5 6 5zM12 9c0-3 3-5 6-5 0 3-2 5-6 5z" stroke="#f2e7c9" stroke-width="2" fill="none"/></svg>Grown</a><a href="#proof"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16l4-6 4 4 4-8 4 10" stroke="#f2e7c9" stroke-width="2" fill="none"/></svg>Proof</a><a href="#box"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="7" width="14" height="10" stroke="#f2e7c9" stroke-width="2" fill="none"/></svg>Box</a><a href="#order"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8l8 6 8-6" stroke="#f2e7c9" stroke-width="2" fill="none"/></svg>Order</a></nav>
+<main id="main">
+<section class="hero" id="top"><div class="wrap rv">
+<p class="k">For head chefs and kitchen teams · 12 to 120 covers · East Anglia</p>
+<h1>Vegetables that arrive with a menu built in.</h1>
+<p class="lede">Plough &amp; Pulse is a weekly farm box for professional kitchens, not a consumer box that wandered into a walk-in. We pick to a forecast, pack to a prep list, and send a one-page menu note the night before so you are not decoding a crate at six in the morning.</p>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><span style="border:2px solid var(--forest);padding:8px 12px;border-radius:999px">Picked morning of delivery</span><span style="border:2px solid var(--forest);padding:8px 12px;border-radius:999px">Same farm, same box, twice a week</span><span style="border:2px solid var(--forest);padding:8px 12px;border-radius:999px">Swap anything before 16:00</span></div>
+<figure style="margin-top:22px"><svg viewBox="0 0 900 260" role="img" aria-label="Farm box in a kitchen with menu note"><title>Farm box</title><desc>Box with greens, beets and a menu card.</desc><rect width="900" height="260" fill="#1e3d2f"/><rect x="280" y="130" width="320" height="80" fill="#f2e7c9"/><path d="M300 130c20-40 60-50 80-30M380 130c10-30 50-40 70-20M480 130c20-30 50-30 70-10" stroke="#3a5f4a" stroke-width="6" fill="none"/><circle cx="340" cy="120" r="18" fill="#a83232"/><circle cx="520" cy="120" r="18" fill="#a83232"/><rect x="620" y="150" width="140" height="70" fill="#fbf6e9"/><g font-family="Georgia" font-size="14" fill="#1e3d2f"><text x="635" y="175">MENU NOTE</text><text x="635" y="195">CHARD — 12C</text><text x="635" y="210">BEET — 8C</text></g><g font-family="system-ui" font-size="15" fill="#f2e7c9"><text x="40" y="40">HARVEST 05:30 — DELIVERED 09:00</text></g></svg><figcaption>Harvest at dawn, menu note the night before. Your prep list is in the box.</figcaption></figure>
+</div></section>
+<section id="why" class="rv"><div class="wrap grid grid2">
+<div><h2>Why chefs switch — and why they stay</h2><p>You buy produce with your prep time in mind. Our box is built that way. The quantity is set by covers, not by a “medium” that means something different every week. The herbs are bunched by portion, the leaves are washed once, and the beet is sized for the mandoline you actually own. If a line is wrong, you swap it before four and it does not cost you a phone call.</p><p>We are not a wholesaler and we are not a farm shop. We are a <strong>kitchen supply partner</strong> who happens to grow most of what we send. That means we can tell you why the celeriac is small this week — a dry fortnight in June — and what we are doing about it, because we are the people who saw it happen. A wholesaler will tell you the celeriac is “in”. We will tell you it is a 400-gram celeriac and you should plan soup.</p><p>Our customers are not buying virtue. They are buying reliability on a Thursday. The sustainability is real, audited and printed on the box, but nobody in a kitchen has time for a lecture at pass. The box works because the food is good and the timing is exact, and the ethics ride along.</p></div>
+<div class="card"><h3>Who it is for</h3><ul><li><strong>High-street restaurants</strong> doing 40 to 80 covers who want seasonality without chaos.</li><li><strong>Hotels and pubs</strong> with a set menu and a variable week.</li><li><strong>Staff canteens and care homes</strong> that need the same reliability at a different price.</li></ul><p>We do not supply single households, and we do not do one-off “special occasion” boxes. If you need that, a good farm shop is a better answer than us.</p></div>
+</div></section>
+<section id="grown" class="alt rv"><div class="wrap">
+<h2>How it is grown — on three farms you can name</h2><p>We farm 47 hectares across three holdings in East Anglia, no-till, with livestock rotated through the vegetable ground in winter. That sentence could be a slogan, so here is what it costs us: we yield about 15% less than a conventional grower in a wet year, and we take that loss because the soil is the asset. The box price reflects it. If you want the cheapest carrot in the county, we are not your carrot.</p>
+<div class="cards">
+<article class="card"><h3>Field 1 — Norwich Road</h3><p>Chard, kale, squash. The ground leans sandy, so we keep the cover crop on until the last frost. The chard is cut, not pulled, and it comes back twice.</p></article>
+<article class="card"><h3>Field 2 — Bungay</h3><p>Beet, celeriac, leeks. Heavier soil, slower drainage. The beet is direct-sown in April and thinned by hand, which is why the sizes are even enough for a mandoline.</p></article>
+<article class="card"><h3>Field 3 — Beccles</h3><p>Herbs, salad and flowers. The herbs are cut at dawn and are in the box by nine. In high summer the whole box smells like a greenhouse that has been opened.</p></article>
+</div>
+<div class="grid grid2" style="margin-top:20px">
+<figure class="card"><svg viewBox="0 0 520 240" role="img" aria-label="Rotation diagram of fields"><title>Rotation</title><desc>Three fields in rotation with livestock.</desc><rect width="520" height="240" fill="#fbf6e9"/><g stroke="#1e3d2f" stroke-width="3" fill="none"><rect x="50" y="50" width="120" height="120"/><rect x="200" y="50" width="120" height="120"/><rect x="350" y="50" width="120" height="120"/></g><g font-family="system-ui" font-size="13" fill="#1e3d2f"><text x="70" y="110">VEG</text><text x="220" y="110">LIVESTOCK</text><text x="370" y="110">COVER</text></g><path d="M170 110h30M320 110h30" stroke="#a83232" stroke-width="4"/></svg><figcaption>Rotation: vegetables, livestock, cover crop. The soil is the asset.</figcaption></figure>
+<figure class="card"><svg viewBox="0 0 520 240" role="img" aria-label="Yield comparison chart"><title>Yield chart</title><desc>Bar chart of regenerative versus conventional yield.</desc><rect width="520" height="240" fill="#fff"/><g fill="#1e3d2f"><rect x="80" y="110" width="80" height="90"/><rect x="220" y="140" width="80" height="60"/></g><g font-family="system-ui" font-size="13" fill="#1e3d2f"><text x="70" y="30">RELATIVE YIELD — SAME FIELD, SAME YEAR</text><text x="80" y="220">CONVENTIONAL</text><text x="220" y="220">REGENERATIVE</text></g><path d="M80 110h220" stroke="#a83232" stroke-width="3" stroke-dasharray="6 6"/></svg><figcaption>Yield is 15% lower in wet years. We publish it because the comparison matters.</figcaption></figure>
+</div></div></section>
+<section id="proof" class="rv"><div class="wrap grid grid2">
+<div><h2>Proof from kitchens, not from us</h2><p>At <strong>The Anchor, Southwold</strong>, a 72-cover restaurant, the switch was prompted by a missed delivery from their wholesaler on a Friday. The first Plough &amp; Pulse box arrived the next Thursday, with the chard sized for the de long menu. Within a month, the head chef had rewritten the autumn menu around the squash we said would be abundant, because we had told them in July that it would be. That forecast, and being right, is the whole business.</p><p>At <strong>Greenhouse Hotel, near Diss</strong>, the gain was in waste. The hotel kitchen was throwing away a quarter of a wholesale delivery because it was packed for a larger kitchen. With covers-based quantities, waste fell to under a tenth in eight weeks, according to their own weigh-in. They did not buy our box to be sustainable. They bought it to stop paying for food they binned.</p><p>We publish our miss rate. It is 0.4% of lines, and when we miss, the swap is free and the credit is automatic. If we cannot grow it, we say so at the menu note stage, not at the door. A chef who is told early will forgive a short box. A chef who is surprised will not.</p></div>
+<div class="card"><h3>Results, in numbers</h3><table><thead><tr><th>Kitchen</th><th>Covers</th><th>Change</th><th>Outcome</th></tr></thead><tbody><tr><td>The Anchor, Southwold</td><td>72</td><td>Wholesaler → Pulse</td><td>Menu built around forecast</td></tr><tr><td>Greenhouse Hotel</td><td>45</td><td>Wholesaler → Pulse</td><td>Waste 25% → &lt;10%</td></tr><tr><td>Staff canteen, Ipswich</td><td>120</td><td>Weekly → twice weekly</td><td>Fresher salad, same budget</td></tr></tbody></table><p style="margin-top:12px">Miss rate: 0.4% of lines, 2025. Swaps before 16:00, free and credited.</p></div>
+</div></section>
+<section id="box" class="alt rv"><div class="wrap grid grid2">
+<div><h2>Build your box — see the week</h2><p>Set covers, pick a style, and the box size, price and menu ideas update together. The price is per delivery, twice a week, and includes the menu note and the return of the box. If you add a third delivery, the box gets smaller and fresher, which is the entire point.</p>
+<div class="boxcfg">
+<label for="bCovers">Covers per week: <span id="covVal">50</span></label>
+<input id="bCovers" type="range" min="12" max="120" step="1" value="50">
+<label for="bStyle">Kitchen style</label>
+<select id="bStyle"><option value="classic">Classic — root, leaf, herb</option><option value="salad">Salad-led — leaves, herb, flower</option><option value="root">Root-led — beet, leek, celeriac</option></select>
+<label for="bDays">Deliveries per week</label>
+<select id="bDays"><option value="1">Once — Thursday</option><option value="2">Twice — Tue &amp; Fri</option></select>
+<div class="out" id="bOut" aria-live="polite"></div>
+</div></div>
+<div><figure class="card"><svg viewBox="0 0 460 260" role="img" aria-label="Box size diagram by covers"><title>Box size</title><desc>Box fills as covers increase.</desc><rect width="460" height="260" fill="#fbf6e9"/><rect x="60" y="60" width="340" height="140" fill="#f2e7c9" stroke="#1e3d2f" stroke-width="3"/><g fill="#3a5f4a"><rect x="80" y="120" width="300" height="40"/></g><g font-family="system-ui" font-size="13" fill="#1e3d2f"><text x="60" y="30">BOX VOLUME BY COVERS</text><text x="60" y="230">12 COVERS</text><text x="340" y="230">120 COVERS</text></g></svg><figcaption>Box volume by covers. A 120-cover box is two crates, not one heroic crate.</figcaption></figure>
+<div class="card"><h3>What is in every box</h3><p>Three leaves, two roots, two herbs, one surprise that is never a surprise because it is listed on the menu note. The surprise is edible, seasonal and always smaller than the chard. Allergies and equipment are on the customer profile, so we do not send the mandoline beet to the kitchen without the mandoline.</p></div></div>
+</div></section>
+<section id="faq" class="rv"><div class="wrap grid grid2">
+<div><h2>Questions from the pass</h2><p><strong>What if we do not use a line?</strong> Swap it before 16:00 the day before, by replying to the menu note. It costs nothing and the box is re-packed. If you forget, the line rolls forward and you are not charged for it twice.</p><p><strong>Is the price fixed?</strong> The box price is fixed per season, and the season is set by the cost of growing, not by the wholesale market. If a dry summer shortens a line, the price does not rise. The quantity adjusts and we tell you.</p><p><strong>Can we visit?</strong> Yes. The first Saturday of each month is a farm walk for chefs and buyers. You will see the rotation, the wash line and the cold store, and you will leave with more questions than you arrived with, which is the point.</p></div>
+<div class="card"><h3>Delivery and returns</h3><p>Boxes arrive in food-grade crates that we collect and wash. The deposit is included in the first invoice and returned when the last crate comes back. We do not use single-use plastic. If a crate is lost, it is £8, which is the cost of the crate and not a penalty for being busy.</p></div>
+</div></section>
+<section id="order" class="alt rv"><div class="wrap grid grid2">
+<div><h2>Start with the menu note</h2><p>Send us your covers and your preferred days. We will send you next week’s menu note for your postcode, with the box price for your covers, before you commit to anything. If the menu does not suit your kitchen, do not order. The note is free because it is the product, and we want you to judge the product.</p></div>
+<form id="oForm" novalidate><p style="margin:0">Fields marked * are required.</p>
+<div><label for="oName">Your name *</label><input id="oName" autocomplete="name" required><p class="error" id="eOName"></p></div>
+<div><label for="oEmail">Kitchen email *</label><input id="oEmail" type="email" autocomplete="email" required><p class="error" id="eOEmail"></p></div>
+<div><label for="oRest">Restaurant / kitchen *</label><input id="oRest" required><p class="error" id="eORest"></p></div>
+<div><label for="oMsg">Covers, days, allergies *</label><textarea id="oMsg" rows="4" required></textarea><p class="error" id="eOMsg"></p></div>
+<button class="btn" type="submit">Send me next week’s menu note</button>
+<div class="success" id="oSuccess" tabindex="-1" aria-live="polite"></div>
+</form></div></section>
+</main>
+<div class="cta"><p><strong id="ctaPrice">50 covers:</strong> £145 per delivery, twice a week.</p><a href="#box" class="btn" style="display:inline-flex;align-items:center;text-decoration:none">Build my box</a></div>
+<footer><div class="wrap"><p>PLOUGH &amp; PULSE FARM · Norwich Road, East Anglia · <a href="#top">Back to top</a></p><p style="font-size:.9rem">Soil Association certified · Miss rate 0.4% · Crates deposit £8 · Swaps before 16:00 free.</p></div></footer>
+<script>
+(function(){var c=document.getElementById('bCovers'),s=document.getElementById('bStyle'),d=document.getElementById('bDays');
+function calc(){var covers=+c.value,style=s.value,days=+d.value;document.getElementById('covVal').textContent=covers;
+var perCover=style==='salad'?3.1:(style==='root'?2.7:2.9);var boxPerDelivery=Math.round(covers/days*perCover*10)/10;
+var price=Math.round((32+covers/days*5.2)*(style==='root'?0.95:1));if(days===2)price=Math.round(price*1.05);
+var kg=(boxPerDelivery*0.45).toFixed(1);var menu=style==='classic'?'Beet, chard, kale, leek, celeriac, parsley, thyme':'';
+if(style==='salad')menu='Lettuce, chard, herbs, edible flower, cucumber, radish';
+if(style==='root')menu='Beet, celeriac, leek, squash, potato, sage, thyme';
+document.getElementById('bOut').textContent='Per delivery: £'+price+' for '+boxPerDelivery+' portions (~'+kg+' kg). Menu base: '+menu+'. Prep note included. '+(days===2?'Twice-weekly: smaller, fresher boxes, 5% uplift, no volume penalty.':'Once weekly: larger box, plan for a mid-week prep day.');
+document.getElementById('ctaPrice').textContent=covers+' covers: £'+price+' per delivery'+(days===2?', twice a week':'');}
+c.addEventListener('input',calc);s.addEventListener('change',calc);d.addEventListener('change',calc);calc();
+var form=document.getElementById('oForm');form.addEventListener('submit',function(ev){ev.preventDefault();var n=document.getElementById('oName').value.trim(),e=document.getElementById('oEmail').value.trim(),r=document.getElementById('oRest').value.trim(),m=document.getElementById('oMsg').value.trim(),ok=true;
+document.getElementById('eOName').textContent=n.length>=2?'':'Enter your name.';if(n.length<2)ok=false;
+var em=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e);document.getElementById('eOEmail').textContent=em?'':'Enter a valid kitchen email.';if(!em)ok=false;
+document.getElementById('eORest').textContent=r.length>=2?'':'Enter your restaurant.';if(r.length<2)ok=false;
+document.getElementById('eOMsg').textContent=m.length>=15?'':'Tell us covers, days and allergies (15+ characters).';if(m.length<15)ok=false;
+if(!ok)return;var ref='PP-'+Math.random().toString(36).slice(2,7).toUpperCase();var s=document.getElementById('oSuccess');s.textContent='Thank you, '+n+'. Next week’s menu note for '+r+' will be sent to '+e+' (ref '+ref+'), with a box price for your covers. No commitment until you swap a line.';s.classList.add('show');s.focus();});
+var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;var els=document.querySelectorAll('.rv');
+if(reduce||!('IntersectionObserver' in window)){els.forEach(function(x){x.classList.add('in')});}else{var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{threshold:.12});els.forEach(function(x){io.observe(x);});}})();
+</script>
+<script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});</script>
+</body>
+</html>
