@@ -1,18 +1,17 @@
 # 05 · three.js scenes — benchmark prompt
 
 > **Uploader instruction (do NOT send this header to the model):**
-> Save the model's reply as `threejs__<model-slug>__<YYYY-MM-DD>__v1.html` (use the exact name the model put on its first line; rename it if it did not). Upload the **.html** to `inbox/`. Never upload a .rar.
-> The sorter files it as `runs/<date>_<model>_threejs_v1/index.html`.
->
-> **Note:** the category slug is `threejs` (no hyphen). The sorter will reject `three-js`.
+> The model delivers three files. Upload each one as its own `.html` into `inbox/`, renamed to exactly:
+> `threejs__<model-slug>__<YYYY-MM-DD>__v1.html`, `…__v2.html`, `…__v3.html`
+> Never upload a .rar. A retest of this prompt uses v4, v5, v6.
 
 ---
 
 ## Model prompt (send everything below this line)
 
-Build a three.js experience as a single HTML file. It must contain **five distinct real-time 3D scenes**, each a different visual idea. Five colour variations of one object do not count.
+Build **three separate three.js experiences**, each as its own single HTML file. Each one is a different visual idea. Three colour variations of one object do not count.
 
-**Libraries (pinned, required)**
+**Libraries (pinned, required, identical in all three)**
 Load three.js from the CDN with an import map, exactly:
 
 ```html
@@ -26,26 +25,27 @@ Load three.js from the CDN with an import map, exactly:
 
 Then import from `three` and `three/addons/...` (for example `three/addons/controls/OrbitControls.js`). No other CDN, no `.glb`/`.gltf` models, no texture or HDRI image files. Build geometry, materials, lights, particles and shaders yourself. Procedural canvas textures are allowed.
 
-**Ground rules**
-- You choose the theme, name and look. Do not ask questions and do not hedge. Decide and build in one pass.
-- Must run opened directly from disk (`file://`) and when hosted on GitHub Pages from a subfolder. Note: module imports from `file://` need the CDN, which is allowed; keep everything else inline.
+**Ground rules (apply to all three)**
+- You choose the theme, name and look. Do not ask questions and do not hedge. Decide and build.
+- Each must open directly from disk (`file://`) and work on GitHub Pages from a subfolder.
 - No placeholder text, TODOs or dead controls.
 
-**What the experience must do**
-- A visible scene menu listing all five scenes with a one-line description each. Switching is live, with a short transition. Keyboard shortcuts 1–5 switch scenes.
-- At least **two scenes** use a custom `ShaderMaterial` with your own GLSL vertex and fragment shaders.
-- Each scene is interactive: orbit controls or a direct interaction (pointer, drag, key input).
-- Lighting that suits each scene. Use shadows in at least one scene. Use fog or tone mapping in at least one scene.
-- Animation is delta-time based, so it runs the same at 30fps and 144fps.
-- A HUD with the scene name, FPS, and a reset-camera key (`R`).
-- Pixel ratio capped at 2, correct resize handling, and no leaks: when switching scene, dispose the previous scene's geometries, materials and textures. Say in your notes how you verified this.
-- Must stay near 60fps on a mid-range laptop. Keep the polygon budget sensible.
+**What each experience must do**
+- One complete interactive 3D scene: orbit controls or a direct interaction (pointer, drag, key input).
+- At least one custom `ShaderMaterial` with your own GLSL vertex and fragment shaders.
+- Lighting that suits the scene. Shadows, fog or tone mapping where they help.
+- Animation that is delta-time based, so it runs the same at 30fps and 144fps.
+- A HUD with the scene's name, a one-line description, FPS, and a reset-camera key (`R`).
+- Pixel ratio capped at 2 and correct resize handling.
+- No leaks: say in your notes how you verified that geometries, materials and textures are disposed when the scene is torn down.
+- Near 60fps on a mid-range laptop. Keep the polygon budget sensible.
 
-**Deliverable — naming is mandatory**
-- Your file must be named exactly: `threejs__{model-slug}__{YYYY-MM-DD}__v1.html`
+**Delivery — naming is mandatory**
+- File names are `threejs__{model-slug}__{YYYY-MM-DD}__v1.html`, then `…__v2.html`, then `…__v3.html`.
   - `{model-slug}`: your model name in lowercase, hyphens for spaces, dots kept when they are part of the name (for example `glm-5.3-flash`).
   - `{YYYY-MM-DD}`: today's date.
-  - No creative file name, no uppercase letters, no spaces.
-- Your first line is that exact file name. Then the complete file in one code block. After the block, five bullets on your key creative choices and one known limitation. Nothing else.
+  - No creative file names, no uppercase letters, no spaces.
+- Deliver the three files in order. Before each one, write its exact file name on its own line. Then the complete file in one code block.
+- After the third file, give one short bullet list per experience: its visual idea, the key creative choice, and one known limitation. Nothing else.
 
 ---
