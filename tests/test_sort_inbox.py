@@ -159,13 +159,13 @@ class ZipMetadataRoutingTests(unittest.TestCase):
             "entry": "index.html"
         }
         archive = self.make_zip(name="conflicting-metadata.zip", meta=meta, wrapped=False)
-        with self.assertRaisesRegex(sorter.IntakeError, "conflicts with prompt number"):
+        with self.assertRaisesRegex(sorter.IntakeError, "identify different challenges"):
             sorter.process_zip(archive)
 
     def test_invalid_category_is_rejected(self):
         meta = {"model":"gpt-6","category":"unknown-category","date":"2026-11-09","version":1,"entry":"index.html"}
         archive = self.make_zip(name="unknown-category.zip", meta=meta, wrapped=False)
-        with self.assertRaisesRegex(sorter.IntakeError, "category could not be resolved"):
+        with self.assertRaisesRegex(sorter.IntakeError, "does not identify a ModelBench challenge"):
             sorter.process_zip(archive)
 
     def test_invalid_date_and_version_are_rejected(self):
