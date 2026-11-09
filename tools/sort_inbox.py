@@ -87,12 +87,45 @@ def validate_metadata(project_root: Path):
     if not MODEL_PATTERN.fullmatch(model):
         raise IntakeError("meta.json model must use lowercase letters, digits, hyphens and dots")
 
-    raw_category = meta.get("category")
-    if not isinstance(raw_category, str):
-        raise IntakeError("meta.json field 'category' must be a catalog slug")
-    category = raw_category.strip().lower()
-    if category not in CATEGORIES:
-        raise IntakeError(f"meta.json category '{category}' is not in prompts/catalog.json")
+    def resolve_category(value):
+        if isinstance(value, bool) or value is None:
+            return None
+        candidate = None
+        if isinstance(value, int):
+            prompt_no = str(value).zfill(2)
+            candidate = next((slug for slug, prompt in PROMPTS.items() if prompt.get("no") == prompt_no), None)
+        elif isinstance(value, str):
+            label = value.strip()
+            folded = label.casefold()
+            if folded in CATEGORIES:
+                candidate = folded
+            else:
+                candidate = next(
+                    (slug for slug, prompt in PROMPTS.items()
+                     if str(prompt.get("title", "")).casefold() == folded),
+                    None,
+                )
+                if candidate is None and label.isdigit():
+                    prompt_no = label.zfill(2)
+                    candidate = next(
+                        (slug for slug, prompt in PROMPTS.items() if prompt.get("no") == prompt_no),
+                        None,
+                    )
+        return candidate
+
+    category_from_field = resolve_category(meta.get("category"))
+    category_from_prompt = resolve_category(meta.get("prompt"))
+    if category_from_field and category_from_prompt and category_from_field != category_from_prompt:
+        raise IntakeError(
+            f"meta.json category conflicts with prompt number: "
+            f"{meta.get('category')!r} vs {meta.get('prompt')!r}"
+        )
+    category = category_from_field or category_from_prompt
+    if category is None:
+        raise IntakeError(
+            "meta.json category could not be resolved; provide a catalog slug, challenge title, "
+            f"or prompt number (category={meta.get('category')!r}, prompt={meta.get('prompt')!r})"
+        )
 
     raw_date = meta.get("date")
     if not isinstance(raw_date, str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", raw_date):
