@@ -60,10 +60,10 @@
     {
       "no": "06",
       "slug": "game-2d",
-      "title": "2D Puzzle Game",
+      "title": "Original 2D Game",
       "family": "Games",
-      "summary": "An original, fully playable 2D puzzle game with a distinctive mechanic, fair challenges and satisfying feedback.",
-      "requirement": "Original mechanic; 6+ solvable stages; readable rules and state; undo/restart; keyboard and touch; saved progress",
+      "summary": "A complete, original 2D game in a genre and direction chosen independently by the model.",
+      "requirement": "Model-chosen genre and core loop; complete playable experience; coherent content; working rules and feedback; responsive, genre-appropriate controls; meaningful outcome and persistence where appropriate",
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
       "hue": 8
