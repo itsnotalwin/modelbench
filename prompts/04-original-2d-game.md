@@ -1,6 +1,6 @@
 # 04 · Original 2D Game
 
-## Automatic run identity — never ask the organiser
+## Automatic run identity — never ask the organiser or user
 
 Resolve the run metadata yourself before creating files. Do not ask the user or organiser for model, date, version, category, project title or creative direction.
 
@@ -51,7 +51,7 @@ The metadata file must contain this structure, with your resolved model slug and
   "entry": "index.html",
   "prompt": "04",
   "prompt_label": "Original 2D Game",
-  "notes": "undefined"
+  "notes": "A concise, honest description of the completed project and any known limitations."
 }
 ~~~
 
