@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AETHERDRIFT — The Nine Star Shards</title>
+<meta name="description" content="AETHERDRIFT: a 3D flight game. Pilot the last Skywarden's glider through a floating archipelago, recover nine star shards by climbing, diving and riding thermals, and reignite the Beacon Spire.">
+<style>
+  :root{
+    --ink:#f5ecdc; --ink-dim:#d8cbb2; --gold:#e8b45a; --gold-2:#f2cf8a;
+    --panel:rgba(10,14,28,.72); --panel-line:rgba(232,180,90,.38);
+    --teal:#7fe3d4; --danger:#ff8a7a; --focus:#ffd88a;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;padding:0;overflow:hidden}
+  body{
+    font-family:ui-sans-serif,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    background:linear-gradient(180deg,#131c38 0%,#2a3560 34%,#8e6a72 62%,#e8a972 84%,#f2c98a 100%);
+  }
+  #game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+  button{font:inherit;color:inherit}
+  :focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+  /* ---------- HUD ---------- */
+  #hud{position:fixed;inset:0;pointer-events:none;display:none}
+  #hud.on{display:block}
+  .panel{background:var(--panel);border:1px solid var(--panel-line);border-radius:14px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  #objective{position:absolute;top:14px;left:14px;padding:12px 16px;max-width:340px}
+  #objective h2{margin:0 0 4px;font-family:Georgia,"Iowan Old Style",serif;font-weight:600;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-2)}
+  #objectiveText{margin:0;font-size:15px;line-height:1.45;color:var(--ink)}
+  #objectiveSub{margin:5px 0 0;font-size:12.5px;color:var(--ink-dim)}
+  #shardRow{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
+  .shardPip{width:16px;height:16px;transform:rotate(45deg);border:2px solid var(--gold);border-radius:3px;background:transparent;opacity:.55}
+  .shardPip.got{background:var(--gold);opacity:1;box-shadow:0 0 10px rgba(232,180,90,.8)}
+  #topRight{position:absolute;top:14px;right:14px;display:flex;gap:8px;align-items:stretch;pointer-events:none}
+  #timerPanel{padding:9px 14px;text-align:right}
+  #timer{font-variant-numeric:tabular-nums;font-size:21px;font-weight:700;letter-spacing:.03em}
+  #best{font-size:11.5px;color:var(--ink-dim);margin-top:1px}
+  .iconBtn{pointer-events:auto;background:var(--panel);border:1px solid var(--panel-line);border-radius:12px;width:44px;height:44px;font-size:19px;cursor:pointer;display:grid;place-items:center}
+  .iconBtn:hover{border-color:var(--gold)}
+  #compass{position:absolute;top:14px;left:50%;transform:translateX(-50%);width:min(460px,52vw);height:34px;overflow:hidden;border-radius:10px;background:rgba(10,14,28,.55);border:1px solid rgba(232,180,90,.28)}
+  #compassTick{position:absolute;left:50%;top:0;width:2px;height:100%;background:var(--gold);transform:translateX(-50%)}
+  .cMark{position:absolute;top:50%;transform:translate(-50%,-50%);font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--ink);white-space:nowrap}
+  .cShard{color:var(--gold-2);font-size:15px}
+  .cBeacon{color:var(--teal)}
+  #gauges{position:absolute;left:14px;bottom:14px;padding:12px 16px;min-width:210px}
+  .gaugeRow{display:flex;align-items:baseline;gap:10px;justify-content:space-between}
+  .gaugeRow + .gaugeRow{margin-top:7px}
+  .gLabel{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-dim)}
+  .gVal{font-variant-numeric:tabular-nums;font-size:20px;font-weight:700}
+  .gVal small{font-size:11px;color:var(--ink-dim);font-weight:500}
+  #boostWrap{position:absolute;right:14px;bottom:14px;padding:12px 16px;min-width:210px}
+  #boostBar{height:12px;border-radius:7px;background:rgba(255,255,255,.14);overflow:hidden;margin-top:6px;border:1px solid rgba(255,255,255,.18)}
+  #boostFill{height:100%;width:100%;background:linear-gradient(90deg,#7fe3d4,#e8b45a);transform-origin:left}
+  #lightRow{display:flex;gap:7px;margin-top:8px;align-items:center}
+  .lightGem{width:15px;height:15px;transform:rotate(45deg);border-radius:3px;background:var(--gold);box-shadow:0 0 9px rgba(232,180,90,.75)}
+  .lightGem.lost{background:transparent;border:2px solid rgba(255,138,122,.8);box-shadow:none;opacity:.6}
+  #toast{position:absolute;left:50%;bottom:96px;transform:translateX(-50%);padding:10px 18px;font-size:15px;max-width:min(560px,86vw);text-align:center;opacity:0;transition:opacity .35s}
+  #toast.show{opacity:1}
+  #warn{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);font-family:Georgia,serif;font-size:22px;letter-spacing:.06em;color:#ffe9c4;text-shadow:0 2px 18px rgba(0,0,0,.7);opacity:0;transition:opacity .25s;text-align:center}
+  #warn.show{opacity:1}
+  /* ---------- Overlays ---------- */
+  .overlay{position:fixed;inset:0;display:none;place-items:center;padding:20px;background:rgba(6,8,18,.55);z-index:20}
+  .overlay.on{display:grid}
+  .sheet{width:min(680px,94vw);max-height:92vh;overflow:auto;background:linear-gradient(165deg,rgba(16,20,40,.96),rgba(28,24,40,.94));border:1px solid var(--panel-line);border-radius:22px;padding:clamp(22px,4vw,44px);box-shadow:0 30px 80px rgba(0,0,0,.55)}
+  .eyebrow{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 8px}
+  h1.title{font-family:Georgia,"Iowan Old Style",serif;font-size:clamp(38px,7vw,64px);line-height:1.02;margin:0 0 6px;letter-spacing:.02em}
+  .sub{font-family:Georgia,serif;font-style:italic;font-size:clamp(16px,2.6vw,20px);color:var(--gold-2);margin:0 0 16px}
+  .story{font-size:15.5px;line-height:1.65;color:var(--ink);margin:0 0 18px}
+  .controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px 18px;margin:0 0 20px;padding:14px 16px;border:1px solid rgba(255,255,255,.14);border-radius:14px;background:rgba(255,255,255,.04);font-size:13.5px;line-height:1.5}
+  .controls b{color:var(--gold-2);display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px}
+  .btnRow{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .primary{background:linear-gradient(180deg,#f2cf8a,#d99a3d);color:#241603;border:0;border-radius:12px;padding:15px 30px;font-size:17px;font-weight:800;letter-spacing:.03em;cursor:pointer;box-shadow:0 10px 28px rgba(217,154,61,.35)}
+  .primary:hover{filter:brightness(1.07)}
+  .secondary{background:transparent;color:var(--ink);border:1px solid rgba(232,180,90,.55);border-radius:12px;padding:14px 20px;font-size:15px;font-weight:600;cursor:pointer}
+  .secondary:hover{border-color:var(--gold)}
+  .toggles{display:flex;gap:18px;flex-wrap:wrap;margin-top:16px;font-size:14px}
+  .toggles label{display:flex;gap:8px;align-items:center;cursor:pointer}
+  .toggles input{width:18px;height:18px;accent-color:var(--gold)}
+  .smallNote{font-size:12.5px;color:var(--ink-dim);margin-top:14px;line-height:1.5}
+  #complete .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin:18px 0}
+  .stat{border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:12px 14px;background:rgba(255,255,255,.04)}
+  .stat .v{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
+  .stat .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);margin-top:2px}
+  #rankLine{font-family:Georgia,serif;font-size:20px;color:var(--gold-2);margin:0 0 6px}
+  #ctxLost .sheet{text-align:center}
+  /* ---------- Touch controls ---------- */
+  #touchUI{position:fixed;inset:0;pointer-events:none;display:none;z-index:15}
+  #touchUI.on{display:block}
+  #stick{position:absolute;left:18px;bottom:86px;width:132px;height:132px;border-radius:50%;border:2px solid rgba(245,236,220,.35);background:rgba(10,14,28,.4);pointer-events:auto;touch-action:none}
+  #stickKnob{position:absolute;left:50%;top:50%;width:56px;height:56px;border-radius:50%;background:rgba(245,236,220,.85);transform:translate(-50%,-50%)}
+  .tBtn{position:absolute;right:20px;width:76px;height:76px;border-radius:50%;border:2px solid rgba(245,236,220,.4);background:rgba(10,14,28,.55);font-size:13px;font-weight:800;letter-spacing:.06em;pointer-events:auto;touch-action:none;color:var(--ink)}
+  #btnBoost{bottom:120px}
+  #btnBrake{bottom:210px;width:64px;height:64px}
+  .tBtn:active,.tBtn.held{background:rgba(232,180,90,.75);color:#241603}
+  @media (max-width:760px){
+    #objective{max-width:62vw;padding:9px 12px}
+    #objectiveText{font-size:13px}
+    #compass{top:auto;bottom:250px;width:70vw}
+    #gauges,#boostWrap{min-width:150px;padding:9px 12px}
+    .gVal{font-size:16px}
+    #toast{bottom:170px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important;animation:none !important}
+  }
+</style>
+</head>
+<body>
+<canvas id="game" role="img" aria-label="AETHERDRIFT 3D flight game. Pilot a glider through a floating archipelago to recover nine star shards."></canvas>
+
+<div id="hud" aria-hidden="true">
+  <section id="objective" class="panel" aria-label="Objective">
+    <h2>Objective</h2>
+    <p id="objectiveText">Recover the nine star shards.</p>
+    <p id="objectiveSub">Ride golden thermals to climb. Dive to gain speed.</p>
+    <div id="shardRow" aria-hidden="true"></div>
+  </section>
+  <div id="compass" aria-hidden="true"><div id="compassTick"></div></div>
+  <div id="topRight">
+    <div id="timerPanel" class="panel"><div id="timer">00:00.0</div><div id="best">Best —</div></div>
+    <button id="btnSound" class="iconBtn" type="button" aria-label="Toggle sound" aria-pressed="true">♪</button>
+    <button id="btnPause" class="iconBtn" type="button" aria-label="Pause game">❚❚</button>
+    <button id="btnHelp" class="iconBtn" type="button" aria-label="Show help">?</button>
+  </div>
+  <div id="gauges" class="panel" aria-label="Flight gauges">
+    <div class="gaugeRow"><span class="gLabel">Speed</span><span class="gVal"><span id="gSpeed">0</span> <small>m/s</small></span></div>
+    <div class="gaugeRow"><span class="gLabel">Altitude</span><span class="gVal"><span id="gAlt">0</span> <small>m</small></span></div>
+    <div class="gaugeRow"><span class="gLabel">Light</span><span id="lightRow" aria-label="Glider light"></span></div>
+  </div>
+  <div id="boostWrap" class="panel" aria-label="Boost energy">
+    <div class="gaugeRow"><span class="gLabel">Boost</span><span class="gVal" id="boostPct">100<small>%</small></span></div>
+    <div id="boostBar"><div id="boostFill"></div></div>
+  </div>
+  <div id="toast" class="panel" role="status" aria-live="polite"></div>
+  <div id="warn" aria-hidden="true"></div>
+</div>
+
+<div id="touchUI" aria-hidden="true">
+  <div id="stick"><div id="stickKnob"></div></div>
+  <button id="btnBoost" class="tBtn" type="button">BOOST</button>
+  <button id="btnBrake" class="tBtn" type="button">BRAKE</button>
+</div>
+
+<!-- TITLE -->
+<div class="overlay on" id="titleScreen">
+  <div class="sheet" role="dialog" aria-labelledby="gameTitle" aria-modal="true">
+    <p class="eyebrow">A flight through the Shattered Sky</p>
+    <h1 class="title" id="gameTitle">AETHERDRIFT</h1>
+    <p class="sub">The Nine Star Shards</p>
+    <p class="story">When the Observatory broke, its star shards scattered across the floating isles. You are the last Skywarden, and the light in your lantern is the only thing keeping the dark moths at bay. Sail the archipelago on your glider — <b>climb the golden thermals, dive for speed, and thread the storm-dark</b> — recover all nine shards, and reignite the Beacon Spire before the moths go out.</p>
+    <div class="controls" aria-label="Controls">
+      <div><b>Steer</b>W A S D / arrows<br>A·D bank &amp; turn · W climb · S dive</div>
+      <div><b>Mouse / touch</b>Drag to steer · scroll = camera<br>Stick + BOOST / BRAKE on touch</div>
+      <div><b>Boost / brake</b>Shift = boost · Space = airbrake<br>Energy refills as you glide</div>
+      <div><b>Game</b>P or Esc pause · R restart<br>M sound · H help</div>
+    </div>
+    <div class="btnRow">
+      <button class="primary" id="btnStart" type="button">Begin the flight</button>
+      <button class="secondary" id="btnHow" type="button">How to fly</button>
+    </div>
+    <div class="toggles">
+      <label><input type="checkbox" id="optMotion"> Reduced motion</label>
+      <label><input type="checkbox" id="optSound" checked> Sound</label>
+      <label><input type="checkbox" id="optQuality"> Lower detail (performance)</label>
+    </div>
+    <p class="smallNote">Height, momentum and line of sight are the game: shards hide high, low, and between the isles. Birds and storm-cells will buffet you — three knocks put out your light and send you back to the Beacon. Best time is saved on this device only.</p>
+  </div>
+</div>
+
+<!-- HELP -->
+<div class="overlay" id="helpScreen">
+  <div class="sheet" role="dialog" aria-labelledby="helpTitle" aria-modal="true">
+    <p class="eyebrow">Skywarden's Primer</p>
+    <h1 class="title" id="helpTitle" style="font-size:34px">How to fly</h1>
+    <p class="story"><b>Energy exchange is everything.</b> Your glider has no engine. Diving trades height for speed; climbing trades speed for height. Below stall speed (~9 m/s) you sink and the nose drops. Enter a <b>golden thermal</b> — the shimmering column over an isle — to be lifted while keeping your speed. Boost spends energy; gliding and thermals refill it.</p>
+    <p class="story">Follow the gold diamonds on the compass to the nearest shard. When all nine are aboard, the teal beam marks the Beacon Spire — fly into its light to reignite it. Talon birds patrol the isles and storm-cells shove sideways; a knock costs one light-gem. Touch the cloud-sea and you will be pushed back into the sky.</p>
+    <div class="btnRow"><button class="primary" id="btnHelpClose" type="button">Back to the sky</button></div>
+  </div>
+</div>
+
+<!-- PAUSE -->
+<div class="overlay" id="pauseScreen">
+  <div class="sheet" role="dialog" aria-labelledby="pauseTitle" aria-modal="true">
+    <p class="eyebrow">Holding altitude</p>
+    <h1 class="title" id="pauseTitle" style="font-size:38px">Paused</h1>
+    <p class="story" id="pauseStats">The wind waits for you.</p>
+    <div class="btnRow">
+      <button class="primary" id="btnResume" type="button">Resume flight</button>
+      <button class="secondary" id="btnRestart" type="button">Restart run</button>
+      <button class="secondary" id="btnQuitTitle" type="button">Title</button>
+    </div>
+    <div class="toggles">
+      <label><input type="checkbox" id="optMotion2"> Reduced motion</label>
+      <label><input type="checkbox" id="optSound2" checked> Sound</label>
+    </div>
+  </div>
+</div>
+
+<!-- COMPLETE -->
+<div class="overlay" id="completeScreen">
+  <div class="sheet" role="dialog" aria-labelledby="doneTitle" aria-modal="true">
+    <p class="eyebrow">The Beacon burns again</p>
+    <h1 class="title" id="doneTitle" style="font-size:40px">Skywarden</h1>
+    <p id="rankLine">Nine shards, one dawn.</p>
+    <div class="stats">
+      <div class="stat"><div class="v" id="stTime">—</div><div class="k">Time</div></div>
+      <div class="stat"><div class="v" id="stBest">—</div><div class="k">Best</div></div>
+      <div class="stat"><div class="v" id="stBumps">—</div><div class="k">Knocks</div></div>
+      <div class="stat"><div class="v" id="stTherm">—</div><div class="k">Thermals ridden</div></div>
+    </div>
+    <p class="story">The moths scatter from the dark. Below the cloud-sea, the isles catch first light — and every window in the archipelago is lit by a shard you carried home.</p>
+    <div class="btnRow">
+      <button class="primary" id="btnAgain" type="button">Fly it again</button>
+      <button class="secondary" id="btnDoneTitle" type="button">Title</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="ctxLost">
+  <div class="sheet" role="alertdialog" aria-labelledby="ctxTitle">
+    <h1 class="title" id="ctxTitle" style="font-size:30px">The sky faltered</h1>
+    <p class="story">The graphics context was lost (often when the tab is backgrounded). Your run is paused safely.</p>
+    <div class="btnRow"><button class="primary" id="btnCtx" type="button">Restore the sky</button></div>
+  </div>
+</div>
+
+<p class="sr-only" id="srStatus" aria-live="polite"></p>
+
+<script>
+"use strict";
+/* ============================================================
+   AETHERDRIFT — original 3D flight game (hand-rolled WebGL)
+   ============================================================ */
+const TAU = Math.PI*2;
+const clamp=(v,a,b)=>v<a?a:(v>b?b:v);
+const lerp=(a,b,t)=>a+(b-a)*t;
+const damp=(a,b,k,dt)=>lerp(a,b,1-Math.exp(-k*dt));
+const hyp=(x,z)=>Math.sqrt(x*x+z*z);
+function mulberry32(seed){let t=seed>>>0;return function(){t+=0x6D2B79F5;let r=Math.imul(t^(t>>>15),1|t);r^=r+Math.imul(r^(r>>>7),61|r);return((r^(r>>>14))>>>0)/4294967296;};}
+let rng = mulberry32(20261109);
+const V3={
+  make:(x=0,y=0,z=0)=>({x,y,z}),
+  add:(a,b)=>({x:a.x+b.x,y:a.y+b.y,z:a.z+b.z}),
+  sub:(a,b)=>({x:a.x-b.x,y:a.y-b.y,z:a.z-b.z}),
+  scale:(a,s)=>({x:a.x*s,y:a.y*s,z:a.z*s}),
+  dot:(a,b)=>a.x*b.x+a.y*b.y+a.z*b.z,
+  cross:(a,b)=>({x:a.y*b.z-a.z*b.y,y:a.z*b.x-a.x*b.z,z:a.x*b.y-a.y*b.x}),
+  len:a=>Math.sqrt(a.x*a.x+a.y*a.y+a.z*a.z),
+  norm:a=>{const l=V3.len(a)||1;return{x:a.x/l,y:a.y/l,z:a.z/l};},
+  lerp:(a,b,t)=>({x:lerp(a.x,b.x,t),y:lerp(a.y,b.y,t),z:lerp(a.z,b.z,t)}),
+  dist:(a,b)=>V3.len(V3.sub(a,b))
+};
+/* ---- quaternion (x,y,z,w) ---- */
+const Q={
+  ident:()=>({x:0,y:0,z:0,w:1}),
+  axis:(ax,ay,az,ang)=>{const s=Math.sin(ang/2);return{x:ax*s,y:ay*s,z:az*s,w:Math.cos(ang/2)};},
+  mul:(a,b)=>({x:a.w*b.x+a.x*b.w+a.y*b.z-a.z*b.y,y:a.w*b.y-a.x*b.z+a.y*b.w+a.z*b.x,z:a.w*b.z+a.x*b.y-a.y*b.x+a.z*b.w,w:a.w*b.w-a.x*b.x-a.y*b.y-a.z*b.z}),
+  rot:(q,v)=>{const u={x:q.x,y:q.y,z:q.z};const uv=V3.cross(u,v);const uuv=V3.cross(u,uv);return{x:v.x+2*(q.w*uv.x+uuv.x),y:v.y+2*(q.w*uv.y+uuv.y),z:v.z+2*(q.w*uv.z+uuv.z)};},
+  fromYawPitchRoll:(yaw,pitch,roll)=>{const qy=Q.axis(0,1,0,yaw);const qp=Q.axis(1,0,0,pitch);const qr=Q.axis(0,0,1,roll);return Q.mul(Q.mul(qy,qp),qr);}
+};
+/* ---- mat4 column-major ---- */
+function mIdent(){return new Float32Array([1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1]);}
+function mPersp(fov,asp,n,f){const t=1/Math.tan(fov/2);const m=new Float32Array(16);m[0]=t/asp;m[5]=t;m[10]=(f+n)/(n-f);m[11]=-1;m[14]=(2*f*n)/(n-f);return m;}
+function mLook(eye,center,up){const z=V3.norm(V3.sub(eye,center));const x=V3.norm(V3.cross(up,z));const y=V3.cross(z,x);const m=new Float32Array(16);m[0]=x.x;m[1]=y.x;m[2]=z.x;m[4]=x.y;m[5]=y.y;m[6]=z.y;m[8]=x.z;m[9]=y.z;m[10]=z.z;m[12]=-V3.dot(x,eye);m[13]=-V3.dot(y,eye);m[14]=-V3.dot(z,eye);m[15]=1;return m;}
+function mMul(a,b){const o=new Float32Array(16);for(let c=0;c<4;c++)for(let r=0;r<4;r++){let s=0;for(let k=0;k<4;k++)s+=a[k*4+r]*b[c*4+k];o[c*4+r]=s;}return o;}
+function mTRS(p,q,s){const m=mIdent();const x=Q.rot(q,{x:1,y:0,z:0}),y=Q.rot(q,{x:0,y:1,z:0}),z=Q.rot(q,{x:0,y:0,z:1});m[0]=x.x*s;m[1]=x.y*s;m[2]=x.z*s;m[4]=y.x*s;m[5]=y.y*s;m[6]=y.z*s;m[8]=z.x*s;m[9]=z.y*s;m[10]=z.z*s;m[12]=p.x;m[13]=p.y;m[14]=p.z;return m;}
+function mNormal(mv){return new Float32Array([mv[0],mv[1],mv[2],mv[4],mv[5],mv[6],mv[8],mv[9],mv[10]]);}
+
+/* ================= Audio (synthesised) ================= */
+const AudioSys={
+  ctx:null,master:null,windGain:null,windFilter:null,muted:false,
+  init(){ if(this.ctx) return; try{
+    const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return;
+    this.ctx=new AC(); this.master=this.ctx.createGain(); this.master.gain.value=0.5; this.master.connect(this.ctx.destination);
+    const len=this.ctx.sampleRate*2; const buf=this.ctx.createBuffer(1,len,this.ctx.sampleRate); const d=buf.getChannelData(0);
+    for(let i=0;i<len;i++) d[i]=Math.random()*2-1;
+    const src=this.ctx.createBufferSource(); src.buffer=buf; src.loop=true;
+    this.windFilter=this.ctx.createBiquadFilter(); this.windFilter.type="bandpass"; this.windFilter.frequency.value=500; this.windFilter.Q.value=0.6;
+    this.windGain=this.ctx.createGain(); this.windGain.gain.value=0.0;
+    src.connect(this.windFilter); this.windFilter.connect(this.windGain); this.windGain.connect(this.master); src.start();
+  }catch(e){ this.ctx=null; } },
+  resume(){ try{ if(this.ctx&&this.ctx.state==="suspended") this.ctx.resume(); }catch(e){} },
+  setWind(speed,thermal){ if(!this.ctx||this.muted) return; const g=clamp(speed/40,0,1)*0.22+(thermal?0.05:0); this.windGain.gain.setTargetAtTime(g,this.ctx.currentTime,0.12); this.windFilter.frequency.setTargetAtTime(300+speed*28+(thermal?250:0),this.ctx.currentTime,0.15); },
+  tone(freq,dur,type,vol,when=0,slideTo){ if(!this.ctx||this.muted) return; try{ const t=this.ctx.currentTime+when; const o=this.ctx.createOscillator(),g=this.ctx.createGain(); o.type=type||"sine"; o.frequency.setValueAtTime(freq,t); if(slideTo) o.frequency.exponentialRampToValueAtTime(slideTo,t+dur); g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol||0.18,t+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t+dur); o.connect(g); g.connect(this.master); o.start(t); o.stop(t+dur+0.05);}catch(e){} },
+  chime(n){ const base=[523.25,587.33,659.25,783.99,880,1046.5]; const k=base[n%base.length]; this.tone(k,0.5,"sine",0.2); this.tone(k*1.5,0.6,"sine",0.12,0.07); this.tone(k*2,0.4,"triangle",0.07,0.14); },
+  bump(){ this.tone(95,0.28,"sine",0.34,0,45); this.tone(60,0.22,"triangle",0.22,0,38); },
+  squawk(){ this.tone(1400,0.14,"sawtooth",0.07,0,900); this.tone(1500,0.12,"sawtooth",0.06,0.1,950); },
+  win(){ [392,523.25,659.25,783.99,1046.5,1318.5].forEach((f,i)=>{ this.tone(f,0.7,"sine",0.2,i*0.13); this.tone(f/2,0.7,"triangle",0.1,i*0.13); }); },
+  setMuted(m){ this.muted=m; if(this.master) this.master.gain.value=m?0:0.5; if(m&&this.windGain) this.windGain.gain.value=0; }
+};
+
+/* ================= Mesh builder ================= */
+function hex(h){ const n=parseInt(h.slice(1),16); return [((n>>16)&255)/255,((n>>8)&255)/255,(n&255)/255]; }
+class MB{
+  constructor(){ this.pos=[]; this.nor=[]; this.col=[]; this.idx=[]; }
+  tri(a,b,c,col){ const i=this.pos.length/3; const A=a,B=b,C=c; let n=V3.cross(V3.sub(B,A),V3.sub(C,A)); n=V3.norm(n); const co=Array.isArray(col)?col:hex(col);
+    this.pos.push(A.x,A.y,A.z,B.x,B.y,B.z,C.x,C.y,C.z); for(let k=0;k<3;k++){this.nor.push(n.x,n.y,n.z);this.col.push(co[0],co[1],co[2],1);} this.idx.push(i,i+1,i+2); }
+  quad(a,b,c,d,col){ this.tri(a,b,c,col); this.tri(a,c,d,col); }
+  box(cx,cy,cz,sx,sy,sz,rotY,col){ const hx=sx/2,hy=sy/2,hz=sz/2; const cs=Math.cos(rotY),sn=Math.sin(rotY);
+    const pt=(x,y,z)=>({x:cx+x*cs+z*sn,y:cy+y,z:cz-x*sn+z*cs});
+    const F=[pt(-hx,-hy,hz),pt(hx,-hy,hz),pt(hx,hy,hz),pt(-hx,hy,hz)],Bk=[pt(hx,-hy,-hz),pt(-hx,-hy,-hz),pt(-hx,hy,-hz),pt(hx,hy,-hz)],T=[pt(-hx,hy,-hz),pt(hx,hy,-hz),pt(hx,hy,hz),pt(-hx,hy,hz)],Bo=[pt(hx,-hy,-hz),pt(-hx,-hy,-hz),pt(-hx,-hy,hz),pt(hx,-hy,hz)],L=[pt(-hx,hy,-hz),pt(-hx,-hy,-hz),pt(-hx,-hy,hz),pt(-hx,hy,hz)],R=[pt(hx,-hy,-hz),pt(hx,hy,-hz),pt(hx,hy,hz),pt(hx,-hy,hz)];
+    this.quad(F[0],F[1],F[2],F[3],col); this.quad(Bk[0],Bk[1],Bk[2],Bk[3],col); this.quad(T[0],T[1],T[2],T[3],col); this.quad(Bo[0],Bo[1],Bo[2],Bo[3],col); this.quad(L[0],L[1],L[2],L[3],col); this.quad(R[0],R[1],R[2],R[3],col); }
+  cone(cx,cy,cz,r,h,seg,col,apexUp){ const half=seg/2; for(let i=0;i<half;i++){ const a0=i/half*TAU,a1=(i+1)/half*TAU;
+    let A,B,C,D; if(apexUp){ const top={x:cx,y:cy+h/2,z:cz}; A=top; B={x:cx+Math.cos(a0)*r,y:cy-h/2,z:cz+Math.sin(a0)*r}; C={x:cx+Math.cos(a1)*r,y:cy-h/2,z:cz+Math.sin(a1)*r}; this.tri(A,C,B,col); }
+    else { const bot={x:cx,y:cy-h/2,z:cz}; A={x:cx+Math.cos(a0)*r,y:cy+h/2,z:cz+Math.sin(a0)*r}; B={x:cx+Math.cos(a1)*r,y:cy+h/2,z:cz+Math.sin(a1)*r}; C=bot; this.tri(A,B,C,col); }
+    if(!apexUp){ const bc={x:cx,y:cy-h/2,z:cz}; } }
+    // cap fan
+    const center={x:cx,y:apexUp?cy-h/2:cy+h/2,z:cz};
+    for(let i=0;i<half;i++){ const a0=i/half*TAU,a1=(i+1)/half*TAU; const A={x:cx+Math.cos(a0)*r,y:center.y,z:cz+Math.sin(a0)*r}; const B={x:cx+Math.cos(a1)*r,y:center.y,z:cz+Math.sin(a1)*r}; if(apexUp) this.tri(center,B,A,col); else this.tri(center,A,B,col); } }
+  cyl(cx,cy,cz,r,h,seg,col,open){ const half=seg/2; for(let i=0;i<half;i++){ const a0=i/half*TAU,a1=(i+1)/half*TAU;
+    const y0=cy-h/2,y1=cy+h/2;
+    const A={x:cx+Math.cos(a0)*r,y:y0,z:cz+Math.sin(a0)*r},B={x:cx+Math.cos(a1)*r,y:y0,z:cz+Math.sin(a1)*r},C={x:cx+Math.cos(a1)*r,y:y1,z:cz+Math.sin(a1)*r},D={x:cx+Math.cos(a0)*r,y:y1,z:cz+Math.sin(a0)*r};
+    this.quad(A,B,C,D,col); }
+    if(!open){ const cb={x:cx,y:cy-h/2,z:cz},ct={x:cx,y:cy+h/2,z:cz};
+      for(let i=0;i<half;i++){ const a0=i/half*TAU,a1=(i+1)/half*TAU; const A={x:cx+Math.cos(a0)*r,y:cb.y,z:cz+Math.sin(a0)*r},B={x:cx+Math.cos(a1)*r,y:cb.y,z:cz+Math.sin(a1)*r}; this.tri(cb,B,A,col); const C={x:cx+Math.cos(a0)*r,y:ct.y,z:cz+Math.sin(a0)*r},D={x:cx+Math.cos(a1)*r,y:ct.y,z:cz+Math.sin(a1)*r}; this.tri(ct,C,D,col); } } }
+  crystal(cx,cy,cz,size,col){ const t=size*1.05,b=size*0.55; const top={x:cx,y:cy+t,z:cz},bot={x:cx,y:cy-t*0.8,z:cz};
+    const ring=[]; for(let i=0;i<4;i++){ const a=i/4*TAU+Math.PI/4; ring.push({x:cx+Math.cos(a)*b,y:cy,z:cz+Math.sin(a)*b}); }
+    for(let i=0;i<4;i++){ const j=(i+1)%4; this.tri(top,ring[i],ring[j],col); this.tri(bot,ring[j],ring[i],col); } }
+  rock(cx,cy,cz,r,col){ // low-poly icosphere-ish: 3 stacked rings
+    const rings=[{y:0,r:r*0.62},{y:r*0.55,r:r*0.85},{y:r*1.0,r:r*0.55}]; const top={x:cx,y:cy+r*1.45,z:cz},bot={x:cx,y:cy-r*1.1,z:cz}; const seg=7;
+    const ringPts=rings.map((rg,ri)=>{ const arr=[]; for(let i=0;i<seg;i++){ const a=(i+(ri%2?0.5:0))/seg*TAU; arr.push({x:cx+Math.cos(a)*rg.r,y:cy+rg.y,z:cz+Math.sin(a)*rg.r}); } return arr; });
+    for(let i=0;i<seg;i++){ const j=(i+1)%seg; this.tri(top,ringPts[2][i],ringPts[2][j],col); this.tri(bot,ringPts[0][j],ringPts[0][i],col); }
+    for(let i=0;i<seg;i++){ const j=(i+1)%seg; this.quad(ringPts[0][i],ringPts[0][j],ringPts[1][j],ringPts[1][i],col); this.quad(ringPts[1][i],ringPts[1][j],ringPts[2][j],ringPts[2][i],col); } }
+  tree(x,y,z,s,col){ this.box(x,y+s*0.7,z,s*0.22,s*1.4,s*0.22,0,"#5a3d2b"); this.cone(x,y+s*2.2,z,s*1.35,s*2.6,7,col,true); this.cone(x,y+s*3.5,z,s*0.85,s*1.9,7,col,true); }
+  house(x,y,z,s,wall,roof,rot){ this.box(x,y+s*0.55,z,s,s*1.1,s,rot,wall); this.cone(x,y+s*1.1+s*0.55,z,s*0.95,s*1.1,4,roof,true); }
+}
+
+/* ================= World data ================= */
+const ISLANDS=[
+ {x:0,z:0,r:16,yTop:32, name:"Beacon Isle"},
+ {x:-70,z:-40,r:14,yTop:55, name:"Observatory"},
+ {x:65,z:-55,r:13,yTop:42, name:"Windmill Isle"},
+ {x:80,z:45,r:11,yTop:28, name:"Shrine Isle"},
+ {x:-85,z:50,r:15,yTop:26, name:"Garden Isle"},
+ {x:10,z:85,r:12,yTop:38, name:"Forge Rock"},
+ {x:-25,z:-95,r:10,yTop:22, name:"Sunken Bell"},
+ {x:35,z:15,r:8,yTop:48, name:"High Atoll"},
+ {x:-50,z:15,r:9,yTop:12, name:"Low Atoll"},
+];
+const SHARD_DEFS=[
+ {x:0,y:54,z:-12}, {x:-70,y:70,z:-40}, {x:65,y:30,z:-55}, {x:80,y:44,z:45},
+ {x:-85,y:42,z:50}, {x:10,y:24,z:85}, {x:-25,y:36,z:-95}, {x:35,y:64,z:15}, {x:-50,y:9,z:15},
+];
+const THERMAL_DEFS=[{x:0,z:0},{x:-70,z:-40},{x:65,z:-55},{x:35,z:15},{x:-85,z:50},{x:-50,z:15}];
+const SUN_DIR=V3.norm({x:-0.55,y:0.32,z:-0.48});
+const FOG_COLOR=[0.91,0.70,0.55];
+
+/* ================= Game state ================= */
+const G={
+  state:"title", // title|playing|paused|complete|help
+  time:0, camDist:13, fovKick:0, shake:0, invuln:0, bumps:0, respawns:0, thermalsRidden:0,
+  boost:100, light:3, shardsGot:0, beaconActive:false, started:false,
+  quality:"auto", reducedMotion:false, pixelRatio:1, particleScale:1,
+  settings:{muted:false,reduced:false,lowQ:false,best:null},
+};
+const player={ pos:V3.make(0,47,28), vel:V3.make(0,1.5,-19), yaw:0, pitch:0.02, roll:0, quat:Q.ident(), fwd:V3.make(0,0,-1), inThermal:false, thermalId:-1 };
+const cam={ pos:V3.make(0,55,15), look:V3.make(0,47,28) };
+const birds=[], storms=[], thermals=[], shards=[], clouds=[];
+const colliders=[]; // {type:'cone'|'cyl',x,z,r,yTop,yBot|y0,y1}
+
+/* ================= DOM ================= */
+const $=id=>document.getElementById(id);
+const els={ canvas:$("game"), hud:$("hud"), objectiveText:$("objectiveText"), objectiveSub:$("objectiveSub"), shardRow:$("shardRow"),
+ timer:$("timer"), best:$("best"), gSpeed:$("gSpeed"), gAlt:$("gAlt"), lightRow:$("lightRow"), boostFill:$("boostFill"), boostPct:$("boostPct"),
+ toast:$("toast"), warn:$("warn"), compass:$("compass"), sr:$("srStatus"), touchUI:$("touchUI") };
+for(let i=0;i<9;i++){ const d=document.createElement("div"); d.className="shardPip"; els.shardRow.appendChild(d); }
+for(let i=0;i<3;i++){ const d=document.createElement("div"); d.className="lightGem"; els.lightRow.appendChild(d); }
+let toastTimer=null;
+function toast(msg,ms){ els.toast.textContent=msg; els.toast.classList.add("show"); els.sr.textContent=msg; clearTimeout(toastTimer); toastTimer=setTimeout(()=>els.toast.classList.remove("show"), ms||3200); }
+let warnTimer=null;
+function warn(msg,ms){ els.warn.textContent=msg; els.warn.classList.add("show"); clearTimeout(warnTimer); warnTimer=setTimeout(()=>els.warn.classList.remove("show"), ms||1400); }
+function fmtTime(t){ const m=Math.floor(t/60),s=t-m*60; return String(m).padStart(2,"0")+":"+s.toFixed(1).padStart(4,"0"); }
+
+/* ================= Storage (guarded) ================= */
+const Store={ load(){ try{ const s=localStorage.getItem("aetherdrift-v1"); if(s) G.settings=Object.assign(G.settings,JSON.parse(s)); }catch(e){} },
+ save(){ try{ localStorage.setItem("aetherdrift-v1",JSON.stringify(G.settings)); }catch(e){} } };
+
+/* ================= Input ================= */
+const Keys=new Set();
+const Stick={active:false,id:null,x:0,y:0};
+const Drag={active:false,id:null,dx:0,dy:0};
+let boostHeld=false,brakeHeld=false;
+addEventListener("keydown",e=>{
+  const k=e.key.toLowerCase();
+  if(["arrowup","arrowdown","arrowleft","arrowright"," "].includes(k)) e.preventDefault();
+  Keys.add(k);
+  if(k==="shift") boostHeld=true;
+  if(k===" "||k==="spacebar") brakeHeld=true;
+  if(k==="m") toggleSound();
+  if(k==="h") toggleHelp();
+  if(k==="p"||k==="escape"){ if(G.state==="playing") pauseGame(); else if(G.state==="paused") resumeGame(); }
+  if(k==="r"&&(G.state==="playing"||G.state==="paused"||G.state==="complete")) restartRun();
+  if(k==="enter"&&G.state==="title") startGame();
+});
+addEventListener("keyup",e=>{ const k=e.key.toLowerCase(); Keys.delete(k); if(k==="shift") boostHeld=false; if(k===" "||k==="spacebar") brakeHeld=false; });
+els.canvas.addEventListener("pointerdown",e=>{ if(e.pointerType==="touch")return; Drag.active=true; Drag.id=e.pointerId; Drag.dx=0; Drag.dy=0; els.canvas.setPointerCapture(e.pointerId); });
+addEventListener("pointermove",e=>{ if(Drag.active&&e.pointerId===Drag.id){ Drag.dx+=e.movementX||0; Drag.dy+=e.movementY||0; } });
+addEventListener("pointerup",e=>{ if(e.pointerId===Drag.id){Drag.active=false;} });
+addEventListener("wheel",e=>{ if(G.state==="playing") G.camDist=clamp(G.camDist+Math.sign(e.deltaY)*1.4,8.5,19); },{passive:true});
+/* touch joystick */
+const stickEl=$("stick"), knobEl=$("stickKnob");
+function stickPos(e){ const r=stickEl.getBoundingClientRect(); const cx=r.left+r.width/2, cy=r.top+r.height/2; let dx=(e.clientX-cx)/(r.width/2), dy=(e.clientY-cy)/(r.height/2); const l=hyp(dx,dy); if(l>1){dx/=l;dy/=l;} Stick.x=dx; Stick.y=dy; knobEl.style.transform=`translate(calc(-50% + ${dx*38}px), calc(-50% + ${dy*38}px))`; }
+stickEl.addEventListener("pointerdown",e=>{ e.preventDefault(); Stick.active=true; Stick.id=e.pointerId; stickEl.setPointerCapture(e.pointerId); stickPos(e); });
+stickEl.addEventListener("pointermove",e=>{ if(Stick.active&&e.pointerId===Stick.id) stickPos(e); });
+const stickEnd=e=>{ if(e.pointerId===Stick.id){Stick.active=false;Stick.x=0;Stick.y=0;knobEl.style.transform="translate(-50%,-50%)";} };
+stickEl.addEventListener("pointerup",stickEnd); stickEl.addEventListener("pointercancel",stickEnd);
+function bindHold(id,set){ const b=$(id); const on=e=>{e.preventDefault(); set(true); b.classList.add("held");}; const off=e=>{set(false); b.classList.remove("held");}; b.addEventListener("pointerdown",on); b.addEventListener("pointerup",off); b.addEventListener("pointercancel",off); b.addEventListener("pointerleave",off); }
+bindHold("btnBoost",v=>boostHeld=v); bindHold("btnBrake",v=>brakeHeld=v);
+if(matchMedia("(pointer:coarse)").matches) els.touchUI.classList.add("on");
+
+/* ================= WebGL ================= */
+let gl=null,extUInt=null,prog=null,spriteProg=null,progLoc={},spriteLoc={},staticMesh=null,gliderMesh=null,birdMesh=null,shardMesh=null,beaconMesh=null,thermalMesh=null,ringMesh=null;
+let spriteBuffers=null;
+const VSH=`attribute vec3 aPos; attribute vec3 aNorm; attribute vec4 aColor;
+uniform mat4 uProj; uniform mat4 uMV; uniform mat3 uNM;
+varying vec3 vN; varying vec4 vC; varying float vD;
+void main(){ vec4 mv=uMV*vec4(aPos,1.0); vD=-mv.z; vN=normalize(uNM*aNorm); vC=aColor; gl_Position=uProj*mv; }`;
+const FSH=`precision mediump float; uniform vec3 uSun; uniform vec3 uFog; uniform vec2 uFogR; uniform float uEmissive; uniform float uAMul;
+varying vec3 vN; varying vec4 vC; varying float vD;
+void main(){ vec3 n=normalize(vN); vec3 lit;
+ if(uEmissive>0.5){ lit=vC.rgb; } else { float diff=max(dot(n,uSun),0.0); float hemi=0.5+0.5*n.y;
+  lit=vC.rgb*(vec3(0.36,0.40,0.52)+diff*vec3(1.08,0.94,0.74)+hemi*vec3(0.13,0.17,0.24)); }
+ float f=clamp((vD-uFogR.x)/(uFogR.y-uFogR.x),0.0,1.0); f=f*f*(3.0-2.0*f);
+ vec3 col=mix(lit,uFog,f); gl_FragColor=vec4(col, vC.a*uAMul); }`;
+const SVSH=`attribute vec3 aCorner; attribute vec3 aCenter; attribute float aSize; attribute vec4 aColor;
+uniform mat4 uProj; uniform mat4 uView;
+varying vec2 vUv; varying vec4 vC;
+void main(){ vec4 mv=uView*vec4(aCenter,1.0); mv.xy+=aCorner.xy*aSize; vUv=aCorner.xy; vC=aColor; gl_Position=uProj*mv; }`;
+const SFSH=`precision mediump float; varying vec2 vUv; varying vec4 vC;
+void main(){ float d=length(vUv); float a=smoothstep(1.0,0.15,d)*vC.a; if(a<0.01) discard; vec3 col=vC.rgb+(1.0-d)*vec3(0.25,0.2,0.05); gl_FragColor=vec4(col,a); }`;
+function compile(type,src){ const s=gl.createShader(type); gl.shaderSource(s,src); gl.compileShader(s); if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){ console.error(gl.getShaderInfoLog(s)); return null; } return s; }
+function makeProg(vs,fs,assign){ const p=gl.createProgram(); const a=compile(gl.VERTEX_SHADER,vs), b=compile(gl.FRAGMENT_SHADER,fs); if(!a||!b) return null; gl.attachShader(p,a); gl.attachShader(p,b); gl.linkProgram(p); if(!gl.getProgramParameter(p,gl.LINK_STATUS)){ console.error(gl.getProgramInfoLog(p)); return null;} assign(p); return p; }
+function meshBuffers(mb){ const b={count:mb.idx.length};
+  const mk=(arr,type)=>{ const buf=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,buf); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(arr),gl.STATIC_DRAW); return buf; };
+  b.pos=mk(mb.pos); b.nor=mk(mb.nor); b.col=mk(mb.col);
+  b.idx=gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,b.idx); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint32Array(mb.idx),gl.STATIC_DRAW); return b; }
+function drawMesh(b,model,view,proj,emissive,alphaMul,transparent){
+  const mv=mMul(view,model); gl.uniformMatrix4fv(progLoc.p,false,proj); gl.uniformMatrix4fv(progLoc.mv,false,mv); gl.uniformMatrix3fv(progLoc.nm,false,mNormal(mv));
+  gl.uniform1f(progLoc.emissive,emissive?1:0); gl.uniform1f(progLoc.amul,alphaMul);
+  gl.disable(gl.BLEND); gl.depthMask(true); if(transparent){gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA); gl.depthMask(false);}
+  gl.bindBuffer(gl.ARRAY_BUFFER,b.pos); gl.enableVertexAttribArray(progLoc.aPos); gl.vertexAttribPointer(progLoc.aPos,3,gl.FLOAT,false,0,0);
+  gl.bindBuffer(gl.ARRAY_BUFFER,b.nor); gl.enableVertexAttribArray(progLoc.aNorm); gl.vertexAttribPointer(progLoc.aNorm,3,gl.FLOAT,false,0,0);
+  gl.bindBuffer(gl.ARRAY_BUFFER,b.col); gl.enableVertexAttribArray(progLoc.aColor); gl.vertexAttribPointer(progLoc.aColor,4,gl.FLOAT,false,0,0);
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,b.idx); gl.drawElements(gl.TRIANGLES,b.count,gl.UNSIGNED_INT,0);
+  gl.depthMask(true); gl.disable(gl.BLEND); }
+
+/* sprites: centers/sizes/colors dynamic */
+const SPR_MAX=700;
+const sprData={center:new Float32Array(SPR_MAX*3),corner:new Float32Array(SPR_MAX*6*3),size:new Float32Array(SPR_MAX*6),col:new Float32Array(SPR_MAX*6*4),idx:new Uint32Array(SPR_MAX*6)};
+(function initSpriteIndex(){ let v=0; for(let i=0;i<SPR_MAX;i++){ const base=i*6; sprData.idx.set([base,base+1,base+2, base,base+2,base+3],i*6); const corners=[[-1,-1],[1,-1],[1,1],[-1,1],[-1,-1],[1,1]];
+  for(let k=0;k<6;k++){ sprData.corner[(base+k)*3]=corners[k][0]; sprData.corner[(base+k)*3+1]=corners[k][1]; sprData.corner[(base+k)*3+2]=0; } } })();
+let _sprBufs=null;
+function drawSprites(list,view,proj){
+  const n=Math.min(list.length,SPR_MAX); if(!n||!gl) return;
+  const center=new Float32Array(n*3),size=new Float32Array(n*6),col=new Float32Array(n*6*4);
+  for(let i=0;i<n;i++){ const s=list[i]; center[i*3]=s.p.x; center[i*3+1]=s.p.y; center[i*3+2]=s.p.z;
+    for(let k=0;k<6;k++){ size[i*6+k]=s.size; col[(i*6+k)*4]=s.col[0]; col[(i*6+k)*4+1]=s.col[1]; col[(i*6+k)*4+2]=s.col[2]; col[(i*6+k)*4+3]=s.alpha; } }
+  gl.useProgram(spriteProg); gl.uniformMatrix4fv(spriteLoc.p,false,proj); gl.uniformMatrix4fv(spriteLoc.v,false,view);
+  gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA,gl.ONE); gl.depthMask(false); gl.enable(gl.DEPTH_TEST);
+  const corner=sprData.corner.subarray(0,n*18);
+  const idx=sprData.idx.subarray(0,n*6);
+  const centerExp=new Float32Array(n*6*3); for(let i=0;i<n;i++){ for(let k=0;k<6;k++){ centerExp[(i*6+k)*3]=center[i*3]; centerExp[(i*6+k)*3+1]=center[i*3+1]; centerExp[(i*6+k)*3+2]=center[i*3+2]; } }
+  if(!_sprBufs){ _sprBufs={corner:gl.createBuffer(),center:gl.createBuffer(),size:gl.createBuffer(),col:gl.createBuffer(),idx:gl.createBuffer()}; }
+  gl.bindBuffer(gl.ARRAY_BUFFER,_sprBufs.corner); gl.bufferData(gl.ARRAY_BUFFER,corner,gl.DYNAMIC_DRAW); gl.enableVertexAttribArray(spriteLoc.corner); gl.vertexAttribPointer(spriteLoc.corner,3,gl.FLOAT,false,0,0);
+  gl.bindBuffer(gl.ARRAY_BUFFER,_sprBufs.center); gl.bufferData(gl.ARRAY_BUFFER,centerExp,gl.DYNAMIC_DRAW); gl.enableVertexAttribArray(spriteLoc.center); gl.vertexAttribPointer(spriteLoc.center,3,gl.FLOAT,false,0,0);
+  gl.bindBuffer(gl.ARRAY_BUFFER,_sprBufs.size); gl.bufferData(gl.ARRAY_BUFFER,size,gl.DYNAMIC_DRAW); gl.enableVertexAttribArray(spriteLoc.size); gl.vertexAttribPointer(spriteLoc.size,1,gl.FLOAT,false,0,0);
+  gl.bindBuffer(gl.ARRAY_BUFFER,_sprBufs.col); gl.bufferData(gl.ARRAY_BUFFER,col,gl.DYNAMIC_DRAW); gl.enableVertexAttribArray(spriteLoc.col); gl.vertexAttribPointer(spriteLoc.col,4,gl.FLOAT,false,0,0);
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,_sprBufs.idx); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,idx,gl.STATIC_DRAW);
+  gl.drawElements(gl.TRIANGLES,n*6,gl.UNSIGNED_INT,0);
+  gl.disable(gl.BLEND); gl.depthMask(true);
+}
+
+/* ================= Build geometry ================= */
+function buildWorld(){
+  colliders.length=0;
+  rng=mulberry32(20261109);
+  const mb=new MB();
+  const rockCols=["#8a5f4d","#7d5646","#96705a"], topCols=["#4f8f6a","#5d9a72","#47855f"];
+  for(const isl of ISLANDS){
+    const yBot=isl.yTop-26-Math.floor(rng()*10);
+    colliders.push({type:"cone",x:isl.x,z:isl.z,r:isl.r,yTop:isl.yTop,yBot});
+    // underside cone + top disc
+    mb.cone(isl.x,(isl.yTop+yBot)/2,isl.z,isl.r,isl.yTop-yBot,14,rockCols[Math.floor(rng()*3)],false);
+    mb.cyl(isl.x,isl.yTop-0.8,isl.z,isl.r,1.6,14,topCols[Math.floor(rng()*3)],false);
+    mb.cyl(isl.x,isl.yTop+0.35,isl.z,isl.r*0.92,0.7,14,"#6aa878",false);
+    // rim rocks
+    for(let i=0;i<5;i++){ const a=rng()*TAU, rr=isl.r*(0.55+rng()*0.4); mb.rock(isl.x+Math.cos(a)*rr,isl.yTop+0.4,isl.z+Math.sin(a)*rr,0.8+rng()*0.9,rockCols[i%3]); }
+    // trees
+    const nTrees=6+Math.floor(rng()*6);
+    for(let i=0;i<nTrees;i++){ const a=rng()*TAU, rr=isl.r*(0.25+rng()*0.6); mb.tree(isl.x+Math.cos(a)*rr,isl.yTop+0.7,isl.z+Math.sin(a)*rr,1.2+rng()*1.3,["#2f6b4f","#3a7d5a","#276045"][i%3]); }
+    // little houses on some isles
+    if(rng()>0.45){ mb.house(isl.x+(rng()-0.5)*isl.r*0.5,isl.yTop+0.7,isl.z+(rng()-0.5)*isl.r*0.5,2.6,"#e8dcc0","#b5563c",rng()*TAU); }
+    // arch bridge stubs between nearby isles (visual)
+    if(isl.name==="Beacon Isle"){ // beacon tower
+      mb.cyl(isl.x,isl.yTop+5,isl.z,2.2,10,10,"#d9cfb4",false);
+      mb.cyl(isl.x,isl.yTop+10.6,isl.z,2.9,1.2,10,"#8a5f4d",false);
+      mb.cone(isl.x,isl.yTop+13.2,isl.z,3.4,4,10,"#b5563c",true);
+      colliders.push({type:"cyl",x:isl.x,z:isl.z,r:3.4,y0:isl.yTop,y1:isl.yTop+15});
+      mb.crystal(isl.x,isl.yTop+10.2,isl.z,1.1,"#ffe9a8");
+    }
+    if(isl.name==="Observatory"){
+      mb.cyl(isl.x,isl.yTop+3.4,isl.z,3.2,6.8,10,"#cfc4a8",false);
+      mb.cone(isl.x,isl.yTop+8.2,isl.z,4.2,2.6,10,"#7a6a8a",true); // broken dome
+      colliders.push({type:"cyl",x:isl.x,z:isl.z,r:4.4,y0:isl.yTop,y1:isl.yTop+9.5});
+      mb.rock(isl.x+6,isl.yTop+0.3,isl.z+3,1.4,"#8a5f4d");
+    }
+    if(isl.name==="Windmill Isle"){
+      mb.cyl(isl.x,isl.yTop+6,isl.z,1.6,12,8,"#c9b896",false);
+      mb.cone(isl.x,isl.yTop+13.4,isl.z,2.6,2.8,8,"#b5563c",true);
+      // blades (static, two boxes crossed) elevated
+      mb.box(isl.x,isl.yTop+11.4,isl.z,11,1.1,0.35,0.6,"#e8dcc0");
+      mb.box(isl.x,isl.yTop+11.4,isl.z,11,1.1,0.35,0.6+Math.PI/2,"#e8dcc0");
+      colliders.push({type:"cyl",x:isl.x,z:isl.z,r:2.4,y0:isl.yTop,y1:isl.yTop+14.8});
+    }
+    if(isl.name==="Shrine Isle"){
+      mb.box(isl.x,isl.yTop+1.6,isl.z,4.4,3.2,4.4,0,"#ddd2b8");
+      mb.cone(isl.x,isl.yTop+3.9,isl.z,4.6,3.2,4,"#3a4a6b",true);
+      mb.crystal(isl.x,isl.yTop+6.6,isl.z,0.9,"#9fe8ff");
+      colliders.push({type:"cyl",x:isl.x,z:isl.z,r:3.2,y0:isl.yTop,y1:isl.yTop+5.5});
+    }
+    if(isl.name==="Garden Isle"){
+      for(let i=0;i<5;i++){ const a=i/5*TAU; mb.crystal(isl.x+Math.cos(a)*6,isl.yTop+1.4,isl.z+Math.sin(a)*6,0.7,"#b8f0ff"); }
+      mb.rock(isl.x-4,isl.yTop+0.3,isl.z+2,1.2,"#96705a");
+    }
+    if(isl.name==="Forge Rock"){
+      mb.cyl(isl.x,isl.yTop+2,isl.z,2.6,4,9,"#5c5648",false);
+      mb.crystal(isl.x,isl.yTop+4.8,isl.z,0.8,"#ffb37a");
+      mb.rock(isl.x+5,isl.yTop+0.2,isl.z-3,1.6,"#6b5a48");
+      mb.rock(isl.x-5,isl.yTop+0.2,isl.z+4,1.3,"#7d5646");
+      colliders.push({type:"cyl",x:isl.x,z:isl.z,r:3.2,y0:isl.yTop,y1:isl.yTop+6});
+    }
+    if(isl.name==="Sunken Bell"){
+      mb.cone(isl.x,isl.yTop+2.6,isl.z,2.2,5.2,9,"#c9a45c",false);
+      mb.box(isl.x,isl.yTop+5.6,isl.z,0.5,1.4,0.5,0,"#4a3f2a");
+      colliders.push({type:"cyl",x:isl.x,z:isl.z,r:2.6,y0:isl.yTop,y1:isl.yTop+6.3});
+    }
+  }
+  // distant silhouette isles (non-collidable, far)
+  for(let i=0;i<7;i++){ const a=(i/7)*TAU+0.5; const d=190+rng()*70; const x=Math.cos(a)*d, z=Math.sin(a)*d, y=8+rng()*42, r=14+rng()*16;
+    mb.cone(x,y-14,z,r,28,9,["#5d6a8a","#6a5f7a","#4f6a7a"][i%3],false); mb.cyl(x,y-0.5,z,r,1.2,9,"#4f7a62",false); }
+  // cloud-sea handled by sprites; static ring of tall spires far
+  staticMesh=meshBuffers(mb);
+
+  // glider
+  const g=new MB();
+  g.cone(0,0,0,0.55,2.6,6,"#e2674a",false); // body (apex back)
+  g.box(0,0.18,0.1,3.6,0.12,1.1,0,"#f0e6cf"); // wing
+  g.box(0,0.32,-1.15,1.3,0.1,0.5,0,"#e2674a"); // tail
+  g.box(0,0.5,-1.15,0.12,0.9,0.12,0,"#f0e6cf"); // fin
+  g.crystal(0,0.35,0.7,0.32,"#ffe9a8"); // lantern
+  gliderMesh=meshBuffers(g);
+
+  // bird
+  const b=new MB();
+  b.cone(0,0,0,0.32,1.1,5,"#2a2340",false);
+  b.cone(0,0.05,0.6,0.22,0.5,5,"#2a2340",false);
+  b.box(0,0.02,0,1.7,0.07,0.5,0,"#3a3055");
+  birdMesh=meshBuffers(b);
+
+  // shard crystal
+  const sm=new MB(); sm.crystal(0,0,0,1,"#ffe9a8"); shardMesh=meshBuffers(sm);
+
+  // beacon beam (cylinder, transparent drawn with alpha) + ring
+  const bm=new MB(); bm.cyl(0,0,0,1.6,120,12,"#7fe3d4",true); beaconMesh=meshBuffers(bm);
+  const rg=new MB(); // win ring torus-ish: 12 boxes around
+  for(let i=0;i<12;i++){ const a=i/12*TAU; rg.box(Math.cos(a)*4,0,Math.sin(a)*4,1.1,0.5,1.1,a,"#f2cf8a"); }
+  ringMesh=meshBuffers(rg);
+
+  // thermal column
+  const tm=new MB(); tm.cyl(0,0,0,7,44,12,[1,0.82,0.5,0.16],true); thermalMesh=meshBuffers(tm);
+
+  // shards init
+  shards.length=0;
+  SHARD_DEFS.forEach((s,i)=>shards.push({pos:V3.make(s.x,s.y,s.z),got:false,spin:rng()*TAU,bob:rng()*TAU}));
+  thermals.length=0;
+  THERMAL_DEFS.forEach((t,i)=>thermals.push({x:t.x,z:t.z,baseY:10,height:46,r:8,inner:false}));
+  // birds
+  birds.length=0;
+  const patrols=[{x:0,z:0,y:44},{x:-70,z:-40,y:62},{x:65,z:-55,y:50},{x:80,z:45,y:36},{x:-85,z:50,y:34}];
+  patrols.forEach((p,i)=>birds.push({center:p,r:14+ (i%3)*4,phase:i*1.7,speed:9+i*0.4,pos:V3.make(p.x,p.y,p.z),yaw:0,flap:i,alert:0,flee:0,prev:V3.make(p.x,p.y,p.z)}));
+  storms.length=0;
+  const stormDefs=[{x:30,z:60,vx:2.2,vz:-1.2},{x:-45,z:-60,vx:-1.8,vz:1.6},{x:0,z:-20,vx:1.4,vz:2.0}];
+  stormDefs.forEach(s=>storms.push({pos:V3.make(s.x,26,s.z),vx:s.vx,vz:s.vz,r:16}));
+  // clouds (sprites positions, drifting)
+  clouds.length=0;
+  for(let i=0;i<46;i++){ const a=rng()*TAU, d=20+rng()*190; clouds.push({p:V3.make(Math.cos(a)*d,4+rng()*26,Math.sin(a)*d),size:16+rng()*30,drift:0.4+rng()*1.0,seed:rng()*TAU}); }
+  for(let i=0;i<16;i++){ const a=rng()*TAU, d=rng()*220; clouds.push({p:V3.make(Math.cos(a)*d,70+rng()*40,Math.sin(a)*d),size:26+rng()*40,drift:0.6+rng(),seed:rng()*TAU,hi:true}); }
+  // stars
+  window._stars=[]; for(let i=0;i<240;i++){ const th=rng()*Math.PI*2, ph=Math.acos(rng()*0.85); const R=860; window._stars.push({p:V3.make(R*Math.sin(ph)*Math.cos(th),R*Math.cos(ph),R*Math.sin(ph)*Math.sin(th)),size:1+rng()*2.2,tw:rng()*TAU}); }
+}
+
+/* ================= Particles ================= */
+const particles=[];
+function burst(pos,col,count,spread,up){ const n=Math.floor(count*G.particleScale)+1; for(let i=0;i<n&&particles.length<500;i++){ particles.push({p:V3.make(pos.x,pos.y,pos.z),v:V3.make((rng()-0.5)*spread,up+rng()*spread*0.6,(rng()-0.5)*spread),life:1.2+rng()*0.8,t:0,size:0.7+rng()*1.1,col:[col[0],col[1],col[2]]}); } }
+
+/* ================= Physics & game update ================= */
+function updatePlayer(dt){
+  // inputs
+  let pitchIn=0, rollIn=0;
+  if(Keys.has("w")||Keys.has("arrowup")) pitchIn+=1;
+  if(Keys.has("s")||Keys.has("arrowdown")) pitchIn-=1;
+  if(Keys.has("a")||Keys.has("arrowleft")) rollIn-=1;
+  if(Keys.has("d")||Keys.has("arrowright")) rollIn+=1;
+  if(Stick.active){ rollIn+=Stick.x; pitchIn+=-Stick.y; }
+  if(Drag.active){ rollIn+=clamp(Drag.dx*0.012,-1,1); pitchIn+=clamp(-Drag.dy*0.012,-1,1); Drag.dx=damp(Drag.dx,0,8,dt); Drag.dy=damp(Drag.dy,0,8,dt); }
+  pitchIn=clamp(pitchIn,-1,1); rollIn=clamp(rollIn,-1,1);
+  const pitchRate=pitchIn*1.15, yawRate=-player.roll*1.25;
+  player.yaw+=yawRate*dt;
+  player.pitch=clamp(player.pitch+pitchRate*dt,-1.25,1.25);
+  // auto level pitch slightly when no input
+  if(Math.abs(pitchIn)<0.05) player.pitch=damp(player.pitch,0,0.5,dt);
+  player.roll=damp(player.roll,rollIn*0.95,4.5,dt);
+  // face slow with lift loss (stall pitch down)
+  const speed=V3.len(player.vel);
+  const stalled=speed<9;
+  if(stalled&&Math.abs(pitchIn)<0.1) player.pitch=damp(player.pitch,-0.5,1.2,dt);
+  player.quat=Q.fromYawPitchRoll(player.yaw,player.pitch,player.roll);
+  player.fwd=Q.rot(player.quat,{x:0,y:0,z:-1});
+  const up=Q.rot(player.quat,{x:0,y:1,z:0});
+  // forces
+  const grav=-13.5;
+  let lift=clamp(speed*speed*0.036,0,24);
+  if(stalled) lift*=clamp(speed/9,0.15,1);
+  let acc=V3.make(0,grav,0);
+  acc=V3.add(acc,V3.scale(up,lift));
+  // thermal lift
+  player.inThermal=false; player.thermalId=-1;
+  for(let i=0;i<thermals.length;i++){ const th=thermals[i]; const dx=player.pos.x-th.x,dz=player.pos.z-th.z; const d=hyp(dx,dz);
+    if(d<th.r&&player.pos.y>th.baseY&&player.pos.y<th.baseY+th.height){ player.inThermal=true; player.thermalId=i;
+      acc.y+=16; if(d>0.1){ acc.x+=-dx/d*3; acc.z+=-dz/d*3; }
+      if(!th.inner&&G.state==="playing"){ th.inner=true; G.thermalsRidden++; burst(player.pos,[1,0.85,0.5],10,2,4); if(G.thermalsRidden>0) toast("Thermal caught — lifted on the gold air.",2200); }
+    } else th.inner=false; }
+  // storm push
+  for(const s of storms){ const d=V3.dist(player.pos,s.pos); if(d<s.r+6){ const away=V3.norm(V3.sub(player.pos,s.pos)); acc=V3.add(acc,V3.scale(away,14)); acc.y+=Math.sin(G.time*2+s.pos.x)*3; } }
+  // boost / brake
+  const boosting=boostHeld&&G.boost>2&&!brakeHeld;
+  if(boosting){ acc=V3.add(acc,V3.scale(player.fwd,20)); G.boost=Math.max(0,G.boost-30*dt); }
+  else G.boost=Math.min(100,G.boost+(player.inThermal?22:11)*dt);
+  if(brakeHeld){ acc=V3.add(acc,V3.scale(player.vel,-0.55)); }
+  // drag
+  const dragK=brakeHeld?0.9:0.13;
+  player.vel=V3.add(player.vel,V3.scale(player.vel,-dragK*V3.len(player.vel)*0.02*8*dt*0.14));
+  player.vel=V3.add(player.vel,V3.scale(acc,dt));
+  // align velocity toward facing
+  const sp=V3.len(player.vel);
+  if(sp>0.5){ const desired=V3.scale(player.fwd,sp); const k=1-Math.exp(-2.6*dt); player.vel=V3.lerp(player.vel,desired,k); }
+  player.pos=V3.add(player.pos,V3.scale(player.vel,dt));
+  // bounds
+  const hd=hyp(player.pos.x,player.pos.z);
+  if(hd>185){ const push=V3.norm({x:-player.pos.x,y:0,z:-player.pos.z}); player.pos.x+=push.x*dt*20; player.pos.z+=push.z*dt*20; warn("The Aether Wall turns you back.",800); }
+  if(player.pos.y>112){ player.pos.y=112; player.vel.y=Math.min(player.vel.y,0); }
+  if(player.pos.y<3){ player.pos.y=3; player.vel.y=Math.abs(player.vel.y)*0.35+2; player.vel.x*=0.92; player.vel.z*=0.92; }
+  collide(dt);
+  // shards
+  if(G.state==="playing") for(let i=0;i<shards.length;i++){ const s=shards[i]; if(s.got) continue;
+    if(V3.dist(player.pos,s.pos)<3.6){ s.got=true; G.shardsGot++; burst(s.pos,[1,0.9,0.55],22,3,3); AudioSys.chime(G.shardsGot); updateObjective(); toast(`Star shard recovered — ${G.shardsGot} of 9.`,3000); checkBeacon(); } }
+  // beacon win
+  if(G.beaconActive&&G.state==="playing"){ const bp=V3.make(0,42,0); if(V3.dist(player.pos,bp)<7) winGame(); }
+  G.invuln=Math.max(0,G.invuln-dt);
+  G.shake=Math.max(0,G.shake-dt*1.6);
+  AudioSys.setWind(sp,player.inThermal);
+}
+function collide(dt){
+  const p=player.pos, pr=1.1;
+  for(const c of colliders){
+    if(c.type==="cone"){
+      const dx=p.x-c.x, dz=p.z-c.z, d=hyp(dx,dz);
+      if(p.y<c.yTop+2&&p.y>c.yBot-2){ const frac=clamp((p.y-c.yBot)/(c.yTop-c.yBot),0,1); const rAt=c.r*frac+pr;
+        if(d<rAt&&d>0.001){ const push=(rAt-d); p.x+=dx/d*push; p.z+=dz/d*push;
+          const dot=(player.vel.x*dx+player.vel.z*dz)/d; if(dot<0){ player.vel.x-=dx/d*dot*1.5; player.vel.z-=dz/d*dot*1.5; hardHit((rAt-d)); } } }
+      // top bounce
+      if(d<c.r&&Math.abs(p.y-(c.yTop+1))<1.2&&player.vel.y<0){ p.y=c.yTop+1; if(player.vel.y<-9) hardHit(1); player.vel.y=Math.abs(player.vel.y)*0.25; player.vel.x*=0.88; player.vel.z*=0.88; }
+    } else {
+      const dx=p.x-c.x, dz=p.z-c.z, d=hyp(dx,dz);
+      if(p.y>c.y0&&p.y<c.y1&&d<c.r+pr&&d>0.001){ const push=(c.r+pr-d); p.x+=dx/d*push; p.z+=dz/d*push; const dot=(player.vel.x*dx+player.vel.z*dz)/d; if(dot<0){ player.vel.x-=dx/d*dot*1.5; player.vel.z-=dz/d*dot*1.5; hardHit(push); } }
+    }
+  }
+}
+let lastHit=0;
+function hardHit(strength){ if(G.time-lastHit<1.2||G.invuln>0||G.state!=="playing") return; lastHit=G.time; registerBump("The isle struck your wing."); }
+function registerBump(msg){ G.bumps++; G.light--; G.invuln=1.6; G.shake=G.reducedMotion?0:0.55; AudioSys.bump(); updateLight(); warn(msg+"  Light "+G.light+"/3",1600); burst(player.pos,[1,0.6,0.4],14,3,2);
+  if(G.light<=0){ G.respawns++; G.light=3; updateLight(); player.pos=V3.make(0,47,28); player.vel=V3.make(0,1.5,-19); player.yaw=0; player.pitch=0.02; player.roll=0; toast("Your light went out — the Beacon relit you. The moths scatter, for now.",3600); } }
+function updateBirds(dt){ for(const b of birds){ b.prev=V3.make(b.pos.x,b.pos.y,b.pos.z);
+  const toP=V3.sub(player.pos,b.pos), dp=V3.len(toP);
+  if(b.flee>0){ b.flee-=dt; const away=V3.norm(V3.sub(b.pos,player.pos)); b.pos=V3.add(b.pos,V3.scale(away,12*dt)); }
+  else if(dp<14&&G.state==="playing"){ b.alert=Math.min(1,b.alert+dt*2); const desired=V3.norm(toP); const cur=V3.norm(V3.sub(b.pos,b.prev)); const turned=V3.norm(V3.lerp(cur,desired,1-Math.exp(-1.8*dt))); b.pos=V3.add(b.pos,V3.scale(turned,13.5*b.alert*dt)); if(dp<2.6&&G.invuln<=0){ registerBump("A talon bird struck you."); AudioSys.squawk(); player.vel=V3.add(player.vel,V3.scale(V3.norm(V3.sub(player.pos,b.pos)),-4)); b.flee=2.2; b.alert=0; } }
+  else { b.alert=Math.max(0,b.alert-dt*0.6); b.phase+=dt*b.speed/b.r; const nx=b.center.x+Math.cos(b.phase)*b.r, nz=b.center.z+Math.sin(b.phase)*b.r, ny=b.center.y+Math.sin(G.time*0.7+b.phase*2)*2.5; b.pos=V3.lerp(b.pos,{x:nx,y:ny,z:nz},1-Math.exp(-1.2*dt)); }
+  b.yaw=Math.atan2(b.pos.x-b.prev.x,b.pos.z-b.prev.z); b.flap+=dt*9; } }
+function updateStorms(dt){ for(const s of storms){ s.pos.x+=s.vx*dt; s.pos.z+=s.vz*dt; if(hyp(s.pos.x,s.pos.z)>165){ s.vx*=-1; s.vz*=-1; } s.pos.y=26+Math.sin(G.time*0.5+s.pos.x*0.05)*4; } }
+function updateClouds(dt){ for(const c of clouds){ c.p.x+=Math.sin(c.seed+G.time*0.05)*c.drift*dt*0.5+c.drift*dt*0.4; if(c.p.x>230) c.p.x=-230; } }
+function updateShards(dt){ for(const s of shards){ s.spin+=dt*1.4; s.bob+=dt*1.2; } }
+
+/* ================= Flow ================= */
+function updateObjective(){ const pips=els.shardRow.children; for(let i=0;i<9;i++) pips[i].classList.toggle("got", shards[i]&&shards[i].got);
+  if(G.beaconActive){ els.objectiveText.textContent="All shards aboard — reignite the Beacon Spire."; els.objectiveSub.textContent="Follow the teal diamond. Fly into the beam of light."; els.sr.textContent="All nine shards recovered. Return to the Beacon Spire."; }
+  else { els.objectiveText.textContent=`Recover the nine star shards — ${G.shardsGot} of 9.`; els.sr.textContent=`${G.shardsGot} of 9 shards recovered.`; } }
+function checkBeacon(){ if(G.shardsGot>=9&&!G.beaconActive){ G.beaconActive=true; updateObjective(); AudioSys.win(); toast("The lantern flares — the Beacon knows its shards. Return to the Spire!",4200); } }
+function updateLight(){ const gems=els.lightRow.children; for(let i=0;i<3;i++) gems[i].classList.toggle("lost",i>=G.light); }
+function startGame(){ AudioSys.init(); AudioSys.resume(); G.state="playing"; G.started=true; G.time=0; G.shardsGot=0; G.beaconActive=false; G.boost=100; G.light=3; G.bumps=0; G.respawns=0; G.thermalsRidden=0; G.invuln=0;
+  player.pos=V3.make(0,47,28); player.vel=V3.make(0,1.5,-19); player.yaw=0; player.pitch=0.02; player.roll=0;
+  shards.forEach(s=>s.got=false); birds.forEach(b=>b.alert=0); updateObjective(); updateLight(); updateBest();
+  ["titleScreen","helpScreen","pauseScreen","completeScreen"].forEach(id=>$(id).classList.remove("on")); els.hud.classList.add("on"); els.hud.setAttribute("aria-hidden","false");
+  toast("Recover the nine shards. Ride the gold thermals to climb.",4000); }
+function restartRun(){ startGame(); }
+function pauseGame(){ if(G.state!=="playing")return; G.state="paused"; $("pauseStats").textContent=`${G.shardsGot} shards aboard · ${fmtTime(G.time)} · ${G.bumps} knocks.`; $("pauseScreen").classList.add("on"); $("btnResume").focus(); AudioSys.setWind(0,false); }
+function resumeGame(){ if(G.state!=="paused")return; G.state="playing"; $("pauseScreen").classList.remove("on"); }
+function winGame(){ G.state="complete"; AudioSys.win(); AudioSys.setWind(0,false);
+  let newBest=false; if(G.settings.best==null||G.time<G.settings.best){ G.settings.best=G.time; newBest=true; Store.save(); }
+  $("stTime").textContent=fmtTime(G.time); $("stBest").textContent=newBest?"New best!":fmtTime(G.settings.best); $("stBumps").textContent=G.bumps; $("stTherm").textContent=G.thermalsRidden;
+  $("rankLine").textContent = G.time<180?"Nine shards, one dawn — Skywarden of the Shattered Sky.": (G.time<300?"Nine shards, one dawn — a Starwise flight.":"Nine shards, one dawn — the light returns, however long it took.");
+  $("completeScreen").classList.add("on"); els.hud.classList.remove("on"); $("btnAgain").focus(); }
+function toggleHelp(){ if(G.state==="help"){ G.state=G.started?"paused":"title"; $("helpScreen").classList.remove("on"); if(G.started)$("pauseScreen").classList.add("on"); else $("titleScreen").classList.add("on"); return; }
+  if(G.state!=="title"&&G.state!=="paused"&&G.state!=="playing") return; if(G.state==="playing")pauseGame(); G.state="help"; $("titleScreen").classList.remove("on"); $("pauseScreen").classList.remove("on"); $("helpScreen").classList.add("on"); $("btnHelpClose").focus(); }
+function toggleSound(){ G.settings.muted=!G.settings.muted; AudioSys.setMuted(G.settings.muted); $("btnSound").textContent=G.settings.muted?"✕":"♪"; $("btnSound").setAttribute("aria-pressed",String(!G.settings.muted)); $("optSound").checked=!G.settings.muted; $("optSound2").checked=!G.settings.muted; Store.save(); }
+function updateBest(){ els.best.textContent=G.settings.best==null?"Best —":("Best "+fmtTime(G.settings.best)); }
+$("btnStart").addEventListener("click",startGame); $("btnHow").addEventListener("click",toggleHelp); $("btnHelpClose").addEventListener("click",toggleHelp);
+$("btnResume").addEventListener("click",resumeGame); $("btnRestart").addEventListener("click",restartRun); $("btnQuitTitle").addEventListener("click",()=>{ G.state="title"; ["pauseScreen","completeScreen"].forEach(id=>$(id).classList.remove("on")); els.hud.classList.remove("on"); $("titleScreen").classList.add("on"); $("btnStart").focus(); });
+$("btnAgain").addEventListener("click",restartRun); $("btnDoneTitle").addEventListener("click",()=>{ G.state="title"; $("completeScreen").classList.remove("on"); $("titleScreen").classList.add("on"); $("btnStart").focus(); });
+$("btnPause").addEventListener("click",()=>{ if(G.state==="playing")pauseGame(); else if(G.state==="paused")resumeGame(); });
+$("btnHelp").addEventListener("click",toggleHelp); $("btnSound").addEventListener("click",toggleSound);
+$("optSound").addEventListener("change",e=>{ if(e.target.checked===G.settings.muted) toggleSound(); });
+$("optSound2").addEventListener("change",e=>{ if(e.target.checked===G.settings.muted) toggleSound(); });
+$("optMotion").addEventListener("change",e=>{ G.reducedMotion=e.target.checked; G.settings.reduced=e.target.checked; Store.save(); });
+$("optMotion2").addEventListener("change",e=>{ G.reducedMotion=e.target.checked; G.settings.reduced=e.target.checked; $("optMotion").checked=e.target.checked; Store.save(); });
+$("optQuality").addEventListener("change",e=>{ G.settings.lowQ=e.target.checked; applyQuality(); Store.save(); });
+$("btnCtx").addEventListener("click",()=>{ $("ctxLost").classList.remove("on"); initGL(); });
+
+/* ================= Camera & HUD ================= */
+function updateCamera(dt){
+  let targetPos, targetLook;
+  if(G.state==="title"||G.state==="help"){ const a=(G.animTime||0)*0.08; targetPos=V3.make(Math.cos(a)*42,52,Math.sin(a)*42); targetLook=V3.make(0,36,0); }
+  else { const back=V3.scale(player.fwd,-G.camDist); const upY=3.4; targetPos=V3.add(player.pos,back); targetPos.y+=upY*(1-Math.abs(player.pitch)*0.4);
+    if(player.pos.y<4) targetPos.y=Math.max(targetPos.y,6);
+    targetLook=V3.add(player.pos,V3.scale(player.fwd,7)); targetLook.y+=1.2; }
+  const k=1-Math.exp(-(G.reducedMotion?2.2:5.5)*dt);
+  cam.pos=V3.lerp(cam.pos,targetPos,k); cam.look=V3.lerp(cam.look,targetLook,1-Math.exp(-9*dt));
+  // keep camera above cloud sea & inside world
+  if(cam.pos.y<4) cam.pos.y=4;
+  const fwd=V3.norm(V3.sub(cam.look,cam.pos));
+  // shake
+  if(G.shake>0&&!G.reducedMotion){ cam.pos.x+=(Math.random()-0.5)*G.shake*1.4; cam.pos.y+=(Math.random()-0.5)*G.shake*1.4; }
+  return fwd;
+}
+const compassMarks=[];
+function buildCompass(){ els.compass.querySelectorAll(".cMark").forEach(n=>n.remove()); compassMarks.length=0;
+  const cardinals=[["N",0],["E",Math.PI/2],["S",Math.PI],["W",-Math.PI/2]];
+  for(const [label,brg] of cardinals){ const d=document.createElement("div"); d.className="cMark"; d.textContent=label; compassMarks.push({el:d,bearing:brg,kind:"card"}); els.compass.appendChild(d); } }
+buildCompass();
+const dynPool=[];
+for(let i=0;i<10;i++){ const d=document.createElement("div"); d.className="cMark dyn"; d.style.opacity="0"; d.style.display="none"; els.compass.appendChild(d); dynPool.push(d); }
+function updateHUD(camFwd){
+  els.timer.textContent=fmtTime(G.time);
+  els.gSpeed.textContent=Math.round(V3.len(player.vel));
+  els.gAlt.textContent=Math.max(0,Math.round(player.pos.y));
+  els.boostFill.style.transform=`scaleX(${G.boost/100})`; els.boostPct.innerHTML=`${Math.round(G.boost)}<small>%</small>`;
+  // compass: heading reference = camera forward on XZ
+  const ref=Math.atan2(camFwd.x,-camFwd.z);
+  const half=els.compass.clientWidth/2;
+  for(const m of compassMarks){ let rel=((m.bearing-ref+Math.PI*3)%TAU)-Math.PI; const px=half+rel*half/(Math.PI/2.2); m.el.style.left=px+"px"; m.el.style.opacity=Math.abs(rel)>Math.PI/2.15?0:1; }
+  const want=[];
+  for(let i=0;i<shards.length;i++) if(!shards[i].got) want.push({p:shards[i].pos,cls:"cShard",ch:"◆"});
+  if(G.beaconActive) want.push({p:V3.make(0,42,0),cls:"cBeacon",ch:"◈ Beacon"});
+  for(let i=0;i<dynPool.length;i++){ const d=dynPool[i]; if(i>=want.length){ d.style.display="none"; continue; }
+    const w=want[i]; const dx=w.p.x-cam.pos.x, dz=w.p.z-cam.pos.z; const brg=Math.atan2(dx,-dz); let rel=((brg-ref+Math.PI*3)%TAU)-Math.PI; if(Math.abs(rel)>Math.PI/2.15){ d.style.display="none"; continue; }
+    d.style.display=""; d.className="cMark dyn "+w.cls; d.textContent=w.ch; d.style.left=(half+rel*half/(Math.PI/2.2))+"px"; d.style.opacity="1"; } }
+
+/* ================= Quality / resize ================= */
+let frameEMA=16, qualityLevel=0; // 0 high..2 low
+function applyQuality(){ if(G.settings.lowQ){ G.pixelRatio=1; G.particleScale=0.5; } else { G.pixelRatio=Math.min(devicePixelRatio||1,2); G.particleScale=1; } resize(); }
+function resize(){ const dpr=G.pixelRatio||Math.min(devicePixelRatio||1,2); const w=innerWidth,h=innerHeight; els.canvas.width=Math.max(2,Math.round(w*dpr)); els.canvas.height=Math.max(2,Math.round(h*dpr)); if(gl) gl.viewport(0,0,els.canvas.width,els.canvas.height); }
+addEventListener("resize",resize);
+function adaptQuality(dt){ frameEMA=frameEMA*0.95+dt*1000*0.05; if(G.settings.lowQ) return;
+  if(frameEMA>24&&qualityLevel<2){ qualityLevel++; G.pixelRatio=[2,1.5,1.15,1][qualityLevel]||1; G.particleScale=[1,0.7,0.45][qualityLevel]; resize(); frameEMA=16; }
+  else if(frameEMA<13&&qualityLevel>0){ qualityLevel--; G.pixelRatio=[2,1.5,1.15][qualityLevel]; G.particleScale=[1,0.7,0.45][qualityLevel]; resize(); frameEMA=16; } }
+document.addEventListener("visibilitychange",()=>{ if(document.hidden&&G.state==="playing") pauseGame(); });
+
+/* ================= GL init ================= */
+function initGL(){
+  try{ gl=els.canvas.getContext("webgl",{alpha:true,antialias:true,depth:true,stencil:false,preserveDrawingBuffer:false});
+    if(!gl){ gl=els.canvas.getContext("experimental-webgl"); } if(!gl) throw new Error("no webgl");
+  }catch(e){ els.sr.textContent="WebGL is unavailable in this browser, so AETHERDRIFT cannot start."; toast("WebGL unavailable — this game needs WebGL.",8000); return false; }
+  extUInt=gl.getExtension("OES_element_index_uint");
+  prog=makeProg(VSH,FSH,p=>{ progLoc.aPos=gl.getAttribLocation(p,"aPos"); progLoc.aNorm=gl.getAttribLocation(p,"aNorm"); progLoc.aColor=gl.getAttribLocation(p,"aColor"); progLoc.p=gl.getUniformLocation(p,"uProj"); progLoc.mv=gl.getUniformLocation(p,"uMV"); progLoc.nm=gl.getUniformLocation(p,"uNM"); progLoc.sun=gl.getUniformLocation(p,"uSun"); progLoc.fog=gl.getUniformLocation(p,"uFog"); progLoc.fogR=gl.getUniformLocation(p,"uFogR"); progLoc.emissive=gl.getUniformLocation(p,"uEmissive"); progLoc.amul=gl.getUniformLocation(p,"uAMul"); });
+  spriteProg=makeProg(SVSH,SFSH,p=>{ spriteLoc.corner=gl.getAttribLocation(p,"aCorner"); spriteLoc.center=gl.getAttribLocation(p,"aCenter"); spriteLoc.size=gl.getAttribLocation(p,"aSize"); spriteLoc.col=gl.getAttribLocation(p,"aColor"); spriteLoc.p=gl.getUniformLocation(p,"uProj"); spriteLoc.v=gl.getUniformLocation(p,"uView"); });
+  if(!prog||!spriteProg) return false;
+  _sprBufs=null;
+  buildWorld(); applyQuality(); updateObjective(); updateLight(); updateBest(); resize();
+  gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LEQUAL);
+  return true;
+}
+els.canvas.addEventListener("webglcontextlost",e=>{ e.preventDefault(); if(G.state==="playing") pauseGame(); $("ctxLost").classList.add("on"); });
+els.canvas.addEventListener("webglcontextrestored",()=>{ $("ctxLost").classList.remove("on"); initGL(); });
+
+/* ================= Render ================= */
+const spriteScratch=[];
+function render(view,proj,fov){
+  gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+  gl.useProgram(prog); gl.uniform3f(progLoc.sun,SUN_DIR.x,SUN_DIR.y,SUN_DIR.z); gl.uniform3fv(progLoc.fog,FOG_COLOR); gl.uniform2f(progLoc.fogR,55,290);
+  const ident=mIdent();
+  drawMesh(staticMesh,ident,view,proj,false,1,false);
+  // glider (blink when invulnerable)
+  if(!(G.invuln>0&&Math.floor(G.time*10)%2===0)){ const gm=mTRS(player.pos,player.quat,1); drawMesh(gliderMesh,gm,view,proj,false,1,false); }
+  // birds
+  for(const b of birds){ const q=Q.fromYawPitchRoll(b.yaw,0,0); drawMesh(birdMesh,mTRS(b.pos,q,1),view,proj,false,1,false); }
+  // shards
+  for(const s of shards){ if(s.got) continue; const q=Q.fromYawPitchRoll(s.spin,0,0); const bobY=Math.sin(s.bob)*0.5; drawMesh(shardMesh,mTRS({x:s.pos.x,y:s.pos.y+bobY,z:s.pos.z},q,1.4),view,proj,true,1,false); }
+  // beacon ring + beam
+  if(G.beaconActive){ drawMesh(beaconMesh,mTRS({x:0,y:96,z:0},Q.ident(),1),view,proj,true,0.28,true); drawMesh(ringMesh,mTRS({x:0,y:42,z:0},Q.ident(),1),view,proj,true,1,false); }
+  // thermals (transparent)
+  for(const th of thermals){ drawMesh(thermalMesh,mTRS({x:th.x,y:th.baseY+th.height/2,z:th.z},Q.ident(),1),view,proj,true,0.5,true); }
+  // sprites: sun, stars, clouds, particles, glows
+  const list=spriteScratch; list.length=0;
+  const sunPos={x:cam.pos.x+SUN_DIR.x*860,y:cam.pos.y+SUN_DIR.y*860,z:cam.pos.z+SUN_DIR.z*860};
+  list.push({p:sunPos,size:90,col:[1,0.82,0.5],alpha:0.95});
+  list.push({p:sunPos,size:300,col:[1,0.62,0.32],alpha:0.28});
+  if(window._stars) for(const st of window._stars){ const tw=0.35+0.3*Math.sin(G.time*2+st.tw); list.push({p:{x:cam.pos.x+st.p.x,y:cam.pos.y+st.p.y,z:cam.pos.z+st.p.z},size:st.size,col:[0.95,0.95,1],alpha:tw*0.5}); }
+  const sortedClouds=[...clouds].sort((a,b)=>V3.dist(b.p,cam.pos)-V3.dist(a.p,cam.pos));
+  for(const c of sortedClouds){ const col=c.hi?[0.85,0.8,0.9]:[0.96,0.9,0.82]; list.push({p:c.p,size:c.size,col,alpha:c.hi?0.16:0.30}); }
+  // storm cores (dark puffs)
+  for(const s of storms){ list.push({p:s.pos,size:26,col:[0.28,0.2,0.42],alpha:0.45}); list.push({p:{x:s.pos.x+8,y:s.pos.y+4,z:s.pos.z},size:18,col:[0.35,0.25,0.5],alpha:0.35}); }
+  // shard glows
+  for(const s of shards){ if(s.got) continue; list.push({p:s.pos,size:6,col:[1,0.85,0.4],alpha:0.55}); }
+  if(G.beaconActive) list.push({p:{x:0,y:50,z:0},size:14,col:[0.5,1,0.9],alpha:0.6});
+  // glider lantern glow
+  list.push({p:player.pos,size:3,col:[1,0.85,0.4],alpha:0.6});
+  // particles
+  for(let i=particles.length-1;i>=0;i--){ const pt=particles[i]; pt.t+=1/60; if(pt.t>pt.life){ particles.splice(i,1); continue; } pt.p=V3.add(pt.p,V3.scale(pt.v,1/60)); pt.v.y+=0.4/60; const fade=1-pt.t/pt.life; list.push({p:pt.p,size:pt.size*(0.6+fade),col:pt.col,alpha:fade*0.8}); }
+  drawSprites(list,view,proj);
+}
+
+/* ================= Main loop ================= */
+let last=performance.now();
+function frame(now){ requestAnimationFrame(frame); let dt=(now-last)/1000; last=now; if(dt>0.05)dt=0.05; if(dt<=0)return;
+  G.animTime=(G.animTime||0)+dt;
+  if(G.state==="playing"){ G.time+=dt; updatePlayer(dt); updateBirds(dt); }
+  else if(G.state==="title"){ player.pos=V3.make(0,47,28+Math.sin(now*0.0002)*4); player.yaw=Math.sin(now*0.0002)*0.2; player.quat=Q.fromYawPitchRoll(player.yaw,0.02,0); }
+  if(G.state==="playing"||G.state==="title"||G.state==="complete"){ updateStorms(dt); updateClouds(dt); updateShards(dt); }
+  if(G.state==="playing") adaptQuality(dt);
+  if(!gl) return;
+  const aspect=els.canvas.width/Math.max(1,els.canvas.height);
+  const speedK=clamp((V3.len(player.vel)-18)/40,0,1);
+  let fov=62/180*Math.PI + (G.reducedMotion?0:speedK*0.22);
+  const proj=mPersp(fov,aspect,0.1,2400);
+  const camFwd=updateCamera(dt);
+  const view=mLook(cam.pos,cam.look,{x:0,y:1,z:0});
+  render(view,proj,fov);
+  if(G.state==="playing") updateHUD(camFwd);
+}
+
+/* ================= Boot ================= */
+Store.load();
+G.reducedMotion=G.settings.reduced||matchMedia("(prefers-reduced-motion: reduce)").matches;
+$("optMotion").checked=G.reducedMotion; $("optMotion2").checked=G.reducedMotion;
+$("optSound").checked=!G.settings.muted; $("optSound2").checked=!G.settings.muted;
+$("optQuality").checked=!!G.settings.lowQ;
+if(G.settings.muted){ $("btnSound").textContent="✕"; }
+G.pixelRatio=G.settings.lowQ?1:Math.min(devicePixelRatio||1,2);
+if(initGL()){ updateObjective(); requestAnimationFrame(frame); $("btnStart").focus(); }
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "crouton-alpha",
+  "category": "game-3d",
+  "date": "2026-11-09",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "05",
+  "prompt_label": "Original 3D Game",
+  "notes": "AETHERDRIFT: original 3D glider flight game in a single self-contained index.html using hand-rolled WebGL (no external dependencies). Pilot through a floating archipelago, manage height/speed energy exchange, ride thermals, avoid birds/storms, recover 9 star shards, return to beacon. Keyboard/mouse/touch supported, procedural audio, adaptive quality, reduced-motion and guarded storage. Tested in the in-app Chromium browser served over localhost: title loads with no console errors, game starts, physics/HUD verified by manually stepping frames (timer, speed ~15-17 m/s, altitude stable), pause/resume/restart verified, framebuffer sampling confirms non-blank rendering after fixing shader-link and launch-heading bugs. Screenshots were unavailable (tab not visible in headless session), and file:// cold-open was not exercised via the browser tool (requires HTTP); the file has no external requests so file:// should work. Full 9-shard playthrough to the beacon ending was verified by code inspection, not by a complete manual playthrough.",
+  "slug": "2026-11-09_crouton-alpha_game-3d_v1",
+  "path": "runs/2026-11-09_crouton-alpha_game-3d_v1/index.html",
+  "source_file": "game-3d__crouton-alpha__2026-11-09__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}
