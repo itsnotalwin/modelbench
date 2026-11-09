@@ -29,7 +29,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A runs manifest.json inbox
+          git add -A runs manifest.json inbox manifest.webmanifest sw.js icons
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else

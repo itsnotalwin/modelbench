@@ -6,6 +6,13 @@
 <title>ModelBench · open-ended tests for AI models</title>
 <meta name="description" content="Twelve open-ended tests. The model chooses the concept. Every output is previewed, compared and scored on six axes.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%238b7bff'/%3E%3Cpath d='M8 22V10l8 7 8-7v12' fill='none' stroke='%230b0d12' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0a0c11">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ModelBench">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <style>
 :root{
   --bg:#0a0c11; --surface:#111420; --surface-2:#171b29; --surface-3:#1e2335;
@@ -551,6 +558,7 @@ footer.foot-site{border-top:1px solid var(--line);padding:22px 0 40px;color:var(
             <span class="tag">${esc(r.date)}</span>
             <span class="tag">v${esc(r.version ?? 1)}</span>
             ${previewable ? "" : `<span class="tag warn">no preview</span>`}
+            ${r.pwa && !r.pwa.manifest_linked ? `<span class="tag warn" title="The uploaded HTML does not link manifest.webmanifest, so it cannot be installed">not installable</span>` : ""}
             ${n === 0 ? `<span class="tag">unscored</span>` : n < 6 ? `<span class="tag">${n}/6 scored</span>` : ""}
           </div>
           <div class="score">
@@ -688,6 +696,10 @@ footer.foot-site{border-top:1px solid var(--line);padding:22px 0 40px;color:var(
     ];
     const files = (r.files || []).slice(0, 200);
     return `
+      <div>
+        <h4>On your phone</h4>
+        <p>Tap <b style="color:var(--text)">Open ↗</b> on a phone, then choose <b style="color:var(--text)">Add to Home Screen</b> (iPhone Safari: Share menu; Android Chrome: menu → Install app). It runs full screen and works offline after one visit.</p>
+      </div>
       <div>
         <h4>Test</h4>
         <p><b style="color:var(--text)">${esc(noOf(r.category))} · ${esc(titleOf(r.category))}</b><br>${esc(testOf(r.category).requirement || "")}</p>
@@ -905,6 +917,10 @@ footer.foot-site{border-top:1px solid var(--line);padding:22px 0 40px;color:var(
   });
 
   // ---------- boot ----------
+  // Installable dashboard (Pages is HTTPS). Guarded so file:// and older browsers are unaffected.
+  if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  }
   showView(currentView());
   load().then(() => {
     if (location.hash.startsWith("#run=")) {

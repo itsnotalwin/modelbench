@@ -175,6 +175,24 @@ def main() -> int:
         moved.append(slug)
         print(f"MOVED {f.name} -> runs/{slug}/")
     sys.path.insert(0, str(ROOT / "tools"))
+    # PWA install assets: manifest, service worker and icons next to each run's index.html.
+    # Only missing files are written, and the model's HTML is never touched.
+    import pwa
+    pwa.ensure_root(ROOT)
+    if RUNS.exists():
+        for d in sorted(RUNS.iterdir()):
+            meta_path = d / "meta.json"
+            if not d.is_dir() or not meta_path.exists():
+                continue
+            meta = json.loads(meta_path.read_text(encoding="utf-8"))
+            cat = PROMPTS.get(meta.get("category"))
+            if not cat:
+                continue
+            title = f"{meta.get('model')} · {cat['title']} v{meta.get('version', 1)}"
+            status = pwa.ensure_run(d, title, f"{cat['summary']} Run by {meta.get('model')}.", cat.get("hue", 210))
+            if meta.get("pwa") != status:
+                meta["pwa"] = status
+                meta_path.write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
     import build_manifest
     build_manifest.main()
     print(f"done: moved={moved} skipped={skipped}")

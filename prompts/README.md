@@ -2,7 +2,7 @@
 
 Each file is one benchmark prompt, kept separate so it can be copied on its own. The top of each file is an uploader header that is **never sent to the model**. Everything under the `## Model prompt` divider is what the model receives.
 
-Every test asks for **three separate, standalone outputs** (`v1`, `v2`, `v3`), each a different concept. The model chooses the subject, name and style. The bar sets the quality the three files must reach.
+Every test asks for **three separate, standalone outputs** (`v1`, `v2`, `v3`), each a different concept. Every output is **mobile-first** and **installable** as a Progressive Web App. The model chooses the subject, name and style. The bar sets the quality the three files must reach.
 
 | # | Test | Slug | Family | File | Bar (per file) |
 |---|------|------|--------|------|----------------|
@@ -19,13 +19,16 @@ Every test asks for **three separate, standalone outputs** (`v1`, `v2`, `v3`), e
 | 11 | Academic explainer | `academic` | Academic | `11-academic.md` | Correct maths, 3+ sliders that change results, worked example, quiz |
 | 12 | Fun toys | `toy` | Toys | `12-toy.md` | Playful, no score: 3+ modes, a hidden surprise, Save PNG, URL-shareable state |
 
-`catalog.json` is the single source of truth for these slugs and their labels. `tools/sort_inbox.py`, `tools/new_run.py` and the dashboard all read it, so a new test is added in the catalog and in its prompt file, and nowhere else.
+## What every prompt asks for
 
-## Outputs per test
+- **Three files per test**, named `{slug}__{model}__{date}__v1.html`, `v2`, `v3`.
+- **Mobile-first:** designed for a 390px portrait phone first, touch-first (44px+ controls), safe-area aware, and fitted to `100dvh`. Each test also gets its own mobile specifics (for example on-screen controls for games, a bottom tab bar for apps).
+- **Installable:** the model's HTML links `manifest.webmanifest` and `icons/`, and registers `sw.js`. The benchmark host supplies those files. The model does not create them.
 
-- Three files per test: `v1`, `v2`, `v3`. Each is a separate run in the dashboard.
-- A retest of the same prompt starts at `v4`. Existing runs are never overwritten.
+## Adding or changing a test
+
+`catalog.json` is the single source of truth for slugs and labels. `tools/sort_inbox.py`, `tools/new_run.py` and the dashboard all read it. To add a test, add it to the catalog and write its prompt file, and nowhere else.
 
 ## Scoring
 
-Six axes, each 0–5, saved to each run's `meta.json`: **completeness, robustness, craft, depth, originality, performance**. Also log: first-try result, console errors, FPS on a mid-range laptop, and file size.
+Six axes, each 0–5, saved to each run's `meta.json`: **completeness, robustness, craft, depth, originality, performance**. Also logged: first-try result, console errors, FPS on a mid-range phone and laptop, and file size.
