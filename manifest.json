@@ -19,7 +19,7 @@
       "title": "Interactive Editorial Feature",
       "family": "Editorial",
       "summary": "A substantial editorial experience combining original storytelling, evidence, data visualisation and meaningful interaction.",
-      "requirement": "800–1,100 words; 3 linked visualisations; transparent sources and methodology; accessible data view; responsive scrollytelling",
+      "requirement": "800\u20131,100 words; 3 linked visualisations; transparent sources and methodology; accessible data view; responsive scrollytelling",
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
       "hue": 18
