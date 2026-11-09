@@ -1,6 +1,6 @@
 {
   "generated_from": "runs/",
-  "count": 18,
+  "count": 23,
   "catalog": [
     {
       "no": "01",
@@ -78,6 +78,46 @@
     "performance"
   ],
   "runs": [
+    {
+      "schema_version": 1,
+      "model": "nemotron-3-ultra-550b-a55b",
+      "category": "web-app",
+      "date": "2026-11-09",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "03",
+      "prompt_label": "Complete Web Application",
+      "notes": "Flux \u2014 Context Switching Tracker for knowledge workers. A single-file application with IndexedDB persistence that tracks time across tasks, projects, and focus sessions. Three connected workflows: Now (active timer + quick task switching), Dashboard (analytics, project breakdown, weekly charts), History (searchable, filterable, sortable session log with bulk actions). Features: real CRUD with validation, keyboard shortcuts (\u2318K palette, Space start/pause, N new task, F finish, J/K navigate), command palette, import/export JSON/CSV, sample data on first run, onboarding flow, idle detection, focus sessions (Pomodoro/deep work), project management with colors, tag system, responsive design (1440px+ primary, tablet/mobile reflow), WCAG AA contrast, reduced motion support, no external dependencies. Tested: opens cold, data survives reload, all three workflows share state, search/filter/sort work, import/export round-trip works, empty/error states handled, keyboard-first with touch support.",
+      "slug": "2026-11-09_nemotron-3-ultra-550b-a55b_web-app_v1",
+      "path": "runs/2026-11-09_nemotron-3-ultra-550b-a55b_web-app_v1/index.html",
+      "source_file": "web-app__nemotron-3-ultra-550b-a55b__2026-11-09__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
     {
       "schema_version": 1,
       "model": "gpt-6",
@@ -220,6 +260,46 @@
       "slug": "2026-11-09_claude-haiku-5-5_web-app_v1",
       "path": "runs/2026-11-09_claude-haiku-5-5_web-app_v1/index.html",
       "source_file": "web-app_claude-haiku-5-5_2026-11-09_v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "nemotron-3-ultra-550b-a55b",
+      "category": "site-editorial",
+      "date": "2026-11-09",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "02",
+      "prompt_label": "Interactive Content Website",
+      "notes": "The VEL-9 System Atlas \u2014 an interactive survey of a fictional planetary system 12.4 light-years from Sol. Features four major interactive components: (1) Filterable planetary catalog with search, type/zone filters, and multi-column sorting; (2) Orbital timeline scrubber simulating 500 years of system evolution with play/pause, conjunction markers, habitable zone visualization, and real-time stats; (3) Annotated cross-section diagram of VEL-9 e with seven interactive hotspots revealing interior structure, atmosphere, magnetosphere, and surface data; (4) Side-by-side comparison slider with four visualization modes (structure, atmosphere, surface, orbital) and five preset pairings. Includes substantial original worldbuilding content (~4,000 words) with consistent editorial voice, honest epistemics labeling (Measured/Inferred/Speculative), procedural canvas animations (hero background, orbital simulation), full keyboard navigation, reduced-motion support, WCAG AA contrast, responsive design from 320px to 2560px+, and no external dependencies beyond Google Fonts. All visualizations rendered in Canvas/SVG via vanilla JS \u2014 no frameworks, build steps, or external APIs.",
+      "slug": "2026-11-09_nemotron-3-ultra-550b-a55b_site-editorial_v1",
+      "path": "runs/2026-11-09_nemotron-3-ultra-550b-a55b_site-editorial_v1/index.html",
+      "source_file": "site-editorial__nemotron-3-ultra-550b-a55b__2026-11-09__v1.zip",
       "scores": {
         "completeness": null,
         "robustness": null,
@@ -684,6 +764,47 @@
     },
     {
       "schema_version": 1,
+      "model": "nemotron-3-ultra-550b-a55b",
+      "category": "game-masterpiece",
+      "date": "2026-11-09",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "06",
+      "prompt_label": "End-to-End Game Masterpiece",
+      "notes": "The Last Light of Orio - A complete narrative adventure game about memory, sacrifice, and what we choose to keep. Features: 4 chapters with branching narrative, dialogue with consequences, resource management (Memory Fragments, Vitality, Resolve), relationship system with 5 characters each with arcs, inventory with equippable items, quest log with main/side quests, journal/codex lore system, save/load via IndexedDB with localStorage fallback, procedural audio synthesis via Web Audio API, atmospheric particle effects, full keyboard navigation, accessibility support (reduced motion, high contrast, screen reader labels), responsive design from 320px to 2560px+. All code, narrative, systems, and design authored from scratch. No external assets or libraries beyond Google Fonts. Tested in Chrome/Firefox - runs from file:// with limited save functionality (IndexedDB requires HTTP), full functionality on local server.",
+      "slug": "2026-11-09_nemotron-3-ultra-550b-a55b_game-masterpiece_v1",
+      "path": "runs/2026-11-09_nemotron-3-ultra-550b-a55b_game-masterpiece_v1/index.html",
+      "source_file": "game-masterpiece__nemotron-3-ultra-550b-a55b__2026-11-09__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "game.js",
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
       "model": "crouton-alpha",
       "category": "game-masterpiece",
       "date": "2026-11-09",
@@ -724,6 +845,46 @@
     },
     {
       "schema_version": 1,
+      "model": "nemotron-3-ultra-550b-a55b",
+      "category": "game-3d",
+      "date": "2026-11-09",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "05",
+      "prompt_label": "Original 3D Game",
+      "notes": "Voxel Resonance - A first-person 3D puzzle-exploration game where players use a phase-shifting scanner to reveal hidden architecture across 4 dimensional frequencies. Core mechanics: spatial reasoning through phase-shifting (geometry exists in same 3D space at different phases), line-of-sight scanning with wave propagation visualization, momentum-based movement with step-up, crouching, sprinting. 5 authored levels with increasing complexity, procedural terrain, phased platforms/columns/bridges, collectible resonance crystals, exit portals. Procedural audio synthesis (Web Audio API) for all SFX and ambient music. Custom GLSL shaders for phase materials, crystal rendering, and scan wave effect. Quality presets (Low/Medium/High/Ultra/Auto), full keyboard/mouse + touch controls, save/load via localStorage, pause/menu/completion flows, WCAG AA contrast, reduced motion support, responsive UI. Runs from single index.html with Three.js via CDN.",
+      "slug": "2026-11-09_nemotron-3-ultra-550b-a55b_game-3d_v1",
+      "path": "runs/2026-11-09_nemotron-3-ultra-550b-a55b_game-3d_v1/index.html",
+      "source_file": "game-3d__nemotron-3-ultra-550b-a55b__2026-11-09__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
       "model": "crouton-alpha",
       "category": "game-3d",
       "date": "2026-11-09",
@@ -735,6 +896,46 @@
       "slug": "2026-11-09_crouton-alpha_game-3d_v1",
       "path": "runs/2026-11-09_crouton-alpha_game-3d_v1/index.html",
       "source_file": "game-3d__crouton-alpha__2026-11-09__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "nemotron-3-ultra-550b-a55b",
+      "category": "game-2d",
+      "date": "2026-11-09",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "04",
+      "prompt_label": "Original 2D Game",
+      "notes": "Void Drifter - A complete top-down action roguelike where players survive 10 sectors of escalating void entities. Features: deterministic fixed-timestep simulation with delta-time, 4 distinct enemy types with unique behaviors (drifter, stalker, anchor, void_walker), energy management system (shards for energy, health regen above 50% energy), void dash with invincibility frames and offensive capability, procedural but seeded level generation, full particle system (800 particles), screen shake, hit-stop, synthesized Web Audio API sound effects and procedural ambient music, keyboard/mouse and touch controls, pause on blur, localStorage persistence for best score/sector, WCAG AA contrast, reduced-motion support, semantic HTML with ARIA labels. Runs from single index.html with no build step.",
+      "slug": "2026-11-09_nemotron-3-ultra-550b-a55b_game-2d_v1",
+      "path": "runs/2026-11-09_nemotron-3-ultra-550b-a55b_game-2d_v1/index.html",
+      "source_file": "game-2d__nemotron-3-ultra-550b-a55b__2026-11-09__v1.zip",
       "scores": {
         "completeness": null,
         "robustness": null,

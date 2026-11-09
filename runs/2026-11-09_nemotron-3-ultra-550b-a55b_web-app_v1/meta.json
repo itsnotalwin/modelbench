@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "nemotron-3-ultra-550b-a55b",
+  "category": "web-app",
+  "date": "2026-11-09",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "03",
+  "prompt_label": "Complete Web Application",
+  "notes": "Flux \u2014 Context Switching Tracker for knowledge workers. A single-file application with IndexedDB persistence that tracks time across tasks, projects, and focus sessions. Three connected workflows: Now (active timer + quick task switching), Dashboard (analytics, project breakdown, weekly charts), History (searchable, filterable, sortable session log with bulk actions). Features: real CRUD with validation, keyboard shortcuts (\u2318K palette, Space start/pause, N new task, F finish, J/K navigate), command palette, import/export JSON/CSV, sample data on first run, onboarding flow, idle detection, focus sessions (Pomodoro/deep work), project management with colors, tag system, responsive design (1440px+ primary, tablet/mobile reflow), WCAG AA contrast, reduced motion support, no external dependencies. Tested: opens cold, data survives reload, all three workflows share state, search/filter/sort work, import/export round-trip works, empty/error states handled, keyboard-first with touch support.",
+  "slug": "2026-11-09_nemotron-3-ultra-550b-a55b_web-app_v1",
+  "path": "runs/2026-11-09_nemotron-3-ultra-550b-a55b_web-app_v1/index.html",
+  "source_file": "web-app__nemotron-3-ultra-550b-a55b__2026-11-09__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}

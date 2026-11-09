@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "nemotron-3-ultra-550b-a55b",
+  "category": "site-editorial",
+  "date": "2026-11-09",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "02",
+  "prompt_label": "Interactive Content Website",
+  "notes": "The VEL-9 System Atlas \u2014 an interactive survey of a fictional planetary system 12.4 light-years from Sol. Features four major interactive components: (1) Filterable planetary catalog with search, type/zone filters, and multi-column sorting; (2) Orbital timeline scrubber simulating 500 years of system evolution with play/pause, conjunction markers, habitable zone visualization, and real-time stats; (3) Annotated cross-section diagram of VEL-9 e with seven interactive hotspots revealing interior structure, atmosphere, magnetosphere, and surface data; (4) Side-by-side comparison slider with four visualization modes (structure, atmosphere, surface, orbital) and five preset pairings. Includes substantial original worldbuilding content (~4,000 words) with consistent editorial voice, honest epistemics labeling (Measured/Inferred/Speculative), procedural canvas animations (hero background, orbital simulation), full keyboard navigation, reduced-motion support, WCAG AA contrast, responsive design from 320px to 2560px+, and no external dependencies beyond Google Fonts. All visualizations rendered in Canvas/SVG via vanilla JS \u2014 no frameworks, build steps, or external APIs.",
+  "slug": "2026-11-09_nemotron-3-ultra-550b-a55b_site-editorial_v1",
+  "path": "runs/2026-11-09_nemotron-3-ultra-550b-a55b_site-editorial_v1/index.html",
+  "source_file": "site-editorial__nemotron-3-ultra-550b-a55b__2026-11-09__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}
