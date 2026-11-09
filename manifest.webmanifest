@@ -1,14 +1,14 @@
 {
   "name": "ModelBench \u00b7 open-ended tests for AI models",
   "short_name": "ModelBench",
-  "description": "Ten to twelve open-ended tests for AI models, with a viewer for every run.",
+  "description": "Fifteen open-ended tests for AI models, with a viewer for every run.",
   "id": "./index.html",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#0a0c11",
-  "theme_color": "#8b7bff",
+  "background_color": "#0f1b2d",
+  "theme_color": "#1f4fd8",
   "icons": [
     {
       "src": "icons/icon-192.png",

@@ -53,7 +53,7 @@ self.addEventListener("fetch", (event) => {
 
 ROOT_SW = """// Dashboard service worker: network-first, falls back to the cached shell when offline.
 // Run apps under /runs/ have their own workers, so they are passed through untouched.
-const CACHE = "modelbench-dashboard-v2";
+const CACHE = "modelbench-dashboard-v3";
 const SHELL = ["./", "./index.html", "./dashboard-ratings.js", "./manifest.webmanifest", "./manifest.json", "./icons/icon-192.png", "./icons/icon-512.png"];
 
 self.addEventListener("install", (event) => {
@@ -176,7 +176,7 @@ def ensure_run(run_dir: Path, title: str, description: str, hue: float) -> dict:
 
 def ensure_root(root: Path = ROOT) -> None:
     """Dashboard install assets at the repo root (served at the Pages root)."""
-    accent, dark = "#8b7bff", "#0a0c11"
+    accent, dark = "#1f4fd8", "#0f1b2d"
     _write_if_missing(root / "manifest.webmanifest",
                       _manifest("ModelBench · open-ended tests for AI models", "ModelBench",
                                 "Fifteen open-ended tests for AI models, with a viewer for every run.",
