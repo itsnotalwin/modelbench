@@ -3,6 +3,8 @@ import json
 import tempfile
 import unittest
 import zipfile
+from types import SimpleNamespace
+from unittest.mock import patch
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -186,6 +188,27 @@ class ZipMetadataRoutingTests(unittest.TestCase):
             sorter.process_zip(archive)
         self.assertEqual((target / "keep.txt").read_text(encoding="utf-8"), "original")
         self.assertTrue(archive.exists())
+
+    def test_main_imports_valid_uploads_and_reports_rejected_uploads(self):
+        valid = self.make_zip(name="valid.zip")
+        rejected = sorter.INBOX / "rejected.zip"
+        with zipfile.ZipFile(rejected, "w") as archive:
+            archive.writestr("index.html", "<h1>Missing metadata</h1>")
+
+        pwa_stub = SimpleNamespace(
+            ensure_root=lambda root: None,
+            ensure_run=lambda *args: {"manifest_linked": False, "sw_registered": False},
+        )
+        manifest_stub = SimpleNamespace(main=lambda: None)
+        with patch.dict("sys.modules", {"pwa": pwa_stub, "build_manifest": manifest_stub}):
+            exit_code = sorter.main()
+
+        self.assertEqual(exit_code, 1)
+        self.assertFalse(valid.exists(), "accepted ZIP should be removed after import")
+        self.assertTrue(rejected.exists(), "rejected ZIP must remain available for correction")
+        run_dir = sorter.RUNS / "2026-11-09_gpt-6_site-editorial_v2"
+        self.assertTrue((run_dir / "index.html").is_file())
+        self.assertTrue((run_dir / "meta.json").is_file())
 
     def test_zip_path_traversal_is_rejected(self):
         archive = sorter.INBOX / "traversal.zip"
