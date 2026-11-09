@@ -40,7 +40,9 @@ class IntakeError(ValueError):
 
 
 def normalise_model(model: str) -> str:
-    model = model.strip().lower()
+    """Turn a display-style model label into a stable lowercase slug."""
+    model = re.sub(r"[^a-z0-9.-]+", "-", model.strip().lower())
+    model = re.sub(r"-{2,}", "-", model).strip(".-")
     return MODEL_ALIASES.get(model, model)
 
 
@@ -191,6 +193,9 @@ def canonicalise_metadata(meta: dict, info: dict, run_dir: Path, source_name: st
     """Preserve notes; overwrite derived and organizer-owned fields."""
     prompt = PROMPTS[info["category"]]
     result = dict(meta)
+    original_model = meta.get("model")
+    if isinstance(original_model, str) and original_model.strip() != info["model"]:
+        result["model_label"] = original_model.strip()
     result.update({
         "schema_version": 1,
         "slug": run_dir.name,
