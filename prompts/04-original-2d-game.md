@@ -16,15 +16,15 @@ Design and build one complete original 2D game. You choose the genre and subgenr
 
 The game must be playable within ten seconds of opening it, understandable without a manual, and worth a second run.
 
-## Who you are building for — mobile first
+## Build at the ceiling — design for the best result you are capable of
 
-Assume a real person opens this on a phone, one hand, half-engaged, on a patchy connection, and has never seen your work before. That person is the primary user; the desktop is the second screen.
+This is a benchmark, not a sprint for a small phone. Your primary canvas is a large, high-quality display: 1440-2560px wide, pointer and keyboard, a viewer with time and attention. Design the experience you would want to be judged on at that size, then make it hold together as the screen shrinks.
 
-- Design the phone layout first at 390 x 844, then scale up. Nothing may break at 320px; nothing may feel like a stretched phone at 1440px.
-- Nothing important may live behind hover. Every action needs a touch path, tap targets at least 44 x 44px with breathing room between them, and gestures that do not fight the browser.
-- Use dynamic viewport units (`100dvh`), respect safe-area insets, keep scrolling native, and never trap the page inside a fixed-height container.
-- Type must be readable at arm's length without zooming: body text at least 16px, line lengths roughly 45-75 characters, contrast at WCAG AA or better in both light and dark contexts you create.
-- Assume a mid-range Android rather than a workstation: keep the first load small, defer what is not needed, and stay smooth while scrolling and while animating.
+- Make the big screen sing: real composition, layered depth, confident typographic scale, motion that earns its place, and detail that rewards looking closely at 100% zoom.
+- Do not optimise for the smallest possible payload or the lowest common denominator. Optimise for the best experience you can actually build and verify.
+- Keyboard and pointer are first-class: shortcuts, hover and focus-visible states, precise input, real density.
+- Responsive is a quality bar, not the design driver. Layouts must reflow cleanly at tablet and phone widths, touch targets must stay usable and nothing may overflow or clip — but the large-screen experience is the one you are showing off.
+- Ambition that stutters is not ambition: keep interaction immediate and animation smooth on ordinary hardware, respect reduced motion, and hold WCAG AA contrast throughout.
 
 ## The bar
 
@@ -32,7 +32,7 @@ Assume a real person opens this on a phone, one hand, half-engaged, on a patchy 
 - Mechanics that are actually simulated: movement with weight and acceleration, collision that never tunnels or snags, deterministic timing, delta-time everywhere, and rules the player can learn and exploit.
 - Game feel as a feature: hit-stop, easing, screen shake used with restraint, particles, squash and stretch, transitional animation, and audio feedback on every meaningful event. Synthesised sound is enough; silence is not.
 - Authored content and a coherent identity: a palette, a typeface or lettering treatment, character or object design, and a world with a point of view. Procedural content is welcome but must be seeded and shaped, not random noise.
-- Controls that suit the design: keyboard and pointer on desktop, real touch controls on phones (no "play on desktop" walls), and a pause that always works, including on tab blur.
+- Controls that suit the design: keyboard and pointer first-class on desktop, touch controls still usable on a phone, and a pause that always works, including on tab blur.
 - Persistence of what matters: best score, progress, settings, with storage guarded and a clear reset.
 
 ## Creative freedom — the concept is yours
@@ -41,16 +41,16 @@ We are scoring execution, not obedience. Choose the subject, the people, the ton
 
 Then avoid anything that smells templated: no stock hero-plus-three-cards landing page, no framework demo aesthetic, no lorem ipsum, no "your text here", no fake logos in a trust bar, no icon soup. Have a point of view, and hold it consistently across every screen, state and error message.
 
-## Work like a studio — use everything your environment gives you
+## Use the maximum of your resources
 
-You are not writing an answer, you are shipping a product. Use every capability you actually have, in this order of preference:
+Use the full capability of your environment, not a fraction of it. You have a serious budget of time, steps, context and tools; spend it on the artifact. The benchmark rewards the best thing you can produce, not the fastest or the smallest.
 
-- **Files.** Write real files to disk; never paste the deliverable into chat.
-- **Shell.** If you have a terminal, use it: scaffold, count assets, serve the build locally, check total payload size.
-- **Browser.** If you have a browser, devtools, a screenshot tool or automation, use them: load the real build, watch the console, click through every flow, resize to phone width, look at what renders, and fix what you see. A build you have not looked at is not finished.
-- **Tooling.** If you have linters, formatters, type checkers or test runners, run them and fix what they report.
-- **Generation.** If you can synthesise or generate assets — SVG, canvas, WebGL/shaders, procedural textures, fonts, audio, images, video — or optimise them, do it deliberately. Production-grade assets you made beat grey placeholder boxes every time.
-- **Measurement.** If you can measure load time, layout shift, paint and frame rate, measure them, then improve the numbers you do not like.
+- Work at full scale: complete content, complete systems, complete polish. Not a vertical slice, not a prototype with the interesting part postponed.
+- Use every tool you actually have — file writes, shell, local server, browser automation and screenshots, devtools and console, linters, type checkers and test runners, image/audio/video generation, shader tooling, font and asset pipelines, performance profiling. If it exists in your environment, it is fair game and it is expected.
+- Generate your own assets instead of settling for placeholders: procedural textures, SVG illustration, custom shaders, synthesised audio, rendered frames, composited video.
+- Be ambitious with content as well as code: more written material, more authored cases, more levels, more states, more edge cases handled properly.
+- Iterate like a studio: build it, look at it in a real browser, write down what is weakest, fix the weakest thing first, repeat until what remains is something you would defend out loud.
+- Never truncate or abbreviate: no stubs, no "rest unchanged", no TODOs, no half-built features left in the shipped folder.
 
 Verify, fix, re-verify. Report only what you actually observed; if a capability was unavailable, say so plainly in the `meta.json` notes instead of implying a test you did not run.
 
@@ -60,7 +60,7 @@ Verify, fix, re-verify. Report only what you actually observed; if a capability 
 2. The genre is model-chosen and coherent; the loop is complete and winnable or losable.
 3. Collision, timing and controls are reliable; no soft-locks, no frame-rate dependence.
 4. Feedback on every action: motion, particles, sound, UI response.
-5. Touch controls genuinely playable at 390px, keyboard on desktop.
+5. Keyboard and pointer control feels excellent on desktop; touch remains playable on a phone.
 6. It is fun for at least five minutes, which is the whole point.
 
 ## Technical and delivery expectations
@@ -69,7 +69,7 @@ Verify, fix, re-verify. Report only what you actually observed; if a capability 
 - Self-contained and portable: local assets, relative paths, works from a repository subfolder and, where the browser allows, from `file://`.
 - No placeholder content, dead controls, fake interactions or console errors. Every visible control produces a real outcome.
 - Accessible by default: semantic landmarks, labelled controls, visible focus, a keyboard path through every flow, reduced-motion support, and colour that never carries meaning alone.
-- Every asset earns its bytes. State a payload budget for the first view and hold it.
+- Performance is craft: profile the build, keep interaction immediate and animation smooth on an ordinary laptop, and be able to say what budget you held.
 - Robust under abuse: empty data, huge data, rapid input, interrupted storage, resized window, backgrounded tab, lost connection. Guard storage access with `try/catch` and never lose the user's work silently.
 - Test the actual experience in a browser when available. Otherwise do a careful code-level smoke check and disclose the limitation honestly. Never claim a test you did not run.
 
