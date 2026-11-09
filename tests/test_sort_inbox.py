@@ -328,8 +328,8 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
             path = matches[0]
             body = path.read_text(encoding="utf-8")
             self.assertIn("Automatic run identity", body, path.name)
-            self.assertIn("Never ask the organiser", body, path.name)
-            self.assertIn("Never ask the user", body, path.name)
+            self.assertIn("never ask the organiser or user", body.casefold(), path.name)
+            self.assertIn("never ask the organiser or user", body.casefold(), path.name)
             self.assertIn("current calendar date", body, path.name)
             self.assertIn("`unknown-model`", body, path.name)
             self.assertIn("Always use the integer `1`", body, path.name)
