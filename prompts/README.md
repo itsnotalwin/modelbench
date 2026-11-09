@@ -28,7 +28,7 @@ Every prompt defines a capability area and a demanding quality bar, not a pre-wr
 
 The challenge boundary remains consistent across models: one finished artifact, the same core acceptance checks and the same submission contract. This lets us compare creative judgement as well as implementation quality, without handing every model the same solution.
 
-Seven challenges focus on games: 2D puzzle design, 3D exploration, 3D colony building, voxel sandbox design, 2D action brawling, 3D racing and action roguelite systems. They test different game-development skills while leaving the creative concept open.
+Seven challenges focus on games: open-ended 2D game design, 3D exploration, 3D colony building, voxel sandbox design, 2D action brawling, 3D racing and action roguelite systems. They test different game-development skills while leaving the creative concept open.
 
 ## Benchmark design principles and research
 
