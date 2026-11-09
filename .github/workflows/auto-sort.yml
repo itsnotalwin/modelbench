@@ -26,8 +26,11 @@ jobs:
       - name: Run importer regression tests
         run: python -m unittest discover -s tests -p "test_sort_inbox.py" -v
       - name: Sort inbox into runs/ and rebuild manifest
+        id: sort_inbox
+        continue-on-error: true
         run: python tools/sort_inbox.py
       - name: Commit sorted runs (if any)
+        if: always() && steps.sort_inbox.outcome != 'skipped'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -38,3 +41,9 @@ jobs:
             git commit -m "Auto-sort: move inbox uploads into runs/"
             git push
           fi
+
+      - name: Report rejected inbox uploads
+        if: always() && steps.sort_inbox.outcome == 'failure'
+        run: |
+          echo "::error::One or more inbox uploads were rejected or the importer failed. Check the sort step logs; rejected ZIP files remain in inbox/."
+          exit 1

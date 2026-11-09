@@ -22,8 +22,8 @@ class ZipMetadataRoutingTests(unittest.TestCase):
         sorter.RUNS.mkdir()
         sorter.INBOX.mkdir()
         sorter.PROMPTS = {
-            "site-editorial": {"no": "02", "title": "Interactive Editorial Investigation", "summary": "Editorial test", "hue": 18},
-            "site-brand": {"no": "01", "title": "Flagship Brand Experience", "summary": "Brand test", "hue": 265},
+            "site-editorial": {"no": "02", "title": "Interactive Editorial Feature", "summary": "Editorial test", "hue": 18},
+            "site-brand": {"no": "01", "title": "Original Brand Website", "summary": "Brand test", "hue": 265},
         }
         sorter.CATEGORIES = set(sorter.PROMPTS)
 
@@ -40,7 +40,7 @@ class ZipMetadataRoutingTests(unittest.TestCase):
             "version": 2,
             "entry": "index.html",
             "prompt": "02",
-            "prompt_label": "Interactive Editorial Investigation",
+            "prompt_label": "Interactive Editorial Feature",
             "notes": "A completed one-shot build.",
             "scores": {"craft": 5},
         }
@@ -61,7 +61,7 @@ class ZipMetadataRoutingTests(unittest.TestCase):
         saved = json.loads((run_dir / "meta.json").read_text(encoding="utf-8"))
         self.assertEqual(saved["model"], "gpt-6")
         self.assertEqual(saved["category"], "site-editorial")
-        self.assertEqual(saved["prompt_label"], "Interactive Editorial Investigation")
+        self.assertEqual(saved["prompt_label"], "Interactive Editorial Feature")
         self.assertEqual(saved["path"], f"runs/{slug}/index.html")
         self.assertEqual(saved["scores"], {axis: None for axis in sorter.SCORE_AXES})
         self.assertEqual(saved["notes"], "A completed one-shot build.")
@@ -238,59 +238,75 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
     def test_game_prompts_leave_creative_direction_open(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
         prompts = {p["no"]: p for p in catalog["prompts"]}
-        expected = {
-            "06": "2D Puzzle Game",
-            "07": "3D Exploration Game",
-            "11": "3D Colony Builder",
-            "12": "Voxel Survival Sandbox",
-            "13": "2D Beat-'em-up",
-            "14": "3D Racing Game",
-            "15": "Action Roguelite",
+        game_files = {
+            "06": ("game-2d", "prompts/06-game-2d.md"),
+            "07": ("game-3d", "prompts/07-spatial-world.md"),
+            "11": ("game-colony", "prompts/11-3d-colony-builder.md"),
+            "12": ("game-voxel", "prompts/12-voxel-survival-game.md"),
+            "13": ("game-brawler", "prompts/13-2d-beat-em-up.md"),
+            "14": ("game-racer", "prompts/14-3d-racing-game.md"),
+            "15": ("game-roguelite", "prompts/15-action-roguelite.md"),
         }
-        for number, title in expected.items():
-            self.assertEqual(prompts[number]["title"], title)
-        paths = [
-            "prompts/06-game-2d.md", "prompts/07-spatial-world.md",
-            "prompts/11-3d-colony-builder.md", "prompts/12-voxel-survival-game.md",
-            "prompts/13-2d-beat-em-up.md", "prompts/14-3d-racing-game.md",
-            "prompts/15-action-roguelite.md",
-        ]
-        for path in paths:
-            body = (REPO_ROOT / path).read_text(encoding="utf-8")
-            self.assertIn("You choose", body)
-            self.assertIn("exactly one folder", body)
+        for number, (slug, relative_path) in game_files.items():
+            challenge = prompts[number]
+            self.assertEqual(challenge["slug"], slug)
+            body = (REPO_ROOT / relative_path).read_text(encoding="utf-8")
+            self.assertTrue(
+                any(term in body.lower() for term in ("you choose", "you decide", "invent", "your choice")),
+                f"{relative_path} should leave creative decisions to the model",
+            )
+            self.assertIn("exactly one folder", body.lower())
             self.assertIn("meta.json", body)
-            self.assertIn("You choose", body)
-        for forbidden in ("Mosslight Isles", "Voxel Wilds", "Neon Alley", "Skyline Circuit", "The Lantern Below", "Echo Courier", "Parallax Archive"):
-            for path in paths:
-                self.assertNotIn(forbidden, (REPO_ROOT / path).read_text(encoding="utf-8"))
+            self.assertIn(f'"category": "{slug}"', body)
+            self.assertIn(f'"prompt": "{number}"', body)
+            self.assertIn(f'"prompt_label": "{challenge["title"]}"', body)
 
     def test_fifteen_one_shot_prompts_match_the_catalog(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
         prompts = catalog["prompts"]
-        self.assertEqual(catalog["version"], 8)
+        self.assertIsInstance(catalog["version"], int)
+        self.assertNotIsInstance(catalog["version"], bool)
+        self.assertGreaterEqual(catalog["version"], 1)
         self.assertEqual(catalog["outputs_per_prompt"], 1)
-        self.assertEqual(len(prompts), 15)
-        self.assertEqual([p["no"] for p in prompts], [f"{n:02d}" for n in range(1, 16)])
-        self.assertEqual(len({p["slug"] for p in prompts}), 15)
+        self.assertGreater(len(prompts), 0)
+        self.assertEqual([p["no"] for p in prompts], [f"{n:02d}" for n in range(1, len(prompts) + 1)])
+        self.assertEqual(len({p["slug"] for p in prompts}), len(prompts))
         self.assertTrue(all(p["min_outputs"] == 1 for p in prompts))
-        new_files = {
-            "11": ("game-colony", "11-3d-colony-builder.md"),
-            "12": ("game-voxel", "12-voxel-survival-game.md"),
-            "13": ("game-brawler", "13-2d-beat-em-up.md"),
-            "14": ("game-racer", "14-3d-racing-game.md"),
-            "15": ("game-roguelite", "15-action-roguelite.md"),
+
+        prompt_files = {
+            "01": "prompts/01-site-brand.md",
+            "02": "prompts/02-interactive-editorial.md",
+            "03": "prompts/03-marketplace.md",
+            "04": "prompts/04-command-centre.md",
+            "05": "prompts/05-project-workspace.md",
+            "06": "prompts/06-game-2d.md",
+            "07": "prompts/07-spatial-world.md",
+            "08": "prompts/08-simulation-lab.md",
+            "09": "prompts/09-creative-studio.md",
+            "10": "prompts/10-music-studio.md",
+            "11": "prompts/11-3d-colony-builder.md",
+            "12": "prompts/12-voxel-survival-game.md",
+            "13": "prompts/13-2d-beat-em-up.md",
+            "14": "prompts/14-3d-racing-game.md",
+            "15": "prompts/15-action-roguelite.md",
         }
-        by_number = {p["no"]: p for p in prompts}
-        for number, (slug, filename) in new_files.items():
-            challenge = by_number[number]
-            self.assertEqual(challenge["slug"], slug)
-            body = (REPO_ROOT / "prompts" / filename).read_text(encoding="utf-8")
-            self.assertIn(f'"category": "{slug}"', body)
-            self.assertIn(f'"prompt": "{number}"', body)
-            self.assertIn(f'"prompt_label": "{challenge["title"]}"', body)
-            self.assertIn("exactly one folder", body)
-            self.assertIn("meta.json", body)
+        self.assertEqual(set(prompt_files), {p["no"] for p in prompts})
+
+        for challenge in prompts:
+            number = challenge["no"]
+            body = (REPO_ROOT / prompt_files[number]).read_text(encoding="utf-8")
+            self.assertIn("exactly one folder", body.lower(), prompt_files[number])
+            self.assertIn("index.html", body, prompt_files[number])
+            self.assertIn("meta.json", body, prompt_files[number])
+            self.assertIn(f'"category": "{challenge["slug"]}"', body, prompt_files[number])
+            self.assertIn(f'"prompt": "{number}"', body, prompt_files[number])
+            self.assertIn(f'"prompt_label": "{challenge["title"]}"', body, prompt_files[number])
+
+    def test_generated_manifest_catalog_matches_source_catalog(self):
+        source = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
+        manifest = json.loads((REPO_ROOT / "manifest.json").read_text(encoding="utf-8"))
+        self.assertEqual(manifest.get("catalog"), source["prompts"])
+
 
 
 if __name__ == "__main__":

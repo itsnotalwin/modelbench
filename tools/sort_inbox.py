@@ -476,7 +476,8 @@ def main() -> int:
     import build_manifest
     build_manifest.main()
     print(f"done: moved={moved} skipped={skipped}")
-    return 0
+    # Leave the workflow red when any upload was skipped or rejected, while preserving the ZIP.
+    return 1 if skipped else 0
 
 
 if __name__ == "__main__":
