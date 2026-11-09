@@ -34,7 +34,7 @@ MODEL_ALIASES = {
 SCORE_AXES = ["completeness", "robustness", "craft", "depth", "originality", "performance"]
 
 PATTERN = re.compile(
-    r"^(?P<category>[a-z0-9]+)__(?P<model>[a-z0-9][a-z0-9\-.]*?)__(?P<date>\d{4}-\d{2}-\d{2})__v(?P<n>\d+)$",
+    r"^(?P<category>[a-z0-9][a-z0-9\-]*)__(?P<model>[a-z0-9][a-z0-9\-.]*?)__(?P<date>\d{4}-\d{2}-\d{2})__v(?P<n>\d+)$",
     re.IGNORECASE,
 )
 

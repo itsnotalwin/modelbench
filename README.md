@@ -1,6 +1,6 @@
 # ModelBench
 
-Twelve open-ended tests for AI models: websites, a useful app, an algorithms lab, an engineering simulation, three.js scenes, 2D games, 3D games, procedural images, a short animated film, a tool-calling playground, an academic explainer, and fun toys. The model chooses the concept in every test. Each test asks for three separate outputs (`v1` to `v3`), each a single HTML file that works on a phone and installs as an app.
+Fifteen open-ended tests for AI models: three websites, three games (an original 2D game, an original 3D game, a two-player duel), three visual pieces (a procedural image, an animated film, a shader piece), and six creative pieces (a branching story, a music machine, a toy, an explainer, a simulation, and one pure idea). The model chooses the concept in every test, and the game prompts forbid copying a known genre. Each test asks for three separate outputs (`v1` to `v3`), each a single HTML file that works on a phone and installs as an app.
 
 **Dashboard:** https://itsnotalwin.github.io/modelbench/ (installable as an app too)
 
@@ -12,7 +12,7 @@ manifest.json             generated: runs + the test catalog
 manifest.webmanifest      dashboard install metadata
 sw.js                     dashboard service worker (network-first)
 icons/                    dashboard install icons
-prompts/catalog.json      the twelve tests (slug, title, bar, colour): single source of truth
+prompts/catalog.json      the fifteen tests (slug, title, bar, colour): single source of truth
 prompts/NN-<slug>.md      one file per prompt; uploader header + model prompt
 inbox/                    upload here (see inbox/README.md)
 runs/<date>_<model>_<slug>_v<n>/   sorted runs: index.html (model's, untouched),
@@ -30,7 +30,7 @@ tools/new_run.py          prints the exact upload filename for a model + test
 python tools/sort_inbox.py     # sort inbox/, add PWA assets, rebuild manifest.json
 python tools/build_manifest.py # rebuild manifest.json only
 python tools/pwa.py            # (re)create the dashboard's install assets
-python tools/new_run.py --model glm-5.3-flash --category game3d --version 2
+python tools/new_run.py --model glm-5.3-flash --category game-2d --version 2
 python -m http.server 8000     # then open http://localhost:8000 (manifest.json and installs need http or https)
 ```
 

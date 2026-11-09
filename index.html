@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>ModelBench · open-ended tests for AI models</title>
-<meta name="description" content="Twelve open-ended tests. The model chooses the concept. Every output is previewed, compared and scored on six axes.">
+<meta name="description" content="Fifteen open-ended tests. The model chooses the concept. Every output is previewed, compared and scored on six axes.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%238b7bff'/%3E%3Cpath d='M8 22V10l8 7 8-7v12' fill='none' stroke='%230b0d12' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0a0c11">
@@ -276,7 +276,7 @@ footer.foot-site{border-top:1px solid var(--line);padding:22px 0 40px;color:var(
     <nav class="tabs" aria-label="Sections">
       <a href="#runs" data-view="runs">Runs</a>
       <a href="#board" data-view="board">Leaderboard</a>
-      <a href="#tests" data-view="tests">The twelve tests</a>
+      <a href="#tests" data-view="tests">The fifteen tests</a>
       <a href="#submit" data-view="submit">Submit</a>
     </nav>
   </div>
@@ -285,7 +285,7 @@ footer.foot-site{border-top:1px solid var(--line);padding:22px 0 40px;color:var(
 <main class="wrap">
 
   <section class="hero" aria-labelledby="hero-title">
-    <h1 id="hero-title">Twelve open-ended tests. <em>The model picks the idea.</em></h1>
+    <h1 id="hero-title">Fifteen open-ended tests. <em>The model picks the idea.</em></h1>
     <p class="lede">Every test leaves the concept, name, style and genre to the model. Each output is a single file you can open, play and judge. Runs are previewed, compared and scored on six axes.</p>
     <div class="stats" id="stats" aria-live="polite"></div>
   </section>
@@ -326,7 +326,7 @@ footer.foot-site{border-top:1px solid var(--line);padding:22px 0 40px;color:var(
 
   <section id="view-tests" data-view="tests" hidden>
     <div class="section-head">
-      <div><h2>The twelve tests</h2><p>Each test asks for three separate outputs, v1 to v3. The model chooses the subject and style; the bar sets what each file must deliver.</p></div>
+      <div><h2>The fifteen tests</h2><p>Each test asks for three separate outputs, v1 to v3. The model chooses the subject and style; the bar sets what each file must deliver.</p></div>
     </div>
     <div class="tests" id="tests-grid"></div>
   </section>
@@ -336,7 +336,7 @@ footer.foot-site{border-top:1px solid var(--line);padding:22px 0 40px;color:var(
       <div><h2>Submit a run</h2><p>Uploads go to <code>inbox/</code>. The Action files them into <code>runs/</code> and rebuilds this dashboard within about a minute.</p></div>
     </div>
     <div class="steps">
-      <div class="step"><b>STEP 01</b><h3>Pick the test</h3><p>Use the test's slug, for example <code>threejs</code> or <code>tooluse</code>. The slug is in the prompt header and on the tests page.</p></div>
+      <div class="step"><b>STEP 01</b><h3>Pick the test</h3><p>Use the test's slug, for example <code>game-2d</code> or <code>idea</code>. The slug is in the prompt header and on the tests page.</p></div>
       <div class="step"><b>STEP 02</b><h3>Name the file</h3><p>The model writes its exact file name on its first line. If it did not, rename the file to this pattern:</p>
         <div class="pattern"><code id="pattern">{test}__{model}__{YYYY-MM-DD}__v1.html</code><button class="copy" data-copy="#pattern">Copy</button></div>
       </div>
@@ -582,7 +582,7 @@ footer.foot-site{border-top:1px solid var(--line);padding:22px 0 40px;color:var(
       grid.innerHTML = `
         <div class="empty">
           <h3>No runs yet</h3>
-          <p>Upload a model's <code>.html</code> to <code>inbox/</code> named like <code>threejs__model-name__2026-11-09__v1.html</code>. The Action files it here within a minute.</p>
+          <p>Upload a model's <code>.html</code> to <code>inbox/</code> named like <code>game-2d__model-name__2026-11-09__v1.html</code>. The Action files it here within a minute.</p>
         </div>`;
       return;
     }

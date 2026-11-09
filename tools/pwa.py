@@ -179,7 +179,7 @@ def ensure_root(root: Path = ROOT) -> None:
     accent, dark = "#8b7bff", "#0a0c11"
     _write_if_missing(root / "manifest.webmanifest",
                       _manifest("ModelBench · open-ended tests for AI models", "ModelBench",
-                                "Ten to twelve open-ended tests for AI models, with a viewer for every run.",
+                                "Fifteen open-ended tests for AI models, with a viewer for every run.",
                                 accent, dark, "./index.html"))
     _write_if_missing(root / "sw.js", ROOT_SW)
     _icons(root, rgb(accent), rgb(dark))

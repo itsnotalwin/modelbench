@@ -10,7 +10,7 @@ Upload model outputs here through GitHub web: open this folder → **Add file** 
    {test}__{model}__{YYYY-MM-DD}__v{n}.html
    ```
 
-   - `test` is one of the twelve slugs in `prompts/catalog.json`: `website`, `webapp`, `codelab`, `engineer`, `threejs`, `game2d`, `game3d`, `image`, `motion`, `tooluse`, `academic`, `toy`.
+   - `test` is one of the fifteen slugs in `prompts/catalog.json`: `site-brand`, `site-editorial`, `site-store`, `game-2d`, `game-3d`, `game-duel`, `vis-image`, `vis-motion`, `vis-3d`, `story`, `music`, `toy`, `teach`, `sim`, `idea`.
    - `model` is lowercase, with hyphens and dots, for example `claude-sonnet-4-5`, `glm-5.3-flash`, `gpt-5`.
    - `v{n}` is `v1`, `v2` or `v3`. A retest of the same prompt starts at `v4`. Never overwrite a run.
    - Only `.html` (or a `.zip` with `index.html` at its root). Never `.rar`.
