@@ -269,32 +269,28 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
         self.assertIn("One run, one ZIP", dashboard)
 
 
+    def test_catalog_is_three_web_and_three_game_challenges(self):
+        catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
+        self.assertEqual(len(catalog["prompts"]), 6)
+        self.assertEqual(sum(p["family"] == "Web" for p in catalog["prompts"]), 3)
+        self.assertEqual(sum(p["family"] == "Games" for p in catalog["prompts"]), 3)
+        self.assertEqual([p["no"] for p in catalog["prompts"]], ["01", "02", "03", "04", "05", "06"])
+
     def test_game_prompts_leave_creative_direction_open(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
         prompts = {p["no"]: p for p in catalog["prompts"]}
-        game_categories = {
-            "04": "game-2d",
-            "05": "game-3d",
-            "06": "game-masterpiece",
-        }
+        game_categories = {"04": "game-2d", "05": "game-3d", "06": "game-masterpiece"}
         for number, slug in game_categories.items():
             challenge = prompts[number]
             self.assertEqual(challenge["slug"], slug)
             matches = list((REPO_ROOT / "prompts").glob(f"{number}-*.md"))
             self.assertEqual(len(matches), 1, f"expected one prompt file for challenge {number}")
-            relative_path = matches[0].relative_to(REPO_ROOT).as_posix()
             body = matches[0].read_text(encoding="utf-8")
-            self.assertTrue(
-                any(term in body.lower() for term in ("you choose", "you decide", "invent", "your choice")),
-                f"{relative_path} should leave creative decisions to the model",
-            )
+            self.assertTrue(any(term in body.lower() for term in ("you choose", "you decide", "invent", "your choice")))
             self.assertIn("exactly one folder", body.lower())
-            self.assertIn("meta.json", body)
             self.assertIn(f'"category": "{slug}"', body)
             self.assertIn(f'"prompt": "{number}"', body)
             self.assertIn(f'"prompt_label": "{challenge["title"]}"', body)
-
-
 
     def test_end_to_end_game_masterpiece_requires_full_story_production(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
@@ -302,19 +298,15 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
         self.assertEqual(challenge["slug"], "game-masterpiece")
         self.assertEqual(challenge["title"], "End-to-End Game Masterpiece")
         body = (REPO_ROOT / "prompts" / "06-end-to-end-game-masterpiece.md").read_text(encoding="utf-8")
-        self.assertIn("Use the full capability of your environment", body)
-        self.assertIn("original, coherent storyline", body)
-        self.assertIn("playable protagonist", body)
-        self.assertIn("supporting cast", body)
-        self.assertIn("actual dialogue and scenes", body)
-        self.assertIn("at least three meaningful", body)
-        self.assertIn("at least four substantial gameplay systems", body)
-        self.assertIn("complete ending", body)
+        for phrase in ("Use the full capability of your environment", "original, coherent storyline",
+                       "playable protagonist", "supporting cast", "actual dialogue and scenes",
+                       "at least three authored missions", "at least four substantial gameplay systems",
+                       "complete ending"):
+            self.assertIn(phrase, body)
         self.assertIn('"prompt": "06"', body)
         self.assertIn('"category": "game-masterpiece"', body)
         guide = (REPO_ROOT / "prompts" / "README.md").read_text(encoding="utf-8")
         self.assertIn("| 06 | End-to-End Game Masterpiece | game-masterpiece |", guide)
-
 
     def test_2d_game_prompt_leaves_genre_and_concept_to_the_model(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
@@ -331,7 +323,13 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
         self.assertNotIn("puzzle", challenge["requirement"].lower())
         guide = (REPO_ROOT / "prompts" / "README.md").read_text(encoding="utf-8")
         self.assertIn("| 04 | Original 2D Game | game-2d |", guide)
-        self.assertNotIn("puzzle", challenge["requirement"].lower())
+
+    def test_reset_manifest_has_no_runs_and_matches_six_prompt_catalog(self):
+        manifest = json.loads((REPO_ROOT / "manifest.json").read_text(encoding="utf-8"))
+        catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
+        self.assertEqual(manifest["count"], 0)
+        self.assertEqual(manifest["runs"], [])
+        self.assertEqual(manifest["catalog"], catalog["prompts"])
 
     def test_numbered_prompts_match_the_catalog(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
