@@ -1,6 +1,6 @@
 {
   "generated_from": "runs/",
-  "count": 2,
+  "count": 3,
   "catalog": [
     {
       "no": "01",
@@ -151,6 +151,50 @@
         "sw_registered": false
       },
       "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "crouton-alpha",
+      "category": "site-brand",
+      "date": "2026-11-09",
+      "version": 2,
+      "entry": "index.html",
+      "prompt": "01",
+      "prompt_label": "Brand & Business Website",
+      "notes": "Duskfield, a four-room dark-sky inn on the North York Moors: single-file site (3144 words, 7 sections) with live moon phase, meteor-shower and Bortle calculations, twinkling star canvas (paused when tab hidden / reduced motion), room pricing, accessible FAQ and a validating booking enquiry flow with human error messages, success reference, edit recovery and localStorage draft persistence guarded by try/catch. Four generated photos compressed from ~11MB PNG to ~1.3MB JPG (hero 1920w, others 1280w). Tested in Chromium via a local Node server: page loads with no console errors, one H1, empty submit shows 6 field errors with no data loss, invalid email/non-Friday dates are rejected with specific messages, valid submit (Observatory + observing extra = \u00a3463) succeeds with reference and Edit restores fields, drafts restore after reload, FAQ/Bortle/room-sync and keyboard 'B' shortcut work, and no horizontal page overflow was measured in iframes at 1440/768/390px after fixing the brightness table. Screenshot capture was unavailable in this session (browser tool requires a visible desktop window) so visuals were verified by reading the generated images and via DOM/layout metrics rather than screenshots; file:// cold open was not browser-tested, only served over local HTTP, though the site has no external dependencies and uses only relative local assets. Organizer note: resubmitted as version 2 because a v1 run for the same model, category and date already exists; the build itself is unmodified.",
+      "slug": "2026-11-09_crouton-alpha_site-brand_v2",
+      "path": "runs/2026-11-09_crouton-alpha_site-brand_v2/index.html",
+      "source_file": "site-brand__crouton-alpha__2026-11-09__v2.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "assets/hero-moor.jpg",
+        "assets/room-interior.jpg",
+        "assets/sauna-dusk.jpg",
+        "assets/telescope-deck.jpg",
         "icons/icon-192.png",
         "icons/icon-512.png",
         "index.html",
