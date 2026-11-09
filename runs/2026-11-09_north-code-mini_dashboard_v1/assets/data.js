@@ -1,0 +1,297 @@
+const sampleData = [
+    {
+        id: 'OP-001',
+        region: 'North',
+        operation: 'Customer Onboarding',
+        status: 'completed',
+        revenue: 12500,
+        duration: 2.5,
+        responseTime: 1.2,
+        customer: 'Acme Corp',
+        satisfaction: 4.8,
+        timestamp: '2026-11-09T08:30:00Z'
+    },
+    {
+        id: 'OP-002',
+        region: 'South',
+        operation: 'Equipment Maintenance',
+        status: 'in-progress',
+        revenue: 8750,
+        duration: 4.2,
+        responseTime: 2.1,
+        customer: 'TechSolutions Ltd',
+        satisfaction: 4.2,
+        timestamp: '2026-11-09T09:45:00Z'
+    },
+    {
+        id: 'OP-003',
+        region: 'East',
+        operation: 'Data Migration',
+        status: 'pending',
+        revenue: 15000,
+        duration: 6.8,
+        responseTime: 3.5,
+        customer: 'Global Finance',
+        satisfaction: 4.5,
+        timestamp: '2026-11-09T10:15:00Z'
+    },
+    {
+        id: 'OP-004',
+        region: 'West',
+        operation: 'System Upgrade',
+        status: 'completed',
+        revenue: 22000,
+        duration: 3.2,
+        responseTime: 1.8,
+        customer: 'MediCare Plus',
+        satisfaction: 4.9,
+        timestamp: '2026-11-09T11:30:00Z'
+    },
+    {
+        id: 'OP-005',
+        region: 'North',
+        operation: 'Network Optimization',
+        status: 'cancelled',
+        revenue: 5500,
+        duration: 1.5,
+        responseTime: 0.8,
+        customer: 'RetailChain Inc',
+        satisfaction: 3.2,
+        timestamp: '2026-11-09T12:45:00Z'
+    },
+    {
+        id: 'OP-006',
+        region: 'South',
+        operation: 'Security Audit',
+        status: 'completed',
+        revenue: 9800,
+        duration: 2.8,
+        responseTime: 1.5,
+        customer: 'SecureBank',
+        satisfaction: 4.7,
+        timestamp: '2026-11-09T14:00:00Z'
+    },
+    {
+        id: 'OP-007',
+        region: 'East',
+        operation: 'Cloud Migration',
+        status: 'in-progress',
+        revenue: 18000,
+        duration: 5.5,
+        responseTime: 2.8,
+        customer: 'CloudNest',
+        satisfaction: 4.4,
+        timestamp: '2026-11-09T15:30:00Z'
+    },
+    {
+        id: 'OP-008',
+        region: 'West',
+        operation: 'Database Optimization',
+        status: 'completed',
+        revenue: 11200,
+        duration: 3.5,
+        responseTime: 2.2,
+        customer: 'DataFlow Systems',
+        satisfaction: 4.6,
+        timestamp: '2026-11-09T16:45:00Z'
+    },
+    {
+        id: 'OP-009',
+        region: 'North',
+        operation: 'Mobile App Development',
+        status: 'pending',
+        revenue: 25000,
+        duration: 8.2,
+        responseTime: 4.1,
+        customer: 'AppMasters',
+        satisfaction: 4.3,
+        timestamp: '2026-11-09T17:00:00Z'
+    },
+    {
+        id: 'OP-010',
+        region: 'South',
+        operation: 'UI/UX Design',
+        status: 'completed',
+        revenue: 7500,
+        duration: 2.0,
+        responseTime: 1.0,
+        customer: 'DesignStudio',
+        satisfaction: 4.8,
+        timestamp: '2026-11-09T18:30:00Z'
+    },
+    {
+        id: 'OP-011',
+        region: 'East',
+        operation: 'API Integration',
+        status: 'in-progress',
+        revenue: 13500,
+        duration: 3.8,
+        responseTime: 2.3,
+        customer: 'API Solutions',
+        satisfaction: 4.1,
+        timestamp: '2026-11-09T19:45:00Z'
+    },
+    {
+        id: 'OP-012',
+        region: 'West',
+        operation: 'Quality Assurance',
+        status: 'completed',
+        revenue: 6800,
+        duration: 1.8,
+        responseTime: 0.9,
+        customer: 'QualityCo',
+        satisfaction: 4.7,
+        timestamp: '2026-11-09T20:15:00Z'
+    },
+    {
+        id: 'OP-013',
+        region: 'North',
+        operation: 'Training Program',
+        status: 'completed',
+        revenue: 4200,
+        duration: 1.2,
+        responseTime: 0.6,
+        customer: 'EduLearn',
+        satisfaction: 4.9,
+        timestamp: '2026-11-09T21:30:00Z'
+    },
+    {
+        id: 'OP-014',
+        region: 'South',
+        operation: 'Supply Chain Optimization',
+        status: 'pending',
+        revenue: 16800,
+        duration: 7.2,
+        responseTime: 3.8,
+        customer: 'LogisticsPro',
+        satisfaction: 4.4,
+        timestamp: '2026-11-09T22:45:00Z'
+    },
+    {
+        id: 'OP-015',
+        region: 'East',
+        operation: 'Digital Marketing',
+        status: 'in-progress',
+        revenue: 9500,
+        duration: 4.5,
+        responseTime: 2.4,
+        customer: 'MarketSphere',
+        satisfaction: 4.2,
+        timestamp: '2026-11-09T23:00:00Z'
+    },
+    {
+        id: 'OP-016',
+        region: 'West',
+        operation: 'Content Management',
+        status: 'completed',
+        revenue: 7200,
+        duration: 2.7,
+        responseTime: 1.4,
+        customer: 'ContentWorks',
+        satisfaction: 4.6,
+        timestamp: '2026-11-10T00:15:00Z'
+    },
+    {
+        id: 'OP-017',
+        region: 'North',
+        operation: 'Enterprise Software',
+        status: 'completed',
+        revenue: 32000,
+        duration: 9.5,
+        responseTime: 5.2,
+        customer: 'EnterpCorp',
+        satisfaction: 4.8,
+        timestamp: '2026-11-10T01:30:00Z'
+    },
+    {
+        id: 'OP-018',
+        region: 'South',
+        operation: 'Data Analytics',
+        status: 'cancelled',
+        revenue: 6900,
+        duration: 2.0,
+        responseTime: 1.1,
+        customer: 'AnalyticsHub',
+        satisfaction: 3.8,
+        timestamp: '2026-11-10T02:45:00Z'
+    },
+    {
+        id: 'OP-019',
+        region: 'East',
+        operation: 'DevOps Implementation',
+        status: 'in-progress',
+        revenue: 14500,
+        duration: 6.0,
+        responseTime: 3.2,
+        customer: 'DevOpsPro',
+        satisfaction: 4.3,
+        timestamp: '2026-11-10T03:00:00Z'
+    },
+    {
+        id: 'OP-020',
+        region: 'West',
+        operation: 'Big Data Processing',
+        status: 'completed',
+        revenue: 19800,
+        duration: 7.8,
+        responseTime: 4.5,
+        customer: 'BigData Inc',
+        satisfaction: 4.7,
+        timestamp: '2026-11-10T04:15:00Z'
+    },
+    {
+        id: 'OP-021',
+        region: 'North',
+        operation: 'Blockchain Development',
+        status: 'pending',
+        revenue: 28000,
+        duration: 10.5,
+        responseTime: 6.1,
+        customer: 'BlockTech',
+        satisfaction: 4.5,
+        timestamp: '2026-11-10T05:30:00Z'
+    },
+    {
+        id: 'OP-022',
+        region: 'South',
+        operation: 'IoT Solution',
+        status: 'completed',
+        revenue: 11500,
+        duration: 3.8,
+        responseTime: 2.0,
+        customer: 'IoTFusion',
+        satisfaction: 4.9,
+        timestamp: '2026-11-10T06:45:00Z'
+    },
+    {
+        id: 'OP-023',
+        region: 'East',
+        operation: 'Augmented Reality',
+        status: 'in-progress',
+        revenue: 24500,
+        duration: 8.2,
+        responseTime: 4.8,
+        customer: 'AR Creations',
+        satisfaction: 4.3,
+        timestamp: '2026-11-10T07:00:00Z'
+    },
+    {
+        id: 'OP-024',
+        region: 'West',
+        operation: 'Quantum Computing',
+        status: 'completed',
+        revenue: 45000,
+        duration: 12.0,
+        responseTime: 8.5,
+        customer: 'Quantum Labs',
+        satisfaction: 5.0,
+        timestamp: '2026-11-10T08:15:00Z'
+    }
+];
+
+// Simulate additional data for real-time updates
+sampleData.allRecords = [...sampleData];
+sampleData.filteredRecords = [...sampleData];
+sampleData.exportData = [...sampleData];
+
+export { sampleData }; // Export for use in dashboard

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "cohere-north-mini-code-free",
+  "category": "music",
+  "date": "2026-11-09",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "10",
+  "prompt_label": "Browser Music Studio",
+  "notes": "A browser-based music studio with Web Audio API synthesis, four independent sound sources, and full composition controls. Built as a finished product with project persistence and audio export.",
+  "slug": "2026-11-09_cohere-north-mini-code-free_music_v1",
+  "path": "runs/2026-11-09_cohere-north-mini-code-free_music_v1/index.html",
+  "source_file": "music__cohere-north-mini-code-free__2026-11-09__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}

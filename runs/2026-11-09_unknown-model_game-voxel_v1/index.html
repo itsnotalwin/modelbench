@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voxel Sandbox Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        #canvas {
+            width: 100vw;
+            height: 100vh;
+            display: block;
+        }
+        #ui {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .inventory {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .block-slot {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #555;
+            background: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .block-slot:hover {
+            border-color: #fff;
+            transform: scale(1.1);
+        }
+        .block-slot.selected {
+            border-color: #4CAF50;
+            background: #2d5a2d;
+        }
+        .controls {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #555;
+        }
+        button {
+            padding: 8px 16px;
+            margin: 2px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .stats {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #ccc;
+        }
+        .message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+            z-index: 1000;
+        }
+        .message.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    
+    <div id="ui">
+        <h2>Voxel Sandbox</h2>
+        <div class="inventory">
+            <div class="block-slot" data-block="grass">🟩</div>
+            <div class="block-slot" data-block="stone">🟦</div>
+            <div class="block-slot" data-block="dirt">🟫</div>
+            <div class="block-slot" data-block="wood">🟫</div>
+            <div class="block-slot" data-block="iron">⚪</div>
+        </div>
+        
+        <div class="controls">
+            <button onclick="saveWorld()">💾 Save</button>
+            <button onclick="loadWorld()">📂 Load</button>
+            <button onclick="resetWorld()">🗑️ Reset</button>
+            <button onclick="toggleFlying()">🦋 Fly</button>
+        </div>
+        
+        <div class="stats">
+            <div>Position: <span id="pos">0, 0, 0</span></div>
+            <div>Blocks: <span id="blocks">0</span></div>
+            <div>Mode: <span id="mode">Place</span></div>
+            <div id="flying-indicator">Fly: Off</div>
+        </div>
+    </div>
+    
+    <div id="message" class="message">
+        <h3>Game Saved!</h3>
+        <p>Your world has been saved successfully.</p>
+        <button onclick="hideMessage()">OK</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Game state
+        const state = {
+            scene: null,
+            camera: null,
+            renderer: null,
+            world: {},
+            player: {
+                position: { x: 0, y: 10, z: 0 },
+                velocity: { x: 0, y: 0, z: 0 },
+                onGround: false,
+                flying: false,
+                selectedBlock: 'grass'
+            },
+            inventory: {
+                grass: 64,
+                stone: 32,
+                dirt: 16,
+                wood: 8,
+                iron: 4
+            },
+            raycaster: null,
+            mouse: null,
+            keys: {},
+            selectedSlot: 0
+        };
+
+        // Block types with colors
+        const blockTypes = {
+            grass: { color: 0x4CAF50, symbol: '🟩' },
+            stone: { color: 0x808080, symbol: '🟦' },
+            dirt: { color: 0x8B4513, symbol: '🟫' },
+            wood: { color: 0xCD853F, symbol: '🟫' },
+            iron: { color: 0xC0C0C0, symbol: '⚪' }
+        };
+
+        // Initialize the game
+        function init() {
+            // Setup Three.js
+            state.scene = new THREE.Scene();
+            state.scene.background = new THREE.Color(0x1a1a1a);
+            
+            state.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            state.camera.position.set(0, 10, 0);
+            
+            state.renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas'), antialias: true });
+            state.renderer.setSize(window.innerWidth, window.innerHeight);
+            state.renderer.shadowMap.enabled = true;
+            
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+            state.scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(10, 20, 5);
+            directionalLight.castShadow = true;
+            state.scene.add(directionalLight);
+            
+            // Raycaster for block selection
+            state.raycaster = new THREE.Raycaster();
+            state.mouse = new THREE.Vector2();
+            
+            // Create world chunks
+            generateWorld();
+            
+            // Event listeners
+            window.addEventListener('resize', onWindowResize);
+            document.addEventListener('click', onMouseClick);
+            document.addEventListener('keydown', onKeyDown);
+            document.addEventListener('keyup', onKeyUp);
+            
+            // Setup inventory slots
+            setupInventorySlots();
+            
+            // Load saved world if available
+            loadGame();
+            
+            // Start animation loop
+            animate();
+        }
+
+        // Generate initial world
+        function generateWorld() {
+            state.world = {};
+            
+            // Create ground plane
+            const groundGeometry = new THREE.PlaneGeometry(100, 100);
+            const groundMaterial = new THREE.MeshStandardMaterial({ color: 0x808080 });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.receiveShadow = true;
+            state.scene.add(ground);
+            
+            // Create some initial structures
+            for (let x = -10; x < 10; x++) {
+                for (let z = -10; z < 10; z++) {
+                    const y = Math.floor(Math.random() * 5);
+                    placeBlock(x, y, z, 'grass');
+                }
+            }
+        }
+
+        // Place a block at given coordinates
+        function placeBlock(x, y, z, blockType) {
+            const key = `${x},${y},${z}`;
+            
+            if (!state.world[key]) {
+                const geometry = new THREE.BoxGeometry(1, 1, 1);
+                const material = new THREE.MeshStandardMaterial({ color: blockTypes[blockType].color });
+                const block = new THREE.Mesh(geometry, material);
+                block.castShadow = true;
+                block.receiveShadow = true;
+                state.scene.add(block);
+                
+                state.world[key] = {
+                    type: blockType,
+                    mesh: block
+                };
+            }
+        }
+
+        // Remove a block at given coordinates
+        function removeBlock(x, y, z) {
+            const key = `${x},${y},${z}`;
+            if (state.world[key]) {
+                const block = state.world[key];
+                state.scene.remove(block.mesh);
+                delete state.world[key];
+                return block.type;
+            }
+            return null;
+        }
+
+        // Handle mouse click for block interaction
+        function onMouseClick(event) {
+            const rect = state.renderer.domElement.getBoundingClientRect();
+            state.mouse.x = ((event.clientX || event.touches?.[0]?.clientX) - rect.left) / rect.width * 2 - 1;
+            state.mouse.y = -((event.clientY || event.touches?.[0]?.clientY) - rect.top) / rect.height * 2 + 1;
+            
+            state.raycaster.setFromCamera(state.mouse, state.camera);
+            
+            const raycastPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+            const intersection = new THREE.Vector3();
+            state.raycaster.ray.intersectPlane(raycastPlane, intersection);
+            
+            if (intersection) {
+                const x = Math.floor(intersection.x);
+                const y = Math.floor(intersection.y);
+                const z = Math.floor(intersection.z);
+                
+                if (event.shiftKey) {
+                    // Remove block
+                    const blockType = removeBlock(x, y, z);
+                    if (blockType && state.inventory[blockType] !== undefined) {
+                        state.inventory[blockType]++;
+                        updateInventoryDisplay();
+                    }
+                } else {
+                    // Place block
+                    if (state.inventory[state.player.selectedBlock] > 0) {
+                        placeBlock(x, y + 1, z, state.player.selectedBlock);
+                        state.inventory[state.player.selectedBlock]--;
+                        updateInventoryDisplay();
+                    }
+                }
+            }
+        }
+
+        // Setup inventory slot click handlers
+        function setupInventorySlots() {
+            const slots = document.querySelectorAll('.block-slot');
+            slots.forEach((slot, index) => {
+                slot.addEventListener('click', () => {
+                    state.selectedSlot = index;
+                    state.player.selectedBlock = slot.dataset.block;
+                    updateInventoryDisplay();
+                });
+            });
+            updateInventoryDisplay();
+        }
+
+        // Update inventory display
+        function updateInventoryDisplay() {
+            const slots = document.querySelectorAll('.block-slot');
+            slots.forEach((slot, index) => {
+                if (index === state.selectedSlot) {
+                    slot.classList.add('selected');
+                } else {
+                    slot.classList.remove('selected');
+                }
+                
+                const blockType = slot.dataset.block;
+                const count = state.inventory[blockType] || 0;
+                slot.textContent = count > 0 ? blockTypes[blockType].symbol : '☐';
+                slot.title = `${blockType}: ${count}`;
+            });
+            
+            document.getElementById('mode').textContent = state.player.selectedBlock;
+        }
+
+        // Handle keyboard input
+        function onKeyDown(event) {
+            state.keys[event.code] = true;
+            
+            // Toggle mode with 'E' key
+            if (event.code === 'KeyE') {
+                // Toggle between place and remove mode
+                if (document.getElementById('mode').textContent === 'Place') {
+                    document.getElementById('mode').textContent = 'Remove';
+                } else {
+                    document.getElementById('mode').textContent = 'Place';
+                }
+            }
+        }
+
+        function onKeyUp(event) {
+            delete state.keys[event.code];
+        }
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Update player movement
+            updatePlayer();
+            
+            // Update player position display
+            updatePlayerDisplay();
+            
+            state.renderer.render(state.scene, state.camera);
+        }
+
+        // Update player movement and physics
+        function updatePlayer() {
+            const speed = state.player.flying ? 0.15 : 0.1;
+            const gravity = 0.02;
+            const jumpPower = 0.3;
+            
+            // Apply gravity
+            if (!state.player.onGround && !state.player.flying) {
+                state.player.velocity.y -= gravity;
+            }
+            
+            // Handle movement
+            if (state.keys['KeyW']) state.player.velocity.z -= speed;
+            if (state.keys['KeyS']) state.player.velocity.z += speed;
+            if (state.keys['KeyA']) state.player.velocity.x -= speed;
+            if (state.keys['KeyD']) state.player.velocity.x += speed;
+            if (state.player.flying) {
+                if (state.keys['KeyE']) state.player.velocity.y += speed;
+                if (state.keys['KeyQ']) state.player.velocity.y -= speed;
+            } else {
+                if (state.keys['Space'] && state.player.onGround) {
+                    state.player.velocity.y = jumpPower;
+                }
+            }
+            
+            // Update position
+            state.player.position.x += state.player.velocity.x;
+            state.player.position.y += state.player.velocity.y;
+            state.player.position.z += state.player.velocity.z;
+            
+            // Check ground collision
+            const y = Math.floor(state.player.position.y);
+            const x = Math.floor(state.player.position.x);
+            const z = Math.floor(state.player.position.z);
+            
+            const groundKey = `${x},${y-1},${z}`;
+            state.player.onGround = !!state.world[groundKey];
+            
+            // Apply friction
+            state.player.velocity.x *= 0.9;
+            state.player.velocity.z *= 0.9;
+            
+            // Update camera position
+            state.camera.position.set(
+                state.player.position.x,
+                state.player.position.y + (state.player.flying ? 0 : 1.7),
+                state.player.position.z
+            );
+            
+            // Constrain world bounds
+            if (x < -50) state.player.position.x = -49.9;
+            if (x > 50) state.player.position.x = 49.9;
+            if (z < -50) state.player.position.z = -49.9;
+            if (z > 50) state.player.position.z = 49.9;
+            if (y < 0.5) {
+                state.player.position.y = 0.5;
+                state.player.velocity.y = 0;
+                state.player.onGround = true;
+            }
+        }
+
+        // Update player display
+        function updatePlayerDisplay() {
+            document.getElementById('pos').textContent = `${Math.floor(state.player.position.x)}, ${Math.floor(state.player.position.y)}, ${Math.floor(state.player.position.z)}`;
+            document.getElementById('blocks').textContent = Object.keys(state.world).length;
+            document.getElementById('flying-indicator').textContent = `Fly: ${state.player.flying ? 'On' : 'Off'}`;
+        }
+
+        // Toggle flying mode
+        function toggleFlying() {
+            state.player.flying = !state.player.flying;
+        }
+
+        // Save game to local storage
+        function saveWorld() {
+            const gameData = {
+                world: state.world,
+                player: state.player,
+                inventory: state.inventory,
+                timestamp: new Date().toISOString()
+            };
+            
+            localStorage.setItem('voxelSandboxSave', JSON.stringify(gameData));
+            showMessage('Game saved successfully!');
+        }
+
+        // Load game from local storage
+        function loadGame() {
+            const saved = localStorage.getItem('voxelSandboxSave');
+            if (saved) {
+                try {
+                    const gameData = JSON.parse(saved);
+                    
+                    // Clear current world
+                    Object.values(state.world).forEach(block => {
+                        state.scene.remove(block.mesh);
+                    });
+                    
+                    // Restore world
+                    state.world = {};
+                    Object.entries(gameData.world).forEach(([key, blockData]) => {
+                        const [x, y, z] = key.split(',').map(Number);
+                        const geometry = new THREE.BoxGeometry(1, 1, 1);
+                        const material = new THREE.MeshStandardMaterial({ color: blockTypes[blockData.type].color });
+                        const block = new THREE.Mesh(geometry, material);
+                        block.castShadow = true;
+                        block.receiveShadow = true;
+                        state.scene.add(block);
+                        
+                        state.world[key] = {
+                            type: blockData.type,
+                            mesh: block
+                        };
+                    });
+                    
+                    // Restore player and inventory
+                    Object.assign(state.player, gameData.player);
+                    Object.assign(state.inventory, gameData.inventory);
+                    
+                    updateInventoryDisplay();
+                    showMessage('Game loaded successfully!');
+                } catch (error) {
+                    console.error('Error loading game:', error);
+                    showMessage('Error loading game. Starting fresh.');
+                }
+            }
+        }
+
+        // Reset world
+        function resetWorld() {
+            if (confirm('Are you sure you want to reset the world? This cannot be undone.')) {
+                generateWorld();
+                // Reset inventory
+                state.inventory = {
+                    grass: 64,
+                    stone: 32,
+                    dirt: 16,
+                    wood: 8,
+                    iron: 4
+                };
+                state.player.position = { x: 0, y: 10, z: 0 };
+                state.player.velocity = { x: 0, y: 0, z: 0 };
+                updateInventoryDisplay();
+                showMessage('World reset!');
+            }
+        }
+
+        // Show message
+        function showMessage(text) {
+            const message = document.getElementById('message');
+            message.querySelector('h3').textContent = text || 'Game Saved!';
+            message.classList.add('show');
+        }
+
+        // Hide message
+        function hideMessage() {
+            document.getElementById('message').classList.remove('show');
+        }
+
+        // Handle window resize
+        function onWindowResize() {
+            state.camera.aspect = window.innerWidth / window.innerHeight;
+            state.camera.updateProjectionMatrix();
+            state.renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // Start the game when page loads
+        window.onload = init;
+    </script>
+</body>
+</html>

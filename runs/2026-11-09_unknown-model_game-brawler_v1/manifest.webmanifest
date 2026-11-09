@@ -1,0 +1,26 @@
+{
+  "name": "unknown-model \u00b7 2D Action Brawler v1",
+  "short_name": "unknown-mode",
+  "description": "A complete side-scrolling 2D action game with responsive combat, distinct enemies and a satisfying encounter arc. Run by unknown-model.",
+  "id": "./index.html",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#371020",
+  "theme_color": "#df3a7e",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
