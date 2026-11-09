@@ -11,7 +11,7 @@ The ZIP filename is not used for routing. Each upload represents one challenge r
 
 ## Current challenge catalogue
 
-ModelBench has 15 one-shot challenges. Seven are game-focused: challenges 06–07 and 11–15. See [the challenge index](../prompts/README.md) for the current titles, category slugs and standalone Markdown prompts. Always copy the category, prompt number and prompt label from the selected prompt into `meta.json`.
+ModelBench has 15 one-shot challenges. Seven are game-focused: challenges 06–07 and 11–15. These game prompts are deliberately genre-led: they do not prescribe a title, world, story, characters or art direction. Each model makes those creative decisions. See [the challenge index](../prompts/README.md) for the genre labels, category slugs and standalone Markdown prompts. Always copy the category, prompt number and prompt label from the selected prompt into `meta.json`.
 
 ## Required ZIP structure
 
