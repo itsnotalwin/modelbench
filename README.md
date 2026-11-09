@@ -1,45 +1,83 @@
 # ModelBench
 
-Fifteen open-ended tests for AI models: three websites, three games (an original 2D game, an original 3D game, a two-player duel), three visual pieces (a procedural image, an animated film, a shader piece), and six creative pieces (a branching story, a music machine, a toy, an explainer, a simulation, and one pure idea). The model chooses the concept in every test, and the game prompts forbid copying a known genre. Each test asks for three separate outputs (`v1` to `v3`), each a single HTML file that works on a phone and installs as an app.
+ModelBench is an open-ended AI build benchmark. It compares model-created websites, games, visual experiments and creative tools in one installable dashboard. Each challenge is judged on six separate axes: completeness, robustness, craft, depth, originality and performance.
 
-**Dashboard:** https://itsnotalwin.github.io/modelbench/ (installable as an app too)
+**Live dashboard:** https://itsnotalwin.github.io/modelbench/
 
-## Rating runs
+## How submissions work
 
-Open a run, choose scores from 0 to 5 for the six axes, and select **Save rating**. The dashboard uses your ratings in its cards, comparison and leaderboard. Incomplete ratings remain unscored for the average. Ratings are saved in your current browser on this device, not to GitHub or other devices. Clearing browser site data will remove them.
+Each uploaded artifact is a ZIP package. The ZIP is the transport container; its `meta.json` is the source of truth for the submission's descriptive metadata.
 
-Use **Export ratings** to download a JSON backup and **Import ratings** to restore or move it to another browser. Import merges ratings, replacing matching run ratings; it does not alter uploaded model files or repository metadata.
+1. Choose one of the 15 challenges in [Prompts](prompts/README.md).
+2. Prepare one build package for each version you are submitting. A ZIP represents **one** challenge, one model and one version. Upload additional versions as separate ZIPs.
+3. Name the ZIP using the intake key:
+   ```
+   {category}__{model}__{YYYY-MM-DD}__v{n}.zip
+   ```
+   The category must match a slug in `prompts/catalog.json`; the model slug uses lowercase letters, digits, hyphens and dots.
+4. Put the project files in one folder inside the ZIP. That folder should contain `index.html`, `meta.json`, and any assets the page needs. The sorter also accepts these files at the ZIP root.
+5. Upload the ZIP to [inbox/](inbox/README.md). GitHub Actions automatically sorts accepted uploads into `runs/` and rebuilds the dashboard manifest.
 
-## Repo layout
+The ZIP filename is used as the intake/routing key so the workflow knows which challenge, model, date and version folder to create. **Descriptive submission information belongs in `meta.json`**, not in the filename or a README.
 
-```
-index.html                dashboard (GitHub Pages entry, reads manifest.json)
-manifest.json             generated: runs + the test catalog
-manifest.webmanifest      dashboard install metadata
-sw.js                     dashboard service worker (network-first)
-icons/                    dashboard install icons
-prompts/catalog.json      the fifteen tests (slug, title, bar, colour): single source of truth
-prompts/NN-<slug>.md      one file per prompt; uploader header + model prompt
-inbox/                    upload here (see inbox/README.md)
-runs/<date>_<model>_<slug>_v<n>/   sorted runs: index.html (model's, untouched),
-                          meta.json, manifest.webmanifest, sw.js, icons/
-tools/sort_inbox.py       inbox -> runs/, writes meta.json, PWA assets, rebuilds manifest
-tools/build_manifest.py   runs/*/meta.json -> manifest.json
-tools/pwa.py              generates manifest, service worker and PNG icons (stdlib only)
-tools/new_run.py          prints the exact upload filename for a model + test
-.github/workflows/auto-sort.yml   runs sort_inbox.py on push
-```
+### `meta.json` contract
 
-## Local checks
+Include valid UTF-8 JSON with these fields:
 
-```
-python tools/sort_inbox.py     # sort inbox/, add PWA assets, rebuild manifest.json
-python tools/build_manifest.py # rebuild manifest.json only
-python tools/pwa.py            # (re)create the dashboard's install assets
-python tools/new_run.py --model glm-5.3-flash --category game-2d --version 2
-python -m http.server 8000     # then open http://localhost:8000 (manifest.json and installs need http or https)
+```json
+{
+  "model": "gpt-6",
+  "category": "site-editorial",
+  "date": "2026-11-09",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "02",
+  "prompt_label": "Editorial feature",
+  "notes": "A short description of the build and any known limitations."
+}
 ```
 
-## Adding or changing a test
+- `model`, `category`, `date`, `version` and `entry` identify the submission in the dashboard and install flow.
+- `prompt` and `prompt_label` identify the challenge.
+- `notes` is the visible human-readable summary. Put the useful description here.
+- The category, model, date and version in metadata must agree with the ZIP's intake key. The intake key determines the destination folder; metadata supplies the descriptive record.
+- The dashboard pipeline fills derived fields such as the run slug, public path, score slots and file inventory when building `manifest.json`.
 
-Add the test to `prompts/catalog.json` and write its `prompts/NN-<slug>.md`. The sorter, manifest and dashboard read the catalog, so no other file lists the slugs.
+Do not put scores in model-authored metadata. Scores and evaluation logs are organizer-owned fields.
+
+## Dashboard ratings
+
+Open a run, score the six axes from 0 to 5, and select **Save rating**. Ratings are stored in the current browser on this device, not committed to GitHub or synced to other devices. Use **Export ratings** to back up your ratings as JSON and **Import ratings** to restore or merge them in another browser. Importing ratings does not modify model artifacts or `meta.json`.
+
+## Repository map
+
+```
+index.html                    dashboard and page metadata
+manifest.json                 generated dashboard data
+manifest.webmanifest          install metadata for the dashboard
+sw.js                         dashboard service worker
+icons/                        dashboard install icons
+prompts/catalog.json          canonical challenge catalog and slugs
+prompts/                      challenge prompt files and prompt guide
+inbox/README.md               ZIP upload instructions
+inbox/                        incoming ZIP packages
+runs/<run-slug>/              accepted build, meta.json and generated PWA assets
+tools/sort_inbox.py           validates intake naming, unpacks ZIPs and creates run records
+tools/build_manifest.py       builds manifest.json from runs/*/meta.json
+tools/pwa.py                  generates run and dashboard PWA assets
+tools/new_run.py              prints an intake filename
+.github/workflows/auto-sort.yml
+                               sorts inbox uploads and commits generated run data
+```
+
+## Local maintenance
+
+```bash
+python tools/sort_inbox.py
+python tools/build_manifest.py
+python tools/pwa.py
+python tools/new_run.py --model gpt-6 --category site-editorial --version 1
+python -m http.server 8000
+```
+
+Open http://localhost:8000 for a local dashboard preview. Use the workflow for the normal GitHub upload path.
