@@ -238,19 +238,22 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
     def test_game_prompts_leave_creative_direction_open(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
         prompts = {p["no"]: p for p in catalog["prompts"]}
-        game_files = {
-            "06": ("game-2d", "prompts/06-game-2d.md"),
-            "07": ("game-3d", "prompts/07-spatial-world.md"),
-            "11": ("game-colony", "prompts/11-3d-colony-builder.md"),
-            "12": ("game-voxel", "prompts/12-voxel-survival-game.md"),
-            "13": ("game-brawler", "prompts/13-2d-beat-em-up.md"),
-            "14": ("game-racer", "prompts/14-3d-racing-game.md"),
-            "15": ("game-roguelite", "prompts/15-action-roguelite.md"),
+        game_categories = {
+            "06": "game-2d",
+            "07": "game-3d",
+            "11": "game-colony",
+            "12": "game-voxel",
+            "13": "game-brawler",
+            "14": "game-racer",
+            "15": "game-roguelite",
         }
-        for number, (slug, relative_path) in game_files.items():
+        for number, slug in game_categories.items():
             challenge = prompts[number]
             self.assertEqual(challenge["slug"], slug)
-            body = (REPO_ROOT / relative_path).read_text(encoding="utf-8")
+            matches = list((REPO_ROOT / "prompts").glob(f"{number}-*.md"))
+            self.assertEqual(len(matches), 1, f"expected one prompt file for challenge {number}")
+            relative_path = matches[0].relative_to(REPO_ROOT).as_posix()
+            body = matches[0].read_text(encoding="utf-8")
             self.assertTrue(
                 any(term in body.lower() for term in ("you choose", "you decide", "invent", "your choice")),
                 f"{relative_path} should leave creative decisions to the model",
@@ -261,7 +264,7 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
             self.assertIn(f'"prompt": "{number}"', body)
             self.assertIn(f'"prompt_label": "{challenge["title"]}"', body)
 
-    def test_fifteen_one_shot_prompts_match_the_catalog(self):
+    def test_numbered_prompts_match_the_catalog(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
         prompts = catalog["prompts"]
         self.assertIsInstance(catalog["version"], int)
@@ -273,34 +276,23 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
         self.assertEqual(len({p["slug"] for p in prompts}), len(prompts))
         self.assertTrue(all(p["min_outputs"] == 1 for p in prompts))
 
-        prompt_files = {
-            "01": "prompts/01-site-brand.md",
-            "02": "prompts/02-interactive-editorial.md",
-            "03": "prompts/03-marketplace.md",
-            "04": "prompts/04-command-centre.md",
-            "05": "prompts/05-project-workspace.md",
-            "06": "prompts/06-game-2d.md",
-            "07": "prompts/07-spatial-world.md",
-            "08": "prompts/08-simulation-lab.md",
-            "09": "prompts/09-creative-studio.md",
-            "10": "prompts/10-music-studio.md",
-            "11": "prompts/11-3d-colony-builder.md",
-            "12": "prompts/12-voxel-survival-game.md",
-            "13": "prompts/13-2d-beat-em-up.md",
-            "14": "prompts/14-3d-racing-game.md",
-            "15": "prompts/15-action-roguelite.md",
-        }
-        self.assertEqual(set(prompt_files), {p["no"] for p in prompts})
+        numbered_files = sorted((REPO_ROOT / "prompts").glob("[0-9][0-9]-*.md"))
+        file_numbers = [path.name[:2] for path in numbered_files]
+        self.assertEqual(sorted(file_numbers), [p["no"] for p in prompts])
+        self.assertEqual(len(file_numbers), len(set(file_numbers)))
 
         for challenge in prompts:
             number = challenge["no"]
-            body = (REPO_ROOT / prompt_files[number]).read_text(encoding="utf-8")
-            self.assertIn("exactly one folder", body.lower(), prompt_files[number])
-            self.assertIn("index.html", body, prompt_files[number])
-            self.assertIn("meta.json", body, prompt_files[number])
-            self.assertIn(f'"category": "{challenge["slug"]}"', body, prompt_files[number])
-            self.assertIn(f'"prompt": "{number}"', body, prompt_files[number])
-            self.assertIn(f'"prompt_label": "{challenge["title"]}"', body, prompt_files[number])
+            matches = list((REPO_ROOT / "prompts").glob(f"{number}-*.md"))
+            self.assertEqual(len(matches), 1, f"expected one prompt file for challenge {number}")
+            body = matches[0].read_text(encoding="utf-8")
+            relative_path = matches[0].relative_to(REPO_ROOT).as_posix()
+            self.assertIn("exactly one folder", body.lower(), relative_path)
+            self.assertIn("index.html", body, relative_path)
+            self.assertIn("meta.json", body, relative_path)
+            self.assertIn(f'"category": "{challenge["slug"]}"', body, relative_path)
+            self.assertIn(f'"prompt": "{number}"', body, relative_path)
+            self.assertIn(f'"prompt_label": "{challenge["title"]}"', body, relative_path)
 
     def test_generated_manifest_catalog_matches_source_catalog(self):
         source = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))

@@ -6,6 +6,10 @@ on:
     paths:
       - "inbox/**"
       - "runs/**/meta.json"
+      - "prompts/**"
+      - "tools/**"
+      - "tests/**"
+      - "manifest.json"
   workflow_dispatch:
 
 permissions:
@@ -18,6 +22,7 @@ concurrency:
 jobs:
   sort:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -25,6 +30,8 @@ jobs:
           python-version: "3.x"
       - name: Run importer regression tests
         run: python -m unittest discover -s tests -p "test_sort_inbox.py" -v
+      - name: Run dashboard rating tests
+        run: node --test tests/dashboard-ratings.test.js
       - name: Sort inbox into runs/ and rebuild manifest
         id: sort_inbox
         continue-on-error: true
