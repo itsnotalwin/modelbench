@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPARKSLIDE — A Lightkeeper's Circuit</title>
+<meta name="description" content="An original sliding puzzle. Guide a spark, collect signal orbs, and reach the exit.">
+<style>
+  :root{
+    --ink:#0b1020; --ink2:#121a33; --panel:#16213f; --panel2:#1b2a52;
+    --line:#2a3a6b; --text:#f3ead8; --muted:#b8c2e0; --amber:#ffb347; --amber2:#ff8c1a;
+    --teal:#39d0c4; --coral:#ff6b6b; --pink:#e879f9; --green:#7ee081; --gold:#ffd166;
+    --focus:#ffd166;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:radial-gradient(1200px 800px at 20% 0%, #1a2a57 0%, var(--ink) 55%);color:var(--text);font-family:ui-rounded,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;min-height:100%}
+  a{color:var(--gold)}
+  button{font:inherit;color:inherit;background:var(--panel2);border:2px solid var(--line);border-radius:12px;padding:.55rem .95rem;cursor:pointer;transition:transform .08s ease, background .15s ease, border-color .15s ease}
+  button:hover{background:#243a6e;border-color:#3d5291}
+  button:active{transform:translateY(1px)}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  button:focus-visible, [tabindex]:focus-visible, a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+  .wrap{max-width:1120px;margin:0 auto;padding:14px}
+  header.topbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:10px 4px 14px}
+  .brand{display:flex;gap:12px;align-items:center}
+  .logo{width:52px;height:52px;border-radius:14px;background:radial-gradient(circle at 35% 35%, #ffe3a3, var(--amber2));display:grid;place-items:center;font-size:30px;box-shadow:0 0 22px #ffb34766;color:#331a00}
+  h1{margin:0;font-size:clamp(1.4rem,3vw,2rem);letter-spacing:.04em}
+  .sub{margin:.15rem 0 0;color:var(--muted);font-size:.95rem}
+  .top-actions{display:flex;gap:8px;flex-wrap:wrap}
+  .hud{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:8px 0 14px}
+  .stat{background:linear-gradient(180deg,var(--panel),var(--ink2));border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+  .stat b{display:block;font-size:1.25rem;color:var(--amber)}
+  .stat span{color:var(--muted);font-size:.82rem;text-transform:uppercase;letter-spacing:.06em}
+  main.layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px;align-items:start}
+  @media (max-width:860px){main.layout{grid-template-columns:1fr}}
+  .board-card{background:linear-gradient(180deg,#141f3f,#0f1730);border:1px solid var(--line);border-radius:18px;padding:12px}
+  #board{display:grid;gap:3px;background:#070b18;border:2px solid #26346b;border-radius:14px;padding:6px;touch-action:none;user-select:none}
+  #board:focus{outline:3px solid var(--focus);outline-offset:3px}
+  .cell{aspect-ratio:1/1;border-radius:8px;display:grid;place-items:center;font-size:clamp(18px,4.5vw,28px);font-weight:800;line-height:1;position:relative;background:#1a274f;border:1px solid #26346b}
+  .cell.wall{background:repeating-linear-gradient(45deg,#2d3d78 0 10px,#24315f 10px 20px);color:#dbe6ff}
+  .cell.honey{background:#0e3a3d;border-color:#1f6f6b;color:var(--teal)}
+  .cell.pit{background:#03050c;border-color:#111a36;color:#4a5a8a}
+  .cell.mirror{background:#3a1f3f;border-color:#6b3a7d;color:#f0abfc}
+  .cell.teleport{background:#3d1445;border-color:#7e2a8a;color:var(--pink)}
+  .cell.exit{background:#12301f;border-color:#265c3a;color:var(--green)}
+  .cell.exit.locked{background:#2a2438;border-color:#544a6b;color:#a99ec2}
+  .cell.orb{background:#3a2d0b;border-color:#7a5c14;color:var(--gold)}
+  .cell .orb-dot{width:62%;height:62%;border-radius:50%;background:radial-gradient(circle at 35% 35%, #fff3b0, var(--gold) 55%, #b8860b);box-shadow:0 0 14px #ffd166aa;display:block}
+  .cell .crate{width:76%;height:76%;border-radius:8px;background:linear-gradient(145deg,#c98a4b,#8b5a2b);border:2px solid #5d3a17;box-shadow:inset 0 0 0 3px #a96f35;display:block}
+  .cell .player{width:74%;height:74%;border-radius:50%;background:radial-gradient(circle at 35% 35%, #fff7cc, var(--amber) 60%, var(--amber2));box-shadow:0 0 18px #ffb347cc;display:grid;place-items:center;color:#331a00;font-size:.65em}
+  .cell .hint-mark{position:absolute;top:2px;right:4px;font-size:10px;color:#fff;opacity:.85}
+  .msg{min-height:2.6em;margin-top:10px;padding:9px 11px;border-radius:12px;background:#0a122b;border:1px solid var(--line);color:#e8ecff}
+  .msg.ok{border-color:#2e7d4f;background:#0d2419}
+  .msg.bad{border-color:#8a2f3f;background:#2a0f18}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .dpad{display:grid;grid-template-columns:repeat(3,56px);grid-template-rows:repeat(3,56px);gap:6px;justify-content:center;margin:16px 0 4px}
+  .dpad button{font-size:22px;padding:0;display:grid;place-items:center;border-radius:14px}
+  .dpad .up{grid-column:2;grid-row:1}.dpad .left{grid-column:1;grid-row:2}.dpad .right{grid-column:3;grid-row:2}.dpad .down{grid-column:2;grid-row:3}
+  .side{background:linear-gradient(180deg,var(--panel),var(--ink2));border:1px solid var(--line);border-radius:18px;padding:14px}
+  .side h2{margin:0 0 8px;font-size:1.1rem}
+  .side p{color:var(--muted);line-height:1.5}
+  details.legend{border:1px solid var(--line);border-radius:12px;padding:10px;background:#0e1738;margin-top:10px}
+  details.legend summary{cursor:pointer;font-weight:700}
+  .legend li{margin:.35rem 0;color:#dbe6ff}
+  .level-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+  .chip{min-width:44px}
+  .chip.done{background:#12301f;border-color:#2e7d4f}
+  .chip.current{background:#3a2d0b;border-color:var(--gold);color:var(--gold)}
+  .hint-box{margin-top:10px;padding:10px;border-radius:12px;background:#2a2008;border:1px dashed #7a5c14;color:#ffe9a8}
+  kbd{background:#0a122b;border:1px solid var(--line);border-bottom-width:3px;border-radius:6px;padding:.05rem .4rem;font-family:inherit}
+  .overlay{position:fixed;inset:0;background:rgba(4,7,18,.88);display:grid;place-items:center;z-index:20;padding:16px}
+  .overlay[hidden]{display:none}
+  .sheet{max-width:620px;width:100%;background:linear-gradient(180deg,#1a2a57,#101a3a);border:2px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .sheet h2{margin-top:0;font-size:1.6rem}
+  .sheet .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .bigbtn{font-size:1.05rem;padding:.75rem 1.2rem;background:#3a2d0b;border-color:var(--gold);color:var(--gold)}
+  .bigbtn:hover{background:#4d3b10}
+  .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .shake{animation:shake .32s ease}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  .pulse{animation:pulse .5s ease}
+  @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.18)}100%{transform:scale(1)}}
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">✦</div>
+      <div>
+        <h1>SPARKSLIDE</h1>
+        <p class="sub">A Lightkeeper's Circuit — slide, stop, spark.</p>
+      </div>
+    </div>
+    <div class="top-actions" aria-label="Game actions">
+      <button id="undoBtn" type="button" aria-label="Undo last move (Z)">↩ Undo</button>
+      <button id="restartBtn" type="button" aria-label="Restart level (R)">⟲ Restart</button>
+      <button id="hintBtn" type="button" aria-label="Show hint (H)" aria-expanded="false">💡 Hint</button>
+      <button id="pauseBtn" type="button" aria-label="Pause game (P or Escape)">⏸ Pause</button>
+      <button id="soundBtn" type="button" aria-label="Toggle sound" aria-pressed="true">🔊 Sound</button>
+    </div>
+  </header>
+
+  <section class="hud" aria-label="Progress summary">
+    <div class="stat"><span>Level</span><b id="hudLevel">1 / 8</b></div>
+    <div class="stat"><span>Moves</span><b id="hudMoves">0</b></div>
+    <div class="stat"><span>Orbs left</span><b id="hudOrbs">0</b></div>
+    <div class="stat"><span>Best</span><b id="hudBest">—</b></div>
+  </section>
+
+  <main class="layout">
+    <section class="board-card" aria-labelledby="boardLabel">
+      <h2 id="boardLabel" class="sr">Puzzle board</h2>
+      <div id="board" tabindex="0" role="grid" aria-label="Puzzle board. Use arrow keys or WASD to slide. Focus this board, then press a direction."></div>
+      <div id="message" class="msg" role="status" aria-live="polite">Welcome, Lightkeeper. Press Start, then slide with the arrow keys, WASD, the D-pad, or a swipe.</div>
+      <div class="controls">
+        <button id="undoBtn2" type="button" aria-label="Undo last move">↩ Undo</button>
+        <button id="restartBtn2" type="button" aria-label="Restart level">⟲ Restart</button>
+        <button id="pauseBtn2" type="button" aria-label="Pause game">⏸ Pause</button>
+      </div>
+      <div class="dpad" aria-label="Direction pad">
+        <button class="up" type="button" data-dir="up" aria-label="Slide up">↑</button>
+        <button class="left" type="button" data-dir="left" aria-label="Slide left">←</button>
+        <button class="right" type="button" data-dir="right" aria-label="Slide right">→</button>
+        <button class="down" type="button" data-dir="down" aria-label="Slide down">↓</button>
+      </div>
+    </section>
+
+    <aside class="side" aria-labelledby="howLabel">
+      <h2 id="howLabel">How to play</h2>
+      <p><strong>You slide until you hit something.</strong> You cannot stop in open space. Plan your stop with walls, crates, honey, mirrors and portals.</p>
+      <p>Collect every <strong>◆ signal orb</strong>, then <strong>reach the exit</strong>. Sliding over or stopping on the exit after all orbs are lit wins the level.</p>
+      <p><strong>Controls:</strong> <kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> or <kbd>WASD</kbd> to slide · <kbd>Z</kbd> Undo · <kbd>R</kbd> Restart · <kbd>H</kbd> Hint · <kbd>P</kbd>/<kbd>Esc</kbd> Pause. Touch: D-pad or swipe the board.</p>
+      <details class="legend" id="legend">
+        <summary>Tile legend — what each thing does</summary>
+        <ul>
+          <li>🧱 <strong>Wall</strong> — stops your slide and crate slides.</li>
+          <li>◉ <strong>Honey (teal)</strong> — you stop the moment you touch it, even mid-slide. Crates also stop on honey.</li>
+          <li>╱ ╲ <strong>Mirrors</strong> — / turns north→east, east→north; \ turns east→south, south→east, etc. You keep sliding after the turn.</li>
+          <li>◎ <strong>Portal</strong> — entering one teleports you to its pair and you keep sliding in the same direction.</li>
+          <li>■ <strong>Crate</strong> — you push it one slide when you hit it, then you stop where it was. It slides until a wall, sticks on honey, and sinks into pits to fill them.</li>
+          <li>◯ <strong>Pit</strong> — sliding into a pit makes you fall and return to the start of that move. Fill pits with crates.</li>
+          <li>◆ <strong>Orb</strong> — collected when you slide over it. ▶ <strong>Exit</strong> is locked until every orb is collected.</li>
+        </ul>
+      </details>
+      <h2 style="margin-top:16px">Levels</h2>
+      <div class="level-chips" id="levelChips" aria-label="Level select"></div>
+      <div id="hintBox" class="hint-box" hidden></div>
+      <p id="levelDesc" style="margin-top:10px"></p>
+    </aside>
+  </main>
+</div>
+
+<!-- TITLE -->
+<div class="overlay" id="titleOverlay" role="dialog" aria-modal="true" aria-labelledby="titleH">
+  <div class="sheet">
+    <h2 id="titleH">✦ SPARKSLIDE</h2>
+    <p>The Ember Refinery has gone dark. You are the last <strong>Spark</strong>. Slide through the vaults, relight the signal orbs, and reach the exit.</p>
+    <p><strong>Core rule:</strong> you slide until you hit a wall, crate, honey or a turn. There is no brake in open space — your stop is your puzzle.</p>
+    <p>Keyboard: arrows / WASD. Touch: D-pad or swipe. <kbd>Z</kbd> undo, <kbd>R</kbd> restart.</p>
+    <div class="row">
+      <button class="bigbtn" id="startBtn" type="button">▶ Start / Continue</button>
+      <button id="titleLevelsBtn" type="button">Levels</button>
+      <button id="resetBtn" type="button">Reset progress</button>
+    </div>
+    <div class="level-chips" id="titleChips" aria-label="Level select on title screen"></div>
+  </div>
+</div>
+
+<!-- PAUSE -->
+<div class="overlay" id="pauseOverlay" role="dialog" aria-modal="true" aria-labelledby="pauseH" hidden>
+  <div class="sheet">
+    <h2 id="pauseH">Paused</h2>
+    <p>The spark holds its breath. Progress is saved.</p>
+    <div class="row">
+      <button class="bigbtn" id="resumeBtn" type="button">▶ Resume</button>
+      <button id="pauseRestartBtn" type="button">⟲ Restart level</button>
+      <button id="pauseTitleBtn" type="button">Title</button>
+    </div>
+    <div class="level-chips" id="pauseChips" aria-label="Level select on pause screen"></div>
+  </div>
+</div>
+
+<!-- STAGE COMPLETE -->
+<div class="overlay" id="stageOverlay" role="dialog" aria-modal="true" aria-labelledby="stageH" hidden>
+  <div class="sheet">
+    <h2 id="stageH">Level complete!</h2>
+    <p id="stageStats"></p>
+    <div class="row">
+      <button class="bigbtn" id="nextBtn" type="button">Next level →</button>
+      <button id="replayBtn" type="button">Replay</button>
+      <button id="stageTitleBtn" type="button">Title</button>
+    </div>
+  </div>
+</div>
+
+<!-- GAME COMPLETE -->
+<div class="overlay" id="gameOverlay" role="dialog" aria-modal="true" aria-labelledby="gameH" hidden>
+  <div class="sheet">
+    <h2 id="gameH">✦ The refinery glows again!</h2>
+    <p id="gameStats"></p>
+    <p>Every orb is lit. Well slid, Lightkeeper.</p>
+    <div class="row">
+      <button class="bigbtn" id="againBtn" type="button">Play again</button>
+      <button id="gameTitleBtn" type="button">Title</button>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ============ LEVELS ============ */
+const LEVELS=[
+ {name:"First Spark", desc:"Slide up, then left to catch the top orb. Slide right onto the locked exit, down to catch the second orb, then up to win.",
+  hint:"Go Up → Left (orb) → Right (stop on the locked exit) → Down (orb) → Up (win). You slide until a wall stops you.",
+  map:["########","#O....X#","#.P...O#","#......#","########"]},
+ {name:"Sticky Signal", desc:"Honey is your brake. Slide right onto honey to catch the orb, then up onto the exit.",
+  hint:"Right — honey stops you right after the orb. Then Up onto the exit.",
+  map:["#########","#.....X.#","#.P..OH.#","#.......#","#.......#","#########"]},
+ {name:"Mirror Bend", desc:"The back-slash mirror turns your east slide south. Use it twice.",
+  hint:"East into the mirror to turn south. West for the bottom orb, north, then East into the mirror again to reach the exit.",
+  map:["#########","#P..O.\\.#","#.......#","#.......#","#.......#","#O....X.#","#########"]},
+ {name:"Crate Brake", desc:"Push the crate to the far wall, use it as a brake, then climb to the orb and drop to the exit.",
+  hint:"East (push crate) → East (stop by the crate) → North (orb) → East → South (exit).",
+  map:["#########","#.....O.#","#.......#","#P...C..#","#.......#","#......X#","#########"]},
+ {name:"Fill the Gap", desc:"Push the crate into the pit to fill it. The pit bridge is the only way east.",
+  hint:"East pushes the crate into the pit. East again across the filled gap to the locked exit. North for the orb, South to win.",
+  map:["##########","#....###O#","#....###.#","#P..C.~.X#","#....###.#","#....###.#","##########"]},
+ {name:"Portal Pair", desc:"Portals carry you through the wall, still sliding the same way. Coming back is also possible — mind your direction.",
+  hint:"East to enter the left portal. You arrive at the right portal still moving East. North, West (orb), East, South to the exit.",
+  map:["#########","#....#O.#","#P.T.#T.#","#....#..#","#....#.X#","#########"]},
+ {name:"Refinery Turn", desc:"Mirror, honey and three orbs. The exit stays locked until the small western orb is caught.",
+  hint:"East → mirror → honey. South, East (orb), West to the locked exit. North, East → mirror → honey, West (orb), then repeat mirror/honey/south/east and go West to win.",
+  map:["##########","#P..O.\\..#","#........#","#........#","#.O...H..#","#........#","#X.....O.#","##########"]},
+ {name:"Ember Finale", desc:"Push a crate into the pit, ride the mirror south through the gap, and sweep the southern vaults. The northern orb must be lit in between.",
+  hint:"East pushes the crate into the pit. East → mirror → honey. West (orb), South, East (orb). Then go back North via honey/mirror, West across the top for the northern orb, and return East → mirror → honey → West → South → West to the exit.",
+  map:["###########","#...O.....#","#.........#","#P.C.~..\\.#","########.##","#.O....H..#","#X.......O#","###########"]}
+];
+const DIRS={up:{dr:-1,dc:0},down:{dr:1,dc:0},left:{dr:0,dc:-1},right:{dr:0,dc:1}};
+const SAVE_KEY="sparkslide_save_v1";
+
+/* ============ STATE ============ */
+let save=loadSave();
+let state=null;
+let paused=false, animating=false, currentOverlay="title";
+let audioCtx=null;
+
+function defaultSave(){return {currentLevel:0,unlocked:0,completed:Array(LEVELS.length).fill(false),best:Array(LEVELS.length).fill(null),sound:true};}
+function loadSave(){
+  try{const raw=localStorage.getItem(SAVE_KEY); if(!raw) return defaultSave();
+    const p=JSON.parse(raw); const d=defaultSave();
+    if(typeof p!=="object"||p===null) return d;
+    const cur=Number.isInteger(p.currentLevel)?Math.max(0,Math.min(LEVELS.length-1,p.currentLevel)):0;
+    const unl=Number.isInteger(p.unlocked)?Math.max(0,Math.min(LEVELS.length-1,p.unlocked)):cur;
+    const comp=Array.isArray(p.completed)?LEVELS.map((_,i)=>!!p.completed[i]):d.completed;
+    const best=Array.isArray(p.best)?LEVELS.map((_,i)=>Number.isInteger(p.best[i])&&p.best[i]>=0?p.best[i]:null):d.best;
+    return {currentLevel:cur,unlocked:Math.max(unl, comp.findIndex(v=>!v)===-1?LEVELS.length-1:unl),completed:comp,best:best,sound:p.sound!==false};
+  }catch(e){ return defaultSave(); }
+}
+function persist(){ try{localStorage.setItem(SAVE_KEY, JSON.stringify(save));}catch(e){} }
+function parseLevel(idx){
+  const lvl=LEVELS[idx]; const rows=lvl.map.length, cols=lvl.map[0].length;
+  const tiles=[], orbs=new Set(), crates=new Set(); let player={r:0,c:0}; const teleports=[];
+  for(let r=0;r<rows;r++){ tiles.push([]);
+    for(let c=0;c<cols;c++){ const ch=lvl.map[r][c]; let t="floor";
+      if(ch==="#") t="wall"; else if(ch==="H") t="honey"; else if(ch==="~") t="pit";
+      else if(ch==="/") t="mirrorSlash"; else if(ch==="\\") t="mirrorBack";
+      else if(ch==="T"){ t="teleport"; teleports.push({r,c}); }
+      else if(ch==="X") t="exit";
+      else if(ch==="O"){ orbs.add(r+","+c); }
+      else if(ch==="C"){ crates.add(r+","+c); }
+      else if(ch==="P"){ player={r,c}; }
+      tiles[r].push(t);
+    }
+  }
+  return {rows,cols,baseTiles:tiles,teleports,initial:{player,orbs:[...orbs],crates:[...crates]}};
+}
+function newLevelState(idx){
+  const p=parseLevel(idx);
+  return {idx, rows:p.rows, cols:p.cols, baseTiles:p.baseTiles, teleports:p.teleports,
+    player:{...p.initial.player}, orbs:new Set(p.initial.orbs), crates:new Set(p.initial.crates),
+    filled:new Set(), moves:0, history:[]};
+}
+function currentTiles(){
+  const t=state.baseTiles.map(row=>row.slice());
+  for(const k of state.filled){ const [r,c]=k.split(",").map(Number); if(t[r]&&t[r][c]==="pit") t[r][c]="floor"; }
+  return t;
+}
+function reflect(dir, tile){
+  // dir as {dr,dc}; returns new {dr,dc}
+  if(tile==="mirrorSlash"){ // / : N<->E, S<->W
+    if(dir.dr===-1&&dir.dc===0) return {dr:0,dc:1};
+    if(dir.dr===1&&dir.dc===0) return {dr:0,dc:-1};
+    if(dir.dr===0&&dir.dc===1) return {dr:-1,dc:0};
+    if(dir.dr===0&&dir.dc===-1) return {dr:1,dc:0};
+  } else { // \ : N<->W, S<->E
+    if(dir.dr===-1&&dir.dc===0) return {dr:0,dc:-1};
+    if(dir.dr===1&&dir.dc===0) return {dr:0,dc:1};
+    if(dir.dr===0&&dir.dc===1) return {dr:1,dc:0};
+    if(dir.dr===0&&dir.dc===-1) return {dr:-1,dc:0};
+  }
+  return dir;
+}
+function findPair(r,c){
+  const others=state.teleports.filter(p=>!(p.r===r&&p.c===c));
+  return others.length?others[0]:null;
+}
+function computeMove(dirName){
+  const dir={...DIRS[dirName]};
+  const S={player:{...state.player}, orbs:new Set(state.orbs), crates:new Set(state.crates), filled:new Set(state.filled)};
+  const tiles=currentTiles();
+  let player={...S.player}; let path=[{...player}]; let jumps=[]; // indexes in path that are teleport jumps
+  let fell=null, pushed=false, loopStop=false;
+  const visited=new Set(); let steps=0;
+  const maxSteps=state.rows*state.cols*4+50;
+  while(steps++<maxSteps){
+    const nr=player.r+dir.dr, nc=player.c+dir.dc;
+    if(nr<0||nr>=state.rows||nc<0||nc>=state.cols) break;
+    const tile=tiles[nr][nc];
+    if(tile==="wall") break;
+    const key=nr+","+nc;
+    if(S.crates.has(key)){
+      let cr=nr, cc=nc, moved=false, fellCrate=false;
+      while(true){
+        const nnr=cr+dir.dr, nnc=cc+dir.dc;
+        if(nnr<0||nnr>=state.rows||nnc<0||nnc>=state.cols) break;
+        const t=tiles[nnr][nnc];
+        if(t==="wall") break;
+        if(S.crates.has(nnr+","+nnc)) break;
+        if(t==="pit"){ tiles[nnr][nnc]="floor"; S.filled.add(nnr+","+nnc); fellCrate=true; moved=true; break; }
+        cr=nnr; cc=nnc; moved=true;
+        if(t==="honey") break;
+      }
+      if(!moved){ pushed=false; break; }
+      S.crates.delete(key);
+      if(!fellCrate) S.crates.add(cr+","+cc);
+      player={r:nr,c:nc}; path.push({...player}); pushed=true; break;
+    }
+    if(tile==="pit"){ fell={r:nr,c:nc}; path.push({r:nr,c:nc}); path.push({...S.player}); break; }
+    if(tile==="honey"){ player={r:nr,c:nc}; path.push({...player}); S.orbs.delete(key); break; }
+    if(tile==="mirrorSlash"||tile==="mirrorBack"){
+      player={r:nr,c:nc}; path.push({...player}); S.orbs.delete(key);
+      const vk=nr+","+nc+","+dir.dr+","+dir.dc;
+      if(visited.has(vk)){ loopStop=true; break; } visited.add(vk);
+      dir=reflect(dir,tile); continue;
+    }
+    if(tile==="teleport"){
+      const pair=findPair(nr,nc);
+      if(pair){
+        const vk=pair.r+","+pair.c+","+dir.dr+","+dir.dc;
+        if(visited.has(vk)){ player={r:nr,c:nc}; path.push({...player}); loopStop=true; break; }
+        visited.add(vk);
+        player={r:pair.r,c:pair.c}; jumps.push(path.length); path.push({...player}); S.orbs.delete(pair.r+","+pair.c); continue;
+      }
+      player={r:nr,c:nc}; path.push({...player}); continue;
+    }
+    // floor / exit
+    player={r:nr,c:nc}; path.push({...player}); S.orbs.delete(key);
+  }
+  const noChange = player.r===S.player.r&&player.c===S.player.c&&S.crates.size===state.crates.size&&S.orbs.size===state.orbs.size&&S.filled.size===state.filled.size&&!pushed;
+  const changedCrates = [...S.crates].sort().join("|")!==[...state.crates].sort().join("|");
+  const changedFilled = S.filled.size!==state.filled.size;
+  const changedOrbs = S.orbs.size!==state.orbs.size;
+  const changedPos = player.r!==state.player.r||player.c!==state.player.c;
+  const onExitPath = path.some(p=> tiles[p.r] && tiles[p.r][p.c]==="exit");
+  const wins = !fell && onExitPath && S.orbs.size===0 && (changedPos||changedCrates||changedOrbs||changedFilled);
+  return {fell, pushed, loopStop, path, jumps, next:{player,orbs:S.orbs,crates:S.crates,filled:S.filled}, wins,
+          invalid: fell?false:(!changedPos&&!changedCrates&&!changedOrbs&&!changedFilled)};
+}
+/* ============ AUDIO ============ */
+function beep(freq,dur,type,vol){
+  if(!save.sound) return;
+  try{
+    if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+    o.type=type||"sine"; o.frequency.value=freq; g.gain.value=vol||0.08;
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(); g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+(dur||0.12)); o.stop(audioCtx.currentTime+(dur||0.12));
+  }catch(e){}
+}
+function sfx(kind){ if(kind==="move") beep(220,0.08,"triangle",0.05); else if(kind==="orb"){beep(880,0.12,"sine",0.09); setTimeout(()=>beep(1320,0.14,"sine",0.08),90);} else if(kind==="bump") beep(110,0.14,"square",0.06); else if(kind==="fall"){beep(440,0.1,"sawtooth",0.06); setTimeout(()=>beep(180,0.18,"sawtooth",0.06),90);} else if(kind==="win"){ [523,659,784,1046].forEach((f,i)=>setTimeout(()=>beep(f,0.16,"sine",0.1),i*110)); } else if(kind==="tele"){beep(1200,0.08,"sine",0.05);} }
+/* ============ RENDER ============ */
+const $=id=>document.getElementById(id);
+function render(){
+  const b=$("board"); b.style.gridTemplateColumns=`repeat(${state.cols}, minmax(0,1fr))`;
+  b.innerHTML="";
+  const tiles=currentTiles();
+  const frag=document.createDocumentFragment();
+  for(let r=0;r<state.rows;r++) for(let c=0;c<state.cols;c++){
+    const cell=document.createElement("div");
+    const tile=tiles[r][c]; const key=r+","+c;
+    let cls="cell"; let inner="";
+    if(tile==="wall"){ cls+=" wall"; inner="🧱"; }
+    else if(tile==="honey"){ cls+=" honey"; inner="◉"; }
+    else if(tile==="pit"){ cls+=" pit"; inner="◌"; }
+    else if(tile==="mirrorSlash"){ cls+=" mirror"; inner="╱"; }
+    else if(tile==="mirrorBack"){ cls+=" mirror"; inner="╲"; }
+    else if(tile==="teleport"){ cls+=" teleport"; inner="◎"; }
+    else if(tile==="exit"){ cls+= state.orbs.size===0?" exit":" exit locked"; inner= state.orbs.size===0?"▶":"🔒"; }
+    else { cls+= state.orbs.has(key)?" orb":""; }
+    if(state.orbs.has(key)) inner='<span class="orb-dot" aria-hidden="true"></span>';
+    if(state.crates.has(key)) inner='<span class="crate" aria-hidden="true"></span>';
+    if(state.player.r===r&&state.player.c===c) inner='<span class="player" aria-hidden="true">✦</span>';
+    cell.className=cls; cell.innerHTML=inner;
+    cell.setAttribute("aria-hidden","true");
+    frag.appendChild(cell);
+  }
+  b.appendChild(frag);
+  $("hudLevel").textContent=(state.idx+1)+" / "+LEVELS.length;
+  $("hudMoves").textContent=state.moves;
+  $("hudOrbs").textContent=state.orbs.size;
+  $("hudBest").textContent= save.best[state.idx]===null?"—":save.best[state.idx];
+  $("levelDesc").textContent=LEVELS[state.idx].desc;
+  renderChips();
+  $("undoBtn").disabled=$("undoBtn2").disabled=state.history.length===0;
+}
+function renderChips(){
+  const make=(container)=>{
+    container.innerHTML="";
+    LEVELS.forEach((lvl,i)=>{
+      const btn=document.createElement("button");
+      btn.type="button"; btn.className="chip"+(save.completed[i]?" done":"")+(i===state.idx?" current":"");
+      btn.textContent=(save.completed[i]?"✓ ":"")+(i+1);
+      btn.setAttribute("aria-label", `Level ${i+1}: ${lvl.name}${save.completed[i]?" (completed)":""}${i>save.unlocked?" (locked)":""}`);
+      btn.addEventListener("click",()=>{
+        if(i>save.unlocked){ say("That level is locked. Complete the previous level first.", "bad"); beep(140,0.1,"square",0.06); return; }
+        selectLevel(i);
+      });
+      container.appendChild(btn);
+    });
+  };
+  make($("levelChips")); make($("titleChips")); make($("pauseChips"));
+}
+function say(text, kind){
+  const m=$("message"); m.textContent=text; m.className="msg"+(kind?" "+kind:"");
+}
+function selectLevel(i){
+  state=newLevelState(i); save.currentLevel=i; persist();
+  hideOverlays(); say(`Level ${i+1}: ${LEVELS[i].name}. ${LEVELS[i].desc}`,"ok"); $("hintBox").hidden=true; $("hintBtn").setAttribute("aria-expanded","false");
+  render(); $("board").focus({preventScroll:true});
+}
+function snapshot(){ return {player:{...state.player}, orbs:[...state.orbs], crates:[...state.crates], filled:[...state.filled], moves:state.moves}; }
+function restore(snap){ state.player={...snap.player}; state.orbs=new Set(snap.orbs); state.crates=new Set(snap.crates); state.filled=new Set(snap.filled); state.moves=snap.moves; }
+function doMove(dirName){
+  if(animating||paused||currentOverlay!=="game") return;
+  if(!DIRS[dirName]) return;
+  const res=computeMove(dirName);
+  if(res.fell){
+    animating=true; sfx("fall");
+    const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const finish=()=>{ animating=false; say("You fell into a pit — returned to the start of that move. Fill pits with a crate.","bad"); render(); };
+    if(reduced||res.path.length<=2){ finish(); } else {
+      // quick visual: flash player at pit then back
+      let i=0; const total=res.path.length;
+      const step=()=>{ if(i<total){ state.player={...res.path[i]}; render(); i++; setTimeout(step,80); } else { state.player=res.path[0]; finish(); } };
+      step();
+    }
+    return;
+  }
+  if(res.invalid){
+    say("No room to slide that way — you need a wall, crate or honey to stop against.","bad");
+    sfx("bump"); $("board").classList.remove("shake"); void $("board").offsetWidth; $("board").classList.add("shake");
+    return;
+  }
+  state.history.push(snapshot()); if(state.history.length>200) state.history.shift();
+  const orbsBefore=state.orbs.size;
+  state.player={...res.next.player}; state.orbs=new Set(res.next.orbs); state.crates=new Set(res.next.crates); state.filled=new Set(res.next.filled);
+  state.moves+=1;
+  if(state.orbs.size<orbsBefore) sfx("orb"); else if(res.jumps.length) sfx("tele"); else sfx("move");
+  render();
+  if(res.wins){ onLevelWin(); return; }
+  if(res.pushed) say(state.filled.size>0?"Crate filled a pit. Keep sliding.":"Crate pushed. You stopped where it was.");
+  else if(state.orbs.size<orbsBefore) say(`Orb lit! ${state.orbs.size} left. Reach the exit when they are all lit.`,"ok");
+  else if(res.path.some(p=> currentTiles()[p.r][p.c]==="exit")) say("Exit is locked — collect every orb first.","bad");
+  else say("Slid "+dirName+".");
+}
+function onLevelWin(){
+  sfx("win");
+  save.completed[state.idx]=true;
+  save.best[state.idx]= save.best[state.idx]===null?state.moves:Math.min(save.best[state.idx],state.moves);
+  if(state.idx+1<LEVELS.length) save.unlocked=Math.max(save.unlocked, state.idx+1);
+  save.currentLevel=state.idx; persist();
+  say("Level complete!","ok"); render();
+  if(state.idx===LEVELS.length-1){ showGameComplete(); } else { showStageComplete(); }
+}
+function showStageComplete(){
+  const lvl=LEVELS[state.idx];
+  $("stageH").textContent=`Level ${state.idx+1} complete — ${lvl.name}!`;
+  $("stageStats").textContent=`Moves: ${state.moves} · Best: ${save.best[state.idx]} · Next: Level ${state.idx+2} — ${LEVELS[state.idx+1].name}.`;
+  $("nextBtn").textContent=`Next: ${LEVELS[state.idx+1].name} →`;
+  showOverlay("stage");
+}
+function showGameComplete(){
+  const total=save.best.reduce((a,b)=>a+(b||0),0);
+  $("gameStats").textContent=`Best moves per level: ${save.best.map(b=>b??"—").join(", ")} (total best ${total}). All 8 vaults relit.`;
+  showOverlay("game");
+}
+/* ============ OVERLAYS ============ */
+function hideOverlays(){ ["titleOverlay","pauseOverlay","stageOverlay","gameOverlay"].forEach(id=>$(id).hidden=true); currentOverlay="game"; }
+function showOverlay(which){
+  hideOverlays();
+  const map={title:"titleOverlay",pause:"pauseOverlay",stage:"stageOverlay",game:"gameOverlay"};
+  $(map[which]).hidden=false; currentOverlay= which==="stage"?"stage":which==="game"?"gamecomplete":which;
+  const btn={title:$("startBtn"),pause:$("resumeBtn"),stage:$("nextBtn"),game:$("againBtn")}[which];
+  if(btn) btn.focus({preventScroll:true});
+}
+function setPaused(p){ paused=p; if(p){ showOverlay("pause"); } else { hideOverlays(); $("board").focus({preventScroll:true}); } }
+/* ============ INPUT ============ */
+document.addEventListener("keydown",(e)=>{
+  const tag=document.activeElement&&document.activeElement.tagName;
+  const typing=tag==="INPUT"||tag==="TEXTAREA";
+  if(typing) return;
+  const k=e.key.toLowerCase();
+  const dirMap={arrowup:"up",w:"up",arrowdown:"down",s:"down",arrowleft:"left",a:"left",arrowright:"right",d:"right"};
+  if(dirMap[k]!==undefined && currentOverlay==="game" && !paused){ e.preventDefault(); doMove(dirMap[k]); return; }
+  if(k==="z"&&currentOverlay==="game"){ doUndo(); }
+  else if(k==="r"&&currentOverlay==="game"){ doRestart(); }
+  else if(k==="h"){ toggleHint(); }
+  else if(k==="p"||k==="escape"){
+    if(currentOverlay==="game") setPaused(true);
+    else if(currentOverlay==="pause") setPaused(false);
+    else if(currentOverlay==="title"){ }
+  }
+  else if(k==="enter"&&currentOverlay==="title"){ $("startBtn").click(); }
+});
+let touchStart=null;
+$("board").addEventListener("touchstart",(e)=>{ if(e.touches.length===1) touchStart={x:e.touches[0].clientX,y:e.touches[0].clientY}; },{passive:true});
+$("board").addEventListener("touchend",(e)=>{
+  if(!touchStart) return; const t=e.changedTouches[0]; const dx=t.clientX-touchStart.x, dy=t.clientY-touchStart.y; touchStart=null;
+  if(Math.hypot(dx,dy)<24) return;
+  doMove(Math.abs(dx)>Math.abs(dy)?(dx>0?"right":"left"):(dy>0?"down":"up"));
+},{passive:true});
+document.querySelectorAll(".dpad button").forEach(btn=> btn.addEventListener("click",()=>doMove(btn.dataset.dir)));
+function doUndo(){ if(animating||paused||currentOverlay!=="game") return; if(!state.history.length){ say("Nothing to undo."); return; } const s=state.history.pop(); restore(s); say("Undone.","ok"); render(); beep(330,0.08,"sine",0.06); }
+function doRestart(){ if(currentOverlay!=="game"&&currentOverlay!=="pause") return; const idx=state.idx; state=newLevelState(idx); paused=false; hideOverlays(); say("Level restarted.","ok"); render(); }
+function toggleHint(){ const box=$("hintBox"); const show=box.hidden; box.hidden=!show; $("hintBtn").setAttribute("aria-expanded",String(show)); if(show){ box.textContent="💡 "+LEVELS[state.idx].hint; $("legend").open=true; } }
+function setSound(on){ save.sound=on; persist(); $("soundBtn").textContent=on?"🔊 Sound":"🔇 Muted"; $("soundBtn").setAttribute("aria-pressed",String(on)); if(on) beep(660,0.08,"sine",0.06); }
+/* ============ WIRE BUTTONS ============ */
+$("undoBtn").addEventListener("click",doUndo); $("undoBtn2").addEventListener("click",doUndo);
+$("restartBtn").addEventListener("click",doRestart); $("restartBtn2").addEventListener("click",doRestart);
+$("pauseBtn").addEventListener("click",()=>setPaused(true)); $("pauseBtn2").addEventListener("click",()=>setPaused(true));
+$("hintBtn").addEventListener("click",toggleHint);
+$("soundBtn").addEventListener("click",()=>setSound(!save.sound));
+$("startBtn").addEventListener("click",()=>{ hideOverlays(); selectLevel(save.currentLevel); });
+$("titleLevelsBtn").addEventListener("click",()=>{ $("titleChips").scrollIntoView({behavior:"smooth"}); say("Tap a level chip to jump to an unlocked level."); });
+$("resetBtn").addEventListener("click",()=>{ if(confirm("Reset all progress? This cannot be undone.")){ save=defaultSave(); persist(); state=newLevelState(0); render(); say("Progress reset. Level 1 fresh."); } });
+$("resumeBtn").addEventListener("click",()=>setPaused(false));
+$("pauseRestartBtn").addEventListener("click",doRestart);
+$("pauseTitleBtn").addEventListener("click",()=>{ setPaused(false); showOverlay("title"); });
+$("nextBtn").addEventListener("click",()=>{ const n=Math.min(state.idx+1,LEVELS.length-1); selectLevel(n); });
+$("replayBtn").addEventListener("click",()=>{ doRestart(); });
+$("stageTitleBtn").addEventListener("click",()=>showOverlay("title"));
+$("againBtn").addEventListener("click",()=>{ selectLevel(0); });
+$("gameTitleBtn").addEventListener("click",()=>showOverlay("title"));
+/* ============ INIT ============ */
+state=newLevelState(save.currentLevel);
+setSound(save.sound);
+render();
+showOverlay("title");
+</script>
+</body>
+</html>

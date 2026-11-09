@@ -1,0 +1,1194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forge — Project Workbench</title>
+<style>
+  :root{
+    --paper:#faf5ec; --paper-2:#fffdf6; --ink:#211e1a; --muted:#6b655c; --faint:#8a8172;
+    --line:#e3d9c8; --line-strong:#d3c4a6; --card:#ffffff;
+    --ember:#c14e2a; --ember-dark:#973916; --moss:#4d5f3a; --gold:#9a6a0a; --slate:#43586b; --rust:#a63d2a; --amber:#a06a06;
+    --focus:#0b5cad; --danger:#b3261e; --danger-bg:#fdecea;
+    --radius:12px; --radius-sm:8px;
+    --shadow:0 1px 2px rgba(33,30,26,.06),0 4px 16px rgba(33,30,26,.07);
+    --shadow-lg:0 12px 40px rgba(33,30,26,.18);
+    --serif:"Iowan Old Style",Palatino,"Palatino Linotype",Georgia,serif;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5}
+  a{color:var(--ember-dark)}
+  button{font:inherit;cursor:pointer}
+  input,select,textarea{font:inherit;color:inherit}
+  :focus{outline:none}
+  :focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:4px}
+  .skip{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+  .skip:focus{position:fixed;left:12px;top:12px;width:auto;height:auto;padding:10px 14px;background:#fff;border:2px solid var(--focus);z-index:200;border-radius:8px}
+  .wrap{max-width:1360px;margin:0 auto;padding:0 20px}
+
+  /* ---------- top bar ---------- */
+  .topbar{background:var(--ink);color:#f7f2e7}
+  .topbar-in{display:flex;align-items:center;gap:16px;padding:14px 20px;max-width:1360px;margin:0 auto;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:12px;min-width:0}
+  .brand-mark{width:40px;height:40px;border-radius:10px;background:var(--ember);color:#fff;display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:22px;flex:none}
+  .brand h1{font-family:var(--serif);font-size:24px;margin:0;letter-spacing:.02em;line-height:1}
+  .brand p{margin:2px 0 0;font-size:12.5px;color:#cbbfa7;letter-spacing:.08em;text-transform:uppercase}
+  .top-search{flex:1 1 280px;min-width:200px;max-width:520px;display:flex}
+  .top-search label{position:absolute;left:-9999px}
+  .top-search input{width:100%;padding:10px 14px;border-radius:10px;border:1px solid #4a443b;background:#2e2a24;color:#f7f2e7}
+  .top-search input::placeholder{color:#a89d87}
+  .top-actions{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border-radius:10px;border:1px solid var(--line-strong);background:#fff;color:var(--ink);font-weight:600;font-size:14px;text-decoration:none}
+  .btn:hover{border-color:var(--ink)}
+  .btn-primary{background:var(--ember);border-color:var(--ember-dark);color:#fff}
+  .btn-primary:hover{background:var(--ember-dark)}
+  .btn-ghost-dark{background:transparent;color:#f7f2e7;border-color:#5a5347}
+  .btn-ghost-dark:hover{border-color:#f7f2e7}
+  .btn-small{padding:6px 10px;font-size:13px;border-radius:8px}
+  .btn-danger{background:var(--danger);border-color:#7e1610;color:#fff}
+  .btn-danger:hover{background:#8e1d17}
+  .btn[disabled]{opacity:.5;cursor:not-allowed}
+
+  /* ---------- projects ---------- */
+  .projects{padding:18px 0 4px}
+  .projects-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .projects-head h2{font-family:var(--serif);font-size:20px;margin:0}
+  .projects-head .hint{color:var(--muted);font-size:13.5px;margin:0}
+  .project-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-top:12px}
+  .project-card{background:var(--paper-2);border:1px solid var(--line);border-top:5px solid var(--accent,var(--slate));border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);text-align:left;display:flex;flex-direction:column;gap:6px;width:100%}
+  .project-card:hover{border-color:var(--line-strong)}
+  .project-card[aria-pressed="true"]{outline:3px solid var(--focus);outline-offset:-3px}
+  .project-card h3{font-family:var(--serif);font-size:17px;margin:0;line-height:1.25}
+  .project-card .client{font-size:12.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+  .project-card .desc{font-size:13.5px;color:#4c463e;margin:0;flex:1}
+  .project-meta{display:flex;gap:8px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+  .project-meta .dot{width:9px;height:9px;border-radius:50%;background:var(--accent,var(--slate));display:inline-block;margin-right:4px;vertical-align:middle}
+  .project-actions{display:flex;gap:6px;margin-top:4px}
+  .project-actions .btn{flex:1;justify-content:center}
+  .new-project-card{border:2px dashed var(--line-strong);background:transparent;align-items:center;justify-content:center;color:var(--muted);font-weight:600;min-height:150px}
+  .new-project-card:hover{border-color:var(--ember);color:var(--ember-dark)}
+
+  /* ---------- toolbar ---------- */
+  .toolbar{position:sticky;top:0;z-index:40;background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:14px}
+  .toolbar-in{display:flex;align-items:center;gap:10px;padding:10px 0;flex-wrap:wrap;max-width:1360px;margin:0 auto;padding-left:20px;padding-right:20px}
+  .view-tabs{display:flex;background:#efe7d6;border:1px solid var(--line-strong);border-radius:11px;padding:3px;gap:2px}
+  .view-tabs button{border:0;background:transparent;padding:7px 16px;border-radius:8px;font-weight:600;color:var(--muted)}
+  .view-tabs button[aria-selected="true"]{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
+  .filter{display:flex;flex-direction:column;gap:2px}
+  .filter label{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+  .filter select,.filter input{padding:7px 9px;border-radius:8px;border:1px solid var(--line-strong);background:#fff;min-height:36px}
+  .count{margin-left:auto;font-size:13.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .clear-btn{padding:7px 12px;border-radius:8px;border:1px solid var(--line-strong);background:#fff;font-weight:600;font-size:13px;align-self:flex-end}
+
+  /* ---------- layout ---------- */
+  .layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;padding:18px 0 8px;align-items:start}
+  .views{min-width:0}
+  .view-panel[hidden]{display:none}
+  .empty{border:2px dashed var(--line-strong);border-radius:var(--radius);padding:32px 22px;text-align:center;color:var(--muted);background:var(--paper-2)}
+  .empty strong{display:block;font-family:var(--serif);font-size:20px;color:var(--ink);margin-bottom:6px}
+  .empty p{margin:0 0 14px}
+
+  /* ---------- board ---------- */
+  .board{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;align-items:start}
+  .col{background:#f3ecdd;border:1px solid var(--line);border-radius:var(--radius);display:flex;flex-direction:column;min-height:180px;max-height:calc(100vh - 260px)}
+  .col-head{padding:12px 14px 10px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
+  .col-head h3{font-family:var(--serif);font-size:16px;margin:0}
+  .col-head .n{margin-left:auto;background:#fff;border:1px solid var(--line-strong);border-radius:999px;font-size:12.5px;padding:1px 9px;font-variant-numeric:tabular-nums}
+  .col-sub{padding:0 14px 8px;font-size:12px;color:var(--muted)}
+  .col-body{padding:0 10px 12px;display:flex;flex-direction:column;gap:10px;overflow-y:auto}
+  .col.drop{outline:3px solid var(--focus);outline-offset:-3px}
+  .card{background:#fff;border:1px solid var(--line);border-left:6px solid var(--prio,var(--slate));border-radius:10px;padding:12px;box-shadow:var(--shadow);cursor:grab;text-align:left}
+  .card:active{cursor:grabbing}
+  .card-title{font-weight:700;line-height:1.3;margin:0 0 6px}
+  .card-proj{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+  .card-notes{font-size:13px;color:#4c463e;margin:0 0 8px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .card-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:6px}
+  .card-footer{display:flex;gap:6px;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid #f0e8d8}
+  .card-footer label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+  .card-footer select{flex:1;padding:5px 7px;border-radius:7px;border:1px solid var(--line-strong);font-size:13px;min-width:0}
+  .card-move-btn{padding:5px 8px;font-size:12.5px}
+  .pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;border:1px solid var(--line-strong);background:#fff;white-space:nowrap}
+  .pill.high{border-color:#e2a49b;background:#fdf0ee;color:#8e1d17}
+  .pill.medium{border-color:#e3c893;background:#fdf6e3;color:#7a5200}
+  .pill.low{border-color:#c9d1ba;background:#f2f5ec;color:#3d4d2c}
+  .pill.status-queue{background:#fff;color:#5b554a}
+  .pill.status-forge{background:var(--ember);border-color:var(--ember-dark);color:#fff}
+  .pill.status-finishing{background:#fdf6e3;border-color:#d9b25a;color:#7a5200}
+  .pill.status-shipped{background:var(--moss);border-color:#3a4a2b;color:#fff}
+  .tag{font-size:11.5px;background:#efe7d6;border-radius:6px;padding:2px 7px;color:#5b554a}
+  .due{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .due.overdue{color:var(--danger);font-weight:700}
+  .dep{font-size:12px;color:var(--muted)}
+  .dep b{color:var(--ink)}
+
+  /* ---------- table ---------- */
+  .table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:#fff;box-shadow:var(--shadow)}
+  table{border-collapse:collapse;width:100%;min-width:820px}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid #f0e8d8;vertical-align:top}
+  thead th{background:#f3ecdd;font-size:12px;text-transform:uppercase;letter-spacing:.06em;position:sticky;top:0}
+  thead th button{background:none;border:0;font:inherit;font-weight:800;text-transform:inherit;letter-spacing:inherit;color:var(--ink);padding:0;display:inline-flex;gap:5px;align-items:center}
+  tbody tr{cursor:pointer}
+  tbody tr:hover{background:#fdfaf3}
+  tbody tr:focus-visible{outline:3px solid var(--focus);outline-offset:-3px}
+  .cell-title{font-weight:700}
+  .cell-sub{font-size:12.5px;color:var(--muted);max-width:340px}
+  .row-actions{display:flex;gap:6px;flex-wrap:wrap}
+  .row-actions .btn{padding:4px 9px;font-size:12.5px}
+
+  /* ---------- calendar ---------- */
+  .cal-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+  .cal-head h3{font-family:var(--serif);font-size:22px;margin:0}
+  .cal-nav{display:flex;gap:6px;margin-left:auto}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .cal-dow{background:#f3ecdd;padding:8px;font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;text-align:center}
+  .cal-day{background:#fff;min-height:112px;padding:6px;display:flex;flex-direction:column;gap:4px;min-width:0}
+  .cal-day.muted{background:#f8f3e8}
+  .cal-day.today{outline:3px solid var(--focus);outline-offset:-3px}
+  .cal-date{font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums}
+  .cal-chip{display:block;width:100%;text-align:left;border:1px solid var(--line-strong);border-left:5px solid var(--prio,var(--slate));background:#fff;border-radius:6px;padding:4px 6px;font-size:12px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .cal-chip:hover{border-color:var(--ink)}
+  .cal-more{font-size:11.5px;color:var(--muted);font-weight:600}
+  .unscheduled{margin-top:12px;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper-2);padding:12px}
+  .unscheduled h4{font-family:var(--serif);margin:0 0 8px;font-size:16px}
+  .chip-list{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{display:inline-flex;gap:8px;align-items:center;background:#fff;border:1px solid var(--line-strong);border-radius:999px;padding:6px 12px;font-size:13px}
+  .chip button{border:0;background:none;font-weight:700;color:var(--ember-dark);padding:0}
+
+  /* ---------- activity ---------- */
+  .activity{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);position:sticky;top:64px;max-height:calc(100vh - 84px);display:flex;flex-direction:column}
+  .activity-head{padding:14px 14px 10px;border-bottom:1px solid var(--line)}
+  .activity-head h2{font-family:var(--serif);font-size:18px;margin:0 0 8px}
+  .activity-head select{width:100%;padding:7px 9px;border-radius:8px;border:1px solid var(--line-strong);background:#fff}
+  .activity-list{overflow-y:auto;padding:10px 14px;display:flex;flex-direction:column;gap:10px}
+  .act{display:grid;grid-template-columns:26px 1fr;gap:9px;padding-bottom:10px;border-bottom:1px dashed var(--line)}
+  .act:last-child{border-bottom:0;padding-bottom:2px}
+  .act-ico{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;background:#efe7d6;border:1px solid var(--line-strong)}
+  .act-msg{margin:0;font-size:13.5px;line-height:1.45}
+  .act-time{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .act-empty{color:var(--muted);font-size:13.5px;padding:8px 0}
+
+  /* ---------- footer / dialogs / toast ---------- */
+  footer{padding:18px 0 28px;color:var(--muted);font-size:13px}
+  dialog{border:1px solid var(--line-strong);border-radius:16px;padding:0;max-width:min(640px,94vw);width:100%;box-shadow:var(--shadow-lg);background:#fff;color:var(--ink)}
+  dialog::backdrop{background:rgba(33,30,26,.45)}
+  .dialog-in{padding:22px;max-height:calc(100vh - 80px);overflow-y:auto}
+  .dialog-in h2{font-family:var(--serif);margin:0 0 4px;font-size:24px;line-height:1.2}
+  .dialog-in .lede{color:var(--muted);margin:0 0 16px}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .field{display:flex;flex-direction:column;gap:5px}
+  .field.full{grid-column:1/-1}
+  .field label{font-size:12.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+  .field input,.field select,.field textarea{padding:10px 11px;border-radius:9px;border:1px solid var(--line-strong);background:#fff;min-height:42px}
+  .field textarea{min-height:90px;resize:vertical}
+  .field .err{color:var(--danger);font-size:13px;font-weight:600;min-height:18px;margin:0}
+  .dialog-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap}
+  .detail-meta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+  .detail-meta dt{font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+  .detail-meta dd{margin:2px 0 0;font-size:14.5px}
+  .notes-box{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px;white-space:pre-wrap}
+  .toasts{position:fixed;right:16px;bottom:16px;display:flex;flex-direction:column;gap:8px;z-index:120;max-width:min(380px,90vw)}
+  .toast{background:var(--ink);color:#f7f2e7;border-radius:11px;padding:12px 14px;box-shadow:var(--shadow-lg);display:flex;gap:10px;align-items:center}
+  .toast.error{background:var(--danger)}
+  .toast button{background:#fff;border:0;border-radius:7px;padding:5px 10px;font-weight:700;flex:none}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .import-errors{background:var(--danger-bg);border:1px solid #e8aea9;border-radius:10px;padding:10px 12px;margin-top:10px}
+  .import-errors ul{margin:6px 0 0;padding-left:20px}
+  dialog.wide{max-width:min(760px,95vw)}
+
+  @media (max-width:1080px){
+    .layout{grid-template-columns:1fr}
+    .activity{position:static;max-height:none}
+    .activity-list{max-height:320px}
+  }
+  @media (max-width:860px){
+    .board{grid-template-columns:repeat(4,minmax(250px,1fr));overflow-x:auto;padding-bottom:8px}
+    .col{max-height:none}
+    .form-grid,.detail-meta{grid-template-columns:1fr}
+    .topbar-in{gap:10px}
+    .count{margin-left:0;width:100%}
+  }
+  @media (max-width:640px){
+    .wrap{padding:0 12px}
+    .toolbar-in{padding-left:12px;padding-right:12px}
+    .project-grid{grid-template-columns:1fr}
+    .cal-grid{min-width:600px}
+    .cal-scroll{overflow-x:auto}
+    .cal-day{min-height:96px}
+    .view-tabs{flex-wrap:wrap}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to workspace</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">F</div>
+      <div>
+        <h1>Forge</h1>
+        <p>Project workbench</p>
+      </div>
+    </div>
+    <div class="top-search">
+      <label for="q">Search work</label>
+      <input id="q" type="search" placeholder="Search title, owner, tag, notes…" autocomplete="off">
+    </div>
+    <div class="top-actions">
+      <button class="btn btn-ghost-dark" id="btn-export" type="button">Export JSON</button>
+      <button class="btn btn-ghost-dark" id="btn-import" type="button">Import JSON</button>
+      <button class="btn btn-primary" id="btn-new-item" type="button">+ New work</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="projects" aria-labelledby="projects-title">
+    <div class="projects-head">
+      <h2 id="projects-title">Work areas</h2>
+      <p class="hint">Select a work area to filter all views. Manage projects below each card.</p>
+    </div>
+    <div class="project-grid" id="project-grid"></div>
+  </section>
+
+  <div class="toolbar" role="region" aria-label="Views and filters">
+    <div class="toolbar-in">
+      <div class="view-tabs" role="tablist" aria-label="Views" id="view-tabs">
+        <button type="button" role="tab" data-view="board" aria-selected="true">Board</button>
+        <button type="button" role="tab" data-view="table" aria-selected="false">Table</button>
+        <button type="button" role="tab" data-view="timeline" aria-selected="false">Calendar</button>
+      </div>
+      <div class="filter"><label for="f-project">Work area</label><select id="f-project"></select></div>
+      <div class="filter"><label for="f-status">Stage</label><select id="f-status"></select></div>
+      <div class="filter"><label for="f-priority">Priority</label><select id="f-priority"></select></div>
+      <div class="filter"><label for="f-owner">Owner</label><select id="f-owner"></select></div>
+      <div class="filter"><label for="f-tag">Tag</label><select id="f-tag"></select></div>
+      <div class="filter"><label for="f-sort">Board order</label>
+        <select id="f-sort">
+          <option value="due">Due date</option>
+          <option value="priority">Priority, then due</option>
+          <option value="title">Title A–Z</option>
+        </select>
+      </div>
+      <button class="clear-btn" id="btn-clear" type="button">Clear filters</button>
+      <span class="count" id="count" aria-live="polite"></span>
+    </div>
+  </div>
+
+  <main id="main" class="layout" tabindex="-1">
+    <div class="views">
+      <section class="view-panel" id="view-board" aria-label="Board view"></section>
+      <section class="view-panel" id="view-table" aria-label="Table view" hidden></section>
+      <section class="view-panel" id="view-timeline" aria-label="Calendar view" hidden></section>
+    </div>
+    <aside class="activity" aria-labelledby="activity-title">
+      <div class="activity-head">
+        <h2 id="activity-title">Activity log</h2>
+        <label for="f-activity" class="sr-only">Filter activity</label>
+        <select id="f-activity">
+          <option value="all">All activity</option>
+          <option value="created">Created</option>
+          <option value="edited">Edited</option>
+          <option value="status">Stage changes</option>
+          <option value="deleted">Deleted</option>
+          <option value="imported">Imports</option>
+        </select>
+      </div>
+      <div class="activity-list" id="activity-list" aria-live="polite" aria-label="Recent activity"></div>
+    </aside>
+  </main>
+
+  <footer>
+    Forge saves to this browser (local storage). Export JSON before clearing browser data. Use Board, Table, and Calendar together — they all update the same workspace, and the activity log records what changed and when.
+  </footer>
+</div>
+
+<!-- item form -->
+<dialog id="dlg-item" aria-labelledby="dlg-item-title">
+  <form class="dialog-in" id="form-item" novalidate>
+    <h2 id="dlg-item-title">New work item</h2>
+    <p class="lede" id="form-item-lede">Add a piece of work to a work area.</p>
+    <input type="hidden" id="it-id" name="id">
+    <div class="form-grid">
+      <div class="field full"><label for="it-title">Title *</label><input id="it-title" name="title" required minlength="3" maxlength="120"><p class="err" data-err="title"></p></div>
+      <div class="field"><label for="it-project">Work area *</label><select id="it-project" name="projectId" required></select><p class="err" data-err="projectId"></p></div>
+      <div class="field"><label for="it-status">Stage</label><select id="it-status" name="status"><option value="queue">Queued</option><option value="forge">In forge</option><option value="finishing">Finishing</option><option value="shipped">Shipped</option></select></div>
+      <div class="field"><label for="it-priority">Priority</label><select id="it-priority" name="priority"><option value="high">High</option><option value="medium" selected>Medium</option><option value="low">Low</option></select></div>
+      <div class="field"><label for="it-owner">Owner *</label><input id="it-owner" name="owner" required minlength="2" maxlength="60" list="owner-list" placeholder="e.g. Mara Ellison"><p class="err" data-err="owner"></p></div>
+      <div class="field"><label for="it-due">Due date</label><input id="it-due" name="due" type="date"><p class="err" data-err="due"></p></div>
+      <div class="field"><label for="it-tags">Tags (comma-separated)</label><input id="it-tags" name="tags" placeholder="research, design"><p class="err" data-err="tags"></p></div>
+      <div class="field"><label for="it-dep">Depends on</label><select id="it-dep" name="dependsOn"><option value="">— None —</option></select><p class="err" data-err="dependsOn"></p></div>
+      <div class="field full"><label for="it-notes">Notes</label><textarea id="it-notes" name="notes" maxlength="1200" placeholder="What does done look like?"></textarea></div>
+    </div>
+    <datalist id="owner-list"></datalist>
+    <div class="dialog-actions">
+      <button class="btn" type="button" data-close="dlg-item">Cancel</button>
+      <button class="btn btn-primary" type="submit" id="form-item-submit">Create work</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- project form -->
+<dialog id="dlg-project" aria-labelledby="dlg-project-title">
+  <form class="dialog-in" id="form-project" novalidate>
+    <h2 id="dlg-project-title">New work area</h2>
+    <p class="lede" id="form-project-lede">A work area groups related work items.</p>
+    <input type="hidden" id="pj-id" name="id">
+    <div class="form-grid">
+      <div class="field full"><label for="pj-name">Name *</label><input id="pj-name" name="name" required minlength="3" maxlength="80"><p class="err" data-err="name"></p></div>
+      <div class="field"><label for="pj-client">Client / context</label><input id="pj-client" name="client" maxlength="60" placeholder="e.g. City Archive"></div>
+      <div class="field"><label for="pj-accent">Accent</label><select id="pj-accent" name="accent"><option value="amber">Amber</option><option value="moss" selected>Moss</option><option value="rust">Rust</option><option value="slate">Slate</option></select></div>
+      <div class="field full"><label for="pj-desc">Description</label><textarea id="pj-desc" name="description" maxlength="400" placeholder="What is this work area for?"></textarea></div>
+    </div>
+    <div class="dialog-actions">
+      <button class="btn" type="button" data-close="dlg-project">Cancel</button>
+      <button class="btn btn-primary" type="submit" id="form-project-submit">Create work area</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- detail -->
+<dialog id="dlg-detail" aria-labelledby="dlg-detail-title" class="wide">
+  <div class="dialog-in" id="detail-body"></div>
+</dialog>
+
+<!-- confirm -->
+<dialog id="dlg-confirm" aria-labelledby="dlg-confirm-title">
+  <div class="dialog-in">
+    <h2 id="dlg-confirm-title">Confirm</h2>
+    <p class="lede" id="dlg-confirm-text"></p>
+    <div class="dialog-actions">
+      <button class="btn" type="button" id="btn-confirm-cancel">Cancel</button>
+      <button class="btn btn-danger" type="button" id="btn-confirm-ok">Delete</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- import -->
+<dialog id="dlg-import" aria-labelledby="dlg-import-title" class="wide">
+  <div class="dialog-in">
+    <h2 id="dlg-import-title">Import workspace JSON</h2>
+    <p class="lede">Import replaces the current workspace only if the file is fully valid. Invalid files are rejected and the current workspace is kept untouched.</p>
+    <div class="field">
+      <label for="imp-file">Choose a JSON file</label>
+      <input id="imp-file" type="file" accept=".json,application/json">
+    </div>
+    <div class="field" style="margin-top:12px">
+      <label for="imp-text">…or paste JSON here</label>
+      <textarea id="imp-text" rows="6" placeholder='{"schema_version":1,"projects":[],"items":[]}'></textarea>
+    </div>
+    <div id="imp-errors"></div>
+    <div class="dialog-actions">
+      <button class="btn" type="button" data-close="dlg-import">Cancel</button>
+      <button class="btn btn-primary" type="button" id="btn-do-import">Validate and import</button>
+    </div>
+  </div>
+</dialog>
+
+<div class="toasts" id="toasts" aria-live="polite" aria-atomic="false"></div>
+<div class="sr-only" id="live" aria-live="polite"></div>
+
+<script>
+"use strict";
+const STORAGE_KEY = "forge.workspace.v1";
+const STATUSES = [{id:"queue",label:"Queued"},{id:"forge",label:"In forge"},{id:"finishing",label:"Finishing"},{id:"shipped",label:"Shipped"}];
+const PRIORITIES = ["high","medium","low"];
+const ACCENTS = {amber:"#a06a06",moss:"#4d5f3a",rust:"#a63d2a",slate:"#43586b"};
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const MONTHS_FULL = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function uid(prefix){ const base = prefix.replace(/-$/, ""); return base + "-" + (crypto.randomUUID ? crypto.randomUUID().slice(0,8) : Math.random().toString(36).slice(2,10)); }
+function todayStr(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function isValidDue(s){ if(s===null||s===""||s===undefined) return true; if(!/^\d{4}-\d{2}-\d{2}$/.test(s)) return false; const [y,m,d]=s.split("-").map(Number); const dt=new Date(y,m-1,d); return dt.getFullYear()===y&&dt.getMonth()===m-1&&dt.getDate()===d; }
+function fmtDate(s){ if(!s) return "Unscheduled"; const [y,m,d]=s.split("-").map(Number); return d+" "+MONTHS[m-1]+" "+y; }
+function fmtTime(iso){ try{ const d=new Date(iso); if(isNaN(d)) return iso; return d.getDate()+" "+MONTHS[d.getMonth()]+" "+d.getFullYear()+", "+String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); }catch(e){ return String(iso); } }
+function isOverdue(it){ return it.due && it.status!=="shipped" && it.due < todayStr(); }
+function statusLabel(id){ const s=STATUSES.find(x=>x.id===id); return s?s.label:String(id); }
+function prioColor(p){ return p==="high"?"#b3261e":(p==="medium"?"#9a6a0a":"#4d5f3a"); }
+
+function seed(){
+  const at=(d,t="10:00")=>d+"T"+t+":00.000Z";
+  return {
+    version:1,
+    projects:[
+      {id:"p-heritage",name:"Heritage Atlas",client:"City Archive",accent:"amber",description:"A public digital atlas mapping the older quarters, built with the archive team for walkers, students, and the curious.",createdAt:at("2026-09-01")},
+      {id:"p-fieldkit",name:"Field Kit — Offline Maps",client:"Trail Trust",accent:"moss",description:"An offline-first maps companion for rangers and volunteers working beyond signal.",createdAt:at("2026-09-03")},
+      {id:"p-press",name:"Little Press — Season Catalogue",client:"Little Press",accent:"rust",description:"A 48-page print catalogue and matching web edition for the autumn season.",createdAt:at("2026-09-08")},
+      {id:"p-ops",name:"Studio Ops — New Workbench",client:"Forge Studio (internal)",accent:"slate",description:"Internal tooling to keep planning, review, and delivery in one honest place.",createdAt:at("2026-09-12")}
+    ],
+    items:[
+      {id:"i-01",projectId:"p-heritage",title:"Confirm archival image rights for 12 photographs",notes:"Rights cleared with the archive for print and web. Keep the clearance letters with the project record.",status:"shipped",priority:"high",owner:"Priya Nair",due:"2026-10-28",tags:["legal","review"],dependsOn:null,createdAt:at("2026-09-15"),updatedAt:at("2026-10-28","16:20")},
+      {id:"i-02",projectId:"p-heritage",title:"Map the old market quarter with the archive team",notes:"Walked the quarter with staff; boundary notes and photo refs filed in the shared folder.",status:"shipped",priority:"high",owner:"Mara Ellison",due:"2026-11-02",tags:["research"],dependsOn:"i-01",createdAt:at("2026-09-22"),updatedAt:at("2026-11-02","15:10")},
+      {id:"i-03",projectId:"p-heritage",title:"Storyboard the atlas opening sequence",notes:"Six panels. Opening move should feel like lifting a map off a table.",status:"finishing",priority:"high",owner:"Jules Park",due:"2026-11-12",tags:["design"],dependsOn:null,createdAt:at("2026-10-01"),updatedAt:at("2026-11-06","11:30")},
+      {id:"i-04",projectId:"p-heritage",title:"Draft captions for the river walk stops",notes:"Need to check place-name spellings with the archive before they lock.",status:"forge",priority:"medium",owner:"Ana Ruiz",due:"2026-11-18",tags:["copy","review"],dependsOn:"i-03",createdAt:at("2026-10-05"),updatedAt:at("2026-11-07","09:45")},
+      {id:"i-05",projectId:"p-heritage",title:"Accessibility pass on the map interface",notes:"Keyboard traversal, contrast, and plain-language labels. Book the assistive-tech session.",status:"queue",priority:"medium",owner:"Tom Owusu",due:"2026-12-01",tags:["design","review"],dependsOn:"i-04",createdAt:at("2026-10-12"),updatedAt:at("2026-10-12","10:05")},
+      {id:"i-06",projectId:"p-fieldkit",title:"Prototype offline tile pack for the north loop",notes:"Pack is built; needs a real-device check on the older handset before it can move on.",status:"forge",priority:"high",owner:"Tom Owusu",due:"2026-11-07",tags:["build"],dependsOn:null,createdAt:at("2026-10-02"),updatedAt:at("2026-11-08","14:15")},
+      {id:"i-07",projectId:"p-fieldkit",title:"Interview rangers about paper-andoff moments",notes:"Three rangers, one volunteer leader. Battery worries came up twice.",status:"shipped",priority:"medium",owner:"Ana Ruiz",due:"2026-10-30",tags:["research"],dependsOn:null,createdAt:at("2026-09-25"),updatedAt:at("2026-10-30","12:00")},
+      {id:"i-08",projectId:"p-fieldkit",title:"User test the one-thumb navigation",notes:"Five participants on the trail, two tasks, one spare battery each.",status:"queue",priority:"high",owner:"Mara Ellison",due:"2026-12-08",tags:["research","review"],dependsOn:"i-06",createdAt:at("2026-10-20"),updatedAt:at("2026-10-20","09:20")},
+      {id:"i-09",projectId:"p-fieldkit",title:"Write the battery-saver guidance card",notes:"Short card for the welcome screen. No jargon.",status:"queue",priority:"low",owner:"Priya Nair",due:null,tags:["copy"],dependsOn:null,createdAt:at("2026-10-28"),updatedAt:at("2026-10-28","13:40")},
+      {id:"i-10",projectId:"p-press",title:"Price the autumn print run with the printer",notes:"Two paper options. Awaiting the printer's revised quote.",status:"finishing",priority:"high",owner:"Mara Ellison",due:"2026-11-14",tags:["ops"],dependsOn:null,createdAt:at("2026-10-06"),updatedAt:at("2026-11-05","16:05")},
+      {id:"i-11",projectId:"p-press",title:"Lay out the 48-page catalogue spread proof",notes:"Proof is on the table. Check the folio folios before the bindery check.",status:"forge",priority:"medium",owner:"Jules Park",due:"2026-11-22",tags:["design"],dependsOn:null,createdAt:at("2026-10-15"),updatedAt:at("2026-11-04","10:15")},
+      {id:"i-12",projectId:"p-press",title:"Proofread the retrospective essay",notes:"Essay is with Ana. Printer's deadline is hard.",status:"queue",priority:"medium",owner:"Ana Ruiz",due:"2026-11-26",tags:["copy","review"],dependsOn:null,createdAt:at("2026-10-22"),updatedAt:at("2026-10-22","11:10")},
+      {id:"i-13",projectId:"p-press",title:"Confirm ISBN and barcode artwork",notes:"Confirm the new ISBN block with the press office.",status:"queue",priority:"low",owner:"Priya Nair",due:"2026-12-03",tags:["legal","ops"],dependsOn:null,createdAt:at("2026-10-29"),updatedAt:at("2026-10-29","15:00")},
+      {id:"i-14",projectId:"p-ops",title:"Draft the shared project brief template",notes:"One page: purpose, audience, done-means, risks. Now pinned in the studio.",status:"shipped",priority:"medium",owner:"Mara Ellison",due:"2026-11-05",tags:["ops"],dependsOn:null,createdAt:at("2026-09-18"),updatedAt:at("2026-11-05","17:30")},
+      {id:"i-15",projectId:"p-ops",title:"Sketch the activity log for client reviews",notes:"Sketch covers what changed, who changed it, and when. Needs a plain-language pass.",status:"finishing",priority:"medium",owner:"Priya Nair",due:"2026-11-16",tags:["design","build"],dependsOn:null,createdAt:at("2026-10-10"),updatedAt:at("2026-11-06","14:50")},
+      {id:"i-16",projectId:"p-ops",title:"Pilot the new status labels with the studio",notes:"Two-week pilot, then a retro on whether the labels help or just add ceremony.",status:"queue",priority:"low",owner:"Tom Owusu",due:"2026-12-10",tags:["review"],dependsOn:"i-15",createdAt:at("2026-11-01"),updatedAt:at("2026-11-01","09:00")},
+      {id:"i-17",projectId:"p-fieldkit",title:"Create the waypoint import from KML",notes:"Import works for points and tracks. Lines are out of scope for v1.",status:"shipped",priority:"high",owner:"Jules Park",due:"2026-11-04",tags:["build"],dependsOn:null,createdAt:at("2026-09-30"),updatedAt:at("2026-11-04","13:25")},
+      {id:"i-18",projectId:"p-heritage",title:"Rehearse the launch walkthrough for the archive",notes:"Walk the route with archive staff twice: once for content, once for timing.",status:"queue",priority:"high",owner:"Mara Ellison",due:"2026-12-15",tags:["outreach","review"],dependsOn:"i-05",createdAt:at("2026-11-02"),updatedAt:at("2026-11-02","16:45")}
+    ],
+    activity:[
+      {id:uid("a-"),at:at("2026-11-08","14:15"),kind:"status",message:"Moved “Prototype offline tile pack for the north loop” from Queued to In forge.",itemId:"i-06",itemTitle:"Prototype offline tile pack for the north loop"},
+      {id:uid("a-"),at:at("2026-11-06","14:50"),kind:"edited",message:"Updated “Sketch the activity log for client reviews” — stage, due date.",itemId:"i-15",itemTitle:"Sketch the activity log for client reviews"},
+      {id:uid("a-"),at:at("2026-11-02","16:45"),kind:"created",message:"Created “Rehearse the launch walkthrough for the archive” in Heritage Atlas.",itemId:"i-18",itemTitle:"Rehearse the launch walkthrough for the archive"},
+      {id:uid("a-"),at:at("2026-10-30","12:00"),kind:"status",message:"Moved “Interview rangers about paper-andoff moments” from Finishing to Shipped.",itemId:"i-07",itemTitle:"Interview rangers about paper-andoff moments"},
+      {id:uid("a-"),at:at("2026-09-12","10:00"),kind:"created",message:"Created work area “Studio Ops — New Workbench”.",itemTitle:"Studio Ops — New Workbench"}
+    ]
+  };
+}
+
+let state;
+let ui = {view:"board", query:"", project:"all", status:"all", priority:"all", owner:"all", tag:"all", boardSort:"due", tableKey:"due", tableDir:1, calCursor:"2026-11-01", activityFilter:"all"};
+let editingDetailId = null;
+let undoSnapshot = null;
+
+function load(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return null;
+    const data = JSON.parse(raw);
+    if(!data || !Array.isArray(data.projects) || !Array.isArray(data.items)) return null;
+    if(!Array.isArray(data.activity)) data.activity = [];
+    return data;
+  }catch(e){ return null; }
+}
+function save(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }catch(e){
+    toast("Could not save: browser storage is unavailable or full.", true);
+  }
+}
+function projectById(id){ return state.projects.find(p=>p.id===id) || null; }
+function itemById(id){ return state.items.find(i=>i.id===id) || null; }
+function allOwners(){ return [...new Set(state.items.map(i=>i.owner).filter(Boolean))].sort((a,b)=>a.localeCompare(b)); }
+function allTags(){ return [...new Set(state.items.flatMap(i=>i.tags||[]))].sort((a,b)=>a.localeCompare(b)); }
+
+function matches(it){
+  if(ui.project!=="all" && it.projectId!==ui.project) return false;
+  if(ui.status!=="all" && it.status!==ui.status) return false;
+  if(ui.priority!=="all" && it.priority!==ui.priority) return false;
+  if(ui.owner!=="all" && it.owner!==ui.owner) return false;
+  if(ui.tag!=="all" && !(it.tags||[]).includes(ui.tag)) return false;
+  if(ui.query){
+    const q = ui.query.trim().toLowerCase();
+    const proj = projectById(it.projectId);
+    const hay = [it.title, it.notes, it.owner, (proj?proj.name:""), ...(it.tags||[])].join(" ").toLowerCase();
+    if(!hay.includes(q)) return false;
+  }
+  return true;
+}
+function filteredItems(){ return state.items.filter(matches); }
+function isFiltering(){
+  return ui.query.trim()!=="" || ui.project!=="all" || ui.status!=="all" || ui.priority!=="all" || ui.owner!=="all" || ui.tag!=="all";
+}
+function prioRank(p){ return p==="high"?0:(p==="medium"?1:2); }
+function sortBoard(items){
+  const arr = [...items];
+  if(ui.boardSort==="title") arr.sort((a,b)=>a.title.localeCompare(b.title));
+  else if(ui.boardSort==="priority") arr.sort((a,b)=>prioRank(a.priority)-prioRank(b.priority) || ((a.due||"9999")<(b.due||"9999")?-1:1) || a.title.localeCompare(b.title));
+  else arr.sort((a,b)=>(a.due||"9999").localeCompare(b.due||"9999") || prioRank(a.priority)-prioRank(b.priority) || a.title.localeCompare(b.title));
+  return arr;
+}
+function sortTable(items){
+  const arr = [...items];
+  const k = ui.tableKey, d = ui.tableDir;
+  const val = (it) => {
+    if(k==="title") return it.title.toLowerCase();
+    if(k==="project"){ const p=projectById(it.projectId); return (p?p.name:"").toLowerCase(); }
+    if(k==="status") return STATUSES.findIndex(s=>s.id===it.status);
+    if(k==="priority") return prioRank(it.priority);
+    if(k==="owner") return it.owner.toLowerCase();
+    if(k==="due") return it.due||"9999-12-31";
+    return "";
+  };
+  arr.sort((a,b)=>{ const va=val(a), vb=val(b); let r=0; if(va<vb) r=-1; else if(va>vb) r=1; if(r===0) r=a.title.localeCompare(b.title); return r*d; });
+  return arr;
+}
+
+/* ---------- render ---------- */
+function renderAll(){ renderProjects(); renderFilterOptions(); renderBoard(); renderTable(); renderTimeline(); renderActivity(); renderCount(); }
+function renderCount(){
+  const total = state.items.length;
+  const shown = filteredItems().length;
+  $("#count").textContent = isFiltering() ? "Showing "+shown+" of "+total+" items" : total+" items across "+state.projects.length+" work areas";
+}
+function renderProjects(){
+  const grid = $("#project-grid");
+  const cards = state.projects.map(p=>{
+    const items = state.items.filter(i=>i.projectId===p.id);
+    const open = items.filter(i=>i.status!=="shipped").length;
+    const accent = ACCENTS[p.accent]||ACCENTS.slate;
+    const pressed = ui.project===p.id;
+    return `<article class="project-card" style="--accent:${esc(accent)}" aria-label="${esc(p.name)}">
+      <div>
+        <h3><span class="dot" aria-hidden="true"></span>${esc(p.name)}</h3>
+        <div class="client">${esc(p.client||"No client listed")}</div>
+      </div>
+      <p class="desc">${esc(p.description||"No description yet.")}</p>
+      <div class="project-meta"><span><strong>${open}</strong> open</span><span><strong>${items.length}</strong> total</span><span>${items.filter(isOverdue).length} overdue</span></div>
+      <div class="project-actions">
+        <button class="btn btn-small" type="button" data-act="filter" data-id="${esc(p.id)}" aria-pressed="${pressed}">${pressed?"Showing ✓":"Show"}</button>
+        <button class="btn btn-small" type="button" data-act="edit-project" data-id="${esc(p.id)}">Edit</button>
+        <button class="btn btn-small" type="button" data-act="delete-project" data-id="${esc(p.id)}">Delete</button>
+      </div>
+    </article>`;
+  }).join("");
+  grid.innerHTML = cards + `<button class="project-card new-project-card" type="button" data-act="new-project">
+      <span aria-hidden="true" style="font-size:28px">+</span><span>New work area</span>
+      <span style="font-weight:400;font-size:13px">Projects and work items stay in sync.</span></button>`;
+  $$("#project-grid [data-act]").forEach(btn=>{
+    btn.addEventListener("click", (e)=>{
+      e.stopPropagation();
+      const act = btn.dataset.act, id = btn.dataset.id;
+      if(act==="filter"){
+        ui.project = ui.project===id ? "all" : id;
+        $("#f-project").value = ui.project;
+        renderAll();
+        announce(ui.project==="all" ? "Showing all work areas." : "Filtering to "+btn.closest(".project-card").querySelector("h3").textContent.trim());
+      }else if(act==="edit-project") openProjectForm(id);
+      else if(act==="delete-project") requestDeleteProject(id);
+      else if(act==="new-project") openProjectForm(null);
+    });
+  });
+}
+function renderFilterOptions(){
+  const fp = $("#f-project");
+  const prev = fp.value || ui.project;
+  fp.innerHTML = `<option value="all">All work areas</option>` + state.projects.map(p=>`<option value="${esc(p.id)}">${esc(p.name)}</option>`).join("");
+  fp.value = state.projects.some(p=>p.id===prev) ? prev : "all";
+  if(fp.value!==prev) ui.project = fp.value;
+
+  const fs = $("#f-status");
+  fs.innerHTML = `<option value="all">All stages</option>` + STATUSES.map(s=>`<option value="${esc(s.id)}">${esc(s.label)}</option>`).join("");
+  fs.value = ui.status;
+
+  const fprio = $("#f-priority");
+  fprio.innerHTML = `<option value="all">All priorities</option>` + PRIORITIES.map(p=>`<option value="${p}">${p[0].toUpperCase()+p.slice(1)}</option>`).join("");
+  fprio.value = ui.priority;
+
+  const fo = $("#f-owner");
+  const owners = allOwners();
+  fo.innerHTML = `<option value="all">All owners</option>` + owners.map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join("");
+  if(!owners.includes(ui.owner)) ui.owner="all";
+  fo.value = ui.owner;
+
+  const ft = $("#f-tag");
+  const tags = allTags();
+  ft.innerHTML = `<option value="all">All tags</option>` + tags.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join("");
+  if(!tags.includes(ui.tag)) ui.tag="all";
+  ft.value = ui.tag;
+}
+function overdueBadge(it){ return isOverdue(it) ? ` <span class="due overdue">(overdue)</span>` : ""; }
+function depBadge(it){
+  if(!it.dependsOn) return "";
+  const d = itemById(it.dependsOn);
+  if(!d) return "";
+  return `<div class="dep">Depends on: <button class="chip-link" style="border:0;background:none;color:var(--ember-dark);font-weight:700;padding:0;cursor:pointer;text-decoration:underline" data-open="${esc(d.id)}" type="button">${esc(d.title)}</button></div>`;
+}
+function cardHTML(it){
+  const p = projectById(it.projectId);
+  const others = STATUSES.filter(s=>s.id!==it.status);
+  const moveOpts = STATUSES.map(s=>`<option value="${esc(s.id)}" ${s.id===it.status?"selected":""}>${esc(s.label)}</option>`).join("");
+  return `<article class="card" draggable="true" data-id="${esc(it.id)}" tabindex="0" role="button" aria-label="${esc(it.title)}. Press Enter for details." style="--prio:${esc(prioColor(it.priority))}">
+    <p class="card-proj">${esc(p?p.name:"—")}</p>
+    <p class="card-title">${esc(it.title)}</p>
+    ${it.notes?`<p class="card-notes">${esc(it.notes)}</p>`:""}
+    <div class="card-row">
+      <span class="pill ${esc(it.priority)}">${esc(it.priority)}</span>
+      <span class="pill status-${esc(it.status)}">${esc(statusLabel(it.status))}</span>
+      <span class="due">${it.due?fmtDate(it.due):"Unscheduled"}${overdueBadge(it)}</span>
+    </div>
+    <div class="card-row"><span class="due">${esc(it.owner)}</span>${(it.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>
+    ${depBadge(it)}
+    <div class="card-footer">
+      <button class="btn btn-small" type="button" data-details="${esc(it.id)}">Details</button>
+      <label for="mv-${esc(it.id)}">Move</label>
+      <select id="mv-${esc(it.id)}" data-move="${esc(it.id)}" aria-label="Move ${esc(it.title)} to stage">${moveOpts}</select>
+    </div>
+  </article>`;
+}
+function renderBoard(){
+  const wrap = $("#view-board");
+  const items = filteredItems();
+  if(items.length===0 && state.items.length>0){
+    wrap.innerHTML = `<div class="empty"><strong>No work matches these filters</strong><p>Try a different search or clear the filters to see everything.</p><button class="btn btn-primary" type="button" id="empty-clear">Clear filters</button></div>`;
+    $("#empty-clear").addEventListener("click", clearFilters);
+    return;
+  }
+  if(state.items.length===0){
+    wrap.innerHTML = `<div class="empty"><strong>No work yet</strong><p>Create your first work item to get moving.</p><button class="btn btn-primary" type="button" id="empty-new">+ New work</button></div>`;
+    $("#empty-new").addEventListener("click", ()=>openItemForm(null));
+    return;
+  }
+  const cols = STATUSES.map(s=>{
+    const colItems = sortBoard(items.filter(i=>i.status===s.id));
+    const cards = colItems.length ? colItems.map(cardHTML).join("") : `<p style="color:var(--muted);font-size:13px;padding:6px 4px;margin:0">Nothing in this stage.</p>`;
+    return `<section class="col" data-status="${esc(s.id)}" aria-label="${esc(s.label)} column, ${colItems.length} items">
+      <div class="col-head"><h3>${esc(s.label)}</h3><span class="n" aria-label="${colItems.length} items">${colItems.length}</span></div>
+      <div class="col-sub">Drop cards here, or use the Move menu.</div>
+      <div class="col-body" data-col="${esc(s.id)}">${cards}</div>
+    </section>`;
+  }).join("");
+  wrap.innerHTML = `<div class="board" role="group" aria-label="Board">${cols}</div>`;
+  // wire cards
+  $$("#view-board .card").forEach(card=>{
+    card.addEventListener("keydown", (e)=>{
+      if(e.target!==card) return;
+      if(e.key==="Enter" || e.key===" "){ e.preventDefault(); openDetail(card.dataset.id); }
+    });
+    card.addEventListener("click", (e)=>{
+      if(e.target.closest("select,button")) return;
+      openDetail(card.dataset.id);
+    });
+    card.addEventListener("dragstart", (e)=>{
+      e.dataTransfer.setData("text/plain", card.dataset.id);
+      e.dataTransfer.effectAllowed="move";
+    });
+  });
+  $$("#view-board [data-details]").forEach(b=>b.addEventListener("click", ()=>openDetail(b.dataset.details)));
+  $$("#view-board [data-open]").forEach(b=>b.addEventListener("click", (e)=>{ e.stopPropagation(); openDetail(b.dataset.open); }));
+  $$("#view-board [data-move]").forEach(sel=>sel.addEventListener("change", ()=>{
+    changeStatus(sel.dataset.move, sel.value, "moved");
+  }));
+  $$("#view-board .col-body").forEach(body=>{
+    body.addEventListener("dragover", (e)=>{ e.preventDefault(); body.classList.add("drop"); e.dataTransfer.dropEffect="move"; });
+    body.addEventListener("dragleave", ()=>body.classList.remove("drop"));
+    body.addEventListener("drop", (e)=>{
+      e.preventDefault(); body.classList.remove("drop");
+      const id = e.dataTransfer.getData("text/plain");
+      const to = body.dataset.col;
+      if(id && itemById(id) && itemById(id).status!==to) changeStatus(id, to, "moved");
+    });
+  });
+}
+function renderTable(){
+  const wrap = $("#view-table");
+  const items = filteredItems();
+  const arrow = (key) => ui.tableKey===key ? (ui.tableDir===1?" ↑":" ↓") : "";
+  if(items.length===0){
+    wrap.innerHTML = `<div class="empty"><strong>No work matches these filters</strong><p>Try a different search or clear the filters.</p><button class="btn btn-primary" type="button" id="t-clear">Clear filters</button></div>`;
+    $("#t-clear").addEventListener("click", clearFilters);
+    return;
+  }
+  const rows = sortTable(items).map(it=>{
+    const p = projectById(it.projectId);
+    const d = it.dependsOn ? itemById(it.dependsOn) : null;
+    return `<tr tabindex="0" data-id="${esc(it.id)}" aria-label="${esc(it.title)}">
+      <td><div class="cell-title">${esc(it.title)}</div><div class="cell-sub">${esc(it.notes||"")}</div>${(it.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join(" ")}</td>
+      <td>${esc(p?p.name:"—")}</td>
+      <td><span class="pill status-${esc(it.status)}">${esc(statusLabel(it.status))}</span></td>
+      <td><span class="pill ${esc(it.priority)}">${esc(it.priority)}</span></td>
+      <td>${esc(it.owner)}</td>
+      <td><span class="due ${isOverdue(it)?"overdue":""}">${it.due?fmtDate(it.due):"Unscheduled"}</span>${overdueBadge(it)}</td>
+      <td>${d?`<span class="dep">Depends on: <b>${esc(d.title)}</b></span>`:"—"}</td>
+      <td><div class="row-actions">
+        <button class="btn" type="button" data-v="${esc(it.id)}">View</button>
+        <button class="btn" type="button" data-e="${esc(it.id)}">Edit</button>
+        <button class="btn" type="button" data-d="${esc(it.id)}">Delete</button>
+      </div></td>
+    </tr>`;
+  }).join("");
+  wrap.innerHTML = `<div class="table-scroll"><table>
+    <caption class="sr-only">Work items, sortable by column. Activate a row to open details.</caption>
+    <thead><tr>
+      <th aria-sort="${ui.tableKey==="title"?(ui.tableDir===1?"ascending":"descending"):"none"}"><button type="button" data-sort="title">Title${arrow("title")}</button></th>
+      <th aria-sort="${ui.tableKey==="project"?(ui.tableDir===1?"ascending":"descending"):"none"}"><button type="button" data-sort="project">Work area${arrow("project")}</button></th>
+      <th aria-sort="${ui.tableKey==="status"?(ui.tableDir===1?"ascending":"descending"):"none"}"><button type="button" data-sort="status">Stage${arrow("status")}</button></th>
+      <th aria-sort="${ui.tableKey==="priority"?(ui.tableDir===1?"ascending":"descending"):"none"}"><button type="button" data-sort="priority">Priority${arrow("priority")}</button></th>
+      <th aria-sort="${ui.tableKey==="owner"?(ui.tableDir===1?"ascending":"descending"):"none"}"><button type="button" data-sort="owner">Owner${arrow("owner")}</button></th>
+      <th aria-sort="${ui.tableKey==="due"?(ui.tableDir===1?"ascending":"descending"):"none"}"><button type="button" data-sort="due">Due${arrow("due")}</button></th>
+      <th>Depends on</th><th>Actions</th>
+    </tr></thead><tbody>${rows}</tbody></table></div>`;
+  $$("#view-table [data-sort]").forEach(b=>b.addEventListener("click", ()=>{
+    const k=b.dataset.sort;
+    if(ui.tableKey===k) ui.tableDir*=-1; else { ui.tableKey=k; ui.tableDir=1; }
+    renderTable();
+    const nb = $(`#view-table [data-sort="${k}"]`); if(nb) nb.focus();
+  }));
+  $$("#view-table tbody tr").forEach(tr=>{
+    tr.addEventListener("click", (e)=>{ if(!e.target.closest("button")) openDetail(tr.dataset.id); });
+    tr.addEventListener("keydown", (e)=>{ if((e.key==="Enter"||e.key===" ") && !e.target.closest("button")){ e.preventDefault(); openDetail(tr.dataset.id); } });
+  });
+  $$("#view-table [data-v]").forEach(b=>b.addEventListener("click", ()=>openDetail(b.dataset.v)));
+  $$("#view-table [data-e]").forEach(b=>b.addEventListener("click", ()=>openItemForm(b.dataset.e)));
+  $$("#view-table [data-d]").forEach(b=>b.addEventListener("click", ()=>requestDeleteItem(b.dataset.d)));
+}
+function parseYmd(s){ const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); }
+function toYmd(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function renderTimeline(){
+  const wrap = $("#view-timeline");
+  const items = filteredItems();
+  const cursor = parseYmd(ui.calCursor);
+  const year = cursor.getFullYear(), month = cursor.getMonth();
+  const first = new Date(year, month, 1);
+  let startDay = (first.getDay()+6)%7; // Monday start
+  const start = new Date(year, month, 1 - startDay);
+  const cells = [];
+  for(let i=0;i<42;i++){
+    const d = new Date(start.getFullYear(), start.getMonth(), start.getDate()+i);
+    const ymd = toYmd(d);
+    const dayItems = items.filter(it=>it.due===ymd).sort((a,b)=>prioRank(a.priority)-prioRank(b.priority)||a.title.localeCompare(b.title));
+    const shown = dayItems.slice(0,3);
+    const chips = shown.map(it=>`<button type="button" class="cal-chip" style="--prio:${esc(prioColor(it.priority))}" data-open="${esc(it.id)}" title="${esc(it.title)}">${esc(it.title)}</button>`).join("") + (dayItems.length>3?`<div class="cal-more">+${dayItems.length-3} more</div>`:"");
+    const muted = d.getMonth()!==month;
+    const today = ymd===todayStr();
+    cells.push(`<div class="cal-day ${muted?"muted":""} ${today?"today":""}" aria-label="${d.getDate()} ${MONTHS_FULL[d.getMonth()]} ${d.getFullYear()}${today?" (today)":""}">
+      <span class="cal-date">${d.getDate()}</span>${chips}</div>`);
+  }
+  const unscheduled = items.filter(i=>!i.due).sort((a,b)=>a.title.localeCompare(b.title));
+  const dows = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map(d=>`<div class="cal-dow">${d}</div>`).join("");
+  if(items.length===0){
+    wrap.innerHTML = `<div class="empty"><strong>No work matches these filters</strong><p>Try a different search or clear the filters.</p><button class="btn btn-primary" type="button" id="c-clear">Clear filters</button></div>`;
+    $("#c-clear").addEventListener("click", clearFilters);
+    return;
+  }
+  wrap.innerHTML = `
+    <div class="cal-head">
+      <h3>${MONTHS_FULL[month]} ${year}</h3>
+      <span class="due">Items appear on their due date. Unscheduled work is listed below.</span>
+      <div class="cal-nav">
+        <button class="btn btn-small" type="button" id="cal-prev" aria-label="Previous month">‹ Prev</button>
+        <button class="btn btn-small" type="button" id="cal-today">Today</button>
+        <button class="btn btn-small" type="button" id="cal-next" aria-label="Next month">Next ›</button>
+      </div>
+    </div>
+    <div class="cal-scroll"><div class="cal-grid" role="grid" aria-label="Calendar for ${MONTHS_FULL[month]} ${year}">${dows}${cells.join("")}</div></div>
+    <section class="unscheduled" aria-label="Unscheduled work">
+      <h4>Unscheduled (${unscheduled.length})</h4>
+      ${unscheduled.length?`<div class="chip-list">${unscheduled.map(it=>`<span class="chip"><span class="pill ${esc(it.priority)}">${esc(it.priority)}</span> ${esc(it.title)} <button type="button" data-open="${esc(it.id)}">Open</button></span>`).join("")}</div>`:`<p style="margin:0;color:var(--muted)">Every item has a due date.</p>`}
+    </section>`;
+  $("#cal-prev").addEventListener("click", ()=>{ const d=new Date(year,month-1,1); ui.calCursor=toYmd(d); renderTimeline(); });
+  $("#cal-next").addEventListener("click", ()=>{ const d=new Date(year,month+1,1); ui.calCursor=toYmd(d); renderTimeline(); });
+  $("#cal-today").addEventListener("click", ()=>{ ui.calCursor=todayStr().slice(0,7)+"-01"; renderTimeline(); });
+  $$("#view-timeline [data-open]").forEach(b=>b.addEventListener("click", ()=>openDetail(b.dataset.open)));
+}
+function renderActivity(){
+  const list = $("#activity-list");
+  let acts = [...state.activity].sort((a,b)=>String(b.at).localeCompare(String(a.at)));
+  if(ui.activityFilter!=="all") acts = acts.filter(a=>a.kind===ui.activityFilter);
+  list.innerHTML = acts.length ? acts.slice(0,80).map(a=>{
+    const icons = {created:"+",edited:"✎",status:"⇄",deleted:"×",imported:"⇪"};
+    return `<div class="act"><div class="act-ico" aria-hidden="true">${icons[a.kind]||"•"}</div><div><p class="act-msg">${esc(a.message)}</p><div class="act-time">${fmtTime(a.at)} · ${esc(a.kind)}</div></div></div>`;
+  }).join("") : `<p class="act-empty">No activity yet. Create, edit, or move work and it will be recorded here.</p>`;
+}
+
+/* ---------- mutations ---------- */
+function nowISO(){ return new Date().toISOString(); }
+function addActivity(kind, message, itemId, itemTitle){
+  state.activity.push({id:uid("a-"), at:nowISO(), kind, message, itemId:itemId||null, itemTitle:itemTitle||null});
+}
+function changeStatus(id, to, how){
+  const it = itemById(id); if(!it) return;
+  const from = it.status;
+  if(from===to) return;
+  it.status = to; it.updatedAt = nowISO();
+  addActivity("status", `Moved “${it.title}” from ${statusLabel(from)} to ${statusLabel(to)}.`, it.id, it.title);
+  save(); renderAll();
+  toast(`Moved “${it.title}” to ${statusLabel(to)}.`);
+  announce(`${it.title} moved to ${statusLabel(to)}.`);
+}
+function createItem(data){
+  const it = {id:uid("i-"), ...data, createdAt:nowISO(), updatedAt:nowISO()};
+  state.items.push(it);
+  const p = projectById(it.projectId);
+  addActivity("created", `Created “${it.title}” in ${p?p.name:""}.`, it.id, it.title);
+  save(); renderAll();
+  toast(`Created “${it.title}”.`);
+}
+function editItem(id, data){
+  const it = itemById(id); if(!it) return;
+  const changed = [];
+  const fields = {title:"title", projectId:"work area", status:"stage", priority:"priority", owner:"owner", due:"due date"};
+  for(const k in fields){
+    const was = it[k] ?? "";
+    const val = data[k] ?? "";
+    if(String(was)!==String(val)) changed.push(fields[k]);
+  }
+  if(JSON.stringify(it.tags||[])!==JSON.stringify(data.tags||[])) changed.push("tags");
+  if((it.notes||"")!==(data.notes||"")) changed.push("notes");
+  if((it.dependsOn||"")!==(data.dependsOn||"")) changed.push("dependency");
+  Object.assign(it, data, {updatedAt:nowISO()});
+  const what = changed.length ? changed.join(", ") : "details";
+  addActivity("edited", `Updated “${it.title}” — ${what}.`, it.id, it.title);
+  save(); renderAll();
+  toast(`Updated “${it.title}”.`);
+  if(editingDetailId===id) openDetail(id, true);
+}
+function deleteItem(id){
+  const it = itemById(id); if(!it) return;
+  undoSnapshot = {type:"item", item: JSON.parse(JSON.stringify(it)), index: state.items.indexOf(it)};
+  state.items = state.items.filter(x=>x.id!==id);
+  addActivity("deleted", `Deleted “${it.title}”.`, null, it.title);
+  save(); renderAll();
+  toast(`Deleted “${it.title}”.`, false, undoDelete);
+}
+function deleteProject(id){
+  const p = projectById(id); if(!p) return;
+  const removedItems = state.items.filter(i=>i.projectId===id);
+  undoSnapshot = {type:"project", project: JSON.parse(JSON.stringify(p)), items: JSON.parse(JSON.stringify(removedItems))};
+  state.items = state.items.filter(i=>i.projectId!==id);
+  state.projects = state.projects.filter(x=>x.id!==id);
+  if(ui.project===id){ ui.project="all"; $("#f-project").value="all"; }
+  addActivity("deleted", `Deleted work area “${p.name}” and ${removedItems.length} item${removedItems.length===1?"":"s"}.`, null, p.name);
+  save(); renderAll();
+  toast(`Deleted “${p.name}”.`, false, undoDelete);
+}
+function undoDelete(){
+  if(!undoSnapshot) return;
+  if(undoSnapshot.type==="item"){
+    state.items.splice(Math.min(undoSnapshot.index, state.items.length), 0, undoSnapshot.item);
+    addActivity("created", `Restored “${undoSnapshot.item.title}” (undo delete).`, undoSnapshot.item.id, undoSnapshot.item.title);
+  }else{
+    state.projects.push(undoSnapshot.project);
+    for(const it of undoSnapshot.items) if(!itemById(it.id)) state.items.push(it);
+    addActivity("created", `Restored work area “${undoSnapshot.project.name}” (undo delete).`, null, undoSnapshot.project.name);
+  }
+  undoSnapshot=null; save(); renderAll(); toast("Restored.");
+}
+function createProject(data){
+  const p = {id:uid("p-"), ...data, createdAt:nowISO()};
+  state.projects.push(p);
+  addActivity("created", `Created work area “${p.name}”.`, null, p.name);
+  save(); renderAll(); toast(`Created “${p.name}”.`);
+}
+function editProject(id, data){
+  const p = projectById(id); if(!p) return;
+  Object.assign(p, data);
+  addActivity("edited", `Updated work area “${p.name}”.`, null, p.name);
+  save(); renderAll(); toast(`Updated “${p.name}”.`);
+}
+
+/* ---------- dialogs ---------- */
+function showDlg(id){ const d=$("#"+id); if(typeof d.showModal==="function") d.showModal(); else d.setAttribute("open",""); }
+function closeDlg(id){ const d=$("#"+id); if(d.close) { try{ d.close(); }catch(e){} } d.removeAttribute("open"); }
+let lastFocus = null;
+function openItemForm(editId){
+  lastFocus = document.activeElement;
+  const dlg = $("#dlg-item"), form = $("#form-item");
+  form.reset(); clearFormErrors(form);
+  const projSel = $("#it-project");
+  projSel.innerHTML = state.projects.map(p=>`<option value="${esc(p.id)}">${esc(p.name)}</option>`).join("");
+  $("#owner-list").innerHTML = allOwners().map(o=>`<option value="${esc(o)}">`).join("");
+  fillDepOptions(editId||null);
+  if(editId){
+    const it = itemById(editId); if(!it) return;
+    $("#dlg-item-title").textContent = "Edit work item";
+    $("#form-item-lede").textContent = "Update this piece of work. Dates use YYYY-MM-DD.";
+    $("#form-item-submit").textContent = "Save changes";
+    $("#it-id").value = it.id; $("#it-title").value = it.title; $("#it-project").value = it.projectId;
+    $("#it-status").value = it.status; $("#it-priority").value = it.priority; $("#it-owner").value = it.owner;
+    $("#it-due").value = it.due||""; $("#it-tags").value = (it.tags||[]).join(", "); $("#it-dep").value = it.dependsOn||""; $("#it-notes").value = it.notes||"";
+  }else{
+    $("#dlg-item-title").textContent = "New work item";
+    $("#form-item-lede").textContent = "Add a piece of work to a work area.";
+    $("#form-item-submit").textContent = "Create work";
+    $("#it-id").value = "";
+    $("#it-status").value = "queue"; $("#it-priority").value = "medium"; $("#it-due").value = "";
+  }
+  showDlg("dlg-item");
+  $("#it-title").focus();
+}
+function fillDepOptions(excludeId){
+  const sel = $("#it-dep");
+  const cur = sel.value;
+  sel.innerHTML = `<option value="">— None —</option>` + state.items.filter(i=>i.id!==excludeId).map(i=>{
+    const p=projectById(i.projectId);
+    return `<option value="${esc(i.id)}">${esc(i.title)} (${esc(p?p.name:"")})</option>`;
+  }).join("");
+  if(cur) sel.value = cur;
+}
+function clearFormErrors(form){ $$("[data-err]", form).forEach(el=>el.textContent=""); }
+function setErr(form, name, msg){ const el=$(`[data-err="${name}"]`, form); if(el) el.textContent=msg; }
+function openProjectForm(editId){
+  lastFocus = document.activeElement;
+  const form = $("#form-project"); form.reset(); clearFormErrors(form);
+  if(editId){
+    const p = projectById(editId); if(!p) return;
+    $("#dlg-project-title").textContent = "Edit work area";
+    $("#form-project-submit").textContent = "Save changes";
+    $("#pj-id").value=p.id; $("#pj-name").value=p.name; $("#pj-client").value=p.client||""; $("#pj-accent").value=p.accent||"moss"; $("#pj-desc").value=p.description||"";
+  }else{
+    $("#dlg-project-title").textContent = "New work area";
+    $("#form-project-submit").textContent = "Create work area";
+    $("#pj-id").value=""; $("#pj-accent").value="moss";
+  }
+  showDlg("dlg-project"); $("#pj-name").focus();
+}
+function openDetail(id, keepOpen){
+  const it = itemById(id); if(!it) return;
+  editingDetailId = id;
+  const p = projectById(it.projectId);
+  const dep = it.dependsOn ? itemById(it.dependsOn) : null;
+  const body = $("#detail-body");
+  body.innerHTML = `
+    <h2 id="dlg-detail-title">${esc(it.title)}</h2>
+    <p class="lede">${esc(p?p.name:"")}${p&&p.client?" — "+esc(p.client):""}</p>
+    <div class="card-row" style="margin-bottom:6px">
+      <span class="pill ${esc(it.priority)}">${esc(it.priority)} priority</span>
+      <span class="pill status-${esc(it.status)}">${esc(statusLabel(it.status))}</span>
+      <span class="due ${isOverdue(it)?"overdue":""}">${it.due?fmtDate(it.due):"Unscheduled"}${overdueBadge(it)}</span>
+    </div>
+    <dl class="detail-meta">
+      <div><dt>Owner</dt><dd>${esc(it.owner)}</dd></div>
+      <div><dt>Tags</dt><dd>${(it.tags||[]).length?it.tags.map(esc).join(", "):"—"}</dd></div>
+      <div><dt>Depends on</dt><dd>${dep?`<button type="button" class="linkbtn" data-dep="${esc(dep.id)}" style="border:0;background:none;color:var(--ember-dark);font-weight:700;padding:0;text-decoration:underline;cursor:pointer">${esc(dep.title)}</button>`:"None"}</dd></div>
+      <div><dt>Last updated</dt><dd>${fmtTime(it.updatedAt||it.createdAt)}</dd></div>
+    </dl>
+    <div class="field">
+      <label for="dt-status">Stage (keyboard alternative to dragging)</label>
+      <select id="dt-status">${STATUSES.map(s=>`<option value="${esc(s.id)}" ${s.id===it.status?"selected":""}>${esc(s.label)}</option>`).join("")}</select>
+    </div>
+    <h3 style="font-family:var(--serif);margin:16px 0 6px">Notes</h3>
+    <div class="notes-box">${esc(it.notes||"No notes yet.")}</div>
+    <div class="dialog-actions">
+      <button class="btn btn-danger" type="button" id="dt-delete">Delete</button>
+      <span style="flex:1"></span>
+      <button class="btn" type="button" id="dt-close">Close</button>
+      <button class="btn btn-primary" type="button" id="dt-edit">Edit details</button>
+    </div>`;
+  $("#dt-status").addEventListener("change", (e)=>{ closeDlg("dlg-detail"); changeStatus(it.id, e.target.value, "moved"); });
+  $("#dt-close").addEventListener("click", ()=>closeDlg("dlg-detail"));
+  $("#dt-edit").addEventListener("click", ()=>{ closeDlg("dlg-detail"); openItemForm(it.id); });
+  $("#dt-delete").addEventListener("click", ()=>{ closeDlg("dlg-detail"); requestDeleteItem(it.id); });
+  const depBtn = $("[data-dep]", body);
+  if(depBtn) depBtn.addEventListener("click", ()=>openDetail(depBtn.dataset.dep));
+  if(!keepOpen){ showDlg("dlg-detail"); $("#dt-status").focus(); }
+}
+let confirmCb = null;
+function confirmDialog(title, text, okLabel, cb){
+  $("#dlg-confirm-title").textContent = title;
+  $("#dlg-confirm-text").textContent = text;
+  $("#btn-confirm-ok").textContent = okLabel||"Delete";
+  confirmCb = cb;
+  showDlg("dlg-confirm");
+  $("#btn-confirm-ok").focus();
+}
+function requestDeleteItem(id){
+  const it=itemById(id); if(!it) return;
+  confirmDialog("Delete this work item?", `“${it.title}” will be removed. You can undo this right after deleting.`, "Delete", ()=>{ deleteItem(id); });
+}
+function requestDeleteProject(id){
+  const p=projectById(id); if(!p) return;
+  const n = state.items.filter(i=>i.projectId===id).length;
+  confirmDialog("Delete this work area?", `“${p.name}” and its ${n} item${n===1?"":"s"} will be removed.`, "Delete", ()=>{ deleteProject(id); });
+}
+
+/* ---------- toast / announce ---------- */
+function toast(msg, isError, undoFn){
+  const box = $("#toasts");
+  const el = document.createElement("div");
+  el.className = "toast" + (isError?" error":"");
+  el.innerHTML = `<span>${esc(msg)}</span>`;
+  if(undoFn){
+    const b=document.createElement("button"); b.type="button"; b.textContent="Undo";
+    b.addEventListener("click", ()=>{ undoFn(); el.remove(); });
+    el.appendChild(b);
+  }
+  box.appendChild(el);
+  setTimeout(()=>el.remove(), undoFn?7000:4200);
+}
+function announce(msg){ $("#live").textContent = msg; }
+
+/* ---------- export / import ---------- */
+function exportJSON(){
+  const payload = {schema_version:1, exportedAt:nowISO(), projects:state.projects, items:state.items, activity:state.activity};
+  const blob = new Blob([JSON.stringify(payload,null,2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "forge-workspace.json";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 1000);
+  toast("Exported workspace JSON.");
+}
+function validateImport(data){
+  const errors = [];
+  if(!data || typeof data!=="object" || Array.isArray(data)) return {ok:false, errors:["Not an object."]};
+  if(data.schema_version!==1) errors.push("schema_version must be 1.");
+  if(!Array.isArray(data.projects)) errors.push("projects must be an array.");
+  if(!Array.isArray(data.items)) errors.push("items must be an array.");
+  if(errors.length) return {ok:false, errors};
+  const pids = new Set();
+  data.projects.forEach((p,i)=>{
+    if(!p||typeof p!=="object") { errors.push(`projects[${i}]: not an object.`); return; }
+    if(!p.id||typeof p.id!=="string") errors.push(`projects[${i}]: id is required.`);
+    else if(pids.has(p.id)) errors.push(`projects[${i}]: duplicate id “${p.id}”.`);
+    else pids.add(p.id);
+    if(!p.name||typeof p.name!=="string"||p.name.trim().length<3) errors.push(`projects[${i}]: name must be at least 3 characters.`);
+    if(p.client!==undefined&&typeof p.client!=="string") errors.push(`projects[${i}]: client must be a string.`);
+    if(p.accent!==undefined&&!ACCENTS[p.accent]) errors.push(`projects[${i}]: accent must be amber, moss, rust, or slate.`);
+    if(p.description!==undefined&&typeof p.description!=="string") errors.push(`projects[${i}]: description must be a string.`);
+  });
+  const iids = new Set();
+  data.items.forEach((it,i)=>{
+    if(!it||typeof it!=="object") { errors.push(`items[${i}]: not an object.`); return; }
+    if(!it.id||typeof it.id!=="string") errors.push(`items[${i}]: id is required.`);
+    else if(iids.has(it.id)) errors.push(`items[${i}]: duplicate id “${it.id}”.`);
+    else iids.add(it.id);
+    if(!it.projectId||!pids.has(it.projectId)) errors.push(`items[${i}]: projectId must match a project.`);
+    if(!it.title||typeof it.title!=="string"||it.title.trim().length<3) errors.push(`items[${i}]: title must be at least 3 characters.`);
+    if(!STATUSES.some(s=>s.id===it.status)) errors.push(`items[${i}]: status must be queue, forge, finishing, or shipped.`);
+    if(!PRIORITIES.includes(it.priority)) errors.push(`items[${i}]: priority must be high, medium, or low.`);
+    if(!it.owner||typeof it.owner!=="string"||it.owner.trim().length<2) errors.push(`items[${i}]: owner is required.`);
+    if(it.due!==null && it.due!==undefined && it.due!=="" && !isValidDue(it.due)) errors.push(`items[${i}]: due must be YYYY-MM-DD or null.`);
+    if(it.tags!==undefined && (!Array.isArray(it.tags)||it.tags.some(t=>typeof t!=="string"))) errors.push(`items[${i}]: tags must be an array of strings.`);
+    if(it.notes!==undefined && typeof it.notes!=="string") errors.push(`items[${i}]: notes must be a string.`);
+    if(it.dependsOn!==null && it.dependsOn!==undefined && it.dependsOn!=="" && typeof it.dependsOn!=="string") errors.push(`items[${i}]: dependsOn must be a string or null.`);
+    if(typeof it.dependsOn==="string" && it.dependsOn && it.dependsOn===it.id) errors.push(`items[${i}]: item cannot depend on itself.`);
+  });
+  // second pass: dependsOn must reference existing item
+  data.items.forEach((it,i)=>{
+    if(it && typeof it.dependsOn==="string" && it.dependsOn && !iids.has(it.dependsOn)) errors.push(`items[${i}]: dependsOn references a missing item.`);
+  });
+  if(data.activity!==undefined){
+    if(!Array.isArray(data.activity)) errors.push("activity must be an array when present.");
+    else data.activity.forEach((a,i)=>{
+      if(!a||typeof a!=="object"||!a.at||!a.kind||!a.message) errors.push(`activity[${i}]: needs at, kind, and message.`);
+    });
+  }
+  return {ok:errors.length===0, errors};
+}
+function doImport(text){
+  const box = $("#imp-errors");
+  box.innerHTML = "";
+  let data;
+  try{ data = JSON.parse(text); }
+  catch(e){ box.innerHTML = `<div class="import-errors"><strong>Import rejected:</strong> invalid JSON — ${esc(e.message)}. Your current workspace is unchanged.</div>`; return; }
+  const res = validateImport(data);
+  if(!res.ok){
+    const list = res.errors.slice(0,12).map(e=>`<li>${esc(e)}</li>`).join("") + (res.errors.length>12?`<li>…and ${res.errors.length-12} more.</li>`:"");
+    box.innerHTML = `<div class="import-errors"><strong>Import rejected.</strong> Your current workspace is unchanged.<ul>${list}</ul></div>`;
+    toast("Import rejected: file is invalid.", true);
+    return;
+  }
+  const projects = data.projects.map(p=>({id:p.id, name:p.name.trim(), client:p.client||"", accent:ACCENTS[p.accent]?p.accent:"moss", description:p.description||"", createdAt:p.createdAt||nowISO()}));
+  const items = data.items.map(it=>({id:it.id, projectId:it.projectId, title:it.title.trim(), notes:it.notes||"", status:it.status, priority:it.priority, owner:it.owner.trim(), due:(it.due===""?null:it.due||null), tags:it.tags||[], dependsOn:it.dependsOn||null, createdAt:it.createdAt||nowISO(), updatedAt:it.updatedAt||nowISO()}));
+  const activity = Array.isArray(data.activity)?data.activity:[];
+  state = {version:1, projects, items, activity};
+  ui.project="all"; ui.status="all"; ui.priority="all"; ui.owner="all"; ui.tag="all"; ui.query=""; $("#q").value="";
+  addActivity("imported", `Imported workspace: ${projects.length} work areas, ${items.length} items.`);
+  save(); renderAll();
+  closeDlg("dlg-import");
+  toast(`Imported ${items.length} items into ${projects.length} work areas.`);
+  announce("Import complete.");
+}
+
+/* ---------- events ---------- */
+function setView(v){
+  ui.view = v;
+  $$("#view-tabs [data-view]").forEach(b=>b.setAttribute("aria-selected", String(b.dataset.view===v)));
+  $("#view-board").hidden = v!=="board";
+  $("#view-table").hidden = v!=="table";
+  $("#view-timeline").hidden = v!=="timeline";
+  if(v==="board") renderBoard(); else if(v==="table") renderTable(); else renderTimeline();
+}
+function clearFilters(){
+  ui.query=""; $("#q").value="";
+  ui.project="all"; ui.status="all"; ui.priority="all"; ui.owner="all"; ui.tag="all";
+  renderAll(); toast("Filters cleared.");
+}
+function init(){
+  const restored = load();
+  state = restored || seed();
+  if(!restored) save();
+  ui.calCursor = "2026-11-01";
+  renderAll();
+
+  $("#q").addEventListener("input", (e)=>{ ui.query=e.target.value; renderAll(); });
+  $("#f-project").addEventListener("change", (e)=>{ ui.project=e.target.value; renderAll(); });
+  $("#f-status").addEventListener("change", (e)=>{ ui.status=e.target.value; renderAll(); });
+  $("#f-priority").addEventListener("change", (e)=>{ ui.priority=e.target.value; renderAll(); });
+  $("#f-owner").addEventListener("change", (e)=>{ ui.owner=e.target.value; renderAll(); });
+  $("#f-tag").addEventListener("change", (e)=>{ ui.tag=e.target.value; renderAll(); });
+  $("#f-sort").addEventListener("change", (e)=>{ ui.boardSort=e.target.value; renderBoard(); });
+  $("#f-activity").addEventListener("change", (e)=>{ ui.activityFilter=e.target.value; renderActivity(); });
+  $("#btn-clear").addEventListener("click", clearFilters);
+  $$("#view-tabs [data-view]").forEach(b=>b.addEventListener("click", ()=>setView(b.dataset.view)));
+
+  $("#btn-new-item").addEventListener("click", ()=>{ if(state.projects.length===0){ toast("Create a work area first.", true); return; } openItemForm(null); });
+  $("#btn-export").addEventListener("click", exportJSON);
+  $("#btn-import").addEventListener("click", ()=>{ $("#imp-errors").innerHTML=""; $("#imp-text").value=""; $("#imp-file").value=""; showDlg("dlg-import"); });
+
+  $$("[data-close]").forEach(b=>b.addEventListener("click", ()=>{ closeDlg(b.dataset.close); if(lastFocus&&lastFocus.focus) lastFocus.focus(); }));
+
+  $("#form-item").addEventListener("submit", (e)=>{
+    e.preventDefault(); clearFormErrors($("#form-item"));
+    const title = $("#it-title").value.trim();
+    const projectId = $("#it-project").value;
+    const status = $("#it-status").value;
+    const priority = $("#it-priority").value;
+    const owner = $("#it-owner").value.trim();
+    const dueRaw = $("#it-due").value;
+    const due = dueRaw===""?null:dueRaw;
+    const tags = $("#it-tags").value.split(",").map(s=>s.trim().toLowerCase()).filter(Boolean);
+    const dependsOn = $("#it-dep").value||null;
+    const notes = $("#it-notes").value.trim();
+    let bad = false;
+    if(title.length<3){ setErr($("#form-item"),"title","Title needs at least 3 characters."); bad=true; }
+    if(!projectId){ setErr($("#form-item"),"projectId","Choose a work area."); bad=true; }
+    if(owner.length<2){ setErr($("#form-item"),"owner","Owner is required."); bad=true; }
+    if(!isValidDue(due)){ setErr($("#form-item"),"due","Due date is invalid."); bad=true; }
+    if(tags.some(t=>t.length>30)){ setErr($("#form-item"),"tags","Tags must be 30 characters or fewer."); bad=true; }
+    if(bad){ toast("Please fix the highlighted fields.", true); return; }
+    const data = {title, projectId, status, priority, owner, due, tags, dependsOn, notes};
+    const id = $("#it-id").value;
+    if(id) editItem(id, data); else createItem(data);
+    closeDlg("dlg-item");
+    if(lastFocus&&lastFocus.focus) lastFocus.focus();
+  });
+  $("#form-project").addEventListener("submit", (e)=>{
+    e.preventDefault(); clearFormErrors($("#form-project"));
+    const name = $("#pj-name").value.trim();
+    if(name.length<3){ setErr($("#form-project"),"name","Name needs at least 3 characters."); toast("Please fix the highlighted fields.", true); return; }
+    const data = {name, client:$("#pj-client").value.trim(), accent:$("#pj-accent").value, description:$("#pj-desc").value.trim()};
+    const id = $("#pj-id").value;
+    if(id) editProject(id, data); else createProject(data);
+    closeDlg("dlg-project");
+    if(lastFocus&&lastFocus.focus) lastFocus.focus();
+  });
+  $("#btn-confirm-cancel").addEventListener("click", ()=>closeDlg("dlg-confirm"));
+  $("#btn-confirm-ok").addEventListener("click", ()=>{ closeDlg("dlg-confirm"); if(confirmCb) confirmCb(); confirmCb=null; });
+
+  const fileInput = $("#imp-file");
+  fileInput.addEventListener("change", ()=>{
+    const f = fileInput.files && fileInput.files[0];
+    if(!f) return;
+    const reader = new FileReader();
+    reader.onload = ()=>{ $("#imp-text").value = String(reader.result||""); };
+    reader.onerror = ()=>{ $("#imp-errors").innerHTML = `<div class="import-errors"><strong>Import rejected:</strong> could not read the file.</div>`; };
+    reader.readAsText(f);
+  });
+  $("#btn-do-import").addEventListener("click", ()=>{
+    const text = $("#imp-text").value.trim();
+    if(!text){ $("#imp-errors").innerHTML = `<div class="import-errors"><strong>Import rejected:</strong> no JSON provided.</div>`; return; }
+    doImport(text);
+  });
+
+  // dialog Escape / backdrop click to close detail
+  $$("dialog").forEach(d=>d.addEventListener("click", (e)=>{
+    const r = d.getBoundingClientRect();
+    if(e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom){ if(d.id!=="dlg-confirm") d.close(); }
+  }));
+}
+init();
+</script>
+</body>
+</html>

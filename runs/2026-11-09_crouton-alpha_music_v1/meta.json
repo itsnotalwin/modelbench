@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "crouton-alpha",
+  "category": "music",
+  "date": "2026-11-09",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "10",
+  "prompt_label": "Browser Music Studio",
+  "notes": "FIELDLOOM is a five-voice Web Audio step-sequencer and playable piano studio with synthesized drums, bass, keys and pads, generated reverb/delay, local save, JSON and WAV export; tested in Chromium for load, play/stop, editing, presets, piano and non-silent WAV output (screenshot capture was unavailable). Known limitation: WAV renders the sequencer (4 bars), not live piano performance.",
+  "slug": "2026-11-09_crouton-alpha_music_v1",
+  "path": "runs/2026-11-09_crouton-alpha_music_v1/index.html",
+  "source_file": "music__crouton-alpha__2026-11-09__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}

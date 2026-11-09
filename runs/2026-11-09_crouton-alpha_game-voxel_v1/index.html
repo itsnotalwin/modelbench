@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Embervale — Voxel Sandbox</title>
+<meta name="description" content="A complete voxel sandbox: mine, craft, build and light the Sky Beacon.">
+<style>
+:root{
+  --amber:#f5b942; --amber2:#ffcf6b; --ink:#17130f; --panel:#221c16; --panel2:#2d251d;
+  --paper:#f7ead1; --muted:#c9b896; --line:#4a3d2e; --good:#8ee08a; --danger:#ff8a7a;
+  --focus:#8fd3ff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#0f0c09;color:var(--paper);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+body{min-height:100vh;display:flex;flex-direction:column}
+:focus{outline:none}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+button{font:inherit;cursor:pointer}
+header{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;padding:.65rem .9rem;background:linear-gradient(180deg,#2b2116,#1c1610);border-bottom:2px solid var(--line)}
+.logo{display:flex;align-items:center;gap:.7rem;margin-right:auto;min-width:0}
+.cube{width:38px;height:38px;flex:0 0 auto;border-radius:8px;background:linear-gradient(135deg,#7ec850 0 42%,#8a5a2b 42% 100%);border:2px solid #00000055;box-shadow:inset 0 -8px 0 #0002, inset 0 6px 0 #fff2}
+h1{font-size:1.25rem;line-height:1;margin:.1rem 0;letter-spacing:.02em}
+.tag{font-size:.82rem;color:var(--muted);margin:0}
+.btn{background:var(--panel2);color:var(--paper);border:1px solid var(--line);border-radius:999px;padding:.48rem .8rem;font-weight:650}
+.btn:hover{border-color:var(--amber);color:var(--amber2)}
+.btn.primary{background:var(--amber);color:#241a08;border-color:#ffe1a0}
+.btn.primary:hover{background:var(--amber2)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn[aria-pressed="true"]{background:var(--amber);color:#241a08}
+main{flex:1;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:0;min-height:0}
+.game-wrap{position:relative;background:#0a0d14;min-height:520px}
+canvas#game{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
+.hud{position:absolute;pointer-events:none}
+.hud .card{pointer-events:auto}
+.crosshair{left:50%;top:50%;transform:translate(-50%,-50%);font-size:22px;color:#fff;text-shadow:0 1px 3px #000;opacity:.9}
+.top-hud{left:.7rem;top:.7rem;display:flex;flex-direction:column;gap:.45rem;max-width:min(320px,72vw)}
+.card{background:rgba(24,19,13,.88);border:1px solid var(--line);border-radius:12px;padding:.55rem .7rem;backdrop-filter:blur(4px)}
+.card h2{font-size:.78rem;text-transform:uppercase;letter-spacing:.09em;color:var(--amber2);margin:0 0 .3rem}
+.meter{display:flex;gap:.45rem;flex-wrap:wrap;font-size:.85rem}
+.pill{background:#0006;border:1px solid var(--line);border-radius:999px;padding:.18rem .5rem}
+.hearts{letter-spacing:.08em}
+.target{left:50%;transform:translateX(-50%);bottom:92px;text-align:center;font-size:.85rem;color:#fff;text-shadow:0 1px 3px #000}
+.toast-stack{right:.7rem;top:.7rem;display:flex;flex-direction:column;gap:.4rem;align-items:flex-end}
+.toast{background:rgba(24,19,13,.94);border:1px solid var(--amber);color:var(--paper);border-radius:10px;padding:.5rem .7rem;max-width:300px;font-size:.88rem;box-shadow:0 8px 24px #0008}
+.banner{left:50%;top:18%;transform:translateX(-50%);background:linear-gradient(135deg,#3a2a0d,#191104);border:2px solid var(--amber);border-radius:16px;padding:1rem 1.2rem;text-align:center;max-width:min(440px,90vw);box-shadow:0 18px 50px #000a}
+.banner h2{color:var(--amber2);margin:0 0 .35rem;font-size:1.25rem}
+.banner p{margin:.25rem 0;color:var(--paper)}
+.hidden{display:none!important}
+.hotbar{left:50%;transform:translateX(-50%);bottom:.6rem;display:flex;gap:.35rem;padding:.35rem;background:rgba(15,12,8,.82);border:1px solid var(--line);border-radius:14px;pointer-events:auto}
+.slot{width:54px;height:54px;border-radius:10px;border:2px solid #0007;background:#120e0a;color:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:2px;position:relative}
+.slot:hover{border-color:#ddd}
+.slot[aria-pressed="true"]{border-color:var(--amber);box-shadow:0 0 0 2px #f5b94255 inset}
+.slot .sw{width:22px;height:22px;border-radius:5px;border:1px solid #0008;box-shadow:inset 0 -5px 0 #0002}
+.slot .nm{font-size:.58rem;line-height:1;text-align:center;color:var(--muted);max-width:48px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.slot .ct{position:absolute;right:3px;bottom:2px;font-size:.72rem;font-weight:800;color:#fff;text-shadow:0 1px 2px #000}
+.slot .key{position:absolute;left:3px;top:1px;font-size:.6rem;color:#fff9}
+aside{background:var(--panel);border-left:2px solid var(--line);padding:.85rem;overflow:auto}
+aside section{margin-bottom:1rem}
+aside h2{font-size:.82rem;text-transform:uppercase;letter-spacing:.1em;color:var(--amber2);margin:0 0 .5rem}
+.objectives{list-style:none;padding:0;margin:0;display:grid;gap:.45rem}
+.objectives li{display:flex;gap:.55rem;align-items:flex-start;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:.5rem .6rem;font-size:.9rem}
+.objectives .done{color:var(--good);font-weight:800}
+.inv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem}
+.inv{min-height:62px;text-align:left;background:var(--panel2);border:1px solid var(--line);border-radius:10px;color:var(--paper);padding:.4rem;display:flex;flex-direction:column;gap:.25rem}
+.inv:hover{border-color:var(--amber)}
+.inv .sw{width:20px;height:20px;border-radius:4px;border:1px solid #0009}
+.inv b{font-size:.8rem}
+.inv span{font-size:.78rem;color:var(--muted)}
+.empty{color:var(--muted);font-size:.88rem;border:1px dashed var(--line);border-radius:10px;padding:.6rem}
+.recipe{display:flex;gap:.6rem;align-items:center;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:.55rem;margin-bottom:.45rem}
+.recipe .info{flex:1;min-width:0}
+.recipe b{font-size:.92rem}
+.recipe p{margin:.15rem 0 0;font-size:.8rem;color:var(--muted)}
+.kbd{background:#0009;border:1px solid #ffffff2a;border-bottom-width:3px;border-radius:5px;padding:.05rem .32rem;font-family:ui-monospace,Consolas,monospace;font-size:.78rem}
+.controls{font-size:.86rem;line-height:1.55;color:var(--muted)}
+.controls b{color:var(--paper)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:.4rem;font-size:.85rem}
+.stats div{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:.45rem .55rem}
+.stats b{display:block;font-size:1.05rem;color:var(--amber2)}
+.touch-ui{position:absolute;left:0;right:0;bottom:86px;display:none;justify-content:space-between;padding:0 .7rem;pointer-events:none}
+.touch-ui .cluster{pointer-events:auto;display:grid;grid-template-columns:repeat(2,56px);gap:.45rem;align-content:end}
+.tbtn{width:56px;height:56px;border-radius:50%;border:2px solid #fff3;background:rgba(20,16,10,.72);color:#fff;font-weight:800;font-size:.72rem}
+.tbtn:active{background:var(--amber);color:#222}
+.stick{pointer-events:auto;width:112px;height:112px;border-radius:50%;background:rgba(20,16,10,.5);border:2px solid #fff2;position:relative;touch-action:none}
+.stick .knob{position:absolute;left:50%;top:50%;width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.82);transform:translate(-50%,-50%)}
+@media (pointer:coarse){.touch-ui{display:flex}}
+@media (max-width:900px){
+  main{grid-template-columns:1fr}
+  .game-wrap{min-height:58vh}
+  aside{border-left:none;border-top:2px solid var(--line);overflow:visible}
+  .slot{width:44px;height:44px}
+  .slot .nm{display:none}
+  .top-hud{max-width:62vw}
+}
+dialog{background:var(--panel);color:var(--paper);border:2px solid var(--amber);border-radius:16px;max-width:min(620px,92vw);padding:1.1rem 1.2rem}
+dialog::backdrop{background:#000a}
+dialog h2{color:var(--amber2);margin-top:0}
+footer{padding:.55rem .9rem;background:#171209;color:var(--muted);font-size:.8rem;display:flex;flex-wrap:wrap;gap:.6rem;justify-content:space-between}
+.error{position:absolute;inset:auto .7rem 120px .7rem;background:#4a1710;border:1px solid var(--danger);border-radius:12px;padding:.7rem}
+@media (prefers-reduced-motion:reduce){
+  .toast,.banner{animation:none!important}
+  *{scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><div class="cube" aria-hidden="true"></div><div><h1>EMBERVALE</h1><p class="tag">Voxel sandbox · mine · craft · build · light the Sky Beacon</p></div></div>
+  <button class="btn primary" id="btnHelp" aria-haspopup="dialog">Help &amp; Controls</button>
+  <button class="btn" id="btnCraft" aria-expanded="true" aria-controls="craftPanel">Crafting</button>
+  <button class="btn" id="btnDay" aria-pressed="false">Night</button>
+  <button class="btn" id="btnSound" aria-pressed="true">Sound: On</button>
+  <button class="btn" id="btnFly" aria-pressed="false">Fly: Locked</button>
+  <button class="btn" id="btnRespawn">Respawn</button>
+  <button class="btn" id="btnReset">Reset World</button>
+</header>
+
+<main>
+  <section class="game-wrap" aria-label="Voxel game view">
+    <canvas id="game" tabindex="0" role="application" aria-label="3D voxel world. Use W A S D to move, mouse to look, left click to mine, right click to place blocks."></canvas>
+    <div class="hud crosshair" aria-hidden="true">+</div>
+
+    <div class="hud top-hud">
+      <div class="card" aria-label="Player status">
+        <h2>Embervale status</h2>
+        <div class="meter">
+          <span class="pill hearts" id="health" aria-label="Health">❤❤❤❤❤</span>
+          <span class="pill" id="crystals">◆ 0 shards</span>
+          <span class="pill" id="clock">☀ Day</span>
+          <span class="pill" id="pos">0, 0, 0</span>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Selected</h2>
+        <div id="selectedInfo" style="font-size:.9rem">Stone ×0</div>
+        <div id="targetInfo" style="font-size:.8rem;color:var(--muted);margin-top:.2rem">Look at a block to mine it</div>
+      </div>
+    </div>
+
+    <div class="hud toast-stack" id="toasts" aria-live="polite"></div>
+
+    <div class="hud banner hidden" id="banner" role="status">
+      <h2>✦ Sky Beacon Lit ✦</h2>
+      <p>Flight is unlocked. Press <span class="kbd">F</span> or the Fly button to soar.</p>
+      <p style="color:var(--muted);font-size:.88rem">Your world, builds and progress are saved automatically in this browser.</p>
+    </div>
+
+    <div class="hud target" id="hint">Click the world to capture the mouse · <span class="kbd">Esc</span> to release</div>
+
+    <nav class="hud hotbar" id="hotbar" aria-label="Block hotbar. Use number keys 1 to 9 or click a slot."></nav>
+
+    <div class="touch-ui" aria-label="Touch controls">
+      <div class="stick" id="stick" aria-label="Movement joystick"><div class="knob" id="knob"></div></div>
+      <div class="cluster">
+        <button class="tbtn" id="tJump">JUMP</button>
+        <button class="tbtn" id="tMine">MINE</button>
+        <button class="tbtn" id="tPlace">PLACE</button>
+        <button class="tbtn" id="tFly">FLY</button>
+      </div>
+    </div>
+
+    <div class="error hidden" id="glError" role="alert">WebGL is not available in this browser, so the voxel world cannot start. Try a current desktop or mobile browser with hardware acceleration enabled.</div>
+  </section>
+
+  <aside aria-label="Game panels">
+    <section aria-labelledby="objH">
+      <h2 id="objH">Quest — Light the Sky Beacon</h2>
+      <ul class="objectives" id="objectives"></ul>
+      <button class="btn primary" id="btnBeacon" style="width:100%;margin-top:.55rem" disabled>Activate Beacon (needs 3 Crystal Shards)</button>
+      <p style="font-size:.8rem;color:var(--muted);margin:.45rem 0 0">Tip: Crystal Ore glows cyan deep underground and on the snowy peak. Look at the purple Beacon on the summit and press <span class="kbd">E</span>, or use the button above.</p>
+    </section>
+
+    <section aria-labelledby="invH">
+      <h2 id="invH">Inventory</h2>
+      <div class="inv-grid" id="inventory"></div>
+      <p class="empty hidden" id="invEmpty">No materials yet — mine grass, dirt, stone or wood to begin.</p>
+    </section>
+
+    <section id="craftPanel" aria-labelledby="craftH">
+      <h2 id="craftH">Crafting bench</h2>
+      <div id="recipes"></div>
+    </section>
+
+    <section aria-labelledby="statsH">
+      <h2 id="statsH">Journey stats</h2>
+      <div class="stats">
+        <div><b id="stMined">0</b>blocks mined</div>
+        <div><b id="stPlaced">0</b>blocks placed</div>
+        <div><b id="stCrafted">0</b>items crafted</div>
+        <div><b id="stDist">0m</b>distance travelled</div>
+      </div>
+    </section>
+
+    <section aria-labelledby="ctrlH">
+      <h2 id="ctrlH">Controls</h2>
+      <p class="controls">
+        <b>Move</b> <span class="kbd">W A S D</span> · <b>Jump</b> <span class="kbd">Space</span> · <b>Sprint</b> <span class="kbd">Shift</span><br>
+        <b>Look</b> mouse (click world to lock) or drag / arrow keys<br>
+        <b>Mine</b> hold <b>Left click</b> · <b>Place</b> <b>Right click</b><br>
+        <b>Select block</b> <span class="kbd">1</span>–<span class="kbd">9</span> or wheel · <b>Beacon</b> <span class="kbd">E</span><br>
+        <b>Fly</b> <span class="kbd">F</span> after lighting the Beacon · <b>Help</b> <span class="kbd">H</span><br>
+        <b>Touch:</b> left stick moves, drag right side to look, on-screen buttons mine / place / jump.
+      </p>
+    </section>
+  </aside>
+</main>
+
+<footer>
+  <span>Embervale runs entirely in your browser. Edits, inventory and quest progress auto-save locally.</span>
+  <span id="saveState">Saved ✓</span>
+</footer>
+
+<dialog id="helpDlg" aria-labelledby="helpH">
+  <h2 id="helpH">How to play Embervale</h2>
+  <p><b>Goal:</b> Gather <b>3 Crystal Shards</b> from glowing Crystal Ore, climb the snowy peak, and activate the purple <b>Sky Beacon</b>. Lighting it unlocks permanent flight.</p>
+  <p><b>Mine</b> by looking at a block and holding left click. Blocks drop into your inventory. <b>Place</b> with right click on the face you are looking at. Your hotbar (bottom) holds the blocks you can place — click a slot, press 1–9, or scroll.</p>
+  <p><b>Craft</b> planks from wood, bricks from stone + dirt, glass from sand, and torches from planks. Crafted materials let you build things the wild world does not provide.</p>
+  <p><b>Survive:</b> Hard falls hurt. Health slowly recovers; if you fall out of the world or run out of health you respawn at the starting meadow with your inventory intact.</p>
+  <p><b>Saving:</b> Every edit and milestone is written to this browser automatically. <b>Reset World</b> (top right) wipes the save and regenerates the valley — it asks for confirmation first.</p>
+  <form method="dialog"><button class="btn primary" style="width:100%">Close help</button></form>
+</dialog>
+
+<script>
+"use strict";
+/* ================= Embervale voxel engine ================= */
+const SX=64, SY=32, SZ=64, CH=16, SEA=10;
+const SAVE_KEY="embervale-save-v1";
+const $=id=>document.getElementById(id);
+const canvas=$("game"), ctx2=$("game").getContext("webgl",{antialias:true,alpha:false});
+const reducedMotion=matchMedia("(prefers-reduced-motion: reduce)").matches;
+if(!ctx2) $("glError").classList.remove("hidden");
+
+const B={
+ 0:{name:"Air",solid:false},
+ 1:{name:"Grass",solid:true,color:[0.38,0.68,0.26],drop:2},
+ 2:{name:"Dirt",solid:true,color:[0.48,0.33,0.19],drop:2},
+ 3:{name:"Stone",solid:true,color:[0.52,0.53,0.56],drop:3},
+ 4:{name:"Sand",solid:true,color:[0.88,0.79,0.52],drop:4},
+ 5:{name:"Wood",solid:true,color:[0.42,0.30,0.16],drop:5},
+ 6:{name:"Leaves",solid:true,color:[0.22,0.52,0.20],drop:6},
+ 7:{name:"Snow",solid:true,color:[0.92,0.95,0.98],drop:3},
+ 8:{name:"Planks",solid:true,color:[0.72,0.54,0.30],drop:8},
+ 9:{name:"Brick",solid:true,color:[0.68,0.32,0.26],drop:9},
+ 10:{name:"Glass",solid:true,color:[0.68,0.88,0.95],drop:10,glass:true},
+ 11:{name:"Torch",solid:false,color:[1.25,0.95,0.35],drop:11},
+ 12:{name:"Crystal Ore",solid:true,color:[0.30,0.38,0.46],drop:"shard"},
+ 13:{name:"Sky Beacon",solid:true,color:[0.85,0.45,1.25],drop:null,mineable:false},
+ 14:{name:"Bedrock",solid:true,color:[0.16,0.15,0.18],drop:null,mineable:false},
+ 15:{name:"Water",solid:false,color:[0.20,0.48,0.85],drop:null,mineable:false,water:true},
+ 16:{name:"Coal Ore",solid:true,color:[0.34,0.34,0.36],drop:"coal"},
+};
+const ITEM_NAME={shard:"Crystal Shard",coal:"Coal"};
+const HOTBAR=[2,3,8,9,10,5,4,11,6];
+const RECIPES=[
+ {out:8,outN:4,cost:{5:1},desc:"1 Wood → 4 Planks. The builder's staple."},
+ {out:9,outN:4,cost:{3:2,2:1},desc:"2 Stone + 1 Dirt → 4 Brick. Sturdy walls."},
+ {out:10,outN:2,cost:{4:2},desc:"2 Sand → 2 Glass. See-through blocks."},
+ {out:11,outN:2,cost:{8:1},desc:"1 Planks → 2 Torches. Warm glowing blocks."},
+ {out:6,outN:2,cost:{5:1},desc:"1 Wood → 2 Leaf blocks for decoration."},
+];
+
+let world=new Uint8Array(SX*SY*SZ);
+const idx=(x,y,z)=>(y*SZ+z)*SX+x;
+const inB=(x,y,z)=>x>=0&&x<SX&&y>=0&&y<SY&&z>=0&&z<SZ;
+function getB(x,y,z){return inB(x,y,z)?world[idx(x,y,z)]:0;}
+function isSolid(x,y,z){const b=B[getB(x,y,z)];return !!(b&&b.solid);}
+
+/* deterministic RNG + value noise */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}}
+const rng=mulberry32(1337);
+function hash2(x,z){let n=Math.sin(x*127.1+z*311.7)*43758.5453;return n-Math.floor(n);}
+function smooth(t){return t*t*(3-2*t);}
+function vnoise(x,z){const xi=Math.floor(x),zi=Math.floor(z),xf=x-xi,zf=z-zi;
+ const a=hash2(xi,zi),b=hash2(xi+1,zi),c=hash2(xi,zi+1),d=hash2(xi+1,zi+1),u=smooth(xf),v=smooth(zf);
+ return a+(b-a)*u+(c-a)*v+(a-b-c+d)*u*v;}
+function fbm(x,z){return vnoise(x,z)*0.6+vnoise(x*2.1,z*2.1)*0.28+vnoise(x*4.3,z*4.3)*0.12;}
+
+let spawn={x:32.5,y:16,z:52.5}, beaconPos={x:32,y:20,z:14};
+function generateWorld(){
+ world.fill(0);
+ let maxH=-1;
+ for(let x=0;x<SX;x++)for(let z=0;z<SZ;z++){
+   let h=8+Math.floor(fbm(x*0.055,z*0.055)*9)+Math.floor(fbm(x*0.16,z*0.16)*3);
+   // mountain ridge toward north (low z)
+   const ridge=Math.max(0, 22 - z*0.9) * (0.55+fbm(x*0.08,3.7)*0.6);
+   h+=Math.floor(ridge*0.45);
+   h=Math.max(5,Math.min(SY-6,h));
+   if(h>maxH){maxH=h;}
+   for(let y=0;y<=h;y++){
+     let id=3;
+     if(y===0) id=14;
+     else if(y===h) id=(h<=SEA+1?4:(h>=21?7:1));
+     else if(y>=h-2) id=(h<=SEA+1?4:2);
+     else if(y<9 && rng()<0.006) id=16;
+     else if(y<9 && rng()<0.008) id=12;
+     if(y>=h-1&&id===3) id=2;
+     world[idx(x,y,z)]=id;
+   }
+   if(h<SEA){ for(let y=h+1;y<=SEA;y++) world[idx(x,y,z)]=15; }
+   // trees on grass
+   if(h>SEA+1 && h<19 && getB(x,h,z)===1 && rng()<0.018){
+     const th=3+Math.floor(rng()*2);
+     for(let i=1;i<=th;i++) if(h+i<SY-2) world[idx(x,h+i,z)]=5;
+     for(let dx=-2;dx<=2;dx++)for(let dz=-2;dz<=2;dz++)for(let dy=th-1;dy<=th+1;dy++){
+       const px=x+dx,py=h+dy,pz=z+dz;
+       if(inB(px,py,pz)&&getB(px,py,pz)===0&&Math.abs(dx)+Math.abs(dz)<=3) world[idx(px,py,pz)]=6;
+     }
+     if(h+th+2<SY) world[idx(x,h+th+2,z)]=6;
+   }
+ }
+ // carve a few caves
+ for(let c=0;c<9;c++){
+   let x=6+Math.floor(rng()*(SX-12)), y=3+Math.floor(rng()*5), z=6+Math.floor(rng()*(SZ-12));
+   for(let s=0;s<70;s++){
+     if(inB(x,y,z)&&getB(x,y,z)!==14) world[idx(x,y,z)]=0;
+     if(rng()<0.35&&inB(x,y+1,z)) world[idx(x,y+1,z)]=0;
+     x+=Math.floor(rng()*3)-1; z+=Math.floor(rng()*3)-1; y+=Math.floor(rng()*3)-1;
+     x=Math.max(2,Math.min(SX-3,x)); z=Math.max(2,Math.min(SZ-3,z)); y=Math.max(1,Math.min(10,y));
+   }
+ }
+ // find peak for beacon + spawn (south meadow flat)
+ let best=-1;
+ for(let x=4;x<SX-4;x++)for(let z=4;z<28;z++){
+   let h=-1; for(let y=SY-1;y>=0;y--) if(getB(x,y,z)!==0){h=y;break;}
+   if(h>best){best=h;beaconPos={x,y:h,z};}
+ }
+ world[idx(beaconPos.x,beaconPos.y+1,beaconPos.z)]=13;
+ // scatter exposed crystal on peak slopes
+ let placed=0;
+ for(let x=0;x<SX&&placed<26;x++)for(let z=0;z<SZ&&placed<26;z++)for(let y=SY-1;y>0;y--){
+   if(getB(x,y,z)===3 && y>=16 && rng()<0.05){ world[idx(x,y,z)]=12; placed++; break; }
+ }
+ // spawn: find grass top near south (z=52)
+ outer:
+ for(let z=SZ-6;z>SZ-22;z--)for(let x=UR_spawnX();x<UR_spawnX()+10;x++){
+   for(let y=SY-1;y>=0;y--) if(getB(x,y,z)===1 && getB(x,y+1,z)===0 && getB(x,y+2,z)===0){spawn={x:x+0.5,y:y+1,z:z+0.5};break outer;}
+ }
+ function UR_spawnX(){return 26;}
+}
+
+/* ---------- state ---------- */
+let player={x:spawn.x,y:spawn.y,z:spawn.z,vx:0,vy:0,vz:0,yaw:Math.PI,pitch:-0.08,onGround:false,fly:false,flyUnlocked:false};
+let health=20, lastDamage=0, distTravelled=0, lastPos={...spawn};
+let inv={}, stats={mined:0,placed:0,crafted:0}, edits={}, beaconLit=false, muted=false, dayT=0.32, nightOverride=false;
+let hotbarSel=0, target=null, keys=new Set(), particles=[];
+let mineCooldown=0, placeCooldown=0, mouseDownL=false, mouseDownR=false, saveTimer=0;
+
+function addInv(item,n){inv[item]=(inv[item]||0)+n; if(inv[item]<=0) delete inv[item]; refreshUI(); scheduleSave();}
+function countInv(item){return inv[item]||0;}
+function itemName(item){return typeof item==="number"?B[item].name:(ITEM_NAME[item]||String(item));}
+function itemColor(item){ if(typeof item==="number") return B[item].color; return item==="shard"?[0.4,0.95,1.1]:[0.25,0.25,0.28]; }
+function rgb(c){return `rgb(${Math.round(Math.min(1,c[0])*255)},${Math.round(Math.min(1,c[1])*255)},${Math.round(Math.min(1,c[2])*255)})`;}
+
+/* ---------- save / load ---------- */
+function scheduleSave(){ $("saveState").textContent="Saving…"; clearTimeout(saveTimer); saveTimer=setTimeout(save,350); }
+function save(){
+ try{
+  const data={v:1,edits,inv,stats,health,beaconLit,flyUnlocked:player.flyUnlocked,muted,dayT,
+    player:{x:player.x,y:player.y,z:player.z,yaw:player.yaw,pitch:player.pitch,fly:player.fly},
+    hotbarSel,distTravelled};
+  localStorage.setItem(SAVE_KEY,JSON.stringify(data));
+  $("saveState").textContent="Saved ✓ "+new Date().toLocaleTimeString();
+ }catch(e){ $("saveState").textContent="Save unavailable in this browser"; }
+}
+function load(){
+ try{
+  const raw=localStorage.getItem(SAVE_KEY); if(!raw) return false;
+  const d=JSON.parse(raw); if(!d||d.v!==1||typeof d!=="object") return false;
+  if(d.edits&&typeof d.edits==="object") for(const k in d.edits){
+    const [x,y,z]=k.split(",").map(Number); const v=Number(d.edits[k]);
+    if(inB(x,y,z)&&B[v]){ world[idx(x,y,z)]=v; edits[k]=v; }
+  }
+  if(d.inv&&typeof d.inv==="object") for(const k in d.inv){ const n=Number(d.inv[k]); if(Number.isFinite(n)&&n>0) inv[k]=n; }
+  if(d.stats) stats={mined:d.stats.mined|0,placed:d.stats.placed|0,crafted:d.stats.crafted|0};
+  health=Number.isFinite(d.health)?Math.max(1,Math.min(20,d.health)):20;
+  beaconLit=!!d.beaconLit; player.flyUnlocked=!!d.flyUnlocked||beaconLit; player.fly=!!d.fly&&player.flyUnlocked;
+  muted=!!d.muted; if(Number.isFinite(d.dayT)) dayT=d.dayT;
+  if(d.player&&Number.isFinite(d.player.x)){ player.x=d.player.x;player.y=d.player.y;player.z=d.player.z;player.yaw=d.player.yaw||0;player.pitch=d.player.pitch||0; }
+  hotbarSel=Math.max(0,Math.min(HOTBAR.length-1,d.hotbarSel|0));
+  distTravelled=Number(d.distTravelled)||0;
+  return true;
+ }catch(e){ console.warn("Save load failed",e); return false; }
+}
+function recordEdit(x,y,z){ edits[x+","+y+","+z]=world[idx(x,y,z)]; scheduleSave(); }
+
+/* ---------- audio ---------- */
+let AC=null;
+function audio(){ if(!AC){ try{AC=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } if(AC&&AC.state==="suspended") AC.resume(); return AC; }
+function tone(f,t=0.08,type="square",g=0.06,slide=0){
+ if(muted||!audio()) return;
+ const o=AC.createOscillator(),gn=AC.createGain(); o.type=type; o.frequency.value=f;
+ if(slide) o.frequency.exponentialRampToValueAtTime(Math.max(30,f+slide),AC.currentTime+t);
+ gn.gain.setValueAtTime(g,AC.currentTime); gn.gain.exponentialRampToValueAtTime(0.0008,AC.currentTime+t);
+ o.connect(gn).connect(AC.destination); o.start(); o.stop(AC.currentTime+t);
+}
+function sfx(kind){
+ if(kind==="mine"){tone(140+Math.random()*60,0.07,"triangle",0.08,-60);}
+ else if(kind==="place"){tone(220,0.07,"square",0.06);}
+ else if(kind==="craft"){tone(520,0.09,"square",0.06); setTimeout(()=>tone(780,0.1,"square",0.06),70);}
+ else if(kind==="hurt"){tone(110,0.18,"sawtooth",0.09,-40);}
+ else if(kind==="win"){ [523,659,784,1046].forEach((f,i)=>setTimeout(()=>tone(f,0.22,"triangle",0.09),i*110)); }
+ else if(kind==="pop"){tone(880,0.05,"sine",0.05);}
+}
+
+/* ---------- WebGL ---------- */
+const gl=ctx2;
+let prog,progP, uProj,uView,uSun,uFog;
+const chunks=new Map(); // key -> {vbo,ebo,count}
+const VSH=`attribute vec3 aPos; attribute vec3 aCol; uniform mat4 uProj; uniform mat4 uView; uniform vec3 uFog; varying vec3 vCol; varying float vDist;
+void main(){ vec4 v=uView*vec4(aPos,1.0); gl_Position=uProj*v; vDist=-v.z; vCol=mix(aCol,uFog,clamp(vDist/70.0,0.0,0.75)); }`;
+const FSH=`precision mediump float; varying vec3 vCol; varying float vDist; void main(){ gl_FragColor=vec4(vCol,1.0); }`;
+const PSH=`attribute vec3 aPos; attribute vec3 aCol; attribute float aSize; uniform mat4 uProj; uniform mat4 uView; varying vec3 vCol;
+void main(){ vec4 v=uView*vec4(aPos,1.0); gl_Position=uProj*v; gl_PointSize=aSize*140.0/max(1.0,-v.z); vCol=aCol; }`;
+const PFSH=`precision mediump float; varying vec3 vCol; void main(){ vec2 d=gl_PointCoord-vec2(0.5); if(dot(d,d)>0.25) discard; gl_FragColor=vec4(vCol,1.0); }`;
+function makeProg(vs,fs){
+ const c=(t,s)=>{const sh=gl.createShader(t);gl.shaderSource(sh,s);gl.compileShader(sh); if(!gl.getShaderParameter(sh,gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(sh)); return sh;};
+ const p=gl.createProgram(); gl.attachShader(p,c(gl.VERTEX_SHADER,vs)); gl.attachShader(p,c(gl.FRAGMENT_SHADER,fs)); gl.linkProgram(p);
+ if(!gl.getProgramParameter(p,gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p));
+ return p;
+}
+let pVbo,pEbo,pCount=0, hlVbo,hlCount=0;
+function initGL(){
+ if(!gl) return;
+ prog=makeProg(VSH,FSH); progP=makeProg(PSH,PFSH);
+ gl.enable(gl.DEPTH_TEST); gl.enable(gl.CULL_FACE); gl.cullFace(gl.BACK);
+ pVbo=gl.createBuffer(); pEbo=gl.createBuffer(); hlVbo=gl.createBuffer();
+}
+
+const FACES=[
+ {n:[1,0,0],s:0.78,c:[[1,0,0],[1,1,0],[1,1,1],[1,0,1]]},
+ {n:[-1,0,0],s:0.78,c:[[0,1,1],[0,1,0],[0,0,0],[0,0,1]]},
+ {n:[0,1,0],s:1.0,c:[[0,1,1],[1,1,1],[1,1,0],[0,1,0]]},
+ {n:[0,-1,0],s:0.52,c:[[0,0,0],[1,0,0],[1,0,1],[0,0,1]]},
+ {n:[0,0,1],s:0.64,c:[[0,0,1],[1,0,1],[1,1,1],[0,1,1]]},
+ {n:[0,0,-1],s:0.64,c:[[0,1,0],[1,1,0],[1,0,0],[0,0,0]]},
+];
+const ckey=(cx,cz)=>cx+","+cz;
+function remeshChunk(cx,cz){
+ if(!gl||!prog) return;
+ const key=ckey(cx,cz), old=chunks.get(key);
+ if(old){ gl.deleteBuffer(old.vbo); gl.deleteBuffer(old.ebo); chunks.delete(key); }
+ const vert=[],ind=[]; let vc=0;
+ const x0=cx*CH, z0=cz*CH;
+ for(let y=0;y<SY;y++)for(let z=z0;z<z0+CH;z++)for(let x=x0;x<x0+CH;x++){
+   const id=getB(x,y,z); if(!id) continue;
+   const def=B[id]; if(!def.color) continue;
+   // crystal / coal speckles
+   const hash=((x*73856093)^(y*19349663)^(z*83492791))>>>0;
+   const vary=0.92+((hash%100)/100)*0.16;
+   for(const f of FACES){
+     const nx=x+f.n[0],ny=y+f.n[1],nz=z+f.n[2], nid=getB(nx,ny,nz);
+     const ndef=B[nid];
+     let show=false;
+     if(!nid) show=true;
+     else if(ndef.water && !def.water) show=true;
+     else if(def.water && !ndef.water) show=true;
+     else if(def.glass && nid!==id) show=true;
+     else if(!ndef.solid && nid!==id) show=true;
+     if(!show) continue;
+     let base=def.color;
+     if(id===12 && hash%3===0) base=[0.25,0.85,1.05];
+     if(id===16 && hash%4===0) base=[0.12,0.12,0.14];
+     if(id===1 && f.n[1]===1) base=[0.44,0.74,0.28];
+     if(id===5 && (f.n[0]||f.n[2])) base=[0.55,0.42,0.24];
+     const sh=f.s*vary;
+     for(const cn of f.c){ vert.push(x+cn[0],y+cn[1],z+cn[2],base[0]*sh,base[1]*sh,base[2]*sh); }
+     ind.push(vc,vc+1,vc+2, vc,vc+2,vc+3); vc+=4;
+   }
+ }
+ if(!ind.length) return;
+ const vbo=gl.createBuffer(),ebo=gl.createBuffer();
+ gl.bindBuffer(gl.ARRAY_BUFFER,vbo); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(vert),gl.STATIC_DRAW);
+ gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,ebo); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(ind),gl.STATIC_DRAW);
+ chunks.set(key,{vbo,ebo,count:ind.length});
+}
+function remeshAll(){ chunks.clear(); for(let cx=0;cx<SX/CH;cx++)for(let cz=0;cz<SZ/CH;cz++) remeshChunk(cx,cz); }
+function remeshAt(x,z){
+ const cx=Math.floor(x/CH), cz=Math.floor(z/CH);
+ remeshChunk(cx,cz);
+ if(x%CH===0&&cx>0) remeshChunk(cx-1,cz);
+ if(x%CH===CH-1&&cx<SX/CH-1) remeshChunk(cx+1,cz);
+ if(z%CH===0&&cz>0) remeshChunk(cx,cz-1);
+ if(z%CH===CH-1&&cz<SZ/CH-1) remeshChunk(cx,cz+1);
+}
+
+/* matrices */
+function perspective(fov,asp,n,f){const t=1/Math.tan(fov/2),d=1/(n-f);return [t/asp,0,0,0,0,t,0,0,0,0,(f+n)*d,-1,0,0,2*f*n*d,0];}
+function mul(a,b){const o=new Array(16);for(let c=0;c<4;c++)for(let r=0;r<4;r++){let s=0;for(let k=0;k<4;k++)s+=a[k*4+r]*b[c*4+k];o[c*4+r]=s;}return o;}
+function viewMat(ex,ey,ez,yaw,pitch){
+ const cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch);
+ // forward = direction camera looks; right = (cy,0,-sy); up = right x forward (orthonormal)
+ const fx=-sy*cp, fy=sp, fz=-cy*cp;
+ const rx=cy, ry=0, rz=-sy;
+ const ux=ry*fz-rz*fy, uy=rz*fx-rx*fz, uz=rx*fy-ry*fx;
+ // column-major view: rows are right, up, -forward
+ return [
+  rx,ux,-fx,0,
+  ry,uy,-fy,0,
+  rz,uz,-fz,0,
+  -(rx*ex+ry*ey+rz*ez), -(ux*ex+uy*ey+uz*ez), (fx*ex+fy*ey+fz*ez), 1
+ ];
+}
+
+/* ---------- raycast ---------- */
+function eye(){return {x:player.x,y:player.y+1.62,z:player.z};}
+function dirVec(){ const cp=Math.cos(player.pitch); return {x:-Math.sin(player.yaw)*cp, y:Math.sin(player.pitch), z:-Math.cos(player.yaw)*cp}; }
+function raycast(){
+ const o=eye(), d=dirVec(); let x=Math.floor(o.x),y=Math.floor(o.y),z=Math.floor(o.z);
+ const stepX=d.x>0?1:-1, stepY=d.y>0?1:-1, stepZ=d.z>0?1:-1;
+ const tdx=Math.abs(1/(d.x||1e-9)), tdy=Math.abs(1/(d.y||1e-9)), tdz=Math.abs(1/(d.z||1e-9));
+ let tmx=(d.x>0?(x+1-o.x):(o.x-x))*tdx, tmy=(d.y>0?(y+1-o.y):(o.y-y))*tdy, tmz=(d.z>0?(z+1-o.z):(o.z-z))*tdz;
+ let nx=0,ny=0,nz=0,t=0;
+ for(let i=0;i<120;i++){
+   const id=getB(x,y,z);
+   if(id&&!B[id].water) return {x,y,z,id,nx,ny,nz};
+   if(tmx<tmy&&tmx<tmz){x+=stepX;t=tmx;tmx+=tdx;nx=-stepX;ny=0;nz=0;}
+   else if(tmy<tmz){y+=stepY;t=tmy;tmy+=tdy;nx=0;ny=-stepY;nz=0;}
+   else {z+=stepZ;t=tmz;tmz+=tdz;nx=0;ny=0;nz=-stepZ;}
+   if(t>7) return null;
+ }
+ return null;
+}
+
+/* ---------- physics ---------- */
+function collideAxis(axis,amt){
+ if(!amt) return false;
+ player[axis]+=amt;
+ const hw=0.32, minX=player.x-hw,maxX=player.x+hw,minY=player.y,maxY=player.y+1.8,minZ=player.z-hw,maxZ=player.z+hw;
+ const x0=Math.floor(minX),x1=Math.floor(maxX-1e-7),y0=Math.floor(minY),y1=Math.floor(maxY-1e-7),z0=Math.floor(minZ),z1=Math.floor(maxZ-1e-7);
+ let hit=false;
+ for(let y=y0;y<=y1;y++)for(let z=z0;z<=z1;z++)for(let x=x0;x<=x1;x++){
+   if(isSolid(x,y,z)){
+     hit=true;
+     if(axis==="x"){ player.x = amt>0 ? x-hw-0.001 : x+1+hw+0.001; player.vx=0; }
+     if(axis==="z"){ player.z = amt>0 ? z-hw-0.001 : z+1+hw+0.001; player.vz=0; }
+     if(axis==="y"){ if(amt<0){player.y=y+1;player.onGround=true;} else {player.y=y-1.8-0.001;} player.vy=0; }
+     return;
+   }
+ }
+ if(axis==="y") player.onGround=false;
+ return hit;
+}
+function inWater(){ const b=getB(Math.floor(player.x),Math.floor(player.y+0.4),Math.floor(player.z)); return b===15; }
+function updatePlayer(dt){
+ const sprint=keys.has("ShiftLeft")||keys.has("ShiftRight")||touch.sprint;
+ const speed=player.fly?9:(sprint?7:4.6);
+ let mx=0,mz=0;
+ if(keys.has("KeyW")||touch.f) mz-=1;
+ if(keys.has("KeyS")||touch.b) mz+=1;
+ if(keys.has("KeyA")||touch.l) mx-=1;
+ if(keys.has("KeyD")||touch.r) mx+=1;
+ const len=Math.hypot(mx,mz)||1; mx/=len;mz/=len;
+ const sy=Math.sin(player.yaw),cy=Math.cos(player.yaw);
+ const wx=(mx*cy - mz*sy), wz=(mz*cy + mx*sy); // forward = -z rotated
+ // Actually forward vector (-sin, -cos); strafe right is (cos,-sin); combine:
+ const fx=-sy, fz=-cy, rx=cy, rz=-sy;
+ const tx=(fx*(-mz)+rx*(mx))*speed, tz=(fz*(-mz)+rz*(mx))*speed;
+ player.vx=tx; player.vz=tz;
+ if(player.fly){
+   let vy=0; if(keys.has("Space")||touch.jump) vy=7; if(keys.has("KeyC")||keys.has("ControlLeft")) vy=-7;
+   player.vy=vy;
+ } else {
+   player.vy-=24*dt;
+   if(inWater()){ player.vy*=0.92; if(keys.has("Space")||touch.jump) player.vy=3.2; }
+   if((keys.has("Space")||touch.jump)&&player.onGround){ player.vy=8.6; player.onGround=false; }
+   player.vy=Math.max(player.vy,-38);
+ }
+ const prevY=player.vy;
+ collideAxis("x",player.vx*dt);
+ collideAxis("z",player.vz*dt);
+ const wasGround=player.onGround;
+ collideAxis("y",player.vy*dt);
+ if(player.onGround&&!wasGround&&prevY<-15){ const dmg=Math.min(12,Math.floor((-prevY-13)/2)); if(dmg>0){ health-=dmg; lastDamage=performance.now(); sfx("hurt"); toast("Ouch! Fall damage −"+dmg+" ❤"); if(health<=0){ health=20; respawn(); toast("You were rescued to the meadow."); } } }
+ if(player.y<-6){ health=20; respawn(); toast("You fell out of the world — respawned safely."); }
+ if(health<20&&performance.now()-lastDamage>6000){ health=Math.min(20,health+dt*0.6); }
+ if(player.fly&&!player.flyUnlocked){ player.fly=false; toast("Fly is locked — light the Sky Beacon first."); }
+ // distance
+ distTravelled+=Math.hypot(player.x-lastPos.x,player.z-lastPos.z); lastPos={x:player.x,y:player.y,z:player.z};
+ if(!reducedMotion){ /* head bob subtle */ }
+}
+function respawn(){ player.x=spawn.x;player.y=spawn.y+0.1;player.z=spawn.z;player.vx=player.vy=player.vz=0;player.fly=false; }
+
+/* ---------- particles ---------- */
+function burst(x,y,z,color,n=14){
+ if(reducedMotion) n=Math.min(n,6);
+ for(let i=0;i<n;i++) particles.push({x:x+0.5,y:y+0.5,z:z+0.5,vx:(Math.random()-0.5)*3,vy:Math.random()*3,vz:(Math.random()-0.5)*3,life:0.5+Math.random()*0.4,c:color});
+}
+function updateParticles(dt){
+ for(let i=particles.length-1;i>=0;i--){const p=particles[i];p.life-=dt;p.vy-=9*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.z+=p.vz*dt;if(p.life<=0)particles.splice(i,1);}
+}
+
+/* ---------- actions ---------- */
+function doMine(){
+ if(!target||mineCooldown>0) return;
+ const def=B[target.id];
+ if(def.mineable===false){ toast(def.name+" cannot be mined."); mineCooldown=0.3; return; }
+ world[idx(target.x,target.y,target.z)]=0; recordEdit(target.x,target.y,target.z); remeshAt(target.x,target.z);
+ if(def.drop){ addInv(def.drop,1); if(def.drop==="shard"){ toast("◆ Crystal Shard! ("+countInv("shard")+"/3 needed for Beacon)"); } }
+ burst(target.x,target.y,target.z,def.color||[1,1,1]); stats.mined++; sfx("mine"); mineCooldown=0.19; checkObjectives();
+}
+function doPlace(){
+ if(!target||placeCooldown>0) return;
+ const px=target.x+target.nx, py=target.y+target.ny, pz=target.z+target.nz;
+ if(!inB(px,py,pz)) return;
+ const cur=getB(px,py,pz); if(cur&&cur!==15) return;
+ const blockId=HOTBAR[hotbarSel];
+ if(countInv(blockId)<=0){ toast("No "+B[blockId].name+" left — mine or craft more."); placeCooldown=0.25; return; }
+ // don't suffocate player
+ if(B[blockId].solid){
+   const hw=0.32;
+   if(px+1>player.x-hw&&px<player.x+hw&&pz+1>player.z-hw&&pz<player.z+hw&&py+1>player.y&&py<player.y+1.8){ toast("Can't place inside yourself."); return; }
+ }
+ world[idx(px,py,pz)]=blockId; recordEdit(px,py,pz); remeshAt(px,pz);
+ addInv(blockId,-1); stats.placed++; sfx("place"); placeCooldown=0.19; checkObjectives();
+}
+function tryBeacon(){
+ if(beaconLit){ toast("The Sky Beacon is already lit ✦"); return; }
+ if(target&&target.id===13&&countInv("shard")>=3||countInv("shard")>=3&&nearBeacon()){
+   addInv("shard",-3); beaconLit=true; player.flyUnlocked=true; sfx("win");
+   for(let i=0;i<60;i++) burst(beaconPos.x,beaconPos.y+2,beaconPos.z,[0.9,0.6,1.3],1);
+   $("banner").classList.remove("hidden"); setTimeout(()=>$("banner").classList.add("hidden"),7000);
+   toast("✦ Sky Beacon lit! Flight unlocked — press F to fly."); refreshUI(); scheduleSave(); checkObjectives();
+ } else if(countInv("shard")<3){ toast("Need 3 Crystal Shards (have "+countInv("shard")+"). Find glowing cyan ore deep or on the peak."); }
+ else toast("Stand near the purple Beacon on the snowy peak to activate it.");
+}
+function nearBeacon(){ return Math.hypot(player.x-beaconPos.x,player.y-(beaconPos.y+1),player.z-beaconPos.z)<6; }
+function toggleFly(){
+ if(!player.flyUnlocked){ toast("Fly is locked — light the Sky Beacon first (collect 3 Crystal Shards)."); tone(160,0.15,"sawtooth",0.06); return; }
+ player.fly=!player.fly; if(player.fly) player.vy=0; sfx("pop"); toast(player.fly?"Flying ✈ — Space up, C down":"Flight off"); refreshUI(); scheduleSave();
+}
+function craft(r){
+ for(const k in r.cost) if(countInv(Number(k))<r.cost[k]){ toast("Not enough materials for "+B[r.out].name); return; }
+ for(const k in r.cost) addInv(Number(k),-r.cost[k]);
+ addInv(r.out,r.outN); stats.crafted++; sfx("craft"); toast("Crafted "+r.outN+"× "+B[r.out].name); checkObjectives();
+}
+
+/* ---------- UI ---------- */
+function toast(msg){
+ const t=document.createElement("div"); t.className="toast"; t.textContent=msg; $("toasts").appendChild(t);
+ setTimeout(()=>t.remove(), reducedMotion?5200:3600);
+ while($("toasts").children.length>3) $("toasts").firstChild.remove();
+}
+function refreshUI(){
+ // hotbar
+ const hb=$("hotbar"); hb.innerHTML="";
+ HOTBAR.forEach((id,i)=>{
+   const b=document.createElement("button"); b.className="slot"; b.setAttribute("aria-pressed", i===hotbarSel?"true":"false");
+   b.setAttribute("aria-label",`Slot ${i+1}: ${B[id].name}, ${countInv(id)} in inventory`);
+   b.innerHTML=`<span class="key">${i+1}</span><span class="sw" style="background:${rgb(B[id].color)}"></span><span class="nm">${B[id].name}</span><span class="ct">${countInv(id)}</span>`;
+   b.onclick=()=>{hotbarSel=i;sfx("pop");refreshUI();scheduleSave();};
+   hb.appendChild(b);
+ });
+ const sel=HOTBAR[hotbarSel];
+ $("selectedInfo").textContent=B[sel].name+" ×"+countInv(sel);
+ $("crystals").textContent="◆ "+countInv("shard")+" shards";
+ $("health").textContent="❤".repeat(Math.max(0,Math.ceil(health/4)))+"· ".repeat(0)+` (${Math.ceil(health)}/20)`;
+ $("health").textContent="❤".repeat(Math.ceil(health/4))+"  "+Math.ceil(health)+"/20";
+ $("btnFly").textContent=player.fly?"Fly: On":(player.flyUnlocked?"Fly: Off":"Fly: Locked");
+ $("btnFly").setAttribute("aria-pressed",player.fly?"true":"false");
+ $("btnSound").textContent=muted?"Sound: Off":"Sound: On"; $("btnSound").setAttribute("aria-pressed",muted?"false":"true");
+ $("btnDay").textContent=nightOverride?"Day":"Night";
+ $("stMined").textContent=stats.mined; $("stPlaced").textContent=stats.placed; $("stCrafted").textContent=stats.crafted; $("stDist").textContent=Math.floor(distTravelled)+"m";
+ // inventory
+ const ig=$("inventory"); ig.innerHTML="";
+ const items=Object.keys(inv).map(k=>isNaN(k)?k:Number(k)).filter(k=>inv[k]>0);
+ $("invEmpty").classList.toggle("hidden",items.length>0);
+ for(const it of items){
+   const b=document.createElement("button"); b.className="inv";
+   const idNum = typeof it==="number"? it : it;
+   b.innerHTML=`<span class="sw" style="background:${rgb(itemColor(idNum))}"></span><b>${itemName(idNum)}</b><span>× ${inv[idNum]}</span>`;
+   if(typeof it==="number"&&HOTBAR.includes(it)) b.onclick=()=>{hotbarSel=HOTBAR.indexOf(it);refreshUI();};
+   else b.disabled=true;
+   if(!(typeof it==="number"&&HOTBAR.includes(it))) b.style.opacity=".75";
+   ig.appendChild(b);
+ }
+ // recipes
+ const rp=$("recipes"); rp.innerHTML="";
+ RECIPES.forEach(r=>{
+   const can=Object.keys(r.cost).every(k=>countInv(Number(k))>=r.cost[k]);
+   const costStr=Object.keys(r.cost).map(k=>countInv(Number(k))+"/"+r.cost[k]+" "+B[k].name).join(" + ");
+   const div=document.createElement("div"); div.className="recipe";
+   div.innerHTML=`<span class="sw" style="width:26px;height:26px;border-radius:6px;background:${rgb(B[r.out].color)};flex:0 0 auto"></span><div class="info"><b>${r.outN}× ${B[r.out].name}</b><p>${r.desc}<br>Needs: ${costStr}</p></div>`;
+   const btn=document.createElement("button"); btn.className="btn primary"; btn.textContent="Craft"; btn.disabled=!can;
+   btn.setAttribute("aria-label",`Craft ${r.outN} ${B[r.out].name}. Needs ${costStr}`);
+   btn.onclick=()=>craft(r); div.appendChild(btn); rp.appendChild(div);
+ });
+ $("btnBeacon").disabled=!(countInv("shard")>=3&&!beaconLit);
+ $("btnBeacon").textContent=beaconLit?"✦ Beacon Lit — Flight Unlocked":`Activate Beacon (have ${countInv("shard")}/3 shards)`;
+ if(beaconLit) $("banner").classList.add("hidden");
+ checkObjectives(true);
+}
+function checkObjectives(silent){
+ const objs=[
+  {t:`Gather 5 Wood — ${Math.min(5,countInv(5))}/5`,done:countInv(5)>=5||stats.mined>20},
+  {t:`Craft 8 Planks — ${Math.min(8,countInv(8)+stats.crafted*0)}/8 placed or held`,done:countInv(8)>=4||stats.placed>=8||stats.crafted>=3},
+  {t:`Build: place 16 blocks — ${Math.min(16,stats.placed)}/16`,done:stats.placed>=16},
+  {t:`Collect 3 Crystal Shards — ${Math.min(3,countInv("shard"))}/3`,done:countInv("shard")>=3||beaconLit},
+  {t:"Light the Sky Beacon on the snowy peak",done:beaconLit},
+ ];
+ const ul=$("objectives"); ul.innerHTML="";
+ objs.forEach(o=>{ const li=document.createElement("li"); li.innerHTML=`<span class="${o.done?"done":""}">${o.done?"✓":"○"}</span><span>${o.t}</span>`; ul.appendChild(li); });
+}
+
+/* ---------- input ---------- */
+const touch={f:false,b:false,l:false,r:false,jump:false,sprint:false};
+function setupInput(){
+ canvas.addEventListener("click",()=>{ if(!("ontouchstart" in window)) canvas.requestPointerLock?.(); $("hint").style.opacity="0"; });
+ document.addEventListener("pointerlockchange",()=>{ $("hint").style.opacity=document.pointerLockElement?"0":"1"; });
+ document.addEventListener("mousemove",e=>{
+   if(document.pointerLockElement===canvas){ player.yaw-=e.movementX*0.0026; player.pitch=Math.max(-1.5,Math.min(1.5,player.pitch-e.movementY*0.0026)); }
+   else if(dragging){ player.yaw-=(e.clientX-dragX)*0.005; player.pitch=Math.max(-1.5,Math.min(1.5,player.pitch-(e.clientY-dragY)*0.005)); dragX=e.clientX;dragY=e.clientY; }
+ });
+ let dragging=false,dragX=0,dragY=0;
+ canvas.addEventListener("mousedown",e=>{ dragging=true;dragX=e.clientX;dragY=e.clientY; if(e.button===0)mouseDownL=true; if(e.button===2)mouseDownR=true; });
+ addEventListener("mouseup",e=>{dragging=false; if(e.button===0)mouseDownL=false; if(e.button===2)mouseDownR=false;});
+ canvas.addEventListener("contextmenu",e=>e.preventDefault());
+ canvas.addEventListener("wheel",e=>{ hotbarSel=(hotbarSel+(e.deltaY>0?1:-1)+HOTBAR.length)%HOTBAR.length; refreshUI(); },{passive:true});
+ addEventListener("keydown",e=>{
+   if(e.target.matches("input,textarea")) return;
+   keys.add(e.code);
+   if(e.code.startsWith("Digit")){ const n=Number(e.code.slice(5)); if(n>=1&&n<=9){hotbarSel=n-1;refreshUI();} }
+   if(e.code==="KeyE") tryBeacon();
+   if(e.code==="KeyF") toggleFly();
+   if(e.code==="KeyH") $("helpDlg").showModal();
+   if(e.code==="ArrowLeft") player.yaw+=0.14;
+   if(e.code==="ArrowRight") player.yaw-=0.14;
+   if(e.code==="ArrowUp") player.pitch=Math.min(1.5,player.pitch+0.1);
+   if(e.code==="ArrowDown") player.pitch=Math.max(-1.5,player.pitch-0.1);
+   if(["Space","ArrowUp","ArrowDown"].includes(e.code)&&document.activeElement===canvas) e.preventDefault();
+ });
+ addEventListener("keyup",e=>keys.delete(e.code));
+ addEventListener("blur",()=>keys.clear());
+ // touch look
+ let tLook=null;
+ canvas.addEventListener("touchstart",e=>{ for(const t of e.changedTouches){ if(t.clientX>innerWidth*0.4&&!tLook) tLook={id:t.identifier,x:t.clientX,y:t.clientY}; } },{passive:true});
+ canvas.addEventListener("touchmove",e=>{ e.preventDefault(); for(const t of e.changedTouches){ if(tLook&&t.identifier===tLook.id){ player.yaw-=(t.clientX-tLook.x)*0.007; player.pitch=Math.max(-1.5,Math.min(1.5,player.pitch-(t.clientY-tLook.y)*0.007)); tLook.x=t.clientX;tLook.y=t.clientY; } } },{passive:false});
+ canvas.addEventListener("touchend",e=>{ for(const t of e.changedTouches) if(tLook&&t.identifier===tLook.id) tLook=null; });
+ // joystick
+ const stick=$("stick"),knob=$("knob"); let stickId=null;
+ stick.addEventListener("touchstart",e=>{e.preventDefault(); stickId=e.changedTouches[0].identifier;},{passive:false});
+ stick.addEventListener("touchmove",e=>{ e.preventDefault(); for(const t of e.changedTouches){ if(t.identifier!==stickId)continue;
+   const r=stick.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2; let dx=(t.clientX-cx)/(r.width/2),dy=(t.clientY-cy)/(r.height/2);
+   dx=Math.max(-1,Math.min(1,dx));dy=Math.max(-1,Math.min(1,dy));
+   knob.style.transform=`translate(calc(-50% + ${dx*32}px),calc(-50% + ${dy*32}px))`;
+   touch.f=dy<-0.25; touch.b=dy>0.25; touch.l=dx<-0.25; touch.r=dx>0.25; touch.sprint=Math.hypot(dx,dy)>0.92;
+ }},{passive:false});
+ const stickEnd=e=>{ for(const t of e.changedTouches) if(t.identifier===stickId){stickId=null;touch.f=touch.b=touch.l=touch.r=touch.sprint=false;knob.style.transform="translate(-50%,-50%)";} };
+ stick.addEventListener("touchend",stickEnd); stick.addEventListener("touchcancel",stickEnd);
+ const bindHold=(id,on,off)=>{ const el=$(id); el.addEventListener("touchstart",e=>{e.preventDefault();on();},{passive:false}); el.addEventListener("touchend",e=>{e.preventDefault();off();},{passive:false}); el.addEventListener("mousedown",on); el.addEventListener("mouseup",off); };
+ bindHold("tJump",()=>touch.jump=true,()=>touch.jump=false);
+ bindHold("tMine",()=>mouseDownL=true,()=>mouseDownL=false);
+ bindHold("tPlace",()=>mouseDownR=true,()=>mouseDownR=false);
+ $("tFly").addEventListener("click",toggleFly);
+ // header buttons
+ $("btnHelp").onclick=()=>$("helpDlg").showModal();
+ $("btnCraft").onclick=()=>{ const p=$("craftPanel"); const open=p.classList.toggle("hidden"); $("btnCraft").setAttribute("aria-expanded",open?"false":"true"); };
+ $("btnDay").onclick=()=>{ nightOverride=!nightOverride; dayT=nightOverride?0.85:0.32; refreshUI(); toast(nightOverride?"Night falls over Embervale 🌙":"Day breaks over Embervale ☀"); };
+ $("btnSound").onclick=()=>{ muted=!muted; refreshUI(); scheduleSave(); if(!muted)sfx("pop"); };
+ $("btnFly").onclick=toggleFly;
+ $("btnRespawn").onclick=()=>{ respawn(); toast("Respawned at the starting meadow."); };
+ $("btnBeacon").onclick=tryBeacon;
+ $("btnReset").onclick=()=>{
+   if(!confirm("Reset Embervale? This erases all world edits, inventory and progress saved in this browser.")) return;
+   try{localStorage.removeItem(SAVE_KEY);}catch(e){}
+   edits={};inv={};stats={mined:0,placed:0,crafted:0};health=20;beaconLit=false;distTravelled=0;
+   generateWorld(); const had=load(); // no save now, so fresh
+   player={x:spawn.x,y:spawn.y,z:spawn.z,vx:0,vy:0,vz:0,yaw:Math.PI,pitch:-0.08,onGround:false,fly:false,flyUnlocked:false};
+   remeshAll(); refreshUI(); toast("World regenerated. A fresh valley awaits."); scheduleSave();
+ };
+}
+
+/* ---------- render ---------- */
+let W=0,H=0;
+function resize(){
+ const r=canvas.parentElement.getBoundingClientRect();
+ const dpr=Math.min(devicePixelRatio||1,1.75);
+ W=Math.max(2,Math.floor(r.width*dpr)); H=Math.max(2,Math.floor(r.height*dpr));
+ if(canvas.width!==W||canvas.height!==H){canvas.width=W;canvas.height=H;}
+ gl.viewport(0,0,W,H);
+}
+function sunInfo(){
+ const a=(dayT-0.25)*Math.PI*2; // 0.25=noon-ish
+ const day=Math.max(0,Math.min(1,Math.sin(a)*1.4+0.25));
+ const sun=0.45+day*0.75;
+ const sky=[0.06+day*0.45,0.08+day*0.38,0.16+day*0.42];
+ if(nightOverride) return {sun:0.55,sky:[0.05,0.07,0.16],label:"🌙 Night"};
+ return {sun,sky,label:day>0.45?"☀ Day":"🌇 Dusk"};
+}
+function render(){
+ if(!gl) return;
+ resize();
+ const e=eye();
+ const proj=perspective(1.22,W/H,0.1,220);
+ const view=viewMat(e.x,e.y,e.z,player.yaw,player.pitch);
+ const si=sunInfo();
+ gl.clearColor(si.sky[0],si.sky[1],si.sky[2],1); gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+ gl.useProgram(prog);
+ gl.uniformMatrix4fv(gl.getUniformLocation(prog,"uProj"),false,new Float32Array(proj));
+ gl.uniformMatrix4fv(gl.getUniformLocation(prog,"uView"),false,new Float32Array(view));
+ gl.uniform3f(gl.getUniformLocation(prog,"uFog"),si.sky[0],si.sky[1],si.sky[2]);
+ const aPos=gl.getAttribLocation(prog,"aPos"), aCol=gl.getAttribLocation(prog,"aCol");
+ gl.enableVertexAttribArray(aPos); gl.enableVertexAttribArray(aCol);
+ for(const ch of chunks.values()){
+   gl.bindBuffer(gl.ARRAY_BUFFER,ch.vbo);
+   gl.vertexAttribPointer(aPos,3,gl.FLOAT,false,24,0);
+   gl.vertexAttribPointer(aCol,3,gl.FLOAT,false,24,12);
+   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,ch.ebo);
+   gl.drawElements(gl.TRIANGLES,ch.count,gl.UNSIGNED_SHORT,0);
+ }
+ gl.disableVertexAttribArray(aPos); gl.disableVertexAttribArray(aCol);
+ // highlight
+ if(target){
+   const p=[]; const x=target.x,y=target.y,z=target.z;
+   const corners=[[x,y,z],[x+1,y,z],[x+1,y,z+1],[x,y,z+1],[x,y+1,z],[x+1,y+1,z],[x+1,y+1,z+1],[x,y+1,z+1]];
+   const edges=[[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
+   for(const [a,b] of edges){p.push(...corners[a],1,1,1,...corners[b],1,1,1);}
+   gl.bindBuffer(gl.ARRAY_BUFFER,hlVbo); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(p),gl.DYNAMIC_DRAW);
+   const hp=gl.getAttribLocation(prog,"aPos"),hc=gl.getAttribLocation(prog,"aCol");
+   gl.enableVertexAttribArray(hp); gl.enableVertexAttribArray(hc);
+   gl.vertexAttribPointer(hp,3,gl.FLOAT,false,24,0); gl.vertexAttribPointer(hc,3,gl.FLOAT,false,24,12);
+   gl.disable(gl.CULL_FACE); gl.drawArrays(gl.LINES,0,24); gl.enable(gl.CULL_FACE);
+   gl.disableVertexAttribArray(hp); gl.disableVertexAttribArray(hc);
+ }
+ // particles
+ if(particles.length){
+   gl.useProgram(progP);
+   gl.uniformMatrix4fv(gl.getUniformLocation(progP,"uProj"),false,new Float32Array(proj));
+   gl.uniformMatrix4fv(gl.getUniformLocation(progP,"uView"),false,new Float32Array(view));
+   const vert=[];
+   for(const pt of particles){vert.push(pt.x,pt.y,pt.z,pt.c[0],pt.c[1],pt.c[2],0.9);}
+   gl.bindBuffer(gl.ARRAY_BUFFER,pVbo); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(vert),gl.DYNAMIC_DRAW);
+   const pp=gl.getAttribLocation(progP,"aPos"),pc=gl.getAttribLocation(progP,"aCol"),ps=gl.getAttribLocation(progP,"aSize");
+   gl.enableVertexAttribArray(pp);gl.enableVertexAttribArray(pc);gl.enableVertexAttribArray(ps);
+   gl.vertexAttribPointer(pp,3,gl.FLOAT,false,28,0); gl.vertexAttribPointer(pc,3,gl.FLOAT,false,28,12); gl.vertexAttribPointer(ps,1,gl.FLOAT,false,28,24);
+   gl.drawArrays(gl.POINTS,0,particles.length);
+   gl.disableVertexAttribArray(pp);gl.disableVertexAttribArray(pc);gl.disableVertexAttribArray(ps);
+ }
+ $("clock").textContent=si.label;
+ $("pos").textContent=`${Math.floor(player.x)}, ${Math.floor(player.y)}, ${Math.floor(player.z)}`;
+ if(target){ const def=B[target.id]; $("targetInfo").textContent=`${def.name} · Left click mine · Right click place`; }
+ else $("targetInfo").textContent="Look at a block to mine it";
+}
+
+/* ---------- main loop ---------- */
+let lastT=performance.now(), hudT=0;
+function loop(now){
+ const dt=Math.min(0.05,(now-lastT)/1000); lastT=now;
+ if(!reducedMotion&&!nightOverride) dayT=(dayT+dt/240)%1;
+ mineCooldown-=dt; placeCooldown-=dt;
+ target=raycast();
+ if(mouseDownL) doMine();
+ if(mouseDownR) doPlace();
+ updatePlayer(dt);
+ updateParticles(dt);
+ if(now-hudT>250){ hudT=now; refreshUI(); }
+ render();
+ requestAnimationFrame(loop);
+}
+
+/* ---------- boot ---------- */
+generateWorld();
+const hadSave=load();
+if(!hadSave){ player.x=spawn.x; player.y=spawn.y+0.05; player.z=spawn.z; player.yaw=Math.PI; player.pitch=-0.08; lastPos={x:player.x,y:player.y,z:player.z}; }
+initGL();
+remeshAll();
+setupInput();
+refreshUI();
+addEventListener("beforeunload",save);
+if(hadSave) toast("Welcome back to Embervale — your saved world was restored.");
+else toast("Welcome to Embervale! Mine wood, craft planks, and find Crystal Ore.");
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

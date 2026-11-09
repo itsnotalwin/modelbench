@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ember Hollow — 3D Colony Builder</title>
+<style>
+:root{--bg:#1a120b;--panel:rgba(28,19,12,.92);--panel2:rgba(46,32,20,.95);--ink:#fff7e8;--muted:#d8c3a5;--accent:#ffb347;--accent2:#7ee8c7;--danger:#ff8a7a;--line:#5a4128;--focus:#7ee8c7}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
+#app{display:flex;flex-direction:column;height:100dvh}
+header{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;padding:.5rem .7rem;background:linear-gradient(180deg,#2e1f13,#20150c);border-bottom:2px solid var(--line);z-index:10}
+.logo{font-weight:900;letter-spacing:.04em;font-size:1.05rem}
+.logo span{color:var(--accent)}
+.sub{color:var(--muted);font-size:.78rem}
+.chips{display:flex;gap:.35rem;flex-wrap:wrap;margin-left:auto}
+.chip{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:.28rem .55rem;font-size:.8rem;white-space:nowrap}
+.chip b{color:var(--accent)}
+.chip.warn b{color:var(--danger)}
+button{background:#3a2816;color:var(--ink);border:1px solid var(--line);border-radius:.6rem;padding:.45rem .6rem;cursor:pointer;font:inherit}
+button:hover{background:#4d351d}
+button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+button.active{background:var(--accent);color:#241505;border-color:#ffe0a8}
+button:disabled{opacity:.45;cursor:not-allowed}
+main{flex:1;display:flex;min-height:0;position:relative}
+#viewport{flex:1;position:relative;min-width:0;background:#ff9a5a}
+#viewport canvas{display:block}
+#hint{position:absolute;left:.6rem;bottom:.6rem;background:rgba(0,0,0,.55);padding:.4rem .6rem;border-radius:.6rem;font-size:.8rem;max-width:46ch}
+#goal{position:absolute;left:.6rem;top:.6rem;background:var(--panel);border:1px solid var(--line);border-radius:.8rem;padding:.6rem .7rem;max-width:300px;font-size:.85rem}
+#goal h2{margin:0 0 .3rem;font-size:.9rem;color:var(--accent)}
+#goal progress{width:100%;height:10px}
+#alerts{position:absolute;right:.6rem;top:.6rem;width:290px;max-height:46%;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:.8rem;padding:.55rem}
+#alerts h2{font-size:.85rem;margin:.1rem 0 .4rem;color:var(--accent2)}
+#alerts p{margin:.25rem 0;font-size:.78rem;color:var(--muted)}
+#alerts p.bad{color:var(--danger)}
+aside{width:300px;background:var(--panel);border-left:2px solid var(--line);padding:.7rem;overflow:auto}
+aside h2{margin:.1rem 0 .5rem;font-size:1rem}
+aside h3{margin:.7rem 0 .3rem;color:var(--accent);font-size:.9rem}
+.kv{display:flex;justify-content:space-between;gap:.5rem;font-size:.85rem;padding:.2rem 0;border-bottom:1px dashed #4a3421}
+.bar{height:8px;background:#120c06;border-radius:99px;overflow:hidden;margin:.3rem 0}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.jobs{display:grid;grid-template-columns:1fr auto auto auto;gap:.3rem;align-items:center;font-size:.85rem}
+footer{background:#20150c;border-top:2px solid var(--line);padding:.5rem .6rem;display:flex;gap:.45rem;overflow:auto;align-items:center}
+.card{min-width:132px;text-align:left;border-radius:.8rem;background:var(--panel2)}
+.card b{display:block}
+.card small{color:var(--muted)}
+.card .cost{font-size:.78rem;color:var(--accent2)}
+.dialog{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;place-items:center;z-index:50}
+.dialog.open{display:grid}
+.box{background:var(--panel2);border:2px solid var(--line);border-radius:1rem;padding:1rem;max-width:560px;width:92vw;max-height:86vh;overflow:auto}
+.box h2{margin-top:0}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:92px;background:#fff;color:#241505;padding:.55rem .9rem;border-radius:999px;font-weight:700;display:none;z-index:60}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media(max-width:900px){aside{display:none}aside.show{display:block;position:absolute;right:0;top:0;height:100%;z-index:5}#alerts{display:none}.card{min-width:112px}#goal{max-width:210px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}
+</script>
+</head>
+<body>
+<div id="app">
+<header>
+  <div class="logo">🔥 Ember <span>Hollow</span><div class="sub">Cinder-crater colony · Day <b id="day">1</b> · <span id="clock">06:00</span></div></div>
+  <div class="chips" aria-label="Colony resources">
+    <span class="chip" id="cWood">🪵 Wood <b>0</b></span><span class="chip" id="cStone">⛏ Stone <b>0</b></span><span class="chip" id="cCrystal">💎 Crystal <b>0</b></span><span class="chip" id="cFood">🍞 Food <b>0</b></span>
+    <span class="chip" id="cPop">👥 <b>0</b>/0</span><span class="chip" id="cMorale">😊 Morale <b>—</b></span><span class="chip" id="cStore">📦 Storage <b>0</b></span>
+  </div>
+  <div role="group" aria-label="Time controls">
+    <button id="btnPause" aria-label="Pause (Space)">⏸ Pause</button><button id="sp1" class="active">1×</button><button id="sp2">2×</button><button id="sp4">4×</button>
+  </div>
+  <div role="group" aria-label="Game">
+    <button id="btnSave">💾 Save</button><button id="btnLoad">📂 Load</button><button id="btnNew">↺ New</button><button id="btnHelp" aria-haspopup="dialog">? Help</button>
+  </div>
+</header>
+<main>
+  <section id="viewport" aria-label="3D colony view. Drag to orbit, wheel to zoom, right-drag to pan.">
+    <div id="goal"><h2>🎯 Founder Goal</h2><div id="goalText">Grow your hollow.</div><progress id="goalProg" max="100" value="0"></progress><small id="goalSub">Build, feed and house colonists.</small></div>
+    <div id="alerts"><h2>⚠ Colony Status</h2><div id="alertList"><p>All systems nominal.</p></div></div>
+    <div id="hint">🖱 Drag orbit · Wheel zoom · Right-drag pan · WASD pan · Click terrain to place · <b>Esc</b> cancel · <b>1–9</b> build</div>
+  </section>
+  <aside id="panel" aria-label="Details panel">
+    <h2 id="panelTitle">Select a building</h2><div id="panelBody"><p>Click any building in the world, or pick a build card below. Build near matching nodes: Lumber near 🌲, Quarry near 🪨, Tap near 💎, Farm near 💧.</p></div>
+    <h3>Workforce</h3><div id="jobList"></div>
+    <p style="font-size:.78rem;color:var(--muted)">Idle colonists build and help. Assign workers to boost output. Food is eaten every day-tick; if food runs out, morale falls and growth stops.</p>
+  </aside>
+</main>
+<footer aria-label="Build menu">
+  <button class="card" data-build="habitat"><b>🏠 Habitat <small>[1]</small></b><span class="cost">15🪵 10⛏ · houses 6</span></button>
+  <button class="card" data-build="farm"><b>🌾 Farm [2]</b><span class="cost">10🪵 5⛏ · +food</span></button>
+  <button class="card" data-build="grove"><b>🪓 Lumber Camp [3]</b><span class="cost">8🪵 4⛏ · +wood</span></button>
+  <button class="card" data-build="quarry"><b>⛏ Quarry [4]</b><span class="cost">10🪵 6⛏ · +stone</span></button>
+  <button class="card" data-build="tap"><b>💎 Crystal Tap [5]</b><span class="cost">12⛏ 8💎 · +crystal</span></button>
+  <button class="card" data-build="depot"><b>📦 Depot [6]</b><span class="cost">12🪵 8⛏ · +storage</span></button>
+  <button class="card" data-build="workshop"><b>⚙ Workshop [7]</b><span class="cost">14🪵 12⛏ 6💎 · boosts all</span></button>
+  <button class="card" data-build="beacon"><b>🗼 Sky Beacon [8]</b><span class="cost">20🪵 20⛏ 15💎 · goal</span></button>
+  <button class="card" data-build="demolish"><b>🧨 Demolish [9]</b><span class="cost">refund 50%</span></button>
+</footer>
+</div>
+<div class="dialog" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle"><div class="box"><h2 id="helpTitle">How to play Ember Hollow</h2><p><b>Goal:</b> Grow to 20 colonists, then build the Sky Beacon to win (then keep playing freely).</p><p><b>Build:</b> Pick a card (1–9), click flat land. Construction takes time and uses idle workers.</p><p><b>Placement matters:</b> Farms near water, Lumber near trees, Quarries near rocks, Taps near crystals produce faster (efficiency shown on ghost + in panel).</p><p><b>Systems:</b> Food feeds everyone. Housing caps population. Depots raise storage. Workshops boost production +25% each (max 2). Upgrades raise capacity/output.</p><p><b>Camera:</b> Drag orbit, wheel zoom, right-drag pan, WASD pan. Space pauses, 1/2/4 change speed, Esc cancels placement.</p><button id="closeHelp">Close</button></div></div>
+<div class="dialog" id="win" role="dialog" aria-modal="true" aria-labelledby="winTitle"><div class="box"><h2 id="winTitle">🗼 The Beacon is lit!</h2><p>Your hollow is a thriving colony. Ember Hollow shines across the crater.</p><button id="closeWin">Keep playing</button></div></div>
+<div id="toast" role="status"></div>
+<div class="sr" aria-live="polite" id="srLive"></div>
+
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+
+const $=id=>document.getElementById(id);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const CELL=2, HALF=26;
+const DEFS={
+ habitat:{name:'Habitat',icon:'🏠',cost:{wood:15,stone:10},time:8,house:6,desc:'Houses colonists.'},
+ farm:{name:'Farm',icon:'🌾',cost:{wood:10,stone:5},time:7,jobs:2,desc:'Grows food. Best near water.'},
+ grove:{name:'Lumber Camp',icon:'🪓',cost:{wood:8,stone:4},time:7,jobs:2,desc:'Harvests wood. Best near trees.'},
+ quarry:{name:'Quarry',icon:'⛏',cost:{wood:10,stone:6},time:8,jobs:2,desc:'Mines stone. Best near rocks.'},
+ tap:{name:'Crystal Tap',icon:'💎',cost:{stone:12,crystal:8},time:9,jobs:2,desc:'Taps crystal. Best near crystal shards.'},
+ depot:{name:'Storage Depot',icon:'📦',cost:{wood:12,stone:8},time:8,desc:'+150 storage.'},
+ workshop:{name:'Workshop',icon:'⚙',cost:{wood:14,stone:12,crystal:6},time:10,desc:'+25% production (stacks to +50%).'},
+ beacon:{name:'Sky Beacon',icon:'🗼',cost:{wood:20,stone:20,crystal:15},time:16,desc:'Win building. Needs 20 pop.'},
+};
+const RES=['wood','stone','crystal','food'];
+const RATES={farm:{food:.35},grove:{wood:.38},quarry:{stone:.34},tap:{crystal:.26}};
+
+let S; // state
+function freshState(){return {res:{wood:60,stone:45,crystal:20,food:50},pop:6,day:1,time:6*60,speed:1,paused:false,won:false,buildings:[],jobs:{farm:1,grove:1,quarry:0,tap:0},selected:null,tool:null,seq:0};}
+S=freshState();
+
+// --- Three setup
+const view=$('viewport');
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+view.prepend(renderer.domElement);
+const scene=new THREE.Scene(); scene.background=new THREE.Color(0xffb27a); scene.fog=new THREE.Fog(0xffc79a,55,120);
+const camera=new THREE.PerspectiveCamera(50,1,.1,300); camera.position.set(28,26,34);
+const controls=new OrbitControls(camera,renderer.domElement); controls.target.set(0,1,0); controls.enableDamping=true; controls.maxPolarAngle=1.45; controls.minDistance=10; controls.maxDistance=90;
+scene.add(new THREE.HemisphereLight(0xffe8c0,0x5a3420,1.15));
+const sun=new THREE.DirectionalLight(0xffd9a0,2.2); sun.position.set(30,42,18); sun.castShadow=true; sun.shadow.mapSize.set(2048,2048); sun.shadow.camera.left=-40;sun.shadow.camera.right=40;sun.shadow.camera.top=40;sun.shadow.camera.bottom=-40; scene.add(sun);
+const moon=new THREE.DirectionalLight(0x9fbfff,.25); moon.position.set(-30,20,-20); scene.add(moon);
+
+// terrain height
+function heightAt(x,z){
+ const d=Math.sqrt(x*x+z*z);
+ let h=Math.sin(x*.18)*Math.cos(z*.16)*1.1+Math.sin(x*.07+z*.11)*1.3;
+ h+=Math.max(0,8-d)*.12; // gentle crater rim
+ if(d>24) h+=(d-24)*.55; // mountains
+ return h;
+}
+const terrGeo=new THREE.PlaneGeometry(72,72,72,72); terrGeo.rotateX(-Math.PI/2);
+{const pos=terrGeo.attributes.position, col=[];
+ const cSand=new THREE.Color(0xe8b07a),cGrass=new THREE.Color(0x7fb069),cRock=new THREE.Color(0x8d6e63),cDark=new THREE.Color(0x6b4f35);
+ for(let i=0;i<pos.count;i++){const x=pos.getX(i),z=pos.getZ(i),y=heightAt(x,z); pos.setY(i,y);
+  let c=cGrass.clone(); if(y<-.4)c=cSand.clone(); if(y>3.4)c=cRock.clone(); if(Math.abs(x)<2&&Math.abs(z)<2)c=cDark.clone();
+  const v=.92+((i*37)%10)/38; col.push(c.r*v,c.g*v,c.b*v);}
+ terrGeo.setAttribute('color',new THREE.Float32BufferAttribute(col,3)); terrGeo.computeVertexNormals();}
+const terrain=new THREE.Mesh(terrGeo,new THREE.MeshStandardMaterial({vertexColors:true,roughness:1})); terrain.receiveShadow=true; scene.add(terrain);
+// water pond
+const water=new THREE.Mesh(new THREE.CircleGeometry(9,28),new THREE.MeshStandardMaterial({color:0x3ec6e8,transparent:true,opacity:.85,roughness:.2})); water.rotation.x=-Math.PI/2; water.position.set(-13,-.15,-11); scene.add(water);
+// nodes
+const nodes={wood:[],stone:[],crystal:[],water:[water.position.clone()]};
+function scatterNodes(){ // deterministic-ish given seed
+ const rnd=(n=>()=>((n=(n*9301+49297)%233280)/233280))(42);
+ for(let i=0;i<70;i++){const x=(rnd()*52-26),z=(rnd()*52-26); if(Math.hypot(x,z)<5)continue; const r=rnd();
+  if(r<.42)makeTree(x,z); else if(r<.68)makeRock(x,z); else if(r<.8)makeShard(x,z);}}
+function M(c){return new THREE.MeshStandardMaterial({color:c,roughness:.9});}
+function makeTree(x,z){const g=new THREE.Group(),y=heightAt(x,z); const t=new THREE.Mesh(new THREE.CylinderGeometry(.18,.28,1.4,6),M(0x6b4226)); t.position.y=.7;t.castShadow=true; const c1=new THREE.Mesh(new THREE.ConeGeometry(1.15,2.2,7),M(0x2f7d4f)); c1.position.y=2.1;c1.castShadow=true; g.add(t,c1); g.position.set(x,y,z); scene.add(g); nodes.wood.push(g.position.clone());}
+function makeRock(x,z){const m=new THREE.Mesh(new THREE.DodecahedronGeometry(.9+rnd2(x,z)*.7,0),M(0x9a8f85)); m.castShadow=true;m.position.set(x,heightAt(x,z)+.4,z);m.rotation.y=x*3;scene.add(m); nodes.stone.push(m.position.clone());}
+function makeShard(x,z){const m=new THREE.Mesh(new THREE.OctahedronGeometry(.8,0),M(0x7ee8ff)); m.scale.y=1.8;m.castShadow=true;m.position.set(x,heightAt(x,z)+.9,z);scene.add(m); nodes.crystal.push(m.position.clone());}
+function rnd2(a,b){return Math.abs(Math.sin(a*12.9+b*78.2)*43758.5)%1;}
+scatterNodes();
+// mountains ring
+for(let i=0;i<22;i++){const a=i/22*Math.PI*2, r=44+ (i%3)*6; const m=new THREE.Mesh(new THREE.ConeGeometry(10+ (i%4)*3,16+(i%5)*3,5),M(0x7a5a44)); m.position.set(Math.cos(a)*r,4,Math.sin(a)*r); scene.add(m);}
+
+// building meshes
+const mats={wood:M(0xb07a45),stone:M(0x9a8f85),roof:M(0xc65d3a),crystal:M(0x7ee8ff),farm:M(0xe8c84a),dark:M(0x3a2816)};
+function buildMesh(type,level=1){
+ const g=new THREE.Group();
+ const add=(geo,mat,x,y,z)=>{const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;g.add(m);return m;};
+ if(type==='habitat'){add(new THREE.BoxGeometry(2.4,1.4,2.4),mats.wood,0,.7,0); add(new THREE.ConeGeometry(2,1.1,4),mats.roof,0,1.95,0).rotation.y=Math.PI/4; add(new THREE.BoxGeometry(.7,.9,.1),mats.dark,0,.45,1.25);}
+ else if(type==='farm'){add(new THREE.BoxGeometry(2.6,.3,2.6),M(0x8a6a3a),0,.15,0); for(let i=0;i<5;i++)add(new THREE.BoxGeometry(.28,.6,.28),mats.farm,-1+i*.5,.5,-.6+i*.25);}
+ else if(type==='grove'){add(new THREE.BoxGeometry(2.2,1.2,2.2),mats.wood,0,.6,0); add(new THREE.CylinderGeometry(.5,.7,1.6,6),mats.dark,.8,.8,.5); add(new THREE.ConeGeometry(.9,1.4,6),M(0x2f7d4f),.8,2, .5);}
+ else if(type==='quarry'){add(new THREE.BoxGeometry(2.6,1,2.2),mats.stone,0,.5,0); add(new THREE.DodecahedronGeometry(.7),mats.stone,-.6,1.2,.3); add(new THREE.DodecahedronGeometry(.5),mats.stone,.6,1.1,-.3);}
+ else if(type==='tap'){add(new THREE.BoxGeometry(1.6,1.6,1.6),mats.dark,0,.8,0); add(new THREE.OctahedronGeometry(1),mats.crystal,0,2.2,0).scale.y=1.8;}
+ else if(type==='depot'){add(new THREE.BoxGeometry(2.6,1.6,2.2),mats.wood,0,.8,0); add(new THREE.BoxGeometry(2.7,.25,2.3),mats.roof,0,1.7,0);}
+ else if(type==='workshop'){add(new THREE.BoxGeometry(2.6,1.5,2.4),mats.stone,0,.75,0); add(new THREE.CylinderGeometry(.4,.4,1,8),mats.dark,-.7,1.9,0); add(new THREE.BoxGeometry(.8,.8,.8),mats.crystal,.7,1.8,0);}
+ else if(type==='beacon'){add(new THREE.CylinderGeometry(.7,1,3,8),mats.stone,0,1.5,0); add(new THREE.OctahedronGeometry(.8),mats.crystal,0,3.8,0); add(new THREE.PointLight(0x7ee8ff,6,14),null,0,3.8,0); const beam=add(new THREE.CylinderGeometry(.12,.12,10,8),new THREE.MeshBasicMaterial({color:0x7ee8ff,transparent:true,opacity:.5}),0,8,0); beam.material.side=THREE.DoubleSide;}
+ else if(type==='spire'){add(new THREE.CylinderGeometry(.6,1.1,4.2,8),mats.stone,0,2.1,0); add(new THREE.OctahedronGeometry(.9),mats.crystal,0,4.8,0); add(new THREE.BoxGeometry(3,.6,3),mats.wood,0,.3,0);}
+ if(level>=2) add(new THREE.BoxGeometry(3,.4,3),mats.crystal,0,2.6,0);
+ return g;
+}
+const occupied=new Map(); const bGroup=new THREE.Group(); scene.add(bGroup);
+const key=(gx,gz)=>gx+','+gz;
+function cellToWorld(gx,gz){return {x:gx*CELL-HALF+CELL/2, z:gz*CELL-HALF+CELL/2};}
+function worldToCell(x,z){return {gx:Math.floor((x+HALF)/CELL), gz:Math.floor((z+HALF)/CELL)};}
+function canPlace(gx,gz){
+ if(gx<0||gz<0||gx>26||gz>26)return {ok:false,why:'Outside the hollow.'};
+ if(occupied.has(key(gx,gz)))return {ok:false,why:'Cell occupied.'};
+ const {x,z}=cellToWorld(gx,gz); const h=heightAt(x,z);
+ if(h<-.3)return {ok:false,why:'Too wet — pick dry land.'};
+ if(h>3.2)return {ok:false,why:'Too steep / high.'};
+ if(Math.hypot(x-water.position.x,z-water.position.z)<9.5)return {ok:false,why:'In the pond.'};
+ return {ok:true,x,z,h};
+}
+function efficiency(type,x,z){
+ if(type==='farm'){const d=Math.hypot(x-water.position.x,z-water.position.z); return clamp(1.5-d*.03,.5,1.5);}
+ const list=nodes[type==='grove'?'wood':type==='quarry'?'stone':type==='tap'?'crystal':null]; if(!list)return 1;
+ let best=1e9; for(const p of list){const d=Math.hypot(x-p.x,z-p.z); if(d<best)best=d;}
+ return clamp(1.6-best*.026,.5,1.6);
+}
+function addBuilding(type,gx,gz,progress=1,level=1,instant=false){
+ const v=canPlace(gx,gz); if(!v.ok){ console.warn('Cannot place '+type,v.why); return null; }
+ const {x,z,h}=v; const id=++S.seq;
+ const b={id,type,gx,gz,x,z,level,progress,eff:efficiency(type,x,z),mesh:buildMesh(type,level)};
+ b.mesh.position.set(x,h,z); if(progress<1)b.mesh.scale.setScalar(.35+.65*progress);
+ bGroup.add(b.mesh); occupied.set(key(gx,gz),b); S.buildings.push(b);
+ if(!instant)toast(`${DEFS[type].name} placed — under construction`);
+ return b;
+}
+function removeBuilding(b,refund=false){
+ bGroup.remove(b.mesh); occupied.delete(key(b.gx,b.gz)); S.buildings=S.buildings.filter(x=>x!==b);
+ if(refund){for(const k in DEFS[b.type].cost)addRes(k,DEFS[b.type].cost[k]*.5);}
+ if(S.selected===b.id)S.selected=null; refreshPanel();
+}
+function storageCap(){return 250 + S.buildings.filter(b=>b.type==='depot'&&b.progress>=1).reduce((s,b)=>s+(b.level>=2?200:150),0);}
+function housing(){return S.buildings.filter(b=>b.type==='habitat'&&b.progress>=1).reduce((s,b)=>s+(b.level>=2?10:6),0)+ 4;}
+function workshopBoost(){return 1+Math.min(2,S.buildings.filter(b=>b.type==='workshop'&&b.progress>=1).length)*.25;}
+function addRes(k,v){S.res[k]=clamp(S.res[k]+v,0,storageCap());}
+function canAfford(type){const c=DEFS[type].cost; return RES.every(k=>S.res[k]>=(c[k]||0));}
+function pay(type){for(const k in DEFS[type].cost)S.res[k]-=DEFS[type].cost[k];}
+
+// agents
+const agents=[]; const agentGroup=new THREE.Group(); scene.add(agentGroup);
+const jobColor={farm:0x7fb069,grove:0xb07a45,quarry:0xcccccc,tap:0x7ee8ff,idle:0xffe8c0,build:0xffb347};
+function makeAgent(i){
+ const g=new THREE.Group(); const body=new THREE.Mesh(new THREE.CylinderGeometry(.22,.3,.75,8),new THREE.MeshStandardMaterial({color:jobColor.idle,roughness:.8})); body.position.y=.55;body.castShadow=true;
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.24,10,8),M(0xffd9b0)); head.position.y=1.15;head.castShadow=true; g.add(body,head); g.userData={body,head,target:null,work:null,state:'idle',wait:Math.random()*3,t:Math.random()};
+ agentGroup.add(g); return g;
+}
+function syncAgents(){
+ while(agents.length<S.pop)agents.push(makeAgent(agents.length));
+ while(agents.length>S.pop){const a=agents.pop(); agentGroup.remove(a);}
+ // assign jobs
+ const assignment=[];
+ for(const type of ['farm','grove','quarry','tap']){const sites=S.buildings.filter(b=>b.type===type&&b.progress>=1); const slots=S.jobs[type]||0; for(let i=0;i<slots;i++){const site=sites[i%sites.length]; assignment.push({type,site});}}
+ assignment.sort(()=>0);
+ agents.forEach((a,i)=>{const as=assignment[i]; a.userData.assign=as||null; a.userData.body.material.color.setHex(as?jobColor[as.type]:jobColor.idle);});
+}
+function workSpot(b,i){const a=(i*137)%360*Math.PI/180; return {x:b.x+Math.cos(a)*2.2,z:b.z+Math.sin(a)*2.2};}
+function nearestHome(p){const homes=S.buildings.filter(b=>b.type==='habitat'&&b.progress>=1); return homes.length?homes[0]:S.buildings[0];}
+function tickAgents(dt){
+ agents.forEach((a,i)=>{
+  const u=a.userData; if(u.wait>0){u.wait-=dt; return;}
+  if(!u.target){ // pick destination
+   if(u.assign&&u.assign.site&&(u.state==='idle'||u.state==='home')){u.target=workSpot(u.assign.site,i); u.state='toWork'; u.work=u.assign.site;}
+   else{const h=nearestHome(); u.target=h?{x:h.x+(i%5)*.6-1.2,z:h.z+1.6}:{x:0,z:0}; u.state='toHome';}
+   u.from=a.position.clone();
+  }
+  const dx=u.target.x-a.position.x, dz=u.target.z-a.position.z, d=Math.hypot(dx,dz);
+  if(d<.35){ a.position.set(u.target.x,heightAt(u.target.x,u.target.z),u.target.z);
+   if(u.state==='toWork'){u.state='working'; u.wait=2.2+ (i%3); } else {u.state='home'; u.wait=1.5;}
+   u.target=null; return;}
+  const sp=reduced?1.2:2.6; const nx=a.position.x+dx/d*sp*dt, nz=a.position.z+dz/d*sp*dt;
+  a.position.set(nx,heightAt(nx,nz)+ (reduced?0:Math.abs(Math.sin(performance.now()*.008+i))*.08),nz);
+  a.rotation.y=Math.atan2(dx,dz);
+ });
+}
+
+// ghost + raycast
+const ray=new THREE.Raycaster(), ptr=new THREE.Vector2();
+let ghost=null, ghostCell=null, downPos=null;
+function setGhost(type){ if(ghost){scene.remove(ghost); ghost=null;}
+ if(!type)return; ghost=buildMesh(type==='demolish'?'depot':type); ghost.traverse(o=>{if(o.material){o.material=o.material.clone();o.material.transparent=true;o.material.opacity=.55;}}); scene.add(ghost);}
+function pointerCell(e){ const r=renderer.domElement.getBoundingClientRect(); ptr.set(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1); ray.setFromCamera(ptr,camera); const hit=ray.intersectObject(terrain)[0]; if(!hit)return null; return worldToCell(hit.point.x,hit.point.z);}
+renderer.domElement.addEventListener('pointermove',e=>{
+ if(!S.tool)return; const c=pointerCell(e); if(!c)return; ghostCell=c; if(!ghost)return;
+ const v=canPlace(c.gx,c.gz); const {x,z}=cellToWorld(c.gx,c.gz);
+ ghost.position.set(x,(v.ok?v.h:heightAt(x,z)),z); ghost.visible=true;
+ const eff=efficiency(S.tool,x,z); ghost.traverse(o=>{if(o.material&&o.material.color)o.material.color.setHex(v.ok?(eff>=1?0xaaffaa:0xffe08a):0xff8888);});
+ $('hint').innerHTML=v.ok?`${DEFS[S.tool].name} — efficiency <b>${Math.round(eff*100)}%</b>. Click to build (cost deducted now).`:`✕ ${v.why}`;
+});
+renderer.domElement.addEventListener('pointerdown',e=>downPos=[e.clientX,e.clientY]);
+renderer.domElement.addEventListener('pointerup',e=>{
+ if(!downPos)return; const moved=Math.hypot(e.clientX-downPos[0],e.clientY-downPos[1]); downPos=null; if(moved>6)return;
+ const c=pointerCell(e); if(!c)return;
+ if(S.tool==='demolish'){ const b=occupied.get(key(c.gx,c.gz)); if(b&&b.type!=='spire'){removeBuilding(b,true); toast('Demolished (50% refunded)');} else if(b)toast('The Spire cannot be demolished'); else toast('Nothing to demolish here'); return;}
+ if(S.tool){ const v=canPlace(c.gx,c.gz); if(!v.ok){toast(v.why);return;}
+  if(!canAfford(S.tool)){toast('Not enough resources — check the top bar');return;}
+  if(S.tool==='beacon'&&S.pop<20){toast('Sky Beacon needs 20 colonists first');return;}
+  pay(S.tool); addBuilding(S.tool,c.gx,c.gz,0); toast(`${DEFS[S.tool].name} construction started`); return;}
+ // select
+ const b=occupied.get(key(c.gx,c.gz)); S.selected=b?b.id:null; refreshPanel();
+});
+
+// UI
+function toast(t){const el=$('toast'); el.textContent=t; el.style.display='block'; $('srLive').textContent=t; clearTimeout(el._t); el._t=setTimeout(()=>el.style.display='none',2200);}
+function fmt(n){return Math.floor(n);}
+document.querySelectorAll('[data-build]').forEach(btn=>btn.addEventListener('click',()=>selectTool(btn.dataset.build)));
+function selectTool(t){ S.tool=S.tool===t?null:t; document.querySelectorAll('[data-build]').forEach(b=>b.classList.toggle('active',b.dataset.build===S.tool)); setGhost(S.tool); if(S.tool)toast(`${DEFS[t]?DEFS[t].name:'Demolish'}: click terrain to ${t==='demolish'?'demolish':'place'}`); }
+addEventListener('keydown',e=>{
+ if(e.key==='Escape'){S.tool=null;setGhost(null);document.querySelectorAll('[data-build]').forEach(b=>b.classList.remove('active'));}
+ if(e.key===' '&&e.target===document.body){e.preventDefault();togglePause();}
+ const map={'1':'habitat','2':'farm','3':'grove','4':'quarry','5':'tap','6':'depot','7':'workshop','8':'beacon','9':'demolish'};
+ if(map[e.key])selectTool(map[e.key]);
+});
+function togglePause(){S.paused=!S.paused; $('btnPause').textContent=S.paused?'▶ Resume':'⏸ Pause';}
+$('btnPause').onclick=togglePause;
+for(const s of [1,2,4])$('sp'+s).onclick=()=>{S.speed=s;document.querySelectorAll('[id^=sp]').forEach(b=>b.classList.toggle('active',b.id==='sp'+s));};
+$('btnHelp').onclick=()=>$('help').classList.add('open'); $('closeHelp').onclick=()=>$('help').classList.remove('open');
+$('closeWin').onclick=()=>$('win').classList.remove('open');
+$('panel').addEventListener('click',e=>{ const a=e.target.closest('[data-act]'); if(!a)return; const b=S.buildings.find(x=>x.id===S.selected); const act=a.dataset.act;
+ if(act==='upgrade'&&b){const cost={wood:12+ b.level*8,stone:10+b.level*8}; if(RES.every(k=>S.res[k]>=(cost[k]||0))){RES.forEach(k=>S.res[k]-=(cost[k]||0)); b.level=2; bGroup.remove(b.mesh); b.mesh=buildMesh(b.type,2); b.mesh.position.set(b.x,b.mesh.position.y=heightAt(b.x,b.z),b.z); bGroup.add(b.mesh); toast('Upgraded!'); refreshPanel();} else toast('Not enough to upgrade');}
+ if(act==='demolish'&&b&&b.type!=='spire'){removeBuilding(b,true); toast('Demolished');}
+ if(act.startsWith('job')){const t=a.dataset.job, d=+a.dataset.d; S.jobs[t]=clamp((S.jobs[t]||0)+d,0,10); syncAgents(); refreshJobs();}
+});
+function refreshJobs(){ $('jobList').innerHTML=Object.keys(RATES).map(t=>`<div class="jobs"><span>${DEFS[t].icon} ${DEFS[t].name}</span><button data-act="job" data-job="${t}" data-d="-1" aria-label="Fewer ${t} workers">−</button><b>${S.jobs[t]||0}</b><button data-act="job" data-job="${t}" data-d="1" aria-label="More ${t} workers">+</button></div>`).join('');}
+function refreshPanel(){ const b=S.buildings.find(x=>x.id===S.selected); const T=$('panelTitle'),B=$('panelBody');
+ if(!b){T.textContent='Select a building'; B.innerHTML='<p>Click any building in the world, or pick a build card below. Build near matching nodes: Lumber near 🌲, Quarry near 🪨, Tap near 💎, Farm near 💧.</p>'; return;}
+ const d=DEFS[b.type]; T.textContent=`${d.icon} ${d.name} · Lv${b.level}`;
+ let extra='';
+ if(b.progress<1)extra=`<div class="bar"><i style="width:${b.progress*100}%"></i></div>Building… ${Math.round(b.progress*100)}%`;
+ if(RATES[b.type])extra+=`<div class="kv"><span>Efficiency</span><b>${Math.round(b.eff*100)}%</b></div><div class="kv"><span>Workers</span><b>${S.jobs[b.type]||0}</b></div>`;
+ if(b.type==='habitat')extra+=`<div class="kv"><span>Houses</span><b>${b.level>=2?10:6}</b></div>`;
+ B.innerHTML=`<p>${d.desc}</p>${extra}<div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem"><button data-act="upgrade" ${b.level>=2?'disabled':''}>⬆ Upgrade</button><button data-act="demolish" ${b.type==='spire'?'disabled':''}>🧨 Demolish (50%)</button></div>`;
+}
+function refreshHUD(){
+ $('day').textContent=S.day;
+ const hh=String(Math.floor(S.time/60)%24).padStart(2,'0'), mm=String(Math.floor(S.time%60)).padStart(2,'0'); $('clock').textContent=`${hh}:${mm}`;
+ const cap=storageCap();
+ const set=(id,k,neg)=>{const el=$(id); el.innerHTML=`${{wood:'🪵 Wood',stone:'⛏ Stone',crystal:'💎 Crystal',food:'🍞 Food'}[k]} <b>${fmt(S.res[k])}</b><small> ${k==='food'?'':''}${neg>=0?'+':''}${neg.toFixed(1)}/s</small>`; el.classList.toggle('warn',S.res[k]>=cap&&k!=='food' || (k==='food'&&S.res[k]<10));};
+ // rates
+ const boost=workshopBoost();
+ let rates={wood:0,stone:0,crystal:0,food:0};
+ for(const b of S.buildings){ if(b.progress<1||!RATES[b.type])continue; const r=RATES[b.type]; const workers=Math.min(S.jobs[b.type]||0, 4+(b.level-1)*2); for(const k in r)rates[k]+=r[k]*workers*b.eff*boost*(b.level>=2?1.4:1);}
+ rates.food-=S.pop*.04;
+ set('cWood','wood',rates.wood); set('cStone','stone',rates.stone); set('cCrystal','crystal',rates.crystal); set('cFood','food',rates.food);
+ $('cPop').innerHTML=`👥 <b>${S.pop}</b>/${housing()}`; $('cPop').classList.toggle('warn',S.pop>=housing());
+ const morale=clamp(55 + (rates.food>0?20:-30) + (housing()-S.pop>=2?15:0) + (S.res.food>20?10:0),0,100);
+ $('cMorale').innerHTML=`${morale>65?'😊':morale>40?'😐':'😟'} Morale <b>${Math.round(morale)}%</b>`; $('cMorale').classList.toggle('warn',morale<45);
+ const used=RES.reduce((s,k)=>s+S.res[k],0); $('cStore').innerHTML=`📦 Storage <b>${fmt(used)}/${cap}</b>`; $('cStore').classList.toggle('warn',used>=cap);
+ // alerts
+ const al=[];
+ if(S.res.food<15)al.push(['bad','⚠ Food low — build farms near water or cut other jobs.']);
+ if(rates.food<0)al.push(['bad','⚠ Food deficit — population will stop growing.']);
+ if(S.pop>=housing())al.push(['bad','⚠ Housing full — build Habitats to grow.']);
+ if(used>=cap)al.push(['bad','⚠ Storage full — build Depots or spend resources.']);
+ for(const b of S.buildings)if(b.progress<1)al.push([`🏗 ${DEFS[b.type].name} building… ${Math.round(b.progress*100)}%`]);
+ if(!al.length)al.push(['All systems nominal.']);
+ $('alertList').innerHTML=al.map(a=>`<p class="${a[0]==='bad'?'bad':''}">${a[0]==='bad'?a[1]:a[0]}</p>`).join('');
+ // goal
+ const bCount=t=>S.buildings.filter(b=>b.type===t&&b.progress>=1).length;
+ let gt,prog,gs;
+ if(S.pop<12){gt='🏠 Reach 12 colonists'; prog=S.pop/12*100; gs='Housing + food grows population slowly.';}
+ else if(bCount('depot')<1||bCount('workshop')<1){gt='⚙ Build a Depot and a Workshop'; prog=((bCount('depot')?50:0)+(bCount('workshop')?50:0)); gs='Depot raises storage; Workshop boosts output.';}
+ else if(bCount('beacon')<1){gt='🗼 Build the Sky Beacon (needs 20 pop)'; prog=S.pop/20*100; gs='Requires 20🪵 20⛏ 15💎. Grow first!';}
+ else {gt='🎉 Colony complete!'; prog=100; gs='Free play — keep growing Ember Hollow.';}
+ $('goalText').textContent=gt; $('goalSub').textContent=gs; $('goalProg').value=prog;
+ return {rates,morale,cap,used};
+}
+
+// save/load
+const SAVE='crouton-colony-save-v1';
+function serialize(){return JSON.stringify({res:S.res,pop:S.pop,day:S.day,time:S.time,speed:S.speed,won:S.won,jobs:S.jobs,seq:S.seq,buildings:S.buildings.map(b=>({type:b.type,gx:b.gx,gz:b.gz,progress:b.progress,level:b.level}))});}
+function clearWorld(){for(const b of [...S.buildings])removeBuilding(b); agents.forEach(a=>agentGroup.remove(a)); agents.length=0; occupied.clear();}
+function loadData(json){ const d=JSON.parse(json); S=freshState(); S.res=d.res; S.pop=d.pop; S.day=d.day; S.time=d.time; S.speed=d.speed||1; S.won=d.won; S.jobs=d.jobs; S.seq=d.seq||0;
+ clearWorld(); for(const b of d.buildings)addBuilding(b.type,b.gx,b.gz,b.progress,b.level,true);
+ syncAgents(); refreshJobs(); refreshPanel(); toast('Colony loaded');}
+$('btnSave').onclick=()=>{try{localStorage.setItem(SAVE,serialize()); toast('Saved ✓');}catch(e){toast('Save failed: storage unavailable');}};
+$('btnLoad').onclick=()=>{const raw=localStorage.getItem(SAVE); if(!raw){toast('No save found');return;} try{loadData(raw);}catch(e){toast('Save data invalid');}};
+$('btnNew').onclick=()=>{if(confirm('Start a new colony? Unsaved progress will be lost.')){clearWorld(); S=freshState(); seedColony(); syncAgents(); refreshJobs(); refreshPanel(); toast('New colony founded');}};
+
+// seed
+function seedColony(){
+ const spot=(type,gx,gz)=>{ for(let r=0;r<6;r++)for(let dx=-r;dx<=r;dx++)for(let dz=-r;dz<=r;dz++){ if(canPlace(gx+dx,gz+dz).ok){ addBuilding(type,gx+dx,gz+dz,1,1,true); return; } } };
+ spot('spire',13,13); spot('habitat',11,12); spot('habitat',15,14); spot('farm',12,15); spot('grove',15,11);
+ S.jobs={farm:1,grove:1,quarry:0,tap:0};
+}
+seedColony(); syncAgents(); refreshJobs(); refreshPanel();
+try{const raw=localStorage.getItem(SAVE); if(raw && confirm('Saved colony found. Load it?'))loadData(raw);}catch(e){}
+
+// resize
+function resize(){const w=view.clientWidth,h=view.clientHeight; renderer.setSize(w,h); camera.aspect=w/h; camera.updateProjectionMatrix();}
+new ResizeObserver(resize).observe(view); resize();
+
+// WASD pan
+const keys={}; addEventListener('keydown',e=>keys[e.key.toLowerCase()]=1); addEventListener('keyup',e=>keys[e.key.toLowerCase()]=0);
+function panCamera(dt){ const sp=(keys['shift']?30:16)*dt; const f=new THREE.Vector3(); camera.getWorldDirection(f); f.y=0;f.normalize(); const r=new THREE.Vector3().crossVectors(f,new THREE.Vector3(0,1,0));
+ const mv=new THREE.Vector3(); if(keys['w'])mv.add(f); if(keys['s'])mv.sub(f); if(keys['a'])mv.sub(r); if(keys['d'])mv.add(r);
+ if(mv.lengthSq()){controls.target.addScaledVector(mv.normalize(),sp); camera.position.addScaledVector(mv.normalize(),sp);}}
+
+// game loop
+let last=performance.now(), acc=0, dayAcc=0;
+function loop(now){ requestAnimationFrame(loop); const rawDt=Math.min(.05,(now-last)/1000); last=now;
+ const dt=S.paused?0:rawDt*S.speed;
+ controls.update(); panCamera(rawDt);
+ if(dt>0){
+  // construction
+  const builders=Math.max(1,Math.min(3,S.pop-(S.jobs.farm||0)-(S.jobs.grove||0)-(S.jobs.quarry||0)-(S.jobs.tap||0)));
+  for(const b of S.buildings){ if(b.progress<1){ b.progress=clamp(b.progress+dt*.05*builders,0,1);
+    b.mesh.scale.setScalar(.35+.65*b.progress); if(b.progress>=1){b.mesh.scale.setScalar(1); toast(`${DEFS[b.type].name} complete!`); checkWin();}}}
+  // production tick 4x/sec
+  acc+=dt; if(acc>=.25){acc=0; const {rates}=refreshProduction(dt);
+   for(const k of RES)addRes(k,rates[k]*.25);
+   S.time+=dt*12; if(S.time>=1440){S.time-=1440; S.day++; consumeFood(); toast(`Day ${S.day} — food consumed`);}}
+  tickAgents(dt);
+ }
+ renderer.render(scene,camera);
+}
+function refreshProduction(){ const boost=workshopBoost(); const rates={wood:0,stone:0,crystal:0,food:0};
+ for(const b of S.buildings){ if(b.progress<1||!RATES[b.type])continue; const r=RATES[b.type]; const w=Math.min(S.jobs[b.type]||0,4+(b.level-1)*2); for(const k in r)rates[k]+=r[k]*w*b.eff*boost*(b.level>=2?1.4:1);}
+ refreshHUD._rates=rates; return {rates}; }
+function consumeFood(){ const need=S.pop*.5; if(S.res.food>=need)S.res.food-=need; else {S.res.food=0; toast('⚠ Starvation — morale drops, growth stalls');}
+ // growth
+ if(S.res.food>10 && S.pop<housing()){S.pop=Math.min(housing(),S.pop+1); syncAgents(); toast(`👥 New colonist! (${S.pop}/${housing()})`);}
+ refreshHUD();}
+function checkWin(){ if(!S.won && S.buildings.some(b=>b.type==='beacon'&&b.progress>=1) && S.pop>=20){S.won=true; $('win').classList.add('open');}}
+setInterval(()=>refreshHUD(),600); refreshHUD();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 {
   "generated_from": "runs/",
-  "count": 4,
+  "count": 15,
   "catalog": [
     {
       "no": "01",
@@ -180,6 +180,47 @@
     {
       "schema_version": 1,
       "model": "crouton-alpha",
+      "category": "workspace",
+      "date": "2026-11-09",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "05",
+      "prompt_label": "Project Workspace",
+      "notes": "Forge is a single-file studio workbench with board, table, and calendar views over localStorage data, validated JSON export/import, and activity history. It runs offline from index.html with no build step; test status is reported separately.",
+      "model_label": "CROUTON_ALPHA",
+      "slug": "2026-11-09_crouton-alpha_workspace_v1",
+      "path": "runs/2026-11-09_crouton-alpha_workspace_v1/index.html",
+      "source_file": "workspace__CROUTON_ALPHA__2026-11-09__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "crouton-alpha",
       "category": "site-store",
       "date": "2026-11-09",
       "version": 1,
@@ -300,6 +341,368 @@
     {
       "schema_version": 1,
       "model": "crouton-alpha",
+      "category": "sim",
+      "date": "2026-11-09",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "08",
+      "prompt_label": "Interactive System Simulation",
+      "notes": "Bloom Lab lake ecosystem simulator with 5 coupled stocks, RK4 integration, 4 scenarios and live plots. Tested in Chromium: play/step/reset/scenarios/determinism passed, no console errors.",
+      "model_label": "CROUTON ALPHA",
+      "slug": "2026-11-09_crouton-alpha_sim_v1",
+      "path": "runs/2026-11-09_crouton-alpha_sim_v1/index.html",
+      "source_file": "sim__CROUTON ALPHA__2026-11-09__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "crouton-alpha",
+      "category": "music",
+      "date": "2026-11-09",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "10",
+      "prompt_label": "Browser Music Studio",
+      "notes": "FIELDLOOM is a five-voice Web Audio step-sequencer and playable piano studio with synthesized drums, bass, keys and pads, generated reverb/delay, local save, JSON and WAV export; tested in Chromium for load, play/stop, editing, presets, piano and non-silent WAV output (screenshot capture was unavailable). Known limitation: WAV renders the sequencer (4 bars), not live piano performance.",
+      "slug": "2026-11-09_crouton-alpha_music_v1",
+      "path": "runs/2026-11-09_crouton-alpha_music_v1/index.html",
+      "source_file": "music__crouton-alpha__2026-11-09__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "crouton-alpha",
+      "category": "game-voxel",
+      "date": "2026-11-09",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "12",
+      "prompt_label": "Voxel Sandbox Game",
+      "notes": "Embervale: a self-contained WebGL voxel sandbox with mining, building, crafting, a Crystal Shard quest to light the Sky Beacon and unlock flight, and localStorage persistence. Tested in Chromium over a local static server for load, rendering, mining, placement, crafting, movement, beacon/flight and reload persistence; screenshot capture was unavailable in this session.",
+      "slug": "2026-11-09_crouton-alpha_game-voxel_v1",
+      "path": "runs/2026-11-09_crouton-alpha_game-voxel_v1/index.html",
+      "source_file": "game-voxel__crouton-alpha__2026-11-09__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "crouton-alpha",
+      "category": "game-roguelite",
+      "date": "2026-11-09",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "15",
+      "prompt_label": "Action Roguelite",
+      "notes": "A complete top-down arena roguelite with 5 depths, 5 enemy types plus a boss, XP-level and depth-clear upgrades, dash/nova abilities, and persistent shard meta-upgrades. Browser-tested via automated load, dive start, pause/resume and timer checks with no console errors; screenshots were unavailable in this environment and full playthrough was not completed.",
+      "slug": "2026-11-09_crouton-alpha_game-roguelite_v1",
+      "path": "runs/2026-11-09_crouton-alpha_game-roguelite_v1/index.html",
+      "source_file": "game-roguelite__crouton-alpha__2026-11-09__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "crouton-alpha",
+      "category": "game-racer",
+      "date": "2026-11-09",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "14",
+      "prompt_label": "3D Racing Game",
+      "notes": "Solar Flats is a complete 3-lap 3D desert time trial against a ghost rival, with checkpoint-gated laps, chase/hood cameras, touch controls, a minimap and persisted best times. It loads Three.js from a CDN, so an internet connection is needed on first load. Verified in a browser via DOM and console checks (start, countdown, timer, HUD, pause, restart, camera and sound); screenshots were unavailable in that environment and a full 3-lap drive was not completed there.",
+      "slug": "2026-11-09_crouton-alpha_game-racer_v1",
+      "path": "runs/2026-11-09_crouton-alpha_game-racer_v1/index.html",
+      "source_file": "game-racer__crouton-alpha__2026-11-09__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "crouton-alpha",
+      "category": "game-colony",
+      "date": "2026-11-09",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "11",
+      "prompt_label": "3D Colony Builder",
+      "notes": "Ember Hollow is a complete 3D colony builder with construction, jobs, four resources, autonomous colonists, goals, speed controls and save/load. Verified in-browser: HUD rates, build tools, pause/speed, help and save/load work with no console errors; visual screenshot capture was unavailable in this environment.",
+      "slug": "2026-11-09_crouton-alpha_game-colony_v1",
+      "path": "runs/2026-11-09_crouton-alpha_game-colony_v1/index.html",
+      "source_file": "game-colony__crouton-alpha__2026-11-09__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "crouton-alpha",
+      "category": "game-brawler",
+      "date": "2026-11-09",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "13",
+      "prompt_label": "2D Action Brawler",
+      "notes": "EMBERLINE is a complete single-file 2D lane brawler with 3 stages, two distinct enemy types plus a boss, light/heavy/dash/block/special combat, and title/pause/defeat/victory flows with touch and keyboard controls. Web Audio and localStorage are guarded; no assets or build step required.",
+      "slug": "2026-11-09_crouton-alpha_game-brawler_v1",
+      "path": "runs/2026-11-09_crouton-alpha_game-brawler_v1/index.html",
+      "source_file": "game-brawler__crouton-alpha__2026-11-09__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "crouton-alpha",
+      "category": "game-3d",
+      "date": "2026-11-09",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "07",
+      "prompt_label": "3D Exploration Game",
+      "notes": "A complete third-person 3D exploration game set on a twilight archipelago where the player rekindles five Echo Shards through a lever, pulse-revealed bridge, rune door and wind-chime steps. Verified by code-level smoke check; touch controls are implemented but were not tested on a physical mobile device.",
+      "slug": "2026-11-09_crouton-alpha_game-3d_v1",
+      "path": "runs/2026-11-09_crouton-alpha_game-3d_v1/index.html",
+      "source_file": "game-3d__crouton-alpha__2026-11-09__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "crouton-alpha",
+      "category": "game-2d",
+      "date": "2026-11-09",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "06",
+      "prompt_label": "2D Puzzle Game",
+      "notes": "SPARKSLIDE, an original slide-until-you-hit-something puzzle with 8 hand-designed levels covering honey, mirrors, crates, pit-filling and portals, plus undo, restart, hints and local progress. Levels were verified with a code-level solvability sweep; full browser playtesting was not available in this environment.",
+      "model_label": "CROUTON-ALPHA",
+      "slug": "2026-11-09_crouton-alpha_game-2d_v1",
+      "path": "runs/2026-11-09_crouton-alpha_game-2d_v1/index.html",
+      "source_file": "game-2d__CROUTON-ALPHA__2026-11-09__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "crouton-alpha",
       "category": "dashboard",
       "date": "2026-11-09",
       "version": 1,
@@ -310,6 +713,46 @@
       "slug": "2026-11-09_crouton-alpha_dashboard_v1",
       "path": "runs/2026-11-09_crouton-alpha_dashboard_v1/index.html",
       "source_file": "dashboard__crouton-alpha__2026-11-09__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "crouton-alpha",
+      "category": "creative-studio",
+      "date": "2026-11-09",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "09",
+      "prompt_label": "Creative Design Studio",
+      "notes": "POSTLAB gig poster studio with SVG canvas, layers, transforms, undo, local save and SVG/PNG/JSON export-import. Starter poster is fully editable; PNG export uses 2x rasterisation of the live SVG.",
+      "slug": "2026-11-09_crouton-alpha_creative-studio_v1",
+      "path": "runs/2026-11-09_crouton-alpha_creative-studio_v1/index.html",
+      "source_file": "creative-studio__crouton-alpha__2026-11-09__v1.zip",
       "scores": {
         "completeness": null,
         "robustness": null,

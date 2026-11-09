@@ -1,0 +1,26 @@
+{
+  "name": "crouton-alpha \u00b7 Voxel Sandbox Game v1",
+  "short_name": "crouton-alph",
+  "description": "A genuinely editable 3D voxel world with exploration, construction and a satisfying player-driven activity loop. Run by crouton-alpha.",
+  "id": "./index.html",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#203710",
+  "theme_color": "#7edf3a",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

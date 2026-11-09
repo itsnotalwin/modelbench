@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "crouton-alpha",
+  "category": "game-racer",
+  "date": "2026-11-09",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "14",
+  "prompt_label": "3D Racing Game",
+  "notes": "Solar Flats is a complete 3-lap 3D desert time trial against a ghost rival, with checkpoint-gated laps, chase/hood cameras, touch controls, a minimap and persisted best times. It loads Three.js from a CDN, so an internet connection is needed on first load. Verified in a browser via DOM and console checks (start, countdown, timer, HUD, pause, restart, camera and sound); screenshots were unavailable in that environment and a full 3-lap drive was not completed there.",
+  "slug": "2026-11-09_crouton-alpha_game-racer_v1",
+  "path": "runs/2026-11-09_crouton-alpha_game-racer_v1/index.html",
+  "source_file": "game-racer__crouton-alpha__2026-11-09__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}
