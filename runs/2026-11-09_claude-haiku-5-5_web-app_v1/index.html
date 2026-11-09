@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Larder</title>
+<style>
+:root{--paper:#f3f5f1;--ink:#18201c;--muted:#56625b;--line:#d5dbd4;--accent:#2f3fa0;--bad:#a3271b;--serif:Charter,"Bitstream Charter","Iowan Old Style",Georgia,serif;--sans:"Avenir Next","Segoe UI",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root{--paper:#141a17;--ink:#e8eee9;--muted:#a4b2a9;--line:#2d3833;--accent:#9fb0ff;--bad:#ff9d8f}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 var(--sans)}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;background:transparent;border:1px solid var(--line);border-radius:4px;padding:5px 10px;white-space:nowrap}
+button:hover:not(:disabled){border-color:var(--ink)}
+button:disabled{opacity:.45;cursor:default}
+button.danger{color:var(--bad)}
+input,select{border:1px solid var(--line);border-radius:4px;padding:7px 9px;background:transparent;min-width:0}
+input[aria-invalid="true"]{border-color:var(--bad)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.skip{position:absolute;left:-999px}
+.skip:focus{left:12px;top:12px;background:var(--paper);padding:6px 10px;z-index:9}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.app{display:grid;grid-template-columns:200px minmax(0,1fr);min-height:100vh}
+aside{border-right:1px solid var(--line);padding:26px 18px;display:flex;flex-direction:column;gap:28px}
+.mark{font:600 28px/1 var(--serif);margin:0}
+nav{display:grid;gap:2px}
+nav button{border:0;text-align:left;display:flex;justify-content:space-between;gap:8px;padding:8px 10px}
+nav button[aria-current="page"]{background:var(--ink);color:var(--paper)}
+.count{color:var(--muted);font-variant-numeric:tabular-nums}
+nav button[aria-current="page"] .count{color:inherit}
+.io{display:grid;gap:8px}
+.keys{font-size:13px;color:var(--muted);margin:auto 0 0;line-height:2}
+kbd{font:inherit;font-size:12px;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 4px}
+main{padding:30px clamp(16px,3.5vw,44px);min-width:0}
+.lede{font:400 clamp(24px,3vw,34px)/1.2 var(--serif);margin:0 0 24px;max-width:24ch}
+h2{font:600 22px/1.2 var(--serif);margin:0 0 6px}
+.hint{color:var(--muted);font-size:14px;margin:0}
+.notice{border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:4px;padding:4px 12px;margin:0 0 18px;font-size:14px}
+.notice p{margin:6px 0}
+.add{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start;padding:16px 0;margin:18px 0 8px;border-block:1px solid var(--line)}
+.field{display:grid;gap:4px;flex:1 1 150px;font-size:13px;color:var(--muted)}
+.field input{color:var(--ink);font-size:15px}
+.err{color:var(--bad);font-size:13px;min-height:1em}
+.formbtns{display:flex;gap:8px;padding-top:21px}
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:18px 0 10px}
+.bulk{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 12px;margin:0 0 10px;border:1px solid var(--accent);border-radius:4px}
+.bulk span{margin-right:auto}
+.wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:13px;color:var(--muted);font-weight:600}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.acts{white-space:nowrap;text-align:right}
+.acts button{margin-left:4px;padding:3px 8px}
+.badge{display:inline-block;padding:1px 9px;border-radius:99px;font-size:13px;white-space:nowrap}
+.b-out,.b-expired{color:#8e2a1c;background:#f7dcd5}
+.b-low{color:#6a4b00;background:#f6e8b8}
+.b-soon{color:#5a2d6e;background:#eee0f5}
+.b-ok{color:#1e5a3e;background:#d8ebe0}
+.empty{padding:28px 0;color:var(--muted)}
+.list{list-style:none;margin:14px 0 0;padding:0}
+.list li{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.list .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.list time{color:var(--muted);font-size:14px;white-space:nowrap}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:5;background:var(--ink);color:var(--paper);padding:10px 14px;border-radius:6px;display:flex;gap:14px;align-items:center;max-width:calc(100vw - 32px)}
+.toast button{color:var(--paper);border-color:var(--muted)}
+@media (pointer:coarse){button{min-height:40px;padding:8px 12px}}
+@media (max-width:820px){.app{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid var(--line)}.keys{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="app">
+<aside>
+<p class="mark">Larder</p>
+<nav aria-label="Sections">
+<button type="button" data-view="pantry" aria-current="page">Pantry <span class="count" id="c-pantry"></span></button>
+<button type="button" data-view="shopping">Shopping list <span class="count" id="c-shop"></span></button>
+<button type="button" data-view="activity">Activity</button>
+</nav>
+<div class="io">
+<button type="button" id="exportBtn">Export JSON</button>
+<button type="button" id="importBtn">Import JSON</button>
+<input type="file" id="importFile" class="sr" accept=".json,application/json" tabindex="-1" aria-hidden="true">
+<button type="button" class="danger" id="eraseBtn">Erase all data</button>
+</div>
+<p class="keys"><kbd>/</kbd> Search<br><kbd>N</kbd> New item<br><kbd>1</kbd> to <kbd>3</kbd> Sections<br><kbd>Ctrl</kbd>+<kbd>Z</kbd> Undo</p>
+</aside>
+<main id="main" tabindex="-1">
+<div class="notice" id="notice" hidden></div>
+<section id="v-pantry">
+<p class="lede" id="lede"></p>
+<h2 id="formTitle">Add to pantry</h2>
+<form id="addForm" class="add" novalidate>
+<div class="field"><label for="f-name">Item</label><input id="f-name" maxlength="80" autocomplete="off" placeholder="Basmati rice" aria-describedby="e-name"><span class="err" id="e-name"></span></div>
+<div class="field"><label for="f-cat">Category</label><input id="f-cat" list="catList" maxlength="40" placeholder="Grains"></div>
+<div class="field"><label for="f-qty">On hand</label><input id="f-qty" type="number" inputmode="numeric" min="0" max="9999" step="1" value="1" aria-describedby="e-qty"><span class="err" id="e-qty"></span></div>
+<div class="field"><label for="f-unit">Unit</label><input id="f-unit" maxlength="20" placeholder="kg, tins"></div>
+<div class="field"><label for="f-par">Par level</label><input id="f-par" type="number" inputmode="numeric" min="0" max="9999" step="1" placeholder="0" aria-describedby="e-par"><span class="err" id="e-par"></span></div>
+<div class="field"><label for="f-exp">Use by</label><input id="f-exp" type="date" aria-describedby="e-exp"><span class="err" id="e-exp"></span></div>
+<div class="formbtns"><button type="submit" id="submitBtn">Add item</button><button type="button" id="cancelBtn" hidden>Cancel</button></div>
+</form>
+<p class="hint">Par level is the least you want on hand. Anything at or below it goes on the shopping list.</p>
+<div class="tools">
+<input type="search" id="q" placeholder="Search items" aria-label="Search items">
+<select id="flt" aria-label="Show"><option value="all">Everything</option><option value="need">Needs restocking</option><option value="soon">Expiring or expired</option></select>
+<select id="cat" aria-label="Category"></select>
+<select id="srt" aria-label="Sort by"><option value="name">Sort by name</option><option value="exp">Sort by use-by date</option><option value="qty">Sort by quantity</option><option value="cat">Sort by category</option></select>
+</div>
+<div class="bulk" id="bulk" hidden><span id="bulkCount"></span><button type="button" id="bulkRestock">Restock to par</button><button type="button" class="danger" id="bulkDelete">Delete selected</button><button type="button" id="bulkClear">Clear selection</button></div>
+<div class="wrap"><table>
+<caption class="sr">Pantry items</caption>
+<thead><tr><th><input type="checkbox" id="allPick" aria-label="Select all shown items"></th><th>Item</th><th>On hand</th><th>Par</th><th>Use by</th><th>Status</th><th><span class="sr">Actions</span></th></tr></thead>
+<tbody id="rows"></tbody>
+</table></div>
+<div class="empty" id="pEmpty" hidden><p id="pEmptyText"></p><button type="button" id="pEmptyBtn" hidden>Clear search and filters</button></div>
+</section>
+<section id="v-shopping" hidden>
+<h2>Shopping list</h2>
+<p class="hint">Filled from anything at or below par. Mark something bought and it is restocked to par.</p>
+<div class="tools"><button type="button" id="copyList">Copy list</button></div>
+<ul class="list" id="shopList"></ul>
+<p class="empty" id="shopEmpty" hidden>Nothing to buy. Everything is above par.</p>
+</section>
+<section id="v-activity" hidden>
+<h2>Activity</h2>
+<p class="hint">Every change on this device, newest first.</p>
+<ul class="list" id="logList"></ul>
+<p class="empty" id="logEmpty" hidden>No changes yet. Adding, using and restocking items will appear here.</p>
+</section>
+</main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<datalist id="catList"></datalist>
+<script>
+(() => {
+'use strict';
+const KEY = 'larder.v1';
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'})[c]);
+const DAY = 864e5, DATE = /^\d{4}-\d{2}-\d{2}$/;
+const fmt = d => [d.getFullYear(), String(d.getMonth() + 1).padStart(2, '0'), String(d.getDate()).padStart(2, '0')].join('-');
+const dayNum = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d).getTime(); };
+const todayNum = () => dayNum(fmt(new Date()));
+const dayFromToday = n => { const d = new Date(); d.setDate(d.getDate() + n); return fmt(d); };
+const now = () => new Date().toISOString();
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const LABEL = {out: 'Out', expired: 'Expired', low: 'Low', soon: 'Use soon', ok: 'In stock'};
+const soonFlag = it => !!it.exp && dayNum(it.exp) - todayNum() <= 7 * DAY;
+const status = it => it.qty === 0 ? 'out' : it.exp && dayNum(it.exp) < todayNum() ? 'expired' : it.qty <= it.par ? 'low' : soonFlag(it) ? 'soon' : 'ok';
+const restockTo = it => Math.max(it.par, 1);
+const need = it => Math.max(restockTo(it) - it.qty, 1);
+const valid = x => x && typeof x.name === 'string' && x.name.trim() !== '' && Number.isInteger(x.qty) && x.qty >= 0 && x.qty <= 9999 && (x.par === undefined || (Number.isInteger(x.par) && x.par >= 0 && x.par <= 9999));
+const clean = x => ({id: String(x.id || uid()), name: x.name.trim().slice(0, 60), cat: String(x.cat || '').trim().slice(0, 40) || 'Other', qty: x.qty, unit: String(x.unit || '').trim().slice(0, 20), par: x.par || 0, exp: DATE.test(x.exp || '') ? x.exp : '', upd: x.upd || now()});
+const sample = () => {
+  const mk = (name, cat, qty, unit, par, exp) => ({id: uid(), name, cat, qty, unit, par, exp, upd: now()});
+  return [
+    mk('Basmati rice', 'Grains', 2, 'kg', 1, ''),
+    mk('Chopped tomatoes', 'Tins', 1, 'tins', 4, dayFromToday(400)),
+    mk('Oats', 'Grains', 0, 'kg', 1, dayFromToday(120)),
+    mk('Greek yoghurt', 'Dairy', 1, 'tub', 2, dayFromToday(4)),
+    mk('Eggs', 'Dairy', 6, 'each', 4, dayFromToday(5)),
+    mk('Olive oil', 'Oils', 1, 'bottle', 1, dayFromToday(200)),
+    mk('Frozen peas', 'Frozen', 2, 'bags', 1, dayFromToday(-4)),
+    mk('Coffee beans', 'Drinks', 300, 'g', 250, dayFromToday(90))
+  ];
+};
+
+let S = {items: [], log: [], sample: false};
+let storeOK = true, loadNote = '', editing = null, undoFn = null, tTimer = 0, shown = [];
+const sel = new Set();
+
+function load() {
+  let raw = null;
+  try { raw = localStorage.getItem(KEY); } catch (e) { storeOK = false; }
+  if (!raw) return {items: sample(), log: [], sample: true};
+  try {
+    const d = JSON.parse(raw);
+    if (!d || !Array.isArray(d.items)) throw new Error('shape');
+    return {items: d.items.filter(valid).map(clean), log: Array.isArray(d.log) ? d.log : [], sample: !!d.sample};
+  } catch (e) {
+    try { localStorage.setItem(KEY + '.backup', raw); } catch (_) {}
+    loadNote = 'Saved data could not be read. A copy is kept under larder.v1.backup, and you are starting with an empty pantry.';
+    return {items: [], log: [], sample: false};
+  }
+}
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify({v: 1, items: S.items, log: S.log.slice(0, 300), sample: S.sample})); storeOK = true; }
+  catch (e) { storeOK = false; }
+}
+function log(text) { S.log.unshift({t: now(), text}); S.log.length = Math.min(S.log.length, 300); }
+function toast(msg, revert) {
+  const t = $('toast');
+  t.innerHTML = `<span>${esc(msg)}</span>${revert ? ' <button type="button" id="undoBtn">Undo</button>' : ''}`;
+  t.hidden = false;
+  undoFn = revert || null;
+  clearTimeout(tTimer);
+  tTimer = setTimeout(() => { t.hidden = true; undoFn = null; }, 6000);
+}
+function undo() {
+  if (!undoFn) return;
+  const u = undoFn;
+  undoFn = null;
+  u();
+  toast('Undone.');
+}
+function commit(msg, revert) { save(); render(); if (msg) toast(msg, revert); }
+
+function render() { renderHeader(); renderNotice(); renderPantry(); renderShop(); renderLog(); }
+function renderHeader() {
+  const toBuy = S.items.filter(i => i.qty <= i.par).length, soon = S.items.filter(soonFlag).length;
+  $('c-pantry').textContent = S.items.length || '';
+  $('c-shop').textContent = toBuy || '';
+  $('lede').textContent = !S.items.length ? 'Nothing on the shelf yet.' : !toBuy && !soon ? 'Stocked and in date.' : `${toBuy} to buy and ${soon} to use up soon.`;
+}
+function renderNotice() {
+  let h = '';
+  if (loadNote) h += `<p>${esc(loadNote)} <button type="button" data-x="dismiss">Got it</button></p>`;
+  if (!storeOK) h += '<p>This browser will not keep changes after the tab closes. Export a JSON copy to keep them.</p>';
+  if (S.sample) h += '<p>This is sample data so you can see how Larder works. <button type="button" data-x="keep">Keep it</button> <button type="button" data-x="clear">Clear sample</button></p>';
+  $('notice').innerHTML = h;
+  $('notice').hidden = !h;
+}
+function renderBulk() {
+  const all = shown.length > 0 && shown.every(i => sel.has(i.id)), some = shown.some(i => sel.has(i.id));
+  $('bulk').hidden = sel.size === 0;
+  $('bulkCount').textContent = `${sel.size} selected`;
+  $('allPick').checked = all;
+  $('allPick').indeterminate = !all && some;
+}
+function renderPantry() {
+  if (editing && !S.items.some(i => i.id === editing)) setEditing(null);
+  const q = $('q').value.trim().toLowerCase(), flt = $('flt').value, srt = $('srt').value, keep = $('cat').value;
+  const cats = [...new Set(S.items.map(i => i.cat))].sort((a, b) => a.localeCompare(b));
+  $('cat').innerHTML = '<option value="">All categories</option>' + cats.map(c => `<option>${esc(c)}</option>`).join('');
+  $('cat').value = cats.includes(keep) ? keep : '';
+  $('catList').innerHTML = cats.map(c => `<option value="${esc(c)}">`).join('');
+  const cat = $('cat').value;
+  const order = {
+    name: (a, b) => a.name.localeCompare(b.name),
+    exp: (a, b) => (a.exp || '9999').localeCompare(b.exp || '9999') || a.name.localeCompare(b.name),
+    qty: (a, b) => a.qty - b.qty || a.name.localeCompare(b.name),
+    cat: (a, b) => a.cat.localeCompare(b.cat) || a.name.localeCompare(b.name)
+  }[srt];
+  shown = S.items
+    .filter(i => !q || `${i.name} ${i.cat}`.toLowerCase().includes(q))
+    .filter(i => flt === 'all' || (flt === 'need' ? i.qty <= i.par : soonFlag(i)))
+    .filter(i => !cat || i.cat === cat)
+    .sort(order);
+  for (const id of [...sel]) if (!S.items.some(i => i.id === id)) sel.delete(id);
+  $('rows').innerHTML = shown.map(it => {
+    const st = status(it), n = esc(it.name), id = esc(it.id);
+    return `<tr data-id="${id}"><td><input type="checkbox" class="pick" aria-label="Select ${n}"${sel.has(it.id) ? ' checked' : ''}></td><td><strong>${n}</strong><br><span class="hint">${esc(it.cat)}</span></td><td class="num">${it.qty} ${esc(it.unit)}</td><td class="num">${it.par}</td><td class="num">${it.exp || '—'}</td><td><span class="badge b-${st}">${LABEL[st]}</span></td><td class="acts"><button type="button" data-act="use" aria-label="Use one ${n}">−1</button><button type="button" data-act="add" aria-label="Add one ${n}">+1</button><button type="button" data-act="edit" aria-label="Edit ${n}">Edit</button><button type="button" class="danger" data-act="del" aria-label="Delete ${n}">Delete</button></td></tr>`;
+  }).join('');
+  $('pEmpty').hidden = shown.length > 0;
+  $('pEmptyText').textContent = S.items.length ? 'Nothing matches those filters.' : 'Your pantry is empty. Add what is on your shelf above, or import a saved Larder file.';
+  $('pEmptyBtn').hidden = !(S.items.length && (q || flt !== 'all' || cat));
+  renderBulk();
+}
+function shopItems() { return S.items.filter(i => i.qty <= i.par).sort((a, b) => a.qty / restockTo(a) - b.qty / restockTo(b)); }
+function renderShop() {
+  const list = shopItems();
+  $('shopList').innerHTML = list.map(it => {
+    const st = status(it);
+    return `<li><span><strong>${esc(it.name)}</strong><br><span class="hint">${esc(it.cat)}. Have ${it.qty} ${esc(it.unit)}, par ${it.par}.</span></span><span class="row"><span class="badge b-${st}">${LABEL[st]}</span><button type="button" data-buy="${esc(it.id)}">Bought ${need(it)} ${esc(it.unit)}</button></span></li>`;
+  }).join('');
+  $('shopEmpty').hidden = list.length > 0;
+  $('copyList').disabled = list.length === 0;
+}
+function renderLog() {
+  $('logList').innerHTML = S.log.map(e => `<li><span>${esc(e.text)}</span><time datetime="${esc(e.t)}">${esc(new Date(e.t).toLocaleString([], {dateStyle: 'medium', timeStyle: 'short'}))}</time></li>`).join('');
+  $('logEmpty').hidden = S.log.length > 0;
+}
+function show(v) {
+  document.querySelectorAll('nav [data-view]').forEach(b => b.dataset.view === v ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current'));
+  ['pantry', 'shopping', 'activity'].forEach(s => { $('v-' + s).hidden = s !== v; });
+  render();
+}
+
+function setEditing(id) {
+  const it = id ? S.items.find(i => i.id === id) : null;
+  editing = it ? it.id : null;
+  $('f-name').value = it ? it.name : '';
+  $('f-cat').value = it ? it.cat : '';
+  $('f-qty').value = it ? it.qty : 1;
+  $('f-unit').value = it ? it.unit : '';
+  $('f-par').value = it ? it.par : '';
+  $('f-exp').value = it ? it.exp : '';
+  $('formTitle').textContent = it ? `Edit ${it.name}` : 'Add to pantry';
+  $('submitBtn').textContent = it ? 'Save changes' : 'Add item';
+  $('cancelBtn').hidden = !it;
+  showErrors({});
+}
+function showErrors(errs) {
+  for (const k of ['name', 'qty', 'par', 'exp']) {
+    $('e-' + k).textContent = errs[k] || '';
+    $('f-' + k).setAttribute('aria-invalid', errs[k] ? 'true' : 'false');
+  }
+}
+function check(v) {
+  const e = {};
+  const dup = S.items.find(i => i.id !== editing && i.name.toLowerCase() === v.name.toLowerCase());
+  if (!v.name) e.name = 'Name the item, for example Basmati rice.';
+  else if (v.name.length > 60) e.name = 'Keep names under 60 characters.';
+  else if (dup) e.name = `${dup.name} is already on the shelf. Edit that item instead.`;
+  if (!Number.isInteger(v.qty) || v.qty < 0) e.qty = 'Enter a whole number, 0 or more.';
+  else if (v.qty > 9999) e.qty = 'That is over 9,999. Split it into separate items.';
+  if (!Number.isInteger(v.par) || v.par < 0 || v.par > 9999) e.par = 'Enter a whole number from 0 to 9,999.';
+  if ($('f-exp').validity.badInput) e.exp = 'That is not a real date. Pick it from the calendar.';
+  return e;
+}
+$('addForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const v = {
+    name: $('f-name').value.trim(),
+    cat: $('f-cat').value.trim() || 'Other',
+    qty: $('f-qty').value === '' ? NaN : Number($('f-qty').value),
+    unit: $('f-unit').value.trim(),
+    par: $('f-par').value === '' ? 0 : Number($('f-par').value),
+    exp: $('f-exp').value
+  };
+  const errs = check(v);
+  showErrors(errs);
+  const first = ['name', 'qty', 'par', 'exp'].find(k => errs[k]);
+  if (first) return $('f-' + first).focus();
+  if (editing) {
+    const it = S.items.find(i => i.id === editing), before = {...it};
+    Object.assign(it, v, {upd: now()});
+    log(`Edited ${it.name}`);
+    setEditing(null);
+    commit(`Saved ${it.name}.`, () => { Object.assign(it, before); save(); render(); });
+  } else {
+    const it = {id: uid(), ...v, upd: now()};
+    S.items.unshift(it);
+    log(`Added ${it.name}`);
+    setEditing(null);
+    $('f-name').focus();
+    commit(`Added ${it.name}.`, () => { S.items = S.items.filter(x => x !== it); save(); render(); });
+  }
+});
+$('cancelBtn').addEventListener('click', () => setEditing(null));
+
+function bump(id, d) {
+  const it = S.items.find(i => i.id === id);
+  if (!it) return;
+  if (it.qty + d < 0) return toast(`${it.name} is at zero. Restock it before you use one.`);
+  if (it.qty + d > 9999) return toast(`${it.name} is at the 9,999 limit.`);
+  const before = it.qty;
+  it.qty += d;
+  it.upd = now();
+  log(`${d < 0 ? 'Used' : 'Added'} one ${it.name} (${it.qty} left)`);
+  commit(`${d < 0 ? 'Used one' : 'Added one'} ${it.name}. ${it.qty} left.`, () => { it.qty = before; save(); render(); });
+}
+function remove(ids) {
+  const gone = S.items.filter(i => ids.includes(i.id));
+  if (!gone.length) return;
+  const label = gone.length === 1 ? gone[0].name : `${gone.length} items`;
+  S.items = S.items.filter(i => !ids.includes(i.id));
+  ids.forEach(id => sel.delete(id));
+  log(`Deleted ${label}`);
+  commit(`Deleted ${label}.`, () => { S.items = [...gone, ...S.items]; save(); render(); });
+}
+function restock(ids) {
+  const changes = S.items.filter(i => ids.includes(i.id) && i.qty < restockTo(i)).map(i => [i, i.qty]);
+  if (!changes.length) return toast('Those items are already at par.');
+  changes.forEach(([it]) => { it.qty = restockTo(it); it.upd = now(); });
+  const label = changes.length === 1 ? changes[0][0].name : `${changes.length} items`;
+  log(`Restocked ${label}`);
+  commit(`Restocked ${label}.`, () => { changes.forEach(([it, q]) => { it.qty = q; }); save(); render(); });
+}
+function refocus(id, act) {
+  const b = document.querySelector(`#rows tr[data-id="${id}"] [data-act="${act}"]`);
+  if (b) b.focus();
+}
+
+$('rows').addEventListener('click', e => {
+  const b = e.target.closest('button[data-act]');
+  if (!b) return;
+  const id = b.closest('tr').dataset.id, act = b.dataset.act;
+  if (act === 'del') return remove([id]);
+  if (act === 'edit') { setEditing(id); return $('f-name').focus(); }
+  bump(id, act === 'use' ? -1 : 1);
+  refocus(id, act);
+});
+$('rows').addEventListener('change', e => {
+  if (!e.target.classList.contains('pick')) return;
+  const id = e.target.closest('tr').dataset.id;
+  if (e.target.checked) sel.add(id); else sel.delete(id);
+  renderBulk();
+});
+$('allPick').addEventListener('change', e => {
+  shown.forEach(i => e.target.checked ? sel.add(i.id) : sel.delete(i.id));
+  renderPantry();
+});
+$('bulkRestock').addEventListener('click', () => restock([...sel]));
+$('bulkDelete').addEventListener('click', () => remove([...sel]));
+$('bulkClear').addEventListener('click', () => { sel.clear(); renderPantry(); });
+['q', 'flt', 'cat', 'srt'].forEach(id => ['input', 'change'].forEach(ev => $(id).addEventListener(ev, () => renderPantry())));
+$('pEmptyBtn').addEventListener('click', () => { $('q').value = ''; $('flt').value = 'all'; $('cat').value = ''; renderPantry(); $('q').focus(); });
+
+$('shopList').addEventListener('click', e => { const b = e.target.closest('[data-buy]'); if (b) restock([b.dataset.buy]); });
+$('copyList').addEventListener('click', async () => {
+  const text = shopItems().map(i => `${i.name}: ${need(i)}${i.unit ? ' ' + i.unit : ''}`).join('\n');
+  try { await navigator.clipboard.writeText(text); toast('Shopping list copied.'); }
+  catch (err) { toast('Could not reach the clipboard here. Select the list on screen and copy it.'); }
+});
+
+$('exportBtn').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify({app: 'larder', version: 1, exported: now(), items: S.items, log: S.log}, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = Object.assign(document.createElement('a'), {href: url, download: `larder-${fmt(new Date())}.json`});
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+  toast(`Exported ${S.items.length} items.`);
+});
+$('importBtn').addEventListener('click', () => $('importFile').click());
+$('importFile').addEventListener('change', async e => {
+  const file = e.target.files[0];
+  e.target.value = '';
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) return toast('That file is over 2 MB, too large for a pantry export.');
+  let d = null;
+  try { d = JSON.parse(await file.text()); } catch (err) { return toast('That file is not valid JSON, so nothing was imported.'); }
+  if (!d || !Array.isArray(d.items)) return toast('That is not a Larder export. It needs an items list.');
+  const good = d.items.filter(valid).map(x => clean({...x, id: ''}));
+  const skipped = d.items.length - good.length;
+  if (!good.length) return toast(`No usable items found. ${skipped} rows were skipped.`);
+  const before = S.items, wasSample = S.sample;
+  S.items = good;
+  S.sample = false;
+  sel.clear();
+  log(`Imported ${good.length} items`);
+  commit(`Replaced your pantry with ${good.length} items${skipped ? `, skipped ${skipped}` : ''}.`, () => { S.items = before; S.sample = wasSample; save(); render(); });
+});
+$('eraseBtn').addEventListener('click', () => {
+  if (!confirm('Erase every item and the activity log in this browser? Export a copy first if you want to keep them.')) return;
+  S = {items: [], log: [], sample: false};
+  sel.clear();
+  save();
+  render();
+  toast('All data erased.');
+});
+$('notice').addEventListener('click', e => {
+  const x = e.target.dataset.x;
+  if (x === 'dismiss') loadNote = '';
+  else if (x === 'keep') S.sample = false;
+  else if (x === 'clear') {
+    const before = S.items;
+    S.items = [];
+    S.sample = false;
+    log('Cleared sample data');
+    return commit('Sample data cleared.', () => { S.items = before; S.sample = true; save(); render(); });
+  } else return;
+  save();
+  render();
+});
+$('toast').addEventListener('click', e => { if (e.target.id === 'undoBtn') undo(); });
+window.addEventListener('storage', e => {
+  if (e.key !== KEY || !e.newValue) return;
+  S = load();
+  render();
+  toast('Pantry updated from another open tab.');
+});
+
+document.querySelectorAll('nav [data-view]').forEach(b => b.addEventListener('click', () => show(b.dataset.view)));
+document.addEventListener('keydown', e => {
+  const typing = /^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName), mod = e.ctrlKey || e.metaKey, k = e.key.toLowerCase();
+  if (mod && k === 'z' && !typing) { if (undoFn) { e.preventDefault(); undo(); } return; }
+  if (typing || mod || e.altKey) { if (typing && k === 'escape') e.target.blur(); return; }
+  if (k === '/') { e.preventDefault(); show('pantry'); $('q').focus(); }
+  else if (k === 'n') { e.preventDefault(); show('pantry'); $('f-name').focus(); }
+  else if (/^[123]$/.test(k)) show(['pantry', 'shopping', 'activity'][Number(k) - 1]);
+  else if (k === 'escape') { if (editing) setEditing(null); sel.clear(); renderPantry(); }
+});
+
+S = load();
+show('pantry');
+})();
+</script>
+</body>
+</html>

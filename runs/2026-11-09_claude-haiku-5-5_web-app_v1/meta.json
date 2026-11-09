@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "claude-haiku-5-5",
+  "category": "web-app",
+  "date": "2026-11-09",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "03",
+  "prompt_label": "Complete Web Application",
+  "notes": "Larder is a single-file pantry and shopping app. It tracks items on hand with par levels and builds a shopping list from anything at or below par. The pantry, shopping list and activity log share one data set, so a change in one is reflected in the counts, the summary line and the others. Create, edit, delete, use, restock, bulk restock and bulk delete all work, with validation that rejects bad input with a specific reason, and undo for the most recent action. Search, status and category filters, and sorting by name, use-by date, quantity or category. Empty, sample-data, storage-unavailable and unreadable-data states are handled. Data persists in localStorage behind try/catch guards, can be exported and imported as JSON, and can be erased deliberately. Keyboard shortcuts: slash for search, N for a new item, 1 to 3 for sections, Ctrl+Z for undo, Escape to clear selection. Known limits: this is a lean first build. There is no command palette, no IndexedDB, no virtual scrolling, and undo covers only the latest action. Two open tabs are synced through the storage event, but that path is untested. Test status: the inline script was parsed and every element id it references was confirmed to exist in the markup. The app was not run in a browser, so the interaction paths are unverified.",
+  "slug": "2026-11-09_claude-haiku-5-5_web-app_v1",
+  "path": "runs/2026-11-09_claude-haiku-5-5_web-app_v1/index.html",
+  "source_file": "web-app_claude-haiku-5-5_2026-11-09_v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}
