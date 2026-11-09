@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crouton Alpha — Plate IV · The Four-Stroke Engine</title>
+<style>
+:root{
+--paper:#F3EDDC;--paper2:#EDE3CC;--ink:#16202E;--ink2:#3C4A5C;--accent:#C0502F;--brass:#A98444;
+--steel:#3E6B8A;--blue:#2F6F9F;--green:#5A7D4F;--line:#C9BC9B;--card:#FBF7EA;--dark:#101A26;
+--shadow:0 10px 30px rgba(22,32,46,.14);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);
+font-family:Georgia,"Times New Roman",serif;}
+body{background:
+radial-gradient(1200px 600px at 20% -10%,#fff8e6 0%,transparent 55%),
+repeating-linear-gradient(0deg,transparent 0 27px,rgba(62,107,138,.045) 27px 28px),
+repeating-linear-gradient(90deg,transparent 0 27px,rgba(62,107,138,.045) 27px 28px),
+var(--paper);}
+button,input,select{font:inherit}
+header{max-width:1440px;margin:0 auto;padding:22px 22px 8px;display:flex;gap:18px;align-items:flex-end;justify-content:space-between;flex-wrap:wrap}
+.eyebrow{font-family:ui-monospace,Consolas,monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent)}
+h1{margin:4px 0 2px;font-size:clamp(28px,4vw,46px);line-height:.95;font-weight:700;letter-spacing:-.02em}
+h1 em{font-style:italic;color:var(--steel)}
+.sub{margin:6px 0 0;color:var(--ink2);font-size:15px;max-width:720px;line-height:1.45}
+.hdr-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{border:1.5px solid var(--ink);background:var(--card);color:var(--ink);padding:8px 13px;border-radius:999px;cursor:pointer;font-family:ui-monospace,Consolas,monospace;font-size:12px;letter-spacing:.04em;box-shadow:2px 2px 0 var(--ink);transition:transform .12s,box-shadow .12s,background .12s}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+.btn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--ink)}
+.btn.primary{background:var(--ink);color:var(--paper)}
+.btn.accent{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:2px 2px 0 #7a2c18}
+.btn[aria-pressed="true"]{background:var(--brass);color:#fff}
+main{max-width:1440px;margin:0 auto;padding:14px 22px 10px;display:grid;grid-template-columns:minmax(0,1.62fr) minmax(320px,.95fr);gap:18px}
+@media(max-width:1020px){main{grid-template-columns:1fr}}
+.stage-wrap{position:relative}
+.stage{position:relative;border:1.5px solid var(--ink);background:linear-gradient(180deg,#FBF6E8,#F1E8D2);box-shadow:var(--shadow);border-radius:6px;overflow:hidden}
+.stage:before,.stage:after{content:"";position:absolute;width:18px;height:18px;border-color:var(--accent);border-style:solid;opacity:.8;z-index:3;pointer-events:none}
+.stage:before{top:8px;left:8px;border-width:2px 0 0 2px}
+.stage:after{bottom:8px;right:8px;border-width:0 2px 2px 0}
+#scene{display:block;width:100%;height:min(68vh,660px);min-height:420px;cursor:crosshair;touch-action:none;outline:none}
+#scene:focus-visible{box-shadow:inset 0 0 0 3px var(--steel)}
+.phase{position:absolute;left:14px;top:12px;z-index:4;background:rgba(251,247,234,.92);border:1.5px solid var(--ink);padding:9px 12px;border-radius:4px;max-width:330px;box-shadow:3px 3px 0 rgba(22,32,46,.85)}
+.phase b{display:block;font-size:19px;letter-spacing:.01em}
+.phase span{display:block;font-size:12.5px;color:var(--ink2);line-height:1.35;margin-top:2px}
+.phase .stroke{font-family:ui-monospace,Consolas,monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.zoombox{position:absolute;right:12px;top:12px;z-index:4;display:flex;gap:6px}
+.zoombox .btn{padding:7px 10px}
+.statusbar{position:absolute;left:14px;bottom:12px;z-index:4;font-family:ui-monospace,Consolas,monospace;font-size:11.5px;background:var(--dark);color:#F3EDDC;padding:7px 10px;border-radius:3px;letter-spacing:.03em;max-width:70%}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:9px;font-family:ui-monospace,Consolas,monospace;font-size:11px;color:var(--ink2)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+aside{display:flex;flex-direction:column;gap:14px;min-width:0}
+.panel{background:var(--card);border:1.5px solid var(--ink);border-radius:6px;padding:14px 15px;box-shadow:var(--shadow)}
+.panel h2{margin:0 0 8px;font-size:16px;letter-spacing:.02em;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.panel h2 small{font-family:ui-monospace,Consolas,monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:400}
+.inspect h2{font-size:22px}
+.inspect .tag{font-family:ui-monospace,Consolas,monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--steel);padding:3px 8px;border-radius:999px;white-space:nowrap}
+.inspect p{margin:7px 0;line-height:1.5;font-size:14.5px;color:var(--ink)}
+.inspect .now{border-left:3px solid var(--accent);background:#FFF3D6;padding:9px 11px;font-family:ui-monospace,Consolas,monospace;font-size:12.5px;line-height:1.5}
+.readouts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ro{border:1px solid var(--line);background:#fff;padding:8px 9px;border-radius:4px}
+.ro label{display:block;font-family:ui-monospace,Consolas,monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
+.ro b{font-family:ui-monospace,Consolas,monospace;font-size:17px;font-weight:700}
+.ro span{font-family:ui-monospace,Consolas,monospace;font-size:11px;color:var(--ink2)}
+canvas.graph{width:100%;height:138px;display:block;border:1px solid var(--line);background:#FFFDF4;border-radius:4px;margin-top:8px}
+canvas.graph.small{height:96px}
+.ctrl-row{display:grid;grid-template-columns:112px 1fr 74px;gap:9px;align-items:center;margin:9px 0;font-size:13px}
+.ctrl-row output{font-family:ui-monospace,Consolas,monospace;font-size:12px;text-align:right;background:#fff;border:1px solid var(--line);padding:4px 6px;border-radius:3px}
+input[type=range]{width:100%;accent-color:var(--accent);height:22px;cursor:pointer}
+select{width:100%;padding:8px;border:1.5px solid var(--ink);background:#fff;border-radius:4px}
+.checks{display:flex;gap:12px;flex-wrap:wrap;font-size:13px;margin-top:8px}
+.checks label{display:flex;gap:6px;align-items:center;cursor:pointer}
+input[type=checkbox]{accent-color:var(--accent);width:16px;height:16px}
+.parts{display:flex;flex-wrap:wrap;gap:6px}
+.parts .btn{padding:6px 9px;font-size:11px;box-shadow:none}
+.parts .btn[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.note{font-size:12.5px;color:var(--ink2);line-height:1.5}
+.warn{border-left:3px solid var(--accent);background:#FFE9DE;padding:8px 10px;font-size:12.5px;line-height:1.45;margin-top:8px;display:none}
+footer{max-width:1440px;margin:0 auto;padding:6px 22px 28px}
+.transport{background:var(--dark);color:var(--paper);border-radius:8px;padding:14px 16px;box-shadow:var(--shadow)}
+.transport .top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.transport .btn{background:var(--paper);color:var(--dark);box-shadow:2px 2px 0 #000}
+.transport .btn.primary{background:var(--accent);color:#fff}
+.scrub-wrap{margin-top:12px}
+.scrub-wrap input{width:100%;accent-color:var(--accent);height:28px;cursor:ew-resize}
+.ticks{display:flex;justify-content:space-between;font-family:ui-monospace,Consolas,monospace;font-size:10px;letter-spacing:.08em;color:#C9BC9B;text-transform:uppercase;margin-top:2px;gap:6px;flex-wrap:wrap}
+.ticks b{color:#F3EDDC}
+.kbd{font-family:ui-monospace,Consolas,monospace;font-size:10.5px;border:1px solid #4A5A70;border-bottom-width:2px;padding:1px 5px;border-radius:3px;color:#DCE6F2}
+@media(max-width:640px){.readouts{grid-template-columns:repeat(2,1fr)}#scene{height:56vh;min-height:360px}.ctrl-row{grid-template-columns:92px 1fr 64px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header>
+<div>
+<div class="eyebrow">Crouton Alpha · Technical Plate IV · Cutaway No. 500</div>
+<h1>The Four-Stroke <em>Engine</em></h1>
+<p class="sub">One crankshaft rotation is only half the story. This single-cylinder Otto engine completes intake, compression, power and exhaust in 720° — every piston, valve, gear and graph below is derived from that one angle.</p>
+</div>
+<div class="hdr-tools">
+<button class="btn primary" id="btnPlay" aria-pressed="true">❚❚ Pause</button>
+<button class="btn" id="btnSound" aria-pressed="false">🔇 Sound off</button>
+<button class="btn" id="btnReset">Reset view</button>
+</div>
+</header>
+
+<main>
+<section class="stage-wrap" aria-label="Engine cutaway">
+<div class="stage">
+<canvas id="scene" tabindex="0" aria-label="Interactive engine cutaway. Use arrow keys to step the crankshaft, space to play or pause, number keys to inspect parts."></canvas>
+<div class="phase"><span class="stroke" id="phaseStroke">Stroke 1 of 4</span><b id="phaseName">Intake</b><span id="phaseDesc">Piston descends, intake valve open, fresh charge enters.</span></div>
+<div class="zoombox"><button class="btn" id="btnZoomOut" aria-label="Zoom out">−</button><button class="btn" id="btnZoomIn" aria-label="Zoom in">+</button></div>
+<div class="statusbar" id="statusBar">Hover or tap a component · scroll to zoom</div>
+</div>
+<div class="legend"><span><i style="background:#2F6F9F"></i>Fresh charge</span><span><i style="background:#C0502F"></i>Combustion</span><span><i style="background:#8A8578"></i>Exhaust</span><span>Crank angle <b id="degRead">0°</b> · 0° = TDC</span></div>
+</section>
+
+<aside>
+<div class="panel inspect">
+<h2><span id="iTitle">Piston</span><span class="tag" id="iTag">Reciprocating</span></h2>
+<p id="iBody"></p>
+<div class="now" id="iNow"></div>
+<div class="parts" id="partsList" style="margin-top:11px" aria-label="Component list"></div>
+</div>
+
+<div class="panel">
+<h2>Live instruments <small>same θ · same state</small></h2>
+<div class="readouts">
+<div class="ro"><label>Crank speed</label><b id="rRpm">900</b> <span>rpm</span></div>
+<div class="ro"><label>Cylinder pressure</label><b id="rPres">0.7</b> <span>bar</span></div>
+<div class="ro"><label>Gas torque</label><b id="rTorq">0</b> <span>N·m</span></div>
+<div class="ro"><label>Piston position</label><b id="rPos">0.0</b> <span>mm from BDC</span></div>
+<div class="ro"><label>Cylinder volume</label><b id="rVol">50</b> <span>cm³</span></div>
+<div class="ro"><label>Indicated power</label><b id="rPow">0</b> <span>kW · IMEP <b id="rImep" style="font-size:12px">0</b> bar</span></div>
+</div>
+<canvas class="graph" id="gPres" aria-label="Pressure versus crank angle graph"></canvas>
+<canvas class="graph" id="gPV" aria-label="Pressure volume diagram"></canvas>
+<canvas class="graph small" id="gTorq" aria-label="Torque versus crank angle graph"></canvas>
+</div>
+
+<div class="panel">
+<h2>What-if laboratory <small>change physics</small></h2>
+<div class="ctrl-row"><label for="sRpm">Engine speed</label><input type="range" id="sRpm" min="150" max="3200" step="10" value="900"><output id="vRpm">900 rpm</output></div>
+<div class="ctrl-row"><label for="sThr">Throttle / load</label><input type="range" id="sThr" min="8" max="100" step="1" value="65"><output id="vThr">65%</output></div>
+<div class="ctrl-row"><label for="sCR">Compression ratio</label><input type="range" id="sCR" min="5" max="12" step="0.1" value="10"><output id="vCR">10.0:1</output></div>
+<div class="ctrl-row"><label for="sSpark">Spark advance</label><input type="range" id="sSpark" min="-10" max="35" step="1" value="18"><output id="vSpark">18° BTDC</output></div>
+<div class="ctrl-row"><label for="sExplode">Exploded view</label><input type="range" id="sExplode" min="0" max="100" step="1" value="0"><output id="vExplode">0%</output></div>
+<label class="note" for="faultSel">Inject a fault — the engine is driven by the rig, so it keeps turning and shows the true consequence:</label>
+<select id="faultSel" style="margin-top:7px">
+<option value="none">✓ Healthy engine</option>
+<option value="misfire">✕ Spark plug fouled — misfire every cycle</option>
+<option value="exhaustStuck">✕ Exhaust valve burnt / stuck open</option>
+<option value="intakeStuck">✕ Intake valve stuck closed</option>
+<option value="beltSlip">✕ Timing belt slipped +90° crank</option>
+</select>
+<div class="warn" id="faultWarn"></div>
+<div class="checks">
+<label><input type="checkbox" id="chkLabels" checked> Leader labels</label>
+<label><input type="checkbox" id="chkIso" checked> Isolate selection</label>
+<label><input type="checkbox" id="chkSlow"> Inspection slow-motion ÷20</label>
+</div>
+<p class="note" style="margin-top:10px">Try: raise compression with late spark, then fit the stuck exhaust valve. Watch the p–V loop collapse and torque go negative on compression — the rig still turns, but it no longer makes power.</p>
+</div>
+</aside>
+</main>
+
+<footer>
+<div class="transport">
+<div class="top">
+<button class="btn" id="btnBack" aria-label="Step back 5 degrees">◀ 5°</button>
+<button class="btn primary" id="btnPlay2">❚❚ Pause</button>
+<button class="btn" id="btnFwd" aria-label="Step forward 5 degrees">5° ▶</button>
+<span style="font-family:ui-monospace,Consolas,monospace;font-size:12px">Crank angle <b id="degRead2">0.0°</b> / 720°</span>
+<span style="margin-left:auto;font-size:12px;color:#C9BC9B"><span class="kbd">Space</span> play · <span class="kbd">←</span><span class="kbd">→</span> step · <span class="kbd">1–9</span> inspect · scroll = zoom · drag = pan</span>
+</div>
+<div class="scrub-wrap">
+<input type="range" id="scrub" min="0" max="720" step="0.1" value="0" aria-label="Scrub through the full 720 degree cycle">
+<div class="ticks"><span><b>0° TDC</b> Intake</span><span><b>180°</b> BDC</span><span><b>342°</b> Spark</span><span><b>360° TDC</b> Power</span><span><b>540°</b> BDC</span><span><b>720°</b> TDC</span></div>
+</div>
+</div>
+<p class="note" style="margin-top:10px">Kinematics: piston height y = r·cosθ + √(l² − r²·sin²θ), r = 43 mm, l = 129 mm, bore × stroke = 86 × 86 mm (499 cm³). Pressure is a polytropic Otto model with finite combustion; torque = −(p−p₀)·A·dy/dθ. Zoom right into the chamber: the ring pack, valve seats and timing marks are drawn to scale.</p>
+</footer>
+
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const fract=v=>v-Math.floor(v);
+const smooth=(a,b,x)=>{const t=clamp((x-a)/(b-a),0,1);return t*t*(3-2*t);};
+const D2R=Math.PI/180, RAD2D=180/Math.PI;
+const reduced=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- single source of truth ---------- */
+const P={rpm:900,throttle:65,cr:10,spark:18,fault:"none"};
+let theta=0, playing=!reduced, scrubbing=false, explode=0, zoom=1, pan={x:0,y:0};
+let selected="piston", hovered=null, labelsOn=true, isoOn=true, slowOn=false, soundOn=false;
+let prevTheta=0, view={s:1,ox:0,oy:0}, audioCtx=null, masterGain=null;
+
+const R=43,L=129,BORE=86,STROKE=86,VD=Math.PI/4*BORE*BORE*STROKE/1000, AREA=Math.PI/4*BORE*BORE;
+const CX=460,CY=448,SCALE=0.9,RPX=R*SCALE,LPX=L*SCALE;
+const sparkTheta=()=>360-P.spark;
+function pistonYmm(th){const t=th*D2R;return R*Math.cos(t)+Math.sqrt(L*L-R*R*Math.sin(t)*Math.sin(t));}
+function pistonYPx(th){const t=th*D2R;return RPX*Math.cos(t)+Math.sqrt(LPX*LPX-RPX*RPX*Math.sin(t)*Math.sin(t));}
+function dyDth(th){const t=th*D2R,s=Math.sin(t),c=Math.cos(t);return -R*s-(R*R*s*c)/Math.sqrt(L*L-R*R*s*s);}
+function volumeAt(th){const disp=(pistonYmm(th)-(L-R))/(2*R);const vc=VD/(P.cr-1);return vc+VD*clamp(disp,0,1);}
+function valveShift(){return P.fault==="beltSlip"?90:0;}
+function liftIn(th,start,end,max){const len=((end-start)%720+720)%720;const d=((th-start)%720+720)%720;if(d>len)return 0;return max*Math.pow(Math.sin(Math.PI*d/len),0.85);}
+function intakeLift(th){if(P.fault==="intakeStuck")return 0;const s=valveShift();return liftIn(th,705+s,205+s,9);}
+function exhaustLift(th){if(P.fault==="exhaustStuck")return 8.2;const s=valveShift();return liftIn(th,525+s,15+s,9);}
+function pInEff(){let p=0.22+0.78*(P.throttle/100);if(P.fault==="intakeStuck")p=0.18;if(P.fault==="beltSlip")p*=0.92;return p;}
+function peakPressure(){const pIn=pInEff();let pT=pIn*Math.pow(P.cr,1.32);
+ if(P.fault==="exhaustStuck")pT*=0.62;
+ const centroid=sparkTheta()+25,eff=clamp(1-0.010*Math.abs(centroid-375),0.68,1);
+ let pPk=pT*(1+2.55*(P.throttle/100)*eff);
+ if(P.fault==="misfire")pPk=pT*1.02;
+ if(P.fault==="intakeStuck")pPk*=0.35;
+ if(P.fault==="exhaustStuck")pPk*=0.62;
+ if(P.fault==="beltSlip")pPk*=0.85;
+ return {pT,pPk};}
+function pressureAt(th){
+ const v=volumeAt(th),vmax=VD/(P.cr-1)+VD,vpeak=volumeAt(372),{pPk}=peakPressure(),pIn=pInEff(),sp=sparkTheta();
+ if(th<180)return pIn*0.92;
+ if(th<540){
+  const comp=pIn*Math.pow(vmax/v,1.32);
+  if(P.fault==="misfire")return comp*(P.fault==="exhaustStuck"?0.7:1);
+  const expP=pPk*Math.pow(vpeak/v,1.3);
+  const w=smooth(sp,sp+42,th);
+  let p=(1-w)*comp+w*expP;
+  if(P.fault==="exhaustStuck")p*=1-0.35*smooth(180,360,th);
+  if(th>520){const p540=pPk*Math.pow(vpeak/volumeAt(540),1.3);p=lerp(p,1.02+(p540-1.02)*Math.exp(-(th-520)/30),smooth(520,545,th));}
+  return p;}
+ const p540=peakPressure().pPk*Math.pow(volumeAt(372)/volumeAt(540),1.3);
+ let p=1.02+(p540-1.02)*Math.exp(-(th-540)/28)+0.03*Math.sin(th*0.1);
+ if(th>700)p=lerp(p,pIn*0.92,smooth(700,720,th));
+ return p;}
+function torqueAt(th){return -(pressureAt(th)-1.0)*0.5808*dyDth(th);}
+function imepBar(){let w=0;const steps=240;let pv=volumeAt(0),pp=pressureAt(0);
+ for(let i=1;i<=steps;i++){const th=i/steps*720,v=volumeAt(th),p=pressureAt(th);w+=0.5*(p+pp)*(v-pv);pv=v;pp=p;}return w/VD;}
+function phaseInfo(th){
+ if(th<180)return["Stroke 1 of 4","Intake","Piston descends. Intake valve open — fresh air–fuel charge is drawn in. Pressure sits below atmospheric (throttling)."];
+ if(th<360)return["Stroke 2 of 4","Compression","Both valves shut. Piston rises, squeezing the charge to ~1/10th volume. Pressure & temperature climb polytropically."];
+ if(th<540)return["Stroke 3 of 4","Power","Spark fires before TDC; the flame front sweeps the chamber. Expanding gas drives the piston down — the only stroke that does work."];
+ return["Stroke 4 of 4","Exhaust","Exhaust valve opens before BDC. Blowdown, then the piston sweeps burned gas out. Overlap at TDC scavenges the chamber."];}
+
+/* ---------- parts metadata ---------- */
+const PARTS=[
+{id:"piston",num:"1",name:"Piston & rings",tag:"Reciprocating",body:"Forged aluminium crown with three rings: two steel compression rings seal against the bore, the oil-control ring scrapes the film back to the crankcase. The crown carries the combustion load — at peak it sees over 40 bar pushing on 58 cm²."},
+{id:"rod",num:"2",name:"Connecting rod",tag:"Articulation",body:"Converts the piston's straight-line force into crankshaft torque. Its length l = 129 mm and crank radius r = 43 mm set the slider-crank geometry; the small end rides on the wrist pin, the big end on the crank pin."},
+{id:"crank",num:"3",name:"Crankshaft & counterweight",tag:"Rotating",body:"The crank throw is offset 43 mm from the main axis, so the rod's push becomes torque. The counterweight opposite the pin balances the rotating mass — and every 360° of rotation is only two of the four strokes."},
+{id:"intakeV",num:"4",name:"Intake valve",tag:"Breathing",body:"Admits the fresh charge. It opens ~15° before TDC (overlap), reaches 9 mm lift, and closes ~25° after BDC so incoming charge keeps ramming in while the piston is already rising."},
+{id:"exhaustV",num:"5",name:"Exhaust valve",tag:"Breathing",body:"Releases burned gas. It opens ~15° before BDC — blowdown first, while pressure is still useful for work — and closes ~15° after TDC, letting the outgoing exhaust drag the last charge residues out."},
+{id:"cam",num:"6",name:"Camshaft & lobes",tag:"Timing",body:"Runs at exactly half crank speed via the 2:1 gear pair. Each lobe's profile is the valve-lift curve in metal: base circle for dwell, flank for opening, nose for full lift. Turn it through 360° and the crank has turned 720°."},
+{id:"spark",num:"7",name:"Spark plug",tag:"Ignition",body:"Fires ~18° before compression TDC so the flame kernel (which takes ~40° of crank rotation to cross the bore) is fully established just as the piston starts down. Too early wastes work against the rising piston; too late and the peak pressure misses the useful expansion."},
+{id:"intakeP",num:"8",name:"Intake port & manifold",tag:"Charge",body:"Carries air–fuel mixture from the throttle to the valve. At part throttle the manifold sits at ~0.7 bar — that pressure deficit is exactly what the throttled pressure waveform shows during intake."},
+{id:"exhaustP",num:"9",name:"Exhaust port & manifold",tag:"Scavenging",body:"Routes burned gas away during the exhaust stroke, then during valve overlap the fast-moving exhaust creates a slight suction that helps pull fresh charge in — scavenging."},
+{id:"head",num:"10",name:"Cylinder head",tag:"Structure",body:"Cast head carrying valves, cam bearings and plug. Its combustion-chamber dome (clearance volume Vc = Vd/(CR−1)) sets the compression ratio together with the piston at TDC."},
+{id:"block",num:"11",name:"Cylinder block",tag:"Structure",body:"The honed bore (Ø86 mm) guides the piston; cooling fins shed heat to the airstream. Bore × stroke = 86 × 86 mm gives a displacement of 499 cm³ — a 'square' engine."},
+{id:"belt",num:"12",name:"Timing belt & gears",tag:"Timing",body:"Crank gear (30 mm pitch radius) drives the cam gear (60 mm) — hence cam speed = crank/2. The painted timing marks must align at TDC; slip the belt 90° and the valves no longer agree with the piston."},
+{id:"crankcase",num:"13",name:"Crankcase & oil",tag:"Lubrication",body:"The crank throws oil onto the bore and bearings; the sump holds it below the crank's reach. Note the crankcase stays near atmospheric pressure — gas torque uses (p − p₀), not gauge pressure alone."},
+{id:"charge",num:"14",name:"Fresh charge",tag:"Charge",body:"The blue particles are the intake charge, followed deterministically from the manifold, through the valve, into the chamber, and out as grey exhaust. Watch them during overlap at TDC: a little fresh charge can short-circuit straight out — the price of late closing."}];
+const PARTMAP={};PARTS.forEach(p=>PARTMAP[p.id]=p);
+const plist=$("partsList");
+PARTS.forEach((p,i)=>{const b=document.createElement("button");b.className="btn";b.textContent=p.num+" "+p.name;b.dataset.id=p.id;b.setAttribute("aria-pressed",p.id===selected?"true":"false");
+ b.addEventListener("click",()=>selectPart(p.id));plist.appendChild(b);});
+
+function selectPart(id){selected=id;plist.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.id===id?"true":"false"));updateInspect();}
+function dynamicNow(id,th){
+ const v=volumeAt(th),p=pressureAt(th),tq=torqueAt(th),il=intakeLift(th),el=exhaustLift(th),pos=(pistonYmm(th)-(L-R));
+ const dPos=pos.toFixed(1),dV=v.toFixed(0),dP=p.toFixed(1),dT=tq.toFixed(1);
+ switch(id){
+ case "piston":return `Now: ${dPos} mm above BDC · crown at ${dP} bar · gas force ${( (p-1)*AREA/100 ).toFixed(0)} N pushing the crown. ${th>340&&th<410?"Combustion load is near its peak — the rings are pressed hard against the bore.":""}`;
+ case "rod":return `Now: rod angle ${Math.asin(clamp(R*Math.sin(th*D2R)/L,-1,1))*RAD2D>0?"":"−"}${(Math.asin(clamp(R*Math.sin(th*D2R)/L,-1,1))*RAD2D).toFixed(1)}° from the bore axis · transmitting ${dT} N·m to the crank.`;
+ case "crank":return `Now: crank at ${th.toFixed(0)}° · gas torque ${dT} N·m ${tq>0?"driving":"resisting"} rotation. Counterweight is opposite the pin, balancing the throw.`;
+ case "intakeV":return `Now: intake lift ${il.toFixed(1)} mm ${il>0.1?"· charge is flowing":"· seated, sealed"}. Opens −15°, closes +25° past BDC.`;
+ case "exhaustV":return `Now: exhaust lift ${el.toFixed(1)} mm ${el>0.1?"· burned gas escaping":"· seated, sealed"}. Opens 15° before BDC, closes 15° after TDC (overlap).`;
+ case "cam":return `Now: cam at ${(th/2).toFixed(0)}° (half crank speed) · lobes ${il>0.1||el>0.1?"on the flank, holding a valve open":"on the base circle, valves at rest"}.`;
+ case "spark":return `Now: gap sees ${Math.abs(th-sparkTheta())<2?"THE SPARK — kernel forming":Math.abs(th-sparkTheta())<40?"flame front expanding from the gap":"no discharge"}. Fires at ${sparkTheta().toFixed(0)}° (${P.spark}° BTDC).`;
+ case "intakeP":return `Now: manifold at ${(pInEff()).toFixed(2)} bar (throttle ${P.throttle}%) · flow ${il>0.1?"inward, charging the cylinder":"stopped — valve shut"}.`;
+ case "exhaustP":return `Now: port pressure ${th>540?dP+" bar, blowdown/sweep":"~1.0 bar, idle"} · flow ${el>0.1?"outward to the exhaust":"none — valve shut"}.`;
+ case "head":return `Now: chamber volume ${dV} cm³ · pressure ${dP} bar · the dome is the clearance volume at TDC (${(VD/(P.cr-1)).toFixed(0)} cm³).`;
+ case "block":return `Now: piston ${dPos} mm up the Ø86 mm bore · wall sees ${dP} bar. Fins are shedding the heat of the last power stroke.`;
+ case "belt":return `Now: crank gear ${th.toFixed(0)}°, cam gear ${(th/2).toFixed(0)}° · marks ${P.fault==="beltSlip"?"MISALIGNED by 90° — danger":"align at every TDC"}.`;
+ case "crankcase":return `Now: crankcase ~1.0 bar · oil film on the bore, sump below. Net gas torque already accounts for crankcase back-pressure.`;
+ case "charge":return `Now: charge ${th<180?"entering through the intake valve":th<360?"being squeezed — density rising":th<540?(P.fault==="misfire"?"UNBURNED — misfire!":"burning, temperature & pressure peaking"):"leaving as grey exhaust"}.`;
+ default:return "";}
+}
+function updateInspect(){const m=PARTMAP[selected];if(!m)return;$("iTitle").textContent=m.name;$("iTag").textContent=m.tag;$("iBody").textContent=m.body;$("iNow").textContent=dynamicNow(selected,theta);}
+
+/* ---------- canvas helpers ---------- */
+const scene=$("scene"),sctx=scene.getContext("2d");
+function fitCanvas(c){const r=c.getBoundingClientRect(),dpr=Math.min(2.5,window.devicePixelRatio||1);const w=Math.max(50,Math.round(r.width*dpr)),h=Math.max(50,Math.round(r.height*dpr));if(c.width!==w||c.height!==h){c.width=w;c.height=h;}return{w:r.width,h:r.height,dpr};}
+function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
+function alphaFor(g){return(!isoOn||g===selected||(g==="valves"&&(selected==="intakeV"||selected==="exhaustV")))?1:0.3;}
+function ex(v){return v*explode;}
+
+/* particles: deterministic function of theta */
+const PN=56,po=[];
+for(let i=0;i<PN;i++)po.push({a:fract(i*0.754877),b:fract(i*0.56984),c:fract(i*0.381966),r:1.6+2*fract(i*0.618)});
+function particle(i,th){
+ const cyc=th/720,o=po[i];let s;
+ if(cyc<0.25)s=clamp(0.02+o.a*0.22+(cyc/0.25)*0.28,0,0.5);
+ else if(cyc<0.75)s=0.5;
+ else s=clamp(0.5+((cyc-0.75)/0.25)*0.55+o.c*0.08,0.5,1.06);
+ const top=CY-pistonYPx(th)-19;
+ let x,y,col="#2F6F9F",rad=o.r;
+ if(s<0.3){const t=s/0.3;x=lerp(160,375,t);y=145+Math.sin(t*3.14)*6;}
+ else if(s<0.5){const t=(s-0.3)/0.2;x=lerp(375,460,t)+Math.sin(th*0.11+i)*3;y=lerp(152,205,t);}
+ else if(s<0.92){const cxp=460+Math.sin(th*0.07+i*1.7)*14*(1+o.b),cyp=lerp(200,top+10,0.25+o.b*0.5);x=cxp;y=cyp;
+   const burning=th>320&&th<560&&P.fault!=="misfire";
+   if(burning){col="#E86A1F";rad=o.r+1.6;}
+   else if(P.fault==="misfire"&&(th>340))col="#7A7264";
+   else if(th>540)col="#8A8578";}
+ else{const t=(s-0.92)/0.14;x=lerp(540,770,t);y=148+Math.sin(t*3.14)*4;col="#8A8578";}
+ return{x,y,col,rad};}
+
+/* ---------- scene drawing ---------- */
+function drawScene(){
+ const{w,h,dpr}=fitCanvas(scene);const c=sctx;
+ c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
+ const g=c.createLinearGradient(0,0,0,h);g.addColorStop(0,"#FBF6E8");g.addColorStop(1,"#EFE4CB");c.fillStyle=g;c.fillRect(0,0,w,h);
+ c.strokeStyle="rgba(62,107,138,.09)";c.lineWidth=1;
+ for(let x=0;x<w;x+=28){c.beginPath();c.moveTo(x,0);c.lineTo(x,h);c.stroke();}
+ for(let y=0;y<h;y+=28){c.beginPath();c.moveTo(0,y);c.lineTo(w,y);c.stroke();}
+ const base=Math.min(w/920,h/640)*1.02;
+ view.s=base*zoom;view.ox=w/2-CX*view.s+pan.x;view.oy=h/2-320*view.s+pan.y;
+ c.save();c.translate(view.ox,view.oy);c.scale(view.s,view.s);
+ const th=theta,pinYPx=pistonYPx(th),pinY=CY-pinYPx,pinX=CX+RPX*Math.sin(th*D2R),pinCrankY=CY-RPX*Math.cos(th*D2R),pinCrankX=CX+RPX*Math.sin(th*D2R);
+ const topY=pinY-19,il=intakeLift(th),el=exhaustLift(th);
+ const brass="#A98444",ink="#16202E",steel="#3E6B8A",accent="#C0502F";
+
+ /* block */
+ c.globalAlpha=alphaFor("block");
+ c.fillStyle="#D8CBA8";rr(c,360,198,200,212,6);c.fill();c.strokeStyle=ink;c.lineWidth=2;c.stroke();
+ c.fillStyle="#B9A87F";
+ for(let y=212;y<400;y+=16){rr(c,346,y,214,5,2);c.fill();}
+ c.fillStyle="#8FA8B5";rr(c,388,198,144,212,2);c.fill();c.strokeStyle=ink;c.lineWidth=1.5;c.stroke();
+ c.fillStyle="rgba(255,255,255,.25)";c.fillRect(398,198,10,212);
+ c.fillStyle=ink;c.font="11px ui-monospace,Consolas,monospace";c.fillText("CROUTON ALPHA · OTTO 500",368,232);
+ c.font="9px ui-monospace,Consolas,monospace";c.fillStyle="#5A4E30";c.fillText("Ø86 × 86 mm · 499 cm³",368,248);
+ /* head */
+ const hy=-ex(58);
+ c.globalAlpha=alphaFor("head");
+ c.fillStyle="#C9B98C";rr(c,350,108+hy,220,90,6);c.fill();c.strokeStyle=ink;c.lineWidth=2;c.stroke();
+ c.beginPath();c.moveTo(388,198+hy);c.lineTo(532,198+hy);c.lineTo(518,178+hy);c.lineTo(402,178+hy);c.closePath();c.fill();c.stroke();
+ for(let bx of[360,546]){c.fillStyle="#7A6A42";rr(c,bx,112+hy,10,80,2);c.fill();}
+ c.globalAlpha=1;
+ /* ports */
+ c.globalAlpha=alphaFor("intakeP");
+ const ix=-ex(52),iy=-ex(18);
+ const pg=c.createLinearGradient(150,130,410,170);pg.addColorStop(0,"#9FB8C6");pg.addColorStop(1,"#5E829B");
+ c.fillStyle=pg;c.beginPath();c.moveTo(150,128+iy);c.quadraticCurveTo(280,118+iy,352,140+iy);c.lineTo(352,168+iy);c.quadraticCurveTo(280,152+iy,150,162+iy);c.closePath();c.fill();c.strokeStyle=ink;c.lineWidth=2;c.stroke();
+ c.fillStyle=ink;c.font="10px ui-monospace,Consolas,monospace";c.fillText("INTAKE",158,120+iy);
+ if(il>0.1&&playing){c.fillStyle=accent;for(let k=0;k<3;k++){const ax=190+((th*2+k*36)%140);c.beginPath();c.moveTo(ax,145+iy);c.lineTo(ax+12,145+iy);c.lineTo(ax+7,140+iy);c.lineTo(ax+7,150+iy);c.closePath();c.fill();}}
+ c.globalAlpha=alphaFor("exhaustP");
+ const exx=ex(52),ey2=-ex(18);
+ const eg=c.createLinearGradient(520,130,770,170);eg.addColorStop(0,"#A08A6A");eg.addColorStop(1,"#7A6A52");
+ c.fillStyle=eg;c.beginPath();c.moveTo(770,128+ey2);c.quadraticCurveTo(640,118+ey2,568,140+ey2);c.lineTo(568,168+ey2);c.quadraticCurveTo(640,152+ey2,770,162+ey2);c.closePath();c.fill();c.strokeStyle=ink;c.lineWidth=2;c.stroke();
+ c.fillStyle=ink;c.font="10px ui-monospace,Consolas,monospace";c.fillText("EXHAUST",700,120+ey2);
+ if(el>0.1&&playing){c.fillStyle="#8A8578";for(let k=0;k<3;k++){const ax=600+((th*2+k*36)%130);c.beginPath();c.moveTo(ax,145+ey2);c.lineTo(ax+12,145+ey2);c.lineTo(ax+7,140+ey2);c.lineTo(ax+7,150+ey2);c.closePath();c.fill();}}
+ /* belt & gears */
+ c.globalAlpha=alphaFor("belt");
+ const cgY=CY+ex(38),camY=82-ex(108);
+ c.strokeStyle="#2A2A2A";c.lineWidth=7;
+ c.beginPath();c.moveTo(335-57,camY);c.lineTo(335-28,cgY);c.moveTo(335+57,camY);c.lineTo(335+28,cgY);c.stroke();
+ c.strokeStyle=accent;c.lineWidth=2;c.setLineDash([5,5]);c.beginPath();c.moveTo(335-57,camY);c.lineTo(335-28,cgY);c.moveTo(335+57,camY);c.lineTo(335+28,cgY);c.stroke();c.setLineDash([]);
+ function gear(x,y,r,ang,body){c.fillStyle=body;c.strokeStyle=ink;c.lineWidth=2;c.beginPath();c.arc(x,y,r,0,7);c.fill();c.stroke();
+  c.save();c.translate(x,y);c.rotate(ang*D2R);
+  for(let i=0;i<12;i++){c.rotate(Math.PI/6);c.fillStyle=ink;c.fillRect(r-3,-3,6,6);}
+  c.restore();c.fillStyle="#F3EDDC";c.beginPath();c.arc(x,y,r*0.32,0,7);c.fill();c.stroke();
+  c.save();c.translate(x,y);c.rotate(ang*D2R);c.strokeStyle=accent;c.lineWidth=3;c.beginPath();c.moveTo(0,-r+4);c.lineTo(0,-r+14);c.stroke();c.restore();}
+ gear(335,cgY,29,th,"#8FA8B5");gear(335,camY,58,th/2,"#C9B98C");
+ c.fillStyle=accent;c.font="bold 9px ui-monospace,Consolas,monospace";c.fillText("TDC▲",342,camY-62);
+ c.globalAlpha=1;
+ /* crankcase */
+ c.globalAlpha=alphaFor("crankcase");
+ const ky=ex(56);
+ c.fillStyle="#D8CBA8";rr(c,345,410+ky,230,135,18);c.fill();c.strokeStyle=ink;c.lineWidth=2;c.stroke();
+ const og=c.createLinearGradient(0,500+ky,0,545+ky);og.addColorStop(0,"#8A6A2A");og.addColorStop(1,"#5A4218");
+ c.fillStyle=og;rr(c,355,512+ky,210,24,8);c.fill();
+ c.fillStyle=ink;c.font="9px ui-monospace,Consolas,monospace";c.fillText("OIL",528,530+ky);
+ c.strokeStyle=brass;c.lineWidth=3;c.beginPath();c.moveTo(552,420+ky);c.lineTo(552,500+ky);c.stroke();
+ c.fillStyle=accent;c.beginPath();c.arc(552,418+ky,5,0,7);c.fill();
+ c.globalAlpha=1;
+ /* crankshaft */
+ c.globalAlpha=alphaFor("crank");
+ const crY=CY+ex(38);
+ c.fillStyle="#6E8296";c.beginPath();c.arc(CX,crY,60,0,7);c.fill();c.strokeStyle=ink;c.lineWidth=2;c.stroke();
+ const cwAng=(th+180)*D2R;
+ c.fillStyle="#93A9BC";c.beginPath();c.moveTo(CX,crY);c.arc(CX,crY,60,cwAng-1.15,cwAng+1.15);c.closePath();c.fill();c.stroke();
+ c.fillStyle=ink;c.font="8px ui-monospace,Consolas,monospace";c.save();c.translate(CX,crY);c.rotate(cwAng);c.fillText("№07 · CRO ALPHA",-34,3);c.restore();
+ c.fillStyle="#3E4A58";c.beginPath();c.arc(CX,crY,15,0,7);c.fill();c.strokeStyle=ink;c.stroke();
+ c.fillStyle="#D9D2BC";c.beginPath();c.arc(pinCrankX,crY+ (pinCrankY-CY),13,0,7);c.fill();c.stroke();
+ c.strokeStyle=accent;c.lineWidth=2;c.beginPath();c.moveTo(CX,crY);c.lineTo(pinCrankX,pinCrankY+ex(38));c.stroke();
+ c.fillStyle=ink;c.font="9px ui-monospace,Consolas,monospace";c.fillText("CRANK "+th.toFixed(0)+"°",CX+64,crY+4);
+ c.globalAlpha=1;
+ /* rod */
+ c.globalAlpha=alphaFor("rod");
+ const rodY1=pinY-ex(20),rodY2=CY-RPX*Math.cos(th*D2R)+ex(38);
+ const rx1=CX+RPX*Math.sin(th*D2R),ry1=rodY1;
+ c.strokeStyle="#3A4654";c.lineWidth=13;c.lineCap="round";c.beginPath();c.moveTo(CX,ry1);c.lineTo(rx1,ry1+ (rodY2-ry1) );c.stroke();
+ c.strokeStyle="#8FA8B5";c.lineWidth=8;c.beginPath();c.moveTo(CX,ry1);c.lineTo(rx1,ry1+(rodY2-ry1));c.stroke();
+ c.fillStyle="#536474";c.beginPath();c.arc(CX,ry1,11,0,7);c.fill();c.strokeStyle=ink;c.lineWidth=1.5;c.stroke();
+ c.beginPath();c.arc(rx1,ry1+(rodY2-ry1),14,0,7);c.fill();c.stroke();
+ c.globalAlpha=1;
+ /* piston */
+ c.globalAlpha=alphaFor("piston");
+ const py=pinY-ex(20);
+ const pg2=c.createLinearGradient(0,py-19,0,py+19);pg2.addColorStop(0,"#E8E2CE");pg2.addColorStop(0.5,"#C9C2A8");pg2.addColorStop(1,"#8A8578");
+ c.fillStyle=pg2;rr(c,CX-72,py-19,144,38,5);c.fill();c.strokeStyle=ink;c.lineWidth=2;c.stroke();
+ c.fillStyle="#5A4E30";for(let i=0;i<3;i++){c.fillRect(CX-72,py-14+i*6,144,2.4);}
+ c.fillStyle="#F3EDDC";c.beginPath();c.arc(CX,py,9,0,7);c.fill();c.strokeStyle=ink;c.lineWidth=1.5;c.stroke();
+ c.fillStyle=ink;c.font="bold 9px ui-monospace,Consolas,monospace";c.fillText("▲ FRONT",CX-26,py-23);
+ c.globalAlpha=1;
+ /* camshaft */
+ c.globalAlpha=alphaFor("cam");
+ const camYY=82-ex(108);
+ c.strokeStyle="#536474";c.lineWidth=9;c.beginPath();c.moveTo(340,camYY);c.lineTo(600,camYY);c.stroke();
+ c.strokeStyle="#A8BCC8";c.lineWidth=4;c.beginPath();c.moveTo(340,camYY);c.lineTo(600,camYY);c.stroke();
+ for(let bx of[360,470,580]){c.fillStyle="#3A4654";c.fillRect(bx-4,camYY-16,8,32);}
+ function lobe(x,angDeg){c.save();c.translate(x,camYY);c.rotate(angDeg*D2R);
+  c.beginPath();for(let a=0;a<=20;a++){const aa=a/20*Math.PI*2;const bump=Math.pow(Math.max(0,Math.cos(aa)),3)*9;const rr2=13+bump;const px=Math.cos(aa)*rr2,py2=Math.sin(aa)*rr2;a?c.lineTo(px,py2):c.moveTo(px,py2);}c.closePath();
+  c.fillStyle="#D9C58A";c.fill();c.strokeStyle=ink;c.lineWidth=1.5;c.stroke();c.restore();}
+ lobe(408,th/2+(valveShift()/2));lobe(512,th/2+(valveShift()/2));
+ c.fillStyle=ink;c.font="9px ui-monospace,Consolas,monospace";c.fillText("CAM "+(th/2).toFixed(0)+"°",540,camYY-18);
+ c.globalAlpha=1;
+ /* valves */
+ function valve(x,lift,kind){
+  const vy=-ex(80)+hy*0.4;
+  const headY=196+vy+lift*SCALE*1.9;
+  c.strokeStyle="#536474";c.lineWidth=6;c.beginPath();c.moveTo(x,96-ex(108));c.lineTo(x,headY-6);c.stroke();
+  c.fillStyle="#8FA8B5";c.beginPath();c.moveTo(x-11,headY);c.lineTo(x+11,headY);c.lineTo(x+6,headY+9);c.lineTo(x-6,headY+9);c.closePath();c.fill();c.strokeStyle=ink;c.lineWidth=1.5;c.stroke();
+  const top=118+vy,bot=headY-14;
+  c.strokeStyle=brass;c.lineWidth=2;c.beginPath();
+  const coils=5;for(let i=0;i<=coils*2;i++){const yy=lerp(top,bot,i/(coils*2));const xx=x+(i%2?6:-6);i?c.lineTo(xx,yy):c.moveTo(xx,yy);}c.stroke();
+  c.fillStyle="#3A4654";rr(c,x-9,bot,18,6,2);c.fill();
+  c.fillStyle=ink;c.font="8px ui-monospace,Consolas,monospace";c.fillText(lift.toFixed(1)+"mm",x+13,headY-2);}
+ c.globalAlpha=alphaFor("valves");valve(408,il,"in");valve(512,el,"ex");c.globalAlpha=1;
+ /* spark plug */
+ c.globalAlpha=alphaFor("spark");
+ const sy=-ex(96)+hy*0.5;
+ c.fillStyle="#EDE6D2";rr(c,452,104+sy,16,48,3);c.fill();c.strokeStyle=ink;c.lineWidth=1.5;c.stroke();
+ c.fillStyle="#8A8578";rr(c,450,148+sy,20,26,2);c.fill();c.stroke();
+ c.fillStyle="#5A4E30";for(let i=0;i<3;i++)c.fillRect(450,154+sy+i*6,20,2);
+ c.strokeStyle="#3A4654";c.lineWidth=2.5;c.beginPath();c.moveTo(460,174+sy);c.lineTo(460,186+sy);c.moveTo(454,186+sy);c.lineTo(466,186+sy);c.stroke();
+ const dSp=((th-sparkTheta())%720+720)%720;
+ if(dSp<2.5&&P.fault!=="misfire"){c.strokeStyle="#7AB8FF";c.lineWidth=2;c.beginPath();c.moveTo(460,186+sy);c.lineTo(456,192+sy);c.lineTo(464,197+sy);c.stroke();}
+ if(P.fault==="misfire"&&dSp<2.5){c.fillStyle=accent;c.font="bold 10px ui-monospace,Consolas,monospace";c.fillText("✕ NO SPARK",468,170+sy);}
+ c.globalAlpha=1;
+ /* charge + flame */
+ c.globalAlpha=alphaFor("charge");
+ for(let i=0;i<PN;i++){const pt=particle(i,th);c.fillStyle=pt.col;c.globalAlpha=alphaFor("charge")*0.9;c.beginPath();c.arc(pt.x,pt.y,pt.rad,0,7);c.fill();}
+ c.globalAlpha=1;
+ const flameP=((th-sparkTheta())%720+720)%720;
+ if(flameP>0&&flameP<75&&P.fault!=="misfire"&&P.fault!=="intakeStuck"){
+  const fp=flameP/75,fr=14+58*Math.sin(Math.PI*Math.min(1,fp));
+  const fg=c.createRadialGradient(460,196,2,460,196,fr);fg.addColorStop(0,"rgba(255,220,120,.95)");fg.addColorStop(0.4,"rgba(255,140,40,.55)");fg.addColorStop(1,"rgba(255,80,20,0)");
+  c.fillStyle=fg;c.beginPath();c.arc(460,196,fr,0,7);c.fill();}
+ /* dimension lines */
+ if(labelsOn){c.strokeStyle="rgba(22,32,46,.5)";c.lineWidth=1;c.fillStyle=ink;c.font="9px ui-monospace,Consolas,monospace";
+  c.beginPath();c.moveTo(388,64);c.lineTo(532,64);c.moveTo(388,58);c.lineTo(388,70);c.moveTo(532,58);c.lineTo(532,70);c.stroke();c.fillText("Ø86 mm",446,58);
+  c.beginPath();c.moveTo(310,293);c.lineTo(310,371);c.stroke();c.fillText("stroke 86",318,336);}
+ /* selection ring */
+ if(selected&&PARTMAP[selected]){
+  c.strokeStyle=accent;c.lineWidth=2.5;c.setLineDash([7,5]);
+  const boxes={piston:[CX-78,pinY-ex(20)-24,156,50],crank:[CX-66,CY+ex(38)-66,132,132],cam:[330,82-ex(108)-30,280,60],spark:[444,100-ex(96)+hy*0.5,32,92],intakeV:[386,80,46,130],exhaustV:[490,80,46,130],intakeP:[140,110+(-ex(18)),240,60],exhaustP:[540,110+(-ex(18)),240,60],head:[344,100+hy,232,100],block:[340,192,228,220],crankcase:[340,404+ex(56),240,146],belt:[262,20,150,520],rod:[CX-20,Math.min(pinY,CY)-10,60,Math.abs(CY-pinY)+30],charge:[380,180,160,180]};
+  const b=boxes[selected];if(b){rr(c,b[0],b[1],b[2],b[3],8);c.stroke();}
+  c.setLineDash([]);}
+ /* labels */
+ if(labelsOn){
+  c.font="10px ui-monospace,Consolas,monospace";
+  function lab(txt,ax,ay,lx,ly){c.strokeStyle="rgba(22,32,46,.65)";c.lineWidth=1;c.beginPath();c.moveTo(ax,ay);c.lineTo(lx,ly);c.stroke();c.fillStyle=accent;c.beginPath();c.arc(ax,ay,3,0,7);c.fill();
+   const wTxt=c.measureText(txt).width+10;c.fillStyle="rgba(251,247,234,.95)";rr(c,lx-5,ly-11,wTxt,18,3);c.fill();c.strokeStyle=ink;c.stroke();c.fillStyle=ink;c.fillText(txt,lx,ly+2);}
+  lab("PISTON",CX-72,pinY-ex(20),36,pinY-ex(20)-6);
+  lab("CRANK",CX,crY+ex(0),36,crY+70);
+  lab("CAMSHAFT ½×",470,camYY,620,52);
+  lab("SPARK PLUG",460,150-ex(96),620,150);
+  lab("INTAKE VALVE",408,170,36,120);
+  lab("EXHAUST VALVE",512,170,620,200);
+  lab("TIMING BELT 2:1",300,300,36,300);
+ }
+ c.restore();
+ /* fault vignette */
+ if(P.fault!=="none"){c.fillStyle="rgba(192,80,47,.08)";c.fillRect(0,0,w,h);}
+}
+
+/* ---------- graphs ---------- */
+function graphSetup(id){const c=$(id);const{w,h,dpr}=fitCanvas(c);const x=c.getContext("2d");x.setTransform(dpr,0,0,dpr,0,0);return{x,w,h};}
+function drawGraphs(){
+ const th=theta;
+ /* pressure vs angle */
+ {const{x,w,h}=graphSetup("gPres");x.clearRect(0,0,w,h);
+  const pMax=Math.max(20,peakPressure().pPk*1.15),padL=30,padR=8,padT=10,padB=18;
+  x.fillStyle="#F3EDDC";x.fillRect(padL,padT,w-padL-padR,h-padT-padB);
+  [0,180,360,540,720].forEach(a=>{const px=padL+(w-padL-padR)*a/720;x.strokeStyle=a===360?"#C0502F":"rgba(22,32,46,.18)";x.beginPath();x.moveTo(px,padT);x.lineTo(px,h-padB);x.stroke();});
+  x.strokeStyle="rgba(22,32,46,.25)";for(let p=0;p<=pMax;p+=Math.max(5,Math.round(pMax/4/5)*5)){const py=padT+(h-padT-padB)*(1-p/pMax);x.beginPath();x.moveTo(padL,py);x.lineTo(w-padR,py);x.stroke();x.fillStyle="#3C4A5C";x.font="9px ui-monospace,Consolas,monospace";x.fillText(p+"",4,py+3);}
+  x.strokeStyle="#2F6F9F";x.lineWidth=2;x.beginPath();
+  for(let a=0;a<=720;a+=4){const px=padL+(w-padL-padR)*a/720,py=padT+(h-padT-padB)*(1-pressureAt(a)/pMax);a?x.lineTo(px,py):x.moveTo(px,py);}x.stroke();
+  const px=padL+(w-padL-padR)*th/720,py=padT+(h-padT-padB)*(1-pressureAt(th)/pMax);
+  x.fillStyle="#C0502F";x.beginPath();x.arc(px,py,5,0,7);x.fill();x.strokeStyle="#fff";x.lineWidth=1.5;x.stroke();
+  x.fillStyle="#16202E";x.font="bold 10px ui-monospace,Consolas,monospace";x.fillText("CYLINDER PRESSURE vs CRANK ANGLE (bar)",padL,10);
+  x.fillStyle="#C0502F";x.fillText("▲ spark "+sparkTheta().toFixed(0)+"°",padL+(w-padL-padR)*sparkTheta()/720-14,h-4);}
+ /* p-V */
+ {const{x,w,h}=graphSetup("gPV");x.clearRect(0,0,w,h);
+  const vc=VD/(P.cr-1),vmax=vc+VD,pMax=Math.max(20,peakPressure().pPk*1.12),padL=34,padR=10,padT=14,padB=18;
+  x.fillStyle="#F3EDDC";x.fillRect(padL,padT,w-padL-padR,h-padT-padB);
+  x.strokeStyle="rgba(22,32,46,.2)";for(let p=0;p<=pMax;p+=Math.max(5,Math.round(pMax/4/5)*5)){const py=padT+(h-padT-padB)*(1-p/pMax);x.beginPath();x.moveTo(padL,py);x.lineTo(w-padR,py);x.stroke();}
+  x.strokeStyle="#5A7D4F";x.lineWidth=1.6;x.beginPath();
+  for(let a=0;a<=720;a+=4){const px=padL+(w-padL-padR)*(volumeAt(a)-vc)/VD,py=padT+(h-padT-padB)*(1-pressureAt(a)/pMax);a?x.lineTo(px,py):x.moveTo(px,py);}x.stroke();
+  x.strokeStyle="#C0502F";x.lineWidth=2.4;x.beginPath();
+  for(let a=0;a<=th;a+=3){const px=padL+(w-padL-padR)*(volumeAt(a)-vc)/VD,py=padT+(h-padT-padB)*(1-pressureAt(a)/pMax);a?x.lineTo(px,py):x.moveTo(px,py);}x.stroke();
+  const px=padL+(w-padL-padR)*(volumeAt(th)-vc)/VD,py=padT+(h-padT-padB)*(1-pressureAt(th)/pMax);
+  x.fillStyle="#C0502F";x.beginPath();x.arc(px,py,5,0,7);x.fill();
+  x.fillStyle="#16202E";x.font="bold 10px ui-monospace,Consolas,monospace";x.fillText("p–V DIAGRAM · area = work (IMEP "+imepBar().toFixed(1)+" bar)",padL,10);
+  x.fillStyle="#3C4A5C";x.font="9px ui-monospace,Consolas,monospace";x.fillText("Vc "+vc.toFixed(0),padL,h-4);x.fillText("Vmax "+vmax.toFixed(0)+" cm³",w-78,h-4);}
+ /* torque */
+ {const{x,w,h}=graphSetup("gTorq");x.clearRect(0,0,w,h);
+  const padL=34,padR=10,padT=12,padB=16;let tMax=10;for(let a=0;a<=720;a+=12)tMax=Math.max(tMax,Math.abs(torqueAt(a)));
+  const mid=padT+(h-padT-padB)/2,sc=(h-padT-padB)/2/tMax;
+  x.strokeStyle="rgba(22,32,46,.3)";x.beginPath();x.moveTo(padL,mid);x.lineTo(w-padR,mid);x.stroke();
+  x.strokeStyle="#A98444";x.lineWidth=2;x.beginPath();
+  for(let a=0;a<=720;a+=4){const px=padL+(w-padL-padR)*a/720,py=mid-torqueAt(a)*sc;a?x.lineTo(px,py):x.moveTo(px,py);}x.stroke();
+  const px=padL+(w-padL-padR)*th/720,py=mid-torqueAt(th)*sc;x.fillStyle="#C0502F";x.beginPath();x.arc(px,py,4.5,0,7);x.fill();
+  x.fillStyle="#16202E";x.font="bold 10px ui-monospace,Consolas,monospace";x.fillText("GAS TORQUE vs ANGLE (N·m) · ±"+tMax.toFixed(0),padL,10);}
+}
+
+/* ---------- audio (synthesised, in-code) ---------- */
+function ensureAudio(){if(audioCtx)return;try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();masterGain=audioCtx.createGain();masterGain.gain.value=0.5;masterGain.connect(audioCtx.destination);}catch(e){audioCtx=null;}}
+function thump(intensity){if(!soundOn||!audioCtx)return;const t=audioCtx.currentTime;
+ const o=audioCtx.createOscillator(),g=audioCtx.createGain(),f=audioCtx.createBiquadFilter();
+ o.type="sine";o.frequency.setValueAtTime(85,t);o.frequency.exponentialRampToValueAtTime(38,t+0.18);
+ f.type="lowpass";f.frequency.value=320;g.gain.setValueAtTime(0.001,t);g.gain.exponentialRampToValueAtTime(0.6*intensity,t+0.015);g.gain.exponentialRampToValueAtTime(0.001,t+0.28);
+ o.connect(f);f.connect(g);g.connect(masterGain);o.start(t);o.stop(t+0.3);}
+
+/* ---------- readouts / UI sync ---------- */
+function syncUI(){
+ const ph=phaseInfo(theta);
+ $("phaseStroke").textContent=ph[0];$("phaseName").textContent=ph[1];$("phaseDesc").textContent=ph[2];
+ $("degRead").textContent=theta.toFixed(0)+"°";$("degRead2").textContent=theta.toFixed(1)+"°";
+ $("rRpm").textContent=slowOn?Math.round(P.rpm/20):P.rpm;
+ $("rPres").textContent=pressureAt(theta).toFixed(1);
+ $("rTorq").textContent=torqueAt(theta).toFixed(1);
+ $("rPos").textContent=(pistonYmm(theta)-(L-R)).toFixed(1);
+ $("rVol").textContent=volumeAt(theta).toFixed(0);
+ const im=imepBar();$("rImep").textContent=im.toFixed(1);
+ $("rPow").textContent=Math.max(0,im*1e5*VD*1e-6*(P.rpm/120)/1000).toFixed(1);
+ if(!scrubbing)$("scrub").value=theta;
+ const btn=$("btnPlay");btn.textContent=playing?"❚❚ Pause":"▶ Play";btn.setAttribute("aria-pressed",playing?"true":"false");
+ $("btnPlay2").textContent=playing?"❚❚ Pause":"▶ Play";
+ $("statusBar").textContent=(hovered?PARTMAP[hovered].name+" — click to inspect":"Hover or tap a component · scroll to zoom")+" · θ "+theta.toFixed(0)+"°";
+ updateInspect();
+ /* fault warning */
+ const warn=$("faultWarn");
+ const interfere=intakeLift(theta)>2&&theta>340&&theta<380||exhaustLift(theta)>2&&theta>340&&theta<380;
+ if(P.fault!=="none"||interfere){warn.style.display="block";
+  warn.textContent=P.fault==="misfire"?"⚠ MISFIRE: no combustion. The p–V loop is only the motoring loop; torque is negative on compression and the charge leaves unburned.":
+  P.fault==="exhaustStuck"?"⚠ EXHAUST VALVE STUCK OPEN: compression leaks away — peak pressure and the p–V area collapse, power falls sharply.":
+  P.fault==="intakeStuck"?"⚠ INTAKE VALVE STUCK CLOSED: no fresh charge enters. The cylinder pumps at near-vacuum; the engine cannot sustain power.":
+  P.fault==="beltSlip"?"⚠ TIMING BELT SLIPPED 90°: valves no longer agree with the piston. "+(interfere?"A valve is open near TDC — in a real engine this is valve–piston interference and bent valves.":"Watch the valve lifts drift from their correct windows."):
+  "";}
+ else warn.style.display="none";
+}
+
+/* ---------- main loop: ONE clock ---------- */
+let last=performance.now();
+function frame(now){
+ requestAnimationFrame(frame);
+ let dt=(now-last)/1000;last=now;if(dt>0.05)dt=0.05;if(dt<0)dt=0;
+ if(playing&&!scrubbing){
+  const effRpm=slowOn?P.rpm/20:P.rpm;
+  prevTheta=theta;theta=(theta+effRpm/60*360*dt)%720;
+  const sp=sparkTheta();const crossed=(prevTheta<sp&&theta>=sp)||(prevTheta>theta&&sp>=prevTheta)||(prevTheta>theta&&sp<theta);
+  if(crossed&&soundOn)thump(0.4+0.6*(P.throttle/100));
+ }
+ drawScene();drawGraphs();syncUI();
+}
+requestAnimationFrame(frame);
+
+/* ---------- persistence (guarded) ---------- */
+function savePrefs(){try{localStorage.setItem("crouton-engine-v2",JSON.stringify({rpm:P.rpm,throttle:P.throttle,cr:P.cr,spark:P.spark,fault:P.fault,explode,labelsOn,isoOn,slowOn}));}catch(e){}}
+function loadPrefs(){try{const s=JSON.parse(localStorage.getItem("crouton-engine-v2")||"null");if(!s)return;
+ P.rpm=s.rpm??900;P.throttle=s.throttle??65;P.cr=s.cr??10;P.spark=s.spark??18;P.fault=s.fault||"none";explode=s.explode??0;labelsOn=s.labelsOn!==false;isoOn=s.isoOn!==false;slowOn=!!s.slowOn;}catch(e){}}
+loadPrefs();
+
+/* ---------- controls ---------- */
+function setPlaying(v){playing=v;}
+$("btnPlay").addEventListener("click",()=>setPlaying(!playing));
+$("btnPlay2").addEventListener("click",()=>setPlaying(!playing));
+$("btnBack").addEventListener("click",()=>{theta=(theta-5+720)%720;});
+$("btnFwd").addEventListener("click",()=>{theta=(theta+5)%720;});
+const scrub=$("scrub");
+scrub.addEventListener("pointerdown",()=>{scrubbing=true;});
+scrub.addEventListener("input",()=>{theta=parseFloat(scrub.value);});
+window.addEventListener("pointerup",()=>{scrubbing=false;});
+function bindSlider(id,out,fmt,apply){const el=$(id);const upd=()=>{const v=parseFloat(el.value);apply(v);$(out).textContent=fmt(v);savePrefs();};el.addEventListener("input",upd);return upd;}
+const uRpm=bindSlider("sRpm","vRpm",v=>v+" rpm",v=>P.rpm=v);
+const uThr=bindSlider("sThr","vThr",v=>v+"%",v=>P.throttle=v);
+const uCR=bindSlider("sCR","vCR",v=>v.toFixed(1)+":1",v=>P.cr=v);
+const uSp=bindSlider("sSpark","vSpark",v=>v+"° BTDC",v=>P.spark=v);
+const uEx=bindSlider("sExplode","vExplode",v=>v+"%",v=>explode=v/100);
+$("faultSel").addEventListener("change",e=>{P.fault=e.target.value;savePrefs();});
+$("chkLabels").addEventListener("change",e=>{labelsOn=e.target.checked;savePrefs();});
+$("chkIso").addEventListener("change",e=>{isoOn=e.target.checked;savePrefs();});
+$("chkSlow").addEventListener("change",e=>{slowOn=e.target.checked;savePrefs();});
+$("btnSound").addEventListener("click",()=>{soundOn=!soundOn;if(soundOn){ensureAudio();if(audioCtx&&audioCtx.state==="suspended")audioCtx.resume();}$("btnSound").textContent=soundOn?"🔊 Sound on":"🔇 Sound off";$("btnSound").setAttribute("aria-pressed",soundOn?"true":"false");});
+$("btnReset").addEventListener("click",()=>{zoom=1;pan={x:0,y:0};});
+$("btnZoomIn").addEventListener("click",()=>{zoom=clamp(zoom*1.25,1,3);});
+$("btnZoomOut").addEventListener("click",()=>{zoom=clamp(zoom/1.25,1,3);if(zoom===1)pan={x:0,y:0};});
+/* restore slider positions */
+$("sRpm").value=P.rpm;$("sThr").value=P.throttle;$("sCR").value=P.cr;$("sSpark").value=P.spark;$("sExplode").value=Math.round(explode*100);
+$("faultSel").value=P.fault;$("chkLabels").checked=labelsOn;$("chkIso").checked=isoOn;$("chkSlow").checked=slowOn;
+[uRpm,uThr,uCR,uSp,uEx]();
+if(reduced){playing=false;slowOn=true;$("chkSlow").checked=true;}
+
+/* ---------- pointer: hover / select / pan / zoom ---------- */
+function designPos(e){const r=scene.getBoundingClientRect();const sx=e.clientX-r.left,sy=e.clientY-r.top;return{x:(sx-view.ox)/view.s,y:(sy-view.oy)/view.s};}
+function partAt(p){
+ const th=theta;
+ const boxes=[
+ ["spark",[444,96-ex(96),34,96]],["intakeV",[384,84-ex(80),48,132]],["exhaustV",[488,84-ex(80),48,132]],
+ ["piston",[CX-78,pinY-ex(20)-24,156,50]],["crank",[CX-66,CY+ex(38)-66,132,132]],["cam",[326,52-ex(108),286,60]],
+ ["intakeP",[140,104-ex(18),240,70]],["exhaustP",[536,104-ex(18),240,70]],["head",[344-HY(),100+hy(),232,100]],
+ ["block",[340,192,228,220]],["crankcase",[340,404+ex(56),240,146]],["belt",[258,14,150,540]],["charge",[378,178,164,190]]];
+ function HY(){return -ex(58);}function hy(){return -ex(58);}
+ for(const[id,b]of boxes){if(p.x>=b[0]&&p.x<=b[0]+b[2]&&p.y>=b[1]&&p.y<=b[1]+b[3])return id;}
+ /* rod by distance to segment */
+ const x1=CX,y1=pinY-ex(20),x2=CX+RPX*Math.sin(th*D2R),y2=CY-RPX*Math.cos(th*D2R)+ex(38);
+ const dx=x2-x1,dy=y2-y1,len2=dx*dx+dy*dy||1;let t=((p.x-x1)*dx+(p.y-y1)*dy)/len2;t=clamp(t,0,1);
+ const px=x1+t*dx,py=y1+t*dy;if(Math.hypot(p.x-px,p.y-py)<16)return"rod";
+ return null;}
+let drag=null;
+scene.addEventListener("pointermove",e=>{
+ const p=designPos(e);
+ if(drag&&drag.moved){pan.x+=e.clientX-drag.x;pan.y+=e.clientY-drag.y;drag.x=e.clientX;drag.y=e.clientY;if(zoom===1)pan={x:0,y:0};return;}
+ const id=partAt(p);hovered=id;scene.style.cursor=id?"pointer":(drag?"grabbing":"crosshair");
+});
+scene.addEventListener("pointerdown",e=>{drag={x:e.clientX,y:e.clientY,moved:false};scene.setPointerCapture(e.pointerId);});
+scene.addEventListener("pointermove",e=>{if(drag&&Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>6)drag.moved=true;});
+scene.addEventListener("pointerup",e=>{if(drag&&!drag.moved){const id=partAt(designPos(e));if(id)selectPart(id);}drag=null;});
+scene.addEventListener("pointerleave",()=>{hovered=null;});
+scene.addEventListener("wheel",e=>{e.preventDefault();const f=e.deltaY<0?1.12:0.89;const before=designPos(e);zoom=clamp(zoom*f,1,3);if(zoom===1)pan={x:0,y:0};else{const r=scene.getBoundingClientRect();pan.x+=(e.clientX-r.left)-(before.x*view.s+view.ox);pan.y+=(e.clientY-r.top)-(before.y*view.s+view.oy);}},{passive:false});
+scene.addEventListener("dblclick",()=>{zoom=1;pan={x:0,y:0};});
+
+/* ---------- keyboard ---------- */
+document.addEventListener("keydown",e=>{
+ const t=e.target;if(t&&(t.tagName==="INPUT"&&t.type!=="range"||t.tagName==="SELECT"||t.tagName==="TEXTAREA"))return;
+ if(e.code==="Space"){e.preventDefault();setPlaying(!playing);}
+ else if(e.key==="ArrowRight"){e.preventDefault();theta=(theta+(e.shiftKey?1:5))%720;}
+ else if(e.key==="ArrowLeft"){e.preventDefault();theta=(theta-(e.shiftKey?1:5)+720)%720;}
+ else if(e.key==="Home"){theta=0;}
+ else if(e.key>="1"&&e.key<="9"){const p=PARTS[parseInt(e.key,10)-1];if(p)selectPart(p.id);}
+});
+document.addEventListener("visibilitychange",()=>{last=performance.now();});
+updateInspect();
+</script>
+</body>
+</html>
