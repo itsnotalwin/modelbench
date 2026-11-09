@@ -135,7 +135,7 @@ class ZipMetadataRoutingTests(unittest.TestCase):
     def test_invalid_category_is_rejected(self):
         meta = {"model":"gpt-6","category":"unknown-category","date":"2026-11-09","version":1,"entry":"index.html"}
         archive = self.make_zip(name="unknown-category.zip", meta=meta, wrapped=False)
-        with self.assertRaisesRegex(sorter.IntakeError, "not in prompts/catalog.json"):
+        with self.assertRaisesRegex(sorter.IntakeError, "category could not be resolved"):
             sorter.process_zip(archive)
 
     def test_invalid_date_and_version_are_rejected(self):
