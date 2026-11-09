@@ -1,0 +1,26 @@
+{
+  "name": "crouton-alpha \u00b7 Interactive Content Website v1",
+  "short_name": "crouton-alph",
+  "description": "A rich content-led website with original editorial structure, visual storytelling and useful interactive experiences. Run by crouton-alpha.",
+  "id": "./index.html",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#371c10",
+  "theme_color": "#df6b3a",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
