@@ -1,83 +1,80 @@
 # ModelBench
 
-ModelBench is an open-ended AI build benchmark. It compares model-created websites, games, visual experiments and creative tools in one installable dashboard. Each challenge is judged on six separate axes: completeness, robustness, craft, depth, originality and performance.
+ModelBench is an open-ended one-shot AI build benchmark. It compares model-created websites, data products, applications, games, simulations and creative tools in one installable dashboard. The ten challenges test different product-building skills, and each model run is a single finished artifact.
 
 **Live dashboard:** https://itsnotalwin.github.io/modelbench/
 
 ## How submissions work
 
-Each uploaded artifact is a ZIP package. The ZIP is the transport container; its `meta.json` is the source of truth for the submission's descriptive metadata.
+Each challenge is one prompt and each model run is **one project folder inside one ZIP**. Do not generate three versions or multiple concepts from one prompt.
 
-1. Choose one of the 15 challenges in [Prompts](prompts/README.md).
-2. Prepare one build package for each version you are submitting. A ZIP represents **one** challenge, one model and one version. Upload additional versions as separate ZIPs.
-3. Name the ZIP using the intake key:
-   ```
-   {category}__{model}__{YYYY-MM-DD}__v{n}.zip
-   ```
-   The category must match a slug in `prompts/catalog.json`; the model slug uses lowercase letters, digits, hyphens and dots.
-4. Put the project files in one folder inside the ZIP. That folder should contain `index.html`, `meta.json`, and any assets the page needs. The sorter also accepts these files at the ZIP root.
-5. Upload the ZIP to [inbox/](inbox/README.md). GitHub Actions automatically sorts accepted uploads into `runs/` and rebuilds the dashboard manifest.
+1. Choose one of the 10 challenges in [Prompts](prompts/README.md).
+2. Fill in the model slug, run date and version at the top of the prompt.
+3. The model creates one folder named CATEGORY__MODEL__YYYY-MM-DD__vN containing index.html, meta.json and only essential runtime assets.
+4. ZIP that folder.
+5. Upload the ZIP to [inbox/](inbox/README.md). The ZIP filename may be anything ending in .zip; the importer reads meta.json inside the archive to determine the destination.
 
-The ZIP filename is used as the intake/routing key so the workflow knows which challenge, model, date and version folder to create. **Descriptive submission information belongs in `meta.json`**, not in the filename or a README.
+### meta.json contract
 
-### `meta.json` contract
+Every ZIP must contain a valid UTF-8 meta.json at the project root:
 
-Include valid UTF-8 JSON with these fields:
-
-```json
+~~~json
 {
+  "schema_version": 1,
   "model": "gpt-6",
-  "category": "site-editorial",
+  "category": "site-brand",
   "date": "2026-11-09",
   "version": 1,
   "entry": "index.html",
-  "prompt": "02",
-  "prompt_label": "Editorial feature",
-  "notes": "A short description of the build and any known limitations."
+  "prompt": "01",
+  "prompt_label": "Flagship Brand Experience",
+  "notes": "A concise description of the build and any known limitations."
 }
-```
+~~~
 
-- `model`, `category`, `date`, `version` and `entry` identify the submission in the dashboard and install flow.
-- `prompt` and `prompt_label` identify the challenge.
-- `notes` is the visible human-readable summary. Put the useful description here.
-- The category, model, date and version in metadata must agree with the ZIP's intake key. The intake key determines the destination folder; metadata supplies the descriptive record.
-- The dashboard pipeline fills derived fields such as the run slug, public path, score slots and file inventory when building `manifest.json`.
+- model is the lowercase model slug using letters, digits, hyphens and dots.
+- category must match one of the ten slugs in prompts/catalog.json.
+- date must be a real ISO date in YYYY-MM-DD format.
+- version is a positive integer. Use a new version for a retest.
+- entry must be index.html at the project root.
+- prompt and prompt_label identify the selected challenge.
+- notes is a short, honest description. Scores and evaluation logs are organizer-owned and must not be supplied by the model.
 
-Do not put scores in model-authored metadata. Scores and evaluation logs are organizer-owned fields.
+**Metadata is authoritative.** The ZIP filename and internal folder name do not determine routing. The sorter validates the metadata, derives runs/{date}_{model}_{category}_v{n}/, and preserves the project files. If metadata is missing or invalid, the ZIP remains in inbox/ with an actionable error. A destination that already exists is never overwritten.
 
 ## Dashboard ratings
 
-Open a run, score the six axes from 0 to 5, and select **Save rating**. Ratings are stored in the current browser on this device, not committed to GitHub or synced to other devices. Use **Export ratings** to back up your ratings as JSON and **Import ratings** to restore or merge them in another browser. Importing ratings does not modify model artifacts or `meta.json`.
+Open a run, score the six axes from 0 to 5, and select **Save rating**. Ratings are stored in the current browser on this device, not committed to GitHub or synced to other devices. Use **Export ratings** to back up your ratings as JSON and **Import ratings** to restore or merge them in another browser. Importing ratings does not modify model artifacts or meta.json.
 
 ## Repository map
 
-```
-index.html                    dashboard and page metadata
-manifest.json                 generated dashboard data
-manifest.webmanifest          install metadata for the dashboard
-sw.js                         dashboard service worker
-icons/                        dashboard install icons
-prompts/catalog.json          canonical challenge catalog and slugs
-prompts/                      challenge prompt files and prompt guide
+~~~text
+index.html                    dashboard UI (unchanged by prompt updates)
+manifest.json                 generated dashboard data and challenge catalog
+prompts/catalog.json          canonical ten-challenge catalog
+prompts/*.md                  standalone one-shot build prompts
+prompts/README.md             suite guide and research basis
 inbox/README.md               ZIP upload instructions
 inbox/                        incoming ZIP packages
-runs/<run-slug>/              accepted build, meta.json and generated PWA assets
-tools/sort_inbox.py           validates intake naming, unpacks ZIPs and creates run records
+runs/<run-slug>/              accepted build, metadata and generated PWA assets
+tools/sort_inbox.py           validates ZIP metadata, safely unpacks and routes runs
 tools/build_manifest.py       builds manifest.json from runs/*/meta.json
 tools/pwa.py                  generates run and dashboard PWA assets
-tools/new_run.py              prints an intake filename
+tools/new_run.py              prints the output-folder and metadata contract
+tests/                         importer and dashboard tests
 .github/workflows/auto-sort.yml
                                sorts inbox uploads and commits generated run data
-```
+~~~
 
 ## Local maintenance
 
-```bash
+~~~bash
+python -m unittest discover -s tests -v
 python tools/sort_inbox.py
 python tools/build_manifest.py
 python tools/pwa.py
-python tools/new_run.py --model gpt-6 --category site-editorial --version 1
+python tools/new_run.py --model gpt-6 --category site-brand --version 1
 python -m http.server 8000
-```
+~~~
 
-Open http://localhost:8000 for a local dashboard preview. Use the workflow for the normal GitHub upload path.
+Open http://localhost:8000 for a local dashboard preview. The dashboard visual implementation is deliberately kept separate from challenge prompt/catalog data.

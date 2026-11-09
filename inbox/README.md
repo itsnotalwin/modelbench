@@ -1,76 +1,66 @@
-# Submission inbox
+# ModelBench submission inbox
 
-Upload ZIP packages here using GitHub's web interface: open this folder, choose **Add file → Upload files**, select the ZIP, then commit the upload to `main`.
+Upload one ZIP package per model run here using GitHub's web interface: open this folder, choose **Add file → Upload files**, select the ZIP, then commit the upload to main.
 
-## One ZIP = one run
+## One ZIP = one prompt = one run
 
-Each ZIP represents one model, one challenge and one version. If you submit v1, v2 and v3, upload three separate ZIPs. Do not put multiple versions in one archive.
+A ZIP contains exactly one completed project. Do not put multiple prompts, multiple model outputs or v1/v2/v3 variants into one archive.
 
-Use this filename pattern:
+The ZIP filename is not used for routing. Name it anything convenient, as long as it ends in .zip. The importer reads the JSON inside the archive.
 
-```
-{category}__{model}__{YYYY-MM-DD}__v{n}.zip
-```
+## Required ZIP structure
 
-Example:
+Preferred structure:
 
-```
-site-editorial__gpt-6__2026-11-09__v1.zip
-```
-
-- `category` must be one of the 15 slugs in `prompts/catalog.json`, such as `site-brand`, `game-2d`, `vis-image` or `idea`.
-- `model` uses lowercase letters, digits, hyphens and dots, for example `gpt-6` or `glm-5.3-flash`.
-- `YYYY-MM-DD` is the submission date.
-- `v{n}` is the version number. Never overwrite an existing run; use the next unused version.
-
-## ZIP contents
-
-Recommended structure:
-
-```
-site-editorial__gpt-6__2026-11-09__v1/
+~~~text
+site-brand__gpt-6__2026-11-09__v1/
 ├── index.html
 ├── meta.json
-├── assets/                 (optional, only if the build needs them)
-└── ...                     (other project files required by index.html)
-```
+└── assets/                 (optional, only essential runtime assets)
+~~~
 
-The folder name inside the ZIP may be the same as the ZIP basename. The sorter also accepts the files directly at the ZIP root. The site entry should be `index.html`; the current sorter can also fall back to a root HTML file or a root `README.md`, but `index.html` is the expected dashboard submission.
+The archive may also contain index.html, meta.json and assets/ directly at its root. It must contain one unambiguous project root. Do not include a second submission folder or unrelated files.
 
-### Metadata is authoritative for descriptions
+## Required meta.json
 
-Include a valid `meta.json` in every ZIP. It carries the submission information shown and indexed by ModelBench. Example:
-
-```json
+~~~json
 {
+  "schema_version": 1,
   "model": "gpt-6",
-  "category": "site-editorial",
+  "category": "site-brand",
   "date": "2026-11-09",
   "version": 1,
   "entry": "index.html",
-  "prompt": "02",
-  "prompt_label": "Editorial feature",
-  "notes": "A long-form editorial experience with interactive reading tools. Known limitation: ..."
+  "prompt": "01",
+  "prompt_label": "Flagship Brand Experience",
+  "notes": "One or two honest sentences describing the build and any known limitations."
 }
-```
+~~~
 
-Keep `model`, `category`, `date` and `version` consistent with the ZIP filename. The filename is the intake key used to route the upload into `runs/`; `meta.json` is the authoritative source for the descriptive metadata. Write the build summary and known limitations in `notes`. Do not use the filename or README as a substitute for metadata.
+The fields have these rules:
+- model: model slug, lowercase letters, digits, hyphens and dots only.
+- category: exact slug from prompts/catalog.json.
+- date: valid ISO date (YYYY-MM-DD).
+- version: positive integer, starting at 1.
+- entry: must be index.html at the project root.
+- prompt: prompt number, such as "01".
+- prompt_label: challenge title.
+- notes: short description and known limitations.
 
-Do not include scores or evaluation results in model-authored metadata. Those belong to the benchmark organizer.
+The importer reads and validates meta.json and uses its model, category, date and version as the only routing source. It ignores the ZIP filename and internal folder name for routing. It overwrites organizer-owned fields such as run slug, public path, scores and evaluation log with canonical values.
 
 ## What happens after upload
 
-1. A push to `inbox/` starts the **Auto-sort inbox uploads** GitHub Actions workflow.
-2. The sorter reads the challenge/model/date/version from the ZIP filename, safely unpacks the package, and keeps the supplied `meta.json`.
-3. The run is placed under `runs/{date}_{model}_{category}_v{n}/`. The submitted HTML is not rewritten.
-4. The workflow generates missing install assets, rebuilds `manifest.json`, and commits the processed run.
-5. The dashboard reads the generated manifest and displays the new run.
+1. A push to inbox/ starts Auto-sort inbox uploads.
+2. The sorter validates the ZIP structure and meta.json, then safely extracts the package.
+3. It creates runs/{date}_{model}_{category}_v{n}/ using metadata values.
+4. It adds canonical run metadata, generates missing install assets, rebuilds manifest.json and commits the processed run.
+5. A successful ZIP is removed from inbox/. A ZIP with missing/invalid metadata, unsafe contents or a destination collision remains in inbox/ with a clear workflow error. Existing runs are never overwritten.
 
-Accepted file types are `.zip`, `.html` and `.htm`. ZIP is the preferred package format because it keeps `index.html`, `meta.json` and supporting assets together. Unsupported files such as `.rar` are not accepted.
+## Safety and upload hygiene
 
-## If an upload does not appear
-
-- Open the repository's **Actions** tab and inspect the latest **Auto-sort inbox uploads** run.
-- A malformed filename, unknown category, or existing run slug will be skipped. Use the exact pattern above and the next unused version.
-- If ZIP extraction fails, the upload remains in `inbox/` so it can be corrected and retried.
-- A valid upload is removed from `inbox/` after it has been moved into `runs/`.
+- Keep the archive to one project and only the files needed to run it.
+- Do not include credentials, API keys, private user data, node_modules, build output or dependency caches.
+- The importer rejects path traversal, symbolic links, encrypted archives, duplicate paths, oversized archives and suspicious compression ratios.
+- Do not include model-authored scores or claim a test passed unless it was actually run.
+- For a retest, increment the positive version in meta.json and the output-folder name. Never overwrite a previous run.

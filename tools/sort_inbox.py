@@ -1,22 +1,18 @@
-"""Sort inbox/ uploads into runs/{date}_{model}_{category}_v{n}/ and rebuild manifest.json.
-Stdlib only. Run locally: python tools/sort_inbox.py  (also run by the GitHub Action)
+"""Safely sort inbox uploads into runs/ and rebuild the dashboard manifest.
 
-Categories come from prompts/catalog.json, the single source of truth.
-
-Accepted inbox filenames (case-insensitive extension):
-  {category}__{model}__{YYYY-MM-DD}__v{n}.html   <- the normal upload
-  {category}__{model}__{YYYY-MM-DD}__v{n}.zip    <- folder outputs, index.html at its root
-Model: lowercase letters, digits, hyphens and dots (e.g. claude-sonnet-4-5, glm-5.3-flash, gpt-5)
-
-The run lands in runs/{date}_{model}_{category}_v{n}/ with index.html as its entry.
-Existing runs are never overwritten: a retest is always a new v{n}.
+ZIP packages are routed exclusively from their root meta.json. The ZIP filename
+and internal folder name are intentionally ignored. Legacy standalone HTML
+uploads retain their historical filename-based route.
 """
 import json
 import re
 import shutil
+import stat
 import sys
+import tempfile
 import zipfile
-from pathlib import Path
+from datetime import date
+from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
 INBOX = ROOT / "inbox"
@@ -25,37 +21,42 @@ CATALOG = json.loads((ROOT / "prompts" / "catalog.json").read_text(encoding="utf
 PROMPTS = {p["slug"]: p for p in CATALOG["prompts"]}
 CATEGORIES = set(PROMPTS)
 
-# Model slug aliases: normalise variant spellings to one canonical slug so a
-# model's runs always group together in the dashboard.
-MODEL_ALIASES = {
-    "glm-5-3-flash": "glm-5.3-flash",
-}
-
+MODEL_ALIASES = {"glm-5-3-flash": "glm-5.3-flash"}
 SCORE_AXES = ["completeness", "robustness", "craft", "depth", "originality", "performance"]
-
 PATTERN = re.compile(
     r"^(?P<category>[a-z0-9][a-z0-9\-]*)__(?P<model>[a-z0-9][a-z0-9\-.]*?)__(?P<date>\d{4}-\d{2}-\d{2})__v(?P<n>\d+)$",
     re.IGNORECASE,
 )
+MODEL_PATTERN = re.compile(r"^[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$")
+MAX_ARCHIVE_BYTES = 30 * 1024 * 1024
+MAX_MEMBERS = 500
+MAX_UNPACKED_BYTES = 80 * 1024 * 1024
+MAX_MEMBER_BYTES = 25 * 1024 * 1024
+MAX_COMPRESSION_RATIO = 250
+
+
+class IntakeError(ValueError):
+    """An invalid upload that should remain in inbox for correction."""
 
 
 def normalise_model(model: str) -> str:
-    model = model.lower()
+    model = model.strip().lower()
     return MODEL_ALIASES.get(model, model)
 
 
 def parse(stem: str):
-    m = PATTERN.match(stem.strip())
-    if not m:
+    """Parse the legacy standalone-HTML filename contract."""
+    match = PATTERN.match(stem.strip())
+    if not match:
         return None
-    category = m.group("category").lower()
+    category = match.group("category").lower()
     if category not in CATEGORIES:
         return None
     return {
         "category": category,
-        "model": normalise_model(m.group("model")),
-        "date": m.group("date"),
-        "v": int(m.group("n")),
+        "model": normalise_model(match.group("model")),
+        "date": match.group("date"),
+        "v": int(match.group("n")),
     }
 
 
@@ -63,12 +64,186 @@ def slug_for(info) -> str:
     return f"{info['date']}_{info['model']}_{info['category']}_v{info['v']}"
 
 
+def validate_metadata(project_root: Path):
+    """Read meta.json and return canonical routing info plus its parsed object."""
+    meta_path = project_root / "meta.json"
+    if not meta_path.is_file():
+        raise IntakeError("ZIP must contain meta.json at the project root; the ZIP filename is not used for routing")
+    try:
+        meta = json.loads(meta_path.read_text(encoding="utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise IntakeError(f"meta.json is not valid UTF-8 JSON: {exc}") from exc
+    if not isinstance(meta, dict):
+        raise IntakeError("meta.json must contain a JSON object")
+    if meta.get("schema_version", 1) != 1:
+        raise IntakeError("meta.json schema_version must be 1")
+
+    raw_model = meta.get("model")
+    if not isinstance(raw_model, str):
+        raise IntakeError("meta.json field 'model' must be a model slug")
+    model = normalise_model(raw_model)
+    if not MODEL_PATTERN.fullmatch(model):
+        raise IntakeError("meta.json model must use lowercase letters, digits, hyphens and dots")
+
+    raw_category = meta.get("category")
+    if not isinstance(raw_category, str):
+        raise IntakeError("meta.json field 'category' must be a catalog slug")
+    category = raw_category.strip().lower()
+    if category not in CATEGORIES:
+        raise IntakeError(f"meta.json category '{category}' is not in prompts/catalog.json")
+
+    raw_date = meta.get("date")
+    if not isinstance(raw_date, str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", raw_date):
+        raise IntakeError("meta.json date must use YYYY-MM-DD")
+    try:
+        parsed_date = date.fromisoformat(raw_date)
+    except ValueError as exc:
+        raise IntakeError("meta.json date is not a real calendar date") from exc
+    if parsed_date.isoformat() != raw_date:
+        raise IntakeError("meta.json date must use canonical YYYY-MM-DD format")
+
+    version = meta.get("version")
+    if isinstance(version, bool) or not isinstance(version, int) or version < 1:
+        raise IntakeError("meta.json version must be a positive integer")
+    if meta.get("entry", "index.html") != "index.html":
+        raise IntakeError("meta.json entry must be index.html at the project root")
+    if not (project_root / "index.html").is_file():
+        raise IntakeError("ZIP must contain index.html beside meta.json at the project root")
+
+    return {"category": category, "model": model, "date": raw_date, "v": version}, meta
+
+
+def safe_extract(zf: zipfile.ZipFile, dest: Path) -> None:
+    """Validate archive members before extraction; reject traversal and unsafe entries."""
+    members = zf.infolist()
+    if not members:
+        raise IntakeError("ZIP is empty")
+    if len(members) > MAX_MEMBERS:
+        raise IntakeError(f"ZIP contains too many entries (limit {MAX_MEMBERS})")
+
+    dest_resolved = dest.resolve()
+    seen = set()
+    total_size = 0
+    for member in members:
+        name = member.filename
+        if not name or "\\" in name:
+            raise IntakeError(f"unsafe ZIP path: {name!r}")
+        relative = PurePosixPath(name)
+        if relative.is_absolute() or any(part in {"", ".", ".."} for part in relative.parts):
+            raise IntakeError(f"unsafe ZIP path: {name}")
+        if relative.parts and ":" in relative.parts[0]:
+            raise IntakeError(f"unsafe ZIP path: {name}")
+        target = (dest / Path(*relative.parts)).resolve()
+        if target != dest_resolved and dest_resolved not in target.parents:
+            raise IntakeError(f"unsafe ZIP entry: {name}")
+
+        key = relative.as_posix().rstrip("/")
+        if key in seen:
+            raise IntakeError(f"duplicate ZIP path: {name}")
+        seen.add(key)
+        if member.flag_bits & 0x1:
+            raise IntakeError(f"encrypted ZIP entries are not accepted: {name}")
+        mode = (member.external_attr >> 16) & 0xFFFF
+        if stat.S_ISLNK(mode):
+            raise IntakeError(f"symbolic links are not accepted: {name}")
+        if member.file_size > MAX_MEMBER_BYTES:
+            raise IntakeError(f"ZIP entry is too large (limit {MAX_MEMBER_BYTES // (1024 * 1024)} MB): {name}")
+        total_size += member.file_size
+        if total_size > MAX_UNPACKED_BYTES:
+            raise IntakeError(f"unpacked ZIP is too large (limit {MAX_UNPACKED_BYTES // (1024 * 1024)} MB)")
+        if member.file_size and not member.compress_size:
+            raise IntakeError(f"invalid compressed size: {name}")
+        if member.compress_size and member.file_size / member.compress_size > MAX_COMPRESSION_RATIO:
+            raise IntakeError(f"suspicious compression ratio: {name}")
+
+    zf.extractall(dest)
+
+
+def find_project_root(extract_dir: Path) -> Path:
+    """Accept files at ZIP root or exactly one visible top-level project folder."""
+    children = [
+        path for path in extract_dir.iterdir()
+        if path.name not in {"__MACOSX", ".DS_Store"}
+    ]
+    if len(children) == 1 and children[0].is_dir():
+        return children[0]
+    return extract_dir
+
+
+def canonicalise_metadata(meta: dict, info: dict, run_dir: Path, source_name: str) -> dict:
+    """Preserve notes; overwrite derived and organizer-owned fields."""
+    prompt = PROMPTS[info["category"]]
+    result = dict(meta)
+    result.update({
+        "schema_version": 1,
+        "slug": run_dir.name,
+        "model": info["model"],
+        "category": info["category"],
+        "prompt": prompt["no"],
+        "prompt_label": prompt["title"],
+        "date": info["date"],
+        "version": info["v"],
+        "entry": "index.html",
+        "path": f"runs/{run_dir.name}/index.html",
+        "source_file": source_name,
+        "scores": {axis: None for axis in SCORE_AXES},
+        "log": {"ran_first_try": None, "console_errors": None, "fps": None, "file_size_kb": None},
+    })
+    if not isinstance(result.get("notes"), str):
+        result["notes"] = ""
+    for key in ("rating", "evaluation", "self_score"):
+        result.pop(key, None)
+    return result
+
+
+def process_zip(src: Path) -> str:
+    """Route a ZIP from its metadata; never use its filename or folder name as identity."""
+    RUNS.mkdir(parents=True, exist_ok=True)
+    if src.stat().st_size > MAX_ARCHIVE_BYTES:
+        raise IntakeError(f"ZIP file is too large (limit {MAX_ARCHIVE_BYTES // (1024 * 1024)} MB)")
+
+    with tempfile.TemporaryDirectory(prefix=".modelbench-intake-", dir=RUNS) as temporary:
+        extract_dir = Path(temporary) / "unpacked"
+        extract_dir.mkdir()
+        try:
+            with zipfile.ZipFile(src) as zf:
+                safe_extract(zf, extract_dir)
+        except zipfile.BadZipFile as exc:
+            raise IntakeError("file is not a valid ZIP archive") from exc
+
+        project_root = find_project_root(extract_dir)
+        info, model_meta = validate_metadata(project_root)
+        run_slug = slug_for(info)
+        run_dir = RUNS / run_slug
+        if run_dir.exists():
+            raise IntakeError(f"destination already exists: {run_slug}; increment meta.json version for a retest")
+
+        for noise in ("__MACOSX",):
+            noise_path = project_root / noise
+            if noise_path.is_dir():
+                shutil.rmtree(noise_path)
+        ds_store = project_root / ".DS_Store"
+        if ds_store.is_file():
+            ds_store.unlink()
+
+        canonical_meta = canonicalise_metadata(model_meta, info, run_dir, src.name)
+        (project_root / "meta.json").write_text(
+            json.dumps(canonical_meta, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+        project_root.rename(run_dir)
+        print(
+            f"ZIP metadata routed: {src.name} -> {run_slug} "
+            f"(category={info['category']}, model={info['model']}, date={info['date']}, v{info['v']})"
+        )
+        return run_slug
+
+
 def write_meta(run_dir: Path, info, source_name: str, entry: str = "index.html") -> None:
-    meta_path = run_dir / "meta.json"
-    if meta_path.exists():
-        return
+    """Create organizer metadata for legacy standalone HTML upload."""
     prompt = PROMPTS[info["category"]]
     meta = {
+        "schema_version": 1,
         "slug": run_dir.name,
         "model": info["model"],
         "category": info["category"],
@@ -81,118 +256,87 @@ def write_meta(run_dir: Path, info, source_name: str, entry: str = "index.html")
         "source_file": source_name,
         "scores": {axis: None for axis in SCORE_AXES},
         "log": {"ran_first_try": None, "console_errors": None, "fps": None, "file_size_kb": None},
-        "notes": "" if entry == "index.html" else f"Entry is {entry} (not index.html). Run it locally per the folder's README.",
+        "notes": "",
     }
-    meta_path.write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
-
-
-def safe_extract(zf: zipfile.ZipFile, dest: Path) -> None:
-    dest_resolved = dest.resolve()
-    for member in zf.infolist():
-        target = (dest / member.filename).resolve()
-        if not str(target).startswith(str(dest_resolved)):
-            raise ValueError(f"unsafe zip entry: {member.filename}")
-    zf.extractall(dest)
-
-
-def handle_zip(src: Path, run_dir: Path) -> str:
-    """The folder inside the zip (whatever the model called it) becomes runs/<slug>/,
-    contents untouched. Entry priority: index.html > any root .html > README.md.
-    Returns the entry path relative to run_dir."""
-    run_dir.mkdir(parents=True, exist_ok=True)
-    tmp = run_dir.parent / (run_dir.name + ".__tmp__")
-    if tmp.exists():
-        shutil.rmtree(tmp)
-    tmp.mkdir(parents=True)
-    try:
-        with zipfile.ZipFile(src) as zf:
-            safe_extract(zf, tmp)
-        children = [p for p in tmp.iterdir() if not p.name.startswith("__MACOSX")]
-        if len(children) == 1 and children[0].is_dir():
-            src_root = children[0]
-        else:
-            src_root = tmp
-        if (src_root / "index.html").exists():
-            entry = "index.html"
-        else:
-            htmls = sorted(p.name for p in src_root.iterdir() if p.is_file() and p.suffix.lower() in {".html", ".htm"})
-            if htmls:
-                entry = htmls[0]
-            elif (src_root / "README.md").exists():
-                entry = "README.md"
-            else:
-                raise ValueError("zip must contain index.html (or a root .html / README.md)")
-        for item in list(src_root.iterdir()):
-            dest = run_dir / item.name
-            if dest.exists():
-                shutil.rmtree(dest) if dest.is_dir() else dest.unlink()
-            shutil.move(str(item), str(dest))
-        return entry
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
-
-
-def handle_html(src: Path, run_dir: Path) -> None:
-    run_dir.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(src, run_dir / "index.html")
+    (run_dir / "meta.json").write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
 
 
 def main() -> int:
     moved, skipped = [], []
+    RUNS.mkdir(parents=True, exist_ok=True)
     if not INBOX.exists():
         print("no inbox/")
         return 0
-    for f in sorted(INBOX.iterdir()):
-        if f.is_dir() or f.name.startswith(".") or f.name.lower() == "readme.md":
+
+    for item in sorted(INBOX.iterdir()):
+        if item.is_dir() or item.name.startswith(".") or item.name.lower() == "readme.md":
             continue
-        if f.suffix.lower() not in {".html", ".htm", ".zip"}:
-            skipped.append(f.name)
-            print(f"SKIP (unsupported extension, use .html or .zip, never .rar): {f.name}")
+        if item.suffix.lower() not in {".html", ".htm", ".zip"}:
+            skipped.append(item.name)
+            print(f"SKIP (unsupported extension, use .zip or legacy .html/.htm): {item.name}")
             continue
-        info = parse(f.stem)
+
+        if item.suffix.lower() == ".zip":
+            try:
+                slug = process_zip(item)
+            except Exception as exc:
+                skipped.append(item.name)
+                print(f"ERROR {item.name}: {exc}")
+                continue
+            item.unlink()
+            moved.append(slug)
+            print(f"MOVED {item.name} -> runs/{slug}/")
+            continue
+
+        info = parse(item.stem)
         if not info:
-            skipped.append(f.name)
-            print(f"SKIP (bad name, want {{category}}__{{model}}__{{date}}__v{{n}} with a category from prompts/catalog.json): {f.name}")
+            skipped.append(item.name)
+            print(f"SKIP (legacy HTML needs category__model__YYYY-MM-DD__vN with a catalog category): {item.name}")
             continue
-        slug = slug_for(info)
-        run_dir = RUNS / slug
-        if run_dir.exists() and (run_dir / "meta.json").exists():
-            skipped.append(f.name)
-            print(f"SKIP (already exists, bump v{{n}} for a retest): {slug}")
+        run_slug = slug_for(info)
+        run_dir = RUNS / run_slug
+        if run_dir.exists():
+            skipped.append(item.name)
+            print(f"SKIP (destination already exists, increment version): {run_slug}")
             continue
         try:
-            entry = "index.html"
-            if f.suffix.lower() == ".zip":
-                entry = handle_zip(f, run_dir)
-            else:
-                handle_html(f, run_dir)
-        except Exception as e:  # keep the file in inbox/ and log why
-            print(f"ERROR {f.name}: {e}")
-            skipped.append(f.name)
+            run_dir.mkdir(parents=True, exist_ok=False)
+            shutil.copy2(item, run_dir / "index.html")
+            write_meta(run_dir, info, item.name)
+        except Exception as exc:
+            shutil.rmtree(run_dir, ignore_errors=True)
+            skipped.append(item.name)
+            print(f"ERROR {item.name}: {exc}")
             continue
-        write_meta(run_dir, info, f.name, entry)
-        f.unlink()
-        moved.append(slug)
-        print(f"MOVED {f.name} -> runs/{slug}/")
+        item.unlink()
+        moved.append(run_slug)
+        print(f"MOVED {item.name} -> runs/{run_slug}/")
+
     sys.path.insert(0, str(ROOT / "tools"))
-    # PWA install assets: manifest, service worker and icons next to each run's index.html.
-    # Only missing files are written, and the model's HTML is never touched.
     import pwa
     pwa.ensure_root(ROOT)
-    if RUNS.exists():
-        for d in sorted(RUNS.iterdir()):
-            meta_path = d / "meta.json"
-            if not d.is_dir() or not meta_path.exists():
-                continue
+    for run_dir in sorted(RUNS.iterdir()):
+        meta_path = run_dir / "meta.json"
+        if not run_dir.is_dir() or run_dir.name.startswith(".") or not meta_path.exists():
+            continue
+        try:
             meta = json.loads(meta_path.read_text(encoding="utf-8"))
-            cat = PROMPTS.get(meta.get("category"))
-            if not cat:
-                continue
-            title = f"{meta.get('model')} · {cat['title']} v{meta.get('version', 1)}"
-            status = pwa.ensure_run(d, title, f"{cat['summary']} Run by {meta.get('model')}.", cat.get("hue", 210))
-            if meta.get("pwa") != status:
-                meta["pwa"] = status
-                meta_path.write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
+        except Exception:
+            continue
+        category = PROMPTS.get(meta.get("category"))
+        if not category:
+            continue
+        title = f"{meta.get('model')} · {category['title']} v{meta.get('version', 1)}"
+        status = pwa.ensure_run(
+            run_dir,
+            title,
+            f"{category['summary']} Run by {meta.get('model')}.",
+            category.get("hue", 210),
+        )
+        if meta.get("pwa") != status:
+            meta["pwa"] = status
+            meta_path.write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
+
     import build_manifest
     build_manifest.main()
     print(f"done: moved={moved} skipped={skipped}")

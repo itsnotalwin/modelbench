@@ -1,60 +1,84 @@
-# 01 · Brand site — benchmark prompt
+# 01 · Flagship Brand Experience
 
-> **Uploader instruction (do NOT send this header to the model):**
-> The model delivers three files. Upload each one as its own `.html` into `inbox/`, renamed to exactly:
-> `site-brand__<model-slug>__<YYYY-MM-DD>__v1.html`, `…__v2.html`, `…__v3.html`
-> Never upload a .rar. A retest of this prompt uses v4, v5, v6.
+## Run parameters
+Set these three values before starting the run. They must be the same values written into the output folder and metadata.
 
----
+- MODEL_SLUG: [model-slug]
+- RUN_DATE: [YYYY-MM-DD]
+- VERSION: 1
 
-## Model prompt (send everything below this line)
+If a value is still bracketed, stop and ask the organizer to fill it in. Do not invent the model identifier or date.
 
-Build **three separate, complete marketing websites**, each for a company you invent. Each is a different industry, audience and business model, and no two may share a name, category or visual language. You choose the companies, the copy, the identity and the tone. Do not ask questions and do not hedge. Decide and build in one pass. The default answer for this category — a hero, three feature cards and a footer with no idea behind it — is the wrong answer.
+## The brief
 
-**Ground rules (apply to all three)**
-- Each file is one self-contained HTML file: HTML, CSS and JS inline. No external images, fonts, audio files or model files.
-- Each must open directly from disk (`file://`) and work on GitHub Pages from a subfolder. No server, no build step, no install.
-- No placeholder text, TODOs, dead controls or unfinished sections.
-- Allowed libraries: none. Everything is built with the platform: no CDN scripts, no web fonts, no image or audio files.
+Build the complete flagship website for **Nearwild**, a premium small-group day-adventure company. Nearwild helps people trade a predictable weekend for a carefully hosted day outdoors. Its voice is observant, confident, warm and quietly adventurous. It is not an extreme-sports brand and must not look like a generic travel template.
 
-**What each file must do**
-- 6+ distinct sections on one page, or 5+ hash-routed views inside the single file, each with a real job (product, proof, pricing, story, FAQ, contact).
-- At least 900 words of copy per site, in the brand's voice, with a headline that could not be reused by another company. No lorem ipsum. The copy has to carry the argument: what is sold, to whom, and why it is different.
-- A bespoke identity: a logo mark drawn in SVG, a palette of at most five colours plus one accent, a type scale, and 3+ original illustrations or diagrams made in SVG or CSS. No emoji standing in for art, no generic blob shapes.
-- One interactive element that is core to the business (a configurator, a quote calculator, a pricing toggle, an availability check), with real state and numbers that visibly update.
-- Motion that serves the argument: scroll reveals, considered hover states, one hero moment. Eased, never bouncing for its own sake.
-- Accessible and responsive from 390px to 1440px: visible focus, real labels, `prefers-reduced-motion` respected, no horizontal scroll.
+The site must help a first-time visitor understand the offer, compare three trips, trust the operator and submit a realistic booking request. The brand, art direction, page composition and implementation are yours to decide. Make it feel like a real business ready to launch, not a mood board.
 
-**Mobile-first and installable (mandatory, every file)**
-- Design for a 390px-wide portrait phone first, then scale up to desktop. Touch is the primary input: every control is at least 44px, nothing depends on hover, and the first interaction works with one thumb.
-- Works in portrait and landscape, handles `resize` and `orientationchange`, and respects `env(safe-area-inset-*)` so nothing hides behind a notch or the home bar.
-- Fits the screen: use `100dvh`, no accidental page scrolling, and `touch-action` set on interactive canvases so pinch and double-tap do not zoom the page.
-- Mobile specifics: a sticky bottom bar for the primary action, sections that stack without losing hierarchy, and a hero that fits a 390px screen without cropping the headline.
-- The file must be installable as a Progressive Web App. The benchmark host places `manifest.webmanifest`, `sw.js` and `icons/` next to your file. Your file must reference them. Put exactly these lines in `<head>` (set `theme-color` to your own palette colour):
+Use these fixed experiences and prices:
+- **Saltline Walk** — 3 hours — easy coastal route — **R590 per person**.
+- **Fynbos Table** — 4 hours — guided botanical walk with a hosted picnic — **R820 per person**.
+- **First Light Ridge** — 5 hours — moderate sunrise hike — **R690 per person**.
 
-```html
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b0d12">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
-```
+These are fictional benchmark products. Do not claim real availability, customer reviews, certifications or partnerships.
 
-  and this line just before `</body>`:
+## Product requirements
 
-```html
-<script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});</script>
-```
+1. Create a distinct visual identity with a considered wordmark or symbol, a compact colour system, deliberate typography, and a consistent spacing and component system. Create the hero artwork and supporting illustrations with inline SVG, CSS or canvas. Do not use remote stock photos, externally hosted fonts or placeholder image boxes.
+2. Build a persuasive page with at least six genuinely useful sections: a clear hero, the three experiences, a detailed itinerary or “what the day feels like” section, what is included, the hosting philosophy or safety approach, practical questions, and a strong final booking invitation. Sections may be combined only when the information hierarchy stays clear.
+3. Each experience must open a meaningful detail view showing duration, difficulty, inclusions, price and a sample itinerary. The detail view must be closable with Escape and must work by keyboard and touch.
+4. Add a working booking-request flow. Visitors choose an experience, a date, and a party size. The estimated total must update immediately and correctly. Validate required fields, reject past dates and unreasonable party sizes, show useful inline errors, and display a confirmation summary. This is a local demo, not a real reservation.
+5. Persist the booking draft and selected experience across a reload. Provide a clear way to start a fresh request. Never imply that the request was sent to a real operator.
+6. Include a useful mobile navigation pattern, visible focus states, reduced-motion support and a responsive layout that is intentionally designed for both a 1440px desktop and a 390px phone.
+7. Write specific, believable copy. No lorem ipsum, fake testimonials, meaningless metrics, “coming soon” sections or dead buttons.
 
-- Do not create the manifest, service worker or icon files yourself. The file must still open and work from disk even when they are missing. Once installed, the app must run offline after its first load, so keep runtime network use to the CDN libraries this prompt allows.
+## Quality bar
 
-**Delivery — naming is mandatory**
-- File names are `site-brand__{model-slug}__{YYYY-MM-DD}__v1.html`, then `…__v2.html`, then `…__v3.html`.
-  - `{model-slug}`: your model name in lowercase, hyphens for spaces, dots kept when they are part of the name (for example `glm-5.3-flash`).
-  - `{YYYY-MM-DD}`: today's date.
-  - No creative file names, no uppercase letters, no spaces.
-- Deliver the three files in order. Before each one, write its exact file name on its own line. Then the complete file in one code block.
-- After the third file, give one short bullet list per file: its business, the identity you built, and one known limitation. Nothing else.
+The page should have a recognisable art direction and memorable composition. Establish a strong visual reading order, credible product presentation, comfortable text measure, balanced whitespace, precise details and restrained motion. Do not rely on a giant gradient, floating glass cards or a standard SaaS hero as a substitute for design. The booking flow must be obvious without making the whole site look like a form.
+
+Use semantic HTML, labelled controls, appropriate heading order, sufficient contrast and touch targets. Avoid unnecessary JavaScript, console errors and layout shifts. Keep the page fast and self-contained.
+
+## Acceptance checklist
+
+Before finishing, verify that:
+- All three experience cards show the correct fixed names, durations, difficulty and prices.
+- A visitor can open and close each experience detail view.
+- Changing experience, date or party size updates the booking total accurately.
+- Invalid booking input is prevented and explained beside the relevant field.
+- A valid request reaches a visible confirmation state and survives reload as a saved draft/record.
+- Navigation, modal/dialog and form work with keyboard as well as pointer/touch.
+- The desktop and phone layouts have no clipped content or horizontal overflow.
+- There are no placeholder links, fake service calls or non-functional controls.
+
+## Submission contract — mandatory
+
+Create exactly one output folder at the workspace root named:
+
+**site-brand__MODEL_SLUG__RUN_DATE__vVERSION**
+
+Inside it, put:
+- **index.html** — the complete runnable website. Keep CSS and JavaScript inline.
+- **meta.json** — the metadata below.
+- **assets/** only if an essential runtime asset cannot reasonably be embedded.
+
+Do not create multiple concepts, three versions, extra HTML pages, a README, an audit report, screenshots, package files, node_modules or build output. Do not paste the source code into chat. Create the files in the workspace and verify that they exist.
+
+The metadata file must be valid UTF-8 JSON and contain exactly these required fields (you may add a concise optional description field, but do not add scores):
+
+~~~json
+{
+  "schema_version": 1,
+  "model": "MODEL_SLUG",
+  "category": "site-brand",
+  "date": "RUN_DATE",
+  "version": VERSION,
+  "entry": "index.html",
+  "prompt": "01",
+  "prompt_label": "Flagship Brand Experience",
+  "notes": "One or two honest sentences describing the completed build and any known limitations."
+}
+~~~
+
+The folder name and metadata values must use the exact run parameters above. The folder is what the organizer will ZIP. The ZIP filename is not used to identify the run.
+
+Finally, open and test the page in a browser if one is available. Otherwise perform a code-level smoke check and say so in the final one-line status. Report only the created folder path and whether the acceptance checklist passed. Do not claim tests you did not run.
