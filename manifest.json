@@ -1,6 +1,126 @@
 {
   "generated_from": "runs/",
-  "count": 26,
+  "count": 4,
+  "catalog": [
+    {
+      "no": "01",
+      "slug": "website",
+      "title": "Website",
+      "family": "Web",
+      "summary": "One original, polished website on a subject the model invents.",
+      "requirement": "5+ screens or sections, real copy, bespoke SVG art, one working interactive element",
+      "output": "1 HTML file",
+      "min_outputs": 1,
+      "hue": 265
+    },
+    {
+      "no": "02",
+      "slug": "webapp",
+      "title": "Useful app",
+      "family": "Web app",
+      "summary": "A complete everyday tool with data, persistence, undo and built-in self-checks.",
+      "requirement": "3 end-to-end workflows, undo, JSON import/export, 10 self-checks that pass",
+      "output": "1 HTML file",
+      "min_outputs": 1,
+      "hue": 200
+    },
+    {
+      "no": "03",
+      "slug": "codelab",
+      "title": "Algorithms lab",
+      "family": "Coding",
+      "summary": "Implement algorithms from scratch, visualise them step by step, then test them in the page.",
+      "requirement": "6+ algorithms with step animations, 30+ assertions, an editable function that re-runs the tests",
+      "output": "1 HTML file",
+      "min_outputs": 6,
+      "hue": 150
+    },
+    {
+      "no": "04",
+      "slug": "engineer",
+      "title": "Simulation tool",
+      "family": "Engineering",
+      "summary": "A physical or control system with stated equations, live plots and an analytic self-check.",
+      "requirement": "5+ scenarios that each show a different behaviour, 3+ live plots, CSV export, solver check",
+      "output": "1 HTML file",
+      "min_outputs": 5,
+      "hue": 35
+    },
+    {
+      "no": "05",
+      "slug": "threejs",
+      "title": "three.js scenes",
+      "family": "3D",
+      "summary": "Five distinct real-time 3D scenes, each a different visual idea, with custom shaders.",
+      "requirement": "5+ different scenes, custom GLSL in 2+ scenes, no external model or texture files",
+      "output": "1 HTML file",
+      "min_outputs": 5,
+      "hue": 320
+    },
+    {
+      "no": "06",
+      "slug": "arcade",
+      "title": "Arcade pack",
+      "family": "Games",
+      "summary": "Five different, playable mini-games in one file, selected from a menu.",
+      "requirement": "5 distinct games, each with win/lose, sound, pause, high score and a self-test",
+      "output": "1 HTML file",
+      "min_outputs": 5,
+      "hue": 10
+    },
+    {
+      "no": "07",
+      "slug": "image",
+      "title": "Procedural images",
+      "family": "Images",
+      "summary": "Original images generated purely in code, each by a different technique.",
+      "requirement": "5+ distinct generated images, seeded and reproducible, PNG download, palette per image",
+      "output": "1 HTML file",
+      "min_outputs": 5,
+      "hue": 190
+    },
+    {
+      "no": "08",
+      "slug": "motion",
+      "title": "Short animated film",
+      "family": "Video",
+      "summary": "A 45-90 second animated film built in code, with its own soundtrack and a timeline.",
+      "requirement": "5-7 scenes with transitions, synthesised soundtrack, scrubbing timeline, WebM recording",
+      "output": "1 HTML file",
+      "min_outputs": 5,
+      "hue": 340
+    },
+    {
+      "no": "09",
+      "slug": "tooluse",
+      "title": "Tool-calling playground",
+      "family": "Tool use",
+      "summary": "Design a set of tools, plan multi-step requests with them and trace every call.",
+      "requirement": "6+ tools with schemas, 6+ requests incl. chained calls, honest refusals, 12 checks that pass",
+      "output": "1 HTML file",
+      "min_outputs": 6,
+      "hue": 60
+    },
+    {
+      "no": "10",
+      "slug": "academic",
+      "title": "Academic explainer",
+      "family": "Academic",
+      "summary": "A rigorous, interactive explainer on a topic the model chooses, with honest references.",
+      "requirement": "Correct mathematics, 3+ sliders that change results, worked example, 5-question quiz",
+      "output": "1 HTML file",
+      "min_outputs": 3,
+      "hue": 225
+    }
+  ],
+  "axes": [
+    "completeness",
+    "robustness",
+    "craft",
+    "depth",
+    "originality",
+    "performance"
+  ],
   "runs": [
     {
       "slug": "2026-11-09_crouton-alpha_fps_v2",
@@ -96,198 +216,6 @@
       ]
     },
     {
-      "slug": "2026-11-06_glm-5.3-flash_world_v2",
-      "model": "glm-5.3-flash",
-      "category": "world",
-      "date": "2026-11-06",
-      "version": 2,
-      "entry": "world__glm-5-3-flash__2026-11-06__v2.html",
-      "path": "runs/2026-11-06_glm-5.3-flash_world_v2/world__glm-5-3-flash__2026-11-06__v2.html",
-      "source_file": "world__glm-5-3-flash__2026-11-06__v2.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "notes": "Entry is world__glm-5-3-flash__2026-11-06__v2.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
-      "prompt": "12",
-      "prompt_label": "Living 3D world",
-      "files": [
-        "meta.json",
-        "world__glm-5-3-flash__2026-11-06__v2.html"
-      ]
-    },
-    {
-      "slug": "2026-11-06_glm-5.3-flash_website_v1",
-      "model": "glm-5.3-flash",
-      "category": "website",
-      "date": "2026-11-06",
-      "version": 1,
-      "entry": "index.html",
-      "path": "runs/2026-11-06_glm-5.3-flash_website_v1/index.html",
-      "source_file": "website__glm-5.3-flash__2026-11-06__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "notes": "",
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "prompt": "01",
-      "prompt_label": "Website",
-      "files": [
-        "README.md",
-        "css/style.css",
-        "index.html",
-        "js/grain.js",
-        "meta.json"
-      ]
-    },
-    {
-      "slug": "2026-11-06_crouton-alpha_website_v1",
-      "model": "crouton-alpha",
-      "category": "website",
-      "date": "2026-11-06",
-      "version": 1,
-      "entry": "index.html",
-      "path": "runs/2026-11-06_crouton-alpha_website_v1/index.html",
-      "source_file": "website__crouton-alpha__2026-11-06__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "notes": "",
-      "files": [
-        "README.md",
-        "favicon.svg",
-        "index.html",
-        "js/app.js",
-        "meta.json",
-        "styles.css"
-      ]
-    },
-    {
-      "slug": "2026-11-06_claude-opus-4-5_website_v1",
-      "model": "claude-opus-4-5",
-      "category": "website",
-      "date": "2026-11-06",
-      "version": 1,
-      "entry": "index.html",
-      "path": "runs/2026-11-06_claude-opus-4-5_website_v1/index.html",
-      "source_file": "website__claude-opus-4-5__2026-11-06__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "notes": "",
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "prompt": "01",
-      "prompt_label": "Website",
-      "files": [
-        "README.md",
-        "index.html",
-        "meta.json"
-      ]
-    },
-    {
-      "slug": "2026-11-06_glm-5.3-flash_tool_v1",
-      "model": "glm-5.3-flash",
-      "category": "tool",
-      "date": "2026-11-06",
-      "version": 1,
-      "entry": "tool__glm-5.3-flash__2026-11-06__v1.html",
-      "path": "runs/2026-11-06_glm-5.3-flash_tool_v1/tool__glm-5.3-flash__2026-11-06__v1.html",
-      "source_file": "tool__glm-5.3-flash__2026-11-06__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "notes": "Entry is tool__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
-      "prompt": "16",
-      "prompt_label": "Creative tool",
-      "files": [
-        "meta.json",
-        "tool__glm-5.3-flash__2026-11-06__v1.html"
-      ]
-    },
-    {
-      "slug": "2026-11-06_glm-5.3-flash_synth_v1",
-      "model": "glm-5.3-flash",
-      "category": "synth",
-      "date": "2026-11-06",
-      "version": 1,
-      "entry": "synth__glm-5.3-flash__2026-11-06__v1.html",
-      "path": "runs/2026-11-06_glm-5.3-flash_synth_v1/synth__glm-5.3-flash__2026-11-06__v1.html",
-      "source_file": "synth__glm-5.3-flash__2026-11-06__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "notes": "Entry is synth__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
-      "prompt": "15",
-      "prompt_label": "Music instrument",
-      "files": [
-        "meta.json",
-        "synth__glm-5.3-flash__2026-11-06__v1.html"
-      ]
-    },
-    {
       "slug": "2026-11-06_glm-5.3-flash_sim_v1",
       "model": "glm-5.3-flash",
       "category": "sim",
@@ -316,510 +244,6 @@
       "files": [
         "meta.json",
         "sim__glm-5.3-flash__2026-11-06__v1.html"
-      ]
-    },
-    {
-      "slug": "2026-11-06_glm-5.3-flash_saas_v1",
-      "model": "glm-5.3-flash",
-      "category": "saas",
-      "date": "2026-11-06",
-      "version": 1,
-      "entry": "index.html",
-      "path": "runs/2026-11-06_glm-5.3-flash_saas_v1/index.html",
-      "source_file": "saas__glm-5.3-flash__2026-11-06__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "notes": "",
-      "prompt": "02",
-      "prompt_label": "SaaS (clearing agents)",
-      "files": [
-        "README.md",
-        "index.html",
-        "js/app.js",
-        "js/core.js",
-        "js/seed.js",
-        "meta.json",
-        "styles.css",
-        "tests/run-tests.js",
-        "tests/suite.js",
-        "tests/tests.html"
-      ]
-    },
-    {
-      "slug": "2026-11-06_glm-5.3-flash_runner_v1",
-      "model": "glm-5.3-flash",
-      "category": "runner",
-      "date": "2026-11-06",
-      "version": 1,
-      "entry": "runner__glm-5.3-flash__2026-11-06__v1.html",
-      "path": "runs/2026-11-06_glm-5.3-flash_runner_v1/runner__glm-5.3-flash__2026-11-06__v1.html",
-      "source_file": "runner__glm-5.3-flash__2026-11-06__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "notes": "Entry is runner__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "prompt": "08",
-      "prompt_label": "Arcade game",
-      "files": [
-        "meta.json",
-        "runner__glm-5.3-flash__2026-11-06__v1.html"
-      ]
-    },
-    {
-      "slug": "2026-11-06_glm-5.3-flash_platformer_v1",
-      "model": "glm-5.3-flash",
-      "category": "platformer",
-      "date": "2026-11-06",
-      "version": 1,
-      "entry": "platformer__glm-5.3-flash__2026-11-06__v1.html",
-      "path": "runs/2026-11-06_glm-5.3-flash_platformer_v1/platformer__glm-5.3-flash__2026-11-06__v1.html",
-      "source_file": "platformer__glm-5.3-flash__2026-11-06__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "notes": "Entry is platformer__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "prompt": "11",
-      "prompt_label": "Original platformer",
-      "files": [
-        "meta.json",
-        "platformer__glm-5.3-flash__2026-11-06__v1.html"
-      ]
-    },
-    {
-      "slug": "2026-11-06_glm-5.3-flash_os_v1",
-      "model": "glm-5.3-flash",
-      "category": "os",
-      "date": "2026-11-06",
-      "version": 1,
-      "entry": "index.html",
-      "path": "runs/2026-11-06_glm-5.3-flash_os_v1/index.html",
-      "source_file": "os__glm-5-3-flash__2026-11-06__v1.zip (model slug normalised to glm-5.3-flash)",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "notes": "",
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "prompt": "09",
-      "prompt_label": "Browser OS",
-      "files": [
-        "index.html",
-        "meta.json"
-      ]
-    },
-    {
-      "slug": "2026-11-06_glm-5.3-flash_generative_v1",
-      "model": "glm-5.3-flash",
-      "category": "generative",
-      "date": "2026-11-06",
-      "version": 1,
-      "entry": "generative__glm-5.3-flash__2026-11-06__v1.html",
-      "path": "runs/2026-11-06_glm-5.3-flash_generative_v1/generative__glm-5.3-flash__2026-11-06__v1.html",
-      "source_file": "generative__glm-5.3-flash__2026-11-06__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "notes": "Entry is generative__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
-      "prompt": "14",
-      "prompt_label": "Generative art",
-      "files": [
-        "generative__glm-5.3-flash__2026-11-06__v1.html",
-        "meta.json"
-      ]
-    },
-    {
-      "slug": "2026-11-06_glm-5.3-flash_game3d_v1",
-      "model": "glm-5.3-flash",
-      "category": "game3d",
-      "date": "2026-11-06",
-      "version": 1,
-      "entry": "index.html",
-      "path": "runs/2026-11-06_glm-5.3-flash_game3d_v1/index.html",
-      "source_file": "game3d__glm-5-3-flash__2026-11-06__v1.zip (model slug normalised to glm-5.3-flash)",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "notes": "",
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "prompt": "04",
-      "prompt_label": "3D game",
-      "files": [
-        "index.html",
-        "meta.json"
-      ]
-    },
-    {
-      "slug": "2026-11-06_crouton-alpha_game3d_v1",
-      "model": "crouton-alpha",
-      "category": "game3d",
-      "date": "2026-11-06",
-      "version": 1,
-      "entry": "game3d__crouton-alpha__2026-11-06__v1.html",
-      "path": "runs/2026-11-06_crouton-alpha_game3d_v1/game3d__crouton-alpha__2026-11-06__v1.html",
-      "source_file": "game3d__crouton-alpha__2026-11-06__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "notes": "Entry is game3d__crouton-alpha__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
-      "prompt": "04",
-      "prompt_label": "3D game",
-      "files": [
-        "game3d__crouton-alpha__2026-11-06__v1.html",
-        "meta.json"
-      ]
-    },
-    {
-      "slug": "2026-11-06_glm-5.3-flash_game2d_v1",
-      "model": "glm-5.3-flash",
-      "category": "game2d",
-      "date": "2026-11-06",
-      "version": 1,
-      "entry": "game2d__glm-5.3-flash__2026-11-06__v1.html",
-      "path": "runs/2026-11-06_glm-5.3-flash_game2d_v1/game2d__glm-5.3-flash__2026-11-06__v1.html",
-      "source_file": "game2d__glm-5.3-flash__2026-11-06__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "notes": "Entry is game2d__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "prompt": "03",
-      "prompt_label": "2D game",
-      "files": [
-        "game2d__glm-5.3-flash__2026-11-06__v1.html",
-        "meta.json"
-      ]
-    },
-    {
-      "slug": "2026-11-06_crouton-alpha_game2d_v1",
-      "model": "crouton-alpha",
-      "category": "game2d",
-      "date": "2026-11-06",
-      "version": 1,
-      "entry": "game2d__crouton-alpha__2026-11-06__v1.html",
-      "path": "runs/2026-11-06_crouton-alpha_game2d_v1/game2d__crouton-alpha__2026-11-06__v1.html",
-      "source_file": "game2d__crouton-alpha__2026-11-06__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "notes": "Entry is game2d__crouton-alpha__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
-      "prompt": "03",
-      "prompt_label": "2D game",
-      "files": [
-        "game2d__crouton-alpha__2026-11-06__v1.html",
-        "meta.json"
-      ]
-    },
-    {
-      "slug": "2026-11-06_glm-5.3-flash_fps_v1",
-      "model": "glm-5.3-flash",
-      "category": "fps",
-      "date": "2026-11-06",
-      "version": 1,
-      "entry": "fps__glm-5.3-flash__2026-11-06__v1.html",
-      "path": "runs/2026-11-06_glm-5.3-flash_fps_v1/fps__glm-5.3-flash__2026-11-06__v1.html",
-      "source_file": "fps__glm-5.3-flash__2026-11-06__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "notes": "Entry is fps__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "prompt": "07",
-      "prompt_label": "First-person game",
-      "files": [
-        "fps__glm-5.3-flash__2026-11-06__v1.html",
-        "meta.json"
-      ]
-    },
-    {
-      "slug": "2026-11-06_glm-5.3-flash_engine_v1",
-      "model": "glm-5.3-flash",
-      "category": "engine",
-      "date": "2026-11-06",
-      "version": 1,
-      "entry": "engine__glm-5.3-flash__2026-11-06__v1.html",
-      "path": "runs/2026-11-06_glm-5.3-flash_engine_v1/engine__glm-5.3-flash__2026-11-06__v1.html",
-      "source_file": "engine__glm-5.3-flash__2026-11-06__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "notes": "Entry is engine__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "prompt": "06",
-      "prompt_label": "Machine explainer",
-      "files": [
-        "engine__glm-5.3-flash__2026-11-06__v1.html",
-        "meta.json"
-      ]
-    },
-    {
-      "slug": "2026-11-06_glm-5.3-flash_datastory_v1",
-      "model": "glm-5.3-flash",
-      "category": "datastory",
-      "date": "2026-11-06",
-      "version": 1,
-      "entry": "datastory__glm-5.3-flash__2026-11-06__v1.html",
-      "path": "runs/2026-11-06_glm-5.3-flash_datastory_v1/datastory__glm-5.3-flash__2026-11-06__v1.html",
-      "source_file": "datastory__glm-5.3-flash__2026-11-06__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "notes": "Entry is datastory__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
-      "prompt": "13",
-      "prompt_label": "Data story",
-      "files": [
-        "datastory__glm-5.3-flash__2026-11-06__v1.html",
-        "meta.json"
-      ]
-    },
-    {
-      "slug": "2026-11-06_glm-5.3-flash_cyberpunk_v1",
-      "model": "glm-5.3-flash",
-      "category": "cyberpunk",
-      "date": "2026-11-06",
-      "version": 1,
-      "entry": "cyberpunk__glm-5.3-flash__2026-11-06__v1.html",
-      "path": "runs/2026-11-06_glm-5.3-flash_cyberpunk_v1/cyberpunk__glm-5.3-flash__2026-11-06__v1.html",
-      "source_file": "cyberpunk__glm-5.3-flash__2026-11-06__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "notes": "Entry is cyberpunk__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "prompt": "",
-      "prompt_label": "",
-      "files": [
-        "cyberpunk__glm-5.3-flash__2026-11-06__v1.html",
-        "meta.json"
-      ]
-    },
-    {
-      "slug": "2026-11-06_glm-5.3-flash_cube_v1",
-      "model": "glm-5.3-flash",
-      "category": "cube",
-      "date": "2026-11-06",
-      "version": 1,
-      "entry": "cube__glm-5.3-flash__2026-11-06__v1.html",
-      "path": "runs/2026-11-06_glm-5.3-flash_cube_v1/cube__glm-5.3-flash__2026-11-06__v1.html",
-      "source_file": "cube__glm-5.3-flash__2026-11-06__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "notes": "Entry is cube__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "prompt": "10",
-      "prompt_label": "Rubik's Cube + solver",
-      "files": [
-        "cube__glm-5.3-flash__2026-11-06__v1.html",
-        "meta.json"
-      ]
-    },
-    {
-      "slug": "2026-11-06_glm-5.3-flash_cafe_v1",
-      "model": "glm-5.3-flash",
-      "category": "cafe",
-      "date": "2026-11-06",
-      "version": 1,
-      "entry": "cafe__glm-5.3-flash__2026-11-06__v1.html",
-      "path": "runs/2026-11-06_glm-5.3-flash_cafe_v1/cafe__glm-5.3-flash__2026-11-06__v1.html",
-      "source_file": "cafe__glm-5.3-flash__2026-11-06__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "notes": "Entry is cafe__glm-5.3-flash__2026-11-06__v1.html (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "prompt": "05",
-      "prompt_label": "Restaurant website",
-      "files": [
-        "cafe__glm-5.3-flash__2026-11-06__v1.html",
-        "meta.json"
-      ]
-    },
-    {
-      "slug": "2026-11-06_crouton-alpha_cafe_v2",
-      "model": "crouton-alpha",
-      "category": "cafe",
-      "date": "2026-11-06",
-      "version": 2,
-      "entry": "index.html",
-      "path": "runs/2026-11-06_crouton-alpha_cafe_v2/index.html",
-      "source_file": "cafe__crouton-alpha__2026-11-06__v2.html",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "notes": "",
-      "prompt": "05",
-      "prompt_label": "Restaurant website",
-      "files": [
-        "index.html",
-        "meta.json"
       ]
     }
   ]

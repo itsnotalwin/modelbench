@@ -1,39 +1,28 @@
-# ModelBench prompt set v2
+# Prompts — ModelBench v3 (ten open-ended tests)
 
-Prompts 01-04 are unchanged from the original set. Prompts 05-12 are rewritten (version v2) and 13-20 are new (version v1).
-Every prompt uses the same structure: an open concept, "the bar" (quality), hard rules, what "real" means, craft, engineering, mandatory naming, and process.
+Each file is one benchmark prompt, kept separate so it can be copied on its own. The top of each file is an uploader header that is **never sent to the model**. Everything under the `## Model prompt` divider is what the model receives.
 
-| # | Prompt | Prefix | Version | Output |
-|---|--------|--------|---------|--------|
-| 01 | Website | website | v1 | folder zip |
-| 02 | SaaS (clearing agents) | saas | v1 | folder zip |
-| 03 | 2D game | game2d | v1 | html |
-| 04 | 3D game | game3d | v1 | html |
-| 05 | Restaurant website | cafe | v2 | html |
-| 06 | Machine explainer | engine | v2 | html |
-| 07 | First-person game | fps | v2 | html |
-| 08 | Arcade game | runner | v2 | html |
-| 09 | Browser OS | os | v2 | html |
-| 10 | Rubik's Cube + solver | cube | v2 | html |
-| 11 | Original platformer | platformer | v2 | html |
-| 12 | Living 3D world | world | v2 | html |
-| 13 | Data story | datastory | v1 | html |
-| 14 | Generative art | generative | v1 | html |
-| 15 | Music instrument | synth | v1 | html |
-| 16 | Creative tool | tool | v1 | html |
-| 17 | Emergent simulation | sim | v1 | html |
-| 18 | Strategy game + AI | strategy | v1 | html |
-| 19 | Spreadsheet | spreadsheet | v1 | html |
-| 20 | Physics engine + playground | physics | v1 | html |
+The model chooses the concept, name, style and genre in every test. The requirements set the bar, not the subject.
 
-Note: new prefixes (world, datastory, generative, synth, tool, sim, strategy, spreadsheet, physics) must be registered in the upload Action and dashboard. Prompts 05-12 changed concept, so v2 results should not be compared with old v1 runs.
+| # | Test | Slug | Family | File | Bar |
+|---|------|------|--------|------|-----|
+| 01 | Website | `website` | Web | `01-website.md` | 5+ screens, real copy, bespoke SVG art, a working interactive element |
+| 02 | Useful app | `webapp` | Web app | `02-webapp.md` | 3 end-to-end workflows, undo, JSON import/export, 10 passing self-checks |
+| 03 | Algorithms lab | `codelab` | Coding | `03-codelab.md` | 6+ algorithms written from scratch, 30+ assertions, editable code that re-runs the tests |
+| 04 | Simulation tool | `engineer` | Engineering | `04-engineer.md` | 5+ scenarios, 3+ live plots, CSV export, analytic solver check |
+| 05 | three.js scenes | `threejs` | 3D | `05-threejs.md` | 5+ different scenes, custom GLSL in 2+, no external model files |
+| 06 | Arcade pack | `arcade` | Games | `06-arcade.md` | 5 distinct playable games in one file, each with win/lose, sound and a self-test |
+| 07 | Procedural images | `image` | Images | `07-image.md` | 5+ distinct images generated in code, seeded, PNG download |
+| 08 | Short animated film | `motion` | Video | `08-motion.md` | 5–7 scenes, 45–90 s, synthesised soundtrack, timeline, WebM recording |
+| 09 | Tool-calling playground | `tooluse` | Tool use | `09-tooluse.md` | 6+ tools with schemas, 6+ requests including chained calls, honest refusals, 12 passing checks |
+| 10 | Academic explainer | `academic` | Academic | `10-academic.md` | Correct maths, 3+ sliders that change results, worked example, quiz, honest references |
 
-## Scoring (0-5 each)
-- Completeness: every promised feature present and working
-- Robustness: runs first try, no console errors, no soft-locks, handles edge cases
-- Craft: how pretty and polished it is, art direction, motion, sound
-- Depth: how much real engineering and design thinking is inside
-- Originality: a point of view, not a template
-- Performance: holds its framerate, loads fast
+`catalog.json` is the single source of truth for these slugs. `tools/sort_inbox.py`, `tools/new_run.py` and the dashboard all read it, so a new test is added in one file.
 
-Also log: ran on first open (yes/no), console errors, FPS on a mid-range laptop, and file size.
+## Scoring
+
+Six axes, each 0–5, saved to each run's `meta.json`: **completeness, robustness, craft, depth, originality, performance**. Also log: first-try result, console errors, FPS on a mid-range laptop, and file size.
+
+## Naming
+
+Every prompt asks the model to name its file `{slug}__{model-slug}__{YYYY-MM-DD}__v1.html` and state it on its first line. If the model does not follow the rule, rename the file to the same pattern before uploading.

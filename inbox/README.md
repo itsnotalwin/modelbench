@@ -1,36 +1,21 @@
 # Inbox — upload here
 
-Upload model outputs **here** (GitHub web: open this folder → "Add file" → "Upload files").
+Upload model outputs here through GitHub web: open this folder → **Add file** → **Upload files**.
 
-Rename each file **exactly** like this before uploading:
+Rename the file exactly like this before uploading:
 
 ```
-{category}__{model}__{YYYY-MM-DD}__v{n}.html
-{category}__{model}__{YYYY-MM-DD}__v{n}.zip
+{test}__{model}__{YYYY-MM-DD}__v{n}.html
 ```
 
-- `category` FIRST, then model, then date, then version — separated by **double** underscores
-- `category`: one per prompt — `website` (01), `saas` (02), `game2d` (03), `game3d` (04), `cafe` (05), `engine` (06), `fps` (07), `runner` (08), `os` (09), `cube` (10), `platformer` (11), `world` (12), `datastory` (13), `generative` (14), `synth` (15), `tool` (16), `sim` (17), `strategy` (18), `spreadsheet` (19), `physics` (20)
-- `model`: lowercase, hyphens and dots — e.g. `claude-sonnet-4-5`, `glm-5.3-flash`, `gpt-5`
-- `v{n}`: attempt number — `v1`, `v2`, …
+- `test` comes first, then the model, date and version, separated by **double** underscores.
+- `test` is one of the ten slugs in `prompts/catalog.json`: `website`, `webapp`, `codelab`, `engineer`, `threejs`, `arcade`, `image`, `motion`, `tooluse`, `academic`.
+- `model`: lowercase, hyphens and dots, for example `claude-sonnet-4-5`, `glm-5.3-flash`, `gpt-5`.
+- `v{n}`: attempt number. A retest is `v2`, never an overwrite.
 
-> **Do not use the run-folder name here.** `2026-11-06_glm-5.3-flash_website_v1.zip` is WRONG and gets skipped — it must be `website__glm-5.3-flash__2026-11-06__v1.zip`.
-> **Only `.zip` or `.html`.** A `.rar` is always skipped.
+Example: `threejs__glm-5.3-flash__2026-11-09__v1.html` → `runs/2026-11-09_glm-5.3-flash_threejs_v1/index.html`
 
-Examples:
+> Do not use the run-folder name here. `2026-11-09_glm-5.3-flash_threejs_v1.html` is skipped.
+> Only `.html` (or `.zip` with `index.html` at its root). Never `.rar`.
 
-| File you upload | Action moves it to |
-|---|---|
-| `website__claude-sonnet-4-5__2026-11-06__v1.zip` (contains a folder with `index.html`) | `runs/2026-11-06_claude-sonnet-4-5_website_v1/` (folder renamed to the prefix) |
-| `game2d__gpt-5__2026-11-06__v1.html` | `runs/2026-11-06_gpt-5_game2d_v1/` |
-| `game3d__grok-4-1__2026-11-07__v2.html` | `runs/2026-11-07_grok-4-1_game3d_v2/` |
-
-Rules:
-- **The folder must be renamed to the benchmark prefix.** Rename the model's folder to `{date}_{model}_{category}_v{n}` before zipping (e.g. `the-grey-index/` → `2026-11-06_claude-sonnet-4-5_website_v1/`). The Action also renames it automatically on upload, so the repo folder always uses the prefix — never the model's creative name. Contents are untouched.
-- **`.zip`** (website / SaaS folder outputs): the zip contains one folder with **`index.html` at its root** — the dashboard previews that file, so an output with no root `index.html` cannot be compared online. (The sorter still files a README-only app so nothing is lost, but that run shows no preview.) The Action unpacks it to `runs/{date}_{model}_{category}_v{n}/`.
-- **`.html`** (2D / 3D games, or single-file outputs): becomes `runs/.../index.html`.
-- The Action also writes a `meta.json` (scores start empty) and rebuilds `manifest.json`, then commits itself. Takes ~30s.
-- Files with a bad name are left in `inbox/` — rename and re-upload, or run the Action manually (Actions tab → "Auto-sort inbox uploads" → Run workflow).
-- Already-sorted runs are never overwritten: use a new `v{n}` for a retest.
-
-Scoring: open the run's `meta.json` on GitHub, edit `scores.visual` / `functionality` / `prompt_following` (0–10) and `notes`, commit. Editing any `meta.json` also triggers the Action, which rebuilds the dashboard manifest.
+The Action moves each file into `runs/`, writes its `meta.json` (scores start empty), and rebuilds `manifest.json`. A file with a bad name stays here until you rename it.

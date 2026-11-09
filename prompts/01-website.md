@@ -1,37 +1,37 @@
-# Website — benchmark prompt
+# 01 · Website — benchmark prompt
 
 > **Uploader instruction (do NOT send this header to the model):**
-> The model must put everything in a folder named `{YYYY-MM-DD}_{model-slug}_website_v1` with `index.html` at its root.
-> If it used a different folder name, rename the folder to that prefix, then zip the folder and name the zip:
->
-> `website__{model}__{YYYY-MM-DD}__v1.zip`
->
-> Example: `website__claude-sonnet-4-5__2026-11-06__v1.zip` (containing `2026-11-06_claude-sonnet-4-5_website_v1/index.html`)
-> Upload the **.zip** (never .rar) to `inbox/`. The Action unpacks it to `runs/{date}_{model}_website_v1/` and the dashboard previews `index.html`.
+> Save the model's reply as `website__<model-slug>__<YYYY-MM-DD>__v1.html` (use the exact name the model put on its first line; rename it if it did not). Upload the **.html** to `inbox/`. Never upload a .rar.
+> The sorter files it as `runs/<date>_<model>_website_v1/index.html`.
 
 ---
 
 ## Model prompt (send everything below this line)
 
-Build a website. The subject, concept, audience, layout and structure are entirely up to you. Choose something you can make genuinely exceptional rather than something safe or generic.
+Build one complete, polished website as a single HTML file. You choose the subject: a place, a product, a person, a movement, a company you invent, a festival, a museum, a tool, a research lab, anything. Pick something specific and surprising rather than a generic SaaS or restaurant page.
 
-Constraints:
-- Strictly monochrome: only black, white and shades of grey, everywhere (type, UI, imagery, shadows, gradients, SVGs, favicon). No accent colour, ever.
-- Treat this as a showcase of the best you are capable of: art direction, typography, layout, motion, interaction, copywriting, accessibility, performance and engineering craft. Make bold, original decisions. Avoid anything that looks templated.
-- Fully responsive, keyboard accessible, respects prefers-reduced-motion, works in current evergreen browsers.
-- No placeholders, lorem ipsum, TODOs, broken links or dead buttons. Every element must be real and functional.
-- All imagery must be created by you (SVG, canvas, CSS, shaders, etc.). No external image files or stock assets.
-- Static only, no build step, ready to deploy on GitHub Pages as-is. Use relative paths so it works from a repository subfolder. Avoid external dependencies; if one is truly worth it, pin an exact version and justify it.
+**Ground rules**
+- You choose the name, look, tone and structure. Do not ask questions and do not hedge. Decide and build in one pass.
+- One self-contained HTML file: HTML, CSS and JS inline. No external images, audio, data or model files. System fonts only.
+- Must run opened directly from disk (`file://`) and when hosted on GitHub Pages from a subfolder. No server, no build step, no install, no absolute paths.
+- No lorem ipsum, placeholder text, TODOs or dead buttons. Every control must do something.
 
-Deliverable — **naming is mandatory, read it twice:**
-- Everything lives inside ONE folder named exactly: `{YYYY-MM-DD}_{model-slug}_website_v1`
-  Example: `2026-11-06_claude-sonnet-4-5_website_v1`
-  Use today's date (YYYY-MM-DD) and your own model name, lowercased, spaces replaced with hyphens. No creative folder name, no uppercase, no spaces.
-- `index.html` at the **root** of that folder is required — it is the single entry point. Opening it must fully render the site with no server, no build step and no install, both from `file://` and from GitHub Pages.
-- All CSS, JS and assets must be referenced with relative paths from inside that folder (e.g. `styles.css`, `js/app.js`) so the site works when the folder is served from a repository subpath.
-- Include a short `README.md` in the folder covering the concept, key design and technical decisions, and what you would improve with more time.
+**What the site must contain**
+- At least 5 distinct sections or screens (hash routing is fine if you build pages).
+- Real written copy with a point of view, not filler.
+- An original identity: name, logo drawn in inline SVG, a deliberate colour system, a clear type hierarchy.
+- At least 3 bespoke illustrations or diagrams drawn in SVG or CSS, not stock shapes.
+- One interactive element with real behaviour: a filter, a calculator, a configurator, a validated form, or a lightbox.
+- Motion on scroll or hover that respects `prefers-reduced-motion`.
+- A contact or signup form with validation and a success state.
+- Working mobile navigation, semantic HTML, alt text, keyboard focus styles.
+- No horizontal overflow at 390px or 1440px.
 
-Process:
-- Do not ask me questions. Make every decision yourself and deliver the finished work in one go.
-- State the exact folder name at the top of your reply, then the full folder tree, then every file in full in its own code block.
-- Before finishing, review your own work, test it if you have the tools to, and fix any problems you find.
+**Deliverable — naming is mandatory**
+- Your file must be named exactly: `website__{model-slug}__{YYYY-MM-DD}__v1.html`
+  - `{model-slug}`: your model name in lowercase, hyphens for spaces, dots kept when they are part of the name (for example `glm-5.3-flash`).
+  - `{YYYY-MM-DD}`: today's date.
+  - No creative file name, no uppercase letters, no spaces.
+- Your first line is that exact file name. Then the complete file in one code block. After the block, five bullets on your key creative choices and one known limitation. Nothing else.
+
+---

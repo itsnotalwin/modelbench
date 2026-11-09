@@ -1,4 +1,5 @@
-"""Scan runs/*/meta.json + index.html and write manifest.json for the dashboard.
+"""Scan runs/*/meta.json and write manifest.json for the dashboard.
+Also embeds the test catalog from prompts/catalog.json, so the dashboard needs one fetch.
 Stdlib only. Run: python tools/build_manifest.py
 """
 import json
@@ -7,7 +8,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 RUNS = ROOT / "runs"
 OUT = ROOT / "manifest.json"
-CATEGORIES = ["website", "saas", "game2d", "game3d"]
+CATALOG = json.loads((ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
+SCORE_AXES = ["completeness", "robustness", "craft", "depth", "originality", "performance"]
 
 
 def load_meta(run_dir: Path) -> dict:
@@ -18,7 +20,6 @@ def load_meta(run_dir: Path) -> dict:
             meta = json.loads(meta_path.read_text(encoding="utf-8"))
         except Exception:
             meta = {}
-    # Defaults filled in, never overwriting existing values
     slug = run_dir.name
     parts = slug.split("_")
     meta.setdefault("slug", slug)
@@ -26,17 +27,20 @@ def load_meta(run_dir: Path) -> dict:
     meta.setdefault("category", parts[2] if len(parts) > 2 else "unknown")
     meta.setdefault("date", parts[0] if parts else "")
     meta.setdefault("entry", "index.html")
-    meta.setdefault("path", f"runs/{slug}/index.html")
-    meta.setdefault("scores", {"visual": None, "functionality": None, "prompt_following": None})
+    meta.setdefault("path", f"runs/{slug}/{meta['entry']}")
     meta.setdefault("notes", "")
-    meta.setdefault("files", sorted(str(p.relative_to(run_dir)).replace("\\", "/") for p in run_dir.rglob("*") if p.is_file()))
+    meta.setdefault("log", {})
+    scores = meta.setdefault("scores", {})
+    for axis in SCORE_AXES:
+        scores.setdefault(axis, None)
+    meta["files"] = sorted(str(p.relative_to(run_dir)).replace("\\", "/") for p in run_dir.rglob("*") if p.is_file())
     return meta
 
 
 def has_entry(run_dir: Path) -> bool:
-    # Entry is meta.json's "entry" if set (e.g. clearline-ops.html), else index.html.
-    meta_path = run_dir / "meta.json"
+    # Entry is meta.json's "entry" if set, else index.html.
     entry = "index.html"
+    meta_path = run_dir / "meta.json"
     if meta_path.exists():
         try:
             entry = json.loads(meta_path.read_text(encoding="utf-8")).get("entry", entry)
@@ -49,15 +53,21 @@ def main() -> None:
     runs = []
     if RUNS.exists():
         for d in sorted(RUNS.iterdir()):
-            if not d.is_dir() or d.name.startswith("_") or d.name.startswith("."):
+            if not d.is_dir() or d.name.startswith(("_", ".")):
                 continue
             if not has_entry(d):
                 continue
             runs.append(load_meta(d))
     runs.sort(key=lambda r: (r.get("date", ""), r.get("category", ""), r.get("model", "")), reverse=True)
-    manifest = {"generated_from": "runs/", "count": len(runs), "runs": runs}
+    manifest = {
+        "generated_from": "runs/",
+        "count": len(runs),
+        "catalog": CATALOG["prompts"],
+        "axes": SCORE_AXES,
+        "runs": runs,
+    }
     OUT.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-    print(f"manifest.json: {len(runs)} run(s)")
+    print(f"manifest.json: {len(runs)} run(s), {len(CATALOG['prompts'])} tests")
 
 
 if __name__ == "__main__":

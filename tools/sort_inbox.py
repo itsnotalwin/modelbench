@@ -1,16 +1,15 @@
-"""Sort inbox/ uploads into runs/{date}_{model}_{category}_v{n}/ and rebuild manifest.
-Stdlib only. Run locally: python tools/sort_inbox.py  (also run by GitHub Action)
+"""Sort inbox/ uploads into runs/{date}_{model}_{category}_v{n}/ and rebuild manifest.json.
+Stdlib only. Run locally: python tools/sort_inbox.py  (also run by the GitHub Action)
+
+Categories come from prompts/catalog.json, the single source of truth.
 
 Accepted inbox filenames (case-insensitive extension):
-  {category}__{model}__{YYYY-MM-DD}__v{n}.html
-  {category}__{model}__{YYYY-MM-DD}__v{n}.zip
-Categories: website | saas | game2d | game3d
-Model: lowercase letters, digits, hyphens and dots (e.g. claude-sonnet-4-5, glm-5.3-flash, gpt-5, grok-4-1)
-.zip must contain a single top folder with index.html at its root.
-That folder is RENAMED to the benchmark prefix on upload:
-runs/{date}_{model}_{category}_v{n}/index.html
-(e.g. website + claude-sonnet-4-5 + 2026-11-06 + v1 -> 2026-11-06_claude-sonnet-4-5_website_v1/)
-The model's creative folder name is discarded; the contents are untouched.
+  {category}__{model}__{YYYY-MM-DD}__v{n}.html   <- the normal upload
+  {category}__{model}__{YYYY-MM-DD}__v{n}.zip    <- folder outputs, index.html at its root
+Model: lowercase letters, digits, hyphens and dots (e.g. claude-sonnet-4-5, glm-5.3-flash, gpt-5)
+
+The run lands in runs/{date}_{model}_{category}_v{n}/ with index.html as its entry.
+Existing runs are never overwritten: a retest is always a new v{n}.
 """
 import json
 import re
@@ -22,41 +21,27 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 INBOX = ROOT / "inbox"
 RUNS = ROOT / "runs"
-CATEGORIES = {
-    "website", "saas", "game2d", "game3d",   # prompts 01-04
-    "cafe", "engine", "fps", "runner", "os", "cube", "platformer", "world",  # prompts 05-12
-    "datastory", "generative", "synth", "tool", "sim", "strategy", "spreadsheet", "physics",  # prompts 13-20
-}
+CATALOG = json.loads((ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
+PROMPTS = {p["slug"]: p for p in CATALOG["prompts"]}
+CATEGORIES = set(PROMPTS)
 
-# Each category slug maps 1:1 to a benchmark prompt number.
-PROMPT_OF_CATEGORY = {
-    "website": ("01", "Website"), "saas": ("02", "SaaS (clearing agents)"),
-    "game2d": ("03", "2D game"), "game3d": ("04", "3D game"),
-    "cafe": ("05", "Restaurant website"), "engine": ("06", "Machine explainer"),
-    "fps": ("07", "First-person game"), "runner": ("08", "Arcade game"),
-    "os": ("09", "Browser OS"), "cube": ("10", "Rubik's Cube + solver"),
-    "platformer": ("11", "Original platformer"), "world": ("12", "Living 3D world"),
-    "datastory": ("13", "Data story"), "generative": ("14", "Generative art"),
-    "synth": ("15", "Music instrument"), "tool": ("16", "Creative tool"),
-    "sim": ("17", "Emergent simulation"), "strategy": ("18", "Strategy game + AI"),
-    "spreadsheet": ("19", "Spreadsheet"), "physics": ("20", "Physics engine + playground"),
-}
 # Model slug aliases: normalise variant spellings to one canonical slug so a
 # model's runs always group together in the dashboard.
 MODEL_ALIASES = {
     "glm-5-3-flash": "glm-5.3-flash",
 }
 
-
-def normalise_model(model: str) -> str:
-    model = model.lower()
-    return MODEL_ALIASES.get(model, model)
-
+SCORE_AXES = ["completeness", "robustness", "craft", "depth", "originality", "performance"]
 
 PATTERN = re.compile(
     r"^(?P<category>[a-z0-9]+)__(?P<model>[a-z0-9][a-z0-9\-.]*?)__(?P<date>\d{4}-\d{2}-\d{2})__v(?P<n>\d+)$",
     re.IGNORECASE,
 )
+
+
+def normalise_model(model: str) -> str:
+    model = model.lower()
+    return MODEL_ALIASES.get(model, model)
 
 
 def parse(stem: str):
@@ -82,28 +67,21 @@ def write_meta(run_dir: Path, info, source_name: str, entry: str = "index.html")
     meta_path = run_dir / "meta.json"
     if meta_path.exists():
         return
-    prompt_no, prompt_label = PROMPT_OF_CATEGORY.get(info["category"], ("", ""))
+    prompt = PROMPTS[info["category"]]
     meta = {
         "slug": run_dir.name,
         "model": info["model"],
         "category": info["category"],
-        "prompt": prompt_no,
-        "prompt_label": prompt_label,
+        "prompt": prompt["no"],
+        "prompt_label": prompt["title"],
         "date": info["date"],
         "version": info["v"],
         "entry": entry,
         "path": f"runs/{run_dir.name}/{entry}",
         "source_file": source_name,
-        "scores": {
-            "completeness": None,
-            "robustness": None,
-            "craft": None,
-            "depth": None,
-            "originality": None,
-            "performance": None,
-        },
+        "scores": {axis: None for axis in SCORE_AXES},
         "log": {"ran_first_try": None, "console_errors": None, "fps": None, "file_size_kb": None},
-        "notes": "" if entry == "index.html" else f"Entry is {entry} (not index.html). If this is a Python/Node SaaS app, clone the repo and run it locally per its README.",
+        "notes": "" if entry == "index.html" else f"Entry is {entry} (not index.html). Run it locally per the folder's README.",
     }
     meta_path.write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
 
@@ -117,48 +95,41 @@ def safe_extract(zf: zipfile.ZipFile, dest: Path) -> None:
     zf.extractall(dest)
 
 
-def handle_zip(src: Path, run_dir: Path, category: str = "") -> str:
-    """Rename the model's folder to the benchmark prefix: the folder inside the
-    zip (whatever the model called it) becomes runs/<slug>/, contents untouched.
-    Entry priority: index.html > any root .html > README.md (SaaS python
-    apps with no html still land in the dashboard, previewing their README).
+def handle_zip(src: Path, run_dir: Path) -> str:
+    """The folder inside the zip (whatever the model called it) becomes runs/<slug>/,
+    contents untouched. Entry priority: index.html > any root .html > README.md.
     Returns the entry path relative to run_dir."""
     run_dir.mkdir(parents=True, exist_ok=True)
     tmp = run_dir.parent / (run_dir.name + ".__tmp__")
     if tmp.exists():
         shutil.rmtree(tmp)
     tmp.mkdir(parents=True)
-    with zipfile.ZipFile(src) as zf:
-        safe_extract(zf, tmp)
-    children = [p for p in tmp.iterdir() if not p.name.startswith("__MACOSX")]
-    if len(children) == 1 and children[0].is_dir():
-        src_root = children[0]  # model's folder -> renamed to run_dir (the prefix)
-    else:
-        src_root = tmp
-    # Pick the entry file before moving anything.
-    entry = None
-    if (src_root / "index.html").exists():
-        entry = "index.html"
-    else:
-        htmls = sorted(p.name for p in src_root.iterdir() if p.is_file() and p.suffix.lower() in {".html", ".htm"})
-        if htmls:
-            entry = htmls[0]
-        elif (src_root / "README.md").exists() or (src_root / "readme.md").exists():
-            entry = "README.md" if (src_root / "README.md").exists() else "readme.md"
-        elif category == "saas":
-            # SaaS python/node app with no html at all: still accept it so the
-            # run shows up; the dashboard will preview the file list via meta.
-            entry = "README.md"
-        if entry is None or not (src_root / entry).exists():
-            shutil.rmtree(tmp, ignore_errors=True)
-            raise ValueError("zip must contain index.html (or a root .html / README.md) at the root of its folder")
-    for item in list(src_root.iterdir()):
-        dest = run_dir / item.name
-        if dest.exists():
-            shutil.rmtree(dest) if dest.is_dir() else dest.unlink()
-        shutil.move(str(item), str(dest))
-    shutil.rmtree(tmp, ignore_errors=True)
-    return entry
+    try:
+        with zipfile.ZipFile(src) as zf:
+            safe_extract(zf, tmp)
+        children = [p for p in tmp.iterdir() if not p.name.startswith("__MACOSX")]
+        if len(children) == 1 and children[0].is_dir():
+            src_root = children[0]
+        else:
+            src_root = tmp
+        if (src_root / "index.html").exists():
+            entry = "index.html"
+        else:
+            htmls = sorted(p.name for p in src_root.iterdir() if p.is_file() and p.suffix.lower() in {".html", ".htm"})
+            if htmls:
+                entry = htmls[0]
+            elif (src_root / "README.md").exists():
+                entry = "README.md"
+            else:
+                raise ValueError("zip must contain index.html (or a root .html / README.md)")
+        for item in list(src_root.iterdir()):
+            dest = run_dir / item.name
+            if dest.exists():
+                shutil.rmtree(dest) if dest.is_dir() else dest.unlink()
+            shutil.move(str(item), str(dest))
+        return entry
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 def handle_html(src: Path, run_dir: Path) -> None:
@@ -174,28 +145,28 @@ def main() -> int:
     for f in sorted(INBOX.iterdir()):
         if f.is_dir() or f.name.startswith(".") or f.name.lower() == "readme.md":
             continue
-        info = parse(f.stem)
         if f.suffix.lower() not in {".html", ".htm", ".zip"}:
             skipped.append(f.name)
-            print(f"SKIP (unsupported extension, use .zip not .rar): {f.name}")
+            print(f"SKIP (unsupported extension, use .html or .zip, never .rar): {f.name}")
             continue
+        info = parse(f.stem)
         if not info:
             skipped.append(f.name)
-            print(f"SKIP (bad name, want {{category}}__{{model}}__{{date}}__v{{n}}): {f.name}")
+            print(f"SKIP (bad name, want {{category}}__{{model}}__{{date}}__v{{n}} with a category from prompts/catalog.json): {f.name}")
             continue
         slug = slug_for(info)
         run_dir = RUNS / slug
         if run_dir.exists() and (run_dir / "meta.json").exists():
             skipped.append(f.name)
-            print(f"SKIP (already exists): {slug}")
+            print(f"SKIP (already exists, bump v{{n}} for a retest): {slug}")
             continue
         try:
             entry = "index.html"
             if f.suffix.lower() == ".zip":
-                entry = handle_zip(f, run_dir, info["category"])
+                entry = handle_zip(f, run_dir)
             else:
                 handle_html(f, run_dir)
-        except Exception as e:
+        except Exception as e:  # keep the file in inbox/ and log why
             print(f"ERROR {f.name}: {e}")
             skipped.append(f.name)
             continue
@@ -203,7 +174,6 @@ def main() -> int:
         f.unlink()
         moved.append(slug)
         print(f"MOVED {f.name} -> runs/{slug}/")
-    # Rebuild manifest always (cheap, keeps dashboard in sync)
     sys.path.insert(0, str(ROOT / "tools"))
     import build_manifest
     build_manifest.main()
