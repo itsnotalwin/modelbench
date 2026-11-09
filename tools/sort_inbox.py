@@ -114,7 +114,7 @@ def validate_metadata(project_root: Path):
 
 
 def safe_extract(zf: zipfile.ZipFile, dest: Path) -> None:
-    """Validate archive members before extraction; reject traversal and unsafe entries."""
+    """Validate and extract entries, normalising safe Windows ZIP separators."""
     members = zf.infolist()
     if not members:
         raise IntakeError("ZIP is empty")
@@ -124,28 +124,38 @@ def safe_extract(zf: zipfile.ZipFile, dest: Path) -> None:
     dest_resolved = dest.resolve()
     seen = set()
     total_size = 0
+    validated = []
+
     for member in members:
         name = member.filename
-        if not name or "\\" in name:
+        if not name or "\x00" in name:
             raise IntakeError(f"unsafe ZIP path: {name!r}")
-        relative = PurePosixPath(name)
+        # Windows ZIP creators often use backslashes as directory separators.
+        # Normalise first, then validate and extract using the same safe path.
+        normalised_name = name.replace("\\", "/")
+        relative = PurePosixPath(normalised_name)
         if relative.is_absolute() or any(part in {"", ".", ".."} for part in relative.parts):
             raise IntakeError(f"unsafe ZIP path: {name}")
         if relative.parts and ":" in relative.parts[0]:
             raise IntakeError(f"unsafe ZIP path: {name}")
+
         target = (dest / Path(*relative.parts)).resolve()
         if target != dest_resolved and dest_resolved not in target.parents:
             raise IntakeError(f"unsafe ZIP entry: {name}")
 
         key = relative.as_posix().rstrip("/")
-        if key in seen:
-            raise IntakeError(f"duplicate ZIP path: {name}")
+        if not key or key in seen:
+            raise IntakeError(f"duplicate or empty ZIP path: {name}")
         seen.add(key)
+
         if member.flag_bits & 0x1:
             raise IntakeError(f"encrypted ZIP entries are not accepted: {name}")
         mode = (member.external_attr >> 16) & 0xFFFF
         if stat.S_ISLNK(mode):
             raise IntakeError(f"symbolic links are not accepted: {name}")
+        file_kind = stat.S_IFMT(mode)
+        if file_kind not in (0, stat.S_IFREG, stat.S_IFDIR):
+            raise IntakeError(f"special filesystem entries are not accepted: {name}")
         if member.file_size > MAX_MEMBER_BYTES:
             raise IntakeError(f"ZIP entry is too large (limit {MAX_MEMBER_BYTES // (1024 * 1024)} MB): {name}")
         total_size += member.file_size
@@ -155,9 +165,16 @@ def safe_extract(zf: zipfile.ZipFile, dest: Path) -> None:
             raise IntakeError(f"invalid compressed size: {name}")
         if member.compress_size and member.file_size / member.compress_size > MAX_COMPRESSION_RATIO:
             raise IntakeError(f"suspicious compression ratio: {name}")
+        validated.append((member, relative, target))
 
-    zf.extractall(dest)
-
+    # Extract manually so the validated, normalised paths are exactly the ones written.
+    for member, relative, target in validated:
+        if member.is_dir() or member.filename.endswith(("/", "\\")):
+            target.mkdir(parents=True, exist_ok=True)
+            continue
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with zf.open(member, "r") as source, target.open("wb") as output:
+            shutil.copyfileobj(source, output)
 
 def find_project_root(extract_dir: Path) -> Path:
     """Accept files at ZIP root or exactly one visible top-level project folder."""
@@ -269,7 +286,7 @@ def main() -> int:
         return 0
 
     for item in sorted(INBOX.iterdir()):
-        if item.is_dir() or item.name.startswith(".") or item.name.lower() == "readme.md":
+        if item.is_dir() or item.name.startswith(".") or item.suffix.lower() == ".md":
             continue
         if item.suffix.lower() not in {".html", ".htm", ".zip"}:
             skipped.append(item.name)
