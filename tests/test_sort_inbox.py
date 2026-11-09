@@ -127,6 +127,27 @@ class ZipMetadataRoutingTests(unittest.TestCase):
         self.assertFalse((self.root / "escaped.txt").exists())
         self.assertTrue(archive.exists())
 
+
+    def test_windows_backslash_paths_are_normalized(self):
+        archive = sorter.INBOX / "crouton-alpha.zip"
+        meta = {
+            "schema_version": 1,
+            "model": "gpt-6",
+            "category": "site-editorial",
+            "date": "2026-11-09",
+            "version": 4,
+            "entry": "index.html",
+            "notes": "Windows-created archive."
+        }
+        with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED) as handle:
+            handle.writestr("crouton-alpha\\index.html", "<!doctype html><title>Build</title>")
+            handle.writestr("crouton-alpha\\meta.json", json.dumps(meta))
+            handle.writestr("crouton-alpha\\AUDIT.md", "Optional audit file")
+        slug = sorter.process_zip(archive)
+        self.assertEqual(slug, "2026-11-09_gpt-6_site-editorial_v4")
+        self.assertTrue((sorter.RUNS / slug / "index.html").is_file())
+        self.assertTrue((sorter.RUNS / slug / "meta.json").is_file())
+
     def test_legacy_html_filename_route_remains_available(self):
         self.assertEqual(sorter.parse("site-brand__gpt-6__2026-11-09__v1"), {
             "category": "site-brand", "model": "gpt-6", "date": "2026-11-09", "v": 1
