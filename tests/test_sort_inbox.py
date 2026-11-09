@@ -268,7 +268,7 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
     def test_fifteen_one_shot_prompts_match_the_catalog(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
         prompts = catalog["prompts"]
-        self.assertEqual(catalog["version"], 7)
+        self.assertEqual(catalog["version"], 8)
         self.assertEqual(catalog["outputs_per_prompt"], 1)
         self.assertEqual(len(prompts), 15)
         self.assertEqual([p["no"] for p in prompts], [f"{n:02d}" for n in range(1, 16)])
