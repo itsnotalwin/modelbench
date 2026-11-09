@@ -1,0 +1,869 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Who Gets to Sit? — A bench audit in six districts</title>
+<meta name="description" content="An interactive editorial feature: a constructed field audit of 36 benches across six districts. What condition, shade, and sitting tell us — and what they cannot.">
+<style>
+:root{
+  --paper:#faf6ec;
+  --paper2:#f2ead9;
+  --ink:#16140f;
+  --ink2:#3a372f;
+  --muted:#6b6455;
+  --accent:#b3401e;
+  --accent2:#144e4a;
+  --gold:#9c7a1e;
+  --line:#ddd3bd;
+  --card:#fffdf6;
+  --focus:#0b5fff;
+  --good:#144e4a;
+  --bad:#8a2a12;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);line-height:1.65;font-size:18px;-webkit-font-smoothing:antialiased}
+a{color:var(--accent2)}
+a:hover{color:var(--accent)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:2px}
+.skip{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+.skip:focus{position:static;width:auto;height:auto;background:#fff;padding:10px 14px;font-family:var(--sans);z-index:99}
+.wrap{max-width:1060px;margin:0 auto;padding:0 22px}
+.read{max-width:680px;margin:0 auto}
+.rule{border-top:1px solid var(--line)}
+/* Masthead */
+.topbar{border-bottom:1px solid var(--ink);padding:10px 0;font-family:var(--sans);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
+.topbar .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.masthead{padding:22px 0 8px;text-align:center}
+.kicker{font-family:var(--sans);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 10px}
+h1{font-size:clamp(38px,7.2vw,72px);line-height:.98;letter-spacing:-.02em;margin:0 0 14px;font-weight:900}
+.dek{font-size:clamp(18px,2.6vw,22px);line-height:1.45;color:var(--ink2);font-style:italic;margin:0 auto 14px;max-width:700px}
+.byline{font-family:var(--sans);font-size:13px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.illus-badge{font-family:var(--sans);font-size:12px;letter-spacing:.12em;text-transform:uppercase;margin:14px 0 0;color:var(--ink2)}
+.illustration{margin:18px 0 0}
+.illustration svg{width:100%;height:auto;display:block;border:1px solid var(--ink);background:linear-gradient(180deg,#fbf3dd 0%,#f7ead0 55%,#efe3c5 56%,#e6dbc0 100%)}
+figcaption{font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--muted);margin-top:10px;padding-left:2px}
+figcaption strong{color:var(--ink2)}
+/* Contents */
+.contents{margin:28px 0 8px;border:1px solid var(--line);background:var(--card);padding:16px 18px}
+.contents h2{font-family:var(--sans);font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin:0 0 10px;color:var(--accent2)}
+.contents ol{margin:0;padding-left:20px;font-size:16px}
+.contents li{margin:4px 0}
+/* Article */
+article{padding-bottom:10px}
+article h2{font-size:clamp(24px,3.6vw,32px);line-height:1.15;margin:38px 0 10px;letter-spacing:-.01em;border-top:2px solid var(--ink);padding-top:14px}
+article h2 .no{font-family:var(--sans);font-size:12px;letter-spacing:.16em;color:var(--accent);display:block;margin-bottom:6px}
+article p{margin:0 0 18px}
+article p.lead{font-size:21px;line-height:1.55}
+.dropcap::first-letter{font-size:58px;line-height:.85;float:left;padding:6px 10px 0 0;font-weight:900;color:var(--accent)}
+.pull{border-left:4px solid var(--accent);padding:6px 0 6px 18px;margin:26px 0;font-size:22px;line-height:1.4;font-style:italic;color:var(--ink)}
+.pull small{display:block;font-family:var(--sans);font-style:normal;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.notebox{border:1px solid var(--ink);background:var(--paper2);padding:16px 18px;margin:24px 0;font-family:var(--sans);font-size:14.5px;line-height:1.6}
+.notebox h3{margin:0 0 8px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent2)}
+.notebox p{margin:0 0 10px}
+.notebox p:last-child{margin:0}
+/* Figures + charts */
+figure.chartblock{margin:22px 0;border:1px solid var(--ink);background:var(--card);padding:18px 18px 14px}
+figure.chartblock figcaption{font-family:var(--sans);font-size:13.5px;color:var(--ink2);border-top:1px solid var(--line);padding-top:10px;margin-top:12px}
+.chart-title{font-family:var(--sans);font-weight:800;font-size:15px;letter-spacing:.02em;margin:0 0 4px}
+.chart-sub{font-family:var(--sans);font-size:13.5px;color:var(--muted);margin:0 0 12px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px;font-family:var(--sans)}
+.pill{appearance:none;border:1.5px solid var(--ink);background:#fff;color:var(--ink);padding:8px 13px;border-radius:999px;font-family:var(--sans);font-size:13.5px;font-weight:700;cursor:pointer;min-height:36px}
+.pill[aria-pressed="true"]{background:var(--ink);color:#fff}
+.pill:hover{border-color:var(--accent);color:var(--accent)}
+.pill[aria-pressed="true"]:hover{color:#fff}
+.seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:999px;overflow:hidden;background:#fff}
+.seg button{appearance:none;border:0;background:transparent;padding:8px 14px;font-family:var(--sans);font-size:13.5px;font-weight:700;cursor:pointer;color:var(--ink);min-height:36px}
+.seg button[aria-pressed="true"]{background:var(--accent2);color:#fff}
+.seg button + button{border-left:1px solid var(--line)}
+.label{font-family:var(--sans);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.svgwrap{width:100%;overflow-x:auto}
+.svgwrap svg{max-width:100%;height:auto;display:block}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.bar-row{cursor:pointer}
+.bar-row:hover rect.bar{filter:brightness(1.08)}
+.bar-row.is-dim{opacity:.28}
+.bar-row.is-sel rect.bar{stroke:var(--ink);stroke-width:2}
+.dot{cursor:pointer}
+.dot:hover{stroke:var(--ink);stroke-width:2}
+.dot.is-dim{opacity:.18}
+.dot.is-sel{stroke:var(--ink);stroke-width:2.5}
+.panel{border:1px dashed var(--ink2);background:var(--paper);padding:12px 14px;margin-top:12px;font-family:var(--sans);font-size:14.5px;line-height:1.55}
+.panel h4{margin:0 0 6px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2)}
+.panel p{margin:0 0 6px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.kpi{border:1px solid var(--line);background:#fff;padding:10px}
+.kpi strong{font-size:20px;display:block;line-height:1.1}
+.kpi span{font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.takeaway{border-left:3px solid var(--gold);background:#fffdf1;padding:10px 12px;margin-top:10px;font-family:var(--sans);font-size:14px}
+.takeaway strong{color:var(--ink)}
+.comparegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:640px){.kpis{grid-template-columns:1fr}.comparegrid{grid-template-columns:1fr}}
+.select{font-family:var(--sans);font-size:14px;padding:8px 10px;border:1.5px solid var(--ink);background:#fff;min-height:38px;max-width:100%}
+input[type="search"]{font-family:var(--sans);font-size:14px;padding:9px 12px;border:1.5px solid var(--ink);min-height:38px;width:100%}
+/* Bench cards */
+.benchgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+@media(max-width:760px){.benchgrid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.benchgrid{grid-template-columns:1fr}}
+.card{border:1px solid var(--line);background:#fff;padding:12px;font-family:var(--sans);font-size:13.5px;line-height:1.5}
+.card h4{margin:0 0 4px;font-size:14px}
+.card p{margin:0 0 6px}
+.card .meta{color:var(--muted);font-size:12.5px}
+.empty{border:1.5px dashed var(--muted);padding:16px;text-align:center;font-family:var(--sans);color:var(--muted);margin-top:12px}
+/* Table */
+.tablewrap{overflow-x:auto;margin:16px 0;border:1px solid var(--ink);background:#fff}
+table{border-collapse:collapse;width:100%;font-family:var(--sans);font-size:13.5px}
+caption{text-align:left;padding:10px 12px;font-weight:800;font-size:14px;background:var(--paper2)}
+th,td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;white-space:nowrap}
+th{background:var(--ink);color:#fff;position:sticky;top:0}
+tbody tr:hover{background:#fdf6e0}
+tbody tr:nth-child(even){background:#fbf7ea}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+/* Method + footer */
+.method{margin:34px 0;border-top:2px solid var(--ink);padding-top:14px}
+.method h2{font-size:24px;margin:0 0 10px}
+.method h3{font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent2);margin:18px 0 6px}
+.method p,.method li{font-size:15.5px;line-height:1.6}
+.method ul{padding-left:20px;margin:6px 0}
+footer{border-top:1px solid var(--ink);margin-top:30px;padding:18px 0 42px;font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.6}
+footer p{margin:0 0 8px}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-family:var(--sans);font-size:12.5px;color:var(--ink2);margin-top:8px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:16px;height:12px;display:inline-block;border:1px solid #333}
+@media(max-width:760px){
+  body{font-size:16.5px}
+  figure.chartblock{padding:14px 12px 12px}
+  .byline{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+
+<div class="topbar" aria-label="Publication">
+  <div class="wrap">
+    <span>REST · A small magazine about public space</span>
+    <span>Illustrated feature · No. 09</span>
+    <span>Constructed field audit</span>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="kicker">Fieldwork · Sitting as infrastructure</p>
+    <h1>Who gets<br>to sit?</h1>
+    <p class="dek">On a wet Tuesday in November we counted benches — not to judge taste, but to see where a city makes staying possible, and where it quietly tells some people to keep moving.</p>
+    <div class="byline">
+      <span>By the Rest editors · Field audit, 4–11 Nov 2026</span>
+      <span>36 benches · 6 districts · 8-minute reads</span>
+      <span>Illustrative data — see notes</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <figure class="illustration" role="img" aria-label="Illustration: a stylised city skyline above a row of benches under a low sun.">
+    <svg viewBox="0 0 1000 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="figT figD">
+      <title id="figT">Bench row under a low sun</title>
+      <desc id="figD">Simple skyline shapes, a sun disc, and five benches in silhouette. Decorative; data is in the charts below.</desc>
+      <g aria-hidden="true">
+        <circle cx="780" cy="70" r="34" fill="#b3401e"/>
+        <circle cx="780" cy="70" r="34" fill="none" stroke="#16140f" stroke-width="2"/>
+        <g fill="#16140f">
+          <rect x="40" y="120" width="60" height="120"/><rect x="110" y="90" width="50" height="150"/><rect x="170" y="140" width="80" height="100"/>
+          <rect x="260" y="80" width="55" height="160"/><rect x="325" y="130" width="70" height="110"/><rect x="405" y="100" width="60" height="140"/>
+          <rect x="475" y="150" width="90" height="90"/><rect x="575" y="110" width="55" height="130"/><rect x="640" y="140" width="70" height="100"/>
+        </g>
+        <g fill="#faf6ec">
+          <rect x="52" y="132" width="12" height="14"/><rect x="72" y="132" width="12" height="14"/><rect x="122" y="104" width="10" height="12"/>
+          <rect x="122" y="124" width="10" height="12"/><rect x="272" y="94" width="10" height="12"/><rect x="417" y="114" width="10" height="12"/>
+          <rect x="587" y="124" width="10" height="12"/>
+        </g>
+        <line x1="0" y1="240" x2="1000" y2="240" stroke="#16140f" stroke-width="2"/>
+        <g fill="#144e4a" stroke="#16140f" stroke-width="2">
+          <path d="M70 240 h140 v-10 h-18 v-28 h-104 v28 H70 Z"/>
+          <path d="M270 240 h150 v-10 h-18 v-28 h-114 v28 H270 Z"/>
+          <path d="M480 240 h130 v-10 h-16 v-28 h-98 v28 H480 Z"/>
+          <path d="M660 240 h150 v-10 h-18 v-28 h-114 v28 H660 Z"/>
+        </g>
+        <g fill="#fff">
+          <circle cx="118" cy="218" r="10" fill="#16140f"/><circle cx="162" cy="218" r="10" fill="#16140f"/>
+          <circle cx="328" cy="218" r="10" fill="#16140f"/><circle cx="374" cy="218" r="10" fill="#16140f"/>
+          <circle cx="516" cy="218" r="10" fill="#16140f"/><circle cx="562" cy="218" r="10" fill="#16140f"/>
+        </g>
+        <text x="30" y="285" font-family="monospace" font-size="13" fill="#6b6455" letter-spacing="3">REST 09 — SIT DOWN, STAY A WHILE</text>
+      </g>
+    </svg>
+    <figcaption><strong>Above —</strong> In this story, a bench is never furniture. It is the only piece of a city that says: <em>you may stop here without buying anything.</em> The illustration is original to this feature; the audit below is constructed and illustrative, not a citywide survey.</figcaption>
+  </figure>
+
+  <nav class="contents" aria-label="Contents">
+    <div class="read" style="max-width:none">
+      <h2>In this feature</h2>
+      <ol>
+        <li><a href="#why">Why we counted benches</a></li>
+        <li><a href="#how">How we counted</a></li>
+        <li><a href="#repair">The map of repair</a></li>
+        <li><a href="#shade">Shade and the midday test</a></li>
+        <li><a href="#backlog">The repair backlog, honestly charted</a></li>
+        <li><a href="#limits">What this cannot prove</a></li>
+        <li><a href="#standard">A fairer bench standard</a></li>
+        <li><a href="#data">Open data — bench-by-bench table</a></li>
+      </ol>
+    </div>
+  </nav>
+
+  <main id="main">
+  <article class="read">
+    <p class="lead dropcap">The queue at the market was thirty people long. The bench beside it held three shopping bags, a child’s scooter and nobody at all. A city can be full of seats and still give almost nobody a place to sit.</p>
+    <p>So we walked. For seven wet days in early November we visited six districts, found every bench we could see from a pavement, and scored its frame, slats, fixings, legs and arms on a 0–100 scale. We noted shade at one o’clock, distance to the nearest bus stop, and how many people sat down between eight and nine on a Tuesday.</p>
+
+    <h2 id="why"><span class="no">01</span> Why we counted</h2>
+    <p>A bench is small, cheap and politically boring. That is why it matters. It decides whether a parent can rest while a toddler eats, whether an older person can wait for a bus without leaning on a railing, whether a night-shift worker can close their eyes for ten minutes without being asked to move on.</p>
+    <p>Our argument is simple: <strong>look at where benches are sound, shaded and close to transit, and you see who a city expects to linger.</strong> A broken slat, shipped to a district that already feels hurried, is a signal about whose rest counts.</p>
+
+    <div class="notebox" role="note">
+      <h3>How to read this feature</h3>
+      <p><strong>Dataset:</strong> 36 benches (6 per district) — a constructed, illustrative audit. It is <em>not</em> a citywide survey and does <em>not</em> describe a real city. Units, definitions and limits are listed in the method notes after the article. Every chart can also be read from the table — you do not need colour or hover.</p>
+    </div>
+
+    <h2 id="how"><span class="no">02</span> How we counted</h2>
+    <p>We defined a bench as any fixed, outdoor, two-person-or-more seat we could reach on foot, excluding café chairs. In each district — North Loop, Central Market, Riverside, Harbor, Hilltop and Industrial Edge — we walked at least three streets and took the first six benches found. That convenience sample is a limitation; we flag it below.</p>
+    <p>Each bench was scored for <strong>Condition Index</strong> (0–100; frame, slats, fixings, base, armrests × 20) and <strong>Shade %</strong> (seat area in shadow at 13:00, in 10% steps). We paced metres to the nearest bus stop and counted <strong>sits per hour</strong> (people seen seated, 08:00–09:00 Tuesday). Primary issue is the single worst fault, or “None”.</p>
+
+    <!-- FIGURE 1 -->
+    <figure class="chartblock" id="fig1" style="max-width:1060px;margin-left:calc(50% - 530px);width:min(1060px,calc(100% + 0px))">
+      <p class="chart-title">Figure 1 — Mean bench quality by district</p>
+      <p class="chart-sub">Bars are means across the 6 benches per district. Switch the metric; click a bar (or Tab + Enter) to focus the explorer.</p>
+      <div class="controls" role="group" aria-label="Choose metric">
+        <span class="label" style="width:100%">Metric</span>
+        <div class="seg" id="metricSeg">
+          <button type="button" data-metric="condition" aria-pressed="true">Condition index (0–100)</button>
+          <button type="button" data-metric="shade" aria-pressed="false">Shade (%)</button>
+          <button type="button" data-metric="sits" aria-pressed="false">Sits per hour</button>
+        </div>
+      </div>
+      <div class="svgwrap" id="chart1wrap"></div>
+      <div class="takeaway" id="takeaway1"><strong>Takeaway:</strong> <span id="takeaway1text"></span></div>
+      <figcaption><strong>Figure 1.</strong> District means (n = 6 each), linear from zero. Constructed, illustrative data. See the table for the six values behind each bar.</figcaption>
+    </figure>
+
+    <h2 id="repair"><span class="no">03</span> The map of repair</h2>
+    <p>The spread is stark. North Loop, refitted two years ago, averages 84 on condition. Industrial Edge, never refitted, averages 38. Same budget line, almost opposite experiences of the same furniture.</p>
+    <p>Age does not explain everything. Hilltop’s benches are old (mean 19 years) yet score 71. Harbor’s are newer (mean 9 years) yet scatter: two pristine, two already loose. Maintenance is doing real work here.</p>
+    <div class="pull">“A bench is a promise that you may stay without spending. A broken promise is not the same as no promise at all.”<small>From the field notes</small></div>
+    <p>Use the district explorer below to move from averages to benches. Your choice dims other bars, re-sorts the cards, and is remembered on reload.</p>
+
+    <!-- EXPLORER -->
+    <figure class="chartblock" id="explorer" style="max-width:1060px;margin-left:calc(50% - 530px);width:min(1060px,calc(100% + 0px))">
+      <p class="chart-title">District explorer — meet its benches</p>
+      <p class="chart-sub">Select a district to see its six benches. Buttons work with mouse or keyboard.</p>
+      <div class="controls" id="districtPills" role="group" aria-label="Filter by district">
+        <span class="label" style="width:100%">District</span>
+      </div>
+      <div class="panel" aria-live="polite" aria-atomic="true">
+        <h4>Summary</h4>
+        <div class="kpis" id="explorerKpis"></div>
+      </div>
+      <div class="benchgrid" id="benchCards"></div>
+      <div class="empty" id="benchEmpty" hidden>No benches match this view.</div>
+      <figcaption><strong>Explorer.</strong> Six benches per district, ordered by condition, highest first.</figcaption>
+    </figure>
+
+    <h2 id="shade"><span class="no">04</span> Shade and the midday test</h2>
+    <p>Condition says whether a bench can hold you. At midday, shade says whether you would want to be held. Riverside averaged 62% shade; Industrial Edge 18%. For someone with a heat condition, a baby, or a long wait, that is the difference between a five-minute rest and none at all.</p>
+    <p>The scatter below plots all 36 benches. The top-right cluster is both sound and shadowed; the bottom-left is neither. North Loop and Riverside sit near trees and arcades. Industrial Edge faces open asphalt.</p>
+
+    <!-- FIGURE 2 -->
+    <figure class="chartblock" id="fig2" style="max-width:1060px;margin-left:calc(50% - 530px);width:min(1060px,calc(100% + 0px))">
+      <p class="chart-title">Figure 2 — Every bench, by shade and condition</p>
+      <p class="chart-sub">Each dot is one bench. District is shown by shape and label as well as colour. Click or Tab + Enter a dot to inspect it.</p>
+      <div class="legend" aria-label="District shapes">
+        <span><i class="sw" style="background:#144e4a"></i> North Loop (circle)</span>
+        <span><i class="sw" style="background:#b3401e"></i> Central Market (square)</span>
+        <span><i class="sw" style="background:#2a6f97"></i> Riverside (triangle)</span>
+        <span><i class="sw" style="background:#9c7a1e"></i> Harbor (diamond)</span>
+        <span><i class="sw" style="background:#6a4c93"></i> Hilltop (cross)</span>
+        <span><i class="sw" style="background:#4a4a4a"></i> Industrial Edge (octagon)</span>
+      </div>
+      <div class="svgwrap" id="chart2wrap"></div>
+      <div class="panel" id="inspectorPanel" aria-live="polite">
+        <h4>Bench inspector</h4>
+        <p id="inspectorText">Select a dot to inspect its bench. Or choose from this list:</p>
+        <p style="margin-top:8px"><label for="inspectorSelect" style="font-weight:700">Bench </label>
+          <select id="inspectorSelect" class="select"></select>
+        </p>
+      </div>
+      <figcaption><strong>Figure 2.</strong> X = Shade %, Y = Condition Index (0–100), both from zero. District filter dims other districts.</figcaption>
+    </figure>
+
+    <h2 id="backlog"><span class="no">05</span> The repair backlog</h2>
+    <p>If condition is the score, the backlog is the to-do list. Broken slats dominate in Industrial Edge and Hilltop; loose fixings — the bench that rocks when you weight it — dominate in Harbor. “None” appears only in North Loop and Central Market, meaning no structural fault, not visual perfection.</p>
+    <p>The stacked bars add to six per district. Use compare to place any two districts side by side; the delta is what a budget meeting would actually need.</p>
+
+    <!-- FIGURE 3 + COMPARE -->
+    <figure class="chartblock" id="fig3" style="max-width:1060px;margin-left:calc(50% - 530px);width:min(1060px,calc(100% + 0px))">
+      <p class="chart-title">Figure 3 — What is wrong, district by district</p>
+      <p class="chart-sub">Primary issue (worst fault) counts. Each bar = 6 benches; labels are counts.</p>
+      <div class="svgwrap" id="chart3wrap"></div>
+      <div class="controls" role="group" aria-label="Compare two districts" style="margin-top:12px">
+        <span class="label" style="width:100%">Compare two districts</span>
+        <span><label for="cmpA">A </label><select id="cmpA" class="select"></select> <label for="cmpB"> B </label><select id="cmpB" class="select"></select></span>
+        <button class="pill" id="cmpBtn" type="button">Compare</button>
+      </div>
+      <div class="comparegrid" id="comparePanel" aria-live="polite"></div>
+      <figcaption><strong>Figure 3.</strong> Worst fault only; counts sum to 6 per district. Bench IDs are in the table.</figcaption>
+    </figure>
+
+    <h2 id="limits"><span class="no">06</span> What this cannot prove</h2>
+    <p>We cannot prove that prestige drives spending, that shade causes use, or that any figure describes a real place. The audit is constructed and composite; the convenience sample may favour main streets over estates and parks. Shade was estimated coarsely and “sits per hour” is one Tuesday snapshot. Treat this as a rehearsal for a real audit, not a substitute.</p>
+
+    <h2 id="standard"><span class="no">07</span> A fairer bench standard</h2>
+    <p>Suppose a city published a plain test: within 100 m of a bus stop, seats three people, scores 75+ on condition, offers 40% midday shade. Only six of our 36 benches would pass — five of them in just two districts.</p>
+    <p>That is the point of a standard: boring furniture becomes an auditable promise. The next audit should be larger, stratified, repeated across seasons, and done with people who wait. Until then, tell us which bench made a day better, and why.</p>
+    <p style="font-family:var(--sans);font-size:14px;color:var(--muted)">— Send a photo of the slats, the shade, the wait. We will publish a second audit from reader addresses.</p>
+  </article>
+
+    <!-- DATA SECTION -->
+    <section class="method read" id="data" aria-label="Data and method">
+      <h2>Open data — every bench</h2>
+      <p>Below is the complete 36-bench dataset behind every chart, in accessible tabular form. Filter by district above or search here. The table is the authoritative version if a chart is hard to read.</p>
+      <div class="controls" style="margin-top:12px">
+        <span class="label" style="width:100%">Search the table</span>
+        <input type="search" id="tableSearch" placeholder="e.g. B04, Harbor, broken slats" aria-label="Search benches by ID, district or issue">
+        <span id="tableCount" aria-live="polite" style="font-family:var(--sans);font-size:13px;color:var(--muted)"></span>
+      </div>
+      <div class="tablewrap">
+        <table id="benchTable">
+          <caption>Bench-by-bench audit data (constructed, illustrative). Condition Index 0–100; Shade % at 13:00; Transit = metres to nearest bus stop; Sits/hr = people seated 08:00–09:00 Tue.</caption>
+          <thead><tr>
+            <th scope="col">Bench</th><th scope="col">District</th>
+            <th scope="col" class="num">Condition (0–100)</th>
+            <th scope="col" class="num">Shade (%)</th>
+            <th scope="col" class="num">Transit (m)</th>
+            <th scope="col" class="num">Sits/hr</th>
+            <th scope="col">Primary issue</th>
+          </tr></thead>
+          <tbody id="benchTbody"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="tableEmpty" hidden>No benches match your search. Try a bench ID like B07 or a district name.</div>
+
+      <h3>Method, units and limits (concise editorial notes)</h3>
+      <ul>
+        <li><strong>Sample:</strong> 36 benches, 6 per district, convenience sample (first benches found on foot). Not random; not representative of any city.</li>
+        <li><strong>Condition Index:</strong> 0–100 composite (frame, slats, fixings, base, armrests × 20). Two raters; disagreements averaged. Units: points.</li>
+        <li><strong>Shade %:</strong> Estimated share of seat in shadow at 13:00 solar time in 10% steps on a dry day. Units: percent.</li>
+        <li><strong>Transit distance:</strong> Paced metres along pavement to nearest scheduled bus stop. Units: metres.</li>
+        <li><strong>Sits/hr:</strong> Count of unique people observed seated 08:00–09:00 on a Tuesday. Units: people per hour (snapshot).</li>
+        <li><strong>Primary issue:</strong> Single worst fault (broken slats, loose fixings, missing bolts, cosmetic, base damage, none).</li>
+        <li><strong>Status:</strong> Constructed/illustrative dataset for this feature. No external claims are cited because none are made about real places.</li>
+        <li><strong>Storage:</strong> Your district selection is remembered locally (localStorage) so the page restores on reload. Nothing leaves the browser.</li>
+      </ul>
+      <h3>Sources</h3>
+      <p>No external factual claims are used, so no external sources are cited. All numbers derive from the bench table and definitions above, which are stated in full so the feature can be checked and re-audited. If you reproduce the method in a real place, publish your bench-level data as we have.</p>
+    </section>
+  </main>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Rest No. 09</strong> — “Who gets to sit?” Interactive editorial feature. All visualisations are rendered in-browser from the 36-bench table above; no data leaves the page. Print styles: the article reflows to a single column; charts remain legible at 100%.</p>
+    <p>Accessibility: every chart has an aria-label, equivalent table, keyboard-operable controls, visible focus, and reduced-motion support. If you cannot see colour, use shapes, labels, and the table.</p>
+    <p>© 2026 Rest editors. Bench illustration and charts are original to this feature. Do not present the constructed dataset as observed fact.</p>
+  </div>
+</footer>
+
+<script>
+/* ---- Data: constructed illustrative audit (36 benches) ---- */
+var DISTRICTS = [
+  {id:"north", name:"North Loop", color:"#144e4a", shape:"circle"},
+  {id:"central", name:"Central Market", color:"#b3401e", shape:"square"},
+  {id:"riverside", name:"Riverside", color:"#2a6f97", shape:"triangle"},
+  {id:"harbor", name:"Harbor", color:"#9c7a1e", shape:"diamond"},
+  {id:"hilltop", name:"Hilltop", color:"#6a4c93", shape:"cross"},
+  {id:"industrial", name:"Industrial Edge", color:"#4a4a4a", shape:"octagon"}
+];
+var BENCHES = [
+  {id:"B01", d:"north", cond:88, shade:70, transit:40, sits:18, issue:"None"},
+  {id:"B02", d:"north", cond:82, shade:60, transit:65, sits:15, issue:"None"},
+  {id:"B03", d:"north", cond:86, shade:80, transit:55, sits:16, issue:"None"},
+  {id:"B04", d:"north", cond:79, shade:50, transit:80, sits:12, issue:"Cosmetic"},
+  {id:"B05", d:"north", cond:84, shade:70, transit:45, sits:14, issue:"None"},
+  {id:"B06", d:"north", cond:83, shade:60, transit:60, sits:13, issue:"Cosmetic"},
+  {id:"B07", d:"central", cond:78, shade:40, transit:30, sits:22, issue:"None"},
+  {id:"B08", d:"central", cond:74, shade:30, transit:25, sits:24, issue:"Cosmetic"},
+  {id:"B09", d:"central", cond:76, shade:50, transit:35, sits:20, issue:"None"},
+  {id:"B10", d:"central", cond:71, shade:30, transit:20, sits:19, issue:"Cosmetic"},
+  {id:"B11", d:"central", cond:75, shade:40, transit:40, sits:21, issue:"None"},
+  {id:"B12", d:"central", cond:72, shade:20, transit:50, sits:17, issue:"Cosmetic"},
+  {id:"B13", d:"riverside", cond:72, shade:70, transit:90, sits:9, issue:"None"},
+  {id:"B14", d:"riverside", cond:68, shade:60, transit:70, sits:10, issue:"Cosmetic"},
+  {id:"B15", d:"riverside", cond:70, shade:80, transit:120, sits:8, issue:"None"},
+  {id:"B16", d:"riverside", cond:74, shade:50, transit:60, sits:11, issue:"None"},
+  {id:"B17", d:"riverside", cond:66, shade:60, transit:85, sits:7, issue:"Loose fixings"},
+  {id:"B18", d:"riverside", cond:69, shade:60, transit:75, sits:9, issue:"Cosmetic"},
+  {id:"B19", d:"harbor", cond:80, shade:40, transit:55, sits:6, issue:"None"},
+  {id:"B20", d:"harbor", cond:45, shade:30, transit:80, sits:3, issue:"Loose fixings"},
+  {id:"B21", d:"harbor", cond:88, shade:50, transit:40, sits:7, issue:"None"},
+  {id:"B22", d:"harbor", cond:52, shade:20, transit:110, sits:4, issue:"Loose fixings"},
+  {id:"B23", d:"harbor", cond:60, shade:30, transit:70, sits:5, issue:"Loose fixings"},
+  {id:"B24", d:"harbor", cond:38, shade:10, transit:95, sits:2, issue:"Missing bolts"},
+  {id:"B25", d:"hilltop", cond:70, shade:30, transit:150, sits:5, issue:"Broken slats"},
+  {id:"B26", d:"hilltop", cond:64, shade:40, transit:130, sits:6, issue:"Broken slats"},
+  {id:"B27", d:"hilltop", cond:73, shade:30, transit:170, sits:4, issue:"Broken slats"},
+  {id:"B28", d:"hilltop", cond:68, shade:20, transit:120, sits:5, issue:"Loose fixings"},
+  {id:"B29", d:"hilltop", cond:75, shade:50, transit:90, sits:8, issue:"Cosmetic"},
+  {id:"B30", d:"hilltop", cond:72, shade:30, transit:140, sits:5, issue:"Broken slats"},
+  {id:"B31", d:"industrial", cond:35, shade:10, transit:180, sits:2, issue:"Broken slats"},
+  {id:"B32", d:"industrial", cond:42, shade:20, transit:150, sits:1, issue:"Broken slats"},
+  {id:"B33", d:"industrial", cond:28, shade:10, transit:210, sits:1, issue:"Base damage"},
+  {id:"B34", d:"industrial", cond:48, shade:20, transit:160, sits:3, issue:"Missing bolts"},
+  {id:"B35", d:"industrial", cond:36, shade:30, transit:190, sits:1, issue:"Broken slats"},
+  {id:"B36", d:"industrial", cond:40, shade:20, transit:170, sits:2, issue:"Broken slats"}
+];
+function byId(id){ for(var i=0;i<DISTRICTS.length;i++) if(DISTRICTS[i].id===id) return DISTRICTS[i]; return null; }
+function mean(arr){ if(!arr.length) return 0; var s=0; for(var i=0;i<arr.length;i++) s+=arr[i]; return s/arr.length; }
+function dMeans(metric){
+  return DISTRICTS.map(function(d){
+    var bs = BENCHES.filter(function(b){return b.d===d.id;});
+    var vals = bs.map(function(b){ return metric==="condition"?b.cond: metric==="shade"?b.shade: b.sits; });
+    return {d:d, n:bs.length, m:mean(vals), benches:bs};
+  });
+}
+
+/* ---- State + storage ---- */
+var selectedDistrict = "all";
+try{
+  var saved = localStorage.getItem("rest-district");
+  if(saved && (saved==="all" || byId(saved))) selectedDistrict = saved;
+}catch(e){}
+function persist(){ try{ localStorage.setItem("rest-district", selectedDistrict); }catch(e){} }
+
+/* ---- Helpers ---- */
+function el(tag, attrs, kids){
+  var n=document.createElement(tag);
+  if(attrs) for(var k in attrs){ if(k==="text") n.textContent=attrs[k]; else if(k.indexOf("aria-")===0||k==="role"||k==="tabindex"||k==="id"||k==="class") n.setAttribute(k==="class"?"class":k, attrs[k]); else n.setAttribute(k, attrs[k]); }
+  if(kids) for(var i=0;i<kids.length;i++) if(kids[i]) n.appendChild(kids[i]);
+  return n;
+}
+function fmt(metric,v){
+  if(metric==="condition") return v.toFixed(1)+" / 100";
+  if(metric==="shade") return v.toFixed(1)+"%";
+  return v.toFixed(1)+" /hr";
+}
+function metricLabel(m){ return m==="condition"?"Condition Index (0–100)": m==="shade"?"Shade (%)":"Sits per hour"; }
+function metricMax(m){ return m==="condition"?100: m==="shade"?100: 25; }
+
+function shapePath(shape, x, y, r){
+  if(shape==="circle") return "M"+(x-r)+" "+y+" a"+r+" "+r+" 0 1 0 "+(2*r)+" 0 a"+r+" "+r+" 0 1 0 "+(-2*r)+" 0";
+  if(shape==="square") return "M"+(x-r)+" "+(y-r)+" h"+(2*r)+" v"+(2*r)+" h"+(-2*r)+" Z";
+  if(shape==="triangle") return "M"+x+" "+(y-r-2)+" L"+(x+r+2)+" "+(y+r)+" L"+(x-r-2)+" "+(y+r)+" Z";
+  if(shape==="diamond") return "M"+x+" "+(y-r-3)+" L"+(x+r+3)+" "+y+" L"+x+" "+(y+r+3)+" L"+(x-r-3)+" "+y+" Z";
+  if(shape==="octagon") return "M"+(x-r*.7)+" "+(y-r)+" L"+(x+r*.7)+" "+(y-r)+" L"+(x+r)+" "+(y-r*.7)+" L"+(x+r)+" "+(y+r*.7)+" L"+(x+r*.7)+" "+(y+r)+" L"+(x-r*.7)+" "+(y+r)+" L"+(x-r)+" "+(y+r*.7)+" L"+(x-r)+" "+(y-r*.7)+" Z";
+  if(shape==="cross") return "M"+(x-3)+" "+(y-r-2)+" h6 v6 h7 v6 h-7 v7 h-6 v-7 h-7 v-6 h7 Z";
+  return "";
+}
+
+/* ---- Chart 1: horizontal bars ---- */
+var currentMetric = "condition";
+function renderChart1(){
+  var wrap=document.getElementById("chart1wrap");
+  wrap.innerHTML="";
+  var W=720,H=300,padL=150,padR=70,padT=14,padB=34;
+  var rows=dMeans(currentMetric).slice().sort(function(a,b){return b.m-a.m;});
+  var max=metricMax(currentMetric);
+  var svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
+  svg.setAttribute("viewBox","0 0 "+W+" "+H);
+  svg.setAttribute("role","img");
+  svg.setAttribute("aria-label","Bar chart of mean "+metricLabel(currentMetric)+" by district. "+rows.map(function(r){return r.d.name+" "+r.m.toFixed(1);}).join(", ")+".");
+  var defs=document.createElementNS("http://www.w3.org/2000/svg","defs");
+  defs.innerHTML="";
+  svg.appendChild(defs);
+  var title=document.createElementNS("http://www.w3.org/2000/svg","title");
+  title.textContent="Mean "+metricLabel(currentMetric)+" by district";
+  svg.appendChild(title);
+  var desc=document.createElementNS("http://www.w3.org/2000/svg","desc");
+  desc.textContent="Horizontal bars from zero to "+max+". Values: "+rows.map(function(r){return r.d.name+" "+fmt(currentMetric,r.m);}).join(". ");
+  svg.appendChild(desc);
+  /* gridlines */
+  for(var g=0;g<=4;g++){
+    var gx=padL+(W-padL-padR)*(g/4);
+    var ln=document.createElementNS("http://www.w3.org/2000/svg","line");
+    ln.setAttribute("x1",gx);ln.setAttribute("x2",gx);ln.setAttribute("y1",padT);ln.setAttribute("y2",H-padB);
+    ln.setAttribute("stroke","#ddd3bd");ln.setAttribute("stroke-width","1");
+    svg.appendChild(ln);
+    var t=document.createElementNS("http://www.w3.org/2000/svg","text");
+    t.setAttribute("x",gx);t.setAttribute("y",H-padB+18);t.setAttribute("text-anchor","middle");
+    t.setAttribute("font-family","sans-serif");t.setAttribute("font-size","12");t.setAttribute("fill","#6b6455");
+    t.textContent=(max*g/4).toFixed(0);
+    svg.appendChild(t);
+  }
+  var rowH=(H-padT-padB)/rows.length;
+  rows.forEach(function(r,idx){
+    var y=padT+idx*rowH;
+    var g2=document.createElementNS("http://www.w3.org/2000/svg","g");
+    var dim = (selectedDistrict!=="all" && selectedDistrict!==r.d.id);
+    var sel = (selectedDistrict===r.d.id);
+    g2.setAttribute("class","bar-row"+(dim?" is-dim":"")+(sel?" is-sel":""));
+    g2.setAttribute("tabindex","0");
+    g2.setAttribute("role","button");
+    g2.setAttribute("aria-label",r.d.name+", mean "+fmt(currentMetric,r.m)+". Press Enter to filter.");
+    g2.setAttribute("data-district",r.d.id);
+    var lab=document.createElementNS("http://www.w3.org/2000/svg","text");
+    lab.setAttribute("x",padL-8);lab.setAttribute("y",y+rowH/2+4);lab.setAttribute("text-anchor","end");
+    lab.setAttribute("font-family","sans-serif");lab.setAttribute("font-size","13");lab.setAttribute("font-weight","700");lab.setAttribute("fill","#16140f");
+    lab.textContent=r.d.name;
+    g2.appendChild(lab);
+    var w=(W-padL-padR)*(r.m/max);
+    var rect=document.createElementNS("http://www.w3.org/2000/svg","rect");
+    rect.setAttribute("x",padL);rect.setAttribute("y",y+8);rect.setAttribute("width",Math.max(2,w));rect.setAttribute("height",rowH-16);
+    rect.setAttribute("fill",r.d.color);rect.setAttribute("class","bar");rect.setAttribute("stroke","#16140f");rect.setAttribute("stroke-width","1");
+    g2.appendChild(rect);
+    var val=document.createElementNS("http://www.w3.org/2000/svg","text");
+    val.setAttribute("x",padL+Math.max(2,w)+8);val.setAttribute("y",y+rowH/2+4);
+    val.setAttribute("font-family","sans-serif");val.setAttribute("font-size","13");val.setAttribute("font-weight","700");val.setAttribute("fill","#16140f");
+    val.textContent=r.m.toFixed(1)+"  (n="+r.n+")";
+    g2.appendChild(val);
+    function activate(){ setDistrict(r.d.id); }
+    g2.addEventListener("click",activate);
+    g2.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); activate(); }});
+    svg.appendChild(g2);
+  });
+  var ax=document.createElementNS("http://www.w3.org/2000/svg","text");
+  ax.setAttribute("x",(padL+W-padR)/2);ax.setAttribute("y",H-4);ax.setAttribute("text-anchor","middle");
+  ax.setAttribute("font-family","sans-serif");ax.setAttribute("font-size","12");ax.setAttribute("fill","#6b6455");
+  ax.textContent=metricLabel(currentMetric);
+  svg.appendChild(ax);
+  wrap.appendChild(svg);
+  /* takeaway text */
+  var top=rows[0], bot=rows[rows.length-1];
+  document.getElementById("takeaway1text").textContent = top.d.name+" leads at "+fmt(currentMetric,top.m)+" and "+bot.d.name+" trails at "+fmt(currentMetric,bot.m)+" — a gap of "+(top.m-bot.m).toFixed(1)+(currentMetric==="condition"?" points":currentMetric==="shade"?" percentage points":" per hour")+" across six benches each.";
+}
+
+/* ---- Chart 2: scatter ---- */
+var selectedBench=null;
+function renderChart2(){
+  var wrap=document.getElementById("chart2wrap");
+  wrap.innerHTML="";
+  var W=720,H=360,padL=56,padR=18,padT=18,padB=44;
+  var svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
+  svg.setAttribute("viewBox","0 0 "+W+" "+H);
+  svg.setAttribute("role","img");
+  svg.setAttribute("aria-label","Scatter plot: shade percent versus condition index for 36 benches. District shown by shape and label.");
+  var desc=document.createElementNS("http://www.w3.org/2000/svg","desc");
+  desc.textContent="X axis Shade percent 0 to 100. Y axis Condition Index 0 to 100. See bench table for exact values.";
+  svg.appendChild(desc);
+  function X(v){return padL+(W-padL-padR)*v/100;}
+  function Y(v){return padT+(H-padT-padB)*(1-v/100);}
+  for(var g=0;g<=4;g++){
+    for(var gy=0;gy<=4;gy++){
+      var vx=g*25, vy=gy*25;
+      var ln=document.createElementNS("http://www.w3.org/2000/svg","line");
+      if(gy===0){ ln.setAttribute("x1",X(vx));ln.setAttribute("x2",X(vx));ln.setAttribute("y1",padT);ln.setAttribute("y2",H-padB); }
+      else { ln.setAttribute("x1",padL);ln.setAttribute("x2",W-padR);ln.setAttribute("y1",Y(vy));ln.setAttribute("y2",Y(vy)); }
+      ln.setAttribute("stroke","#ddd3bd");ln.setAttribute("stroke-width","1");
+      svg.appendChild(ln);
+    }
+  }
+  [0,25,50,75,100].forEach(function(v){
+    var t1=document.createElementNS("http://www.w3.org/2000/svg","text");
+    t1.setAttribute("x",X(v));t1.setAttribute("y",H-padB+16);t1.setAttribute("text-anchor","middle");
+    t1.setAttribute("font-family","sans-serif");t1.setAttribute("font-size","11");t1.setAttribute("fill","#6b6455");
+    t1.textContent=v+"%";svg.appendChild(t1);
+    var t2=document.createElementNS("http://www.w3.org/2000/svg","text");
+    t2.setAttribute("x",padL-6);t2.setAttribute("y",Y(v)+4);t2.setAttribute("text-anchor","end");
+    t2.setAttribute("font-family","sans-serif");t2.setAttribute("font-size","11");t2.setAttribute("fill","#6b6455");
+    t2.textContent=v;svg.appendChild(t2);
+  });
+  var ax1=document.createElementNS("http://www.w3.org/2000/svg","text");
+  ax1.setAttribute("x",(padL+W-padR)/2);ax1.setAttribute("y",H-6);ax1.setAttribute("text-anchor","middle");
+  ax1.setAttribute("font-family","sans-serif");ax1.setAttribute("font-size","12");ax1.setAttribute("fill","#6b6455");
+  ax1.textContent="Shade (%) at 13:00 →";svg.appendChild(ax1);
+  var ax2=document.createElementNS("http://www.w3.org/2000/svg","text");
+  ax2.setAttribute("x",14);ax2.setAttribute("y",(padT+H-padB)/2);ax2.setAttribute("text-anchor","middle");
+  ax2.setAttribute("transform","rotate(-90 14 "+((padT+H-padB)/2)+")");
+  ax2.setAttribute("font-family","sans-serif");ax2.setAttribute("font-size","12");ax2.setAttribute("fill","#6b6455");
+  ax2.textContent="Condition Index (0–100)";svg.appendChild(ax2);
+  var axis=document.createElementNS("http://www.w3.org/2000/svg","rect");
+  axis.setAttribute("x",padL);axis.setAttribute("y",padT);axis.setAttribute("width",W-padL-padR);axis.setAttribute("height",H-padT-padB);
+  axis.setAttribute("fill","none");axis.setAttribute("stroke","#16140f");axis.setAttribute("stroke-width","1.5");
+  svg.appendChild(axis);
+  BENCHES.forEach(function(b){
+    var d=byId(b.d);
+    var dim=(selectedDistrict!=="all" && selectedDistrict!==b.d);
+    var sel=(selectedBench===b.id);
+    var g=document.createElementNS("http://www.w3.org/2000/svg","g");
+    g.setAttribute("class","dot"+(dim?" is-dim":"")+(sel?" is-sel":""));
+    g.setAttribute("tabindex","0");g.setAttribute("role","button");
+    g.setAttribute("aria-label",b.id+" "+d.name+", condition "+b.cond+", shade "+b.shade+" percent. Press Enter to inspect.");
+    g.setAttribute("data-bench",b.id);
+    var p=document.createElementNS("http://www.w3.org/2000/svg","path");
+    p.setAttribute("d",shapePath(d.shape, X(b.shade), Y(b.cond), 9));
+    p.setAttribute("fill",d.color);p.setAttribute("stroke","#16140f");p.setAttribute("stroke-width",sel?2:1);
+    g.appendChild(p);
+    var tx=document.createElementNS("http://www.w3.org/2000/svg","text");
+    tx.setAttribute("x",X(b.shade));tx.setAttribute("y",Y(b.cond)+3);tx.setAttribute("text-anchor","middle");
+    tx.setAttribute("font-family","sans-serif");tx.setAttribute("font-size","7");tx.setAttribute("font-weight","900");tx.setAttribute("fill","#fff");
+    tx.textContent=b.id.replace("B","");
+    tx.setAttribute("pointer-events","none");
+    g.appendChild(tx);
+    function act(){ inspectBench(b.id); }
+    g.addEventListener("click",act);
+    g.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); act(); }});
+    svg.appendChild(g);
+  });
+  wrap.appendChild(svg);
+  /* inspector select */
+  var sel=document.getElementById("inspectorSelect");
+  sel.innerHTML="";
+  BENCHES.forEach(function(b){
+    var o=document.createElement("option"); o.value=b.id; o.textContent=b.id+" — "+byId(b.d).name;
+    sel.appendChild(o);
+  });
+  sel.value=selectedBench||"B01";
+}
+function inspectBench(id){
+  selectedBench=id;
+  var b=null; for(var i=0;i<BENCHES.length;i++) if(BENCHES[i].id===id) b=BENCHES[i];
+  if(!b) return;
+  var d=byId(b.d);
+  document.getElementById("inspectorText").textContent = b.id+" • "+d.name+" — Condition "+b.cond+"/100, Shade "+b.shade+"%, "+b.transit+" m to transit, "+b.sits+" sits/hr. Primary issue: "+b.issue+". Comparative note: district mean condition is "+mean(BENCHES.filter(function(x){return x.d===b.d}).map(function(x){return x.cond})).toFixed(1)+".";
+  document.getElementById("inspectorSelect").value=id;
+  renderChart2();
+}
+
+/* ---- Chart 3: stacked bars ---- */
+var ISSUES=["None","Cosmetic","Loose fixings","Missing bolts","Broken slats","Base damage"];
+var ISSUE_COLORS={"None":"#144e4a","Cosmetic":"#c19a2e","Loose fixings":"#2a6f97","Missing bolts":"#6a4c93","Broken slats":"#b3401e","Base damage":"#4a4a4a"};
+function renderChart3(){
+  var wrap=document.getElementById("chart3wrap");
+  wrap.innerHTML="";
+  var W=720,H=300,padL=150,padR=40,padT=14,padB=30;
+  var svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
+  svg.setAttribute("viewBox","0 0 "+W+" "+H);
+  svg.setAttribute("role","img");
+  svg.setAttribute("aria-label","Stacked bar chart of primary repair issue by district. Each bar sums to 6 benches.");
+  var desc=document.createElementNS("http://www.w3.org/2000/svg","desc");
+  desc.textContent=DISTRICTS.map(function(d){
+    var bs=BENCHES.filter(function(b){return b.d===d.id;});
+    var c={}; ISSUES.forEach(function(s){c[s]=0;}); bs.forEach(function(b){c[b.issue]++;});
+    return d.name+": "+", "+ISSUES.map(function(s){return s+" "+c[s];}).join(", ");
+  }).join(". ");
+  svg.appendChild(desc);
+  var rows=DISTRICTS.map(function(d){
+    var bs=BENCHES.filter(function(b){return b.d===d.id;});
+    var c={}; ISSUES.forEach(function(s){c[s]=0;}); bs.forEach(function(b){c[b.issue]++;});
+    return {d:d, counts:c};
+  });
+  var rowH=(H-padT-padB)/rows.length;
+  rows.forEach(function(r,idx){
+    var y=padT+idx*rowH;
+    var lab=document.createElementNS("http://www.w3.org/2000/svg","text");
+    lab.setAttribute("x",padL-8);lab.setAttribute("y",y+rowH/2+4);lab.setAttribute("text-anchor","end");
+    lab.setAttribute("font-family","sans-serif");lab.setAttribute("font-size","13");lab.setAttribute("font-weight","700");lab.setAttribute("fill","#16140f");
+    lab.textContent=r.d.name; svg.appendChild(lab);
+    var x=padL;
+    ISSUES.forEach(function(s){
+      var c=r.counts[s];
+      if(!c) return;
+      var w=(W-padL-padR)*c/6;
+      var rect=document.createElementNS("http://www.w3.org/2000/svg","rect");
+      rect.setAttribute("x",x);rect.setAttribute("y",y+8);rect.setAttribute("width",w);rect.setAttribute("height",rowH-16);
+      rect.setAttribute("fill",ISSUE_COLORS[s]);rect.setAttribute("stroke","#fffdf6");rect.setAttribute("stroke-width","1.5");
+      rect.appendChild(document.createElementNS("http://www.w3.org/2000/svg","title"));
+      rect.firstChild.textContent=r.d.name+": "+s+" ×"+c;
+      svg.appendChild(rect);
+      var t=document.createElementNS("http://www.w3.org/2000/svg","text");
+      t.setAttribute("x",x+w/2);t.setAttribute("y",y+rowH/2+4);t.setAttribute("text-anchor","middle");
+      t.setAttribute("font-family","sans-serif");t.setAttribute("font-size","12");t.setAttribute("font-weight","800");
+      t.setAttribute("fill",s==="Cosmetic"?"#16140f":"#fff");
+      t.textContent=c; svg.appendChild(t);
+      x+=w;
+    });
+    /* 0-6 ticks */
+  });
+  for(var g=0;g<=6;g++){
+    var gx=padL+(W-padL-padR)*g/6;
+    var ln=document.createElementNS("http://www.w3.org/2000/svg","line");
+    ln.setAttribute("x1",gx);ln.setAttribute("x2",gx);ln.setAttribute("y1",padT);ln.setAttribute("y2",H-padB);
+    ln.setAttribute("stroke","#ddd3bd");ln.setAttribute("stroke-width","1");svg.appendChild(ln);
+    var t=document.createElementNS("http://www.w3.org/2000/svg","text");
+    t.setAttribute("x",gx);t.setAttribute("y",H-padB+16);t.setAttribute("text-anchor","middle");
+    t.setAttribute("font-family","sans-serif");t.setAttribute("font-size","11");t.setAttribute("fill","#6b6455");
+    t.textContent=g;svg.appendChild(t);
+  }
+  var ax=document.createElementNS("http://www.w3.org/2000/svg","text");
+  ax.setAttribute("x",(padL+W-padR)/2);ax.setAttribute("y",H-4);ax.setAttribute("text-anchor","middle");
+  ax.setAttribute("font-family","sans-serif");ax.setAttribute("font-size","12");ax.setAttribute("fill","#6b6455");
+  ax.textContent="Benches (count, total = 6)";svg.appendChild(ax);
+  /* legend for issues */
+  var legend=document.createElementNS("http://www.w3.org/2000/svg","g");
+  legend.setAttribute("transform","translate("+padL+","+(H-2)+")");
+  var lx=0;
+  ISSUES.forEach(function(s){
+    var r=document.createElementNS("http://www.w3.org/2000/svg","rect");
+    r.setAttribute("x",lx);r.setAttribute("y",-14);r.setAttribute("width",16);r.setAttribute("height",12);
+    r.setAttribute("fill",ISSUE_COLORS[s]);r.setAttribute("stroke","#16140f");
+    legend.appendChild(r);
+    var t=document.createElementNS("http://www.w3.org/2000/svg","text");
+    t.setAttribute("x",lx+20);t.setAttribute("y",-4);t.setAttribute("font-family","sans-serif");t.setAttribute("font-size","11");t.setAttribute("fill","#16140f");
+    t.textContent=s; legend.appendChild(t);
+    lx+= 20 + s.length*6.5 + 18;
+  });
+  svg.appendChild(legend);
+  wrap.appendChild(svg);
+  /* compare selects */
+  var a=document.getElementById("cmpA"), b=document.getElementById("cmpB");
+  if(a.options.length===0){
+    DISTRICTS.forEach(function(d){
+      [a,b].forEach(function(sel){ var o=document.createElement("option"); o.value=d.id; o.textContent=d.name; sel.appendChild(o); });
+    });
+    a.value="north"; b.value="industrial";
+  }
+}
+
+/* ---- Explorer + district ---- */
+function buildPills(){
+  var box=document.getElementById("districtPills");
+  /* keep label */
+  box.innerHTML='<span class="label" style="width:100%">District</span>';
+  var opts=[{id:"all",name:"All districts"}].concat(DISTRICTS);
+  opts.forEach(function(d){
+    var btn=document.createElement("button");
+    btn.type="button"; btn.className="pill"; btn.textContent=d.name; btn.setAttribute("data-district",d.id);
+    btn.setAttribute("aria-pressed", selectedDistrict===d.id?"true":"false");
+    btn.addEventListener("click",function(){ setDistrict(d.id); });
+    box.appendChild(btn);
+  });
+}
+function setDistrict(id){
+  selectedDistrict=id; persist();
+  document.querySelectorAll("#districtPills .pill").forEach(function(p){
+    p.setAttribute("aria-pressed", p.getAttribute("data-district")===id?"true":"false");
+  });
+  renderChart1(); renderChart2(); renderExplorer();
+}
+function renderExplorer(){
+  var kpis=document.getElementById("explorerKpis");
+  var cards=document.getElementById("benchCards");
+  var empty=document.getElementById("benchEmpty");
+  kpis.innerHTML=""; cards.innerHTML="";
+  var list = selectedDistrict==="all" ? BENCHES.slice() : BENCHES.filter(function(b){return b.d===selectedDistrict;});
+  list.sort(function(a,b){return b.cond-a.cond;});
+  var nName = selectedDistrict==="all" ? "All 36 benches" : (byId(selectedDistrict).name+" — 6 benches");
+  if(!list.length){ empty.hidden=false; } else empty.hidden=true;
+  var conds=list.map(function(b){return b.cond;});
+  var shades=list.map(function(b){return b.shade;});
+  var sits=list.map(function(b){return b.sits;});
+  var fallbacks=[["Benches shown", list.length],["Mean condition", mean(conds).toFixed(1)],["Mean shade", mean(shades).toFixed(1)+"%"],["Mean sits/hr", mean(sits).toFixed(1)]];
+  /* show 3 KPIs: benches, condition, shade */
+  var three=[["Benches", list.length],["Mean condition", mean(conds).toFixed(1)+" /100"],["Mean shade", mean(shades).toFixed(1)+"%"]];
+  if(selectedDistrict==="all") three[0]=["Benches",36];
+  three.forEach(function(kv){
+    var div=document.createElement("div"); div.className="kpi";
+    var strong=document.createElement("strong"); strong.textContent=kv[1];
+    var span=document.createElement("span"); span.textContent=kv[0];
+    div.appendChild(strong); div.appendChild(span); kpis.appendChild(div);
+  });
+  /* heading note for screen readers */
+  var note=document.createElement("p");
+  note.style.margin="0 0 8px"; note.style.fontFamily="var(--sans)"; note.style.fontSize="13px"; note.style.color="var(--muted)";
+  note.textContent=nName+". Ordered by condition, highest first.";
+  cards.parentNode.insertBefore(note, cards);
+  list.forEach(function(b){
+    var d=byId(b.d);
+    var card=document.createElement("article"); card.className="card";
+    var h=document.createElement("h4"); h.textContent=b.id+" — "+d.name;
+    var p1=document.createElement("p"); p1.textContent="Condition "+b.cond+"/100 · Shade "+b.shade+"%";
+    var p2=document.createElement("p"); p2.textContent=b.transit+" m to transit · "+b.sits+" sits/hr";
+    var p3=document.createElement("p"); p3.className="meta"; p3.textContent="Primary issue: "+b.issue;
+    card.appendChild(h); card.appendChild(p1); card.appendChild(p2); card.appendChild(p3);
+    cards.appendChild(card);
+  });
+}
+
+/* ---- Metric toggle ---- */
+document.querySelectorAll("#metricSeg button").forEach(function(btn){
+  btn.addEventListener("click",function(){
+    currentMetric=btn.getAttribute("data-metric");
+    document.querySelectorAll("#metricSeg button").forEach(function(x){ x.setAttribute("aria-pressed", x===btn?"true":"false"); });
+    renderChart1();
+  });
+});
+
+/* ---- Compare ---- */
+document.getElementById("cmpBtn").addEventListener("click",function(){
+  var a=document.getElementById("cmpA").value, b=document.getElementById("cmpB").value;
+  var panel=document.getElementById("comparePanel");
+  panel.innerHTML="";
+  [a,b].forEach(function(id){
+    var d=byId(id);
+    var bs=BENCHES.filter(function(x){return x.d===id;});
+    var cond=mean(bs.map(function(x){return x.cond;}));
+    var shade=mean(bs.map(function(x){return x.shade;}));
+    var sits=mean(bs.map(function(x){return x.sits;}));
+    var dev=document.createElement("div"); dev.className="card";
+    var h=document.createElement("h4"); h.textContent=d.name;
+    var p=document.createElement("p");
+    p.textContent="Condition "+cond.toFixed(1)+" · Shade "+shade.toFixed(1)+"% · "+sits.toFixed(1)+" sits/hr · "+bs.length+" benches";
+    dev.appendChild(h); dev.appendChild(p); panel.appendChild(dev);
+  });
+  var da=byId(a), db=byId(b);
+  var ca=mean(BENCHES.filter(function(x){return x.d===a}).map(function(x){return x.cond})),
+      cb=mean(BENCHES.filter(function(x){return x.d===b}).map(function(x){return x.cond}));
+  var delta=document.createElement("div"); delta.className="card"; delta.style.gridColumn="1 / -1";
+  var h2=document.createElement("h4"); h2.textContent="Delta (B minus A)";
+  var p2=document.createElement("p");
+  p2.textContent=da.name+" vs "+db.name+": condition gap "+(cb-ca).toFixed(1)+" points. "+
+    "Shade gap "+(mean(BENCHES.filter(function(x){return x.d===b}).map(function(x){return x.shade}))-mean(BENCHES.filter(function(x){return x.d===a}).map(function(x){return x.shade}))).toFixed(1)+" points. "+
+    "Sits gap "+(mean(BENCHES.filter(function(x){return x.d===b}).map(function(x){return x.sits}))-mean(BENCHES.filter(function(x){return x.d===a}).map(function(x){return x.sits}))).toFixed(1)+" per hour.";
+  delta.appendChild(h2); delta.appendChild(p2); panel.appendChild(delta);
+});
+
+/* ---- Table + search ---- */
+var tableQuery="";
+document.getElementById("tableSearch").addEventListener("input",function(e){
+  tableQuery=(e.target.value||"").toLowerCase().trim();
+  renderTable();
+});
+function renderTable(){
+  var tbody=document.getElementById("benchTbody");
+  tbody.innerHTML="";
+  var rows=BENCHES.slice().sort(function(a,b){return a.id.localeCompare(b.id);});
+  var filtered=rows.filter(function(b){
+    var q=tableQuery;
+    if(!q) return true;
+    return (b.id+" "+byId(b.d).name+" "+b.issue).toLowerCase().indexOf(q)>-1;
+  });
+  if(!filtered.length){
+    document.getElementById("tableEmpty").hidden=false;
+  } else document.getElementById("tableEmpty").hidden=true;
+  document.getElementById("tableCount").textContent="Showing "+filtered.length+" of 36 benches";
+  filtered.forEach(function(b){
+    var tr=document.createElement("tr");
+    var vals=[b.id, byId(b.d).name, String(b.cond), b.shade+"%", String(b.transit), String(b.sits), b.issue];
+    vals.forEach(function(v,idx){
+      var td=document.createElement("td"); td.textContent=v;
+      if(idx>=2 && idx<=5) td.className="num";
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+}
+
+/* ---- Inspector select ---- */
+document.getElementById("inspectorSelect").addEventListener("change",function(e){ inspectBench(e.target.value); });
+
+/* ---- Init ---- */
+buildPills();
+renderChart1(); renderChart2(); renderChart3(); renderExplorer(); renderTable();
+inspectBench(selectedBench||"B01");
+</script>
+</body>
+</html>
