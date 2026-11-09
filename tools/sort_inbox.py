@@ -133,11 +133,16 @@ def validate_metadata(project_root: Path):
                         "prompt_id", "prompt_name", "prompt_title", "task", "suite")
             if key in meta
         }
+        project_identity = {
+            key: meta.get(key)
+            for key in ("slug", "title", "model", "entry", "submittedAt")
+            if key in meta
+        }
         raise IntakeError(
             "meta.json category could not be resolved; provide a catalog slug, challenge title, "
             f"or prompt number (category={meta.get('category')!r}, prompt={meta.get('prompt')!r}, "
             f"prompt_label={meta.get('prompt_label')!r}, other_identity_fields={hints!r}, "
-            f"project_identity={{key: meta.get(key) for key in ('slug', 'title', 'model', 'entry', 'submittedAt') if key in meta}}, "
+            f"project_identity={project_identity!r}, "
             f"available_keys={sorted(meta.keys())!r})"
         )
 
