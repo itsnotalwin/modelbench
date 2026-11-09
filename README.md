@@ -4,6 +4,12 @@ Fifteen open-ended tests for AI models: three websites, three games (an original
 
 **Dashboard:** https://itsnotalwin.github.io/modelbench/ (installable as an app too)
 
+## Rating runs
+
+Open a run, choose scores from 0 to 5 for the six axes, and select **Save rating**. The dashboard uses your ratings in its cards, comparison and leaderboard. Incomplete ratings remain unscored for the average. Ratings are saved in your current browser on this device, not to GitHub or other devices. Clearing browser site data will remove them.
+
+Use **Export ratings** to download a JSON backup and **Import ratings** to restore or move it to another browser. Import merges ratings, replacing matching run ratings; it does not alter uploaded model files or repository metadata.
+
 ## Repo layout
 
 ```

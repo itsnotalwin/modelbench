@@ -1,7 +1,7 @@
 // Dashboard service worker: network-first, falls back to the cached shell when offline.
 // Run apps under /runs/ have their own workers, so they are passed through untouched.
-const CACHE = "modelbench-dashboard-v1";
-const SHELL = ["./", "./index.html", "./manifest.webmanifest", "./manifest.json", "./icons/icon-192.png", "./icons/icon-512.png"];
+const CACHE = "modelbench-dashboard-v2";
+const SHELL = ["./", "./index.html", "./dashboard-ratings.js", "./manifest.webmanifest", "./manifest.json", "./icons/icon-192.png", "./icons/icon-512.png"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
