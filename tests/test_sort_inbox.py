@@ -17,6 +17,7 @@ class ZipMetadataRoutingTests(unittest.TestCase):
         self.root = Path(self.temp.name)
         sorter.RUNS = self.root / "runs"
         sorter.INBOX = self.root / "inbox"
+        sorter.ROOT = self.root
         sorter.RUNS.mkdir()
         sorter.INBOX.mkdir()
         sorter.PROMPTS = {
@@ -105,6 +106,35 @@ class ZipMetadataRoutingTests(unittest.TestCase):
         with self.assertRaisesRegex(sorter.IntakeError, "valid UTF-8 JSON"):
             sorter.process_zip(archive)
         self.assertTrue(archive.exists())
+
+    def test_model_metadata_with_provider_slug_is_normalized(self):
+        self.assertEqual(
+            sorter.normalise_model("Crouton Alpha (stealth/crouton-alpha)"),
+            "crouton-alpha"
+        )
+
+    def test_missing_category_is_inferred_only_from_exact_legacy_artifact_match(self):
+        html = "<!doctype html><title>Halcyon Field</title>"
+        matching = sorter.ROOT / "site-editorial__crouton-alpha__2026-11-09__v4.html"
+        matching.write_text(html, encoding="utf-8")
+        meta = {
+            "model": "Crouton Alpha (stealth/crouton-alpha)",
+            "slug": "crouton-alpha",
+            "title": "Halcyon Field",
+            "submittedAt": "2026-11-09T15:45:43+02:00",
+            "entry": "index.html"
+        }
+        archive = sorter.INBOX / "crouton-alpha.zip"
+        with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED) as handle:
+            handle.writestr("crouton-alpha/index.html", html)
+            handle.writestr("crouton-alpha/meta.json", json.dumps(meta))
+        slug = sorter.process_zip(archive)
+        self.assertEqual(slug, "2026-11-09_crouton-alpha_site-editorial_v4")
+        saved = json.loads((sorter.RUNS / slug / "meta.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["model_label"], "Crouton Alpha (stealth/crouton-alpha)")
+        self.assertEqual(saved["routing_inference"], "exact_match_to_existing_artifact")
+        self.assertEqual(saved["matched_artifact"], matching.name)
+        self.assertEqual(saved["date_source"], "submittedAt")
 
     def test_prompt_number_resolves_legacy_category_metadata(self):
         meta = {
