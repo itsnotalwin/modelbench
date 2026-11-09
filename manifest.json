@@ -19,7 +19,7 @@
       "title": "Interactive Editorial Investigation",
       "family": "Editorial",
       "summary": "A long-form, data-led magazine feature with interactive charts, scrollytelling and evidence notes.",
-      "requirement": "800–1,100 word feature; fixed six-district dataset; 3 data visualisations; linked interactions; accessible table; honest methodology",
+      "requirement": "800\u20131,100 word feature; fixed six-district dataset; 3 data visualisations; linked interactions; accessible table; honest methodology",
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
       "hue": 18
@@ -93,7 +93,7 @@
     {
       "no": "09",
       "slug": "creative-studio",
-      "title": "Poster Foundry — Creative Production Studio",
+      "title": "Poster Foundry \u2014 Creative Production Studio",
       "family": "Creative",
       "summary": "A real browser-based vector poster editor with editable layers, transforms, undo/redo and export.",
       "requirement": "Editable text and 4+ shapes; synchronized layers; transform/style controls; undo/redo; save/import/export; valid SVG and PNG",
@@ -104,7 +104,7 @@
     {
       "no": "10",
       "slug": "music",
-      "title": "Pulse Loom — Browser Music Workstation",
+      "title": "Pulse Loom \u2014 Browser Music Workstation",
       "family": "Audio",
       "summary": "A multi-voice Web Audio step sequencer with musical controls, persistent patterns and WAV export.",
       "requirement": "4 distinct synth voices; 16-step sequencer; tempo/swing/scales; mute/solo; drift-free clock; JSON round-trip; valid WAV export",
