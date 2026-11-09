@@ -64,6 +64,21 @@ class ZipMetadataRoutingTests(unittest.TestCase):
         self.assertEqual(saved["scores"], {axis: None for axis in sorter.SCORE_AXES})
         self.assertEqual(saved["notes"], "A completed one-shot build.")
 
+    def test_display_name_model_is_safely_slugified(self):
+        meta = {
+            "model": "GPT 6 Thinking (Preview)",
+            "category": "site-editorial",
+            "date": "2026-11-09",
+            "version": 3,
+            "entry": "index.html",
+            "notes": "Model display name."
+        }
+        archive = self.make_zip(name="freeform-name.zip", meta=meta)
+        slug = sorter.process_zip(archive)
+        self.assertEqual(slug, "2026-11-09_gpt-6-thinking-preview_site-editorial_v3")
+        saved = json.loads((sorter.RUNS / slug / "meta.json").read_text(encoding="utf-8"))
+        self.assertEqual(saved["model_label"], "GPT 6 Thinking (Preview)")
+
     def test_metadata_overrides_conflicting_zip_name(self):
         archive = self.make_zip(name="site-brand__wrong-model__2026-01-01__v99.zip")
         self.assertEqual(sorter.process_zip(archive), "2026-11-09_gpt-6_site-editorial_v2")
