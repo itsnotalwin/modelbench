@@ -8,6 +8,11 @@ A ZIP contains exactly one completed project. Do not put multiple prompts, multi
 
 The ZIP filename is not used for routing. Name it anything convenient, as long as it ends in .zip. The importer reads the JSON inside the archive. Category can be the canonical slug, exact challenge title or prompt number; conflicts are rejected. ZIP entry paths created on Windows are normalised safely, so ordinary backslash folder separators are supported. Display-style model names are converted into stable lowercase slugs and the original label is retained as model_label. The auto-sort workflow runs the dedicated ZIP-import regression suite before processing uploads. Unsupported or contradictory category metadata is reported with the available identity keys, and the original ZIP remains available for correction. Project-specific metadata is not treated as benchmark metadata unless it identifies a catalog challenge. When required challenge fields are absent, the importer reports the project title and slug for manual classification. A legacy category/version can be inferred only when the ZIP entry file exactly matches an already-registered named artifact for the same model and date. The matching check does not use project title, palette or tagline as a substitute.
 
+
+## Current challenge catalogue
+
+ModelBench has 15 one-shot challenges. Seven are game-focused: challenges 06–07 and 11–15. See [the challenge index](../prompts/README.md) for the current titles, category slugs and standalone Markdown prompts. Always copy the category, prompt number and prompt label from the selected prompt into `meta.json`.
+
 ## Required ZIP structure
 
 Preferred structure:
