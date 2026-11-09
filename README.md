@@ -1,6 +1,6 @@
 # ModelBench
 
-ModelBench is an open-ended one-shot AI build benchmark. It compares model-created websites, data products, applications, games, simulations and creative tools in one installable dashboard. The fifteen challenges test different product-building skills, and each model run is a single finished artifact.
+ModelBench is an open-ended one-shot AI build benchmark. It compares model-created websites, data products, applications, games, simulations and creative tools in one installable dashboard. The sixteen challenges test different product-building skills, and each model run is a single finished artifact.
 
 **Live dashboard:** https://itsnotalwin.github.io/modelbench/
 
@@ -8,7 +8,7 @@ ModelBench is an open-ended one-shot AI build benchmark. It compares model-creat
 
 Each challenge is one prompt and each model run is **one project folder inside one ZIP**. Do not generate three versions or multiple concepts from one prompt.
 
-1. Choose one of the 15 challenges in [Prompts](prompts/README.md).
+1. Choose one of the 16 challenges in [Prompts](prompts/README.md).
 2. The prompt automatically identifies the executing model, uses the current system date and sets version to `1`. You do not need to supply or confirm these values.
 3. The model creates one folder named CATEGORY__MODEL__YYYY-MM-DD__v1 containing index.html, meta.json and only essential runtime assets.
 4. ZIP that folder.
@@ -33,7 +33,7 @@ Every ZIP must contain a valid UTF-8 meta.json at the project root:
 ~~~
 
 - model is the lowercase model slug using letters, digits, hyphens and dots.
-- category must match one of the fifteen slugs in prompts/catalog.json.
+- category must match one of the sixteen slugs in prompts/catalog.json.
 - date must be a real ISO date in YYYY-MM-DD format.
 - version is always the integer `1` for prompt-generated runs. Do not ask for or increment the version.
 - entry must be index.html at the project root.
@@ -51,7 +51,7 @@ Open a run, score the six axes from 0 to 5, and select **Save rating**. Ratings 
 ~~~text
 index.html                    dashboard UI (unchanged by prompt updates)
 manifest.json                 generated dashboard data and challenge catalog
-prompts/catalog.json          canonical fifteen-challenge catalog
+prompts/catalog.json          canonical sixteen-challenge catalog
 prompts/*.md                  standalone one-shot build prompts
 prompts/README.md             suite guide and research basis
 inbox/README.md               ZIP upload instructions

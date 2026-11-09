@@ -272,6 +272,7 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
             "13": "game-brawler",
             "14": "game-racer",
             "15": "game-roguelite",
+            "16": "game-masterpiece",
         }
         for number, slug in game_categories.items():
             challenge = prompts[number]
@@ -289,6 +290,27 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
             self.assertIn(f'"category": "{slug}"', body)
             self.assertIn(f'"prompt": "{number}"', body)
             self.assertIn(f'"prompt_label": "{challenge["title"]}"', body)
+
+
+
+    def test_masterpiece_game_is_the_open_ended_final_boss_challenge(self):
+        catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
+        challenge = next(p for p in catalog["prompts"] if p["no"] == "16")
+        self.assertEqual(challenge["slug"], "game-masterpiece")
+        self.assertEqual(challenge["title"], "Masterpiece Game")
+        body = (REPO_ROOT / "prompts" / "16-masterpiece-game.md").read_text(encoding="utf-8")
+        self.assertIn("You choose everything that defines the game", body)
+        self.assertIn("Any genre is valid.", body)
+        self.assertIn("at least **four substantial gameplay systems**", body)
+        self.assertIn("at least three meaningfully different playable situations", body)
+        self.assertIn("at least three meaningful progression milestones", body)
+        self.assertIn("Exceptional visual craft", body)
+        self.assertIn("Sound and feedback", body)
+        self.assertIn('"prompt": "16"', body)
+        self.assertIn('"category": "game-masterpiece"', body)
+        self.assertNotIn("Do not default to or assume a puzzle game", body)
+        guide = (REPO_ROOT / "prompts" / "README.md").read_text(encoding="utf-8")
+        self.assertIn("| 16 | Masterpiece Game | game-masterpiece |", guide)
 
 
     def test_2d_game_prompt_leaves_genre_and_concept_to_the_model(self):

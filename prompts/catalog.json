@@ -1,5 +1,5 @@
 {
-  "version": 10,
+  "version": 11,
   "outputs_per_prompt": 1,
   "prompts": [
     {
@@ -166,6 +166,17 @@
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
       "hue": 28
+    },
+    {
+      "no": "16",
+      "slug": "game-masterpiece",
+      "title": "Masterpiece Game",
+      "family": "Games",
+      "summary": "The ultimate open-ended game challenge: a beautiful, complete original game with deeply interconnected systems, meaningful progression, exceptional craft and reliable implementation.",
+      "requirement": "Model-chosen genre and presentation; complete playable arc; 4+ interconnected gameplay systems; 3+ distinct playable situations; meaningful progression; bespoke visual craft and animation; intentional audio; responsive controls; reliable save/load",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 305
     }
   ]
 }

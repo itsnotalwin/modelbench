@@ -4,7 +4,7 @@
 Hold regression tests for ModelBench import behavior and dashboard state utilities.
 
 ## Key files
-- test_sort_inbox.py — ZIP metadata routing, validation, collision safety, legacy HTML parsing, catalogue-driven prompt integrity, genre-agnostic 2D game direction, automatic run identity and partial-success/rejection behavior.
+- test_sort_inbox.py — ZIP metadata routing, validation, collision safety, legacy HTML parsing, catalogue-driven prompt integrity, genre-agnostic 2D game direction, Masterpiece Game capstone coverage, automatic run identity and partial-success/rejection behavior.
 - dashboard-ratings.test.js and test_dashboard_ui.py — existing dashboard rating and UI checks.
 
 ## Connections

@@ -1,8 +1,8 @@
 # ModelBench · One-shot build suite
 
-ModelBench contains **15 one-shot build challenges**. Each prompt asks a model to create one substantial, usable product in one pass. One prompt produces one project folder; one ZIP contains that one project; its **meta.json** is the sole routing source of truth.
+ModelBench contains **16 one-shot build challenges**. Each prompt asks a model to create one substantial, usable product in one pass. One prompt produces one project folder; one ZIP contains that one project; its **meta.json** is the sole routing source of truth.
 
-## The fifteen challenges
+## The sixteen challenges
 
 | # | Challenge | Category slug | Primary capability tested | Prompt |
 |---|---|---|---|---|
@@ -11,7 +11,7 @@ ModelBench contains **15 one-shot build challenges**. Each prompt asks a model t
 | 03 | Commerce Marketplace | site-store | 10+ coherent catalogue items | 03-marketplace.md |
 | 04 | Interactive Data Dashboard | dashboard | 24+ coherent records | 04-command-centre.md |
 | 05 | Project Workspace | workspace | 3 projects and 15+ work items | 05-project-workspace.md |
-| 06 | Original 2D Game | game-2d | Independent genre and game design | Complete playable game; model-chosen genre and core loop; coherent content; working rules and feedback; appropriate controls | 06-game-2d.md |
+| 06 | Original 2D Game | game-2d | Complete genre-independent 2D game | 06-game-2d.md |
 | 07 | 3D Exploration Game | game-3d | Real 3D environment | 07-spatial-world.md |
 | 08 | Interactive System Simulation | sim | 4+ coupled state variables | 08-simulation-lab.md |
 | 09 | Creative Design Studio | creative-studio | Editable composition | 09-creative-studio.md |
@@ -21,6 +21,7 @@ ModelBench contains **15 one-shot build challenges**. Each prompt asks a model t
 | 13 | 2D Action Brawler | game-brawler | Playable character | 13-2d-beat-em-up.md |
 | 14 | 3D Racing Game | game-racer | Real 3D vehicle and course | 14-3d-racing-game.md |
 | 15 | Action Roguelite | game-roguelite | Replayable run structure | 15-action-roguelite.md |
+| 16 | Masterpiece Game | game-masterpiece | Ultimate game-design and implementation challenge | 4+ interconnected systems; 3+ varied situations; meaningful progression; exceptional craft, audio and reliability | 16-masterpiece-game.md |
 
 ## Creative freedom and benchmark fairness
 
@@ -28,7 +29,7 @@ Every prompt defines a capability area and a demanding quality bar, not a pre-wr
 
 The challenge boundary remains consistent across models: one finished artifact, the same core acceptance checks and the same submission contract. This lets us compare creative judgement as well as implementation quality, without handing every model the same solution.
 
-Seven challenges focus on games: open-ended 2D game design, 3D exploration, 3D colony building, voxel sandbox design, 2D action brawling, 3D racing and action roguelite systems. They test different game-development skills while leaving the creative concept open.
+Eight challenges focus on games: open-ended 2D game design, 3D exploration, 3D colony building, voxel sandbox design, 2D action brawling, 3D racing, action roguelite systems and the all-direction Masterpiece Game capstone. Challenge 16 deliberately allows any genre and presentation; its difficulty comes from integration, depth and finish rather than a prescribed concept. They test different game-development skills while leaving the creative concept open.
 
 ## Benchmark design principles and research
 
@@ -73,7 +74,7 @@ The importer uses model, category, date and version from the JSON. Every new pro
 
 ## Shared ModelBench scorecard
 
-Keep these organizer-owned dimensions stable across all fifteen challenges:
+Keep these organizer-owned dimensions stable across all sixteen challenges:
 
 - **Completeness** — required features and acceptance criteria are genuinely present.
 - **Robustness** — edge cases, error states, persistence and state consistency.

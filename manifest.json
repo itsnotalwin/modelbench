@@ -19,7 +19,7 @@
       "title": "Interactive Editorial Feature",
       "family": "Editorial",
       "summary": "A substantial editorial experience combining original storytelling, evidence, data visualisation and meaningful interaction.",
-      "requirement": "800\u20131,100 words; 3 linked visualisations; transparent sources and methodology; accessible data view; responsive scrollytelling",
+      "requirement": "800–1,100 words; 3 linked visualisations; transparent sources and methodology; accessible data view; responsive scrollytelling",
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
       "hue": 18
@@ -166,6 +166,17 @@
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
       "hue": 28
+    },
+    {
+      "no": "16",
+      "slug": "game-masterpiece",
+      "title": "Masterpiece Game",
+      "family": "Games",
+      "summary": "The ultimate open-ended game challenge: a beautiful, complete original game with deeply interconnected systems, meaningful progression, exceptional craft and reliable implementation.",
+      "requirement": "Model-chosen genre and presentation; complete playable arc; 4+ interconnected gameplay systems; 3+ distinct playable situations; meaningful progression; bespoke visual craft and animation; intentional audio; responsive controls; reliable save/load",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 305
     }
   ],
   "axes": [

@@ -4,8 +4,8 @@
 Own the canonical one-shot challenge briefs and the catalog that drives dashboard challenge labels and ZIP intake category validation.
 
 ## Key files
-- catalog.json — fifteen category slugs, titles, summaries, acceptance summaries and output count.
-- Numbered Markdown files — standalone prompts with run parameters, a broad task/genre, a clear quality bar and metadata contract. Creative decisions should remain open to each model.
+- catalog.json — sixteen category slugs, titles, summaries, acceptance summaries and output count.
+- Numbered Markdown files — standalone prompts with automatic run identity, a clear capability challenge, a demanding quality bar and metadata contract. Creative decisions should remain open to each model. Challenge 16 is the highest-difficulty, open-ended game capstone.
 - README.md — suite index, evaluation philosophy, sources and submission process.
 
 ## Connections
