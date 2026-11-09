@@ -106,6 +106,32 @@ class ZipMetadataRoutingTests(unittest.TestCase):
             sorter.process_zip(archive)
         self.assertTrue(archive.exists())
 
+    def test_prompt_number_resolves_legacy_category_metadata(self):
+        meta = {
+            "model": "gpt-6",
+            "prompt": "02",
+            "date": "2026-11-09",
+            "version": 1,
+            "entry": "index.html",
+            "notes": "Legacy metadata with prompt number only."
+        }
+        archive = self.make_zip(name="older-metadata.zip", meta=meta, wrapped=False)
+        slug = sorter.process_zip(archive)
+        self.assertEqual(slug, "2026-11-09_gpt-6_site-editorial_v1")
+
+    def test_conflicting_category_and_prompt_are_rejected(self):
+        meta = {
+            "model": "gpt-6",
+            "category": "site-brand",
+            "prompt": "02",
+            "date": "2026-11-09",
+            "version": 1,
+            "entry": "index.html"
+        }
+        archive = self.make_zip(name="conflicting-metadata.zip", meta=meta, wrapped=False)
+        with self.assertRaisesRegex(sorter.IntakeError, "conflicts with prompt number"):
+            sorter.process_zip(archive)
+
     def test_invalid_category_is_rejected(self):
         meta = {"model":"gpt-6","category":"unknown-category","date":"2026-11-09","version":1,"entry":"index.html"}
         archive = self.make_zip(name="unknown-category.zip", meta=meta, wrapped=False)
