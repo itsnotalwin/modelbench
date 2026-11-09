@@ -11,22 +11,22 @@ ModelBench now contains **15 one-shot build challenges**. Each prompt asks a mod
 | 03 | Commerce and Booking Marketplace | site-store | Search, filtering, inventory, cart maths and transactional state | 03-marketplace.md |
 | 04 | Operations Command Centre | dashboard | Dense information design, linked metrics, drill-downs and event simulation | 04-command-centre.md |
 | 05 | Project Operations Workspace | workspace | CRUD, synchronized views, planning, persistence and data integrity | 05-project-workspace.md |
-| 06 | Echo Courier — Original 2D Puzzle Game | game-2d | Game rules, deterministic state, level design and input handling | 06-game-2d.md |
-| 07 | Parallax Archive — Interactive 3D World | game-3d | Real 3D geometry, camera interaction, spatial puzzles and rendering | 07-spatial-world.md |
+| 06 | 2D Puzzle Game | game-2d | Original puzzle design, state, level design and input handling | 06-game-2d.md |
+| 07 | 3D Exploration Game | game-3d | 3D environments, navigation, interaction and exploration | 07-spatial-world.md |
 | 08 | Living Systems Simulator | sim | Numerical modelling, coupled state, reproducibility and scientific communication | 08-simulation-lab.md |
 | 09 | Poster Foundry — Creative Production Studio | creative-studio | Direct manipulation, layers, editing history and real file export | 09-creative-studio.md |
 | 10 | Pulse Loom — Browser Music Workstation | music | Web Audio, sequencer timing, sound design, persistence and WAV export | 10-music-studio.md |
-| 11 | Mosslight Isles — 3D Colony Builder | mosslight-isles | 3D settlement simulation, worker AI, pathfinding and production logistics | 11-mosslight-isles.md |
-| 12 | Voxel Wilds — Block Survival Sandbox | voxel-wilds | Editable voxel rendering, first-person controls, crafting and persistent world state | 12-voxel-wilds.md |
-| 13 | Neon Alley '94 — 16-bit Beat-'em-up | neon-alley | Arcade combat, hitboxes, combos, enemy AI and boss telegraphs | 13-neon-alley.md |
-| 14 | Skyline Circuit — 3D Arcade Racer | skyline-circuit | 3D track, vehicle physics, rival AI, checkpoints and lap timing | 14-skyline-circuit.md |
-| 15 | The Lantern Below — Action Roguelite | lantern-below | Seeded dungeons, combat systems, enemy AI, relic builds and boss phases | 15-lantern-below.md |
+| 11 | 3D Colony Builder | game-colony | Settlement systems, agents, construction and logistics | 11-3d-colony-builder.md |
+| 12 | Voxel Survival Sandbox | game-voxel | Editable voxel worlds, building, crafting and world state | 12-voxel-survival-game.md |
+| 13 | 2D Beat-'em-up | game-brawler | Arcade movement, combat, enemy behaviour and progression | 13-2d-beat-em-up.md |
+| 14 | 3D Racing Game | game-racer | Vehicle handling, course design and competition systems | 14-3d-racing-game.md |
+| 15 | Action Roguelite | game-roguelite | Replayable runs, combat, upgrades and enemy design | 15-action-roguelite.md |
 
 ## Game-development focus
 
-The suite now contains **7 game challenges out of 15**. The five additions test distinct disciplines: a living 3D colony simulation, editable voxel survival, a 16-bit side-scrolling brawler, a 3D arcade racer and a seeded action roguelite. The broader web, data, productivity, simulation and creative challenges remain in the suite.
+Seven of the fifteen challenges are games. Each game prompt defines a genre and a quality bar, not a pre-written concept. Models are free to invent the title, setting, characters, mechanics, level design, visual direction, tone and moment-to-moment experience. The prompts avoid fixed lore, prescribed art styles and named fictional worlds so creative decisions become part of what we evaluate.
 
-The 3D colony brief uses broad settlement-simulation ideas: visible production chains, autonomous inhabitants, readable buildings, logistics and fog-shrouded islands. It is an original setting and implementation brief, not a request to reproduce another game's characters, art, levels or proprietary content. Background reference: [Pioneers of Pagonia official overview](https://www.pioneersofpagonia.com/) and [developer discussion of building art and readability](https://steamcommunity.com/games/2155180/announcements/detail/693094122829905929).
+The five additional game genres are 3D colony building, voxel sandbox/survival, 2D beat-'em-up, 3D racing and action roguelite. The earlier game prompts cover 2D puzzle design and 3D exploration.
 
 ## Benchmark design principles and research
 

@@ -234,6 +234,37 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
         self.assertIn("one complete project folder", dashboard)
         self.assertIn("One run, one ZIP", dashboard)
 
+
+    def test_game_prompts_leave_creative_direction_open(self):
+        catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
+        prompts = {p["no"]: p for p in catalog["prompts"]}
+        expected = {
+            "06": "2D Puzzle Game",
+            "07": "3D Exploration Game",
+            "11": "3D Colony Builder",
+            "12": "Voxel Survival Sandbox",
+            "13": "2D Beat-'em-up",
+            "14": "3D Racing Game",
+            "15": "Action Roguelite",
+        }
+        for number, title in expected.items():
+            self.assertEqual(prompts[number]["title"], title)
+        paths = [
+            "prompts/06-game-2d.md", "prompts/07-spatial-world.md",
+            "prompts/11-3d-colony-builder.md", "prompts/12-voxel-survival-game.md",
+            "prompts/13-2d-beat-em-up.md", "prompts/14-3d-racing-game.md",
+            "prompts/15-action-roguelite.md",
+        ]
+        for path in paths:
+            body = (REPO_ROOT / path).read_text(encoding="utf-8")
+            self.assertIn("You choose", body)
+            self.assertIn("exactly one folder", body)
+            self.assertIn("meta.json", body)
+            self.assertIn("You choose", body)
+        for forbidden in ("Mosslight Isles", "Voxel Wilds", "Neon Alley", "Skyline Circuit", "The Lantern Below", "Echo Courier", "Parallax Archive"):
+            for path in paths:
+                self.assertNotIn(forbidden, (REPO_ROOT / path).read_text(encoding="utf-8"))
+
     def test_fifteen_one_shot_prompts_match_the_catalog(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
         prompts = catalog["prompts"]
@@ -244,11 +275,11 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
         self.assertEqual(len({p["slug"] for p in prompts}), 15)
         self.assertTrue(all(p["min_outputs"] == 1 for p in prompts))
         new_files = {
-            "11": ("mosslight-isles", "11-mosslight-isles.md"),
-            "12": ("voxel-wilds", "12-voxel-wilds.md"),
-            "13": ("neon-alley", "13-neon-alley.md"),
-            "14": ("skyline-circuit", "14-skyline-circuit.md"),
-            "15": ("lantern-below", "15-lantern-below.md"),
+            "11": ("game-colony", "11-3d-colony-builder.md"),
+            "12": ("game-voxel", "12-voxel-survival-game.md"),
+            "13": ("game-brawler", "13-2d-beat-em-up.md"),
+            "14": ("game-racer", "14-3d-racing-game.md"),
+            "15": ("game-roguelite", "15-action-roguelite.md"),
         }
         by_number = {p["no"]: p for p in prompts}
         for number, (slug, filename) in new_files.items():
