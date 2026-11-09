@@ -11,6 +11,10 @@ from playwright.sync_api import sync_playwright
 MANIFEST = json.loads((Path(__file__).resolve().parents[1] / 'manifest.json').read_text(encoding='utf-8'))
 
 BASE = 'http://127.0.0.1:8765/'
+HAS_RUNS = len(MANIFEST['runs']) > 0
+HAS_THREE_RUNS = len(MANIFEST['runs']) >= 3
+requires_runs = unittest.skipUnless(HAS_RUNS, 'needs at least one imported run')
+requires_three_runs = unittest.skipUnless(HAS_THREE_RUNS, 'needs at least three imported runs')
 
 class DashboardUI(unittest.TestCase):
     @classmethod
@@ -23,6 +27,19 @@ class DashboardUI(unittest.TestCase):
         cls.browser.close()
         cls.p.stop()
 
+    def test_empty_state_is_explicit(self):
+        if HAS_RUNS:
+            self.skipTest('repo already has runs')
+        context = self.browser.new_context()
+        page = context.new_page()
+        page.goto(BASE, wait_until='networkidle')
+        empty = page.locator('.empty')
+        self.assertIn('No runs yet', empty.inner_text())
+        self.assertIn('inbox/', empty.inner_text())
+        self.assertEqual(page.locator('.card').count(), 0)
+        context.close()
+
+    @requires_three_runs
     def test_search_filter_compare_and_cleanup(self):
         context = self.browser.new_context()
         page = context.new_page()
@@ -63,6 +80,7 @@ class DashboardUI(unittest.TestCase):
             self.assertEqual(overflow, 0, f'overflow at {width}px')
         context.close()
 
+    @requires_runs
     def test_secondary_views_are_built_only_when_opened(self):
         context = self.browser.new_context()
         page = context.new_page()
@@ -76,6 +94,7 @@ class DashboardUI(unittest.TestCase):
         self.assertEqual(page.locator('#tests-grid .test').count(), len(MANIFEST['catalog']))
         context.close()
 
+    @requires_runs
     def test_offline_after_first_visit_keeps_rating_controls(self):
         context = self.browser.new_context()
         page = context.new_page()
@@ -90,6 +109,7 @@ class DashboardUI(unittest.TestCase):
         self.assertIn('Saved on this device', page.locator('.rating-message').inner_text())
         context.close()
 
+    @requires_runs
     def test_export_import_round_trip(self):
         context = self.browser.new_context(accept_downloads=True)
         page = context.new_page()
@@ -109,6 +129,7 @@ class DashboardUI(unittest.TestCase):
         self.assertEqual(page.get_by_label('Craft', exact=True).input_value(), '3.5')
         context.close()
 
+    @requires_runs
     def test_rating_persists_and_updates_cards(self):
         context = self.browser.new_context()
         page = context.new_page()
