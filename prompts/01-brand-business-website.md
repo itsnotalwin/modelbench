@@ -1,6 +1,6 @@
 # 01 · Brand & Business Website
 
-## Automatic run identity — never ask the organiser
+## Automatic run identity — never ask the organiser or user
 
 Resolve the run metadata yourself before creating files. Do not ask the user or organiser for model, date, version, category, project title or creative direction.
 
@@ -51,7 +51,7 @@ The metadata file must contain this structure, with your resolved model slug and
   "entry": "index.html",
   "prompt": "01",
   "prompt_label": "Brand & Business Website",
-  "notes": "undefined"
+  "notes": "A concise, honest description of the completed project and any known limitations."
 }
 ~~~
 
