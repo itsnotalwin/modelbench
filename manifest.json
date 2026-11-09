@@ -19,7 +19,7 @@
       "title": "Interactive Editorial Investigation",
       "family": "Editorial",
       "summary": "A long-form, data-led magazine feature with interactive charts, scrollytelling and evidence notes.",
-      "requirement": "800–1,100 word feature; fixed six-district dataset; 3 data visualisations; linked interactions; accessible table; honest methodology",
+      "requirement": "800\u20131,100 word feature; fixed six-district dataset; 3 data visualisations; linked interactions; accessible table; honest methodology",
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
       "hue": 18
@@ -60,7 +60,7 @@
     {
       "no": "06",
       "slug": "game-2d",
-      "title": "Echo Courier — Original 2D Puzzle Game",
+      "title": "Echo Courier \u2014 Original 2D Puzzle Game",
       "family": "Games",
       "summary": "A deterministic tile puzzle in which a delayed echo repeats the player's previous four moves.",
       "requirement": "5 solvable rooms; exact four-turn echo; switches and gates; undo/restart; keyboard and touch; progress save; real self-test",
@@ -71,7 +71,7 @@
     {
       "no": "07",
       "slug": "game-3d",
-      "title": "Parallax Archive — Interactive 3D World",
+      "title": "Parallax Archive \u2014 Interactive 3D World",
       "family": "Games",
       "summary": "A procedural 3D exploration puzzle built around perspective, camera alignment and spatial discovery.",
       "requirement": "Real 3D geometry; orbit/zoom/selection; 4 distinct spatial puzzles; keyboard/touch; resize and WebGL failure handling",
@@ -93,7 +93,7 @@
     {
       "no": "09",
       "slug": "creative-studio",
-      "title": "Poster Foundry — Creative Production Studio",
+      "title": "Poster Foundry \u2014 Creative Production Studio",
       "family": "Creative",
       "summary": "A real browser-based vector poster editor with editable layers, transforms, undo/redo and export.",
       "requirement": "Editable text and 4+ shapes; synchronized layers; transform/style controls; undo/redo; save/import/export; valid SVG and PNG",
@@ -104,7 +104,7 @@
     {
       "no": "10",
       "slug": "music",
-      "title": "Pulse Loom — Browser Music Workstation",
+      "title": "Pulse Loom \u2014 Browser Music Workstation",
       "family": "Audio",
       "summary": "A multi-voice Web Audio step sequencer with musical controls, persistent patterns and WAV export.",
       "requirement": "4 distinct synth voices; 16-step sequencer; tempo/swing/scales; mute/solo; drift-free clock; JSON round-trip; valid WAV export",
@@ -115,7 +115,7 @@
     {
       "no": "11",
       "slug": "mosslight-isles",
-      "title": "Mosslight Isles — 3D Colony Builder",
+      "title": "Mosslight Isles \u2014 3D Colony Builder",
       "family": "Games",
       "summary": "A living 3D island settlement game with visible workers, road logistics, resource chains and a beacon-restoration goal.",
       "requirement": "Real 3D island; 12+ autonomous workers; 8 building types; 4 production chains; roads and pathfinding; stockpiles; save/load; staged objective",
@@ -126,7 +126,7 @@
     {
       "no": "12",
       "slug": "voxel-wilds",
-      "title": "Voxel Wilds — Block Survival Sandbox",
+      "title": "Voxel Wilds \u2014 Block Survival Sandbox",
       "family": "Games",
       "summary": "A first-person voxel survival sandbox with editable terrain, mining, building, crafting, day/night and a persistent world.",
       "requirement": "Real editable voxel world; 8 block types; mining/placement; inventory/hotbar; 5 crafting recipes; survival loop; world save/load; mobile controls",
@@ -137,7 +137,7 @@
     {
       "no": "13",
       "slug": "neon-alley",
-      "title": "Neon Alley '94 — 16-bit Beat-'em-up",
+      "title": "Neon Alley '94 \u2014 16-bit Beat-'em-up",
       "family": "Games",
       "summary": "An original side-scrolling arcade brawler with responsive combat, combo timing, enemy AI, boss encounters and chunky pixel-art presentation.",
       "requirement": "2 playable fighters; 3 enemy archetypes; 3 stages; combo and dodge systems; boss with telegraphed attacks; keyboard/touch; real hit detection",
@@ -148,7 +148,7 @@
     {
       "no": "14",
       "slug": "skyline-circuit",
-      "title": "Skyline Circuit — 3D Arcade Racer",
+      "title": "Skyline Circuit \u2014 3D Arcade Racer",
       "family": "Games",
       "summary": "A procedural 3D arcade racing game with drivable vehicle physics, rival racers, checkpoints, lap timing and trackside spectacle.",
       "requirement": "Real 3D track; fixed-step driving physics; drift/handbrake; 3 AI rivals; 3-lap race; checkpoints; HUD/minimap; keyboard/touch; best-time save",
@@ -159,7 +159,7 @@
     {
       "no": "15",
       "slug": "lantern-below",
-      "title": "The Lantern Below — Action Roguelite",
+      "title": "The Lantern Below \u2014 Action Roguelite",
       "family": "Games",
       "summary": "A replayable top-down dungeon action game with connected procedural rooms, readable enemy telegraphs, weapon choices, relic builds and a boss.",
       "requirement": "Seeded 6-room run; guaranteed connectivity; 3 weapon styles; 4 enemy archetypes; relic upgrades; boss fight; dodge/combat; keyboard/touch; self-test",
