@@ -1,4 +1,4 @@
-# 06 · 2D Puzzle Game
+# 06 · Original 2D Game
 
 ## Automatic run identity — Never ask the organiser for these values
 
@@ -12,31 +12,32 @@ Use the resolved values consistently in the output folder and `meta.json`. Do no
 
 ## The challenge
 
-Design and build one complete original 2D puzzle game. You decide the premise, setting, visual style, tone, player role, rules, puzzle mechanic, level structure and progression. The mechanic should be understandable, offer room for mastery and produce interesting decisions. Do not imitate an existing game's levels, characters, branding or presentation.
+Create and build one complete, original, browser-playable 2D game. You choose the genre and subgenre, premise, setting, tone, visual style, perspective, core activity, mechanics, controls, content structure and progression. Any game genre is valid. Do not default to or assume a puzzle game, platformer, combat game, shooter, roguelike or any other familiar format. Choose one direction independently and make it a distinctive, fully realised game. Do not ask the organiser to choose or present multiple concepts.
 
 ## What the build must deliver
 
-1. Invent a central puzzle mechanic and teach it clearly through the opening interaction. The player should understand what actions are available and why they matter.
-2. Create at least six designed, solvable stages or challenges with a deliberate difficulty curve. Avoid relying on random layouts that may be impossible to solve.
-3. Implement reliable game state, collision or rule resolution, win detection and clear feedback for successful and invalid actions.
-4. Provide restart and undo or another fair recovery mechanism. Add hints only if they support the design without solving the game automatically.
-5. Support keyboard and touch input with clear controls. Include complete title, playing, pause where appropriate, stage-complete and game-complete states.
-6. Save meaningful progress locally and restore it safely after reload.
+1. A clear game identity and a playable core loop with a meaningful goal, challenge and outcome suited to the genre you chose.
+2. Enough designed content to demonstrate the game properly. Choose the amount and structure that fit your concept; do not force an unrelated level, stage or mission format.
+3. Working game rules and state, with reliable interaction, collision, simulation or opponent behaviour wherever the chosen design needs it.
+4. Clear feedback for player actions, important events, progress, success and failure where relevant.
+5. A coherent flow into gameplay and through a complete playable session. Include useful restart, pause, settings or result states where they make sense for the design.
+6. Controls that suit the game and are clearly communicated. Make the experience usable on desktop and mobile without forcing an unsuitable control scheme.
+7. Deliberate handling of meaningful local persistence, such as progress, unlocks, settings or best results, where appropriate to the chosen game.
 
 ## Quality bar
 
-Make the result feel like a finished, intentionally designed product. Make strong creative and technical decisions independently; do not ask the organiser to choose the concept, visual direction, content, mechanics or implementation. Use a distinctive identity and a consistent visual language. Prioritise clarity, responsiveness, satisfying interaction and meaningful detail over decorative complexity.
+Make the result feel like a complete game, not a static mock-up or an isolated mechanic demo. Make the creative decisions yourself and commit to one coherent direction. The genre is your choice; the quality and completeness of the resulting game are what matter.
 
-Every visible control must work. Every important interaction must create a real state change and give appropriate feedback. Avoid placeholder sections, dead buttons, fake charts, non-functional menus, empty world geometry and features that only look interactive. A smaller coherent experience is better than a large collection of unfinished systems.
+Every visible control must work. Important actions must produce real state changes and clear feedback. Avoid placeholder sections, dead buttons, fake menus, empty world geometry and features that only look interactive. A smaller, finished game is better than a large collection of unfinished systems.
 
 ## Acceptance checklist
 
-- [ ] The game has an original, understandable puzzle mechanic.
-- [ ] At least six stages are playable and can be completed.
-- [ ] Rules, state changes, invalid moves and completion are communicated clearly.
-- [ ] Undo/restart or equivalent recovery works reliably.
-- [ ] Keyboard and touch controls are both usable.
-- [ ] Progress persists and the game remains responsive at common screen sizes.
+- [ ] The game is a complete, original 2D experience in a genre chosen independently by the model.
+- [ ] Its core loop, goal and meaningful outcome are playable.
+- [ ] It has enough coherent content to demonstrate the chosen genre.
+- [ ] Its rules, interactions and feedback work reliably.
+- [ ] Controls are clear, appropriate to the game and usable on desktop and mobile.
+- [ ] Progress, settings or results persist where appropriate, and the game remains responsive at common screen sizes.
 
 ## Technical expectations
 
@@ -71,7 +72,7 @@ The metadata file must contain this structure with the exact automatically resol
   "version": 1,
   "entry": "index.html",
   "prompt": "06",
-  "prompt_label": "2D Puzzle Game",
+  "prompt_label": "Original 2D Game",
   "notes": "One or two honest sentences describing the completed build and any known limitations."
 }
 ~~~
