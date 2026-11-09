@@ -1,6 +1,6 @@
 # 06 · End-to-End Game Masterpiece
 
-## Automatic run identity — never ask the organiser
+## Automatic run identity — never ask the organiser or user
 
 Resolve the run metadata yourself before creating files. Do not ask the user or organiser for model, date, version, category, project title or creative direction.
 
@@ -33,7 +33,7 @@ Treat this as a complete game production, not a prototype or a collection of dis
 - Implement at least four substantial gameplay systems that interact with one another. Choose systems appropriate to the genre: examples include traversal, combat, stealth, investigation, dialogue, relationships, crafting, resource management, tactics, abilities, exploration, environmental simulation, vehicles, rhythm or world events. These are examples, not a prescribed feature list.
 - Include at least three authored missions, quests, chapters, major encounters or equivalent playable story beats.
 - Make progression meaningful. Unlocks, abilities, discoveries and character/story developments should change what the player can do or how the world responds.
-- Provide a complete arc from onboarding through the middle and climax to an actual ending. Include failure/recovery, restart and replay handling appropriate to the design.
+- Provide a complete arc from onboarding through the middle and climax to an actual ending. Deliver a complete ending that resolves the central story. Include failure/recovery, restart and replay handling appropriate to the design.
 
 **Art, sound and presentation**
 - Establish a distinctive visual identity and carry it consistently through characters, environments, animation, interface and narrative presentation.
@@ -83,7 +83,7 @@ The metadata file must contain this structure, with your resolved model slug and
   "entry": "index.html",
   "prompt": "06",
   "prompt_label": "End-to-End Game Masterpiece",
-  "notes": "undefined"
+  "notes": "A concise, honest description of the completed project and any known limitations."
 }
 ~~~
 
