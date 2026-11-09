@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glacier · Cold Chain Command</title>
+<meta name="description" content="Interactive sample dashboard for refrigerated shipment operations. All data is simulated.">
+<style>
+:root{
+  --bg:#070d1a; --bg2:#0b1426; --panel:#101c33; --panel2:#0e1930; --line:#1f3155; --line2:#2a4068;
+  --ink:#e8f0ff; --muted:#9db0d0; --faint:#6b81a5; --cyan:#38e1ff; --cyan2:#22b8d8;
+  --green:#34d399; --amber:#fbbf24; --red:#fb7185; --violet:#a78bfa;
+  --radius:16px; --radius-sm:10px;
+  --shadow:0 18px 40px rgba(0,0,0,.35);
+  --focus:#8be9ff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{transition:none!important; animation:none!important} }
+body{margin:0;background:
+  radial-gradient(900px 500px at 85% -10%, rgba(56,225,255,.14), transparent 60%),
+  radial-gradient(700px 500px at -10% 10%, rgba(167,139,250,.10), transparent 60%),
+  linear-gradient(180deg,var(--bg),var(--bg2));
+  color:var(--ink); font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Inter,Helvetica,Arial,sans-serif; min-height:100vh}
+a{color:var(--cyan)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1280px;margin:0 auto;padding:18px 18px 34px}
+/* header */
+header.mast{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;padding:10px 0 14px}
+.brand{display:flex;gap:14px;align-items:center}
+.logo{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,#0e2a3f,#123a54);border:1px solid var(--line2);display:grid;place-items:center;box-shadow:var(--shadow);flex:0 0 auto}
+.logo svg{width:26px;height:26px}
+h1{font-size:clamp(22px,3vw,30px);margin:0;letter-spacing:-.02em;line-height:1.1}
+.sub{color:var(--muted);margin:4px 0 0;max-width:62ch}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--line2);border-radius:999px;background:rgba(255,255,255,.04);font-size:12.5px;color:var(--muted)}
+.pill strong{color:var(--ink)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(52,211,153,.15)}
+.dot.paused{background:var(--amber);box-shadow:0 0 0 4px rgba(251,191,36,.15)}
+.badge-sample{border-style:dashed}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* buttons */
+.btn{appearance:none;border:1px solid var(--line2);background:#16263f;color:var(--ink);padding:10px 14px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{border-color:#3a5a8f;background:#1a2f4f}
+.btn.primary{background:linear-gradient(180deg,#1eaecb,#1490ad);border-color:#4ad8f2;font-weight:650}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.ghost{background:transparent}
+.btn.small{padding:7px 10px;font-size:13px;border-radius:8px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.btn .ico{width:16px;height:16px;flex:0 0 auto}
+/* layout */
+.panel{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.grid-kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:8px 0 12px}
+.kpi{padding:14px 14px 12px;border-radius:14px;border:1px solid var(--line);background:linear-gradient(180deg,#12203c,#0e1a31)}
+.kpi .label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:700}
+.kpi .value{font-size:30px;font-weight:800;letter-spacing:-.03em;margin:6px 0 2px}
+.kpi .hint{color:var(--muted);font-size:13px}
+.kpi .trend{font-size:12.5px;margin-top:6px}
+.trend.up{color:var(--green)} .trend.warn{color:var(--amber)} .trend.bad{color:var(--red)}
+/* filters */
+.controls{padding:12px;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr auto;gap:10px;align-items:end}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+.field .control, input[type="search"], select{width:100%;background:#0a1528;border:1px solid var(--line2);border-radius:10px;padding:10px 11px}
+.field .control::placeholder{color:var(--faint)}
+.checkline{display:flex;align-items:center;gap:9px;padding:10px 11px;border:1px solid var(--line2);border-radius:10px;background:#0a1528;min-height:44px}
+.checkline input{width:18px;height:18px;accent-color:var(--cyan)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;padding:0 12px 12px}
+.countline{color:var(--muted);font-size:13.5px}
+.countline strong{color:var(--ink)}
+/* charts */
+.grid-charts{display:grid;grid-template-columns:1.15fr .85fr;gap:12px;margin:12px 0}
+.card{padding:14px}
+.card h2{font-size:15px;margin:0 0 2px;letter-spacing:-.01em}
+.card p.desc{color:var(--muted);font-size:13px;margin:0 0 10px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:12.5px;margin:8px 0 0}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:6px;vertical-align:-1px}
+.chartbox{background:#0a1528;border:1px solid var(--line);border-radius:12px;padding:10px;overflow:hidden}
+.chartbox svg{width:100%;height:auto;display:block}
+.grid-charts2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 12px}
+.bar-label{fill:var(--muted);font-size:11px}
+.bar-value{fill:var(--ink);font-size:11px;font-weight:700}
+.axis{stroke:var(--line2);stroke-width:1}
+/* table */
+.table-wrap{overflow:auto;border-top:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;min-width:860px}
+thead th{position:sticky;top:0;background:#0f1e38;text-align:left;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);padding:10px 12px;border-bottom:1px solid var(--line2)}
+thead th button{all:unset;cursor:pointer;color:inherit;font:inherit;letter-spacing:inherit;text-transform:inherit;display:inline-flex;gap:6px;align-items:center}
+tbody td{padding:11px 12px;border-bottom:1px solid rgba(31,49,85,.6);vertical-align:top}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:rgba(56,225,255,.05)}
+tbody tr.selected{background:rgba(56,225,255,.10);box-shadow:inset 3px 0 0 var(--cyan)}
+.mono{font-variant-numeric:tabular-nums;white-space:nowrap}
+.ship{font-weight:750}
+.hubcell{color:var(--muted);font-size:13px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;border:1px solid var(--line2);font-size:12px;font-weight:700;white-space:nowrap}
+.chip::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.chip.ok{color:#6ee7b7;background:rgba(52,211,153,.10);border-color:rgba(52,211,153,.35)}
+.chip.warn{color:#fcd34d;background:rgba(251,191,36,.10);border-color:rgba(251,191,36,.35)}
+.chip.bad{color:#fda4af;background:rgba(251,113,133,.10);border-color:rgba(251,113,133,.40)}
+.chip.neutral{color:#cbd5e1;background:rgba(148,163,184,.10)}
+.chip.info{color:#7dd3fc;background:rgba(56,225,255,.10);border-color:rgba(56,225,255,.35)}
+.chip.violet{color:#c4b5fd;background:rgba(167,139,250,.10);border-color:rgba(167,139,250,.35)}
+/* sim + feed layout */
+.lower{display:grid;grid-template-columns:1fr 380px;gap:12px;margin:12px 0}
+.simcard{padding:14px}
+.simrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.simrow select{width:auto}
+.kv{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.kv div{background:#0a1528;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:13px;color:var(--muted)}
+.kv strong{color:var(--ink)}
+.feed{padding:14px}
+.feed h2{margin:0 0 8px;font-size:15px}
+.feed ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;max-height:240px;overflow:auto}
+.feed li{background:#0a1528;border:1px solid var(--line);border-radius:10px;padding:9px 10px;font-size:13px}
+.feed time{color:var(--faint);font-size:12px;display:block}
+.feed .ticked{border-color:rgba(56,225,255,.4)}
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(4,8,18,.62);backdrop-filter:blur(3px);display:none}
+.scrim.open{display:block}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(460px,96vw);background:linear-gradient(180deg,#12203c,#0e1a31);border-left:1px solid var(--line2);box-shadow:var(--shadow);transform:translateX(102%);transition:transform .25s ease;z-index:30;display:flex;flex-direction:column}
+.drawer.open{transform:none}
+.drawer header{padding:16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.drawer h2{margin:0;font-size:20px}
+.drawer .body{padding:16px;overflow:auto}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.dcell{background:#0a1528;border:1px solid var(--line);border-radius:10px;padding:10px}
+.dcell .k{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:700}
+.dcell .v{font-weight:750;margin-top:4px}
+.timeline{margin-top:14px;border:1px solid var(--line);border-radius:12px;padding:12px;background:#0a1528}
+.timeline h3{margin:0 0 8px;font-size:14px}
+.timeline ol{margin:0;padding-left:18px;color:var(--muted);font-size:13.5px}
+.timeline li{margin:6px 0}
+.timeline strong{color:var(--ink)}
+/* states */
+.empty{padding:28px 18px;text-align:center;color:var(--muted)}
+.empty h3{color:var(--ink);margin:0 0 6px}
+.skeleton{padding:18px}
+.skel{height:14px;border-radius:8px;background:linear-gradient(90deg,#16263f,#1d3357,#16263f);background-size:200% 100%;animation:shimmer 1.2s linear infinite;margin:10px 0}
+@keyframes shimmer{to{background-position:-200% 0}}
+.toaststack{position:fixed;left:16px;bottom:16px;display:flex;flex-direction:column;gap:10px;z-index:40;max-width:min(420px,92vw)}
+.toast{background:#0f223f;border:1px solid var(--line2);border-left:4px solid var(--cyan);border-radius:12px;padding:12px 14px;box-shadow:var(--shadow)}
+.toast.err{border-left-color:var(--red)}
+.toast.ok{border-left-color:var(--green)}
+.toast b{display:block}
+.toast span{color:var(--muted);font-size:13px}
+footer{color:var(--faint);font-size:12.5px;padding:10px 2px 0}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+@media (max-width:1020px){
+  .grid-kpi{grid-template-columns:1fr 1fr}
+  .grid-charts,.grid-charts2,.lower{grid-template-columns:1fr}
+  .controls{grid-template-columns:1fr 1fr}
+}
+@media (max-width:640px){
+  .wrap{padding:12px}
+  .grid-kpi{grid-template-columns:1fr}
+  .controls{grid-template-columns:1fr}
+  .dgrid{grid-template-columns:1fr}
+  table{min-width:720px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5 21 7.5v9L12 21.5 3 16.5v-9L12 2.5Z" stroke="#38e1ff" stroke-width="1.6"/><path d="M12 7.5v9M8 10l8 5M16 10l-8 5" stroke="#38e1ff" stroke-width="1.3" opacity=".85"/></svg>
+      </div>
+      <div>
+        <h1>Glacier · Cold Chain Command</h1>
+        <p class="sub">Refrigerated shipment operations for the Northgate network. Monitor temperature excursions, spot at-risk lanes, and drill into any shipment — every number below is computed live from the same records.</p>
+      </div>
+    </div>
+    <div class="actions">
+      <span class="pill badge-sample" title="All records are simulated for demonstration">◈ <strong>Sample / simulated data</strong> · 28 shipments · seeded</span>
+      <span class="pill" id="simPill"><span class="dot" id="simDot" aria-hidden="true"></span><span id="simPillText">Live simulation · running</span></span>
+    </div>
+  </header>
+
+  <!-- KPIs -->
+  <section class="grid-kpi" aria-label="Summary indicators" id="kpis" aria-live="polite">
+    <div class="kpi"><div class="label">Visible shipments</div><div class="value" id="kpiTotal">—</div><div class="hint" id="kpiTotalHint">of 28 total records</div><div class="trend" id="kpiTotalTrend">—</div></div>
+    <div class="kpi"><div class="label">On-time rate</div><div class="value" id="kpiOntime">—</div><div class="hint">On track + Delivered ÷ visible</div><div class="trend" id="kpiOntimeTrend">—</div></div>
+    <div class="kpi"><div class="label">Avg excursion</div><div class="value" id="kpiExc">—</div><div class="hint">Minutes above 6 °C · visible set</div><div class="trend" id="kpiExcTrend">—</div></div>
+    <div class="kpi"><div class="label">Value at risk</div><div class="value" id="kpiRisk">—</div><div class="hint">At risk + Delayed shipment value</div><div class="trend" id="kpiRiskTrend">—</div></div>
+  </section>
+
+  <!-- Filters -->
+  <section class="panel" aria-label="Filters">
+    <div class="controls">
+      <div class="field"><label for="q">Search shipments</label><input id="q" type="search" placeholder="e.g. GL-1024, vaccines, ColdLink…" autocomplete="off"></div>
+      <div class="field"><label for="fHub">Hub</label><select id="fHub"><option value="all">All hubs</option></select></div>
+      <div class="field"><label for="fStatus">Status</label><select id="fStatus"><option value="all">All statuses</option></select></div>
+      <div class="field"><label for="fPriority">Priority</label><select id="fPriority"><option value="all">All priorities</option></select></div>
+      <div class="field"><label for="fProduct">Product</label><select id="fProduct"><option value="all">All products</option></select></div>
+      <div class="field"><label id="riskLbl">Risk only</label><div class="checkline"><input id="riskOnly" type="checkbox" aria-labelledby="riskLbl"><span style="font-size:13px;color:var(--muted)">At risk + Delayed</span></div></div>
+    </div>
+    <div class="toolbar">
+      <div class="countline" id="countLine">—</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn ghost small" id="clearBtn" type="button">Clear filters</button>
+        <button class="btn primary small" id="exportBtn" type="button">↓ Export CSV (filtered)</button>
+      </div>
+    </div>
+    <div id="loadingState" class="skeleton" hidden aria-label="Loading">
+      <div class="skel" style="width:92%"></div><div class="skel" style="width:78%"></div><div class="skel" style="width:85%"></div>
+    </div>
+    <div id="emptyState" class="empty" hidden>
+      <h3>No shipments match these filters</h3>
+      <p>Try widening the hub/status choice, clearing the search, or turning off <em>Risk only</em>. The simulation is still running — clearing filters will restore the full board.</p>
+      <button class="btn" id="emptyClear" type="button">Clear all filters</button>
+    </div>
+    <div class="table-wrap" id="tableWrap">
+      <table aria-label="Shipments">
+        <thead><tr>
+          <th><button type="button" data-sort="id">Shipment <span aria-hidden="true">↕</span></button></th>
+          <th><button type="button" data-sort="hub">Hub <span aria-hidden="true">↕</span></button></th>
+          <th><button type="button" data-sort="product">Product <span aria-hidden="true">↕</span></button></th>
+          <th><button type="button" data-sort="priority">Priority <span aria-hidden="true">↕</span></button></th>
+          <th><button type="button" data-sort="status">Status <span aria-hidden="true">↕</span></button></th>
+          <th><button type="button" data-sort="temp">Temp °C <span aria-hidden="true">↕</span></button></th>
+          <th><button type="button" data-sort="excursion">Excursion <span aria-hidden="true">↕</span></button></th>
+          <th><button type="button" data-sort="value">Value <span aria-hidden="true">↕</span></button></th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Charts row 1 -->
+  <div class="grid-charts">
+    <section class="panel card">
+      <h2>Temperature excursion by product</h2>
+      <p class="desc">Average minutes above 6 °C for the visible shipments. Longer bars need a cold-chain review first.</p>
+      <div class="chartbox" id="chartProduct" role="img" aria-label="Bar chart: average excursion by product"></div>
+      <div class="legend"><span><i style="background:#38e1ff"></i>≤ 15 min</span><span><i style="background:#fbbf24"></i>16–35 min</span><span><i style="background:#fb7185"></i>&gt; 35 min</span></div>
+    </section>
+    <section class="panel card">
+      <h2>Status mix</h2>
+      <p class="desc">Share of visible shipments in each operational status.</p>
+      <div class="chartbox" id="chartStatus" role="img" aria-label="Donut chart: status mix"></div>
+      <div class="legend" id="statusLegend"></div>
+    </section>
+  </div>
+
+  <!-- Charts row 2 -->
+  <div class="grid-charts2">
+    <section class="panel card">
+      <h2>Shipments by hub</h2>
+      <p class="desc">Visible volume per hub, coloured by the at-risk share.</p>
+      <div class="chartbox" id="chartHub" role="img" aria-label="Horizontal bar chart: shipments by hub"></div>
+    </section>
+    <section class="panel card">
+      <h2>Departures — last 7 simulated days</h2>
+      <p class="desc">How many visible shipments departed each day. Use it to spot bunching before dock congestion.</p>
+      <div class="chartbox" id="chartDays" role="img" aria-label="Area chart: departures over last seven simulated days"></div>
+    </section>
+  </div>
+
+  <!-- Simulation + feed -->
+  <div class="lower">
+    <section class="panel simcard" aria-label="Live simulation controls">
+      <h2 style="margin:0 0 6px;font-size:15px">Live simulation — deterministic event stream</h2>
+      <p style="color:var(--muted);font-size:13px;margin:0 0 12px">Every tick nudges one shipment’s temperature (seeded RNG, never <code>Math.random</code> for state). Excursions accumulate above 6 °C and statuses follow: <strong>On track → At risk → Delayed</strong>. Delivered/Returned are terminal. Pause to inspect, Reset to replay from seed 42.</p>
+      <div class="simrow">
+        <button class="btn" id="pauseBtn" type="button">⏸ Pause</button>
+        <button class="btn" id="resetBtn" type="button">↺ Reset simulation</button>
+        <label style="color:var(--muted);font-size:13px">Speed
+          <select id="speedSel" aria-label="Simulation speed"><option value="2600">1× · 2.6s</option><option value="1300">2× · 1.3s</option><option value="650">4× · 0.65s</option></select>
+        </label>
+        <span class="pill">Tick <strong id="tickN">0</strong> · Seed <strong>42</strong></span>
+      </div>
+      <div class="kv">
+        <div>Simulation state <strong id="simState">running</strong></div>
+        <div>Last event <strong id="lastEvent">—</strong></div>
+        <div>Saved filters <strong>local · auto</strong></div>
+      </div>
+      <p style="color:var(--faint);font-size:12.5px;margin:12px 0 0">Tip: press <kbd>Enter</kbd> on a table row to open its detail. Press <kbd>Esc</kbd> to close. Filters, sort and speed persist after reload.</p>
+    </section>
+    <section class="panel feed" aria-label="Event stream" aria-live="polite">
+      <h2>Event stream</h2>
+      <ul id="feedList"><li>No events yet. Start the simulation or press Reset.</li></ul>
+    </section>
+  </div>
+
+  <footer>
+    <p>Simulated dataset: 28 refrigerated shipments · hubs Northgate / Harborview / Inlandport / Sutherland · statuses On track, At risk, Delayed, Delivered, Returned. KPIs recompute from filtered records only. CSV export contains the filtered rows. This demo stores only your filter/sort/speed choices locally — no shipment data leaves the browser.</p>
+  </footer>
+</div>
+
+<!-- Detail drawer -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" aria-hidden="true">
+  <header>
+    <div>
+      <div style="color:var(--faint);font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:700">Shipment detail</div>
+      <h2 id="drawerTitle">—</h2>
+      <div style="margin-top:6px" id="drawerChips"></div>
+    </div>
+    <button class="btn ghost small" id="drawerClose" type="button" aria-label="Close detail">✕</button>
+  </header>
+  <div class="body" id="drawerBody"></div>
+</aside>
+
+<div class="toaststack" id="toasts" aria-live="polite"></div>
+<div class="sr-only" aria-live="polite" id="srStatus"></div>
+
+<script>
+"use strict";
+/* ---------- deterministic seed data (28 records) ---------- */
+function mulberry32(seed){ return function(){ seed|=0; seed=(seed+0x6D2B79F5)|0; let t=Math.imul(seed^(seed>>>15),1|seed); t=(t+Math.imul(t^(t>>>7),61|t))^t; return ((t^(t>>>14))>>>0)/4294967296; }; }
+
+const HUBS = [
+  {id:"northgate", name:"Northgate"},
+  {id:"harborview", name:"Harborview"},
+  {id:"inlandport", name:"Inlandport"},
+  {id:"sutherland", name:"Sutherland"}
+];
+const PRODUCTS = ["Vaccines","Dairy & Eggs","Seafood","Fresh Produce","Frozen Meals","Pharma"];
+const CARRIERS = ["ColdLink","PolarFreight","FreshLine","CryoTrans"];
+const STATUSES = ["On track","At risk","Delayed","Delivered","Returned"];
+const PRIORITIES = ["Critical","High","Routine"];
+
+const HUB_NAME = Object.fromEntries(HUBS.map(h=>[h.id,h.name]));
+const TOTAL = 28;
+
+function buildDataset(){
+  const rng = mulberry32(42);
+  const rows = [];
+  for(let i=0;i<TOTAL;i++){
+    const hub = HUBS[i % HUBS.length].id;
+    const product = PRODUCTS[i % PRODUCTS.length];
+    const carrier = CARRIERS[i % CARRIERS.length];
+    // excursion grows with index for realism, plus seeded jitter
+    const excursion = Math.round( (i*1.7 + rng()*28) * 10 ) / 10;
+    const baseTemp = product==="Vaccines"||product==="Pharma" ? 3.1+rng()*1.4 : 3.8+rng()*3.2;
+    const temp = Math.round(baseTemp*10)/10;
+    let status;
+    if(i>=22) status = rng()<0.7 ? "Delivered" : "Returned";
+    else if(excursion>45) status = "Delayed";
+    else if(excursion>25) status = "At risk";
+    else status = "On track";
+    // keep a truthful mix: force a couple early records to demonstrate statuses
+    if(i===0) status="At risk"; if(i===5) status="Delayed"; if(i===10) status="On track";
+    const priority = i%7===0 ? "Critical" : (i%3===0 ? "High" : "Routine");
+    const transit = Math.round((8 + rng()*42)*10)/10;
+    const value = Math.round((1200 + rng()*14000));
+    const dest = ["Rijswijk","Rotterdam","Eindhoven","Utrecht","Maastricht","Amsterdam","Antwerpen","Köln"][i % 8];
+    const departDay = i % 7; // 0 = 6 days ago … 6 = today
+    rows.push({
+      id:"GL-"+(1024+i), hub, hubName:HUB_NAME[hub], product, carrier,
+      priority, status, temp, excursion, transit, value, dest, departDay,
+      lot:"LOT-"+(3100+i), sku: product.slice(0,3).toUpperCase()+"-"+(450+i)
+    });
+  }
+  return rows;
+}
+
+/* ---------- state ---------- */
+const LS_KEY = "glacier-dash-v1";
+let data = buildDataset();
+let simRng = mulberry32(42); // separate stream so reset replays identically
+let tick = 0, timer = null, running = true, speed = 2600;
+let selectedId = null;
+let filters = { q:"", hub:"all", status:"all", priority:"all", product:"all", riskOnly:false };
+let sort = { key:"id", dir:1 };
+let events = [];
+
+const $ = (s)=>document.querySelector(s);
+const tbody = $("#tbody"), feedList = $("#feedList");
+
+/* populate filter options */
+function fill(sel, values){ values.forEach(v=>{ const o=document.createElement("option"); o.value=v; o.textContent=v; sel.appendChild(o); }); }
+fill($("#fHub"), HUBS.map(h=>h.name));
+fill($("#fStatus"), STATUSES);
+fill($("#fPriority"), PRIORITIES);
+fill($("#fProduct"), PRODUCTS);
+
+/* ---------- persistence ---------- */
+function saveState(){
+  try{ localStorage.setItem(LS_KEY, JSON.stringify({filters, sort, speed})); }
+  catch(e){ toast("Could not save settings","Browser storage is unavailable or full. Your filters still work for this session.", "err"); }
+}
+function loadState(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return;
+    const s = JSON.parse(raw);
+    if(s && typeof s==="object"){
+      if(s.filters) filters = {...filters, ...s.filters};
+      if(s.sort && s.sort.key) sort = s.sort;
+      if(s.speed) speed = Number(s.speed)||speed;
+    }
+  }catch(e){ toast("Saved settings were invalid","We ignored the corrupted saved state and started from defaults.", "err"); }
+}
+function applyFiltersToUI(){
+  $("#q").value = filters.q; $("#fHub").value = filters.hub; $("#fStatus").value = filters.status;
+  $("#fPriority").value = filters.priority; $("#fProduct").value = filters.product;
+  $("#riskOnly").checked = !!filters.riskOnly; $("#speedSel").value = String(speed);
+}
+
+/* ---------- filtering / sorting ---------- */
+function getFiltered(){
+  const q = filters.q.trim().toLowerCase();
+  let rows = data.filter(r=>{
+    if(filters.hub!=="all" && r.hubName!==filters.hub) return false;
+    if(filters.status!=="all" && r.status!==filters.status) return false;
+    if(filters.priority!=="all" && r.priority!==filters.priority) return false;
+    if(filters.product!=="all" && r.product!==filters.product) return false;
+    if(filters.riskOnly && !(r.status==="At risk"||r.status==="Delayed")) return false;
+    if(q){
+      const hay = [r.id,r.product,r.carrier,r.hubName,r.dest,r.lot].join(" ").toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
+    return true;
+  });
+  const k = sort.key;
+  rows.sort((a,b)=>{
+    let va=a[k], vb=b[k];
+    if(typeof va==="string"){ va=va.toLowerCase(); vb=String(vb).toLowerCase(); }
+    return (va<vb?-1:va>vb?1:0)*sort.dir;
+  });
+  return rows;
+}
+
+/* ---------- helpers ---------- */
+const money = (n)=> "$"+Number(n).toLocaleString("en-US");
+const pct = (n)=> (Math.round(n*10)/10).toFixed(1)+"%";
+function statusChip(s){
+  if(s==="On track"||s==="Delivered") return `<span class="chip ok">${s}</span>`;
+  if(s==="At risk") return `<span class="chip warn">${s}</span>`;
+  if(s==="Delayed") return `<span class="chip bad">${s}</span>`;
+  if(s==="Returned") return `<span class="chip neutral">${s}</span>`;
+  return `<span class="chip info">${s}</span>`;
+}
+function priorityChip(p){
+  if(p==="Critical") return `<span class="chip violet">${p}</span>`;
+  if(p==="High") return `<span class="chip info">${p}</span>`;
+  return `<span class="chip neutral">${p}</span>`;
+}
+function toast(title, body, kind){
+  const el=document.createElement("div"); el.className="toast "+(kind||"");
+  el.innerHTML="<b></b><span></span>"; el.querySelector("b").textContent=title; el.querySelector("span").textContent=body;
+  $("#toasts").appendChild(el); $("#srStatus").textContent=title+". "+body;
+  setTimeout(()=>{ el.remove(); }, 4200);
+}
+
+/* ---------- KPIs ---------- */
+function renderKPIs(filtered){
+  const n = filtered.length;
+  const ontime = filtered.filter(r=>r.status==="On track"||r.status==="Delivered").length;
+  const ontimeRate = n? (ontime/n*100):0;
+  const avgExc = n? filtered.reduce((s,r)=>s+r.excursion,0)/n : 0;
+  const atRisk = filtered.filter(r=>r.status==="At risk"||r.status==="Delayed");
+  const valueAtRisk = atRisk.reduce((s,r)=>s+r.value,0);
+  $("#kpiTotal").textContent = n;
+  $("#kpiTotalHint").textContent = `of ${TOTAL} total records · ${TOTAL-n} hidden by filters`;
+  $("#kpiTotalTrend").textContent = n===TOTAL ? "Showing full board" : "Filtered view — KPIs reconcile with the table";
+  $("#kpiTotalTrend").className="trend "+(n===TOTAL?"up":"warn");
+  $("#kpiOntime").textContent = n? pct(ontimeRate):"—";
+  $("#kpiOntimeTrend").textContent = n? `${ontime} of ${n} on-time` : "No rows";
+  $("#kpiOntimeTrend").className="trend "+(ontimeRate>=80?"up":ontimeRate>=60?"warn":"bad");
+  $("#kpiExc").textContent = n? Math.round(avgExc*10)/10+" min":"—";
+  $("#kpiExcTrend").textContent = n? (avgExc<=15?"Within tolerance":avgExc<=35?"Watch — elevated excursions":"High — excursion review needed"):"No rows";
+  $("#kpiExcTrend").className="trend "+(avgExc<=15?"up":avgExc<=35?"warn":"bad");
+  $("#kpiRisk").textContent = money(valueAtRisk);
+  $("#kpiRiskTrend").textContent = n? `${atRisk.length} shipment${atRisk.length===1?"":"s"} at risk (At risk + Delayed)` : "No rows";
+  $("#kpiRiskTrend").className="trend "+(atRisk.length===0?"up":atRisk.length<=3?"warn":"bad");
+  $("#countLine").innerHTML = `Showing <strong>${n}</strong> of ${TOTAL} shipments · filters update every KPI, chart and the CSV export`;
+}
+
+/* ---------- table ---------- */
+function renderTable(filtered){
+  tbody.textContent="";
+  filtered.forEach(r=>{
+    const tr=document.createElement("tr");
+    tr.tabIndex=0; tr.dataset.id=r.id;
+    if(r.id===selectedId) tr.classList.add("selected");
+    tr.setAttribute("aria-label", `Open detail for ${r.id}`);
+    const cells=[
+      {k:"id", v:r.id, cls:"ship mono"},
+      {k:"hub", v:r.hubName, cls:"hubcell"},
+      {k:"product", v:r.product},
+      {k:"priority", v:""}, {k:"status", v:""},
+      {k:"temp", v:r.temp.toFixed(1)+" °C", cls:"mono"},
+      {k:"excursion", v:Math.round(r.excursion)+" min", cls:"mono"},
+      {k:"value", v:money(r.value), cls:"mono"}
+    ];
+    cells.forEach(c=>{
+      const td=document.createElement("td"); if(c.cls) td.className=c.cls;
+      if(c.k==="id") td.textContent=c.v;
+      else if(c.k==="priority") td.innerHTML=priorityChip(r.priority);
+      else if(c.k==="status") td.innerHTML=statusChip(r.status);
+      else td.textContent=c.v;
+      tr.appendChild(td);
+    });
+    tr.addEventListener("click", ()=>openDetail(r.id));
+    tr.addEventListener("keydown", (e)=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openDetail(r.id);} });
+    tbody.appendChild(tr);
+  });
+  $("#emptyState").hidden = filtered.length!==0;
+  $("#tableWrap").style.display = filtered.length===0 ? "none" : "";
+}
+
+/* ---------- charts (pure SVG, no deps) ---------- */
+function svgOpen(w,h){ return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" role="presentation">`; }
+function renderProductChart(filtered){
+  const groups={}; PRODUCTS.forEach(p=>groups[p]={sum:0,n:0});
+  filtered.forEach(r=>{ groups[r.product].sum+=r.excursion; groups[r.product].n++; });
+  const entries=PRODUCTS.map(p=>({p, avg: groups[p].n? groups[p].sum/groups[p].n:0, n:groups[p].n})).sort((a,b)=>b.avg-a.avg);
+  const W=560,H=260,padL=110,padR=60,padT=14,padB=30;
+  const iw=W-padL-padR, bh=26, gap=12;
+  const max=Math.max(1,...entries.map(e=>e.avg));
+  let s=svgOpen(W,H);
+  s+=`<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${H-padB}" class="axis"/>`;
+  entries.forEach((e,i)=>{
+    const y=padT+i*(bh+gap);
+    const w=(e.avg/max)*iw;
+    const col=e.avg>35?"#fb7185":e.avg>15?"#fbbf24":"#38e1ff";
+    s+=`<text x="${padL-8}" y="${y+bh/2+4}" text-anchor="end" class="bar-label">${e.p}</text>`;
+    s+=`<rect x="${padL}" y="${y}" width="${Math.max(2,w)}" height="${bh}" rx="6" fill="${col}" opacity=".92"/>`;
+    s+=`<text x="${padL+w+8}" y="${y+bh/2+4}" class="bar-value">${Math.round(e.avg)}m · n=${e.n}</text>`;
+  });
+  s+="</svg>";
+  $("#chartProduct").innerHTML=s;
+}
+function renderStatusDonut(filtered){
+  const counts={}; STATUSES.forEach(s=>counts[s]=0);
+  filtered.forEach(r=>counts[r.status]++);
+  const total=filtered.length||1;
+  const cols={"On track":"#34d399","At risk":"#fbbf24","Delayed":"#fb7185","Delivered":"#38e1ff","Returned":"#94a3b8"};
+  const W=560,H=240,cx=150,cy=120,R=84,r=52;
+  let s=svgOpen(W,H); let a0=-Math.PI/2;
+  if(filtered.length===0){ s+=`<text x="${cx}" y="${cy}" text-anchor="middle" class="bar-label">No data</text>`; }
+  else{
+    STATUSES.forEach(st=>{
+      const c=counts[st]; if(!c) return;
+      const frac=c/total, a1=a0+frac*Math.PI*2;
+      const x0=cx+R*Math.cos(a0),y0=cy+R*Math.sin(a0),x1=cx+R*Math.cos(a1),y1=cy+R*Math.sin(a1);
+      const xi1=cx+r*Math.cos(a1),yi1=cy+r*Math.sin(a1),xi0=cx+r*Math.cos(a0),yi0=cy+r*Math.sin(a0);
+      const laf=frac>0.5?1:0;
+      s+=`<path d="M ${x0} ${y0} A ${R} ${R} 0 ${laf} 1 ${x1} ${y1} L ${xi1} ${yi1} A ${r} ${r} 0 ${laf} 0 ${xi0} ${yi0} Z" fill="${cols[st]}" stroke="#0a1528" stroke-width="2"/>`;
+      a0=a1;
+    });
+    s+=`<text x="${cx}" y="${cy-4}" text-anchor="middle" class="bar-value" style="font-size:18px">${filtered.length}</text>`;
+    s+=`<text x="${cx}" y="${cy+16}" text-anchor="middle" class="bar-label">visible</text>`;
+  }
+  // legend labels with percents
+  let ly=64;
+  STATUSES.forEach(st=>{
+    s+=`<rect x="300" y="${ly-10}" width="12" height="12" rx="3" fill="${cols[st]}"/>`;
+    s+=`<text x="320" y="${ly}" class="bar-label">${st} · ${counts[st]} (${filtered.length? Math.round(counts[st]/filtered.length*100):0}%)</text>`;
+    ly+=26;
+  });
+  s+="</svg>";
+  $("#chartStatus").innerHTML=s;
+  $("#statusLegend").innerHTML = STATUSES.map(st=>`<span><i style="background:${cols[st]}"></i>${st}</span>`).join("");
+}
+function renderHubChart(filtered){
+  const groups={}; HUBS.forEach(h=>groups[h.name]={n:0,risk:0});
+  filtered.forEach(r=>{ groups[r.hubName].n++; if(r.status==="At risk"||r.status==="Delayed") groups[r.hubName].risk++; });
+  const entries=HUBS.map(h=>({hub:h.name,...groups[h.name]})).sort((a,b)=>b.n-a.n);
+  const W=560,H=220,padL=100,padR=90;
+  const iw=W-padL-padR, bh=30, gap=14, max=Math.max(1,...entries.map(e=>e.n));
+  let s=svgOpen(W,H);
+  entries.forEach((e,i)=>{
+    const y=16+i*(bh+gap), w=(e.n/max)*iw, riskW= e.n? (e.risk/e.n)*w:0;
+    s+=`<text x="${padL-8}" y="${y+bh/2+4}" text-anchor="end" class="bar-label">${e.hub}</text>`;
+    s+=`<rect x="${padL}" y="${y}" width="${Math.max(2,w)}" height="${bh}" rx="7" fill="#2a4068"/>`;
+    s+=`<rect x="${padL}" y="${y}" width="${Math.max(0,riskW)}" height="${bh}" rx="7" fill="#fb7185"/>`;
+    s+=`<text x="${padL+w+8}" y="${y+bh/2+4}" class="bar-value">${e.n} · ${e.risk} at-risk</text>`;
+  });
+  s+="</svg>";
+  $("#chartHub").innerHTML=s;
+}
+function renderDayChart(filtered){
+  const counts=[0,0,0,0,0,0,0];
+  filtered.forEach(r=>{ counts[r.departDay]++; });
+  const W=560,H=220,padL=44,padR=16,padT=16,padB=34;
+  const iw=W-padL-padR, ih=H-padT-padB, max=Math.max(1,...counts);
+  const xs=i=>padL+(i*(iw/6)), ys=v=>padT+ih-((v/max)*ih);
+  let s=svgOpen(W,H);
+  s+=`<line x1="${padL}" y1="${padT+ih}" x2="${padL+iw}" y2="${padT+ih}" class="axis"/>`;
+  counts.forEach((c,i)=>{ s+=`<text x="${xs(i)}" y="${H-10}" text-anchor="middle" class="bar-label">D-${6-i}</text>`; s+=`<text x="${xs(i)}" y="${ys(c)-6}" text-anchor="middle" class="bar-value">${c}</text>`; });
+  let d=`M ${xs(0)} ${ys(counts[0])}`;
+  for(let i=1;i<7;i++) d+=` L ${xs(i)} ${ys(counts[i])}`;
+  s+=`<path d="${d} L ${xs(6)} ${padT+ih} L ${xs(0)} ${padT+ih} Z" fill="rgba(56,225,255,.14)" stroke="none"/>`;
+  s+=`<path d="${d}" fill="none" stroke="#38e1ff" stroke-width="2.5" stroke-linejoin="round"/>`;
+  counts.forEach((c,i)=>{ s+=`<circle cx="${xs(i)}" cy="${ys(c)}" r="4" fill="#0e1a31" stroke="#38e1ff" stroke-width="2"/>`; });
+  s+="</svg>";
+  $("#chartDays").innerHTML=s;
+}
+function renderCharts(filtered){
+  renderProductChart(filtered); renderStatusDonut(filtered); renderHubChart(filtered); renderDayChart(filtered);
+}
+
+/* ---------- render all ---------- */
+function render(){
+  const filtered=getFiltered();
+  renderKPIs(filtered); renderTable(filtered); renderCharts(filtered);
+}
+
+/* ---------- detail drawer ---------- */
+function openDetail(id){
+  const r=data.find(x=>x.id===id); if(!r) return;
+  selectedId=id;
+  const dayLabel = r.departDay===6 ? "Today" : `${6-r.departDay} day${6-r.departDay===1?"":"s"} ago`;
+  $("#drawerTitle").textContent = `${r.id} · ${r.product}`;
+  $("#drawerChips").innerHTML = `${statusChip(r.status)} ${priorityChip(r.priority)}`;
+  $("#drawerBody").innerHTML = `
+    <p style="color:var(--muted);font-size:13.5px;margin:0">Departed ${dayLabel} from <strong style="color:var(--ink)">${r.hubName}</strong> to <strong style="color:var(--ink)">${r.dest}</strong> via ${r.carrier}. Lot ${r.lot} · SKU ${r.sku}.</p>
+    <div class="dgrid">
+      <div class="dcell"><div class="k">Temperature</div><div class="v">${r.temp.toFixed(1)} °C</div></div>
+      <div class="dcell"><div class="k">Excursion > 6 °C</div><div class="v">${Math.round(r.excursion)} min</div></div>
+      <div class="dcell"><div class="k">Transit</div><div class="v">${r.transit} h</div></div>
+      <div class="dcell"><div class="k">Value</div><div class="v">${money(r.value)}</div></div>
+      <div class="dcell"><div class="k">Carrier</div><div class="v">${r.carrier}</div></div>
+      <div class="dcell"><div class="k">Destination</div><div class="v">${r.dest}</div></div>
+    </div>
+    <div class="timeline">
+      <h3>Shipment timeline</h3>
+      <ol>
+        <li><strong>Departed</strong> ${r.hubName} — ${dayLabel.toLowerCase()} (D-${6-r.departDay})</li>
+        <li><strong>In transit</strong> — ${r.transit} h door-to-door, ${r.carrier} reefer</li>
+        <li><strong>Temperature</strong> — currently ${r.temp.toFixed(1)} °C with ${Math.round(r.excursion)} min above 6 °C</li>
+        <li><strong>Action</strong> — ${r.status==="Delayed" ? "Escalate to carrier and quarantine-check on arrival." : r.status==="At risk" ? "Monitor next 30 min; pre-cool at next dock." : r.status==="Delivered" ? "Closed — file POD and close the lot." : r.status==="Returned" ? "Closed — returned to origin; review packaging." : "No action required beyond routine telemetry."}</li>
+      </ol>
+    </div>`;
+  $("#scrim").classList.add("open"); $("#drawer").classList.add("open"); $("#drawer").setAttribute("aria-hidden","false");
+  $("#drawerClose").focus(); render(); // refresh selection highlight
+}
+function closeDetail(){
+  selectedId=null; $("#scrim").classList.remove("open"); $("#drawer").classList.remove("open"); $("#drawer").setAttribute("aria-hidden","true"); render();
+}
+
+/* ---------- simulation (deterministic) ---------- */
+function pushEvent(msg){
+  const time=new Date().toLocaleTimeString("en-GB",{hour12:false});
+  events.unshift({tick,time,msg}); events=events.slice(0,12);
+  feedList.textContent="";
+  events.forEach(ev=>{
+    const li=document.createElement("li"); li.className="ticked";
+    const t=document.createElement("time"); t.textContent=`Tick ${ev.tick} · ${ev.time}`;
+    const p=document.createElement("div"); p.textContent=ev.msg;
+    li.append(t,p); feedList.appendChild(li);
+  });
+  $("#lastEvent").textContent=msg;
+}
+function step(){
+  tick++;
+  // pick a non-terminal shipment deterministically
+  const active=data.filter(r=>r.status!=="Delivered"&&r.status!=="Returned");
+  if(active.length===0){ pushEvent("All shipments are terminal — Reset to replay."); setRunning(false); return; }
+  const idx=Math.floor(simRng()*active.length);
+  const r=active[idx];
+  const delta=(simRng()-0.42)*0.8;
+  r.temp=Math.min(9.5,Math.max(1.5, Math.round((r.temp+delta)*10)/10));
+  if(r.temp>6) r.excursion=Math.round((r.excursion+ (r.temp-6)*3 + simRng()*5)*10)/10;
+  else r.excursion=Math.max(0, Math.round((r.excursion-1.5)*10)/10);
+  const before=r.status;
+  if(r.excursion>45 && r.status!=="Delayed") r.status="Delayed";
+  else if(r.excursion>25 && r.status==="On track") r.status="At risk";
+  else if(r.excursion<12 && r.status==="At risk" && simRng()<0.35) r.status="On track";
+  pushEvent(`${r.id} (${r.hubName}) → ${r.temp.toFixed(1)} °C · excursion ${Math.round(r.excursion)} min · ${before} → ${r.status}`);
+  $("#tickN").textContent=tick;
+  render();
+}
+function setRunning(on){
+  running=on;
+  clearInterval(timer);
+  if(on){ timer=setInterval(step, speed); }
+  $("#pauseBtn").textContent = on ? "⏸ Pause" : "▶ Resume";
+  $("#simState").textContent = on ? "running" : "paused";
+  $("#simPillText").textContent = on ? "Live simulation · running" : "Live simulation · paused";
+  $("#simDot").className = on ? "dot" : "dot paused";
+}
+function resetSim(){
+  data=buildDataset(); simRng=mulberry32(42); tick=0; events=[]; selectedId=null;
+  closeDetail(); $("#tickN").textContent="0";
+  feedList.innerHTML="<li>No events yet. Simulation restarted from seed 42.</li>";
+  $("#lastEvent").textContent="—";
+  setRunning(true); render();
+  toast("Simulation reset","Dataset and RNG restored to seed 42. State is identical every time.","ok");
+}
+function restartTimer(){ if(running){ clearInterval(timer); timer=setInterval(step, speed);} }
+
+/* ---------- CSV export ---------- */
+function csvCell(v){ const s=String(v??""); return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s; }
+function exportCSV(){
+  const rows=getFiltered();
+  if(rows.length===0){ toast("Nothing to export","No shipments match the active filters. Clear or widen filters first.","err"); return; }
+  const headers=["id","hub","product","carrier","priority","status","temp_c","excursion_min","transit_h","value_usd","destination","lot","sku"];
+  const lines=[headers.join(",")];
+  rows.forEach(r=>lines.push(headers.map(h=>{
+    const map={id:r.id,hub:r.hubName,product:r.product,carrier:r.carrier,priority:r.priority,status:r.status,temp_c:r.temp.toFixed(1),excursion_min:Math.round(r.excursion),transit_h:r.transit,value_usd:r.value,destination:r.dest,lot:r.lot,sku:r.sku};
+    return csvCell(map[h]);
+  }).join(",")));
+  try{
+    const blob=new Blob(["\ufeff"+lines.join("\r\n")],{type:"text/csv;charset=utf-8"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a"); a.href=url; a.download="glacier-shipments-filtered.csv"; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),800);
+    toast("CSV exported", `${rows.length} filtered shipment${rows.length===1?"":"s"} downloaded as glacier-shipments-filtered.csv.`,"ok");
+  }catch(e){ toast("Export failed","Your browser blocked the download. Try again or copy fewer filters.", "err"); }
+}
+
+/* ---------- wiring ---------- */
+function wire(){
+  const refresh=()=>{ saveState(); render(); };
+  $("#q").addEventListener("input", (e)=>{ filters.q=e.target.value; refresh(); });
+  $("#fHub").addEventListener("change", (e)=>{ filters.hub=e.target.value; refresh(); });
+  $("#fStatus").addEventListener("change", (e)=>{ filters.status=e.target.value; refresh(); });
+  $("#fPriority").addEventListener("change", (e)=>{ filters.priority=e.target.value; refresh(); });
+  $("#fProduct").addEventListener("change", (e)=>{ filters.product=e.target.value; refresh(); });
+  $("#riskOnly").addEventListener("change", (e)=>{ filters.riskOnly=e.target.checked; refresh(); });
+  const clear=()=>{
+    filters={q:"",hub:"all",status:"all",priority:"all",product:"all",riskOnly:false};
+    applyFiltersToUI(); saveState(); render();
+    toast("Filters cleared","All 28 shipments are back in scope.","ok");
+  };
+  $("#clearBtn").addEventListener("click", clear);
+  $("#emptyClear").addEventListener("click", clear);
+  $("#exportBtn").addEventListener("click", exportCSV);
+  document.querySelectorAll("[data-sort]").forEach(b=>b.addEventListener("click", ()=>{
+    const k=b.dataset.sort;
+    if(sort.key===k) sort.dir*=-1; else { sort.key=k; sort.dir=1; }
+    saveState(); render();
+    toast("Sorted", `Table sorted by ${k} (${sort.dir===1?"ascending":"descending"}).`,"ok");
+  }));
+  $("#pauseBtn").addEventListener("click", ()=>{ setRunning(!running); toast(running?"Simulation paused":"Simulation resumed", running?"Ticks stopped — KPIs and charts are frozen.":"Ticks resumed with the seeded stream.", "ok"); });
+  $("#resetBtn").addEventListener("click", resetSim);
+  $("#speedSel").addEventListener("change", (e)=>{ speed=Number(e.target.value); saveState(); restartTimer(); toast("Speed updated", `Simulation speed set to ${e.target.selectedOptions[0].textContent.trim()}.`,"ok"); });
+  $("#drawerClose").addEventListener("click", closeDetail);
+  $("#scrim").addEventListener("click", closeDetail);
+  document.addEventListener("keydown", (e)=>{ if(e.key==="Escape" && $("#drawer").classList.contains("open")) closeDetail(); });
+}
+
+/* ---------- boot with loading state ---------- */
+loadState(); applyFiltersToUI(); wire();
+$("#loadingState").hidden=false; $("#tableWrap").style.display="none";
+setTimeout(()=>{
+  $("#loadingState").hidden=true; $("#tableWrap").style.display="";
+  render(); setRunning(true); step(); // first tick immediately proves liveness
+}, 550);
+</script>
+</body>
+</html>

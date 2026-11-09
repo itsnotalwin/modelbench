@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "crouton-alpha",
+  "category": "site-store",
+  "date": "2026-11-09",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "03",
+  "prompt_label": "Commerce Marketplace",
+  "notes": "Rootcellar simulated pantry marketplace with 12 products, composable search/filters/sort, detail views, basket with MAKER10 discount and $6.95 delivery threshold, and validated demo checkout; see browser test status in report.",
+  "slug": "2026-11-09_crouton-alpha_site-store_v1",
+  "path": "runs/2026-11-09_crouton-alpha_site-store_v1/index.html",
+  "source_file": "site-store__crouton-alpha__2026-11-09__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}
