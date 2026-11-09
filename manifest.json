@@ -1,6 +1,6 @@
 {
   "generated_from": "runs/",
-  "count": 0,
+  "count": 3,
   "catalog": [
     {
       "no": "01",
@@ -176,5 +176,123 @@
     "originality",
     "performance"
   ],
-  "runs": []
+  "runs": [
+    {
+      "slug": "2026-11-09_crouton-alpha_site-brand_v1",
+      "model": "crouton-alpha",
+      "category": "site-brand",
+      "prompt": "01",
+      "prompt_label": "Brand site",
+      "date": "2026-11-09",
+      "version": 1,
+      "entry": "index.html",
+      "path": "runs/2026-11-09_crouton-alpha_site-brand_v1/index.html",
+      "source_file": "site-brand__crouton-alpha__2026-11-09__v1.html",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "notes": "",
+      "pwa": {
+        "manifest_linked": true,
+        "sw_registered": true
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "slug": "2026-11-09_crouton-alpha_site-brand_v2",
+      "model": "crouton-alpha",
+      "category": "site-brand",
+      "prompt": "01",
+      "prompt_label": "Brand site",
+      "date": "2026-11-09",
+      "version": 2,
+      "entry": "index.html",
+      "path": "runs/2026-11-09_crouton-alpha_site-brand_v2/index.html",
+      "source_file": "site-brand__crouton-alpha__2026-11-09__v2.html",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "notes": "",
+      "pwa": {
+        "manifest_linked": true,
+        "sw_registered": true
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "slug": "2026-11-09_crouton-alpha_site-brand_v3",
+      "model": "crouton-alpha",
+      "category": "site-brand",
+      "prompt": "01",
+      "prompt_label": "Brand site",
+      "date": "2026-11-09",
+      "version": 3,
+      "entry": "index.html",
+      "path": "runs/2026-11-09_crouton-alpha_site-brand_v3/index.html",
+      "source_file": "site-brand__crouton-alpha__2026-11-09__v3.html",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "notes": "",
+      "pwa": {
+        "manifest_linked": true,
+        "sw_registered": true
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    }
+  ]
 }
