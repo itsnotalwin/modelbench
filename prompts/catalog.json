@@ -1,5 +1,5 @@
 {
-  "version": 12,
+  "version": 13,
   "outputs_per_prompt": 1,
   "prompts": [
     {
@@ -67,6 +67,105 @@
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
       "hue": 305
+    },
+    {
+      "no": "07",
+      "slug": "explainer",
+      "title": "Interactive Machine Explainer",
+      "family": "Web",
+      "summary": "An interactive visual explainer of a real machine or physical system, accurate enough for an engineer and beautiful enough to watch.",
+      "requirement": "Single source of truth for state; timeline scrubbing; part inspection with accurate explanations; 2+ live readouts; what-if simulation",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 190
+    },
+    {
+      "no": "08",
+      "slug": "game-fps",
+      "title": "First-Person 3D Game",
+      "family": "Games",
+      "summary": "A complete first-person 3D game with pointer-lock controls, an authored environment and gameplay that reacts to the player.",
+      "requirement": "Pointer-lock movement with real collision; animated view-model; authored environment; reactive opponents or hazards; complete loop; saved progress; stable frame rate",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 275
+    },
+    {
+      "no": "09",
+      "slug": "os-sim",
+      "title": "Browser Desktop OS",
+      "family": "Web",
+      "summary": "A complete desktop operating system in the browser with its own identity, a real window manager and a shared virtual filesystem.",
+      "requirement": "Window manager with snap and z-order; persisted shared filesystem; 8+ working apps including terminal and editor; launcher search; settings that persist; safe input handling",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 215
+    },
+    {
+      "no": "10",
+      "slug": "world-3d",
+      "title": "Living 3D World",
+      "family": "Games",
+      "summary": "An explorable 3D world that feels inhabited: procedural terrain that streams, weather and time that matter, creatures with routines.",
+      "requirement": "Seamless exploration with collision; seeded procedural streaming world; time of day and weather that change gameplay; believable inhabitants; save/load and map; cinematic rendering",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 150
+    },
+    {
+      "no": "11",
+      "slug": "generative-art",
+      "title": "Generative Artwork",
+      "family": "Visual",
+      "summary": "A seeded, reproducible generative artwork that evolves in real time and is worth watching rather than a screensaver.",
+      "requirement": "Deterministic seeding from the URL; three or more distinct scenes over time; collaborative interaction; high-resolution PNG export; adaptive resolution; composed visual language",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 330
+    },
+    {
+      "no": "12",
+      "slug": "creative-tool",
+      "title": "Professional Creative Tool",
+      "family": "Visual",
+      "summary": "A professional-grade creative tool in the browser: layered, non-destructive, fast and dense enough for real work.",
+      "requirement": "Real file open and export; layered non-destructive workflow with undo/redo; eight or more tools; autosave; smooth zoom and pan on large canvases",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 25
+    },
+    {
+      "no": "13",
+      "slug": "game-strategy",
+      "title": "Strategy Game with AI",
+      "family": "Games",
+      "summary": "An original strategy or tactics game won by thinking, against an AI opponent that is genuinely hard to beat.",
+      "requirement": "Clean rules engine; fair consistent rules with clear outcomes; AI with multiple difficulties using real techniques; three or more scenarios; tutorial; save/load",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 45
+    },
+    {
+      "no": "14",
+      "slug": "physics-engine",
+      "title": "Physics Engine & Playground",
+      "family": "Games",
+      "summary": "A 2D rigid-body physics engine written from scratch, with a delightful sandbox built on top of it.",
+      "requirement": "Circles and convex polygons with SAT or GJK; friction, restitution and joints; stable stacks; fixed timestep; 500+ bodies; debug overlay; scene save/load",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 170
+    },
+    {
+      "no": "15",
+      "slug": "island-pagoda",
+      "title": "Floating Pagoda Island",
+      "family": "Worlds",
+      "summary": "An explorable floating island crowned by a multi-tier pagoda: architecture, geology, water, light and sound built entirely in code.",
+      "requirement": "Procedural multi-tier pagoda with construction detail; floating island geology; waterfalls and cloud sea; day cycle with lantern light; exploration and interaction; ambient audio; stable frame rate",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 280
     }
   ]
 }

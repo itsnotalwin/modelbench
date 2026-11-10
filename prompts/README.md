@@ -1,21 +1,30 @@
-# ModelBench · Six mega-prompts
+# ModelBench · Fifteen mega-prompts
 
-ModelBench now contains **six one-shot challenges**: three focused on web development and three focused on game development. Each prompt produces exactly one finished project folder and one ZIP. The model resolves its own model identity and current date; version is always 1. The organiser is never asked for run metadata.
+ModelBench contains **fifteen one-shot challenges** spanning web builds, applications, games, visual work, simulations and worlds. Each prompt produces exactly one finished project folder and one ZIP. The model resolves its own model identity and current date; version is always 1. The organiser is never asked for run metadata.
 
-## The six challenges
+## The fifteen challenges
 
-| # | Challenge | Category slug | Primary capability |
-|---|---|---|---|
-| 01 | Brand & Business Website | site-brand | Brand identity, responsive marketing website and conversion flow |
-| 02 | Interactive Content Website | site-editorial | Content architecture, storytelling and useful interactive web experiences |
-| 03 | Complete Web Application | web-app | Connected workflows, persistent state, CRUD and robust application UX |
-| 04 | Original 2D Game | game-2d | Model-chosen genre and a complete playable 2D experience |
-| 05 | Original 3D Game | game-3d | Model-chosen genre and a genuinely interactive 3D game |
-| 06 | End-to-End Game Masterpiece | game-masterpiece | Full game production: world, cast, story, dialogue, quests, systems, art, sound and ending |
+| # | Challenge | Category slug | Family | Primary capability |
+|---|---|---|---|---|
+| 01 | Brand & Business Website | site-brand | Web | Brand identity, responsive marketing website and conversion flow |
+| 02 | Interactive Content Website | site-editorial | Web | Content architecture, storytelling and useful interactive web experiences |
+| 03 | Complete Web Application | web-app | Web | Connected workflows, persistent state, CRUD and robust application UX |
+| 04 | Original 2D Game | game-2d | Games | Model-chosen genre and a complete playable 2D experience |
+| 05 | Original 3D Game | game-3d | Games | Model-chosen genre and a genuinely interactive 3D game |
+| 06 | End-to-End Game Masterpiece | game-masterpiece | Games | Full game production: world, cast, story, dialogue, quests, systems, art, sound and ending |
+| 07 | Interactive Machine Explainer | explainer | Web | Physically accurate mechanism simulation, timeline control and part inspection |
+| 08 | First-Person 3D Game | game-fps | Games | Pointer-lock movement, authored environment and reactive gameplay in 3D |
+| 09 | Browser Desktop OS | os-sim | Web | Window management, shared virtual filesystem and eight-plus working apps |
+| 10 | Living 3D World | world-3d | Games | Streaming procedural world, weather and time systems, believable inhabitants |
+| 11 | Generative Artwork | generative-art | Visual | Seeded reproducibility, real-time evolution and composed visual language |
+| 12 | Professional Creative Tool | creative-tool | Visual | Layered non-destructive editing, real file IO and professional density |
+| 13 | Strategy Game with AI | game-strategy | Games | Rules-engine design and an opponent built on real search or evaluation |
+| 14 | Physics Engine & Playground | physics-engine | Games | From-scratch rigid-body simulation, stability and tooling |
+| 15 | Floating Pagoda Island | island-pagoda | Worlds | Procedural architecture, geology, water, light and atmosphere in one place |
 
 ## Creative freedom
 
-Prompts define the capability being tested and a demanding quality bar, not a pre-written concept. Models choose names, ideas, stories, characters, data, visual direction and implementation wherever those choices are not essential to the challenge. In particular, the 2D and 3D game prompts do not prescribe a genre. Challenge 06 asks the model to create an entire story-driven game from opening to ending and to use every relevant capability actually available in its environment.
+Prompts define the capability being tested and a demanding quality bar, not a pre-written concept. Models choose names, ideas, stories, characters, data, visual direction and implementation wherever those choices are not essential to the challenge. The 2D and 3D game prompts do not prescribe a genre. Challenges 01-14 are open briefs; challenge 15 is the one deliberate exception — the subject (a floating island with a pagoda) is fixed, and everything about how it looks, feels and plays is still the model's decision. Challenge 06 asks for an entire story-driven game from opening to ending, using every relevant capability actually available in its environment.
 
 ## Fairness and evaluation
 
@@ -53,13 +62,13 @@ The shared six-axis scorecard remains unchanged:
 }
 ```
 
-The category must match one of the six slugs in `catalog.json`. The version is always integer `1`. The importer rejects invalid or duplicate submissions without overwriting existing runs. Ratings and evaluation logs remain organizer-owned.
+The category must match one of the fifteen slugs in `catalog.json`. The version is always integer `1`. The importer rejects invalid or duplicate submissions without overwriting existing runs. Ratings and evaluation logs remain organizer-owned.
 
 ## Repository map
 
 - `index.html` — dashboard.
-- `prompts/catalog.json` — canonical six-challenge catalogue.
-- `prompts/01-*.md` through `prompts/06-*.md` — standalone mega-prompts.
+- `prompts/catalog.json` — canonical fifteen-challenge catalogue.
+- `prompts/01-*.md` through `prompts/15-*.md` — standalone mega-prompts.
 - `manifest.json` — generated dashboard data.
 - `inbox/` — incoming ZIP submissions.
 - `runs/` — accepted immutable submissions.

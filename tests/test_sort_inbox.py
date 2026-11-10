@@ -255,28 +255,29 @@ class ZipMetadataRoutingTests(unittest.TestCase):
 class PromptCatalogIntegrityTests(unittest.TestCase):
 
 
-    def test_catalog_is_three_web_and_three_game_challenges(self):
+    def test_catalog_covers_all_fifteen_challenges(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
-        self.assertEqual(len(catalog["prompts"]), 6)
-        self.assertEqual(sum(p["family"] == "Web" for p in catalog["prompts"]), 3)
-        self.assertEqual(sum(p["family"] == "Games" for p in catalog["prompts"]), 3)
-        self.assertEqual([p["no"] for p in catalog["prompts"]], ["01","02","03","04","05","06"])
+        prompts = catalog["prompts"]
+        self.assertEqual(len(prompts), 15)
+        self.assertEqual([p["no"] for p in prompts], [f"{n:02d}" for n in range(1, 16)])
+        self.assertEqual(len({p["slug"] for p in prompts}), 15)
+        self.assertTrue({p["family"] for p in prompts} <= {"Web", "Games", "Visual", "Worlds"})
+        for challenge in prompts:
+            matches = list((REPO_ROOT / "prompts").glob(f"{challenge['no']}-*.md"))
+            self.assertEqual(len(matches), 1, f"expected one prompt file for {challenge['no']}")
+            body = matches[0].read_text(encoding="utf-8")
+            self.assertIn(f'"category": "{challenge["slug"]}"', body)
+            self.assertIn(f'"prompt": "{challenge["no"]}"', body)
+            self.assertIn(f'"prompt_label": "{challenge["title"]}"', body)
 
     def test_dashboard_describes_one_artifact_per_prompt(self):
         dashboard = (REPO_ROOT / "index.html").read_text(encoding="utf-8")
         self.assertNotIn("three separate outputs", dashboard)
         self.assertIn("one complete project folder", dashboard)
         self.assertIn("One run, one ZIP", dashboard)
-        self.assertIn("Six open-ended challenges", dashboard)
-        self.assertIn("three web-development challenges and three game-development challenges", dashboard)
+        self.assertIn("Fifteen open-ended challenges", dashboard)
+        self.assertIn("Fifteen mega-prompts", dashboard)
 
-
-    def test_catalog_is_three_web_and_three_game_challenges(self):
-        catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
-        self.assertEqual(len(catalog["prompts"]), 6)
-        self.assertEqual(sum(p["family"] == "Web" for p in catalog["prompts"]), 3)
-        self.assertEqual(sum(p["family"] == "Games" for p in catalog["prompts"]), 3)
-        self.assertEqual([p["no"] for p in catalog["prompts"]], ["01", "02", "03", "04", "05", "06"])
 
     def test_game_prompts_leave_creative_direction_open(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
