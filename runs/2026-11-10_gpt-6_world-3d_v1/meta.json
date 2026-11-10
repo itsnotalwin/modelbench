@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "gpt-6",
+  "category": "world-3d",
+  "date": "2026-11-10",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "10",
+  "prompt_label": "Living 3D World",
+  "notes": "A self-contained WebGL city with deterministic streamed building chunks, continuous street grid, authored beacon landmarks, walk/drive/flight modes, building collision, wandering inhabitants with proximity reactions, seven collectible memory echoes, live map, journal, guarded local save/load, day cycle, smoothly transitioning weather, rain, distance fog, emissive lighting, synthesized hum and discovery tones, and adaptive pixel-density/rain quality. No external assets, libraries, build step or network dependency. NPCs use roaming routines rather than full pathfinding; audio is a simple synthesized ambience/chime layer rather than positional biome audio. Browser rendering could not be verified because headless Chromium failed to initialize its graphics/display backend in this environment. JavaScript syntax, metadata JSON, entry-file existence and duplicate HTML IDs passed code-level smoke checks. WebGL support is required.",
+  "slug": "2026-11-10_gpt-6_world-3d_v1",
+  "path": "runs/2026-11-10_gpt-6_world-3d_v1/index.html",
+  "source_file": "world-3d__gpt-6__2026-11-10__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}

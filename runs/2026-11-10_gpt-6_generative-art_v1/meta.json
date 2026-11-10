@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "gpt-6",
+  "category": "generative-art",
+  "date": "2026-11-10",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "11",
+  "prompt_label": "Generative Artwork",
+  "notes": "The Salt Atlas is a self-contained, seeded canvas artwork with three evolving movements, pointer-driven field disturbances, parameter controls, optional synthesized audio responsive to scene and pointer activity, fullscreen mode and 3200\u00d72000 PNG export rendered from the live generative field. Seed is stored in the URL hash. Animation uses a lightweight 2D field with adaptive render resolution. Chromium browser checks via Playwright verified scene navigation, control-panel and density interaction, pause/resume, PNG download and no page errors; a 390px viewport had no horizontal overflow. Direct file:// navigation was blocked by the environment policy, so cold-open from disk was not verified. Sustained 60 FPS was not benchmarked.",
+  "slug": "2026-11-10_gpt-6_generative-art_v1",
+  "path": "runs/2026-11-10_gpt-6_generative-art_v1/index.html",
+  "source_file": "generative-art__gpt-6__2026-11-10__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}
