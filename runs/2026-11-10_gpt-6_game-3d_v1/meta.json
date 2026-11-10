@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "gpt-6",
+  "category": "game-3d",
+  "date": "2026-11-10",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "05",
+  "prompt_label": "Original 3D Game",
+  "notes": "Self-contained WebGL flight exploration game with procedural low-poly archipelago geometry, momentum-based 3D flight, spatial gate crossings, six collectible signal fragments, updraft volumes, collision, synthesized ambient and reactive audio, HUD, pause/restart, keyboard/mouse/touch input and a completion state. No external runtime dependencies. Browser rendering and real-device performance profiling could not be verified because the available headless Chromium environment could not initialize WebGL; JavaScript syntax, metadata validation and mocked WebGL startup/render checks passed.",
+  "slug": "2026-11-10_gpt-6_game-3d_v1",
+  "path": "runs/2026-11-10_gpt-6_game-3d_v1/index.html",
+  "source_file": "game-3d__gpt-6__2026-11-10__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}
