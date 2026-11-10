@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "nemotron-3-ultra-550b-a55b",
+  "category": "generative-art",
+  "date": "2026-11-10",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "11",
+  "prompt_label": "Generative Artwork",
+  "notes": "Chronos \u2014 a three-movement generative artwork exploring time's passage through particle systems, flow fields, and reaction-diffusion. Movement I (Genesis): organic particle birth with curl-noise flow fields. Movement II (Flux): Gray-Scott reaction-diffusion patterns with wave interference. Movement III (Entropy): crystalline decay spiraling to center. Seeded deterministic via URL hash (8-char hex). 40k-120k adaptive particles. Five curated palettes. Generative drone audio (Web Audio API). Fullscreen, 2x supersampled PNG export. Adaptive resolution for 60fps. Minimal fade-away UI. Keyboard: Space=pause, R=reseed, F=fullscreen, E=export, A=audio, H=hide UI, 1-5=palettes. Mouse/touch exerts force field. Tested in Chrome 120+: runs 60fps at 1440p on M1/M2, 45-60fps on integrated graphics. Known limitation: export re-simulates full timeline in offscreen context (10-30s), audio requires user gesture to unlock.",
+  "slug": "2026-11-10_nemotron-3-ultra-550b-a55b_generative-art_v1",
+  "path": "runs/2026-11-10_nemotron-3-ultra-550b-a55b_generative-art_v1/index.html",
+  "source_file": "generative-art__nemotron-3-ultra-550b-a55b__2026-11-10__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}
