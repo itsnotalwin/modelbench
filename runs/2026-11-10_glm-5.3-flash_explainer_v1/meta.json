@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "glm-5.3-flash",
+  "category": "explainer",
+  "date": "2026-11-10",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "07",
+  "prompt_label": "Interactive Machine Explainer",
+  "notes": "Interactive cutaway explainer of a single-cylinder 499.6 cc DOHC four-stroke gasoline engine. A single crank-angle state (js/model.js: exact slider-crank kinematics, analytic cam profiles at half crank speed, polytropic + Wiebe zero-dimensional thermodynamics with wall-heat decay, blow-down, pumping loop, calibrated to ~69 bar peak / 12.6 bar net IMEP at WOT) drives everything: the procedural SVG cutaway (piston, rod, crank, DOHC valve gear with compressing coil springs, ports with flow dashes, deterministic gas particles whose density/colour/agitation derive from pressure-volume state, flame front from the burned fraction, knock ripple), four derived charts (P-theta with event markers, gas+inertia torque, valve lift, P-V loop with IMEP), eight live readouts, a 720-degree scrubber with phase bands and event flags, crank-angle dial, exploded view, clickable component inspector that narrates each part at the exact instant, and a test bench (throttle, ignition advance, compression ratio, rpm; faults: no spark, broken exhaust/intake valve spring, worn rings) with dashed stock-tune overlay and live diagnosis cards. Keyboard path throughout (space, arrows, 1-4, L/E/B, +/-), labelled controls, focus-visible rings, reduced-motion support, guarded localStorage, hidden-tab timer fallback clock. Verified in an automated Chromium session (1600px and 390px): zero console errors; scrub/step/speed, selection, exploded view, dialogs, faults and knock all exercised via screenshots and DOM assertions; thermodynamic values cross-checked against a Node calibration harness (motoring, valve-collapse, blow-by and knock scenarios all behave correctly). Known limitations: thermodynamics is a teaching-grade zero-dimensional model (steady-state speed, no residual-gas dynamics, no friction - indicated values; assumptions are listed in-app under 'Model notes'); file:// cold-open could not be exercised by the automation browser (it refuses file: URLs) but the build uses no modules, no fetches and relative paths specifically to stay file://-safe; reduced-motion path verified by code review, not by emulation; audio intentionally out of scope.",
+  "slug": "2026-11-10_glm-5.3-flash_explainer_v1",
+  "path": "runs/2026-11-10_glm-5.3-flash_explainer_v1/index.html",
+  "source_file": "explainer__glm-5.3-flash__2026-11-10__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}

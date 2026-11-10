@@ -1,6 +1,6 @@
 {
   "generated_from": "runs/",
-  "count": 34,
+  "count": 37,
   "catalog": [
     {
       "no": "01",
@@ -419,6 +419,59 @@
     },
     {
       "schema_version": 1,
+      "model": "glm-5.3-flash",
+      "category": "game-3d",
+      "date": "2026-11-10",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "05",
+      "prompt_label": "Original 3D Game",
+      "notes": "EMBERWAKE \u2014 an original 3D momentum-glider game built on a custom WebGL2 engine (no external libraries, assets or network use; runs from index.html on static hosting and from file://). The sun has set on a sealed 2.4 km valley; you pilot a lantern-glider that trades altitude for speed (energy-conserving arcade aerodynamics with stall, banked turns and boost), ride thermals, graze stone for fuel, dodge drifting storm cells and light eight sleeping beacons \u2014 each a checkpoint that warms the world \u2014 then fly the Dawn Gate on the summit for a dusk-to-dawn finale with stats. 3D is the mechanic: dive-for-speed/climb-to-spend energy trading, landmark line-of-sight navigation via beacon light pillars and a compass, altitude gates (a floating isle reachable by thermal or boost), terrain/prop/water collision with soft-fail scraping and hard-crash respawn. All content is procedural or hand-authored in code: 83k-vertex heightmapped terrain with baked AO vertex color, 2800 instanced swaying trees, spires/arches/buttes/floating isles, analytic sky with sun/stars/clouds, shader water, instanced billboard particles, and a fully synthesised WebAudio layer (speed-mapped wind, drone pad that rises with progress, pentatonic pickups, thunder, dawn chords). Accessibility: keyboard-path menus with focus states, aria-live compass callouts, labelled settings (quality/sensitivity/invert/volume/reduced-motion/touch), reduced-motion support, never colour-only meaning. Verified with automated headless-Chrome (CDP) runs: full loop (title, flight, dive/boost, steering, ember pickup, beacon ignition, crash/respawn, pause, all-beacon gate pass, finale, completion panel, keep-soaring, 700px viewport) with zero console errors and zero exceptions, plus a headless CPU simulation of the flight model; file:// boot also verified clean. Known limitations: FPS was measured in headless Chrome (20-30 fps under screencast, software-limited) so real-GPU smoothness is unverified on physical hardware here; touch controls were exercised via their DOM logic but not with a real touchscreen; WebGL2 is required (a styled error screen shows otherwise); no shadow maps (baked AO + hemisphere lighting instead).",
+      "slug": "2026-11-10_glm-5.3-flash_game-3d_v1",
+      "path": "runs/2026-11-10_glm-5.3-flash_game-3d_v1/index.html",
+      "source_file": "game-3d__glm-5.3-flash__2026-11-10__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "css/style.css",
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "js/audio.js",
+        "js/entities.js",
+        "js/glcore.js",
+        "js/main.js",
+        "js/math.js",
+        "js/props.js",
+        "js/shaders.js",
+        "js/sim.js",
+        "js/sky.js",
+        "js/sprites.js",
+        "js/terrain.js",
+        "js/ui.js",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
       "model": "claude-haiku-5-5",
       "category": "game-3d",
       "date": "2026-11-10",
@@ -575,6 +628,52 @@
         "icons/icon-192.png",
         "icons/icon-512.png",
         "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "glm-5.3-flash",
+      "category": "explainer",
+      "date": "2026-11-10",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "07",
+      "prompt_label": "Interactive Machine Explainer",
+      "notes": "Interactive cutaway explainer of a single-cylinder 499.6 cc DOHC four-stroke gasoline engine. A single crank-angle state (js/model.js: exact slider-crank kinematics, analytic cam profiles at half crank speed, polytropic + Wiebe zero-dimensional thermodynamics with wall-heat decay, blow-down, pumping loop, calibrated to ~69 bar peak / 12.6 bar net IMEP at WOT) drives everything: the procedural SVG cutaway (piston, rod, crank, DOHC valve gear with compressing coil springs, ports with flow dashes, deterministic gas particles whose density/colour/agitation derive from pressure-volume state, flame front from the burned fraction, knock ripple), four derived charts (P-theta with event markers, gas+inertia torque, valve lift, P-V loop with IMEP), eight live readouts, a 720-degree scrubber with phase bands and event flags, crank-angle dial, exploded view, clickable component inspector that narrates each part at the exact instant, and a test bench (throttle, ignition advance, compression ratio, rpm; faults: no spark, broken exhaust/intake valve spring, worn rings) with dashed stock-tune overlay and live diagnosis cards. Keyboard path throughout (space, arrows, 1-4, L/E/B, +/-), labelled controls, focus-visible rings, reduced-motion support, guarded localStorage, hidden-tab timer fallback clock. Verified in an automated Chromium session (1600px and 390px): zero console errors; scrub/step/speed, selection, exploded view, dialogs, faults and knock all exercised via screenshots and DOM assertions; thermodynamic values cross-checked against a Node calibration harness (motoring, valve-collapse, blow-by and knock scenarios all behave correctly). Known limitations: thermodynamics is a teaching-grade zero-dimensional model (steady-state speed, no residual-gas dynamics, no friction - indicated values; assumptions are listed in-app under 'Model notes'); file:// cold-open could not be exercised by the automation browser (it refuses file: URLs) but the build uses no modules, no fetches and relative paths specifically to stay file://-safe; reduced-motion path verified by code review, not by emulation; audio intentionally out of scope.",
+      "slug": "2026-11-10_glm-5.3-flash_explainer_v1",
+      "path": "runs/2026-11-10_glm-5.3-flash_explainer_v1/index.html",
+      "source_file": "explainer__glm-5.3-flash__2026-11-10__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "css/style.css",
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "js/charts.js",
+        "js/main.js",
+        "js/model.js",
+        "js/parts.js",
+        "js/scene.js",
         "manifest.webmanifest",
         "meta.json",
         "sw.js"
@@ -1342,6 +1441,55 @@
         "index.html",
         "manifest.webmanifest",
         "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "glm-5.3-flash",
+      "category": "game-masterpiece",
+      "date": "2026-11-09",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "06",
+      "prompt_label": "End-to-End Game Masterpiece",
+      "notes": "The Long Light \u2014 a complete story-driven game: you inherit a lighthouse one week before an 88-year tidal phenomenon called the Lending rises, and the whole game builds to the keeper's answer of one question: what is the light for? Five authored chapters and six playable night watches; four interlocking systems (lamp apparatus watch with oil/wick/lens economy, dialogue with trust and consequences, inventory-and-repairs crafting across bell/lens/tower/skiff, day cycle with hours/tides/weather feeding the night); journal/codex, relationship standings, three climax paths and six ending variants, epistolary dawn logs, save/load (autosave + 3 slots, storage guarded), settings (volumes, motion, text speed), pause menu, credits. All art is drawn on canvas (island, lamp room, endings) and all audio is synthesized in code (sea, wind, rain, gulls, bell, foghorn, telegraph, generative music, the Lending's hum, the ticking watch). Accessibility: semantic landmarks, labelled controls, visible focus, full keyboard path (Enter/Space/Esc/J/I/Q/1-5), reduced-motion support, aria-live feeds, colour never carries meaning alone. Verified in a Chromium-based browser via automation: cold start through title, prologue, teaching night, days 1-2, nights 1-2, and a full endgame run (night 5, the rite, the three-path choice, a played-through ending and credits); panels, saves, keyboard shortcuts and responsive layouts at 1600/768/390 px checked; zero console errors observed across all sessions; canvas frame cost measured at 0.16-0.9 ms against a 16.7 ms budget. Limitations: the automation ran in an occluded browser pane, so some screenshot captures showed stale composited frames; scene correctness was therefore additionally verified by direct pixel sampling. All six ending texts were executed and validated; one ending (led_drift) was played live to credits while the other paths share the same verified resolution machinery. English only. Audio starts after the first user gesture per browser policy. Tested over local http; the build uses only relative classic-script loads with no fetch, modules or external assets, so file:// operation is expected but was not directly verified in this environment.",
+      "slug": "2026-11-09_glm-5.3-flash_game-masterpiece_v1",
+      "path": "runs/2026-11-09_glm-5.3-flash_game-masterpiece_v1/index.html",
+      "source_file": "game-masterpiece__glm-5.3-flash__2026-11-09__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "js/art.js",
+        "js/audio.js",
+        "js/content_dialogue.js",
+        "js/content_nights.js",
+        "js/content_world.js",
+        "js/main.js",
+        "js/state.js",
+        "js/ui.js",
+        "manifest.webmanifest",
+        "meta.json",
+        "styles.css",
         "sw.js"
       ]
     },
