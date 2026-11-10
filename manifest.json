@@ -1,6 +1,6 @@
 {
   "generated_from": "runs/",
-  "count": 28,
+  "count": 29,
   "catalog": [
     {
       "no": "01",
@@ -190,6 +190,46 @@
       "slug": "2026-11-10_gpt-6_game-masterpiece_v1",
       "path": "runs/2026-11-10_gpt-6_game-masterpiece_v1/index.html",
       "source_file": "game-masterpiece__gpt-6__2026-11-10__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "gpt-6",
+      "category": "game-fps",
+      "date": "2026-11-10",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "08",
+      "prompt_label": "First-Person 3D Game",
+      "notes": "Self-contained WebGL first-person survival game set in an authored underground relay station. Includes pointer-lock mouse look, keyboard and gamepad movement, wall collision, animated pulse-driver view model, pursuing enemies, damage and hit feedback, three collectible cores, extraction and defeat states, restart, pause, locally persisted best time and settings, synthesised audio, fog, and a responsive HUD. JavaScript syntax and metadata JSON were validated. Headless Chromium was attempted but could not initialise WebGL in this environment, so in-browser rendering, pointer-lock and physical gamepad interaction remain unverified. Procedural geometry; no external runtime assets. WebGL availability is required.",
+      "slug": "2026-11-10_gpt-6_game-fps_v1",
+      "path": "runs/2026-11-10_gpt-6_game-fps_v1/index.html",
+      "source_file": "game-fps__gpt-6__2026-11-10__v1.zip",
       "scores": {
         "completeness": null,
         "robustness": null,
