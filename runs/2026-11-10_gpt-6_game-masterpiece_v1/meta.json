@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "gpt-6",
+  "category": "game-masterpiece",
+  "date": "2026-11-10",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "06",
+  "prompt_label": "End-to-End Game Masterpiece",
+  "notes": "A self-contained browser narrative game with branching dialogue, resource and relationship tracking, inventory, journal, three chapters, three distinct endings, local save/load, keyboard controls, and synthesized audio feedback. Visuals are authored with CSS and no local external assets. JSON parsing, JavaScript syntax, required UI/state markers, and output structure passed code-level smoke checks. A headless Chromium launch was attempted but timed out before producing DOM output, so in-browser interaction and console behavior remain unverified. Google Fonts are optional network-loaded typography; system fallbacks are provided.",
+  "slug": "2026-11-10_gpt-6_game-masterpiece_v1",
+  "path": "runs/2026-11-10_gpt-6_game-masterpiece_v1/index.html",
+  "source_file": "game-masterpiece__gpt-6__2026-11-10__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}
