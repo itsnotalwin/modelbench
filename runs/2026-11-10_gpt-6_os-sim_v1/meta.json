@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "gpt-6",
+  "category": "os-sim",
+  "date": "2026-11-10",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "09",
+  "prompt_label": "Browser Desktop OS",
+  "notes": "LUMA is a self-contained browser desktop with a shared persistent virtual filesystem, terminal interpreter, draggable/resizable windows, snap and context menus, launcher, notifications, lock screen, settings, wallpaper themes and ten built-in apps. Storage falls back to session memory if browser persistence is unavailable; audio is synthesized locally. Node syntax checks and terminal smoke tests covered file creation, read/write, pipes, redirection, copy/move, find and tree; Python validated the metadata and HTML parse. Chromium headless startup stalled in this environment, so interactive browser verification was not completed.",
+  "slug": "2026-11-10_gpt-6_os-sim_v1",
+  "path": "runs/2026-11-10_gpt-6_os-sim_v1/index.html",
+  "source_file": "os-sim__gpt-6__2026-11-10__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}
