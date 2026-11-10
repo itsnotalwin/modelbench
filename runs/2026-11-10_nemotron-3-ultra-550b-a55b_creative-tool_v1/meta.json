@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "nemotron-3-ultra-550b-a55b",
+  "category": "creative-tool",
+  "date": "2026-11-10",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "12",
+  "prompt_label": "Professional Creative Tool",
+  "notes": "Pixellum - Professional Pixel Art Studio. A complete browser-based pixel art editor with: layered non-destructive workflow (unlimited layers with visibility, opacity, blend modes, locking), 12 professional tools (Pencil, Eraser, Fill, Color Picker, Line, Rectangle, Ellipse, Filled shapes, Select/Move, Lasso, Hand/Pan, Zoom) with keyboard shortcuts; animation timeline with onion skinning, frame management, playback; professional color system with HSV picker, 10 preset palettes (PICO-8, DB16/32, C64, Game Boy, NES, ZX Spectrum, Amstrad, MSX, DawnBringer), custom palette storage; full undo/redo history (100 steps) surviving sessions; autosave to localStorage every 5s with project restore on reload; import/export PNG, animated GIF, and .pixellum project files; drag-and-drop file opening; smooth GPU-accelerated zoom/pan (0.125x-64x) at 60fps; dense professional panelled UI with tooltips, focus states, reduced-motion support, WCAG AA contrast; responsive down to mobile with collapsible panels. No external dependencies, runs from file://, self-contained in single HTML.",
+  "slug": "2026-11-10_nemotron-3-ultra-550b-a55b_creative-tool_v1",
+  "path": "runs/2026-11-10_nemotron-3-ultra-550b-a55b_creative-tool_v1/index.html",
+  "source_file": "creative-tool__nemotron-3-ultra-550b-a55b__2026-11-10__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}
