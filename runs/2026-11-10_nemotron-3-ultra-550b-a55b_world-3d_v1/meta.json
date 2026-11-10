@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "nemotron-3-ultra-550b-a55b",
+  "category": "world-3d",
+  "date": "2026-11-10",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "10",
+  "prompt_label": "Living 3D World",
+  "notes": "Aether Isles - A living procedural floating archipelago with 5 distinct biomes (Crystal Reefs, Luminous Forest, Ancient Spires, Void Fringes, Thermal Vents). Features: seamless chunk-based world streaming, dynamic time of day with color-scripted skies and aurora, weather system (clear, mist, rain, storm, aurora, void haze) affecting visibility and gameplay, 15 creature species with distinct AI behaviors (flock, school, hunt, patrol, orbit, soar, skirmish, ambush, stalk, territorial, sessile, filter, drift, swarm, wander), 4 movement modes (walk, glide, flight, skimmer) with energy management, 47 authored discoveries (landmarks and creature habitats) with rewards, save/load system with localStorage (multiple slots, export/import), procedural minimap with explored areas, compass, HUD with biome/environment stats, cinematic rendering with custom shaders for atmosphere, water, terrain, creatures, particles, and post-processing (bloom, vignette, filmic tonemapping, chromatic aberration, grain), layered audio-ready particle effects for weather and biome ambience, adaptive quality settings (ultra/high/medium/low), reduced motion support, WCAG AA contrast, keyboard/mouse controls with pointer lock. Known limitations: Three.js loaded from CDN (requires network for first load), no procedural audio synthesis implemented (Web Audio API hooks present but silent), terrain collision uses simplified height sampling, save system stores island positions but not full chunk state.",
+  "slug": "2026-11-10_nemotron-3-ultra-550b-a55b_world-3d_v1",
+  "path": "runs/2026-11-10_nemotron-3-ultra-550b-a55b_world-3d_v1/index.html",
+  "source_file": "world-3d__nemotron-3-ultra-550b-a55b__2026-11-10__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}
