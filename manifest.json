@@ -1,6 +1,6 @@
 {
   "generated_from": "runs/",
-  "count": 39,
+  "count": 42,
   "catalog": [
     {
       "no": "01",
@@ -275,6 +275,58 @@
     },
     {
       "schema_version": 1,
+      "model": "nemotron-3-ultra-550b-a55b",
+      "category": "os-sim",
+      "date": "2026-11-10",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "09",
+      "prompt_label": "Browser Desktop OS",
+      "notes": "Lumina OS \u2014 A complete browser-based desktop operating system with a unique visual identity (ethereal light theme with glass morphism, depth, and smooth motion). Features: real window manager (drag, resize, snap, minimize, maximize, focus, z-order, alt-tab), virtual filesystem persisted in localStorage shared across all apps, 10 fully functional built-in apps (Files, Terminal with real command set including pipes/redirection/history/tab-completion, Editor with syntax highlighting/tabs/search, Paint with layers/tools, Music Player with visualizer/playlist, Calendar with month/week/day views, System Monitor with live charts, Browser with tabs/bookmarks, Settings with full persistence, Calculator with basic/scientific/programmer modes). Includes boot sequence, lock screen, launcher with live search, notification center, context menus, keyboard shortcuts, theme/wallpaper/settings persistence, system sounds, and responsive design. All apps genuinely work and share the filesystem. No external dependencies, runs from index.html.",
+      "slug": "2026-11-10_nemotron-3-ultra-550b-a55b_os-sim_v1",
+      "path": "runs/2026-11-10_nemotron-3-ultra-550b-a55b_os-sim_v1/index.html",
+      "source_file": "os-sim__nemotron-3-ultra-550b-a55b__2026-11-10__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "apps/browser.js",
+        "apps/calculator.js",
+        "apps/calendar.js",
+        "apps/editor.js",
+        "apps/files.js",
+        "apps/music.js",
+        "apps/paint.js",
+        "apps/settings.js",
+        "apps/system-monitor.js",
+        "apps/terminal.js",
+        "assets/js/core.js",
+        "assets/styles/core.css",
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
       "model": "gpt-6",
       "category": "os-sim",
       "date": "2026-11-10",
@@ -286,6 +338,46 @@
       "slug": "2026-11-10_gpt-6_os-sim_v1",
       "path": "runs/2026-11-10_gpt-6_os-sim_v1/index.html",
       "source_file": "os-sim__gpt-6__2026-11-10__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "nemotron-3-ultra-550b-a55b",
+      "category": "island-pagoda",
+      "date": "2026-11-10",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "15",
+      "prompt_label": "Floating Pagoda Island",
+      "notes": "A fully self-contained browser-based 3D exploration experience featuring a procedurally generated floating island with a 7-tier pagoda built with authentic architectural details (dougong brackets, hip roofs with chiwen ornaments, balustrades, lanterns, interior floors and stairs). The island features stratified geology with cliff strata, moss, roots, and vegetation that follows terrain normals. Living systems include 6 waterfalls with particle simulation and splash effects, 4 drifting cloud layers with sun lighting, dynamic mist that reacts to height and time, and a full day/night cycle with directional sun/moon, god rays, bloom, and emissive lanterns. Player can walk, sprint, jump, glide, and explore with full collision detection against all geometry. 12 shrines with lanterns to light, 8 collectible offerings, 5 ringable bells with physics-simulated clappers, and a meditation point at the pagoda summit that shifts time. Synthesized ambient audio via Web Audio API: wind, water, creaking wood, bell tones, bird calls, and footstep sounds with spatial positioning. Runs from a single index.html with no build step, uses Three.js via importmap from CDN, all assets generated procedurally at runtime. Tested to open cold with no console errors.",
+      "slug": "2026-11-10_nemotron-3-ultra-550b-a55b_island-pagoda_v1",
+      "path": "runs/2026-11-10_nemotron-3-ultra-550b-a55b_island-pagoda_v1/index.html",
+      "source_file": "island-pagoda__nemotron-3-ultra-550b-a55b__2026-11-10__v1.zip",
       "scores": {
         "completeness": null,
         "robustness": null,
@@ -350,6 +442,48 @@
         "index.html",
         "manifest.webmanifest",
         "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "nemotron-3-ultra-550b-a55b",
+      "category": "game-strategy",
+      "date": "2026-11-10",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "13",
+      "prompt_label": "Strategy Game with AI",
+      "notes": "Hex Dominion - A complete turn-based hex strategy game with AI opponent. Features: 4 hand-crafted scenarios + procedural generation, 6 unit types with unique abilities, 4 structure types, fog of war, territory control, resource economy, save/load system, undo, tutorial, 4 AI difficulty levels using minimax with alpha-beta pruning and MCTS for expert, full keyboard/mouse controls, accessibility options (high contrast, color blind, reduced motion, large UI), procedural audio synthesis, animated combat/movement, particle effects. All assets generated in code - no external dependencies except Google Fonts.",
+      "slug": "2026-11-10_nemotron-3-ultra-550b-a55b_game-strategy_v1",
+      "path": "runs/2026-11-10_nemotron-3-ultra-550b-a55b_game-strategy_v1/index.html",
+      "source_file": "game-strategy__nemotron-3-ultra-550b-a55b__2026-11-10__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "game.js",
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "styles.css",
         "sw.js"
       ]
     },
