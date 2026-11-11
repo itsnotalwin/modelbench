@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "gpt-6",
+  "category": "saas",
+  "date": "2026-11-11",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "02",
+  "prompt_label": "SaaS for Clearing Agents",
+  "notes": "Standalone monochrome customs-clearance operations desk with local demo authentication, persistent declaration CRUD, search and filters, guarded status progression, indicative ZAR duty/VAT calculations, CSV export and printable text documents. No server or third-party integration; accounts and operational data are browser-local, and customs calculations are estimates requiring verification.",
+  "slug": "2026-11-11_gpt-6_saas_v1",
+  "path": "runs/2026-11-11_gpt-6_saas_v1/index.html",
+  "source_file": "saas__gpt-6__2026-11-11__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}

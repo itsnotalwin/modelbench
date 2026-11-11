@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClearLane · Customs Clearance Operations</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="auth-screen">
+    <div class="auth-wrap">
+      <div class="auth-card">
+        <div class="auth-brand"><span class="brand-mark"></span>ClearLane</div>
+        <h1>Customs clearance operations</h1>
+        <p class="auth-sub">Freight forwarders and customs clearing agents — from booking to cleared, in one place.</p>
+        <div class="auth-tabs" role="tablist">
+          <button type="button" id="auth-tab-signin" data-mode="signin" role="tab" aria-selected="true">Sign in</button>
+          <button type="button" id="auth-tab-signup" data-mode="signup" role="tab" aria-selected="false">Create account</button>
+        </div>
+        <form id="auth-form" class="auth-form" novalidate>
+          <div class="field" id="auth-name-field" hidden>
+            <label for="auth-name">Full name</label>
+            <input id="auth-name" name="name" type="text" autocomplete="name">
+          </div>
+          <div class="field">
+            <label for="auth-email">Email</label>
+            <input id="auth-email" name="email" type="email" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="auth-password">Password</label>
+            <input id="auth-password" name="password" type="password" autocomplete="current-password" required>
+          </div>
+          <p class="auth-error" id="auth-error" role="alert" hidden></p>
+          <button type="submit" class="btn" id="auth-submit" style="width: 100%">Sign in</button>
+        </form>
+        <p class="auth-demo">Demo account — email <code>demo@clarlane.io</code>, password <code>demo1234</code></p>
+      </div>
+    </div>
+  </div>
+
+  <div id="app-shell" hidden>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand"><span class="brand-mark"></span>ClearLane</div>
+        <div class="topbar-user">
+          <span class="who" id="topbar-email"></span>
+          <button type="button" class="btn btn--secondary btn--sm" id="sign-out-btn">Sign out</button>
+        </div>
+      </div>
+    </header>
+    <main class="container">
+      <section class="stats" aria-label="Shipment statistics">
+        <div class="stat"><div class="stat-label">Total shipments</div><div class="stat-value" id="stats-total">0</div></div>
+        <div class="stat"><div class="stat-label">Awaiting docs</div><div class="stat-value" id="stats-awaiting">0</div></div>
+        <div class="stat"><div class="stat-label">In clearance</div><div class="stat-value" id="stats-inprogress">0</div></div>
+        <div class="stat"><div class="stat-label">Cleared</div><div class="stat-value" id="stats-cleared">0</div></div>
+      </section>
+      <section class="panel">
+        <div class="toolbar">
+          <div class="search-box">
+            <svg viewBox="0 0 14 14" width="14" height="14" aria-hidden="true"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.5"/></svg>
+            <input id="search-input" type="search" placeholder="Search reference, goods, party, HS…" aria-label="Search shipments">
+          </div>
+          <select id="status-filter" aria-label="Filter by status">
+            <option value="">All statuses</option>
+          </select>
+          <select id="country-filter" aria-label="Filter by country">
+            <option value="">All countries</option>
+          </select>
+          <div class="spacer"></div>
+          <span class="result-count" id="result-count"></span>
+          <button type="button" class="btn btn--secondary" id="btn-export-csv">Export CSV</button>
+          <button type="button" class="btn" id="btn-new">New shipment</button>
+        </div>
+        <div class="table-wrap">
+          <table id="shipments-table">
+            <thead>
+              <tr>
+                <th scope="col">Reference</th>
+                <th scope="col">Consignee</th>
+                <th scope="col">Exporter</th>
+                <th scope="col">HS / Incoterm</th>
+                <th scope="col" class="num">Declared value</th>
+                <th scope="col">Status</th>
+                <th scope="col">Updated</th>
+                <th style="text-align: right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+          </table>
+          <div class="empty" id="empty-state" hidden>
+            <div class="empty-icon"></div>
+            <h3>No shipments yet</h3>
+            <p>Create your first customs shipment to generate documents and start the clearance workflow.</p>
+            <button type="button" class="btn" id="empty-new">New shipment</button>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="footer">ClearLane demo — all data stays in your browser.</footer>
+  </div>
+
+  <div class="modal-overlay" id="shipment-modal-overlay" hidden>
+    <div class="modal" id="shipment-modal" role="dialog" aria-modal="true" aria-labelledby="shipment-modal-title" tabindex="-1">
+      <div class="modal-head">
+        <h2 id="shipment-modal-title">New shipment</h2>
+        <button type="button" class="icon-btn" id="shipment-modal-close" aria-label="Close dialog">✕</button>
+      </div>
+      <form id="shipment-form" novalidate>
+        <div class="modal-body">
+          <input type="hidden" id="f-shipment-id">
+          <div class="field">
+            <label for="f-reference">Reference</label>
+            <input id="f-reference" data-field="reference" type="text" class="mono" required>
+            <p class="hint">Unique shipment reference, e.g. CLN-0007.</p>
+            <p class="field-error" id="err-reference" hidden></p>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px;">
+            <div class="field">
+              <label for="f-consignee-name">Consignee name</label>
+              <input id="f-consignee-name" data-field="consignee.name" type="text" required>
+              <p class="field-error" id="err-consignee-name" hidden></p>
+            </div>
+            <div class="field">
+              <label for="f-consignee-country">Consignee country</label>
+              <input id="f-consignee-country" data-field="consignee.country" type="text" maxlength="2" placeholder="DE" required>
+              <p class="hint">ISO 2-letter code.</p>
+              <p class="field-error" id="err-consignee-country" hidden></p>
+            </div>
+            <div class="field">
+              <label for="f-consignor-name">Exporter name</label>
+              <input id="f-consignor-name" data-field="consignor.name" type="text" required>
+              <p class="field-error" id="err-consignor-name" hidden></p>
+            </div>
+            <div class="field">
+              <label for="f-consignor-country">Exporter country</label>
+              <input id="f-consignor-country" data-field="consignor.country" type="text" maxlength="2" placeholder="CN" required>
+              <p class="field-error" id="err-consignor-country" hidden></p>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px;">
+            <div class="field">
+              <label for="f-hs-code">HS code</label>
+              <input id="f-hs-code" data-field="hsCode" type="text" placeholder="8471.30" required>
+              <p class="hint">6 digits, optionally with a 2-digit suffix.</p>
+              <p class="field-error" id="err-hs-code" hidden></p>
+            </div>
+            <div class="field">
+              <label for="f-incoterm">Incoterm</label>
+              <select id="f-incoterm" data-field="incoterm">
+                <option value="">Select incoterm</option>
+              </select>
+              <p class="field-error" id="err-incoterm" hidden></p>
+            </div>
+            <div class="field" style="grid-column: 1 / -1;">
+              <label for="f-goods">Goods description</label>
+              <input id="f-goods" data-field="goodsDescription" type="text" required>
+              <p class="field-error" id="err-goods-description" hidden></p>
+            </div>
+            <div class="field">
+              <label for="f-quantity">Quantity</label>
+              <input id="f-quantity" data-field="quantity" type="number" min="1" step="1" value="1" required>
+              <p class="field-error" id="err-quantity" hidden></p>
+            </div>
+            <div class="field">
+              <label for="f-unit-weight">Unit weight (kg)</label>
+              <input id="f-unit-weight" data-field="unitWeightKg" type="number" min="0.01" step="0.01" value="1" required>
+              <p class="field-error" id="err-unit-weight-kg" hidden></p>
+            </div>
+            <div class="field">
+              <label for="f-declared">Declared value (USD)</label>
+              <input id="f-declared" data-field="declaredValueUsd" type="number" min="0" step="0.01" required>
+              <p class="field-error" id="err-declared-value-usd" hidden></p>
+            </div>
+            <div class="field">
+              <label for="f-freight">Freight (USD)</label>
+              <input id="f-freight" data-field="freightUsd" type="number" min="0" step="0.01" value="0">
+              <p class="field-error" id="err-freight-usd" hidden></p>
+            </div>
+            <div class="field">
+              <label for="f-insurance">Insurance (USD)</label>
+              <input id="f-insurance" data-field="insuranceUsd" type="number" min="0" step="0.01" value="0">
+              <p class="field-error" id="err-insurance-usd" hidden></p>
+            </div>
+            <div class="field">
+              <label for="f-packages">Package count</label>
+              <input id="f-packages" data-field="packageCount" type="number" min="1" step="1" value="1">
+              <p class="field-error" id="err-package-count" hidden></p>
+            </div>
+          </div>
+          <p class="hint">Shipments start in the <strong>Pending</strong> state; the clearance status workflow is managed from the shipment list.</p>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn btn--secondary" id="shipment-modal-cancel">Cancel</button>
+          <button type="submit" class="btn">Save shipment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="delete-modal-overlay" hidden>
+    <div class="modal modal--narrow" role="alertdialog" aria-modal="true" aria-labelledby="delete-title" tabindex="-1">
+      <div class="modal-head">
+        <h2 id="delete-title">Delete shipment</h2>
+      </div>
+      <div class="modal-body">
+        <p id="delete-modal-message"></p>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn btn--secondary" id="delete-cancel">Cancel</button>
+        <button type="button" class="btn" id="delete-confirm">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-region" id="toast-region" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

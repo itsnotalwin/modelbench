@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "glm-5.3-flash",
+  "category": "saas",
+  "date": "2026-11-11",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "02",
+  "prompt_label": "SaaS for Clearing Agents",
+  "notes": "ClearDesk \u2014 a working SaaS for customs clearing agents: full clearance-entry pipeline with guarded status transitions (new \u2192 awaiting docs \u2192 lodged \u2192 customs query \u2192 assessed \u2192 duty paid \u2192 released \u2192 delivered \u2192 closed), an HS tariff schedule, duty/excise/VAT computation with pro-rata CIF allocation and FX conversion, per-mode document checklists that gate lodging, a disbursement ledger with aging buckets and payments, client statements, dashboard KPIs/reports, global search, keyboard shortcuts, CSV exports and printable duty-computation/entry sheets. Pure static product: index.html runs directly from file:// or any static host with zero install; data persists in localStorage (every access wrapped in try/catch with an in-memory fallback and warning banner). Auth is local (salted SHA-256), seed data is generated relative to the current date, and the domain-logic test suite can be run from Settings \u2192 Diagnostics (also 'node assets/core.test.js'). Demo credentials are shown on the sign-in screen: clara.otien@atlasfreight.app / demo1234 (manager) and james.mwangi@atlasfreight.app / demo1234 (clerk). Known limitations: single-browser storage, illustrative tariff rates, no real customs-authority or payment integration, local-only auth.",
+  "slug": "2026-11-11_glm-5.3-flash_saas_v1",
+  "path": "runs/2026-11-11_glm-5.3-flash_saas_v1/index.html",
+  "source_file": "saas__glm-5.3-flash__2026-11-11__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}
