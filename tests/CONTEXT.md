@@ -1,10 +1,10 @@
 # Test suite context
 
 ## Purpose
-Hold regression tests for importer behavior, the fifteen-prompt catalogue and dashboard interactions.
+Hold regression tests for importer behavior, the twenty-one-prompt catalogue and dashboard interactions.
 
 ## Key files
-- `test_sort_inbox.py` — ZIP metadata routing, validation, collision safety, legacy HTML parsing, catalog integrity across all fifteen challenges, automatic run identity and fixed version 1.
+- `test_sort_inbox.py` — ZIP metadata routing, validation, collision safety, legacy HTML parsing, catalog integrity across all twenty-one challenges, automatic run identity and fixed version 1.
 - `dashboard-ratings.test.js` and `test_dashboard_ui.py` — rating and dashboard UI checks, including the empty state after a reset.
 
 ## Change and verify

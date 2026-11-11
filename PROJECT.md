@@ -1,10 +1,10 @@
 # ModelBench Project
 
 ## Purpose
-A static-hosted, one-shot AI benchmark spanning web development, games, visual work and simulated worlds. The fifteen challenges cover three web projects, six games, two visual tools and two world builds. Each model produces one finished artifact; the inbox importer routes ZIP packages into immutable runs.
+A static-hosted, one-shot AI benchmark spanning web development, games, visual work and simulated worlds. The twenty-one challenges span websites, applications, games, visual tools, simulations and worlds. Each model produces one finished artifact; the inbox importer routes ZIP packages into immutable runs.
 
 ## Current benchmark shape
-Fifteen standalone prompts in `prompts/`. Prompts 01-06 are the original core (three web, three games) with 06 as the story-driven Game Masterpiece capstone; 07-15 add the machine explainer, first-person game, browser OS, living world, generative art, creative tool, strategy AI, physics engine and the fixed-brief Floating Pagoda Island.
+Twenty-one standalone prompts in `prompts/`, 01-21. Prompts 01-20 are themed open briefs; 21 is the single fixed-subject brief (Floating Pagoda Island).
 
 ## Key entry points
 - `index.html` — dashboard.

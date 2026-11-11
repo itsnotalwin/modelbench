@@ -1,4 +1,4 @@
-# 09 · Browser Desktop OS
+# 09 · Browser Operating System
 
 ## Automatic run identity — never ask the organiser or user
 
@@ -10,66 +10,49 @@ Resolve the run metadata yourself before creating files. Do not ask the user or 
 
 Use the resolved values in both the output folder and `meta.json`. Do not pause for confirmation and do not leave placeholders in the finished files.
 
-## The challenge
+## The brief
 
-Build a complete desktop operating system that runs in the browser, with an identity of its own: a name, a visual language, wallpapers, icons, sounds, a boot sequence. Do not skin Windows or macOS. Invent how it feels to use, and then make that feeling consistent across every app, menu and dialog.
+Build a complete desktop operating system that runs in the browser, with an identity of its own: name, visual language, wallpapers, icons, sounds, boot sequence. Do not skin Windows or macOS. Invent how it feels to use.
 
-## Build at the ceiling — design for the best result you are capable of
+The bar:
+- This is a test of the absolute ceiling of what you can build in one response. Not a demo, not a prototype, not a tech showcase: a finished product with the polish of work from a top studio.
+- Be ambitious in scope AND exacting in execution. If you must choose, depth beats breadth, but nothing you include may be half-built. Every control works, every state is handled, nothing is a placeholder.
+- Art direction comes first. Before writing code, decide the visual identity (palette, type, motion language, sound) and hold to it with taste. Avoid anything that looks default, templated or generic.
+- Include at least one detail that rewards a closer look, something a user only discovers by playing with it and thinks "they thought of that".
 
-This is a benchmark, not a sprint for a small phone. Your primary canvas is a large, high-quality display: 1440-2560px wide, pointer and keyboard, a viewer with time and attention. Design the experience you would want to be judged on at that size, then make it hold together as the screen shrinks.
+Hard rules:
+- Everything lives in ONE .html file (HTML, CSS and JS inline). No external asset files of any kind: no images, models, textures, audio or font files.
+- All visuals and all sound are created by you in code (canvas, SVG, CSS, WebGL/shaders, Web Audio). They need deliberate art direction and visible craft, not placeholder shapes.
+- No library is required. If you use one, load it from a CDN at an exact pinned version only.
+- It must run by opening the file directly in a current evergreen browser, with no server, no build step and no install, and must also work when served from a static host such as GitHub Pages from a subfolder. Relative paths only.
+- Guard every storage access (localStorage/IndexedDB) with try/catch.
 
-- Make the big screen sing: real composition, layered depth, confident typographic scale, motion that earns its place, and detail that rewards looking closely at 100% zoom.
-- Do not optimise for the smallest possible payload or the lowest common denominator. Optimise for the best experience you can actually build and verify.
-- Keyboard and pointer are first-class: shortcuts, hover and focus-visible states, precise input, real density.
-- Responsive is a quality bar, not the design driver. Layouts must reflow cleanly at tablet and phone widths, touch targets must stay usable and nothing may overflow or clip — but the large-screen experience is the one you are showing off.
-- Ambition that stutters is not ambition: keep interaction immediate and animation smooth on ordinary hardware, respect reduced motion, and hold WCAG AA contrast throughout.
+What "real" means here (all of it must genuinely work):
+- A real window manager: drag, resize from all edges and corners, snap, minimise, maximise, correct focus and z-order, multiple instances, alt-tab style switcher, keyboard shortcuts, context menus
+- A virtual filesystem persisted between sessions (folders, create, rename, move, delete, drag and drop) that every app shares
+- At least eight built-in apps of your choosing, including a file manager, a terminal wired to the filesystem with a real command set (pipes, redirection, history, tab completion), a text or code editor, and at least three substantial apps (for example a game, paint or image tool, music player, calendar, browser, system monitor)
+- Launcher with live search, notifications, a settings app that genuinely changes theme, wallpaper and behaviour and persists, and a lock or login screen
+- Never evaluate user input unsafely (no raw eval)
 
-## The bar
+Craft:
+- A coherent design system: iconography in SVG, motion language, depth and material, sound design
+- Everything feels responsive and alive: animated open and close, smooth drag, no jank with many windows open
 
-- A real window manager: drag, resize from every edge and corner, snap, minimise, maximise, correct focus and z-order, multiple instances of the same app, an alt-tab style switcher, keyboard shortcuts and context menus.
-- A virtual filesystem persisted between sessions — folders, create, rename, move, delete, drag and drop — shared by every app rather than faked per-app.
-- At least eight built-in apps, all genuinely working, including a file manager, a terminal wired to that filesystem with a real command set (pipes, redirection, history, tab completion), a text or code editor, and at least three substantial apps such as a game, a paint or image tool, a music player, a calendar, a browser or a system monitor.
-- A launcher with live search, notifications, a settings app that really changes theme, wallpaper and behaviour and persists, and a lock or login screen.
-- Safety as a feature: never evaluate user input unsafely, no raw `eval` of command strings, and storage access that fails gracefully.
-- A coherent design system: SVG iconography, motion language, depth and material, sound design — and nothing that feels like a framework default.
+Engineering:
+- Stable framerate (delta-time or fixed timestep as appropriate), crisp at any resolution and devicePixelRatio, handles window resize and tab visibility changes, no console errors, no memory leaks.
+- Keyboard accessible where it makes sense, respects prefers-reduced-motion, sensible touch support.
 
-## Creative freedom — the concept is yours
+Deliverable: **naming is mandatory, read it twice:**
+- One file only, named exactly: `os__{model-slug}__{YYYY-MM-DD}__v2.html`
+  Example: `os__claude-sonnet-4-5__2026-11-06__v2.html`
+  Use today's date (YYYY-MM-DD) and your own model name, lowercased, spaces replaced with hyphens. Do not use a creative file name, uppercase or spaces.
+- State that exact file name as the first line of your reply.
 
-We are scoring execution, not obedience. Choose the subject, the people, the tone, the structure, the visual language and the implementation yourself. Do not ask questions, do not offer a menu of options, do not wait for approval: commit to one strong direction and carry it all the way through.
-
-Then avoid anything that smells templated: no stock hero-plus-three-cards landing page, no framework demo aesthetic, no lorem ipsum, no "your text here", no fake logos in a trust bar, no icon soup. Have a point of view, and hold it consistently across every screen, state and error message.
-
-## Use the maximum of your resources
-
-Use the full capability of your environment, not a fraction of it. You have a serious budget of time, steps, context and tools; spend it on the artifact. The benchmark rewards the best thing you can produce, not the fastest or the smallest.
-
-- Work at full scale: complete content, complete systems, complete polish. Not a vertical slice, not a prototype with the interesting part postponed.
-- Use every tool you actually have — file writes, shell, local server, browser automation and screenshots, devtools and console, linters, type checkers and test runners, image/audio/video generation, shader tooling, font and asset pipelines, performance profiling. If it exists in your environment, it is fair game and it is expected.
-- Generate your own assets instead of settling for placeholders: procedural textures, SVG illustration, custom shaders, synthesised audio, rendered frames, composited video.
-- Be ambitious with content as well as code: more written material, more authored cases, more levels, more states, more edge cases handled properly.
-- Iterate like a studio: build it, look at it in a real browser, write down what is weakest, fix the weakest thing first, repeat until what remains is something you would defend out loud.
-- Never truncate or abbreviate: no stubs, no "rest unchanged", no TODOs, no half-built features left in the shipped folder.
-
-Verify, fix, re-verify. Report only what you actually observed; if a capability was unavailable, say so plainly in the `meta.json` notes instead of implying a test you did not run.
-
-## Acceptance — a reviewer will check
-
-1. One folder, `index.html` boots cold, no server, no console errors.
-2. Windows drag, resize, snap, stack and focus correctly.
-3. The filesystem persists and is genuinely shared between apps.
-4. Eight or more apps that all work; the terminal really drives the filesystem.
-5. Settings change the OS and survive a reload.
-6. It feels like one designed system, not a pile of demos.
-
-## Technical and delivery expectations
-
-- One browser-first project that runs from `index.html` on static hosting — no server, build step, secret key, paid API, external account or manual setup for the core experience.
-- Self-contained and portable: local assets, relative paths, works from a repository subfolder and, where the browser allows, from `file://`.
-- No placeholder content, dead controls, fake interactions or console errors. Every visible control produces a real outcome.
-- Accessible by default: semantic landmarks, labelled controls, visible focus, a keyboard path through every flow, reduced-motion support, and colour that never carries meaning alone.
-- Performance is craft: profile the build, keep interaction immediate and animation smooth on an ordinary laptop, and be able to say what budget you held.
-- Robust under abuse: empty data, huge data, rapid input, interrupted storage, resized window, backgrounded tab, lost connection. Guard storage access with `try/catch` and never lose the user's work silently.
-- Test the actual experience in a browser when available. Otherwise do a careful code-level smoke check and disclose the limitation honestly. Never claim a test you did not run.
+Process:
+- Do not ask me questions. Make every decision yourself.
+- Before finishing, review your code for bugs, runtime errors, soft-locks, performance problems and edge cases, and fix them.
+- Output the complete file in a single code block. Never truncate, abbreviate or write "rest unchanged".
+- Follow it with a note of under 150 words covering the concept, the controls, and what you are proudest of.
 
 ## Submission contract — mandatory
 
@@ -94,7 +77,7 @@ The metadata file must contain this structure, with your resolved model slug and
   "version": 1,
   "entry": "index.html",
   "prompt": "09",
-  "prompt_label": "Browser Desktop OS",
+  "prompt_label": "Browser Operating System",
   "notes": "A concise, honest description of the completed project and any known limitations."
 }
 ~~~

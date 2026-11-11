@@ -1,133 +1,177 @@
 {
   "generated_from": "runs/",
-  "count": 47,
+  "count": 21,
   "catalog": [
     {
       "no": "01",
-      "slug": "site-brand",
-      "title": "Brand & Business Website",
+      "slug": "website",
+      "title": "Website",
       "family": "Web",
-      "summary": "A polished, responsive website for an original business, product or organisation, designed to communicate value and convert visitors.",
-      "requirement": "Distinct identity; 5+ purposeful sections; responsive layouts; functional enquiry flow; accessible interactions; SEO-ready structure",
+      "summary": "An open website brief: the model invents the subject, brand, content and visual direction of a complete site.",
+      "requirement": "Original concept and identity; substantial real content; responsive layout; working interactions; accessible and fast",
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
       "hue": 265
     },
     {
       "no": "02",
-      "slug": "site-editorial",
-      "title": "Interactive Content Website",
+      "slug": "saas",
+      "title": "SaaS for Clearing Agents",
       "family": "Web",
-      "summary": "A rich content-led website with original editorial structure, visual storytelling and useful interactive experiences.",
-      "requirement": "Strong information architecture; substantial original content; meaningful interactive components; clear navigation; responsive and accessible design",
-      "output": "1 complete ZIP-ready project folder",
-      "min_outputs": 1,
-      "hue": 18
-    },
-    {
-      "no": "03",
-      "slug": "web-app",
-      "title": "Complete Web Application",
-      "family": "Web",
-      "summary": "A coherent, production-minded browser application with connected workflows, persistent data and a carefully designed interface.",
-      "requirement": "3+ connected workflows; real CRUD; search and filtering; validated state; local persistence; import/export; responsive and accessible UX",
+      "summary": "A working SaaS product for customs clearing and freight forwarding, with real domain logic rather than generic CRUD.",
+      "requirement": "Working product end to end; three or more connected workflows; domain-specific calculations; persistence; import/export; tests for core logic",
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
       "hue": 200
     },
     {
-      "no": "04",
+      "no": "03",
       "slug": "game-2d",
-      "title": "Original 2D Game",
+      "title": "2D Game",
       "family": "Games",
-      "summary": "A complete original 2D game whose genre, premise and creative direction are independently chosen by the model.",
-      "requirement": "Model-chosen genre; playable core loop; coherent content; working game rules; responsive controls; clear feedback and satisfying outcome",
+      "summary": "A complete 2D game in a single HTML file, with the genre and art direction chosen by the model.",
+      "requirement": "Complete game loop; played and taught without a manual; reliable collision and timing; feedback and sound; keyboard and touch controls",
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
       "hue": 8
     },
     {
-      "no": "05",
+      "no": "04",
       "slug": "game-3d",
-      "title": "Original 3D Game",
+      "title": "3D Game",
       "family": "Games",
-      "summary": "A complete original game built around a genuinely three-dimensional playable experience, with the genre and concept chosen by the model.",
-      "requirement": "Real 3D environment and interaction; model-chosen genre; purposeful objective; responsive movement/camera; authored content; reliable rendering and controls",
+      "summary": "A complete 3D game in a single HTML file, with the genre, world and camera model chosen by the model.",
+      "requirement": "Genuine 3D play; authored environment; working objective and progression; reliable controls and camera; stable frame rate",
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
       "hue": 250
     },
     {
-      "no": "06",
-      "slug": "game-masterpiece",
-      "title": "End-to-End Game Masterpiece",
-      "family": "Games",
-      "summary": "An ambitious, complete story-driven game production combining original worldbuilding, characters, narrative, gameplay systems, art, audio and a finished ending.",
-      "requirement": "Complete original story; protagonist and supporting cast with character arcs; 3-act narrative; meaningful dialogue and choices; 4+ interconnected gameplay systems; authored quests/chapters; original visual/audio direction; complete ending; save/load",
+      "no": "05",
+      "slug": "restaurant",
+      "title": "Restaurant Website",
+      "family": "Web",
+      "summary": "A restaurant or cafe website with a full menu, reservations and a distinctive art direction.",
+      "requirement": "Real menu with 30+ items; reservation and order flows with validation; opening-hours logic; strong identity; responsive and accessible",
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
-      "hue": 305
+      "hue": 18
     },
     {
-      "no": "07",
+      "no": "06",
       "slug": "explainer",
-      "title": "Interactive Machine Explainer",
+      "title": "Machine Explainer",
       "family": "Web",
-      "summary": "An interactive visual explainer of a real machine or physical system, accurate enough for an engineer and beautiful enough to watch.",
-      "requirement": "Single source of truth for state; timeline scrubbing; part inspection with accurate explanations; 2+ live readouts; what-if simulation",
+      "summary": "An interactive visual explainer of a real machine or physical system that is accurate enough for an engineer.",
+      "requirement": "One source of truth for state; timeline scrubbing; part inspection with accurate explanations; two or more live readouts; what-if simulation",
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
       "hue": 190
     },
     {
-      "no": "08",
+      "no": "07",
       "slug": "game-fps",
-      "title": "First-Person 3D Game",
+      "title": "First-Person Game",
       "family": "Games",
-      "summary": "A complete first-person 3D game with pointer-lock controls, an authored environment and gameplay that reacts to the player.",
-      "requirement": "Pointer-lock movement with real collision; animated view-model; authored environment; reactive opponents or hazards; complete loop; saved progress; stable frame rate",
+      "summary": "A complete first-person 3D game with pointer-lock movement, an authored environment and reactive gameplay.",
+      "requirement": "Pointer-lock movement with real collision; animated view-model; authored environment; reactive opponents or hazards; complete loop; saved progress",
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
       "hue": 275
     },
     {
+      "no": "08",
+      "slug": "arcade",
+      "title": "Arcade Game",
+      "family": "Games",
+      "summary": "A score-attack arcade game designed around one more run, with seeded runs and a local leaderboard.",
+      "requirement": "Scoring with real risk and reward; escalation beyond speed; modifiers with trade-offs; seeded and daily runs; ghost or replay; juice and generative audio",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 35
+    },
+    {
       "no": "09",
       "slug": "os-sim",
-      "title": "Browser Desktop OS",
+      "title": "Browser Operating System",
       "family": "Web",
-      "summary": "A complete desktop operating system in the browser with its own identity, a real window manager and a shared virtual filesystem.",
-      "requirement": "Window manager with snap and z-order; persisted shared filesystem; 8+ working apps including terminal and editor; launcher search; settings that persist; safe input handling",
+      "summary": "A complete desktop operating system in the browser with its own identity, window management and a shared filesystem.",
+      "requirement": "Window manager with snap and z-order; persisted shared filesystem; eight or more apps including a terminal and editor; launcher search; persistent settings",
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
       "hue": 215
     },
     {
       "no": "10",
+      "slug": "rubiks-cube",
+      "title": "Rubik's Cube",
+      "family": "Games",
+      "summary": "A physically convincing 3D Rubik's Cube with direct manipulation, a speedcubing timer and a solver that actually solves any scramble.",
+      "requirement": "Correct cubie state as source of truth; drag-to-turn and full notation; scramble, undo and redo; timer with ao5 and ao12; solver that animates any scramble",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 320
+    },
+    {
+      "no": "11",
+      "slug": "platformer",
+      "title": "Platformer",
+      "family": "Games",
+      "summary": "An original 2D platformer with one mechanic twist of the model's invention, four levels and a boss.",
+      "requirement": "Excellent movement with coyote time and input buffering; solid tile collision; four escalating levels; distinct enemies and a boss; level select with saved progress",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 145
+    },
+    {
+      "no": "12",
       "slug": "world-3d",
       "title": "Living 3D World",
-      "family": "Games",
-      "summary": "An explorable 3D world that feels inhabited: procedural terrain that streams, weather and time that matter, creatures with routines.",
-      "requirement": "Seamless exploration with collision; seeded procedural streaming world; time of day and weather that change gameplay; believable inhabitants; save/load and map; cinematic rendering",
+      "family": "Worlds",
+      "summary": "An explorable 3D world that feels inhabited: streaming terrain, weather and time systems, creatures with routines.",
+      "requirement": "Seamless exploration with collision; seeded procedural streaming world; weather and time that change gameplay; believable inhabitants; save/load and map",
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
       "hue": 150
     },
     {
-      "no": "11",
-      "slug": "generative-art",
-      "title": "Generative Artwork",
+      "no": "13",
+      "slug": "data-story",
+      "title": "Data Story",
       "family": "Visual",
-      "summary": "A seeded, reproducible generative artwork that evolves in real time and is worth watching rather than a screensaver.",
-      "requirement": "Deterministic seeding from the URL; three or more distinct scenes over time; collaborative interaction; high-resolution PNG export; adaptive resolution; composed visual language",
+      "summary": "An interactive data-driven story built on a generated dataset, told through linked custom visualisations.",
+      "requirement": "Four or more hand-built visual forms with linked interaction; a genuine insight with a narrative arc; annotations, tooltips and CSV export; responsive redraw",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 45
+    },
+    {
+      "no": "14",
+      "slug": "generative-art",
+      "title": "Generative Art",
+      "family": "Visual",
+      "summary": "A seeded generative artwork that evolves in real time and is worth watching rather than a screensaver.",
+      "requirement": "Deterministic seeding from the URL; three or more scenes or developments; collaborative interaction; high-resolution PNG export; adaptive resolution",
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
       "hue": 330
     },
     {
-      "no": "12",
-      "slug": "creative-tool",
-      "title": "Professional Creative Tool",
+      "no": "15",
+      "slug": "synth-studio",
+      "title": "Music Instrument",
       "family": "Visual",
+      "summary": "A browser instrument or mini-workstation that sounds genuinely good, built on a real Web Audio engine.",
+      "requirement": "Real sound engine with envelopes, filters and effects; sequencer with tempo and swing; presets, save/load and WAV export; live visualisation",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 305
+    },
+    {
+      "no": "16",
+      "slug": "creative-tool",
+      "title": "Creative Tool",
+      "family": "Web",
       "summary": "A professional-grade creative tool in the browser: layered, non-destructive, fast and dense enough for real work.",
       "requirement": "Real file open and export; layered non-destructive workflow with undo/redo; eight or more tools; autosave; smooth zoom and pan on large canvases",
       "output": "1 complete ZIP-ready project folder",
@@ -135,34 +179,56 @@
       "hue": 25
     },
     {
-      "no": "13",
-      "slug": "game-strategy",
-      "title": "Strategy Game with AI",
-      "family": "Games",
-      "summary": "An original strategy or tactics game won by thinking, against an AI opponent that is genuinely hard to beat.",
-      "requirement": "Clean rules engine; fair consistent rules with clear outcomes; AI with multiple difficulties using real techniques; three or more scenarios; tutorial; save/load",
+      "no": "17",
+      "slug": "emergent-sim",
+      "title": "Emergent Simulation",
+      "family": "Worlds",
+      "summary": "A simulation sandbox where simple rules produce rich, surprising behaviour that rewards watching.",
+      "requirement": "Deterministic fixed-timestep simulation with three or more interacting systems; thousands of entities at 60 FPS; inspection tools and live graphs; presets and save/load",
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
-      "hue": 45
+      "hue": 110
     },
     {
-      "no": "14",
-      "slug": "physics-engine",
-      "title": "Physics Engine & Playground",
+      "no": "18",
+      "slug": "game-strategy",
+      "title": "Strategy Game",
+      "family": "Games",
+      "summary": "An original strategy or tactics game won by thinking, against an AI opponent built on real search or evaluation.",
+      "requirement": "Clean rules engine with legal-move validation; AI with multiple difficulties using real techniques; three or more scenarios; tutorial; save/load",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 55
+    },
+    {
+      "no": "19",
+      "slug": "spreadsheet",
+      "title": "Spreadsheet",
+      "family": "Web",
+      "summary": "A real spreadsheet application with a formula engine, a virtualised grid and charting.",
+      "requirement": "Formula parser without eval with 40+ functions and cycle detection; 100k-row virtualised grid; copy/paste interchange; three chart types; CSV import and export",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 175
+    },
+    {
+      "no": "20",
+      "slug": "physics",
+      "title": "Physics Engine",
       "family": "Games",
       "summary": "A 2D rigid-body physics engine written from scratch, with a delightful sandbox built on top of it.",
-      "requirement": "Circles and convex polygons with SAT or GJK; friction, restitution and joints; stable stacks; fixed timestep; 500+ bodies; debug overlay; scene save/load",
+      "requirement": "Circles and convex polygons with SAT or GJK; friction, restitution and joints; stable stacks; fixed timestep; 500+ bodies; debug overlay and scene save/load",
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
-      "hue": 170
+      "hue": 165
     },
     {
-      "no": "15",
+      "no": "21",
       "slug": "island-pagoda",
       "title": "Floating Pagoda Island",
       "family": "Worlds",
-      "summary": "An explorable floating island crowned by a multi-tier pagoda: architecture, geology, water, light and sound built entirely in code.",
-      "requirement": "Procedural multi-tier pagoda with construction detail; floating island geology; waterfalls and cloud sea; day cycle with lantern light; exploration and interaction; ambient audio; stable frame rate",
+      "summary": "A fixed brief: an explorable floating island crowned by a multi-tier pagoda, built entirely in code.",
+      "requirement": "Procedural pagoda with real construction detail; island geology; waterfalls and cloud sea; day cycle with lantern light; exploration and interaction",
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
       "hue": 280
@@ -649,46 +715,6 @@
     },
     {
       "schema_version": 1,
-      "model": "gpt-6",
-      "category": "game-masterpiece",
-      "date": "2026-11-10",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "06",
-      "prompt_label": "End-to-End Game Masterpiece",
-      "notes": "A self-contained browser narrative game with branching dialogue, resource and relationship tracking, inventory, journal, three chapters, three distinct endings, local save/load, keyboard controls, and synthesized audio feedback. Visuals are authored with CSS and no local external assets. JSON parsing, JavaScript syntax, required UI/state markers, and output structure passed code-level smoke checks. A headless Chromium launch was attempted but timed out before producing DOM output, so in-browser interaction and console behavior remain unverified. Google Fonts are optional network-loaded typography; system fallbacks are provided.",
-      "slug": "2026-11-10_gpt-6_game-masterpiece_v1",
-      "path": "runs/2026-11-10_gpt-6_game-masterpiece_v1/index.html",
-      "source_file": "game-masterpiece__gpt-6__2026-11-10__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
       "model": "nemotron-3-ultra-550b-a55b",
       "category": "game-fps",
       "date": "2026-11-10",
@@ -740,46 +766,6 @@
       "slug": "2026-11-10_gpt-6_game-fps_v1",
       "path": "runs/2026-11-10_gpt-6_game-fps_v1/index.html",
       "source_file": "game-fps__gpt-6__2026-11-10__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "gpt-6",
-      "category": "game-3d",
-      "date": "2026-11-10",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "05",
-      "prompt_label": "Original 3D Game",
-      "notes": "Self-contained WebGL flight exploration game with procedural low-poly archipelago geometry, momentum-based 3D flight, spatial gate crossings, six collectible signal fragments, updraft volumes, collision, synthesized ambient and reactive audio, HUD, pause/restart, keyboard/mouse/touch input and a completion state. No external runtime dependencies. Browser rendering and real-device performance profiling could not be verified because the available headless Chromium environment could not initialize WebGL; JavaScript syntax, metadata validation and mocked WebGL startup/render checks passed.",
-      "slug": "2026-11-10_gpt-6_game-3d_v1",
-      "path": "runs/2026-11-10_gpt-6_game-3d_v1/index.html",
-      "source_file": "game-3d__gpt-6__2026-11-10__v1.zip",
       "scores": {
         "completeness": null,
         "robustness": null,
@@ -897,48 +883,6 @@
         "index.html",
         "manifest.webmanifest",
         "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "gpt-6",
-      "category": "game-2d",
-      "date": "2026-11-10",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "04",
-      "prompt_label": "Original 2D Game",
-      "notes": "A complete original top-down arcade navigation game with three escalating relay runs, twelve echo pickups, currents, hazards, pursuing enemies, sonar combat, burst movement, score/time pressure, synthesized audio, touch controls and guarded local records/settings. Uses vanilla HTML/CSS/JavaScript and procedural canvas art with no external dependencies or build step. Performance budget: fixed 120 Hz simulation, at most 8 catch-up steps per frame, 260-particle cap and canvas DPR cap of 1.25; sampled render cadence was 58\u201360 fps. Browser smoke tests ran in local Chromium/Playwright using an in-memory page because the sandbox blocked direct file:// and localhost navigation. JavaScript and metadata syntax checks passed. Native-origin localStorage persistence was not directly verified; its guarded code path was exercised with a test storage shim.",
-      "slug": "2026-11-10_gpt-6_game-2d_v1",
-      "path": "runs/2026-11-10_gpt-6_game-2d_v1/index.html",
-      "source_file": "game-2d__gpt-6__2026-11-10__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "game.js",
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "style.css",
         "sw.js"
       ]
     },
@@ -1151,731 +1095,6 @@
     },
     {
       "schema_version": 1,
-      "model": "nemotron-3-ultra-550b-a55b",
-      "category": "web-app",
-      "date": "2026-11-09",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "03",
-      "prompt_label": "Complete Web Application",
-      "notes": "Flux \u2014 Context Switching Tracker for knowledge workers. A single-file application with IndexedDB persistence that tracks time across tasks, projects, and focus sessions. Three connected workflows: Now (active timer + quick task switching), Dashboard (analytics, project breakdown, weekly charts), History (searchable, filterable, sortable session log with bulk actions). Features: real CRUD with validation, keyboard shortcuts (\u2318K palette, Space start/pause, N new task, F finish, J/K navigate), command palette, import/export JSON/CSV, sample data on first run, onboarding flow, idle detection, focus sessions (Pomodoro/deep work), project management with colors, tag system, responsive design (1440px+ primary, tablet/mobile reflow), WCAG AA contrast, reduced motion support, no external dependencies. Tested: opens cold, data survives reload, all three workflows share state, search/filter/sort work, import/export round-trip works, empty/error states handled, keyboard-first with touch support.",
-      "slug": "2026-11-09_nemotron-3-ultra-550b-a55b_web-app_v1",
-      "path": "runs/2026-11-09_nemotron-3-ultra-550b-a55b_web-app_v1/index.html",
-      "source_file": "web-app__nemotron-3-ultra-550b-a55b__2026-11-09__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "gpt-6",
-      "category": "web-app",
-      "date": "2026-11-09",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "03",
-      "prompt_label": "Complete Web Application",
-      "notes": "Harbor is a browser-first clearance operations workspace for tracking shipments, tasks and operational handoffs. The project is self-contained in index.html and requires no build step. Browser automation was unavailable in this environment, so interactive browser behavior and persistence have not been independently verified.",
-      "slug": "2026-11-09_gpt-6_web-app_v1",
-      "path": "runs/2026-11-09_gpt-6_web-app_v1/index.html",
-      "source_file": "web-app__gpt-6__2026-11-09__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "glm-5.3-flash",
-      "category": "web-app",
-      "date": "2026-11-09",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "03",
-      "prompt_label": "Complete Web Application",
-      "notes": "Galley \u2014 a story desk for a small newsroom (The Calder Weekly sample paper): a kanban desk moves stories pitch\u2192assigned\u2192draft\u2192edit\u2192ready\u2192slotted with an enforced state machine that rejects illegal moves in plain language; an edition desk slots ready stories into sectioned print slots with holds that block publishing and a checklist-gated publish pass; a people desk manages writers with workload bars and enforced deactivation/reassignment rules; plus a ledger with search, filters, section chips, sorting, saved views (built-in + user), pagination and bulk actions (status, reassign, due bump, kill, archive), story drawer with notes, field history and validation, global undo/redo, command palette, full keyboard layer (g-chords, j/k, x, /, n, ?), activity log, archive with restore/delete-forever, first-run onboarding, JSON export/import (merge or replace with per-record conflict resolution) and CSV export, localStorage persistence with try/catch guards, debounced saves, a schema migration ladder with defensive repair, cross-tab BroadcastChannel change detection, and reset/wipe flows that offer a backup first. Fraunces and Inter variable fonts (SIL OFL) are bundled locally; no network is used at runtime. Verified in Chromium (in-app browser) at 1600px and 390px: all views render, full CRUD + rules battery passed, export/import round-trip passed, keyboard shortcuts passed, zero console errors observed during the sweep, storage survival across reload confirmed. Limitations: file:// operation was not verified in a live browser (scripts are classic non-module scripts and assets are relative, so it is expected to work); HTML5 drag-and-drop was verified via synthetic drag events rather than a physical pointer drag (the menu-based move path, used on touch and keyboard, was tested end to end); entrance animations can appear frozen in backgrounded/background-throttled tabs.",
-      "slug": "2026-11-09_glm-5.3-flash_web-app_v1",
-      "path": "runs/2026-11-09_glm-5.3-flash_web-app_v1/index.html",
-      "source_file": "web-app__glm-5.3-flash__2026-11-09__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "assets/css/style.css",
-        "assets/fonts/Fraunces-var.woff2",
-        "assets/fonts/Inter-var.woff2",
-        "assets/js/app.js",
-        "assets/js/data.js",
-        "assets/js/domain.js",
-        "assets/js/store.js",
-        "assets/js/ui.js",
-        "assets/js/views.js",
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "crouton-alpha",
-      "category": "web-app",
-      "date": "2026-11-09",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "03",
-      "prompt_label": "Complete Web Application",
-      "notes": "Fieldline Dispatch Desk: a self-contained facilities dispatch app with a Kanban board, jobs register (search/filter/sort/saved views/bulk actions), sites, crew capacity, and parts inventory sharing one localStorage state with guarded persistence, undo (30 steps), JSON import/export round-trip, CSV export, command palette (Ctrl+K), drag-and-drop plus keyboard flows, sample data, and empty/error/recovery states. Single index.html, no build step, works from file:// and subfolders. Browser-tested via local server: cold load with no console errors, board/jobs/sites/crew/parts render, drawer edit persisted across reload, illegal status moves and over-capacity assignments rejected, import/export wired.",
-      "slug": "2026-11-09_crouton-alpha_web-app_v1",
-      "path": "runs/2026-11-09_crouton-alpha_web-app_v1/index.html",
-      "source_file": "web-app__crouton-alpha__2026-11-09__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "claude-haiku-5-5",
-      "category": "web-app",
-      "date": "2026-11-09",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "03",
-      "prompt_label": "Complete Web Application",
-      "notes": "Larder is a single-file pantry and shopping app. It tracks items on hand with par levels and builds a shopping list from anything at or below par. The pantry, shopping list and activity log share one data set, so a change in one is reflected in the counts, the summary line and the others. Create, edit, delete, use, restock, bulk restock and bulk delete all work, with validation that rejects bad input with a specific reason, and undo for the most recent action. Search, status and category filters, and sorting by name, use-by date, quantity or category. Empty, sample-data, storage-unavailable and unreadable-data states are handled. Data persists in localStorage behind try/catch guards, can be exported and imported as JSON, and can be erased deliberately. Keyboard shortcuts: slash for search, N for a new item, 1 to 3 for sections, Ctrl+Z for undo, Escape to clear selection. Known limits: this is a lean first build. There is no command palette, no IndexedDB, no virtual scrolling, and undo covers only the latest action. Two open tabs are synced through the storage event, but that path is untested. Test status: the inline script was parsed and every element id it references was confirmed to exist in the markup. The app was not run in a browser, so the interaction paths are unverified.",
-      "slug": "2026-11-09_claude-haiku-5-5_web-app_v1",
-      "path": "runs/2026-11-09_claude-haiku-5-5_web-app_v1/index.html",
-      "source_file": "web-app_claude-haiku-5-5_2026-11-09_v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "nemotron-3-ultra-550b-a55b",
-      "category": "site-editorial",
-      "date": "2026-11-09",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "02",
-      "prompt_label": "Interactive Content Website",
-      "notes": "The VEL-9 System Atlas \u2014 an interactive survey of a fictional planetary system 12.4 light-years from Sol. Features four major interactive components: (1) Filterable planetary catalog with search, type/zone filters, and multi-column sorting; (2) Orbital timeline scrubber simulating 500 years of system evolution with play/pause, conjunction markers, habitable zone visualization, and real-time stats; (3) Annotated cross-section diagram of VEL-9 e with seven interactive hotspots revealing interior structure, atmosphere, magnetosphere, and surface data; (4) Side-by-side comparison slider with four visualization modes (structure, atmosphere, surface, orbital) and five preset pairings. Includes substantial original worldbuilding content (~4,000 words) with consistent editorial voice, honest epistemics labeling (Measured/Inferred/Speculative), procedural canvas animations (hero background, orbital simulation), full keyboard navigation, reduced-motion support, WCAG AA contrast, responsive design from 320px to 2560px+, and no external dependencies beyond Google Fonts. All visualizations rendered in Canvas/SVG via vanilla JS \u2014 no frameworks, build steps, or external APIs.",
-      "slug": "2026-11-09_nemotron-3-ultra-550b-a55b_site-editorial_v1",
-      "path": "runs/2026-11-09_nemotron-3-ultra-550b-a55b_site-editorial_v1/index.html",
-      "source_file": "site-editorial__nemotron-3-ultra-550b-a55b__2026-11-09__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "gpt-6",
-      "category": "site-editorial",
-      "date": "2026-11-09",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "02",
-      "prompt_label": "Interactive Content Website",
-      "notes": "A self-contained editorial field atlas tracing Johannesburg's water supply from the Lesotho Highlands through the Vaal River System, bulk treatment and municipal distribution. Includes a historical timeline, clickable route explorer, treatment-process selector, reservoir buffer calculator, searchable glossary and linked source ledger. Illustrations are inline SVG/CSS; no external runtime dependencies or network requests are required. Reservoir calculations are explicitly illustrative, not live hydraulic forecasts. Rendered and interaction-tested in headless Chromium at desktop, tablet and mobile widths; no console errors, failed requests, broken internal anchors or horizontal overflow observed. Direct file:// and localhost navigation were blocked by the environment's browser policy, so cold-open navigation itself could not be verified.",
-      "slug": "2026-11-09_gpt-6_site-editorial_v1",
-      "path": "runs/2026-11-09_gpt-6_site-editorial_v1/index.html",
-      "source_file": "site-editorial__gpt-6__2026-11-09__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "glm-5.3-flash",
-      "category": "site-editorial",
-      "date": "2026-11-09",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "02",
-      "prompt_label": "Interactive Content Website",
-      "notes": "Lines of Sight \u2014 an interactive editorial atlas of the Chappe optical telegraph (1791\u20131855). Single static site, vanilla HTML/CSS/JS, no frameworks or network calls; ~5,000 words of original editorial prose across ten plates, with every historical claim cited on the Sources plate and every invented element (vignettes, letter-to-pose teaching table, 1\u201398 pose numbering, schematic map routes, modelled lengths, symbolic fraud codes) explicitly labelled. Six interactive instruments built from scratch: a scrub-and-play network atlas (SVG map of 26 documented lines plus a Mediterranean inset with year-gated construction and closure), an annotated station plate with 8 hotspots, an explorer for all 98 semaphore poses, a Paris\u2013Lille encoder with animated relay simulation and a true-pace (20 s/symbol) mode, a two-transcript reconstruction of the 1834 Blanc brothers fraud, and a six-question exam with explanations; plus a glossary whose 16 inline dotted terms open popovers. All artwork (tower renderer, engraved France map, hero ridgeline scene) is procedural SVG from one shared generator; Fraunces/EB Garamond/IBM Plex Mono are self-hosted OFL woff2 subsets in assets/fonts. Tested in a Chromium-class browser at 1600px and 390px: timeline scrubbed to peak and selected lines, encoder run at both paces, fraud replayed on/off, exam answered, poses browsed, glossary popovers and contents overlay opened, horizontal overflow checked at phone width (none). No console capture was available in the automation harness, so a clean console is inferred from full DOM construction and zero error-path triggers across all exercised flows rather than from a direct console read; localStorage is not used, so storage guards were not needed. Known limitation: keyboard-shortcut help lists J/K/C/? which were verified via dispatched DOM key events; the harness's synthetic key path could not be exercised end-to-end.",
-      "slug": "2026-11-09_glm-5.3-flash_site-editorial_v1",
-      "path": "runs/2026-11-09_glm-5.3-flash_site-editorial_v1/index.html",
-      "source_file": "site-editorial__glm-5.3-flash__2026-11-09__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "assets/css/main.css",
-        "assets/fonts/ebgaramond-var-italic.woff2",
-        "assets/fonts/ebgaramond-var.woff2",
-        "assets/fonts/fraunces-var.woff2",
-        "assets/fonts/plexmono-400.woff2",
-        "assets/fonts/plexmono-600.woff2",
-        "assets/js/app.js",
-        "assets/js/data.js",
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "crouton-alpha",
-      "category": "site-editorial",
-      "date": "2026-11-09",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "02",
-      "prompt_label": "Interactive Content Website",
-      "notes": "LONGITUDE \u2014 a single-file documentary atlas on standard time. Five interactive components: scrubbable timeline, time-zone explorer, solar-time calculator with analemma, filterable observatory index, and a 6-question teaching quiz, plus glossary. Vanilla HTML/CSS/JS, no dependencies; procedural SVG diagrams and canvas starfield. Factual spine cited; illustrations labelled as computed/schematic; invented phrasing flagged. Browser-tested via localhost: page loads with 0 console errors; timeline keyboard/click, city explorer, calculator (Feb -15, Nov +16), observatory filters and quiz scoring exercised via in-page evaluation; no horizontal overflow at tested width; screenshot capture unavailable in this environment, so visual review was via preview and accessibility tree, not pixel screenshots. No network requests; localStorage access guarded with try/catch.",
-      "slug": "2026-11-09_crouton-alpha_site-editorial_v1",
-      "path": "runs/2026-11-09_crouton-alpha_site-editorial_v1/index.html",
-      "source_file": "site-editorial__crouton-alpha__2026-11-09__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "claude-haiku-5-5",
-      "category": "site-editorial",
-      "date": "2026-11-09",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "02",
-      "prompt_label": "Interactive Content Website",
-      "notes": "Single-file editorial site on how towns, railways and governments agreed on a shared clock. Three built interactives: a longitude explorer showing where solar noon falls against a clock, a scrubbable timeline of milestones, and a two-question quiz with feedback. Also a glossary reached through inline links, sticky chapter navigation with scroll progress, and procedural SVG art whose marker follows the explorer. Historical facts are drawn from standard histories named on the page; dates are the commonly reported ones. The explorer uses mean solar time and ignores the equation of time, so it is an illustration rather than survey data. Limitations: the text is shorter than a full long-form publication, imagery is generated SVG only, and the layout has not been viewed in a live browser. Test status: the inline script was checked for syntax with a parser only; nothing was run or rendered in a browser.",
-      "slug": "2026-11-09_claude-haiku-5-5_site-editorial_v1",
-      "path": "runs/2026-11-09_claude-haiku-5-5_site-editorial_v1/index.html",
-      "source_file": "site-editorial_claude-haiku-5-5_2026-11-09_v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "nemotron-3-ultra-550b-a55b",
-      "category": "site-brand",
-      "date": "2026-11-09",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "01",
-      "prompt_label": "Brand & Business Website",
-      "notes": "Created AURA Audio \u2014 a premium planar magnetic headphone brand handcrafted in Portland. The site features: 1) Hero with animated SVG headphone illustration and live stats counter, 2) Three product cards (Aeon $2,499 flagship, Verse $1,799 studio reference, Echo $899 portable) with detailed specs, 3) Technology section explaining 14.2nm diaphragm, N55 magnet arrays, hand-matched pairs, CNC chassis, 4) Six-step manufacturing process timeline, 5) Six detailed testimonials from real-world professionals (mastering engineer, FOH engineer, software engineer, recording engineer, producer, composer) with schema.org Review markup, 6) Press/awards bar, 7) About section with founder story and four core values, 8) Six FAQ entries with honest answers, 9) Full order form with dynamic pricing, validation, 30-day trial consent, and success state \u2014 all client-side. Semantic HTML, WCAG AA contrast, keyboard navigation, reduced-motion support, structured data (Brand, Product, Review), SEO meta tags, responsive 1440px/768px/390px breakpoints. No external dependencies beyond Google Fonts. All SVG illustrations authored inline. Form validates with human-readable errors, shows loading state, generates serial number on success, and allows reset.",
-      "slug": "2026-11-09_nemotron-3-ultra-550b-a55b_site-brand_v1",
-      "path": "runs/2026-11-09_nemotron-3-ultra-550b-a55b_site-brand_v1/index.html",
-      "source_file": "site-brand__nemotron-3-ultra-550b-a55b__2026-11-09__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "gpt-6",
-      "category": "site-brand",
-      "date": "2026-11-09",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "01",
-      "prompt_label": "Brand & Business Website",
-      "notes": "A self-contained, mobile-first concept site for Good Ground Clearance Co., a fictional Johannesburg home-clearance service. The enquiry flow validates and saves a brief in-browser, with copy/download recovery; it does not transmit enquiries to a live inbox. First-view budget: 80 KiB; shipped HTML plus the local hero SVG is 76.6 KiB, with no third-party requests. Headless Chromium in-memory checks passed at 320, 390 and 1440 px; navigation, keyboard entry, validation, clipboard/download, the storage path (test shim), storage-denied recovery and success/edit states passed without console or page errors. Scroll reveals were checked. This environment blocked direct file:// and localhost navigation by browser policy, so cold-open and native-origin persistence were not browser-verified; the relative asset path and static source were code-checked.",
-      "slug": "2026-11-09_gpt-6_site-brand_v1",
-      "path": "runs/2026-11-09_gpt-6_site-brand_v1/index.html",
-      "source_file": "site-brand__gpt-6__2026-11-09__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "assets/hero-room.svg",
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "glm-5.3-flash",
-      "category": "site-brand",
-      "date": "2026-11-09",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "01",
-      "prompt_label": "Brand & Business Website",
-      "notes": "Sallow & Fen \u2014 a fictional heritage vegetable seed nursery on the Norfolk fen edge. Single-page site with: annotated botanical hero plate (hand-drawn inline SVG with stroke-draw animation), three-part argument with stats band, a 12-variety seed library with real horticultural data (prices, sow windows, germination percentages, batch numbers) and type/month filtering, a month-by-month sowing calendar wired to both the calendar panel and the filters, a five-step process section with a germination-certificate artefact, a \u00a345/yr subscription with four-parcel timeline and sold-out status, three named founders, a seven-question FAQ, and a consultation/booking enquiry flow with human validation messages, error summary, character counter, conditional postcode field, localStorage draft autosave with restore banner, browser-only sent-enquiry records, print-copy and reset paths. Three policy dialogs (native <dialog>). All assets local: self-hosted Fraunces/Archivo/IBM Plex Mono woff2, 12 hand-authored botanical SVGs, favicon, og.png (1200x630, composed live from the page). SEO: single H1, semantic sections, descriptive meta/OG/Twitter tags, JSON-LD @graph (Organization+Store, WebSite, Product for the subscription, three Services matching the booking options, FAQPage matching the visible FAQ). Verified in-browser at 1440/768/390 (layout screenshots, no horizontal overflow at 390, mobile nav, scrollspy, calendar month switching, filters incl. empty state, full enquiry flow: empty-submit errors, bad postcode error, draft restore after an unplanned reload, successful submission with reference, sent list, privacy dialog). Keyboard: skip link, logical tab order audited, JS focus management on errors/success; trusted key events could not be dispatched by the embedded test browser, so button/radio activation was verified through the same click/submit event paths rather than raw key presses. prefers-reduced-motion is handled in CSS (animations/transitions/reveals/plate draw all collapse) but could not be emulated at runtime in this browser. Zero console errors observed across a full page walk; no external network requests. file:// was not directly openable by the embedded browser; the page uses no fetch/modules/CDN so it is expected to work from file:// (localStorage guarded with try/catch either way). Known limitations: enquiry/subscription are client-side only by design (storage-backed, nothing is transmitted); testimonials omitted deliberately in favour of verifiable process claims.",
-      "slug": "2026-11-09_glm-5.3-flash_site-brand_v1",
-      "path": "runs/2026-11-09_glm-5.3-flash_site-brand_v1/index.html",
-      "source_file": "site-brand__glm-5.3-flash__2026-11-09__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "assets/css/style.css",
-        "assets/favicon.svg",
-        "assets/fonts/archivo-var.woff2",
-        "assets/fonts/fraunces-var-italic.woff2",
-        "assets/fonts/fraunces-var.woff2",
-        "assets/fonts/plexmono-400.woff2",
-        "assets/fonts/plexmono-500.woff2",
-        "assets/fonts/plexmono-600.woff2",
-        "assets/img/bean.svg",
-        "assets/img/beetroot.svg",
-        "assets/img/carrot.svg",
-        "assets/img/chard.svg",
-        "assets/img/kale.svg",
-        "assets/img/leek.svg",
-        "assets/img/lettuce.svg",
-        "assets/img/nasturtium.svg",
-        "assets/img/pea.svg",
-        "assets/img/radish.svg",
-        "assets/img/squash.svg",
-        "assets/img/tomato.svg",
-        "assets/js/main.js",
-        "assets/og.png",
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "crouton-alpha",
-      "category": "site-brand",
-      "date": "2026-11-09",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "01",
-      "prompt_label": "Brand & Business Website",
-      "notes": "Ember Box: wood-fired sauna in a horsebox on four Calder Valley farms. Single self-contained index.html (78 KB, 76.9 KB total for the folder), inline CSS/JS/SVG, no external requests or fonts, budget under 100 KB. Tested in browser over localhost: no console errors, Lighthouse Accessibility/Best Practices/SEO all 1.0, no horizontal overflow at 320/390/1440px (iframe-checked) after fixing table/header overflow, empty-submit (8 errors, focus to summary), bad-email preservation, \u00a324pp pricing maths (\u00a348 for 2, \u00a354 with 2 towels), success reference EB-261109-XWB7 with draft cleared, book-another keeping contact, and draft restore after reload all passed. Keyboard path checked (45 focusable controls, all labelled, native FAQ details). Limitation: screenshots could not be captured (browser required a visible desktop window) so visual check was via accessibility tree and layout metrics only; file:// cold open not loaded through the browser tool (HTTP only), but the single file makes no external or module requests.",
-      "slug": "2026-11-09_crouton-alpha_site-brand_v1",
-      "path": "runs/2026-11-09_crouton-alpha_site-brand_v1/index.html",
-      "source_file": "site-brand__crouton-alpha__2026-11-09__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "crouton-alpha",
-      "category": "site-brand",
-      "date": "2026-11-09",
-      "version": 2,
-      "entry": "index.html",
-      "prompt": "01",
-      "prompt_label": "Brand & Business Website",
-      "notes": "Duskfield, a four-room dark-sky inn on the North York Moors: single-file site (3144 words, 7 sections) with live moon phase, meteor-shower and Bortle calculations, twinkling star canvas (paused when tab hidden / reduced motion), room pricing, accessible FAQ and a validating booking enquiry flow with human error messages, success reference, edit recovery and localStorage draft persistence guarded by try/catch. Four generated photos compressed from ~11MB PNG to ~1.3MB JPG (hero 1920w, others 1280w). Tested in Chromium via a local Node server: page loads with no console errors, one H1, empty submit shows 6 field errors with no data loss, invalid email/non-Friday dates are rejected with specific messages, valid submit (Observatory + observing extra = \u00a3463) succeeds with reference and Edit restores fields, drafts restore after reload, FAQ/Bortle/room-sync and keyboard 'B' shortcut work, and no horizontal page overflow was measured in iframes at 1440/768/390px after fixing the brightness table. Screenshot capture was unavailable in this session (browser tool requires a visible desktop window) so visuals were verified by reading the generated images and via DOM/layout metrics rather than screenshots; file:// cold open was not browser-tested, only served over local HTTP, though the site has no external dependencies and uses only relative local assets. Organizer note: resubmitted as version 2 because a v1 run for the same model, category and date already exists; the build itself is unmodified.",
-      "slug": "2026-11-09_crouton-alpha_site-brand_v2",
-      "path": "runs/2026-11-09_crouton-alpha_site-brand_v2/index.html",
-      "source_file": "site-brand__crouton-alpha__2026-11-09__v2.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "assets/hero-moor.jpg",
-        "assets/room-interior.jpg",
-        "assets/sauna-dusk.jpg",
-        "assets/telescope-deck.jpg",
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "claude-haiku-5-5",
-      "category": "site-brand",
-      "date": "2026-11-09",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "01",
-      "prompt_label": "Brand & Business Website",
-      "notes": "Invented business Burr & Bevel, a mail-in knife sharpening service. One self-contained index.html with inline CSS and JavaScript, no external requests, no build step, system font stacks and a drawn SVG bevel diagram. Seven sections: hero, process, prices, testimonials, owner story, FAQ and a booking form. The form validates each field with specific messages, keeps entered data on error, moves focus to the first problem, saves bookings to localStorage inside try/catch, shows a success state with a reference, and offers a text summary download. If storage is blocked the page says so and the download still works. Bookings never leave the browser. Test status: code-level only. The inline script was syntax-checked, JSON-LD was parsed, and duplicate ids and the single H1 were counted. No browser was available, so layouts at 1440, 768 and 390px, the keyboard path, and reduced-motion behaviour were not observed. Typefaces are system stacks, so they vary by platform.",
-      "slug": "2026-11-09_claude-haiku-5-5_site-brand_v1",
-      "path": "runs/2026-11-09_claude-haiku-5-5_site-brand_v1/index.html",
-      "source_file": "site-brand_claude-haiku-5-5_2026-11-09_v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "nemotron-3-ultra-550b-a55b",
-      "category": "game-masterpiece",
-      "date": "2026-11-09",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "06",
-      "prompt_label": "End-to-End Game Masterpiece",
-      "notes": "The Last Light of Orio - A complete narrative adventure game about memory, sacrifice, and what we choose to keep. Features: 4 chapters with branching narrative, dialogue with consequences, resource management (Memory Fragments, Vitality, Resolve), relationship system with 5 characters each with arcs, inventory with equippable items, quest log with main/side quests, journal/codex lore system, save/load via IndexedDB with localStorage fallback, procedural audio synthesis via Web Audio API, atmospheric particle effects, full keyboard navigation, accessibility support (reduced motion, high contrast, screen reader labels), responsive design from 320px to 2560px+. All code, narrative, systems, and design authored from scratch. No external assets or libraries beyond Google Fonts. Tested in Chrome/Firefox - runs from file:// with limited save functionality (IndexedDB requires HTTP), full functionality on local server.",
-      "slug": "2026-11-09_nemotron-3-ultra-550b-a55b_game-masterpiece_v1",
-      "path": "runs/2026-11-09_nemotron-3-ultra-550b-a55b_game-masterpiece_v1/index.html",
-      "source_file": "game-masterpiece__nemotron-3-ultra-550b-a55b__2026-11-09__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "game.js",
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
       "model": "glm-5.3-flash",
       "category": "game-masterpiece",
       "date": "2026-11-09",
@@ -1920,252 +1139,6 @@
         "manifest.webmanifest",
         "meta.json",
         "styles.css",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "crouton-alpha",
-      "category": "game-masterpiece",
-      "date": "2026-11-09",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "06",
-      "prompt_label": "End-to-End Game Masterpiece",
-      "notes": "The Drowned Atlas: single-file story RPG in Siltmarsh. 3 chapters, 7 districts, 4 interacting systems (dialogue/trust, daylight/tide time pressure, survey/craft charts, journal/discoveries), 5 endings, save/load via localStorage, synthesised WebAudio music/SFX, responsive parchment chart-table UI with keyboard shortcuts (1-7,S,H,C,J,Esc), WCAG-focused labels/focus/reduced-motion/large-text. Single ~54KB HTML, no external assets/build/network. Performance: DOM-only map (7 nodes), no per-frame loops except 1.4s music timer, renders on state change only. Verified in Chromium from file:// after fixes: cold title, game visible (display block), map nodes sized/no overlap/no horizontal overflow, automated full playthrough Day1-3 through all 3 crafts to finished ending + credits, ending gating (shared/honest/ordered/hidden/narrow), mid-game and finished save/load coherence, pause/settings/help, keyboard travel/locking, corrupted/huge save clamping, rapid-input single-spend \u2014 0 console errors in final runs. Screenshot capture unavailable (needs visible desktop window), so visual check was via live DOM geometry, not pixels.",
-      "slug": "2026-11-09_crouton-alpha_game-masterpiece_v1",
-      "path": "runs/2026-11-09_crouton-alpha_game-masterpiece_v1/index.html",
-      "source_file": "game-masterpiece__crouton-alpha__2026-11-09__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "nemotron-3-ultra-550b-a55b",
-      "category": "game-3d",
-      "date": "2026-11-09",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "05",
-      "prompt_label": "Original 3D Game",
-      "notes": "Voxel Resonance - A first-person 3D puzzle-exploration game where players use a phase-shifting scanner to reveal hidden architecture across 4 dimensional frequencies. Core mechanics: spatial reasoning through phase-shifting (geometry exists in same 3D space at different phases), line-of-sight scanning with wave propagation visualization, momentum-based movement with step-up, crouching, sprinting. 5 authored levels with increasing complexity, procedural terrain, phased platforms/columns/bridges, collectible resonance crystals, exit portals. Procedural audio synthesis (Web Audio API) for all SFX and ambient music. Custom GLSL shaders for phase materials, crystal rendering, and scan wave effect. Quality presets (Low/Medium/High/Ultra/Auto), full keyboard/mouse + touch controls, save/load via localStorage, pause/menu/completion flows, WCAG AA contrast, reduced motion support, responsive UI. Runs from single index.html with Three.js via CDN.",
-      "slug": "2026-11-09_nemotron-3-ultra-550b-a55b_game-3d_v1",
-      "path": "runs/2026-11-09_nemotron-3-ultra-550b-a55b_game-3d_v1/index.html",
-      "source_file": "game-3d__nemotron-3-ultra-550b-a55b__2026-11-09__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "crouton-alpha",
-      "category": "game-3d",
-      "date": "2026-11-09",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "05",
-      "prompt_label": "Original 3D Game",
-      "notes": "AETHERDRIFT: original 3D glider flight game in a single self-contained index.html using hand-rolled WebGL (no external dependencies). Pilot through a floating archipelago, manage height/speed energy exchange, ride thermals, avoid birds/storms, recover 9 star shards, return to beacon. Keyboard/mouse/touch supported, procedural audio, adaptive quality, reduced-motion and guarded storage. Tested in the in-app Chromium browser served over localhost: title loads with no console errors, game starts, physics/HUD verified by manually stepping frames (timer, speed ~15-17 m/s, altitude stable), pause/resume/restart verified, framebuffer sampling confirms non-blank rendering after fixing shader-link and launch-heading bugs. Screenshots were unavailable (tab not visible in headless session), and file:// cold-open was not exercised via the browser tool (requires HTTP); the file has no external requests so file:// should work. Full 9-shard playthrough to the beacon ending was verified by code inspection, not by a complete manual playthrough.",
-      "slug": "2026-11-09_crouton-alpha_game-3d_v1",
-      "path": "runs/2026-11-09_crouton-alpha_game-3d_v1/index.html",
-      "source_file": "game-3d__crouton-alpha__2026-11-09__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "nemotron-3-ultra-550b-a55b",
-      "category": "game-2d",
-      "date": "2026-11-09",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "04",
-      "prompt_label": "Original 2D Game",
-      "notes": "Void Drifter - A complete top-down action roguelike where players survive 10 sectors of escalating void entities. Features: deterministic fixed-timestep simulation with delta-time, 4 distinct enemy types with unique behaviors (drifter, stalker, anchor, void_walker), energy management system (shards for energy, health regen above 50% energy), void dash with invincibility frames and offensive capability, procedural but seeded level generation, full particle system (800 particles), screen shake, hit-stop, synthesized Web Audio API sound effects and procedural ambient music, keyboard/mouse and touch controls, pause on blur, localStorage persistence for best score/sector, WCAG AA contrast, reduced-motion support, semantic HTML with ARIA labels. Runs from single index.html with no build step.",
-      "slug": "2026-11-09_nemotron-3-ultra-550b-a55b_game-2d_v1",
-      "path": "runs/2026-11-09_nemotron-3-ultra-550b-a55b_game-2d_v1/index.html",
-      "source_file": "game-2d__nemotron-3-ultra-550b-a55b__2026-11-09__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "glm-5.3-flash",
-      "category": "game-2d",
-      "date": "2026-11-09",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "04",
-      "prompt_label": "Original 2D Game",
-      "notes": "HIVEMOTHER \u2014 an original swarmkeeping game: you are a queen bee; a boids-flocked worker swarm follows your cursor/keys, gathers nectar from seeded flower clusters inside your scent ring, and ferries pollen to the hive while wasps raid (they chase, lunge, leave after feeding, and give up after two pulse-stuns). Complete 7-day season loop: per-day quota before dusk, night interlude with hatching, golden blossoms (double pollen), wind gusts from day 4, honey-bank economy funding a decoy ability; lose by empty comb at dusk or a scattered swarm; win screen, instant restart, seeded per-day meadows, best-score persistence with guarded localStorage, pause on P/Esc/blur, WebAudio-synth SFX and ambience, reduced-motion support, keyboard+pointer+touch controls, DOM HUD with live quota/sun-track/cooldowns. Balance verified by scripted full-season simulations across multiple seeds (winnable, losable, near-miss finishes). Tested in the environment's embedded Chromium: console clean at boot and through title/run/dusk/night/end/pause flows, storage-corruption guard verified, letterbox resize verified, synthetic frame cost ~0.7 ms at 1586x892 (60 fps headroom). Limitations: the embedded test page never fires requestAnimationFrame (reports visibilityState hidden), so frame pacing was exercised via a ?tick=1 timer path and real-rAF pacing relies on code review; touch buttons were verified by coarse-pointer emulation only, not on physical hardware; audio was verified error-free by instrumentation, not by listening.",
-      "slug": "2026-11-09_glm-5.3-flash_game-2d_v1",
-      "path": "runs/2026-11-09_glm-5.3-flash_game-2d_v1/index.html",
-      "source_file": "game-2d__glm-5.3-flash__2026-11-09__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "js/audio.js",
-        "js/main.js",
-        "js/render.js",
-        "js/sim.js",
-        "js/world.js",
-        "manifest.webmanifest",
-        "meta.json",
-        "style.css",
-        "sw.js"
-      ]
-    },
-    {
-      "schema_version": 1,
-      "model": "crouton-alpha",
-      "category": "game-2d",
-      "date": "2026-11-09",
-      "version": 1,
-      "entry": "index.html",
-      "prompt": "04",
-      "prompt_label": "Original 2D Game",
-      "notes": "GRAVITIDE: original 2D gravity-well physics courier. Hold to thrust with real inertia, sling past three pulsing wells, carry shards (heavier = slower, higher multiplier) back to the centre Beacon to bank 24 for the win; dash through spiky hunters to break them, plus shield cells and three-phase escalation. Fixed 120Hz simulation, delta-time rendering, synthesized WebAudio (thrust/ambient/SFX), guarded localStorage best/settings, pause on blur, touch dash button, reduced-motion mode. Verified by loading via localhost in the in-app browser: cold title renders, Launch starts the run, pause/resume, mute and dash controls work, zero console errors observed. Long-run visual/gameplay check was limited: the tab was backgrounded so rAF throttled and a screenshot needed a visible window.",
-      "slug": "2026-11-09_crouton-alpha_game-2d_v1",
-      "path": "runs/2026-11-09_crouton-alpha_game-2d_v1/index.html",
-      "source_file": "game-2d__crouton-alpha__2026-11-09__v1.zip",
-      "scores": {
-        "completeness": null,
-        "robustness": null,
-        "craft": null,
-        "depth": null,
-        "originality": null,
-        "performance": null
-      },
-      "log": {
-        "ran_first_try": null,
-        "console_errors": null,
-        "fps": null,
-        "file_size_kb": null
-      },
-      "pwa": {
-        "manifest_linked": false,
-        "sw_registered": false
-      },
-      "files": [
-        "icons/icon-192.png",
-        "icons/icon-512.png",
-        "index.html",
-        "manifest.webmanifest",
-        "meta.json",
         "sw.js"
       ]
     }

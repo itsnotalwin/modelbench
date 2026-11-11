@@ -255,12 +255,12 @@ class ZipMetadataRoutingTests(unittest.TestCase):
 class PromptCatalogIntegrityTests(unittest.TestCase):
 
 
-    def test_catalog_covers_all_fifteen_challenges(self):
+    def test_catalog_covers_all_challenges(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
         prompts = catalog["prompts"]
-        self.assertEqual(len(prompts), 15)
-        self.assertEqual([p["no"] for p in prompts], [f"{n:02d}" for n in range(1, 16)])
-        self.assertEqual(len({p["slug"] for p in prompts}), 15)
+        self.assertEqual(len(prompts), 21)
+        self.assertEqual([p["no"] for p in prompts], [f"{n:02d}" for n in range(1, 22)])
+        self.assertEqual(len({p["slug"] for p in prompts}), 21)
         self.assertTrue({p["family"] for p in prompts} <= {"Web", "Games", "Visual", "Worlds"})
         for challenge in prompts:
             matches = list((REPO_ROOT / "prompts").glob(f"{challenge['no']}-*.md"))
@@ -275,57 +275,45 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
         self.assertNotIn("three separate outputs", dashboard)
         self.assertIn("one complete project folder", dashboard)
         self.assertIn("One run, one ZIP", dashboard)
-        self.assertIn("Fifteen open-ended challenges", dashboard)
-        self.assertIn("Fifteen mega-prompts", dashboard)
+        self.assertIn("Twenty-one open-ended challenges", dashboard)
+        self.assertIn("Twenty-one mega-prompts", dashboard)
 
 
-    def test_game_prompts_leave_creative_direction_open(self):
+    def test_every_prompt_carries_the_submission_contract(self):
+        catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
+        for challenge in catalog["prompts"]:
+            path = next((REPO_ROOT / "prompts").glob(f"{challenge['no']}-*.md"))
+            body = path.read_text(encoding="utf-8")
+            self.assertIn("## Automatic run identity", body)
+            self.assertIn("## Submission contract", body)
+            self.assertIn("exactly one folder", body.lower())
+            self.assertIn(f'"category": "{challenge["slug"]}"', body)
+            self.assertIn(f'"prompt": "{challenge["no"]}"', body)
+            self.assertIn(f'"prompt_label": "{challenge["title"]}"', body)
+            self.assertIn("index.html", body)
+            self.assertIn("meta.json", body)
+
+    def test_open_challenges_leave_creative_direction_to_the_model(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
         prompts = {p["no"]: p for p in catalog["prompts"]}
-        game_categories = {"04": "game-2d", "05": "game-3d", "06": "game-masterpiece"}
-        for number, slug in game_categories.items():
-            challenge = prompts[number]
-            self.assertEqual(challenge["slug"], slug)
-            matches = list((REPO_ROOT / "prompts").glob(f"{number}-*.md"))
-            self.assertEqual(len(matches), 1, f"expected one prompt file for challenge {number}")
-            body = matches[0].read_text(encoding="utf-8")
-            self.assertTrue(any(term in body.lower() for term in ("you choose", "you decide", "invent", "your choice")))
-            self.assertIn("exactly one folder", body.lower())
-            self.assertIn(f'"category": "{slug}"', body)
-            self.assertIn(f'"prompt": "{number}"', body)
-            self.assertIn(f'"prompt_label": "{challenge["title"]}"', body)
+        open_challenges = {"03": "game-2d", "04": "game-3d", "12": "world-3d", "14": "generative-art"}
+        for number, slug in open_challenges.items():
+            self.assertEqual(prompts[number]["slug"], slug)
+            body = next((REPO_ROOT / "prompts").glob(f"{number}-*.md")).read_text(encoding="utf-8")
+            self.assertTrue(
+                any(term in body.lower() for term in ("up to you", "you choose", "you invent", "entirely up to", "is yours", "are yours")),
+                f"challenge {number} should leave the concept open",
+            )
 
-    def test_end_to_end_game_masterpiece_requires_full_story_production(self):
-        catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
-        challenge = next(p for p in catalog["prompts"] if p["no"] == "06")
-        self.assertEqual(challenge["slug"], "game-masterpiece")
-        self.assertEqual(challenge["title"], "End-to-End Game Masterpiece")
-        body = (REPO_ROOT / "prompts" / "06-end-to-end-game-masterpiece.md").read_text(encoding="utf-8")
-        for phrase in ("Use the full capability of your environment", "original, coherent storyline",
-                       "playable protagonist", "supporting cast", "actual dialogue and scenes",
-                       "at least three authored missions", "at least four substantial gameplay systems",
-                       "complete ending"):
-            self.assertIn(phrase, body)
-        self.assertIn('"prompt": "06"', body)
-        self.assertIn('"category": "game-masterpiece"', body)
-        guide = (REPO_ROOT / "prompts" / "README.md").read_text(encoding="utf-8")
-        self.assertIn("| 06 | End-to-End Game Masterpiece | game-masterpiece |", guide)
-
-    def test_2d_game_prompt_leaves_genre_and_concept_to_the_model(self):
-        catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
-        challenge = next(p for p in catalog["prompts"] if p["no"] == "04")
-        self.assertEqual(challenge["title"], "Original 2D Game")
-        body = (REPO_ROOT / "prompts" / "04-original-2d-game.md").read_text(encoding="utf-8")
-        self.assertIn("You choose the genre and subgenre", body)
-        self.assertIn("Any game genre is valid.", body)
-        self.assertIn("Do not default to puzzles", body)
-        self.assertNotIn("puzzle mechanic", body.lower())
+    def test_two_d_game_prompt_does_not_prescribe_a_genre(self):
+        body = (REPO_ROOT / "prompts" / "03-game-2d.md").read_text(encoding="utf-8")
+        self.assertIn("entirely up to you", body)
         self.assertNotIn("six designed, solvable stages", body.lower())
-        self.assertNotIn("undo/restart", body.lower())
-        self.assertIn('"prompt_label": "Original 2D Game"', body)
+        challenge = next(
+            p for p in json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))["prompts"]
+            if p["no"] == "03"
+        )
         self.assertNotIn("puzzle", challenge["requirement"].lower())
-        guide = (REPO_ROOT / "prompts" / "README.md").read_text(encoding="utf-8")
-        self.assertIn("| 04 | Original 2D Game | game-2d |", guide)
 
     def test_manifest_matches_runs_directory_and_six_prompt_catalog(self):
         """The manifest must always describe exactly what is in runs/ — the old
@@ -393,10 +381,10 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
         for key in ("MODELBENCH_MODEL", "MODEL_ID", "OPENAI_MODEL", "ANTHROPIC_MODEL", "GEMINI_MODEL", "GOOGLE_MODEL"):
             env.pop(key, None)
         result = subprocess.run(
-            [sys.executable, str(REPO_ROOT / "tools" / "new_run.py"), "--category", "site-brand"],
+            [sys.executable, str(REPO_ROOT / "tools" / "new_run.py"), "--category", "website"],
             check=True, capture_output=True, text=True, env=env,
         )
-        self.assertRegex(result.stdout, r"site-brand__unknown-model__\d{4}-\d{2}-\d{2}__v1/")
+        self.assertRegex(result.stdout, r"website__unknown-model__\d{4}-\d{2}-\d{2}__v1/")
         metadata_text = result.stdout.split("Required metadata:\n", 1)[1]
         metadata = json.loads(metadata_text)
         self.assertEqual(metadata["model"], "unknown-model")
@@ -410,7 +398,7 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
             env.pop(key, None)
         env["MODELBENCH_MODEL"] = "provider/GPT 6 Thinking"
         result = subprocess.run(
-            [sys.executable, str(REPO_ROOT / "tools" / "new_run.py"), "--category", "site-brand"],
+            [sys.executable, str(REPO_ROOT / "tools" / "new_run.py"), "--category", "website"],
             check=True, capture_output=True, text=True, env=env,
         )
         metadata = json.loads(result.stdout.split("Required metadata:\n", 1)[1])

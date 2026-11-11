@@ -1,34 +1,40 @@
 # ModelBench
 
-ModelBench is a one-shot AI build benchmark focused on **web development, games, visual work and simulated worlds**. It contains fifteen demanding challenges spanning those families. Each model run is one finished artifact.
+ModelBench is a one-shot AI build benchmark focused on **web development, games, visual work and simulated worlds**. It contains twenty-one demanding challenges spanning those families. Each model run is one finished artifact.
 
 **Live dashboard:** https://itsnotalwin.github.io/modelbench/
 
 ## How submissions work
 
-1. Choose one of the fifteen challenges in [Prompts](prompts/README.md).
+1. Choose one of the twenty-one challenges in [Prompts](prompts/README.md).
 2. The prompt identifies the executing model, uses the current system date and fixes version to `1`. No organiser input is required.
 3. The model creates one folder named `CATEGORY__MODEL__YYYY-MM-DD__v1` containing `index.html`, `meta.json` and essential local assets only.
 4. ZIP that folder.
 5. Upload the ZIP to [inbox/](inbox/README.md). The importer routes from `meta.json`, not the ZIP filename.
 
-## The fifteen challenges
+## The challenges
 
-- **01 Brand & Business Website** — responsive brand website and enquiry flow.
-- **02 Interactive Content Website** — rich content, storytelling and useful interactions.
-- **03 Complete Web Application** — connected workflows and persistent application state.
-- **04 Original 2D Game** — genre and creative direction chosen by the model.
-- **05 Original 3D Game** — model-chosen genre with genuine 3D gameplay.
-- **06 End-to-End Game Masterpiece** — original world, characters, full storyline, dialogue, choices, quests, interconnected gameplay, art, sound and a complete ending.
-- **07 Interactive Machine Explainer** — physically accurate mechanism, timeline control, part inspection and what-if simulation.
-- **08 First-Person 3D Game** — pointer-lock movement, authored environment and reactive opposition.
-- **09 Browser Desktop OS** — window manager, shared virtual filesystem and eight-plus apps.
-- **10 Living 3D World** — streaming procedural world with weather, time and inhabitants.
-- **11 Generative Artwork** — seeded, reproducible, real-time composition.
-- **12 Professional Creative Tool** — layered, non-destructive editor with real file IO.
-- **13 Strategy Game with AI** — rules engine plus an opponent built on real search or evaluation.
-- **14 Physics Engine & Playground** — rigid-body engine written from scratch, with tooling.
-- **15 Floating Pagoda Island** — a fixed brief: procedural pagoda, floating geology, water, light and atmosphere.
+- **01 Website** — open brief: any subject, brand, content and visual direction.
+- **02 SaaS for Clearing Agents** — working customs-clearing product with real domain logic.
+- **03 2D Game** — complete 2D game, genre chosen by the model.
+- **04 3D Game** — complete 3D game, genre and camera chosen by the model.
+- **05 Restaurant Website** — menu, reservations and ordering with a distinct identity.
+- **06 Machine Explainer** — accurate interactive explanation of a real mechanism.
+- **07 First-Person Game** — pointer-lock 3D game with authored environment.
+- **08 Arcade Game** — score-attack design with seeded runs and a leaderboard.
+- **09 Browser Operating System** — window manager, shared filesystem, eight-plus apps.
+- **10 Rubik's Cube** — 3D cube with direct manipulation and a working solver.
+- **11 Platformer** — original mechanic twist, four levels and a boss.
+- **12 Living 3D World** — streaming procedural world with weather and inhabitants.
+- **13 Data Story** — linked custom visualisations over a generated dataset.
+- **14 Generative Art** — seeded, reproducible, real-time composition.
+- **15 Music Instrument** — real Web Audio engine with sequencer and export.
+- **16 Creative Tool** — layered non-destructive editing with real file IO.
+- **17 Emergent Simulation** — thousands of agents from simple rules.
+- **18 Strategy Game** — rules engine plus an AI built on real search.
+- **19 Spreadsheet** — formula engine, 100k-row grid and charts.
+- **20 Physics Engine** — rigid-body engine written from scratch.
+- **21 Floating Pagoda Island** — the fixed brief: procedural pagoda on a floating island.
 
 ## Metadata contract
 
@@ -49,7 +55,7 @@ Every ZIP must contain a UTF-8 `meta.json` at its project root:
 ```
 
 - `model`: runtime model slug, lowercase.
-- `category`: one of the fifteen canonical slugs.
+- `category`: one of the twenty-one canonical slugs.
 - `date`: real ISO date in `YYYY-MM-DD`.
 - `version`: always integer `1`; never ask or increment it.
 - `entry`: `index.html` at project root.
@@ -66,9 +72,9 @@ The six-axis rating system remains unchanged: completeness, robustness, craft, d
 
 ```text
 index.html                    dashboard UI
-manifest.json                 generated dashboard data and fifteen-challenge catalog
+manifest.json                 generated dashboard data and twenty-one-challenge catalog
 prompts/catalog.json          canonical challenge catalog
-prompts/01-*.md … 15-*.md     fifteen standalone mega-prompts
+prompts/01-*.md … 21-*.md     twenty-one standalone challenge briefs
 inbox/                        incoming ZIP packages and archived prior uploads
 runs/<run-slug>/              accepted submissions
 tools/sort_inbox.py           safe ZIP intake and routing
