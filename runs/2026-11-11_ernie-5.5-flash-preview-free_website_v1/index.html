@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Umbra — Twelve Studies in Light and Grey</title>
+<meta name="description" content="Umbra is a series of twelve generative monochrome studies, drawn live in the browser with Canvas 2D. No images, no colour, no dependencies.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0b">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="topbar" id="topbar">
+  <a class="brand" href="#top" aria-label="Umbra — back to top">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <span class="brand-word">Umbra</span>
+  </a>
+  <nav class="nav" aria-label="Sections">
+    <a href="#statement">Statement</a>
+    <a href="#wall">Plates</a>
+    <a href="#method">Method</a>
+    <a href="#colophon">Colophon</a>
+  </nav>
+  <p class="status"><span class="status-dot" aria-hidden="true"></span><span id="statusText">Live</span></p>
+</header>
+
+<main id="main">
+
+  <section class="hero" id="top">
+    <canvas id="heroCanvas" class="hero-canvas" role="img" aria-label="An animated field of fine white concentric rings on black, drifting slowly across one another."></canvas>
+    <div class="hero-inner">
+      <p class="eyebrow">Series 001—012 &nbsp;·&nbsp; MMXXVI</p>
+      <h1>Light,<br>laid down<br>one value<br>at a time.</h1>
+      <div class="hero-foot">
+        <p class="hero-lede">Twelve generative studies in pure monochrome, drawn live in your browser. No images, no colour, no dependencies — only geometry, noise and time.</p>
+        <dl class="hero-meta">
+          <div><dt>Plates</dt><dd>12</dd></div>
+          <div><dt>Renderer</dt><dd>Canvas 2D</dd></div>
+          <div><dt>Rate</dt><dd>30 fps</dd></div>
+        </dl>
+      </div>
+      <a class="scroll-cue" href="#statement"><span>Enter the viewing room</span><span class="cue-arrow" aria-hidden="true">↓</span></a>
+    </div>
+  </section>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track" id="tickerTrack">
+      <span>No colour</span><span>No images</span><span>No dependencies</span><span>Twelve plates</span><span>Seeded, not stored</span><span>Thirty frames a second</span>
+    </div>
+  </div>
+
+  <section class="section statement" id="statement" aria-labelledby="statement-title">
+    <div class="section-inner">
+      <header class="section-head" data-reveal>
+        <span class="sec-num">01</span>
+        <h2 id="statement-title">Statement</h2>
+      </header>
+      <div class="statement-grid">
+        <p class="statement-lead" data-reveal>Umbra is a study in subtraction. Take away hue and what remains is value — the single variable that decides whether a form reads as solid, distant, soft or sharp.</p>
+        <div class="statement-copy">
+          <p data-reveal>Every plate on this site is drawn at runtime from a seed and a set of rules. Nothing is a photograph. Nothing is pre-rendered. The images exist only while you are looking at them.</p>
+          <p data-reveal>Without colour the eye does the work: it reads density as weight, spacing as distance, grain as air. A halftone dot is not a grey pixel. It is a promise that the grey will be rebuilt by the viewer.</p>
+          <blockquote data-reveal>
+            <p>“A picture made of rules is not less authored than a picture made of paint. It is only authored earlier.”</p>
+            <cite>Working note 001</cite>
+          </blockquote>
+        </div>
+      </div>
+      <dl class="stats" data-reveal>
+        <div><dt>Studies</dt><dd>12</dd></div>
+        <div><dt>Images</dt><dd>0</dd></div>
+        <div><dt>Dependencies</dt><dd>0</dd></div>
+        <div><dt>Seeds</dt><dd>∞</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section wall" id="wall" aria-labelledby="wall-title">
+    <div class="section-inner">
+      <header class="section-head" data-reveal>
+        <span class="sec-num">02</span>
+        <h2 id="wall-title">The wall</h2>
+      </header>
+      <div class="wall-top">
+        <p class="section-lede" data-reveal>Twelve plates, one value. Each is live and each is seeded. Open a plate for its notes, its two parameters and a high-resolution still.</p>
+        <div class="wall-tools" data-reveal>
+          <button class="btn" id="reseedAll" type="button">Reseed wall</button>
+          <button class="btn btn-quiet" id="motionToggle" type="button">Pause</button>
+        </div>
+      </div>
+      <ol class="wall-grid" id="wallGrid"></ol>
+      <noscript><p class="wall-hint">This exhibition draws every plate with JavaScript. Enable it to see the work.</p></noscript>
+      <p class="wall-hint">Select a plate to open it &nbsp;·&nbsp; press <kbd>R</kbd> to reseed the wall</p>
+    </div>
+  </section>
+
+  <section class="section method" id="method" aria-labelledby="method-title">
+    <div class="section-inner">
+      <header class="section-head" data-reveal>
+        <span class="sec-num">03</span>
+        <h2 id="method-title">Method</h2>
+      </header>
+      <p class="method-lead" data-reveal>Three rules, applied without exception.</p>
+      <div class="method-grid">
+        <article data-reveal>
+          <span class="m-num">i</span>
+          <h3>One channel</h3>
+          <p>Every pixel is set to a single value between black and white. No hue, no tint, no colour-managed grey. If it cannot be written as one number, it is not in the picture.</p>
+        </article>
+        <article data-reveal>
+          <span class="m-num">ii</span>
+          <h3>Seeded, not stored</h3>
+          <p>Each plate is a function of a seed, a clock and two parameters. Change the seed and you get another edition of the same rule. Nothing is cached and nothing is downloaded.</p>
+        </article>
+        <article data-reveal>
+          <span class="m-num">iii</span>
+          <h3>Drawn, not loaded</h3>
+          <p>The site ships no image files. Every mark is a canvas operation: an arc, a line, a glyph, a thresholded pixel. The whole exhibition is a few kilobytes of code.</p>
+        </article>
+      </div>
+
+      <figure class="demo" data-reveal>
+        <figcaption class="demo-head">
+          <span class="demo-cap">Try the constraint — one smooth gradient, reduced to a handful of values.</span>
+          <span class="demo-readout" id="demoReadout">5 levels · ordered 8×8</span>
+        </figcaption>
+        <canvas id="demoCanvas" role="img" aria-label="A halftone gradient rendered in black and white. Move the pointer across it to move the light, or use the controls below."></canvas>
+        <div class="demo-controls">
+          <label class="ctl" for="demoLevels">
+            <span>Levels</span>
+            <input type="range" id="demoLevels" min="2" max="12" step="1" value="5">
+            <output id="demoLevelsOut" for="demoLevels">5</output>
+          </label>
+          <label class="check" for="demoDither">
+            <input type="checkbox" id="demoDither" checked>
+            <span>Ordered dither</span>
+          </label>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section colophon" id="colophon" aria-labelledby="colophon-title">
+    <div class="section-inner">
+      <header class="section-head" data-reveal>
+        <span class="sec-num">04</span>
+        <h2 id="colophon-title">Colophon</h2>
+      </header>
+      <div class="colophon-grid">
+        <dl class="spec-list" data-reveal>
+          <div><dt>Type</dt><dd>System grotesque and system monospace. No webfonts, no requests.</dd></div>
+          <div><dt>Rendering</dt><dd>Canvas 2D on a single animation loop, capped at thirty frames a second, device pixel ratio capped at two.</dd></div>
+          <div><dt>Motion</dt><dd>Paused off-screen, paused in a hidden tab, and paused when the system asks for reduced motion. Every plate can be stopped by hand.</dd></div>
+          <div><dt>Assets</dt><dd>None. Every image on this page is generated at runtime from a seed.</dd></div>
+          <div><dt>Files</dt><dd>index.html, assets/style.css, assets/studies.js, assets/app.js</dd></div>
+          <div><dt>Keys</dt><dd>Tab to a plate, Enter to open it, ← → to move between plates, Esc to close.</dd></div>
+        </dl>
+        <div class="syscheck" data-reveal aria-label="Live system readout">
+          <p class="syscheck-title">System check <span class="status-dot" aria-hidden="true"></span></p>
+          <div class="sys-row"><span>Viewport</span><span id="sysViewport">—</span></div>
+          <div class="sys-row"><span>Pixel ratio</span><span id="sysDpr">—</span></div>
+          <div class="sys-row"><span>Reduced motion</span><span id="sysRm">—</span></div>
+          <div class="sys-row"><span>Motion</span><span id="sysMotion">—</span></div>
+          <div class="sys-row"><span>Frame rate</span><span id="sysFps">—</span></div>
+          <div class="sys-row"><span>Plates</span><span id="sysPlates">12</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p class="footer-word" aria-hidden="true">Umbra</p>
+  <div class="footer-bar">
+    <span>© 2026 Umbra — a study series</span>
+    <span>Twelve studies in light and grey</span>
+    <a href="#top">Back to top ↑</a>
+  </div>
+</footer>
+
+<dialog class="plate-dialog" id="plate" aria-labelledby="plateTitle">
+  <div class="plate-bar">
+    <p class="plate-kicker"><span id="plateNum">01</span> &nbsp;—&nbsp; <span id="plateMethod">Concentric superposition</span></p>
+    <button class="icon-btn" id="plateClose" type="button">Close <span aria-hidden="true">✕</span></button>
+  </div>
+  <div class="plate-inner">
+    <div class="plate-stage" id="plateStage">
+      <canvas id="plateCanvas" role="img" aria-label="The selected plate, drawn live."></canvas>
+      <div class="plate-hud" aria-hidden="true"><span id="hudXY">x 0.00 · y 0.00</span><span id="hudL">L 0.00</span></div>
+    </div>
+    <div class="plate-side">
+      <h2 class="plate-title" id="plateTitle">Interference</h2>
+      <p class="plate-desc" id="plateDesc"></p>
+      <dl class="plate-meta">
+        <div><dt>Year</dt><dd>2026</dd></div>
+        <div><dt>Medium</dt><dd>Canvas 2D</dd></div>
+        <div><dt>Seed</dt><dd id="plateSeedValue">—</dd></div>
+      </dl>
+      <div class="controls" id="plateControls"></div>
+      <div class="plate-actions">
+        <button class="btn" id="platePrev" type="button">← Prev</button>
+        <button class="btn" id="plateNext" type="button">Next →</button>
+        <button class="btn" id="plateReseed" type="button">New seed</button>
+        <button class="btn" id="plateSave" type="button">Save PNG</button>
+        <button class="btn btn-wide" id="plateLink" type="button">Copy link to this plate</button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<div class="sr-only" id="live" role="status" aria-live="polite"></div>
+
+<script src="assets/studies.js" defer></script>
+<script src="assets/app.js" defer></script>
+</body>
+</html>
