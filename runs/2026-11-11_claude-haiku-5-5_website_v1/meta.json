@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "claude-haiku-5-5",
+  "category": "website",
+  "date": "2026-11-11",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "01",
+  "prompt_label": "Website",
+  "notes": "Two Tones is a single-file, strictly greyscale interactive atlas of dithering. It renders procedural sphere, ramp and relief sources on canvas through four 1-bit methods (threshold, Bayer ordered, Floyd\u2013Steinberg, Atkinson), and includes a live studio, a pointer-driven hero light, an orbit toggle, PNG export, scroll progress and reduced-motion support. It uses no external files, fonts or libraries. Limitation: verified with static checks and a stubbed-DOM run only, not in a real browser, so visual layout and motion are untested; browsers without :has() show the selected-state styling less clearly.",
+  "slug": "2026-11-11_claude-haiku-5-5_website_v1",
+  "path": "runs/2026-11-11_claude-haiku-5-5_website_v1/index.html",
+  "source_file": "website__claude-haiku-5-5_2026-11-11_v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}
