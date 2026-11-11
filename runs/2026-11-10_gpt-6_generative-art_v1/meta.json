@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "gpt-6",
+  "category": "generative-art",
+  "date": "2026-11-10",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "14",
+  "prompt_label": "Generative Art",
+  "notes": "The Sleeping Orrery is a self-contained, seeded generative artwork with four evolving movements, pointer-field interaction, palette and density controls, fullscreen, optional synthesized sound, adaptive render resolution, and native 3840\u00d72160 PNG rendering. The experience uses inline HTML/CSS/JavaScript and local procedural drawing only. JavaScript syntax and submission structure passed code-level checks. A headless Chromium launch timed out before a browser render could be verified; sustained 60 FPS on ordinary hardware was not independently benchmarked. Organizer note: prompt number and label updated from 11/Generative Artwork to 14/Generative Art after the suite was renumbered. Build unmodified.",
+  "slug": "2026-11-10_gpt-6_generative-art_v1",
+  "path": "runs/2026-11-10_gpt-6_generative-art_v1/index.html",
+  "source_file": "generative-art__gpt-6__2026-11-10__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}
