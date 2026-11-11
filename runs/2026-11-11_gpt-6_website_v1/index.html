@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111111">
+  <meta name="description" content="A field guide to the city after closing. Notes from the hours when the streets belong to something else.">
+  <title>NOCTURNE — A field guide to after-hours</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23111'/%3E%3Cpath d='M12 50V14h7l26 25V14h7v36h-7L19 25v25z' fill='%23fff'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to the field guide</a>
+  <header class="masthead" id="top">
+    <a class="wordmark" href="#top" aria-label="Nocturne home">N<span>·</span></a>
+    <div class="masthead-center">AN ATLAS OF THE HOURS<br>BETWEEN LAST CALL & FIRST LIGHT</div>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="menu-label">Index</span><span class="menu-icon" aria-hidden="true"><i></i><i></i></span></button>
+    <nav class="site-nav" id="site-nav" aria-label="Main navigation">
+      <a href="#observations">Observations <span>01—05</span></a>
+      <a href="#method">The method <span>06</span></a>
+      <a href="#colophon">Colophon <span>07</span></a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-kicker"><span class="eyebrow">FIELD NOTES / VOL. 01</span><span class="live-mark"><i></i> THE CITY IS STILL AWAKE</span></div>
+      <div class="hero-title-wrap">
+        <h1 id="hero-title">NOCTURNE<span class="period">.</span></h1>
+        <p class="hero-deck">A field guide to<br><em>after-hours.</em></p>
+      </div>
+      <div class="hero-art" aria-label="Abstract monochrome illustration of a city skyline dissolving into a field of night lines" role="img">
+        <canvas id="night-canvas"></canvas>
+        <div class="art-coordinate coordinate-left">33°55′ S<br>18°25′ E</div>
+        <div class="art-coordinate coordinate-right">OBSERVATION WINDOW<br>00:17 — 04:42</div>
+        <div class="art-caption">FIG. 01 / THE CITY, BETWEEN BREATHS</div>
+      </div>
+      <div class="hero-foot"><p>When the shutters come down,<br>another city clocks in.</p><a class="round-link" href="#observations" aria-label="Explore the observations"><span>↓</span></a><span class="folio">01 <b>/</b> 07</span></div>
+    </section>
+
+    <section class="intro-band" aria-label="Introduction">
+      <p class="intro-large">The day shift leaves a thousand small things behind. <span>At night, they become the whole story.</span></p>
+      <div class="intro-aside"><span class="eyebrow">A NOTE ON LOOKING</span><p>This is not a guide to where to go. It is a guide to what remains when everyone else has gone.</p></div>
+    </section>
+
+    <section class="observations section-pad" id="observations" aria-labelledby="observations-title">
+      <div class="section-heading"><div><span class="eyebrow">THE INDEX / 5 OBSERVATIONS</span><h2 id="observations-title">Things that<br><em>stay up.</em></h2></div><p class="section-note">A small taxonomy of the<br>city's second life.</p></div>
+      <div class="observation-list">
+        <article class="observation" data-note="01">
+          <button class="observation-trigger" type="button" aria-expanded="false" aria-controls="note-01">
+            <span class="obs-number">01</span><span class="obs-name">The sodium hour</span><span class="obs-subtitle">LIGHT / 00:43</span><span class="obs-glyph glyph-sun" aria-hidden="true"><i></i></span><span class="obs-arrow" aria-hidden="true">↗</span>
+          </button>
+          <div class="observation-detail" id="note-01" hidden><div class="detail-art art-sodium" aria-hidden="true"><span></span><span></span><span></span><span></span></div><div class="detail-copy"><span class="eyebrow">OBSERVATION 001 / LIGHT POLLUTION</span><p>Under old street lamps, the pavement takes on the texture of a photograph left in developer. Every wet surface holds a second, trembling street.</p><dl><div><dt>Best witnessed</dt><dd>After rain, before 02:00</dd></div><div><dt>Field instrument</dt><dd>A window, left uncurtained</dd></div></dl></div></div>
+        </article>
+        <article class="observation" data-note="02">
+          <button class="observation-trigger" type="button" aria-expanded="false" aria-controls="note-02"><span class="obs-number">02</span><span class="obs-name">The last laundrette</span><span class="obs-subtitle">RITUAL / 01:26</span><span class="obs-glyph glyph-drum" aria-hidden="true"><i></i></span><span class="obs-arrow" aria-hidden="true">↗</span></button>
+          <div class="observation-detail" id="note-02" hidden><div class="detail-art art-drum" aria-hidden="true"><span></span><span></span></div><div class="detail-copy"><span class="eyebrow">OBSERVATION 002 / REPETITION</span><p>A lit rectangle on an otherwise dark block. Inside, the slow orbit of a bedsheet. Someone is beginning again, one rinse cycle at a time.</p><dl><div><dt>Best witnessed</dt><dd>From across the street</dd></div><div><dt>Field instrument</dt><dd>Patience, preferably seated</dd></div></dl></div></div>
+        </article>
+        <article class="observation" data-note="03">
+          <button class="observation-trigger" type="button" aria-expanded="false" aria-controls="note-03"><span class="obs-number">03</span><span class="obs-name">The empty timetable</span><span class="obs-subtitle">TRANSIT / 02:08</span><span class="obs-glyph glyph-lines" aria-hidden="true"><i></i><i></i><i></i></span><span class="obs-arrow" aria-hidden="true">↗</span></button>
+          <div class="observation-detail" id="note-03" hidden><div class="detail-art art-timetable" aria-hidden="true"><span>02:08</span><span>02:41</span><span>03:16</span></div><div class="detail-copy"><span class="eyebrow">OBSERVATION 003 / DEPARTURE</span><p>The board keeps its promises to nobody. Times advance with the solemnity of a clock in an empty room. Somewhere, a bus is turning around.</p><dl><div><dt>Best witnessed</dt><dd>At the terminus</dd></div><div><dt>Field instrument</dt><dd>A ticket you don't need</dd></div></dl></div></div>
+        </article>
+        <article class="observation" data-note="04">
+          <button class="observation-trigger" type="button" aria-expanded="false" aria-controls="note-04"><span class="obs-number">04</span><span class="obs-name">The kitchen window</span><span class="obs-subtitle">DOMESTIC / 03:11</span><span class="obs-glyph glyph-window" aria-hidden="true"><i></i></span><span class="obs-arrow" aria-hidden="true">↗</span></button>
+          <div class="observation-detail" id="note-04" hidden><div class="detail-art art-window" aria-hidden="true"><span></span></div><div class="detail-copy"><span class="eyebrow">OBSERVATION 004 / OCCUPATION</span><p>A single square of light, high above the pavement. A person stands at a counter. The kettle clicks off. The whole block feels briefly inhabited.</p><dl><div><dt>Best witnessed</dt><dd>From a respectful distance</dd></div><div><dt>Field instrument</dt><dd>An excellent imagination</dd></div></dl></div></div>
+        </article>
+        <article class="observation" data-note="05">
+          <button class="observation-trigger" type="button" aria-expanded="false" aria-controls="note-05"><span class="obs-number">05</span><span class="obs-name">The first delivery</span><span class="obs-subtitle">ARRIVAL / 04:42</span><span class="obs-glyph glyph-wheel" aria-hidden="true"><i></i></span><span class="obs-arrow" aria-hidden="true">↗</span></button>
+          <div class="observation-detail" id="note-05" hidden><div class="detail-art art-wheel" aria-hidden="true"><span></span><span></span></div><div class="detail-copy"><span class="eyebrow">OBSERVATION 005 / THRESHOLD</span><p>Before dawn has a colour, it has a sound: a metal shutter lifted, a crate set down, wheels crossing a seam in the road. The day arrives by hand.</p><dl><div><dt>Best witnessed</dt><dd>At the loading bay</dd></div><div><dt>Field instrument</dt><dd>A warm coat</dd></div></dl></div></div>
+        </article>
+      </div>
+      <div class="list-foot"><span>SELECT AN ENTRY TO OPEN ITS FIELD NOTE</span><span>05 RECORDS <b>·</b> NO CONCLUSIONS</span></div>
+    </section>
+
+    <section class="interlude" aria-label="A pause in the field guide"><div class="interlude-mark">∴</div><p>“The night is not the absence of the day.<br><em>It is a different kind of evidence.</em>”</p><span class="eyebrow">FROM THE UNFILED NOTEBOOK / PAGE 17</span><div class="interlude-lines" aria-hidden="true"></div></section>
+
+    <section class="method section-pad" id="method" aria-labelledby="method-title"><div class="method-top"><span class="eyebrow">06 / THE METHOD</span><span class="method-stamp">OPEN<br>ENDED</span></div><h2 id="method-title">How to be<br><em>out there.</em></h2><div class="method-grid"><p class="method-lede">No equipment list. No route to follow. Just a few principles for noticing the city when its usual performance is over.</p><ol class="principles"><li><span>01</span><p>Walk slowly enough for the details to catch up.</p></li><li><span>02</span><p>Look at the edges: loading bays, side streets, lit stairwells.</p></li><li><span>03</span><p>Do not turn another person's solitude into your spectacle.</p></li><li><span>04</span><p>Leave the place exactly as you found it. Leave no trace but attention.</p></li></ol></div></section>
+
+    <section class="closing" aria-label="Closing note"><div class="closing-orbit" aria-hidden="true"><span></span><span></span><span></span><b>04:42</b></div><p class="closing-line">Somewhere,<br><em>the lights are still on.</em></p><a class="back-top" href="#top">RETURN TO THE SURFACE <span>↑</span></a></section>
+  </main>
+
+  <footer class="footer" id="colophon"><a class="footer-mark" href="#top">N<span>·</span></a><div class="footer-copy"><span class="eyebrow">NOCTURNE / FIELD GUIDE NO. 01</span><p>An independent study of the city after closing.<br>Made for the hours that don't make the brochure.</p></div><div class="footer-meta"><span>33°55′ S / 18°25′ E</span><span>© 2026 / END OF TRANSMISSION</span></div></footer>
+  <div class="reading-progress" aria-hidden="true"><span id="progress-bar"></span></div>
+</body>
+</html>
