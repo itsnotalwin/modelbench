@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DIM — The Hour Between</title>
+  <meta name="description" content="DIM is a strictly monochrome interactive field guide to the hour between day and night — a keeper's log told through light, fog, signal and silence.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <a class="wordmark" href="#top">DIM<span class="wordmark-dot">.</span></a>
+      <nav class="site-nav" aria-label="Sections">
+        <a href="#arrival">Arrival</a>
+        <a href="#turn">The Turn</a>
+        <a href="#grey">The Grey</a>
+        <a href="#night">The Night</a>
+        <a href="#return">The Return</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="container">
+        <p class="eyebrow hero-eyebrow reveal">Field guide Nº00 — The hour between</p>
+        <h1 class="hero-title" id="hero-title">
+          <span class="hero-line"><span class="hero-line-inner">It is</span></span>
+          <span class="hero-line"><span class="hero-line-inner">Dim.</span></span>
+        </h1>
+        <div class="hero-foot">
+          <p class="lede reveal">Day ends. Night begins. Between them, the world exhales — and for a few minutes it turns grey. This is the keeper's log, and the instrument that never sleeps.</p>
+          <ul class="hero-facts reveal">
+            <li><span class="fact-label">Est.</span><span class="fact-value">MMXXVI</span></li>
+            <li><span class="fact-label">Station</span><span class="fact-value">Nº0 Signal</span></li>
+            <li><span class="fact-label">Coords</span><span class="fact-value">51.48°N / 0.65°W</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Dusk — Fade — Grey — Quiet — Night — Signal — </span>
+        <span>Dusk — Fade — Grey — Quiet — Night — Signal — </span>
+      </div>
+    </div>
+
+    <section class="section" id="arrival">
+      <div class="container">
+        <p class="eyebrow reveal">01 — Arrival</p>
+        <h2 class="section-title reveal">Dusk doesn't arrive. It unzips.</h2>
+        <div class="section-body">
+          <p>The sun doesn't vanish. It recedes, politely, over hours, like it has somewhere better to be.</p>
+          <p>Light doesn't switch off — it lowers its voice. This is the hour when the sky stops performing and starts telling the truth, and the keeper stops writing it down.</p>
+        </div>
+        <blockquote class="pullquote reveal">
+          <p>Light doesn't leave. It just stops announcing itself.</p>
+          <cite>Keeper's log — dusk</cite>
+        </blockquote>
+      </div>
+    </section>
+
+    <section class="section" id="turn">
+      <div class="container">
+        <p class="eyebrow reveal">02 — The turn</p>
+        <h2 class="section-title reveal">Set the <em>light</em>.</h2>
+        <div class="section-body">
+          <p>The year turns. The clock turns. The light turns. Every dial is a calendar, and every calendar is a feeling. Turn yours.</p>
+        </div>
+        <div class="sky" id="turn-sky" aria-hidden="true">
+          <div class="sky__glow"></div>
+          <div class="sky__stars"></div>
+          <div class="sky__fog"></div>
+        </div>
+        <div class="dial">
+          <label class="dial-label" for="light-level">Light level</label>
+          <input class="dial-slider" type="range" id="light-level" min="0" max="100" value="34" step="1">
+          <p class="dial-readout" id="light-readout" aria-live="polite">Light level 34 — Civil twilight</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="grey">
+      <div class="container">
+        <p class="eyebrow reveal">03 — The grey</p>
+        <h2 class="section-title reveal">No colour was used.</h2>
+        <div class="section-body">
+          <p>Not one. The brief asked for black, white and grey — and the work obeyed. This is the whole palette: a scale, not a selection.</p>
+        </div>
+        <ul class="swatches">
+          <li class="swatch" style="--c: #ffffff;"><span class="swatch-chip"></span><span class="swatch-name">White</span></li>
+          <li class="swatch" style="--c: #f2f2f2;"><span class="swatch-chip"></span><span class="swatch-name">Soft white</span></li>
+          <li class="swatch" style="--c: #e5e5e5;"><span class="swatch-chip"></span><span class="swatch-name">Light grey</span></li>
+          <li class="swatch" style="--c: #d4d4d4;"><span class="swatch-chip"></span><span class="swatch-name">Mid grey</span></li>
+          <li class="swatch" style="--c: #a3a3a3;"><span class="swatch-chip"></span><span class="swatch-name">Deep grey</span></li>
+          <li class="swatch" style="--c: #737373;"><span class="swatch-chip"></span><span class="swatch-name">Strong grey</span></li>
+          <li class="swatch" style="--c: #525252;"><span class="swatch-chip"></span><span class="swatch-name">Dark grey</span></li>
+          <li class="swatch" style="--c: #333333;"><span class="swatch-chip"></span><span class="swatch-name">Charcoal</span></li>
+          <li class="swatch" style="--c: #111111;"><span class="swatch-chip"></span><span class="swatch-name">Near black</span></li>
+          <li class="swatch" style="--c: #000000;"><span class="swatch-chip"></span><span class="swatch-name">Black</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section section--night" id="night">
+      <div class="container">
+        <p class="eyebrow reveal">04 — The night</p>
+        <h2 class="section-title reveal">The beacon turns.</h2>
+        <div class="section-body">
+          <p>The keeper sleeps. The log keeps its hours. The fog keeps its counsel.</p>
+        </div>
+        <div class="sky sky--night" id="night-sky" aria-hidden="true">
+          <div class="sky__glow"></div>
+          <div class="sky__stars"></div>
+          <div class="sky__fog"></div>
+          <div class="moon"></div>
+        </div>
+        <ol class="log">
+          <li>
+            <span class="log-time">23:58</span>
+            <p>The beacon turned. I turned it.</p>
+          </li>
+          <li>
+            <span class="log-time">00:11</span>
+            <p>Fog came in low, like it was tired.</p>
+          </li>
+          <li>
+            <span class="log-time">01:03</span>
+            <p>Logged the hour. Slept in the chair again.</p>
+          </li>
+          <li>
+            <span class="log-time">06:44</span>
+            <p>Sky: grey. Again.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="return">
+      <div class="container">
+        <p class="eyebrow reveal">05 — The return</p>
+        <h2 class="section-title reveal">The light comes back.</h2>
+        <div class="section-body">
+          <p>And it did. Dawn is just dusk that got over it. The keeper made tea. The station hummed. The grey held.</p>
+        </div>
+        <a class="btn reveal" href="#top">Return to the hour</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-word">Dim<span class="wordmark-dot">.</span></p>
+      <nav class="site-nav footer-nav" aria-label="Footer">
+        <a href="#arrival">Arrival</a>
+        <a href="#turn">The Turn</a>
+        <a href="#grey">The Grey</a>
+        <a href="#night">The Night</a>
+        <a href="#return">The Return</a>
+        <a href="#top">Top</a>
+      </nav>
+      <p class="footer-note">Set in black, white and grey — no colour was harmed.</p>
+    </div>
+  </footer>
+
+  <script src="js/app.js" defer></script>
+</body>
+</html>
