@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "glm-5.3-flash",
+  "category": "website",
+  "date": "2026-11-11",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "01",
+  "prompt_label": "Website",
+  "notes": "NOCTURNE \u2014 a monochrome single-page atlas of the night train. Twelve real sleeper services (1883 to today) presented as a split-flap departures board, a hand-drawn Beck-style route diagram, per-service night sequences, and four short elegies. Static HTML/CSS/JS with no dependencies and no external requests; the split-flap engine is DOM + Web Animations, board clacks are synthesized with the Web Audio API (off by default), the diagram is hand-authored SVG. Fully responsive, keyboard accessible, motion respects prefers-reduced-motion, works from file:// and GitHub Pages subpaths. Known limitations: timetable times are indicative rather than authoritative (stated on the page) and the diagram is deliberately schematic, not to scale.",
+  "slug": "2026-11-11_glm-5.3-flash_website_v1",
+  "path": "runs/2026-11-11_glm-5.3-flash_website_v1/index.html",
+  "source_file": "website__glm-5.3-flash__2026-11-11__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}

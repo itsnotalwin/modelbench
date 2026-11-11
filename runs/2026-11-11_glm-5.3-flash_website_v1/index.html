@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NOCTURNE — An Atlas of the Night Train</title>
+<meta name="description" content="A monochrome atlas of the night train: twelve sleeper services, 1883 to tonight, drawn as one diagram and read as elegies.">
+<meta name="theme-color" content="#0a0a0b">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230a0a0b'/%3E%3Cpath d='M41 10a22 22 0 1 0 13 26 17 17 0 0 1-13-26Z' fill='%23f4f4f4'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+<noscript><style>.board,.board-cap,.dot{display:none!important}</style></noscript>
+</head>
+<body>
+<a class="skip" href="#board">Skip to the atlas</a>
+
+<header class="site-head">
+  <div class="wrap site-head-in">
+    <a class="wordmark" href="#top">NOCTURNE<span class="wm-dot">·</span></a>
+    <nav class="site-nav" aria-label="Atlas sections">
+      <a href="#board">Board</a>
+      <a href="#diagram">Diagram</a>
+      <a href="#timetable">Timetable</a>
+      <a href="#elegies">Elegies</a>
+      <a href="#colophon">Colophon</a>
+    </nav>
+    <div class="site-tools">
+      <p class="clock" id="clock" aria-label="Local time"><span id="clock-h">--</span><span class="sep">:</span><span id="clock-m">--</span></p>
+      <button type="button" id="soundToggle" class="sound-toggle" aria-pressed="false">SOUND · OFF</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero wrap" aria-label="Introduction">
+    <div class="kicker-row">
+      <p class="kicker">FIELD ATLAS Nº 01 · THE SLEEPING CAR</p>
+      <svg class="moon" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+        <path d="M41 10a22 22 0 1 0 13 26 17 17 0 0 1-13-26Z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="14" cy="14" r="1.6" fill="currentColor"/>
+        <circle cx="22" cy="8" r="1" fill="currentColor"/>
+        <circle cx="10" cy="24" r="1" fill="currentColor"/>
+      </svg>
+    </div>
+    <div class="mast">
+      <h1 class="mast-title">NOCTURNE</h1>
+    </div>
+    <div class="hero-deck">
+      <p class="deck">Once, the night was a mode of transport. You handed your body to a city terminus at dusk, and it gave you back at dawn — eight hundred kilometres away, with different weather in the window. This atlas keeps the timetable of that idea: twelve sleeper services, 1883 to tonight, drawn as one diagram and read as elegies.</p>
+    </div>
+    <ul class="stats" aria-label="The atlas in figures">
+      <li><span class="stat-n">12</span><span class="stat-l">SERVICES</span></li>
+      <li><span class="stat-n">4</span><span class="stat-l">CONTINENTS</span></li>
+      <li><span class="stat-n">143</span><span class="stat-l">YEARS ON THE TIMETABLE</span></li>
+      <li><span class="stat-n">9,289</span><span class="stat-l">KM, LONGEST RUN</span></li>
+    </ul>
+
+    <div class="board" aria-hidden="true">
+      <div class="board-cap"><span>SOLARI BOARD · DEPARTURES</span><span class="dot"></span></div>
+      <div class="flap-row" id="flapA"></div>
+      <div class="flap-row" id="flapB"></div>
+    </div>
+
+    <p class="scroll-cue" aria-hidden="true"><span class="cue-line"></span>SCROLL FOR THE BOARD</p>
+  </section>
+
+  <!-- ================= 01 THE BOARD ================= -->
+  <section class="sec" id="board" aria-labelledby="board-h">
+    <div class="wrap">
+      <header class="sec-head reveal">
+        <p class="kicker">01 — THE BOARD</p>
+        <h2 id="board-h">Departures &amp; destinies</h2>
+        <p class="sec-sub">An index of the atlas. Every row is a service that once, or still, or never did carry sleepers. Choose one — the diagram and the timetable will follow.</p>
+      </header>
+
+      <div class="filters reveal" role="group" aria-label="Filter the board by status">
+        <button type="button" class="fbtn" data-filter="ALL" aria-pressed="true">ALL · 12</button>
+        <button type="button" class="fbtn" data-filter="RUNS" aria-pressed="false">RUNNING · 9</button>
+        <button type="button" class="fbtn" data-filter="ENDED" aria-pressed="false">ENDED · 1</button>
+        <button type="button" class="fbtn" data-filter="NEVER RAN" aria-pressed="false">NEVER RAN · 1</button>
+      </div>
+
+      <div class="boardlist reveal">
+        <div class="svc-head">
+          <span class="c-no">Nº</span><span class="c-name">SERVICE</span><span class="c-route">ROUTE</span><span class="c-nights">NGTS</span><span class="c-years">YEARS</span><span class="c-status">STATUS</span>
+        </div>
+        <ol id="serviceList">
+          <li class="svc" data-id="orient" data-status="ENDED"><button type="button" class="svc-row"><span class="c-no">01</span><span class="c-name">ORIENT EXPRESS</span><span class="c-route">PARIS EST <span class="arr">→</span> ISTANBUL SIRKECI</span><span class="c-nights">3</span><span class="c-years">1883–1977</span><span class="c-status"><span class="chip chip--ended">ENDED</span></span></button></li>
+          <li class="svc" data-id="vostok" data-status="RUNS"><button type="button" class="svc-row"><span class="c-no">02</span><span class="c-name">TRANS-SIBERIAN · VOSTOK</span><span class="c-route">MOSCOW <span class="arr">→</span> BEIJING</span><span class="c-nights">6</span><span class="c-years">SINCE 1960</span><span class="c-status"><span class="chip chip--runs">RUNS</span></span></button></li>
+          <li class="svc" data-id="caledonian" data-status="RUNS"><button type="button" class="svc-row"><span class="c-no">03</span><span class="c-name">CALEDONIAN SLEEPER</span><span class="c-route">LONDON <span class="arr">→</span> INVERNESS</span><span class="c-nights">1</span><span class="c-years">SINCE 1873</span><span class="c-status"><span class="chip chip--runs">RUNS</span></span></button></li>
+          <li class="svc" data-id="riviera" data-status="RUNS"><button type="button" class="svc-row"><span class="c-no">04</span><span class="c-name">NIGHT RIVIERA</span><span class="c-route">LONDON <span class="arr">→</span> PENZANCE</span><span class="c-nights">1</span><span class="c-years">SINCE 1904</span><span class="c-status"><span class="chip chip--runs">RUNS</span></span></button></li>
+          <li class="svc" data-id="njberlin" data-status="RUNS"><button type="button" class="svc-row"><span class="c-no">05</span><span class="c-name">NIGHTJET BERLIN–PARIS</span><span class="c-route">BERLIN <span class="arr">→</span> PARIS</span><span class="c-nights">1</span><span class="c-years">SINCE 2023</span><span class="c-status"><span class="chip chip--runs">RUNS</span></span></button></li>
+          <li class="svc" data-id="njvenice" data-status="RUNS"><button type="button" class="svc-row"><span class="c-no">06</span><span class="c-name">NIGHTJET VIENNA–VENICE</span><span class="c-route">VIENNA <span class="arr">→</span> VENICE</span><span class="c-nights">1</span><span class="c-years">SINCE 1990S</span><span class="c-status"><span class="chip chip--runs">RUNS</span></span></button></li>
+          <li class="svc" data-id="nordland" data-status="RUNS"><button type="button" class="svc-row"><span class="c-no">07</span><span class="c-name">NORDLAND LINE SLEEPER</span><span class="c-route">TRONDHEIM <span class="arr">→</span> BODØ</span><span class="c-nights">1</span><span class="c-years">SINCE 1962</span><span class="c-status"><span class="chip chip--runs">RUNS</span></span></button></li>
+          <li class="svc" data-id="lapland" data-status="RUNS"><button type="button" class="svc-row"><span class="c-no">08</span><span class="c-name">LAPLAND SLEEPER</span><span class="c-route">STOCKHOLM <span class="arr">→</span> NARVIK</span><span class="c-nights">1</span><span class="c-years">SINCE 1950S</span><span class="c-status"><span class="chip chip--runs">RUNS</span></span></button></li>
+          <li class="svc" data-id="bluetrain" data-status="RUNS"><button type="button" class="svc-row"><span class="c-no">09</span><span class="c-name">THE BLUE TRAIN</span><span class="c-route">PRETORIA <span class="arr">→</span> CAPE TOWN</span><span class="c-nights">1</span><span class="c-years">SINCE 1923</span><span class="c-status"><span class="chip chip--runs">RUNS</span></span></button></li>
+          <li class="svc" data-id="watania" data-status="RUNS"><button type="button" class="svc-row"><span class="c-no">10</span><span class="c-name">WATANIA NILE SLEEPER</span><span class="c-route">CAIRO <span class="arr">→</span> LUXOR</span><span class="c-nights">1</span><span class="c-years">SINCE 1980S</span><span class="c-status"><span class="chip chip--runs">RUNS</span></span></button></li>
+          <li class="svc" data-id="nightstar" data-status="NEVER RAN"><button type="button" class="svc-row"><span class="c-no">11</span><span class="c-name">NIGHTSTAR</span><span class="c-route">LONDON <span class="arr">→</span> PARIS</span><span class="c-nights">0</span><span class="c-years">1994–2000</span><span class="c-status"><span class="chip chip--ghost">NEVER RAN</span></span></button></li>
+          <li class="svc" data-id="indianpacific" data-status="RUNS"><button type="button" class="svc-row"><span class="c-no">12</span><span class="c-name">INDIAN PACIFIC</span><span class="c-route">SYDNEY <span class="arr">→</span> PERTH</span><span class="c-nights">3</span><span class="c-years">SINCE 1970</span><span class="c-status"><span class="chip chip--runs">RUNS</span></span></button></li>
+        </ol>
+        <p class="foot">Statuses — <strong>RUNS</strong>: in the current timetable. <strong>ENDED</strong>: withdrawn. <strong>NEVER RAN</strong>: built for the timetable, held back by it. Times throughout are indicative, compiled from timetables, guidebooks and memory.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 02 THE DIAGRAM ================= -->
+  <section class="sec" id="diagram" aria-labelledby="diagram-h">
+    <div class="wrap">
+      <header class="sec-head reveal">
+        <p class="kicker">02 — THE DIAGRAM</p>
+        <h2 id="diagram-h">The night network</h2>
+        <p class="sec-sub">Twelve routes on one sheet: straight lines, square corners, the sea left out on purpose. The drawing is schematic; the nights were not. Click a route — or choose from the manifest below.</p>
+      </header>
+
+      <div class="diagram reveal">
+        <svg id="nightMap" class="map" viewBox="0 0 1160 820" role="img" aria-label="Schematic diagram of twelve sleeper routes across Europe, Africa and Australia, in the style of a transit map" focusable="false">
+          <title>The Night Network — schematic</title>
+          <defs>
+            <pattern id="dotgrid" width="28" height="28" patternUnits="userSpaceOnUse">
+              <circle cx="1.4" cy="1.4" r="1.4" fill="rgba(244,244,244,0.055)"/>
+            </pattern>
+          </defs>
+          <rect x="0" y="0" width="1160" height="820" fill="url(#dotgrid)"/>
+
+          <rect class="inset" x="140" y="612" width="320" height="168"/>
+          <rect class="inset" x="830" y="612" width="390" height="168"/>
+          <text class="region-label" x="152" y="634">AFRICA</text>
+          <text class="region-label" x="842" y="634">AUSTRALIA</text>
+          <text class="region-label" x="152" y="96">EUROPE · SIBERIA</text>
+
+          <g class="rt" id="rt-caledonian" data-id="caledonian" tabindex="0" role="button" aria-label="Caledonian Sleeper: London Euston to Inverness">
+            <path class="rt-hit" d="M280,390 L280,310 L340,250"/>
+            <path class="rt-line" d="M280,390 L280,310 L340,250" pathLength="1"/>
+            <circle class="rt-end" cx="280" cy="390" r="3.5"/>
+            <circle class="rt-end" cx="340" cy="250" r="3.5"/>
+          </g>
+          <g class="rt rt--ghost" id="rt-nightstar" data-id="nightstar" tabindex="0" role="button" aria-label="Nightstar: London to Paris. A service that never ran">
+            <path class="rt-hit" d="M280,390 L280,450 L400,450"/>
+            <path class="rt-line" d="M280,390 L280,450 L400,450"/>
+            <circle class="rt-end" cx="400" cy="450" r="3.5"/>
+          </g>
+          <g class="rt" id="rt-njberlin" data-id="njberlin" tabindex="0" role="button" aria-label="Nightjet Berlin to Paris">
+            <path class="rt-hit" d="M560,330 L560,370 L480,450 L400,450"/>
+            <path class="rt-line" d="M560,330 L560,370 L480,450 L400,450" pathLength="1"/>
+            <circle class="rt-end" cx="560" cy="330" r="3.5"/>
+          </g>
+          <g class="rt" id="rt-riviera" data-id="riviera" tabindex="0" role="button" aria-label="Night Riviera: London Paddington to Penzance">
+            <path class="rt-hit" d="M280,390 L220,390 L170,440 L170,480"/>
+            <path class="rt-line" d="M280,390 L220,390 L170,440 L170,480" pathLength="1"/>
+            <circle class="rt-end" cx="170" cy="480" r="3.5"/>
+          </g>
+          <g class="rt" id="rt-orient" data-id="orient" tabindex="0" role="button" aria-label="Orient Express: Paris Est to Istanbul Sirkeci">
+            <path class="rt-hit" d="M400,450 L460,510 L560,510 L660,510 L700,550 L740,590 L820,590"/>
+            <path class="rt-line" d="M400,450 L460,510 L560,510 L660,510 L700,550 L740,590 L820,590" pathLength="1"/>
+            <circle class="rt-dot" cx="460" cy="510" r="2.5"/>
+            <circle class="rt-dot" cx="560" cy="510" r="2.5"/>
+            <circle class="rt-dot" cx="660" cy="510" r="2.5"/>
+            <circle class="rt-dot" cx="700" cy="550" r="2.5"/>
+            <circle class="rt-dot" cx="740" cy="590" r="2.5"/>
+            <circle class="rt-end" cx="820" cy="590" r="3.5"/>
+          </g>
+          <g class="rt" id="rt-njvenice" data-id="njvenice" tabindex="0" role="button" aria-label="Nightjet Vienna to Venice">
+            <path class="rt-hit" d="M560,510 L520,550 L440,550"/>
+            <path class="rt-line" d="M560,510 L520,550 L440,550" pathLength="1"/>
+            <circle class="rt-dot" cx="520" cy="550" r="2.5"/>
+            <circle class="rt-end" cx="440" cy="550" r="3.5"/>
+          </g>
+          <g class="rt" id="rt-nordland" data-id="nordland" tabindex="0" role="button" aria-label="Nordland line sleeper: Trondheim to Bodø">
+            <path class="rt-hit" d="M640,150 L680,110 L760,110"/>
+            <path class="rt-line" d="M640,150 L680,110 L760,110" pathLength="1"/>
+            <circle class="rt-end" cx="760" cy="110" r="3.5"/>
+          </g>
+          <g class="rt" id="rt-lapland" data-id="lapland" tabindex="0" role="button" aria-label="Lapland sleeper: Stockholm to Narvik">
+            <path class="rt-hit" d="M680,220 L740,160 L780,160 L820,120"/>
+            <path class="rt-line" d="M680,220 L740,160 L780,160 L820,120" pathLength="1"/>
+            <circle class="rt-dot" cx="740" cy="160" r="2.5"/>
+            <circle class="rt-end" cx="820" cy="120" r="3.5"/>
+          </g>
+          <g class="rt" id="rt-vostok" data-id="vostok" tabindex="0" role="button" aria-label="Trans-Siberian Vostok: Moscow to Beijing">
+            <path class="rt-hit" d="M980,240 L1060,320 L1100,320 L1100,380"/>
+            <path class="rt-line" d="M980,240 L1060,320 L1100,320 L1100,380" pathLength="1"/>
+            <circle class="rt-dot" cx="1060" cy="320" r="2.5"/>
+            <circle class="rt-end" cx="1100" cy="380" r="3.5"/>
+          </g>
+          <g class="rt" id="rt-watania" data-id="watania" tabindex="0" role="button" aria-label="Watania Nile sleeper: Cairo to Luxor">
+            <path class="rt-hit" d="M190,650 L250,710"/>
+            <path class="rt-line" d="M190,650 L250,710" pathLength="1"/>
+            <circle class="rt-end" cx="250" cy="710" r="3.5"/>
+          </g>
+          <g class="rt" id="rt-bluetrain" data-id="bluetrain" tabindex="0" role="button" aria-label="The Blue Train: Pretoria to Cape Town">
+            <path class="rt-hit" d="M360,650 L320,690 L320,730"/>
+            <path class="rt-line" d="M360,650 L320,690 L320,730" pathLength="1"/>
+            <circle class="rt-dot" cx="320" cy="690" r="2.5"/>
+            <circle class="rt-end" cx="320" cy="730" r="3.5"/>
+          </g>
+          <g class="rt" id="rt-indianpacific" data-id="indianpacific" tabindex="0" role="button" aria-label="Indian Pacific: Sydney to Perth">
+            <path class="rt-hit" d="M1080,650 L1000,690 L940,690 L880,750"/>
+            <path class="rt-line" d="M1080,650 L1000,690 L940,690 L880,750" pathLength="1"/>
+            <circle class="rt-dot" cx="1000" cy="690" r="2.5"/>
+            <circle class="rt-end" cx="880" cy="750" r="3.5"/>
+          </g>
+
+          <g class="st-labels" aria-hidden="true">
+            <text class="st-label" id="lb-london" x="292" y="394">LONDON</text>
+            <text class="st-label" id="lb-inverness" x="348" y="246">INVERNESS</text>
+            <text class="st-label" id="lb-penzance" x="170" y="500">PENZANCE</text>
+            <text class="st-label" id="lb-paris" x="388" y="474" text-anchor="end">PARIS</text>
+            <text class="st-label" id="lb-berlin" x="572" y="334">BERLIN</text>
+            <text class="st-label" id="lb-munich" x="460" y="530">MUNICH</text>
+            <text class="st-label" id="lb-vienna" x="560" y="496">VIENNA</text>
+            <text class="st-label" id="lb-budapest" x="668" y="496">BUDAPEST</text>
+            <text class="st-label" id="lb-belgrade" x="696" y="574">BELGRADE</text>
+            <text class="st-label" id="lb-sofia" x="740" y="610">SOFIA</text>
+            <text class="st-label" id="lb-istanbul" x="830" y="594">ISTANBUL</text>
+            <text class="st-label" id="lb-villach" x="520" y="570">VILLACH</text>
+            <text class="st-label" id="lb-venice" x="440" y="570">VENICE</text>
+            <text class="st-label" id="lb-trondheim" x="640" y="170">TRONDHEIM</text>
+            <text class="st-label" id="lb-bodo" x="770" y="114">BODØ</text>
+            <text class="st-label" id="lb-stockholm" x="680" y="240">STOCKHOLM</text>
+            <text class="st-label" id="lb-kiruna" x="746" y="182">KIRUNA</text>
+            <text class="st-label" id="lb-narvik" x="830" y="118">NARVIK</text>
+            <text class="st-label" id="lb-moscow" x="966" y="244" text-anchor="end">MOSCOW</text>
+            <text class="st-label" id="lb-chita" x="1060" y="340">CHITA</text>
+            <text class="st-label" id="lb-beijing" x="1108" y="384">BEIJING</text>
+            <text class="st-label" id="lb-cairo" x="178" y="654" text-anchor="end">CAIRO</text>
+            <text class="st-label" id="lb-luxor" x="260" y="714">LUXOR</text>
+            <text class="st-label" id="lb-pretoria" x="370" y="654">PRETORIA</text>
+            <text class="st-label" id="lb-kimberley" x="330" y="694">KIMBERLEY</text>
+            <text class="st-label" id="lb-capetown" x="330" y="734">CAPE TOWN</text>
+            <text class="st-label" id="lb-sydney" x="1088" y="654">SYDNEY</text>
+            <text class="st-label" id="lb-brokenhill" x="1000" y="708">BROKEN HILL</text>
+            <text class="st-label" id="lb-perth" x="888" y="754">PERTH</text>
+          </g>
+        </svg>
+
+        <nav class="legend reveal" aria-label="Choose a route on the diagram">
+          <button type="button" class="lg" data-id="orient"><span class="lg-no">01</span>ORIENT EXPRESS</button>
+          <button type="button" class="lg" data-id="vostok"><span class="lg-no">02</span>TRANS-SIBERIAN · VOSTOK</button>
+          <button type="button" class="lg" data-id="caledonian"><span class="lg-no">03</span>CALEDONIAN SLEEPER</button>
+          <button type="button" class="lg" data-id="riviera"><span class="lg-no">04</span>NIGHT RIVIERA</button>
+          <button type="button" class="lg" data-id="njberlin"><span class="lg-no">05</span>NIGHTJET BERLIN–PARIS</button>
+          <button type="button" class="lg" data-id="njvenice"><span class="lg-no">06</span>NIGHTJET VIENNA–VENICE</button>
+          <button type="button" class="lg" data-id="nordland"><span class="lg-no">07</span>NORDLAND LINE SLEEPER</button>
+          <button type="button" class="lg" data-id="lapland"><span class="lg-no">08</span>LAPLAND SLEEPER</button>
+          <button type="button" class="lg" data-id="bluetrain"><span class="lg-no">09</span>THE BLUE TRAIN</button>
+          <button type="button" class="lg" data-id="watania"><span class="lg-no">10</span>WATANIA NILE SLEEPER</button>
+          <button type="button" class="lg" data-id="nightstar"><span class="lg-no">11</span>NIGHTSTAR</button>
+          <button type="button" class="lg" data-id="indianpacific"><span class="lg-no">12</span>INDIAN PACIFIC</button>
+        </nav>
+
+        <p class="map-cap">FIG. 1 — THE NIGHT NETWORK. SCHEMATIC; DISTANCES NOT TO SCALE. ROUTES SHOWN SOLID RAN OR RUN; THE DASHED LINE WAS ONLY EVER TIMETABLED.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 03 THE TIMETABLE ================= -->
+  <section class="sec" id="timetable" aria-labelledby="timetable-h">
+    <div class="wrap">
+      <header class="sec-head reveal">
+        <p class="kicker">03 — THE TIMETABLE</p>
+        <h2 id="timetable-h">One night, in full</h2>
+        <p class="sec-sub">One service at a time — the plaque, the paragraph, and the sequence of a single night. Use the arrows, or pick from the board and the diagram above.</p>
+      </header>
+
+      <article class="detail reveal" id="detail" aria-label="Service detail">
+        <p class="d-kicker">PLAQUE Nº 01</p>
+        <h3 class="d-name">ORIENT EXPRESS</h3>
+        <p class="d-route">PARIS EST <span class="arr">→</span> ISTANBUL SIRKECI</p>
+        <p class="d-chips"><span class="chip chip--ended">ENDED</span><span class="chip chip--plain">3 NIGHTS</span></p>
+        <dl class="d-meta">
+          <div><dt>ERA</dt><dd>1883–1977</dd></div>
+          <div><dt>CLASS</dt><dd>PULLMAN / WAGON-LITS</dd></div>
+          <div><dt>OPERATOR</dt><dd>WAGONS-LITS, PARIS</dd></div>
+          <div><dt>STATUS</dt><dd>LAST THROUGH SERVICE 1977</dd></div>
+          <div class="wide"><dt>OUTLOOK</dt><dd>Revived as expensive specials; the real thing died with the 1977 season.</dd></div>
+        </dl>
+        <p class="d-blurb">The first train to carry its own name like a flag, and the one that taught Europe that borders were something you could sleep through. Its later years were shabbier than its legend — the through carriages were nicknamed “the Polytechnique” for the student traffic — and in 1977 the last Wagons-Lits service was withdrawn. Everything sold today as luxury rail was invented in these carriages.</p>
+        <h4 class="d-sub">THE NIGHT SEQUENCE</h4>
+        <ol class="beats">
+          <li><span class="b-t">18:55</span><span class="b-p">PARIS, GARE DE L’EST</span><span class="b-n">The iron hall, the goodbyes, the smell of other people’s holidays.</span></li>
+          <li><span class="b-t">DAY 2, 07:20</span><span class="b-p">VIENNA</span><span class="b-n">Coffee, and the first new consonants.</span></li>
+          <li><span class="b-t">DAY 2, 23:40</span><span class="b-p">BELGRADE</span><span class="b-n">The border takes longer than the river.</span></li>
+          <li><span class="b-t">DAY 3, 19:10</span><span class="b-p">ISTANBUL, SIRKECI</span><span class="b-n">Arrival under seagulls, in a station built as a promise.</span></li>
+        </ol>
+        <div class="d-nav">
+          <button type="button" id="prevSvc">← PREVIOUS</button>
+          <p id="svcCounter" class="mono">01 / 12</p>
+          <button type="button" id="nextSvc">NEXT →</button>
+        </div>
+      </article>
+      <p id="svcLive" class="sr-only" role="status">Showing Nº 01, Orient Express, Paris Est to Istanbul Sirkeci.</p>
+    </div>
+  </section>
+
+  <!-- ================= 04 THE ELEGIES ================= -->
+  <section class="sec" id="elegies" aria-labelledby="elegies-h">
+    <div class="wrap">
+      <header class="sec-head reveal">
+        <p class="kicker">04 — THE ELEGIES</p>
+        <h2 id="elegies-h">Four pieces for the sleeping car</h2>
+        <p class="sec-sub">Every atlas of the night needs its marginalia. These are ours.</p>
+      </header>
+
+      <article class="elegy reveal">
+        <p class="e-kicker">ELEGY I</p>
+        <h3>The Border at Four A.M.</h3>
+        <p class="e-body"><span class="dropcap">T</span>here is a genre of waking that only trains provide. The corridor lights come up like interrogation, boots go past in threes, and a voice with a different consonant inventory asks, through the glass, for the thing you left in your other coat. You sign your pulse rate onto a form. Outside, a station you will never be able to name again is holding its breath with you; the dog on platform two is the only witness both countries will agree on. Then the window goes dark, the train takes up its slack, and somewhere behind you a border quietly closes like a book being returned to its shelf. Sleep, when it comes back, has a stamp in it.</p>
+      </article>
+
+      <article class="elegy reveal">
+        <p class="e-kicker">ELEGY II</p>
+        <h3>In Praise of the Dining Car</h3>
+        <p class="e-body"><span class="dropcap">T</span>he dining car is the last truly public room. The tables are laid for people who have not met yet. The waiter knows the train better than the driver: he can tell, by the tilt of the soup, which valley you are in and which tunnel is coming. At midnight the menu shortens and the lights come down a stop, and the carriage performs its best trick — it makes motion feel like permanence. Cities slide past uncriticised. You order the last thing on the list, the wheel rhythm keeps the time, and for the length of a night the world is a set table on a long straight rail.</p>
+      </article>
+
+      <article class="elegy reveal">
+        <p class="e-kicker">ELEGY III</p>
+        <h3>On Waking Somewhere</h3>
+        <p class="e-body"><span class="dropcap">T</span>he trick of the sleeper is that it steals a day’s travel from the hours you were not using anyway. But its real gift is the waking: the grey light that is not your grey light, the curtain gap framing a landscape nobody chose for you, the sudden arithmetic of <em>where am I</em> performed with a dry mouth. Hotels promise you the same room everywhere; the sleeper promises the opposite — that you will open your eyes somewhere else, and know it before you know it. Geography becomes something that happened to you while you were unconscious, which is, if you think about it, how most of the important things arrive.</p>
+      </article>
+
+      <article class="elegy elegy--gloss reveal">
+        <p class="e-kicker">ELEGY IV</p>
+        <h3>A Glossary of Night Noises</h3>
+        <dl class="gloss">
+          <div><dt>COUPLING, <span class="g-pos">n.</span></dt><dd>A deep clank that starts three carriages away and arrives like swallowed thunder; the train, taking up its slack, clears its throat.</dd></div>
+          <div><dt>WHEEL RHYTHM, <span class="g-pos">n.</span></dt><dd>The metronome under the mattress. Four beats, a rail joint, silence, four beats. The only clock you will not check.</dd></div>
+          <div><dt>THE COACH DOOR, <span class="g-pos">n.</span></dt><dd>A pneumatic sigh, opened by someone else’s mistake at two in the morning.</dd></div>
+          <div><dt>BERTH CURTAIN, <span class="g-pos">n.</span></dt><dd>A small brass argument, settled by whoever is tireder.</dd></div>
+          <div><dt>BORDER LIGHTS, <span class="g-pos">n.</span></dt><dd>The corridor coming up bright enough to read passports by. Not your passport. Not your problem, for nine more minutes.</dd></div>
+          <div><dt>DAWN BLIND, <span class="g-pos">n.</span></dt><dd>The strip of grey under the curtain that tells you the latitude better than any signboard.</dd></div>
+        </dl>
+      </article>
+    </div>
+  </section>
+
+  <!-- ================= 05 COLOPHON ================= -->
+  <section class="sec" id="colophon" aria-labelledby="colophon-h">
+    <div class="wrap">
+      <header class="sec-head reveal">
+        <p class="kicker">05 — COLOPHON</p>
+        <h2 id="colophon-h">Method, type, colour, engineering</h2>
+      </header>
+      <dl class="colog reveal">
+        <div><dt>METHOD</dt><dd>Facts compiled from timetables, guidebooks, operator announcements and memory. Times, distances and dates are indicative rather than authoritative — this is an atlas, not an audit. The board’s clatter is synthesized on the spot with the Web Audio API; there are no recordings on this page.</dd></div>
+        <div><dt>TYPE</dt><dd>Set in the system grotesque, a monospaced face, and Georgia italic. No fonts were downloaded; the board flips in the same type as the timetable.</dd></div>
+        <div><dt>COLOUR</dt><dd>Black, white, and the greys between. Night trains run through the dark, and so does this page.</dd></div>
+        <div><dt>ENGINEERING</dt><dd>One HTML file, one stylesheet, one script. No frameworks, no build step, no external requests. The split-flap board is DOM and transforms; the diagram is hand-drawn SVG; all motion obeys the visitor’s reduced-motion preference.</dd></div>
+        <div><dt>ACCESSIBILITY</dt><dd>Keyboard operable throughout, with a skip link, visible focus, live announcements for board changes, and contrast checked on every grey.</dd></div>
+        <div><dt>CREDIT</dt><dd>Compiled by GLM, 2026-11-11. Dedicated to everyone who ever slept sitting up.</dd></div>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap site-foot-in">
+    <p>NOCTURNE — AN ATLAS OF THE NIGHT TRAIN</p>
+    <p>COMPILED 2026-11-11 · BLACK, WHITE, AND THE GREYS BETWEEN</p>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

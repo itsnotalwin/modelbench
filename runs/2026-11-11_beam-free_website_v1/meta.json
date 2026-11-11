@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "beam-free",
+  "category": "website",
+  "date": "2026-11-11",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "01",
+  "prompt_label": "Website",
+  "notes": "Single-page monochrome interactive experience 'GRAVITY': generative canvas particle fields, scroll-driven reveals, an interactive gravity-well demo, and a dark/light monochrome theme toggle. Static HTML/CSS/JS, no build step, relative paths. Known limitations: external Google Fonts dependency for typography; canvas animations disabled under prefers-reduced-motion.",
+  "slug": "2026-11-11_beam-free_website_v1",
+  "path": "runs/2026-11-11_beam-free_website_v1/index.html",
+  "source_file": "website__beam-free__2026-11-11__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}
