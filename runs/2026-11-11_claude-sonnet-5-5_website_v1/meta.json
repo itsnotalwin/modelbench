@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "claude-sonnet-5-5",
+  "category": "website",
+  "date": "2026-11-11",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "01",
+  "prompt_label": "Website",
+  "notes": "Gnomon: a single self-contained index.html (inline CSS and JS, no external assets, no dependencies) about sundials. It has a hero whose title casts a long shadow from a movable light, a working horizontal sundial driven by latitude and solar time, and an analemma driven by an approximate equation-of-time model. Everything is monochrome and drawn with CSS and SVG. Limitations: the page was syntax-checked and statically checked for colour, but not opened in a real browser, so layout and performance on devices are untested. Live solar time uses the time zone's standard meridian rather than the viewer's exact longitude, and the equation of time is a low-order approximation, so readings can be off by several minutes. The shadow on the dial has a fixed length and is drawn only between 06:00 and 18:00 apparent solar time.",
+  "slug": "2026-11-11_claude-sonnet-5-5_website_v1",
+  "path": "runs/2026-11-11_claude-sonnet-5-5_website_v1/index.html",
+  "source_file": "website__claude-sonnet-5-5_2026-11-11_v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}
