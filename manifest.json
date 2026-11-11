@@ -1,6 +1,6 @@
 {
   "generated_from": "runs/",
-  "count": 0,
+  "count": 1,
   "catalog": [
     {
       "no": "01",
@@ -242,5 +242,62 @@
     "originality",
     "performance"
   ],
-  "runs": []
+  "runs": [
+    {
+      "schema_version": 1,
+      "model": "glm-5.3",
+      "category": "website",
+      "date": "2026-11-10",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "01",
+      "prompt_label": "Website",
+      "notes": "Concept: 'Longshore', a fictional one-person coastal field-recording label in Eyemouth, Berwickshire, selling long-form, unlooped field-recording libraries with a single licence covering unlimited projects. Invented per the brief \u2014 all people, testimonials, prices and statistics are fiction. Static single-folder site: hand-authored semantic HTML (one H1, JSON-LD Organization/Product/FAQPage), two stylesheets, three scripts, self-hosted WOFF2 fonts (Fraunces, Space Grotesk, IBM Plex Mono \u2014 OFL), AI-generated photographs graded with PIL, and procedurally generated bathymetric-contour SVG art (hero layers, covers, compass) injected at build time. The listening room synthesises three 'honest imitation' previews live with the Web Audio API (noise synthesis, LFOs, scheduled events), with a graceful branded fallback when Web Audio is unavailable. The enquiry/order flow runs entirely in the browser: field-level validation with specific human messages, an error summary with focus management, autosaved drafts in localStorage guarded by try/catch, a simulated submission, a success state that survives reload, and a downloadable .txt copy of the enquiry \u2014 nothing is transmitted anywhere. Verified in headless Chromium (agent-browser): zero console/page errors at 1440/768/390/2560 px, no horizontal overflow at any width, empty-submit validation, specific error messages, successful submission, reload persistence, draft restore, order prefill from the catalogue buy buttons, keyboard shortcuts (/ ? P Esc plus native dialog focus traps), 15 s of audio playback including scheduled wave/bird/horn events with no errors, valid JSON-LD, all images load, FCP 228 ms from disk, 0.93 MB total payload, and 30/30 WCAG AA contrast pairs pass by script. Known limitations: there is no real payment or licence-delivery backend (fictional business); the tide clock is a decorative harmonic model, not a real tidal prediction (labelled 'not for navigation'); reduced-motion support is implemented in CSS and JS but was verified by code review rather than device emulation; og:image uses a relative path, so social previews resolve once the folder is hosted at a domain root. Continued-run amendment: re-verified from the delivered folder in a fresh headless-Chromium session \u2014 cold open with zero console/page errors, no horizontal overflow at 1440/768/390, empty-submit validation (field messages, summary, focus management), valid submission, reload persistence, draft autosave/restore/discard, catalogue order prefill, skip-link activation, dialog open/Escape-close, tab order from the skip link, 5 s of audio playback, .txt download, valid JSON-LD, 1 H1, and no leftover placeholders. One bug was found and fixed during re-verification: display:flex on the draft banner and order chip defeated the HTML hidden attribute, so both rendered on every cold load (the banner falsely claimed an unsent draft); fixed by a global [hidden]{display:none!important} rule and re-tested clean. Note for future testers: full-page screenshots taken without scrolling show mid-page sections as blank, because reveal-on-scroll keeps below-the-fold content at opacity 0 until IntersectionObserver marks it; under real continuous scrolling all 36 reveal elements activate.",
+      "slug": "2026-11-10_glm-5.3_website_v1",
+      "path": "runs/2026-11-10_glm-5.3_website_v1/index.html",
+      "source_file": "site-brand__glm-5.3__2026-11-10__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "assets/css/base.css",
+        "assets/css/fonts.css",
+        "assets/css/sections.css",
+        "assets/fonts/fraunces-italic-300-700.woff2",
+        "assets/fonts/fraunces-normal-300-700.woff2",
+        "assets/fonts/ibmplexmono-normal-400.woff2",
+        "assets/fonts/ibmplexmono-normal-500.woff2",
+        "assets/fonts/spacegrotesk-normal-300-700.woff2",
+        "assets/img/favicon.svg",
+        "assets/img/founder.jpg",
+        "assets/img/hero.jpg",
+        "assets/img/nightsea.jpg",
+        "assets/img/og.jpg",
+        "assets/js/app.js",
+        "assets/js/audio.js",
+        "assets/js/form.js",
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    }
+  ]
 }
