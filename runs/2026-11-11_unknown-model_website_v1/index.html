@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ordered — an atlas of tone, reduced to dots</title>
+  <meta name="description" content="Ordered is an interactive atlas of halftone and dither: how continuous grey becomes a finite set of black dots. Every image is computed in the browser, with no image files and no dependencies.">
+  <meta name="theme-color" content="#0b0b0b">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20fill='%230b0b0b'/%3E%3Cg%20fill='%23efefef'%3E%3Ccircle%20cx='4'%20cy='4'%20r='.6'/%3E%3Ccircle%20cx='4'%20cy='12'%20r='1.1'/%3E%3Ccircle%20cx='4'%20cy='20'%20r='1.7'/%3E%3Ccircle%20cx='4'%20cy='28'%20r='2.2'/%3E%3Ccircle%20cx='12'%20cy='4'%20r='1.1'/%3E%3Ccircle%20cx='12'%20cy='12'%20r='1.7'/%3E%3Ccircle%20cx='12'%20cy='20'%20r='2.2'/%3E%3Ccircle%20cx='12'%20cy='28'%20r='2.7'/%3E%3Ccircle%20cx='20'%20cy='4'%20r='1.7'/%3E%3Ccircle%20cx='20'%20cy='12'%20r='2.2'/%3E%3Ccircle%20cx='20'%20cy='20'%20r='2.7'/%3E%3Ccircle%20cx='20'%20cy='28'%20r='3.3'/%3E%3Ccircle%20cx='28'%20cy='4'%20r='2.2'/%3E%3Ccircle%20cx='28'%20cy='12'%20r='2.7'/%3E%3Ccircle%20cx='28'%20cy='20'%20r='3.3'/%3E%3Ccircle%20cx='28'%20cy='28'%20r='3.8'/%3E%3C/g%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to the atlas</a>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="#top">
+      <svg class="mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <g fill="currentColor">
+          <circle cx="4" cy="4" r=".6"/><circle cx="4" cy="12" r="1.1"/><circle cx="4" cy="20" r="1.7"/><circle cx="4" cy="28" r="2.2"/>
+          <circle cx="12" cy="4" r="1.1"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="20" r="2.2"/><circle cx="12" cy="28" r="2.7"/>
+          <circle cx="20" cy="4" r="1.7"/><circle cx="20" cy="12" r="2.2"/><circle cx="20" cy="20" r="2.7"/><circle cx="20" cy="28" r="3.3"/>
+          <circle cx="28" cy="4" r="2.2"/><circle cx="28" cy="12" r="2.7"/><circle cx="28" cy="20" r="3.3"/><circle cx="28" cy="28" r="3.8"/>
+        </g>
+      </svg>
+      <span>Ordered</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <ul>
+        <li><a href="#resolve">Resolve</a></li>
+        <li><a href="#atlas">Atlas Lab</a></li>
+        <li><a href="#wedge">Step wedge</a></li>
+        <li><a href="#history">History</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <canvas id="hero-canvas" class="hero-canvas" tabindex="0" role="img" aria-label="A dotted planet lit from the direction of your pointer. Focus this field and use the arrow keys to move the light."></canvas>
+
+      <div class="hero-copy">
+        <p class="eyebrow">An atlas of halftone &amp; dither · Vol. 01</p>
+        <h1 id="hero-title" class="hero-title"><span>Tone, told</span> <span>in dots.</span></h1>
+        <p class="lede">Every grey you have ever seen in print or on a screen is a bargain: a short list of ink marks, arranged so the eye agrees to see something softer. Ordered is a field guide to that bargain, with every method running live in your browser.</p>
+      </div>
+
+      <div class="hero-foot">
+        <p class="readout" id="hero-readout" aria-live="off"></p>
+        <div class="btn-row">
+          <button type="button" class="btn" id="hero-mode" aria-keyshortcuts="D">Screen: Halftone</button>
+          <button type="button" class="btn btn-solid" id="hero-save">Save this frame (PNG)</button>
+        </div>
+        <p class="hint">Move the pointer to move the light. Press <kbd>D</kbd> to change the screen.</p>
+        <noscript><p class="hint">Every image on this page is drawn by JavaScript. Enable it to see the dots.</p></noscript>
+      </div>
+    </section>
+
+    <section class="resolve" id="resolve" aria-labelledby="resolve-title">
+      <div class="resolve-stage">
+        <canvas id="resolve-canvas" class="resolve-canvas" role="img" aria-label="A dune landscape that changes from continuous grey into a field of halftone dots as you scroll."></canvas>
+        <div class="resolve-meter" aria-hidden="true"><span></span></div>
+        <div class="resolve-copy">
+          <p class="label">01 — Resolve</p>
+          <h2 id="resolve-title">From far enough away, everything is grey.</h2>
+          <p>This landscape is pure arithmetic: a height field lit low from the left. Keep scrolling and its continuous tone breaks into dots, one cell at a time, until the grey is only a rhythm of ink.</p>
+          <p class="readout" id="resolve-readout" aria-live="off"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="statement" aria-labelledby="statement-title">
+      <div class="statement-inner">
+        <p class="label">02 — The problem</p>
+        <h2 id="statement-title" class="statement-text" data-words>A printing press can only do one thing: put ink on paper, or leave it off. It has no grey at all. Every tone you have ever seen in print is a trick of spacing: dots small enough and close enough that the eye averages them into something soft. The craft was always in deciding where the dots go.</h2>
+      </div>
+    </section>
+
+    <section class="atlas" id="atlas" aria-labelledby="atlas-title">
+      <div class="section-head">
+        <p class="label">03 — Atlas Lab</p>
+        <h2 id="atlas-title">Four ways to say grey in two colours.</h2>
+        <p class="section-note" data-reveal>The same source, four decisions. Change the source, tone or contrast and every output recalculates. Copy any method as working JavaScript, or save its frame as a PNG.</p>
+      </div>
+
+      <div class="lab-top" data-reveal>
+        <figure class="source-figure">
+          <canvas id="lab-source" width="320" height="320" role="img" aria-label="The source image after tone and contrast adjustments"></canvas>
+          <figcaption>Source · 320 × 320 · 256 grey levels</figcaption>
+        </figure>
+
+        <div class="lab-controls">
+          <fieldset class="field">
+            <legend>Source</legend>
+            <div class="seg" role="group" aria-label="Choose a source image">
+              <button type="button" class="seg-btn" data-source="sphere" aria-pressed="true">Sphere</button>
+              <button type="button" class="seg-btn" data-source="ramp" aria-pressed="false">Ramp</button>
+              <button type="button" class="seg-btn" data-source="type" aria-pressed="false">Type</button>
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label for="type-input">Your word (typing switches the source to Type)</label>
+            <input id="type-input" type="text" maxlength="12" value="GREY" autocomplete="off" spellcheck="false">
+          </div>
+
+          <div class="slider-row">
+            <label for="tone">Tone</label>
+            <input type="range" id="tone" min="-120" max="120" step="1" value="0">
+            <output for="tone" id="tone-out">0</output>
+          </div>
+
+          <div class="slider-row">
+            <label for="contrast">Contrast</label>
+            <input type="range" id="contrast" min="50" max="200" step="1" value="100">
+            <output for="contrast" id="contrast-out">100%</output>
+          </div>
+
+          <p class="lab-status" id="lab-status" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <div class="lab-grid">
+        <article class="card" data-reveal>
+          <div class="card-media"><canvas data-out="threshold" width="320" height="320" role="img" aria-label="Threshold output: one fixed cut-off value for every pixel"></canvas></div>
+          <div class="card-body">
+            <h3>Threshold</h3>
+            <p>Compare every pixel with one fixed value. It is fast and brutal: anything near the midpoint is lost to a single decision, which is why most of the grey disappears.</p>
+            <p class="stat" data-stat="threshold">Ink coverage —</p>
+            <div class="card-actions">
+              <button type="button" class="btn" data-copy="threshold">Copy source</button>
+              <button type="button" class="btn" data-save="threshold">Save PNG</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-reveal>
+          <div class="card-media"><canvas data-out="ordered" width="320" height="320" role="img" aria-label="Ordered output: an eight by eight Bayer threshold matrix"></canvas></div>
+          <div class="card-body">
+            <h3>Ordered 8×8</h3>
+            <p>A fixed 8 × 8 matrix of thresholds, the Bayer matrix from Bryce Bayer's 1973 paper. Each pixel is tested against its own position, which gives a regular, engraved texture.</p>
+            <p class="stat" data-stat="ordered">Ink coverage —</p>
+            <div class="card-actions">
+              <button type="button" class="btn" data-copy="ordered">Copy source</button>
+              <button type="button" class="btn" data-save="ordered">Save PNG</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-reveal>
+          <div class="card-media"><canvas data-out="floyd" width="320" height="320" role="img" aria-label="Floyd–Steinberg output: error diffusion"></canvas></div>
+          <div class="card-body">
+            <h3>Floyd–Steinberg</h3>
+            <p>Each pixel's rounding error is pushed onto its unvisited neighbours, so the average tone survives and no fixed pattern shows. Robert Floyd and Louis Steinberg, 1976.</p>
+            <p class="stat" data-stat="floyd">Ink coverage —</p>
+            <div class="card-actions">
+              <button type="button" class="btn" data-copy="floyd">Copy source</button>
+              <button type="button" class="btn" data-save="floyd">Save PNG</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-reveal>
+          <div class="card-media"><canvas data-out="atkinson" width="320" height="320" role="img" aria-label="Atkinson output: error diffusion that discards a quarter of the error"></canvas></div>
+          <div class="card-body">
+            <h3>Atkinson</h3>
+            <p>Bill Atkinson's variant spreads only three quarters of each error. Highlights stay clean and shadows stay open, a look closely associated with the original Macintosh.</p>
+            <p class="stat" data-stat="atkinson">Ink coverage —</p>
+            <div class="card-actions">
+              <button type="button" class="btn" data-copy="atkinson">Copy source</button>
+              <button type="button" class="btn" data-save="atkinson">Save PNG</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="wedge" id="wedge" aria-labelledby="wedge-title">
+      <div class="section-head">
+        <p class="label">04 — Step wedge</p>
+        <h2 id="wedge-title">Eleven steps from paper to ink, and the press gets the middle wrong.</h2>
+        <p class="section-note" data-reveal>Printers calibrate with a wedge of flat tones. Ink spreads as it lands, so every dot prints a little larger than it was drawn. That is dot gain, and it is worst in the midtones. Turn it up to see what a press does to an intention.</p>
+      </div>
+
+      <div class="wedge-controls">
+        <div class="slider-row">
+          <label for="gain">Dot gain at 50%</label>
+          <input type="range" id="gain" min="0" max="30" step="1" value="12">
+          <output for="gain" id="gain-out">+12 pts</output>
+        </div>
+      </div>
+
+      <div class="wedge-strip" id="wedge-strip" role="group" aria-label="Step wedge: eleven flat tones from 0 to 100 percent. Use the arrow keys to read each step."></div>
+
+      <div class="wedge-readout" aria-live="polite">
+        <p class="wedge-sentence" id="wedge-sentence"></p>
+        <div class="wedge-bar" aria-hidden="true">
+          <span class="wedge-bar-printed" id="wedge-bar-printed"></span>
+          <span class="wedge-bar-intended" id="wedge-bar-intended"></span>
+        </div>
+        <p class="wedge-legend" aria-hidden="true"><span>Bar: printed ink</span><span>Tick: intended</span></p>
+      </div>
+    </section>
+
+    <section class="history" id="history" aria-labelledby="history-title">
+      <div class="section-head">
+        <p class="label">05 — History</p>
+        <h2 id="history-title">A short history of the dot.</h2>
+        <p class="section-note" data-reveal>Each date below is a moment when someone decided that a grey could be built out of something else.</p>
+      </div>
+
+      <ol class="timeline">
+        <li data-reveal>
+          <time datetime="1839">1839</time>
+          <h3>The daguerreotype is announced</h3>
+          <p>Daguerre's process is made public in Paris. Photographs arrive as continuous tone, and the presses of the day cannot print that, so the problem of grey begins.</p>
+        </li>
+        <li data-reveal>
+          <time datetime="1852">1852</time>
+          <h3>Talbot patents photo-engraving through a screen</h3>
+          <p>William Henry Fox Talbot describes photographing through fine screens or veils, breaking an image into a pattern that a press can ink. This is the ancestor of the halftone.</p>
+        </li>
+        <li data-reveal>
+          <time datetime="1879">1879</time>
+          <h3>Ben-Day tints</h3>
+          <p>Benjamin Henry Day's patent for mechanical tints lets illustrators shade drawings with printed dot patterns, rather than hand-stippling every tone.</p>
+        </li>
+        <li data-reveal>
+          <time datetime="1880">1880</time>
+          <h3>The first halftone in a newspaper</h3>
+          <p>On 4 March, the New York Daily Graphic prints Stephen H. Horgan's photograph “A Scene in Shantytown”, made through a fine screen so that the picture is built from dots.</p>
+        </li>
+        <li data-reveal>
+          <time datetime="1973">1973</time>
+          <h3>Bayer's ordered matrix</h3>
+          <p>Bryce Bayer's paper on the two-level rendition of continuous-tone pictures sets out an ordered arrangement of thresholds that spreads dots evenly. Ordered dither starts here.</p>
+        </li>
+        <li data-reveal>
+          <time datetime="1976">1976</time>
+          <h3>Error diffusion</h3>
+          <p>Robert Floyd and Louis Steinberg show that pushing each pixel's rounding error onto its unvisited neighbours produces convincing tones with no obvious pattern.</p>
+        </li>
+        <li data-reveal>
+          <time datetime="1984">1984</time>
+          <h3>Dither arrives on the desktop</h3>
+          <p>Bill Atkinson's variant of error diffusion lets one-bit screens show photographs, a look closely associated with the original Macintosh.</p>
+        </li>
+        <li data-reveal>
+          <time datetime="1987">1987</time>
+          <h3>Blue noise</h3>
+          <p>Robert Ulichney's Digital Halftoning popularises blue noise: random-looking dots kept evenly apart, so the pattern is hard for the eye to find.</p>
+        </li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="colophon">
+    <p class="colophon-big" data-reveal>Ordered is made of arithmetic.</p>
+    <div class="colophon-cols">
+      <p>No photographs, no icon fonts, no libraries and no build step. The landscape, the planet, the type and every dot on this page are computed in your browser from plain HTML, CSS and JavaScript.</p>
+      <nav aria-label="Footer">
+        <ul>
+          <li><a href="#resolve">Resolve</a></li>
+          <li><a href="#atlas">Atlas Lab</a></li>
+          <li><a href="#wedge">Step wedge</a></li>
+          <li><a href="#history">History</a></li>
+          <li><a href="#top">Back to top</a></li>
+        </ul>
+      </nav>
+      <p class="small">Keyboard: Tab through the Lab, D cycles the hero screen, and arrow keys move the light when the hero is focused. Motion is reduced automatically when your system asks for it.</p>
+    </div>
+  </footer>
+
+  <script defer src="js/core.js"></script>
+  <script defer src="js/sources.js"></script>
+  <script defer src="js/hero.js"></script>
+  <script defer src="js/lab.js"></script>
+  <script defer src="js/wedge.js"></script>
+  <script defer src="js/resolve.js"></script>
+  <script defer src="js/app.js"></script>
+</body>
+</html>
