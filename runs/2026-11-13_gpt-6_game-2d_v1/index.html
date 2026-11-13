@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#080d1a">
+<title>NOCTILUCA — A little light in the long dark</title>
+<style>
+:root{color-scheme:dark;font-family:ui-rounded,"Trebuchet MS",system-ui,sans-serif}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080d1a;color:#eaf8ff}
+body{display:grid;place-items:center;touch-action:none}
+#frame{position:relative;width:100vw;height:100vh;overflow:hidden;background:#080d1a}
+canvas{display:block;width:100%;height:100%;outline:none}
+#hud{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .35s}
+#hud.live{opacity:1}
+.pill{position:absolute;top:clamp(12px,3vw,28px);padding:9px 14px;border:1px solid #9deaff35;background:#09182ab8;backdrop-filter:blur(10px);border-radius:30px;box-shadow:0 5px 24px #0004;font-size:clamp(11px,1.5vw,14px);letter-spacing:.12em;text-transform:uppercase;color:#a9c8d9}
+#score{left:clamp(12px,3vw,28px)}#stage{left:50%;transform:translateX(-50%)}#best{right:clamp(12px,3vw,28px)}
+#charge{position:absolute;left:50%;bottom:clamp(18px,4vh,34px);transform:translateX(-50%);width:min(210px,38vw);height:5px;background:#9deaff20;border-radius:10px;overflow:hidden}
+#charge span{display:block;height:100%;width:100%;transform:scaleX(0);transform-origin:left;background:linear-gradient(90deg,#59e6d4,#e8ffb5);box-shadow:0 0 14px #65ffe5}
+#hint{position:absolute;bottom:clamp(34px,7vh,58px);left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#9ab8c8a8;white-space:nowrap}
+.overlay{position:absolute;inset:0;display:grid;place-items:center;padding:22px;background:radial-gradient(ellipse at 50% 45%,#101f36a8,#050914c9 70%);transition:opacity .35s,visibility .35s}
+.overlay.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.panel{width:min(510px,100%);text-align:center;padding:clamp(25px,5vw,46px);border:1px solid #a7e9f52e;border-radius:28px;background:linear-gradient(145deg,#14263bd9,#0b1425e8);box-shadow:0 24px 90px #0009,inset 0 1px #ffffff12;backdrop-filter:blur(16px)}
+.kicker{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#80e8db;margin-bottom:15px}
+h1{font-size:clamp(42px,9vw,76px);line-height:.9;letter-spacing:-.07em;margin:0;color:#effff9;text-shadow:0 0 28px #8effdf48}
+h1 em{font-style:normal;color:#8ef2d7}
+.subtitle{max-width:360px;margin:20px auto 25px;color:#b2c8d6;line-height:1.65;font-size:14px}
+.instructions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin:20px 0 25px}
+.instructions span{border:1px solid #b5eaff2b;background:#ffffff08;padding:8px 11px;border-radius:12px;font-size:11px;color:#c8dce5}
+button{font:inherit;color:#07151c;background:linear-gradient(110deg,#a1ffe0,#cfff9d);border:0;border-radius:30px;padding:14px 30px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;cursor:pointer;box-shadow:0 5px 25px #8dffd333;transition:transform .15s,filter .15s}
+button:hover{transform:translateY(-2px);filter:brightness(1.08)}button:active{transform:translateY(1px)}
+.small{margin-top:16px;font-size:11px;color:#7795a8;letter-spacing:.08em}
+#pauseBtn{position:absolute;right:clamp(14px,3vw,30px);bottom:clamp(18px,4vh,34px);pointer-events:auto;border:1px solid #9deaff35;background:#09182ab8;color:#bfe8ef;padding:8px 13px;font-size:10px;box-shadow:none}
+@media(max-width:520px){#stage{top:56px}#best{top:12px}#score{top:12px}.panel{border-radius:22px}}
+</style>
+</head>
+<body>
+<div id="frame">
+<canvas id="game" aria-label="Noctiluca game canvas"></canvas>
+<div id="hud">
+ <div class="pill" id="score">GLOW <b>0000</b></div>
+ <div class="pill" id="stage">NIGHT 01</div>
+ <div class="pill" id="best">BEST <b>0000</b></div>
+ <div id="charge"><span></span></div><div id="hint">SPACE / CLICK TO PULSE</div>
+ <button id="pauseBtn" type="button">Ⅱ Pause</button>
+</div>
+<div class="overlay" id="title">
+ <div class="panel">
+  <div class="kicker">a nocturnal flight game</div>
+  <h1>NOCTI<em>LUCA</em></h1>
+  <p class="subtitle">The garden is asleep, but its little lights are not. Guide a wandering glow-moth through the midnight bloom. Gather stardust. Keep your light alive.</p>
+  <div class="instructions"><span>↑ ↓ / W S · steer</span><span>SPACE / CLICK · pulse</span><span>P · pause</span></div>
+  <button id="startBtn">Enter the night</button>
+  <div class="small">A calm hand, a curious heart. How far can you drift?</div>
+ </div>
+</div>
+<div class="overlay hidden" id="pause">
+ <div class="panel"><div class="kicker">the garden is holding its breath</div><h1>PAUSED</h1><p class="subtitle">Your little light can wait here. The night won't move until you're ready.</p><button id="resumeBtn">Keep drifting</button><div class="small">Press P or Escape to resume</div></div>
+</div>
+<div class="overlay hidden" id="end">
+ <div class="panel"><div class="kicker" id="endKicker">the last petal falls</div><h1 id="endTitle">DARKNESS</h1><p class="subtitle" id="endCopy">Every light leaves a little warmth behind.</p><div class="instructions"><span id="finalScore">GLOW 0000</span><span id="finalBest">BEST 0000</span></div><button id="againBtn">Fly again</button><div class="small">The garden remembers every glow.</div></div>
+</div>
+</div>
+<script>
+(()=>{
+'use strict';
+const canvas=document.getElementById('game'),ctx=canvas.getContext('2d',{alpha:false});
+const $=id=>document.getElementById(id);
+const hud=$('hud'),title=$('title'),pauseLayer=$('pause'),endLayer=$('end');
+let W=innerWidth,H=innerHeight,DPR=1,state='title',last=0,time=0,score=0,best=0,stage=1,shake=0,spawn=0,world=0;
+let player, hazards=[], motes=[], particles=[], stars=[], keys={}, pointer={x:0,y:0,active:false}, audio=null, muted=false;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), rand=(a,b)=>a+Math.random()*(b-a);
+try{best=Number(localStorage.getItem('noctiluca-best')||0)||0}catch(e){}
+function resize(){W=innerWidth;H=innerHeight;DPR=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(W*DPR);canvas.height=Math.round(H*DPR);ctx.setTransform(DPR,0,0,DPR,0,0);if(player){player.y=clamp(player.y,60,H-60)}stars=Array.from({length:Math.ceil(W*H/8500)},()=>({x:Math.random()*W,y:Math.random()*H,z:rand(.2,1),r:rand(.4,1.5),p:rand(0,7)}))}
+addEventListener('resize',resize);resize();
+function sound(type){if(muted)return;try{audio ||= new (window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')audio.resume();let o=audio.createOscillator(),g=audio.createGain(),f=audio.createBiquadFilter();o.connect(f);f.connect(g);g.connect(audio.destination);let now=audio.currentTime;f.type='lowpass';f.frequency.value=type==='hit'?700:1600;o.type='sine';o.frequency.setValueAtTime(type==='hit'?170:type==='pulse'?480:680,now);o.frequency.exponentialRampToValueAtTime(type==='hit'?55:type==='pulse'?170:1050,now+.18);g.gain.setValueAtTime(type==='hit'?.0001:.045,now);g.gain.exponentialRampToValueAtTime(.0001,now+.22);o.start(now);o.stop(now+.23)}catch(e){}}
+function reset(){score=0;stage=1;time=0;world=0;spawn=.7;shake=0;hazards=[];motes=[];particles=[];player={x:W*.22,y:H*.5,vy:0,r:13,inv:1,energy:0,trail:[]};for(let i=0;i<8;i++)motes.push(makeMote(W+rand(80,W),rand(80,H-80)))}
+function makeMote(x,y){return{x,y,r:rand(4,7),phase:rand(0,7),value:10+Math.round(rand(0,2))*5}}
+function burst(x,y,color,n=12){for(let i=0;i<n;i++){let a=rand(0,Math.PI*2),s=rand(35,190);particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:rand(.3,.8),max:.8,r:rand(1,3),color})}}
+function start(){reset();state='play';title.classList.add('hidden');pauseLayer.classList.add('hidden');endLayer.classList.add('hidden');hud.classList.add('live');last=performance.now();sound('collect')}
+function pause(){if(state==='play'){state='pause';pauseLayer.classList.remove('hidden')}else if(state==='pause'){state='play';pauseLayer.classList.add('hidden');last=performance.now()}}
+function finish(win=false){if(state!=='play')return;state='end';sound('hit');burst(player.x,player.y,'#b4ffe7',28);best=Math.max(best,score);try{localStorage.setItem('noctiluca-best',String(best))}catch(e){}$('endKicker').textContent=win?'the garden opens':'the last petal falls';$('endTitle').textContent=win?'DAWN':'DARKNESS';$('endCopy').textContent=win?'You carried enough light to wake the whole garden. A new day unfurls.':'Even the smallest light makes a beautiful journey. The garden will remember.';$('finalScore').textContent='GLOW '+String(score).padStart(4,'0');$('finalBest').textContent='BEST '+String(best).padStart(4,'0');hud.classList.remove('live');endLayer.classList.remove('hidden')}
+function pulse(){if(state!=='play'||player.energy<1)return;player.energy=0;player.pulse=.24;shake=7;sound('pulse');burst(player.x+20,player.y,'#a6ffe4',18);hazards.forEach(h=>{if(Math.hypot(h.x-player.x,h.y-player.y)<145)h.stun=.65});motes.forEach(m=>{if(Math.hypot(m.x-player.x,m.y-player.y)<175)m.pull=.8})}
+function togglePause(){if(state==='play'||state==='pause')pause()}
+$('startBtn').onclick=start;$('againBtn').onclick=start;$('resumeBtn').onclick=pause;$('pauseBtn').onclick=togglePause;
+addEventListener('keydown',e=>{let k=e.key.toLowerCase();keys[k]=true;if([' ','arrowup','arrowdown'].includes(k))e.preventDefault();if(k==='p'||k==='escape')togglePause();if(k===' '||k==='enter')pulse()});
+addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+canvas.addEventListener('pointermove',e=>{pointer.x=e.clientX;pointer.y=e.clientY;pointer.active=true});
+canvas.addEventListener('pointerdown',e=>{pointer.x=e.clientX;pointer.y=e.clientY;if(state==='title')start();else if(state==='play')pulse()});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&state==='play')pause()});
+function drawBackground(dt){let g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#0b1830');g.addColorStop(.55,'#101b32');g.addColorStop(1,'#111a2a');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+let glow=ctx.createRadialGradient(W*.72,H*.24,0,W*.72,H*.24,Math.max(W,H)*.7);glow.addColorStop(0,'#24445a55');glow.addColorStop(1,'#0a102000');ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
+stars.forEach(s=>{let x=(s.x-world*s.z*.08%W+W)%W;let a=.25+.55*(.5+.5*Math.sin(time*1.3+s.p));ctx.globalAlpha=a;ctx.fillStyle='#c5f4f0';ctx.beginPath();ctx.arc(x,s.y,s.r*s.z,0,Math.PI*2);ctx.fill()});ctx.globalAlpha=1;
+for(let layer=0;layer<3;layer++){let y=H*(.68+layer*.105),amp=22+layer*13;ctx.beginPath();ctx.moveTo(0,H);for(let x=0;x<=W+8;x+=8){let yy=y+Math.sin((x+world*(.12+layer*.08))*.009+layer*2)*amp+Math.sin(x*.021+time*.25+layer)*9;ctx.lineTo(x,yy)}ctx.lineTo(W,H);ctx.closePath();ctx.fillStyle=['#132b36','#10232f','#0b1c29'][layer];ctx.fill()}
+}
+function drawMoth(){let p=player;ctx.save();ctx.translate(p.x,p.y);let flap=Math.sin(time*19)*.48;ctx.globalAlpha=p.inv>0&&Math.floor(time*18)%2===0?.45:1;
+let halo=ctx.createRadialGradient(0,0,2,0,0,70);halo.addColorStop(0,'#a5ffe44d');halo.addColorStop(1,'#a5ffe400');ctx.fillStyle=halo;ctx.beginPath();ctx.arc(0,0,70,0,7);ctx.fill();
+ctx.rotate(clamp(p.vy*.001,-.35,.35));
+ctx.fillStyle='#a6f9e4';ctx.beginPath();ctx.ellipse(-3,-9,-0+8,13+flap*5,-.55,0,Math.PI*2);ctx.fill();ctx.globalAlpha*=.8;ctx.fillStyle='#e0fff2';ctx.beginPath();ctx.ellipse(4,8,7,12-flap*5,.55,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+ctx.fillStyle='#efffe8';ctx.beginPath();ctx.ellipse(5,0,11,7,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#284b57';ctx.beginPath();ctx.arc(10,-2,1.8,0,7);ctx.fill();ctx.fillStyle='#b7fff0';ctx.beginPath();ctx.arc(-5,0,3,0,7);ctx.fill();
+ctx.strokeStyle='#c4fff0';ctx.lineWidth=1.3;ctx.beginPath();ctx.moveTo(2,-5);ctx.quadraticCurveTo(8,-16,13,-13);ctx.moveTo(2,-5);ctx.quadraticCurveTo(0,-17,-4,-16);ctx.stroke();ctx.restore()}
+function drawHazard(h){ctx.save();ctx.translate(h.x,h.y);ctx.rotate(h.rot);ctx.globalAlpha=h.stun>0?.4:1;
+let r=h.r;ctx.shadowBlur=18;ctx.shadowColor='#ff759c88';ctx.fillStyle='#843d68';ctx.strokeStyle='#f69ab7';ctx.lineWidth=2;
+ctx.beginPath();for(let i=0;i<10;i++){let a=i*Math.PI/5,rr=i%2===0?r:r*.66;let x=Math.cos(a)*rr,y=Math.sin(a)*rr; i?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.closePath();ctx.fill();ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#ffd5ac';ctx.beginPath();ctx.arc(0,0,r*.22,0,7);ctx.fill();
+for(let i=0;i<5;i++){let a=i*Math.PI*2/5;ctx.strokeStyle='#ffc0ce';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(Math.cos(a)*r*.72,Math.sin(a)*r*.72);ctx.lineTo(Math.cos(a)*r*1.22,Math.sin(a)*r*1.22);ctx.stroke()}ctx.restore()}
+function update(dt){time+=dt;world+=dt*(95+stage*11);score+=0;stage=1+Math.floor(time/24);$('stage').textContent='NIGHT '+String(stage).padStart(2,'0');
+let target=player.y,up=keys['arrowup']||keys['w'],down=keys['arrowdown']||keys['s'];if(up)target-=260*dt;if(down)target+=260*dt;if(pointer.active&&Math.abs(pointer.y-player.y)>12)target+=(pointer.y-player.y)*Math.min(1,dt*5);player.vy+=(target-player.y)*dt*7;player.vy*=Math.pow(.055,dt);player.y=clamp(player.y+player.vy*dt,42,H-42);
+player.inv=Math.max(0,player.inv-dt);player.pulse=Math.max(0,(player.pulse||0)-dt);player.trail.unshift({x:player.x-8,y:player.y,life:.35});player.trail=player.trail.slice(0,12);
+spawn-=dt;if(spawn<=0){let gap=rand(145,Math.max(155,H*.34));let cy=rand(90,H-90);hazards.push({x:W+50,y:cy,r:rand(19,28),rot:rand(0,6),speed:rand(0,1),stun:0});if(Math.random()<.7){motes.push(makeMote(W+rand(40,180),clamp(cy+rand(-gap*.65,gap*.65),55,H-55)))}spawn=Math.max(.48,rand(1.05,1.55)-stage*.045)}
+hazards.forEach(h=>{h.x-=(170+stage*17)*dt;h.rot+=dt*(h.stun>0?-.6:1.2);h.stun=Math.max(0,h.stun-dt)});hazards=hazards.filter(h=>h.x>-80);
+motes.forEach(m=>{m.x-=(150+stage*14)*dt;m.phase+=dt*2.5;if(m.pull>0){m.pull-=dt;let dx=player.x-m.x,dy=player.y-m.y,d=Math.hypot(dx,dy)||1;m.x+=dx/d*360*dt;m.y+=dy/d*360*dt}
+if(Math.hypot(m.x-player.x,m.y-player.y)<player.r+m.r+7){score+=m.value;player.energy=Math.min(1,player.energy+.22);burst(m.x,m.y,'#c8ff9e',9);sound('collect');m.x=-100}});motes=motes.filter(m=>m.x>-40);
+for(let h of hazards){if(h.stun<=0&&player.inv<=0&&Math.hypot(h.x-player.x,h.y-player.y)<h.r+player.r-4){player.inv=1.15;shake=12;score=Math.max(0,score-25);player.energy=Math.max(0,player.energy-.35);burst(player.x,player.y,'#ff9ab5',18);sound('hit');if(score===0&&stage>5){} }}
+if(player.inv<=0&&hazards.some(h=>h.stun<=0&&Math.hypot(h.x-player.x,h.y-player.y)<h.r+player.r-4)){/* collision grace is handled by invulnerability */}
+if(time>180)finish(true);
+particles.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vx*=Math.pow(.2,dt);p.vy*=Math.pow(.2,dt);p.life-=dt});particles=particles.filter(p=>p.life>0);
+shake=Math.max(0,shake-dt*24);
+$('score').innerHTML='GLOW <b>'+String(score).padStart(4,'0')+'</b>';$('best').innerHTML='BEST <b>'+String(Math.max(best,score)).padStart(4,'0')+'</b>';$('charge span').style.transform='scaleX('+player.energy+')';
+}
+function render(dt){ctx.save();if(shake>0)ctx.translate(rand(-shake,shake),rand(-shake,shake));drawBackground(dt);
+motes.forEach(m=>{let bob=Math.sin(m.phase)*4;ctx.save();ctx.translate(m.x,m.y+bob);ctx.shadowBlur=18;ctx.shadowColor='#cfff9d';ctx.fillStyle='#dfffaa';ctx.beginPath();ctx.arc(0,0,m.r,0,7);ctx.fill();ctx.shadowBlur=0;ctx.strokeStyle='#dfffaa77';ctx.beginPath();ctx.arc(0,0,m.r+5+Math.sin(m.phase)*2,0,7);ctx.stroke();ctx.restore()});
+hazards.forEach(drawHazard);
+player?.trail.forEach((t,i)=>{ctx.globalAlpha=(1-i/player.trail.length)*.18;ctx.fillStyle='#9dffe3';ctx.beginPath();ctx.arc(t.x,t.y,player.r*(1-i/player.trail.length)*.7,0,7);ctx.fill()});ctx.globalAlpha=1;
+if(player){drawMoth();if(player.pulse>0){ctx.strokeStyle='#baffdf';ctx.globalAlpha=player.pulse/.24;ctx.lineWidth=3;ctx.beginPath();ctx.arc(player.x,player.y,35+(1-player.pulse/.24)*100,0,7);ctx.stroke();ctx.globalAlpha=1}}
+particles.forEach(p=>{ctx.globalAlpha=clamp(p.life/p.max,0,1);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fill()});ctx.globalAlpha=1;ctx.restore();
+if(state==='title'){time+=dt;drawTitleMoth()} }
+function drawTitleMoth(){let x=W*.5,y=H*.34+Math.sin(time*1.2)*12;ctx.save();ctx.translate(x,y);ctx.shadowBlur=35;ctx.shadowColor='#9effdf';ctx.fillStyle='#baffea';ctx.beginPath();ctx.ellipse(-9,-3,8,17,-.6+Math.sin(time*7)*.3,0,7);ctx.ellipse(9,3,8,17,.6-Math.sin(time*7)*.3,0,7);ctx.fill();ctx.fillStyle='#f1ffe8';ctx.beginPath();ctx.ellipse(0,0,8,11,0,0,7);ctx.fill();ctx.restore()}
+function loop(now){let dt=Math.min(.033,(now-last)/1000||0);last=now;if(state==='play')update(dt);render(dt);requestAnimationFrame(loop)}
+last=performance.now();requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

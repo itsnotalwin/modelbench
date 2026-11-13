@@ -1,6 +1,6 @@
 {
   "generated_from": "runs/",
-  "count": 13,
+  "count": 17,
   "catalog": [
     {
       "no": "01",
@@ -243,6 +243,126 @@
     "performance"
   ],
   "runs": [
+    {
+      "schema_version": 1,
+      "model": "gpt-6",
+      "category": "game-2d",
+      "date": "2026-11-13",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "03",
+      "prompt_label": "2D Game",
+      "notes": "A self-contained canvas arcade flight game with procedural night-garden art, synthesized sound, escalating hazard density, pulse ability, keyboard/pointer/touch input, pause, and locally saved best score. Runs without external assets; browser storage and audio may be restricted by privacy settings.",
+      "slug": "2026-11-13_gpt-6_game-2d_v1",
+      "path": "runs/2026-11-13_gpt-6_game-2d_v1/index.html",
+      "source_file": "game-2d__gpt-6__2026-11-13__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "ernie-5.5-flash-preview-free",
+      "category": "game-2d",
+      "date": "2026-11-13",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "03",
+      "prompt_label": "2D Game",
+      "notes": "LUMENFALL is a complete single-file canvas action game: a lantern spirit survives escalating waves of crystalline enemies, collecting motes of light, chaining combos, dashing through danger and unleashing a screen-clearing Nova. All art is drawn procedurally on canvas and all music and sound effects are synthesized with Web Audio. Includes title, pause, game-over and restart flows, persistent high score, mouse and keyboard controls, and touch controls. Known limitation: the game is tuned for desktop and landscape play; touch firing is automatic and the arena is best experienced on a wider screen.",
+      "slug": "2026-11-13_ernie-5.5-flash-preview-free_game-2d_v1",
+      "path": "runs/2026-11-13_ernie-5.5-flash-preview-free_game-2d_v1/index.html",
+      "source_file": "game-2d__ernie-5.5-flash-preview-free__2026-11-13__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "beam-free",
+      "category": "game-2d",
+      "date": "2026-11-13",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "03",
+      "prompt_label": "2D Game",
+      "notes": "Aether Drift: neon top-down arena shooter/collector with waves, boss every 5th wave, phase (slow-mo+invuln) mechanic, entropy discharge via cores, procedural canvas art, synth audio+music, touch/gamepad support. Known limitations: music loop simple; no explicit victory state (endless survival).",
+      "slug": "2026-11-13_beam-free_game-2d_v1",
+      "path": "runs/2026-11-13_beam-free_game-2d_v1/index.html",
+      "source_file": "game-2d__beam-free__2026-11-13__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
     {
       "schema_version": 1,
       "model": "beam-free",
@@ -788,6 +908,51 @@
       "files": [
         "assets/app.js",
         "assets/styles.css",
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "index.html",
+        "manifest.webmanifest",
+        "meta.json",
+        "sw.js"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "deepseek-v4.1-flash-free",
+      "category": "saas",
+      "date": "2026-11-11",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "02",
+      "prompt_label": "SaaS for Clearing Agents",
+      "notes": "Declarant is a local-first customs clearing workspace for a Mombasa freight desk. It covers intake, document checklists with lodgement gates, pro-rata CIF allocation, duty/excise/VAT/levy computation, assessments, customs queries, release and delivery, disbursement aging, client statements, CSV exports, print documents and role-based demo accounts. Runs directly from index.html with seeded data and localStorage persistence; no server, build step or external services. Limitations: tariff rates and the demo accounts are illustrative and not a substitute for current authority tariffs or real authentication; data is confined to one browser profile; CSV and print output are the only integrations; the bundled test suite covers core calculations, document gating, aging and storage serialisation, not browser rendering.",
+      "slug": "2026-11-11_deepseek-v4.1-flash-free_saas_v1",
+      "path": "runs/2026-11-11_deepseek-v4.1-flash-free_saas_v1/index.html",
+      "source_file": "saas__deepseek-v4.1-flash-free__2026-11-11__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "pwa": {
+        "manifest_linked": false,
+        "sw_registered": false
+      },
+      "files": [
+        "assets/app.css",
+        "assets/app.js",
+        "assets/core.js",
+        "assets/seed.js",
+        "assets/tests.js",
         "icons/icon-192.png",
         "icons/icon-512.png",
         "index.html",

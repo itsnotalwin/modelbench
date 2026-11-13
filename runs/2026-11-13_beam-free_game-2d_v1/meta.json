@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "beam-free",
+  "category": "game-2d",
+  "date": "2026-11-13",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "03",
+  "prompt_label": "2D Game",
+  "notes": "Aether Drift: neon top-down arena shooter/collector with waves, boss every 5th wave, phase (slow-mo+invuln) mechanic, entropy discharge via cores, procedural canvas art, synth audio+music, touch/gamepad support. Known limitations: music loop simple; no explicit victory state (endless survival).",
+  "slug": "2026-11-13_beam-free_game-2d_v1",
+  "path": "runs/2026-11-13_beam-free_game-2d_v1/index.html",
+  "source_file": "game-2d__beam-free__2026-11-13__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}

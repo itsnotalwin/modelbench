@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "ernie-5.5-flash-preview-free",
+  "category": "game-2d",
+  "date": "2026-11-13",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "03",
+  "prompt_label": "2D Game",
+  "notes": "LUMENFALL is a complete single-file canvas action game: a lantern spirit survives escalating waves of crystalline enemies, collecting motes of light, chaining combos, dashing through danger and unleashing a screen-clearing Nova. All art is drawn procedurally on canvas and all music and sound effects are synthesized with Web Audio. Includes title, pause, game-over and restart flows, persistent high score, mouse and keyboard controls, and touch controls. Known limitation: the game is tuned for desktop and landscape play; touch firing is automatic and the arena is best experienced on a wider screen.",
+  "slug": "2026-11-13_ernie-5.5-flash-preview-free_game-2d_v1",
+  "path": "runs/2026-11-13_ernie-5.5-flash-preview-free_game-2d_v1/index.html",
+  "source_file": "game-2d__ernie-5.5-flash-preview-free__2026-11-13__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}
