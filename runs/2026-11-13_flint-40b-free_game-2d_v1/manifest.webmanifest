@@ -1,0 +1,26 @@
+{
+  "name": "flint-40b-free \u00b7 2D Game v1",
+  "short_name": "flint-40b-fr",
+  "description": "A complete 2D game in a single HTML file, with the genre and art direction chosen by the model. Run by flint-40b-free.",
+  "id": "./index.html",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#371510",
+  "theme_color": "#df503a",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

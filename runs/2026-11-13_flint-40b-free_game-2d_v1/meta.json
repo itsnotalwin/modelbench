@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "flint-40b-free",
+  "category": "game-2d",
+  "date": "2026-11-13",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "03",
+  "prompt_label": "2D Game",
+  "notes": "Single-file 2D twin-stick gravity-well survival game (VORTEX). Vector-drawn canvas art, Web Audio synthesized SFX and music, particles, screen shake, hit-stop, slow-mo, dash, combo scoring, escalating endless waves, persistent best score via guarded localStorage. Known limitations: no external assets; touch and gamepad bindings implemented but not hardware-verified.",
+  "slug": "2026-11-13_flint-40b-free_game-2d_v1",
+  "path": "runs/2026-11-13_flint-40b-free_game-2d_v1/index.html",
+  "source_file": "game-2d__flint-40b-free__2026-11-13__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}
