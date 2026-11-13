@@ -1,5 +1,5 @@
 {
-  "version": 14,
+  "version": 15,
   "outputs_per_prompt": 1,
   "prompts": [
     {
@@ -232,6 +232,17 @@
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
       "hue": 280
+    },
+    {
+      "no": "22",
+      "slug": "site-refresh",
+      "title": "Production Site Refresh",
+      "family": "Web",
+      "summary": "A fixed source: refresh the live Shutterhaus Visuals production site \u2014 same doctrine, a generation better, shipped as one self-contained static folder.",
+      "requirement": "All five public pages rebuilt; keyboard gallery and scroll frames preserved; zero third-party requests; no build step; content in the markup; WCAG 2.2 AA; verified performance budget",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 42
     }
   ]
 }

@@ -1,6 +1,6 @@
-# ModelBench · Twenty-one challenges
+# ModelBench · Twenty-two challenges
 
-ModelBench contains **twenty-one one-shot challenges** spanning websites, applications, games, visual tools, simulations and worlds. Each prompt produces exactly one finished project folder and one ZIP. The model resolves its own model identity and current date; version is always 1. The organiser is never asked for run metadata.
+ModelBench contains **twenty-two one-shot challenges** spanning websites, applications, games, visual tools, simulations and worlds. Each prompt produces exactly one finished project folder and one ZIP. The model resolves its own model identity and current date; version is always 1. The organiser is never asked for run metadata.
 
 Prompt text is authored by the organiser. The only additions made to each prompt file are the automatic run-identity block and the submission contract that carries the folder name, `meta.json` fields and category slug.
 
@@ -29,10 +29,11 @@ Prompt text is authored by the organiser. The only additions made to each prompt
 | 19 | Spreadsheet | spreadsheet | Web |
 | 20 | Physics Engine | physics | Games |
 | 21 | Floating Pagoda Island | island-pagoda | Worlds |
+| 22 | Production Site Refresh | site-refresh | Web |
 
 ## Creative freedom
 
-Challenges 01-20 are open briefs: the model chooses the subject, name, audience, tone, art direction and implementation wherever the brief does not require something specific. Challenge 21 is the single fixed-subject brief — a floating island crowned by a multi-tier pagoda — where everything about how it looks, feels and plays is still the model's decision.
+Challenges 01-20 are open briefs: the model chooses the subject, name, audience, tone, art direction and implementation wherever the brief does not require something specific. Challenge 21 is a fixed subject — a floating island crowned by a multi-tier pagoda — where everything about how it looks, feels and plays is still the model's decision. Challenge 22 is a fixed source: refresh the live Shutterhaus Visuals production site, keeping its identity and interaction language while rebuilding the execution to a much higher standard.
 
 ## Fairness and evaluation
 
@@ -70,13 +71,13 @@ The shared six-axis scorecard:
 }
 ```
 
-The category must match one of the twenty-one slugs in `catalog.json`. The version is always integer `1`. The importer rejects invalid or duplicate submissions without overwriting existing runs. Ratings and evaluation logs remain organizer-owned.
+The category must match one of the twenty-two slugs in `catalog.json`. The version is always integer `1`. The importer rejects invalid or duplicate submissions without overwriting existing runs. Ratings and evaluation logs remain organizer-owned.
 
 ## Repository map
 
 - `index.html` — dashboard.
 - `prompts/catalog.json` — canonical challenge catalogue.
-- `prompts/01-*.md` through `prompts/21-*.md` — standalone challenge briefs.
+- `prompts/01-*.md` through `prompts/22-*.md` — standalone challenge briefs.
 - `manifest.json` — generated dashboard data.
 - `inbox/` — incoming ZIP submissions.
 - `runs/` — accepted immutable submissions.

@@ -258,9 +258,9 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
     def test_catalog_covers_all_challenges(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
         prompts = catalog["prompts"]
-        self.assertEqual(len(prompts), 21)
-        self.assertEqual([p["no"] for p in prompts], [f"{n:02d}" for n in range(1, 22)])
-        self.assertEqual(len({p["slug"] for p in prompts}), 21)
+        self.assertEqual(len(prompts), 22)
+        self.assertEqual([p["no"] for p in prompts], [f"{n:02d}" for n in range(1, 23)])
+        self.assertEqual(len({p["slug"] for p in prompts}), 22)
         self.assertTrue({p["family"] for p in prompts} <= {"Web", "Games", "Visual", "Worlds"})
         for challenge in prompts:
             matches = list((REPO_ROOT / "prompts").glob(f"{challenge['no']}-*.md"))
@@ -275,8 +275,8 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
         self.assertNotIn("three separate outputs", dashboard)
         self.assertIn("one complete project folder", dashboard)
         self.assertIn("One run, one ZIP", dashboard)
-        self.assertIn("Twenty-one open-ended challenges", dashboard)
-        self.assertIn("Twenty-one mega-prompts", dashboard)
+        self.assertIn("Twenty-two open-ended challenges", dashboard)
+        self.assertIn("Twenty-two mega-prompts", dashboard)
 
 
     def test_every_prompt_carries_the_submission_contract(self):

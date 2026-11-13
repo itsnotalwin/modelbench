@@ -1,10 +1,10 @@
 # ModelBench Project
 
 ## Purpose
-A static-hosted, one-shot AI benchmark spanning web development, games, visual work and simulated worlds. The twenty-one challenges span websites, applications, games, visual tools, simulations and worlds. Each model produces one finished artifact; the inbox importer routes ZIP packages into immutable runs.
+A static-hosted, one-shot AI benchmark spanning web development, games, visual work and simulated worlds. The twenty-two challenges span websites, applications, games, visual tools, simulations and worlds. Each model produces one finished artifact; the inbox importer routes ZIP packages into immutable runs.
 
 ## Current benchmark shape
-Twenty-one standalone prompts in `prompts/`, 01-21. Prompts 01-20 are themed open briefs; 21 is the single fixed-subject brief (Floating Pagoda Island).
+Twenty-two standalone prompts in `prompts/`, 01-22. Prompts 01-20 are themed open briefs; 21 is a fixed subject (Floating Pagoda Island); 22 is a fixed source (refresh the live Shutterhaus Visuals site).
 
 ## Key entry points
 - `index.html` — dashboard.

@@ -1,12 +1,12 @@
 # ModelBench
 
-ModelBench is a one-shot AI build benchmark focused on **web development, games, visual work and simulated worlds**. It contains twenty-one demanding challenges spanning those families. Each model run is one finished artifact.
+ModelBench is a one-shot AI build benchmark focused on **web development, games, visual work and simulated worlds**. It contains twenty-two demanding challenges spanning those families. Each model run is one finished artifact.
 
 **Live dashboard:** https://itsnotalwin.github.io/modelbench/
 
 ## How submissions work
 
-1. Choose one of the twenty-one challenges in [Prompts](prompts/README.md).
+1. Choose one of the twenty-two challenges in [Prompts](prompts/README.md).
 2. The prompt identifies the executing model, uses the current system date and fixes version to `1`. No organiser input is required.
 3. The model creates one folder named `CATEGORY__MODEL__YYYY-MM-DD__v1` containing `index.html`, `meta.json` and essential local assets only.
 4. ZIP that folder.
@@ -34,7 +34,8 @@ ModelBench is a one-shot AI build benchmark focused on **web development, games,
 - **18 Strategy Game** — rules engine plus an AI built on real search.
 - **19 Spreadsheet** — formula engine, 100k-row grid and charts.
 - **20 Physics Engine** — rigid-body engine written from scratch.
-- **21 Floating Pagoda Island** — the fixed brief: procedural pagoda on a floating island.
+- **21 Floating Pagoda Island** — the fixed subject: procedural pagoda on a floating island.
+- **22 Production Site Refresh** — the fixed source: rebuild a live production portfolio a generation better.
 
 ## Metadata contract
 
@@ -55,7 +56,7 @@ Every ZIP must contain a UTF-8 `meta.json` at its project root:
 ```
 
 - `model`: runtime model slug, lowercase.
-- `category`: one of the twenty-one canonical slugs.
+- `category`: one of the twenty-two canonical slugs.
 - `date`: real ISO date in `YYYY-MM-DD`.
 - `version`: always integer `1`; never ask or increment it.
 - `entry`: `index.html` at project root.
@@ -72,9 +73,9 @@ The six-axis rating system remains unchanged: completeness, robustness, craft, d
 
 ```text
 index.html                    dashboard UI
-manifest.json                 generated dashboard data and twenty-one-challenge catalog
+manifest.json                 generated dashboard data and twenty-two-challenge catalog
 prompts/catalog.json          canonical challenge catalog
-prompts/01-*.md … 21-*.md     twenty-one standalone challenge briefs
+prompts/01-*.md … 22-*.md     twenty-two standalone challenge briefs
 inbox/                        incoming ZIP packages and archived prior uploads
 runs/<run-slug>/              accepted submissions
 tools/sort_inbox.py           safe ZIP intake and routing
