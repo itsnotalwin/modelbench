@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Page not found | Shutterhaus Visuals</title>
+  <!-- Self-contained on purpose: a 404 can be served from any path, so it
+       loads no external assets and links only to root-level pages. -->
+  <style>
+    :root { --ink: #161513; --grey: #6d6a63; --line: #dcd9d2; --ivory: #f6f5f1; }
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; display: grid; place-items: center;
+      background: #fff; color: var(--ink);
+      font: 400 16px/1.6 Inter, "Helvetica Neue", Arial, sans-serif;
+      text-align: center; padding: 32px 20px;
+    }
+    a { color: var(--ink); }
+    a:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+    .arc { width: 96px; height: 32px; margin: 0 auto 30px; color: var(--ink); }
+    h1 {
+      font: 400 clamp(2.4rem, 6vw, 4rem)/1.04 Bodoni\ Moda, Didot, "Times New Roman", serif;
+      letter-spacing: -0.03em; margin: 0;
+    }
+    h1 em { font-style: italic; }
+    p { color: var(--grey); max-width: 42ch; margin: 18px auto 30px; }
+    nav { display: flex; flex-wrap: wrap; gap: 12px 28px; justify-content: center; }
+    nav a {
+      display: inline-flex; align-items: center; min-height: 48px; padding: 8px 2px;
+      font: 500 12px/1 Inter, "Helvetica Neue", Arial, sans-serif;
+      letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none;
+      border-bottom: 1px solid var(--ink);
+    }
+    nav a:hover { color: var(--grey); border-bottom-color: var(--grey); }
+    small { display: block; margin-top: 44px; color: var(--grey); font-size: 12px; letter-spacing: 0.08em; }
+    @media print {
+      nav, small { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <svg class="arc" viewBox="0 0 96 32" fill="none" aria-hidden="true"><path d="M0 32A32 32 0 0 1 32 0h1.6A32 32 0 0 0 64 32Z" fill="currentColor" opacity=".92"/><path d="M66 32A30 30 0 0 1 96 2.7V32Z" fill="currentColor" opacity=".45"/></svg>
+    <h1>Frame<br /><em>not found.</em></h1>
+    <p>The page you asked for isn&rsquo;t in the portfolio &mdash; it may have been moved, mislabelled, or never printed. The work itself is all still here.</p>
+    <nav aria-label="Recovery links">
+      <a href="index.html">Home</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Book a session</a>
+      <a href="mailto:alwin@shutterhausvisuals.co.za">Email the studio</a>
+    </nav>
+    <small>&copy; 2019&ndash;2026 SHUTTERHAUS VISUALS &middot; KEMPTON PARK, GAUTENG</small>
+  </main>
+</body>
+</html>

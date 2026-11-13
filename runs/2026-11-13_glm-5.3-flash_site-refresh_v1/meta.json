@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "glm-5.3-flash",
+  "category": "site-refresh",
+  "date": "2026-11-13",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "22",
+  "prompt_label": "Production Site Refresh",
+  "notes": "Refresh, not rebrand. Studied repo itsnotalwin/shutterhaus-site at commit 084a13bae9b7742658e0131cde9249a77823f8e8 (confirmed serving per live release.json) plus docs and config. The owner's documented identity (Bodoni Moda, Inter, white editorial ground, monochrome photographs, arc artwork, 'Portraits worth keeping.', captionless About photo) kept; execution moves a generation: modular fluid type scale, arc rules/corners/index markers, 33-plate portfolio with numbered full captions, two browsing modes on one DOM (contact-sheet wall + keyboard lightbox; reading-room mode with CSS scroll-driven reveals, sticky series heads, progress arc), print stylesheet, studio/print/licensing footer. All 36 photographs are the studio's own repo derivatives, copied locally. Series/plate titles and caption years are fictional editorial curation of real frames, disclosed on-page ('About these plates'); years approximated. Sessions folds into contact.html#packages with all pricing.json facts kept. Form composes a mailto: handoff - Formspree removed as third-party. Limits: no-JS shows wall view with direct image links; reading mode and lightbox JPG fallback are progressive enhancements.",
+  "slug": "2026-11-13_glm-5.3-flash_site-refresh_v1",
+  "path": "runs/2026-11-13_glm-5.3-flash_site-refresh_v1/index.html",
+  "source_file": "site-refresh__glm-5.3-flash__2026-11-13__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}
