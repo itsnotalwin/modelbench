@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "zai-glm",
+  "category": "site-refresh",
+  "date": "2026-11-13",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "22",
+  "prompt_label": "Production Site Refresh",
+  "notes": "Studied itsnotalwin/shutterhaus-site @084a13b (main; live site cross-checked). Refresh, not rebrand: the identity is real and approved (Bodoni Moda/Inter, white editorial, monochrome, 'Portraits worth keeping.'), so execution was raised instead. Five pages, Sessions folded into Index and Contact. Arc motif promoted to structure; museum captions on all plates (the deployed About figure had none). Wall = the studio's committed 30 frames plus the archive's four vistas, making People/Places/Stories literal; plate titles are editorial labels; years n.d. except the 2024 shoot (archive carries no dates). Two gallery modes: scroll-settled plates + keyboard lightbox (arrows/Home/End/Escape, focus trapped+returned, inert background, live announcements). Photos are the studio's own, re-derived monochrome from public/gallery; packages/terms/copy verbatim from config.ts and pricing.json. No phone (owner's 2026-10-03 decision). Form uses the documented email-app fallback; zero third-party requests; fonts self-hosted with OFL. Limits: 404 cannot emit an HTTP status alone; og:image points at the production card. Tested: file:// render, keyboard pass, links, contrast, <=250KB non-photo budget.",
+  "slug": "2026-11-13_zai-glm_site-refresh_v1",
+  "path": "runs/2026-11-13_zai-glm_site-refresh_v1/index.html",
+  "source_file": "site-refresh__zai-glm__2026-11-13__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}

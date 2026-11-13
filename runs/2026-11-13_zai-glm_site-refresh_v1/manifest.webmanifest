@@ -1,0 +1,26 @@
+{
+  "name": "zai-glm \u00b7 Production Site Refresh v1",
+  "short_name": "zai-glm",
+  "description": "A fixed source: refresh the live Shutterhaus Visuals production site \u2014 same doctrine, a generation better, shipped as one self-contained static folder. Run by zai-glm.",
+  "id": "./index.html",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#372c10",
+  "theme_color": "#dfad3a",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
