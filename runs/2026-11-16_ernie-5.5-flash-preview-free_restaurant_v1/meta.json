@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "model": "ernie-5.5-flash-preview-free",
+  "category": "restaurant",
+  "date": "2026-11-16",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "05",
+  "prompt_label": "Restaurant Website",
+  "notes": "Marrow & Tide, a fictional 28-seat wood-fired coastal kitchen in Rockport, Maine. Includes a 33-item searchable menu with dietary filters, a reservation flow with live availability and calendar export, a persistent larder basket with pickup checkout, real opening-hours status with special-hours handling, an SVG-illustrated room and dishes, generated ambient sound, and responsive/reduced-motion support. Reservation and pickup availability are simulated client-side; no real orders or bookings are transmitted.",
+  "slug": "2026-11-16_ernie-5.5-flash-preview-free_restaurant_v1",
+  "path": "runs/2026-11-16_ernie-5.5-flash-preview-free_restaurant_v1/index.html",
+  "source_file": "restaurant__ernie-5.5-flash-preview-free__2026-11-16__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  },
+  "pwa": {
+    "manifest_linked": false,
+    "sw_registered": false
+  }
+}

@@ -1,0 +1,2501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#150F09">
+<meta name="description" content="Fuego Lento — a thirty-eight-seat Basque asador in Portland, Oregon. Everything we cook passes through oak, ember or ash. Book a table, or order from the fire.">
+<title>Fuego Lento — live-fire Basque table · Portland, Oregon</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FF6A1E' d='M12 1.6c1.2 4.4 5.6 6.1 5.6 11.2A5.6 5.6 0 0 1 6.4 12.8c0-2.2.9-4 2.2-5.6.3 1.6 1.1 2.5 2.3 3C10 7 11 4.3 12 1.6z'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   FUEGO LENTO — one-file site
+   palette: hearth black · bone cream · ember orange · oak gold
+   type: Fraunces (display) · Archivo (body) · IBM Plex Mono (labels)
+   ============================================================ */
+:root{
+  --bg:#150F09; --bg2:#1C130B; --bg3:#241809;
+  --ink:#F3E9D2; --dim:#B3A184; --faint:rgba(243,233,210,.55);
+  --line:rgba(243,233,210,.14); --line2:rgba(243,233,210,.26);
+  --ember:#FF6A1E; --ember2:#FFA14D; --emberd:#C24A12; --ember-ink:#1D1006;
+  --gold:#D9A44C; --green:#8FA46A; --olive:#ABA166; --red:#D05038;
+  --paper:#EFE4CB; --p-ink:#241708; --p-dim:#6B5840; --p-line:rgba(36,23,8,.24); --p-ember:#B4461B;
+  --f-d:"Fraunces", Georgia, "Times New Roman", serif;
+  --f-b:"Archivo", system-ui, "Segoe UI", Helvetica, sans-serif;
+  --f-m:"IBM Plex Mono", ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace;
+  --ease:cubic-bezier(.22,.8,.24,1);
+  --head-h:68px;
+  --pad:clamp(20px, 4.5vw, 64px);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;color-scheme:dark;-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg); color:var(--ink);
+  font:400 16px/1.65 var(--f-b);
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+body.lock{overflow:hidden}
+::selection{background:var(--ember); color:var(--ember-ink)}
+img,svg{display:block}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input,select,textarea{font:inherit;color:inherit}
+:focus{outline:none}
+:focus-visible{outline:2px solid var(--ember); outline-offset:3px; border-radius:2px}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(243,233,210,.18);border-radius:6px;border:2px solid var(--bg)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+[hidden]{display:none !important}
+.skip{position:fixed;left:12px;top:-60px;z-index:200;background:var(--ember);color:var(--ember-ink);padding:10px 16px;font:600 13px var(--f-m);border-radius:4px;transition:top .2s}
+.skip:focus{top:12px}
+.wrap{width:min(1240px, 100% - 2*var(--pad)); margin-inline:auto}
+.mono{font-family:var(--f-m)}
+.ic{width:18px;height:18px;flex:none}
+
+/* ---------- reveal on scroll ---------- */
+.rv{opacity:0; transform:translateY(26px); transition:opacity .9s var(--ease), transform .9s var(--ease); transition-delay:var(--d,0s)}
+.rv.in{opacity:1; transform:none}
+.rv-imm{opacity:1 !important; transform:none !important; transition:none !important}
+
+/* ---------- buttons & chips ---------- */
+.btn{
+  display:inline-flex; align-items:center; gap:10px;
+  font:600 12px/1 var(--f-m); letter-spacing:.18em; text-transform:uppercase;
+  padding:15px 22px; border:1px solid var(--line2); border-radius:2px;
+  color:var(--ink); text-decoration:none; white-space:nowrap;
+  transition:background .25s var(--ease), border-color .25s var(--ease), color .25s var(--ease), transform .15s var(--ease);
+}
+.btn:hover{border-color:var(--ember); color:var(--ember2)}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--ember); border-color:var(--ember); color:var(--ember-ink)}
+.btn-primary:hover{background:var(--ember2); border-color:var(--ember2); color:var(--ember-ink)}
+.btn[disabled]{opacity:.45; cursor:not-allowed}
+.btn-danger{border-color:rgba(208,80,56,.5); color:#E88A70}
+.btn-danger:hover{border-color:var(--red); color:var(--red); background:rgba(208,80,56,.08)}
+.chip{
+  font:500 12px/1 var(--f-m); letter-spacing:.1em;
+  padding:9px 15px; border:1px solid var(--line); border-radius:999px; color:var(--dim);
+  transition:all .2s var(--ease); white-space:nowrap;
+}
+.chip:hover{border-color:var(--line2); color:var(--ink)}
+.chip.on{background:var(--ink); color:#221505; border-color:var(--ink)}
+.icbtn{
+  position:relative; display:inline-flex; align-items:center; justify-content:center;
+  width:42px; height:42px; border:1px solid var(--line); border-radius:2px; color:var(--dim);
+  transition:all .25s var(--ease);
+}
+.icbtn:hover{color:var(--ember2); border-color:var(--line2)}
+.icbtn .ic{width:19px;height:19px}
+.badge{
+  position:absolute; top:-7px; right:-7px; min-width:19px; height:19px; padding:0 5px;
+  background:var(--ember); color:var(--ember-ink); border-radius:999px;
+  font:600 11px/19px var(--f-m); text-align:center;
+  transform:scale(0); transition:transform .3s var(--ease);
+}
+.badge.show{transform:scale(1)}
+.badge.pop{animation:pop .35s var(--ease)}
+@keyframes pop{50%{transform:scale(1.45)}}
+
+/* ---------- header ---------- */
+.site-head{
+  position:fixed; inset:0 0 auto 0; z-index:50; height:var(--head-h);
+  background:rgba(21,15,9,.55); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid transparent; transition:background .3s, border-color .3s;
+}
+.site-head.scrolled{background:rgba(18,12,7,.86); border-bottom-color:var(--line)}
+.head-grid{display:flex; align-items:center; gap:26px; height:var(--head-h)}
+.logo{display:flex; align-items:center; gap:11px; text-decoration:none; margin-right:auto}
+.logo-flame{width:20px;height:20px;color:var(--ember); animation:flick 2.8s ease-in-out infinite; transform-origin:50% 100%}
+.logo-word{font:700 17px/1 var(--f-d); letter-spacing:.1em}
+.logo-word i{font-style:italic; font-weight:400; color:var(--ember2)}
+.head-nav{display:flex; gap:26px}
+.head-nav a{
+  font:500 11px/1 var(--f-m); letter-spacing:.22em; text-transform:uppercase; text-decoration:none;
+  color:var(--dim); padding:8px 0; position:relative; transition:color .2s;
+}
+.head-nav a::after{content:""; position:absolute; left:0; bottom:0; height:1px; width:100%; background:var(--ember); transform:scaleX(0); transform-origin:left; transition:transform .3s var(--ease)}
+.head-nav a:hover{color:var(--ink)}
+.head-nav a[aria-current]{color:var(--ember2)}
+.head-nav a[aria-current]::after{transform:scaleX(1)}
+.head-actions{display:flex; align-items:center; gap:12px}
+.pill{
+  display:inline-flex; align-items:center; gap:9px;
+  font:500 11px/1 var(--f-m); letter-spacing:.14em; text-transform:uppercase;
+  border:1px solid var(--line); border-radius:999px; padding:9px 14px; color:var(--dim);
+}
+.pill .dot{width:7px;height:7px;border-radius:50%;background:var(--red); flex:none; transition:background .3s}
+.pill.open .dot{background:#8FC96B; box-shadow:0 0 8px rgba(143,201,107,.8)}
+#soundBtn[aria-pressed="true"]{color:var(--ember2); border-color:rgba(255,106,30,.5)}
+#burgerBtn{display:none}
+@keyframes flick{0%,100%{transform:scaleY(1)}28%{transform:scaleY(1.08) scaleX(.96)}52%{transform:scaleY(.94)}74%{transform:scaleY(1.05) scaleX(.98)}}
+
+/* ---------- mobile nav ---------- */
+.mnav{
+  position:fixed; inset:0; z-index:60; background:#120C07;
+  display:flex; flex-direction:column; padding:calc(var(--head-h) + 24px) var(--pad) 40px;
+  opacity:0; visibility:hidden; transition:opacity .3s var(--ease), visibility .3s;
+}
+.mnav.open{opacity:1; visibility:visible}
+.mnav-link{
+  font:600 clamp(2rem, 8vw, 3rem)/1.35 var(--f-d); text-decoration:none; color:var(--ink);
+  border-bottom:1px solid var(--line); padding:14px 4px; display:flex; justify-content:space-between; align-items:center;
+  transform:translateY(14px); opacity:0; transition:transform .4s var(--ease), opacity .4s var(--ease), color .2s;
+}
+.mnav.open .mnav-link{transform:none; opacity:1}
+.mnav-link:hover{color:var(--ember2)}
+.mnav-link .mono{font:400 12px var(--f-m); color:var(--dim); letter-spacing:.2em}
+.mnav-foot{margin-top:auto; display:flex; flex-direction:column; gap:12px; padding-top:26px}
+.mnav-close{position:absolute; top:14px; right:var(--pad)}
+
+/* ---------- hero ---------- */
+.hero{
+  position:relative; min-height:92vh; min-height:92svh;
+  display:flex; flex-direction:column; justify-content:flex-end;
+  overflow:hidden; background:#0D0906;
+}
+#heroCanvas{position:absolute; inset:0; width:100%; height:100%; z-index:0}
+.hero-veil{position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(to top, rgba(10,6,3,.72) 0%, rgba(13,9,6,.22) 26%, rgba(13,9,6,0) 48%),
+             radial-gradient(85% 60% at 14% 96%, rgba(10,6,3,.6), rgba(10,6,3,0) 62%)}
+.hero-grain{position:absolute; inset:0; z-index:1; pointer-events:none; opacity:.07; mix-blend-mode:overlay}
+.hero-inner{position:relative; z-index:2; padding-bottom:96px; padding-top:150px}
+.hero-over{display:flex; align-items:center; gap:14px; font:500 11px/1 var(--f-m); letter-spacing:.26em; text-transform:uppercase; color:var(--dim); margin-bottom:26px}
+.hero-over::before{content:""; width:44px; height:1px; background:var(--ember)}
+.hero-title{font:600 clamp(3.4rem, 11.5vw, 8.6rem)/0.92 var(--f-d); letter-spacing:.015em; font-optical-sizing:auto}
+.hero-title .t2{display:block; font-style:italic; font-weight:340; padding-left:.9em; color:var(--ember2);
+  text-shadow:0 0 34px rgba(255,106,30,.28)}
+.hero-sub{max-width:52ch; color:var(--faint); font-size:clamp(15px,1.35vw,17.5px); margin:30px 0 36px}
+.hero-sub strong{color:var(--ink); font-weight:500}
+.hero-ctas{display:flex; gap:14px; flex-wrap:wrap}
+.hero-foot{position:relative; z-index:2; display:flex; justify-content:space-between; align-items:flex-end; gap:20px;
+  padding:0 var(--pad) 22px; margin-top:8px}
+.stoke{
+  font:400 11px/1.5 var(--f-m); letter-spacing:.2em; text-transform:uppercase; color:var(--dim);
+  border-bottom:1px dotted var(--line2); padding:6px 2px; user-select:none; -webkit-user-select:none;
+  transition:color .2s;
+}
+.stoke:hover,.stoke.hot{color:var(--ember2); border-bottom-color:var(--ember2)}
+.stoke.hot{border-bottom-style:solid}
+.gauge{display:flex; flex-direction:column; align-items:flex-end; gap:7px; pointer-events:none}
+.gauge-row{display:flex; align-items:baseline; gap:10px; font-family:var(--f-m)}
+.gauge-cap{font:500 10px/1 var(--f-m); letter-spacing:.3em; color:var(--dim)}
+#gTemp{font:600 15px/1 var(--f-m); color:var(--ember2); min-width:74px; text-align:right; font-variant-numeric:tabular-nums}
+.meter{width:150px; height:3px; background:rgba(243,233,210,.12); border-radius:2px; overflow:hidden}
+.meter i{display:block; height:100%; width:12%; background:linear-gradient(90deg, var(--emberd), var(--ember), var(--ember2)); transition:width .12s linear}
+
+/* ---------- ticker ---------- */
+.ticker{border-block:1px solid var(--line); background:#0E0A06; overflow:hidden; padding:13px 0}
+.ticker-track{display:flex; width:max-content; will-change:transform; animation:tick 44s linear infinite}
+.ticker:hover .ticker-track{animation-play-state:paused}
+.ticker-half{display:flex; white-space:nowrap; font:400 12px/1 var(--f-m); letter-spacing:.24em; text-transform:uppercase; color:var(--dim)}
+.ticker-half b{color:var(--ember2); font-weight:600}
+.ticker-half .tk-sep{color:var(--emberd); padding:0 22px}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ---------- section shells ---------- */
+.sec{padding:clamp(90px, 11vw, 148px) 0; scroll-margin-top:calc(var(--head-h) + 8px)}
+.overline{
+  display:flex; align-items:center; gap:14px; margin-bottom:22px;
+  font:600 11px/1 var(--f-m); letter-spacing:.3em; text-transform:uppercase; color:var(--ember2);
+}
+.overline::before{content:""; width:44px; height:1px; background:var(--emberd); flex:none}
+.h2{font:600 clamp(2.2rem, 4.6vw, 3.9rem)/1.08 var(--f-d); letter-spacing:.005em; max-width:22ch}
+.h2 em{font-style:italic; font-weight:360; color:var(--ember2)}
+.lede{max-width:58ch; color:var(--faint); margin-top:20px; font-size:clamp(15px,1.3vw,17px)}
+
+/* ---------- story ---------- */
+.story-grid{display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr); gap:clamp(36px,6vw,86px); align-items:start; margin-top:56px}
+.prose p{margin-bottom:1.35em; color:var(--faint); font-size:16.5px}
+.prose p:first-of-type{color:var(--ink); font-size:18.5px}
+.prose p:first-of-type::first-letter{font:600 3.1em/0.82 var(--f-d); float:left; padding:6px 12px 0 0; color:var(--ember)}
+.house-rules{margin:30px 0 0; padding:22px 26px; border:1px solid var(--line); border-radius:3px; background:rgba(243,233,210,.03)}
+.house-rules h3{font:600 11px/1 var(--f-m); letter-spacing:.28em; text-transform:uppercase; color:var(--gold); margin-bottom:14px}
+.house-rules li{list-style:none; display:flex; gap:12px; color:var(--dim); font-size:14.5px; padding:7px 0; border-bottom:1px dashed var(--line)}
+.house-rules li:last-child{border-bottom:0}
+.house-rules li::before{content:"·"; color:var(--ember); font-weight:700}
+.illo-frame{border:1px solid var(--line); border-radius:3px; background:linear-gradient(180deg,#1A1109,#120B06); overflow:hidden}
+.illo-frame svg{width:100%; height:auto}
+.illo-cap{display:flex; justify-content:space-between; gap:14px; padding:14px 18px; border-top:1px solid var(--line); font:400 11px/1.6 var(--f-m); letter-spacing:.14em; text-transform:uppercase; color:var(--dim)}
+.chef-card{margin-top:22px; border:1px solid var(--line); border-radius:3px; padding:26px 28px; background:rgba(243,233,210,.03); position:relative}
+.chef-card::before{content:"“"; position:absolute; top:-4px; left:18px; font:700 64px/1 var(--f-d); color:var(--emberd); opacity:.55}
+.chef-quote{font:400 20px/1.5 var(--f-d); font-style:italic; color:var(--ink)}
+.chef-name{margin-top:18px; font:600 12px/1 var(--f-m); letter-spacing:.2em; text-transform:uppercase; color:var(--ember2)}
+.chef-role{margin-top:5px; font:400 11px/1.5 var(--f-m); letter-spacing:.16em; text-transform:uppercase; color:var(--dim)}
+
+/* ---------- signatures ---------- */
+.sig-grid{display:grid; grid-template-columns:repeat(2, 1fr); gap:clamp(22px,3vw,36px); margin-top:56px}
+.sig-card{border:1px solid var(--line); border-radius:3px; background:#191007; overflow:hidden; display:flex; flex-direction:column; transition:border-color .3s, transform .3s var(--ease)}
+.sig-card:hover{border-color:rgba(255,106,30,.4); transform:translateY(-4px)}
+.sig-illo{background:radial-gradient(120% 100% at 50% 0%, #221507, #150D07); border-bottom:1px solid var(--line)}
+.sig-illo svg{width:100%; height:auto}
+.sig-body{padding:26px 28px 28px; display:flex; flex-direction:column; gap:10px; flex:1}
+.sig-no{font:400 10px/1 var(--f-m); letter-spacing:.34em; color:var(--emberd); text-transform:uppercase}
+.sig-name{font:600 clamp(1.4rem,2vw,1.7rem)/1.2 var(--f-d)}
+.sig-desc{color:var(--faint); font-size:15px; max-width:52ch}
+.sig-meta{display:flex; align-items:center; gap:14px; margin-top:auto; padding-top:16px}
+.sig-price{font:600 15px/1 var(--f-m); color:var(--gold)}
+.sig-add{margin-left:auto; display:inline-flex; align-items:center; gap:9px; font:600 11px/1 var(--f-m); letter-spacing:.18em; text-transform:uppercase;
+  border:1px solid var(--line2); padding:11px 16px; border-radius:2px; color:var(--dim); transition:all .25s var(--ease)}
+.sig-add:hover{border-color:var(--ember); color:var(--ember2)}
+.sig-add.added{border-color:var(--green); color:var(--green)}
+
+/* ---------- menu (paper) ---------- */
+.paper{background:var(--paper); color:var(--p-ink); --line:var(--p-line); --line2:rgba(36,23,8,.4); --dim:var(--p-dim); --ember2:var(--p-ember); --faint:rgba(36,23,8,.72)}
+.paper .overline{color:var(--p-ember)}
+.paper .overline::before{background:var(--p-ember)}
+.paper .h2 em{color:var(--p-ember)}
+.paper ::selection{background:var(--p-ember); color:var(--paper)}
+.menu-head{display:flex; align-items:flex-end; justify-content:space-between; gap:30px; flex-wrap:wrap}
+.menu-note{font:400 11.5px/1.8 var(--f-m); letter-spacing:.08em; color:var(--p-dim); text-align:right; max-width:36ch}
+.menu-tools{margin-top:46px; display:flex; flex-direction:column; gap:18px}
+.search-wrap{position:relative; max-width:520px}
+.search-wrap .ic{position:absolute; left:16px; top:50%; transform:translateY(-50%); width:17px; height:17px; color:var(--p-dim); pointer-events:none}
+#menuSearch{
+  width:100%; background:rgba(255,255,255,.5); border:1px solid var(--p-line); border-radius:2px;
+  padding:15px 46px 15px 44px; color:var(--p-ink); font:400 15px var(--f-b);
+  transition:border-color .2s, background .2s;
+}
+#menuSearch::placeholder{color:var(--p-dim); opacity:.8}
+#menuSearch:focus{border-color:var(--p-ember); background:#F7F0DF; outline:none; box-shadow:0 0 0 3px rgba(180,70,27,.14)}
+#searchClear{position:absolute; right:8px; top:50%; transform:translateY(-50%); width:32px; height:32px; display:none; align-items:center; justify-content:center; color:var(--p-dim); border-radius:2px}
+#searchClear:hover{color:var(--p-ink)}
+#searchClear.show{display:inline-flex}
+.chips-row{display:flex; flex-wrap:wrap; gap:9px; align-items:center}
+.chips-row + .chips-row{margin-top:-4px}
+.chips-row .cr-label{font:600 10px/1 var(--f-m); letter-spacing:.26em; text-transform:uppercase; color:var(--p-dim); margin-right:6px}
+.paper .chip{border-color:var(--p-line); color:var(--p-dim)}
+.paper .chip:hover{border-color:var(--p-ink); color:var(--p-ink)}
+.paper .chip.on{background:var(--p-ink); border-color:var(--p-ink); color:var(--paper)}
+.chip-diet.on{background:var(--p-ember); border-color:var(--p-ember); color:var(--paper)}
+.menu-count{font:400 11px/1 var(--f-m); letter-spacing:.18em; text-transform:uppercase; color:var(--p-dim); border-top:1px solid var(--p-line); padding-top:16px}
+#menuList{margin-top:10px}
+.mgroup{padding-top:44px}
+.mgroup:first-child{padding-top:26px}
+.g-head{display:flex; align-items:center; gap:13px; margin-bottom:8px}
+.g-head .ic{width:17px; height:17px; color:var(--p-ember)}
+.g-head h3{font:600 13px/1 var(--f-m); letter-spacing:.3em; text-transform:uppercase; color:var(--p-ember)}
+.g-head::after{content:""; flex:1; height:1px; background:var(--p-line)}
+.g-count{font:400 11px/1 var(--f-m); color:var(--p-dim); letter-spacing:.12em}
+.mi{padding:22px 4px 20px; border-bottom:1px solid rgba(36,23,8,.14); position:relative; transition:background .2s}
+.mi::after{content:""; position:absolute; left:0; top:0; bottom:-1px; width:2px; background:var(--p-ember); transform:scaleY(0); transition:transform .25s var(--ease)}
+.mi:hover{background:rgba(255,255,255,.34)}
+.mi:hover::after{transform:scaleY(1)}
+.mi-top{display:flex; align-items:baseline; gap:16px}
+.mi-name{font:600 clamp(1.12rem,1.6vw,1.3rem)/1.25 var(--f-d); letter-spacing:.01em}
+.mi-name .spark{display:inline-block; width:13px; height:13px; color:var(--p-ember); margin-left:8px; vertical-align:-1px; animation:sparkspin 5s linear infinite}
+@keyframes sparkspin{to{transform:rotate(360deg)}}
+.lead{flex:1; min-width:34px; border-bottom:2px dotted rgba(36,23,8,.3); transform:translateY(-5px); transition:border-color .2s}
+.mi:hover .lead{border-color:var(--p-ember)}
+.mi-price{font:600 14.5px/1 var(--f-m); color:var(--p-ink); font-variant-numeric:tabular-nums; white-space:nowrap}
+.mi-add{
+  flex:none; width:34px; height:34px; border:1px solid var(--p-line); border-radius:50%;
+  display:inline-flex; align-items:center; justify-content:center; color:var(--p-dim); align-self:center;
+  transition:all .22s var(--ease); margin-left:2px;
+}
+.mi-add .ic{width:15px; height:15px}
+.mi-add:hover{background:var(--p-ink); border-color:var(--p-ink); color:var(--paper); transform:rotate(90deg)}
+.mi-add.added{background:var(--p-ember); border-color:var(--p-ember); color:var(--paper); transform:none}
+.mi-desc{color:var(--p-dim); font-size:14.5px; max-width:62ch; margin-top:7px}
+.mi-tags{display:flex; gap:7px; margin-top:10px}
+.tag{font:600 9.5px/1 var(--f-m); letter-spacing:.16em; padding:4px 8px; border-radius:3px; border:1px solid; text-transform:uppercase}
+.tag-v{color:#5C6B33; border-color:#5C6B33}
+.tag-vg{color:#3E6B44; border-color:#3E6B44}
+.tag-gf{color:#8A5A1E; border-color:#8A5A1E}
+.mi-secret{background:linear-gradient(90deg, rgba(180,70,27,.08), rgba(180,70,27,0) 60%)}
+.mi-secret .mi-name{color:var(--p-ember)}
+.menu-empty{padding:70px 20px; text-align:center; border:1px dashed var(--p-line); border-radius:3px; margin-top:34px}
+.menu-empty p:first-child{font:600 22px/1.3 var(--f-d)}
+.menu-empty .dim{color:var(--p-dim); font-size:14.5px; margin:10px auto 22px; max-width:44ch}
+.menu-empty .btn{border-color:var(--p-ink); color:var(--p-ink)}
+.menu-empty .btn:hover{background:var(--p-ink); color:var(--paper)}
+
+/* ---------- drawer (order) ---------- */
+.scrim{position:fixed; inset:0; z-index:65; background:rgba(8,5,3,.6); backdrop-filter:blur(3px); opacity:0; visibility:hidden; transition:opacity .3s, visibility .3s}
+.scrim.show{opacity:1; visibility:visible}
+.drawer{
+  position:fixed; top:0; right:0; bottom:0; z-index:70; width:min(440px, 94vw);
+  background:#1D1309; border-left:1px solid var(--line);
+  transform:translateX(102%); transition:transform .4s var(--ease);
+  display:flex; flex-direction:column; overflow-y:auto; overscroll-behavior:contain;
+}
+.drawer.open{transform:none}
+.drawer-head{display:flex; align-items:center; justify-content:space-between; gap:14px; padding:20px 24px; border-bottom:1px solid var(--line); position:sticky; top:0; background:#1D1309; z-index:2}
+.drawer-head h2{font:600 20px/1.2 var(--f-d)}
+.drawer-head .sub{font:400 10.5px/1.6 var(--f-m); letter-spacing:.2em; text-transform:uppercase; color:var(--dim); margin-top:4px}
+.drawer-body{padding:20px 24px 28px; flex:1; display:flex; flex-direction:column}
+.d-empty{margin:auto 0; text-align:center; padding:40px 10px}
+.d-empty .ic{width:44px; height:44px; color:var(--emberd); margin:0 auto 18px}
+.d-empty p{font:600 20px/1.4 var(--f-d)}
+.d-empty .dim{color:var(--dim); font-size:14px; margin-top:8px}
+.b-line{display:flex; align-items:center; gap:14px; padding:15px 0; border-bottom:1px dashed var(--line)}
+.b-info{flex:1; min-width:0}
+.b-name{font:600 15px/1.35 var(--f-d)}
+.b-each{font:400 11px/1.6 var(--f-m); color:var(--dim); letter-spacing:.06em}
+.b-price{font:600 13.5px/1 var(--f-m); color:var(--gold); font-variant-numeric:tabular-nums; min-width:58px; text-align:right}
+.qty{display:flex; align-items:center; gap:2px; border:1px solid var(--line); border-radius:2px}
+.qty-btn{width:30px; height:30px; display:inline-flex; align-items:center; justify-content:center; color:var(--dim); transition:color .2s, background .2s}
+.qty-btn:hover{color:var(--ember2); background:rgba(255,106,30,.08)}
+.qty-btn .ic{width:13px; height:13px}
+.qty-num{min-width:26px; text-align:center; font:600 13px/1 var(--f-m); font-variant-numeric:tabular-nums}
+.b-x{width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center; color:var(--dim); opacity:.6; transition:all .2s}
+.b-x:hover{color:var(--red); opacity:1}
+.b-x .ic{width:13px; height:13px}
+.drawer-foot{border-top:1px solid var(--line); padding:18px 24px 26px; display:flex; flex-direction:column; gap:14px; background:#1A1108}
+.sum-row{display:flex; justify-content:space-between; align-items:baseline}
+.sum-row .k{font:400 11px/1 var(--f-m); letter-spacing:.2em; text-transform:uppercase; color:var(--dim)}
+.sum-row .v{font:600 20px/1 var(--f-d); color:var(--gold)}
+.field{display:flex; flex-direction:column; gap:7px}
+.field label{font:600 10px/1 var(--f-m); letter-spacing:.24em; text-transform:uppercase; color:var(--dim)}
+.field input,.field select,.field textarea{
+  background:#150E07; border:1px solid var(--line); border-radius:2px; padding:12px 13px;
+  color:var(--ink); font:400 14.5px var(--f-b); width:100%; transition:border-color .2s, box-shadow .2s;
+}
+.field textarea{resize:vertical; min-height:64px}
+.field select{appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%23B3A184' stroke-width='2'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; background-size:15px; padding-right:36px}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--ember); outline:none; box-shadow:0 0 0 3px rgba(255,106,30,.14)}
+.field .err{display:none; font:400 12px/1.5 var(--f-m); color:#E88A70}
+.field.bad input,.field.bad select{border-color:var(--red)}
+.field.bad .err{display:block}
+.f-row{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.done-view{text-align:center; padding:26px 6px}
+.done-view .big-flame{width:52px; height:52px; color:var(--ember); margin:0 auto 18px; animation:flick 2.2s ease-in-out infinite; transform-origin:50% 100%}
+.done-view h3{font:600 26px/1.25 var(--f-d)}
+.done-view .sub{color:var(--dim); font-size:14px; margin-top:10px}
+.done-code{display:inline-block; margin:20px auto 4px; font:600 22px/1 var(--f-m); letter-spacing:.24em; color:var(--ember2); border:1px dashed rgba(255,106,30,.5); padding:14px 22px; border-radius:3px; background:rgba(255,106,30,.06)}
+.done-list{margin:18px 0 0; text-align:left; border:1px solid var(--line); border-radius:3px; padding:14px 18px}
+.done-list div{display:flex; justify-content:space-between; gap:14px; padding:6px 0; border-bottom:1px dashed var(--line); font-size:13.5px}
+.done-list div:last-child{border-bottom:0}
+.done-list span:first-child{color:var(--dim)}
+.done-list span:last-child{font-family:var(--f-m); font-weight:500; color:var(--ink); text-align:right}
+
+/* ---------- reservations ---------- */
+.book-grid{display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr); gap:clamp(30px,4vw,60px); margin-top:56px; align-items:start}
+.panel{border:1px solid var(--line); border-radius:3px; background:linear-gradient(180deg,#1B1208,#160E07); padding:clamp(24px,3vw,40px)}
+.step-label{font:600 10px/1 var(--f-m); letter-spacing:.3em; text-transform:uppercase; color:var(--gold); margin:26px 0 12px}
+.step-label:first-child{margin-top:0}
+.date-strip{display:flex; gap:8px; overflow-x:auto; padding-bottom:8px; scrollbar-width:none; scroll-behavior:smooth}
+.date-strip::-webkit-scrollbar{display:none}
+.date-chip{
+  flex:none; width:66px; padding:10px 6px 9px; border:1px solid var(--line); border-radius:2px; text-align:center;
+  display:flex; flex-direction:column; gap:3px; transition:all .2s var(--ease); color:var(--dim);
+}
+.date-chip .d-dow{font:500 9.5px/1 var(--f-m); letter-spacing:.2em; text-transform:uppercase}
+.date-chip .d-num{font:600 19px/1 var(--f-d)}
+.date-chip .d-mon{font:400 9px/1 var(--f-m); letter-spacing:.18em; text-transform:uppercase; color:var(--dim)}
+.date-chip:hover:not([disabled]){border-color:var(--line2); color:var(--ink)}
+.date-chip.on{background:var(--ember); border-color:var(--ember); color:var(--ember-ink)}
+.date-chip.on .d-mon,.date-chip.on .d-dow{color:var(--ember-ink); opacity:.75}
+.date-chip[disabled]{opacity:.32; cursor:not-allowed; text-decoration:line-through}
+.strip-nav{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px}
+.strip-nav .n-label{font:400 11px/1 var(--f-m); letter-spacing:.18em; text-transform:uppercase; color:var(--dim)}
+.strip-btns{display:flex; gap:8px}
+.strip-btns .icbtn{width:34px; height:34px}
+.time-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(92px, 1fr)); gap:8px}
+.time-btn{
+  font:500 12.5px/1 var(--f-m); letter-spacing:.06em; padding:13px 6px; border:1px solid var(--line); border-radius:2px;
+  color:var(--dim); text-align:center; transition:all .18s var(--ease); font-variant-numeric:tabular-nums;
+}
+.time-btn:hover:not([disabled]):not(.on){border-color:var(--line2); color:var(--ink)}
+.time-btn.on{background:var(--ink); border-color:var(--ink); color:#221505}
+.time-btn.full{opacity:.32; text-decoration:line-through; cursor:not-allowed}
+.time-btn[disabled]:not(.full){opacity:.35; cursor:not-allowed}
+.time-note{margin-top:14px; font:400 12px/1.7 var(--f-m); color:var(--dim); letter-spacing:.04em}
+.time-note b{color:var(--ember2); font-weight:600}
+.form-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:4px}
+.form-grid .full{grid-column:1/-1}
+.res-submit-row{display:flex; align-items:center; gap:16px; margin-top:26px; flex-wrap:wrap}
+.res-hint{font:400 11.5px/1.6 var(--f-m); color:var(--dim)}
+.banner{display:flex; align-items:center; gap:16px; flex-wrap:wrap; border:1px solid rgba(255,106,30,.4); background:rgba(255,106,30,.07); border-radius:3px; padding:16px 20px; margin-bottom:26px}
+.banner .b-txt{font:400 13px/1.6 var(--f-m); color:var(--ink); flex:1; min-width:220px}
+.banner .b-txt b{color:var(--ember2)}
+.side-note{border:1px solid var(--line); border-radius:3px; padding:26px 28px; background:rgba(243,233,210,.03)}
+.side-note h3{font:600 12px/1 var(--f-m); letter-spacing:.28em; text-transform:uppercase; color:var(--gold); margin-bottom:16px}
+.side-note li{list-style:none; display:flex; gap:12px; padding:9px 0; border-bottom:1px dashed var(--line); color:var(--dim); font-size:14px; line-height:1.55}
+.side-note li:last-child{border-bottom:0}
+.side-note li::before{content:"·"; color:var(--ember); font-weight:700; flex:none}
+.call-line{margin-top:18px; font:400 12.5px/1.7 var(--f-m); color:var(--dim)}
+.call-line a{color:var(--ember2); text-decoration:none; border-bottom:1px dotted var(--line2)}
+.call-line a:hover{border-bottom-color:var(--ember2)}
+
+/* ---------- visit ---------- */
+.visit-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(30px,4vw,64px); margin-top:56px; align-items:start}
+.hours-block h3,.addr-block h3{font:600 12px/1 var(--f-m); letter-spacing:.28em; text-transform:uppercase; color:var(--gold); margin-bottom:16px}
+.hours-table{border-top:1px solid var(--line)}
+.hrow{display:grid; grid-template-columns:130px 1fr auto; gap:14px; align-items:baseline; padding:13px 4px; border-bottom:1px solid var(--line); font-size:14.5px}
+.hrow .d{font:600 12px/1 var(--f-m); letter-spacing:.18em; text-transform:uppercase; color:var(--dim)}
+.hrow .w{color:var(--ink); font-family:var(--f-m); font-size:13px; letter-spacing:.04em}
+.hrow .now{font:600 9.5px/1 var(--f-m); letter-spacing:.22em; text-transform:uppercase; color:var(--ember2)}
+.hrow.today{background:rgba(255,106,30,.06)}
+.hrow.today .d{color:var(--ember2)}
+.hours-note{margin-top:14px; font:400 12px/1.7 var(--f-m); color:var(--dim)}
+.spec{margin-top:28px; border:1px solid var(--line); border-radius:3px; padding:18px 20px; background:rgba(243,233,210,.03)}
+.spec h4{font:600 10.5px/1 var(--f-m); letter-spacing:.26em; text-transform:uppercase; color:var(--red); margin-bottom:12px}
+.spec .spec-row{display:flex; gap:14px; padding:6px 0; font:400 12.5px/1.6 var(--f-m); color:var(--dim)}
+.spec .spec-row b{color:var(--ink); font-weight:600; white-space:nowrap}
+.addr-line{font:600 clamp(1.3rem,2vw,1.6rem)/1.45 var(--f-d)}
+.here-list{margin:20px 0 0}
+.map-frame{margin-top:30px; border:1px solid var(--line); border-radius:3px; overflow:hidden; background:#191007}
+.map-frame svg{width:100%; height:auto}
+.map-cap{padding:12px 16px; border-top:1px solid var(--line); font:400 10.5px/1.6 var(--f-m); letter-spacing:.16em; text-transform:uppercase; color:var(--dim); display:flex; justify-content:space-between; gap:12px}
+@keyframes ping{0%{transform:scale(.4); opacity:.9}80%,100%{transform:scale(1.9); opacity:0}}
+.map-ping{transform-origin:center; animation:ping 2.6s var(--ease) infinite}
+
+/* ---------- footer ---------- */
+.site-foot{background:#0E0906; border-top:1px solid var(--line); padding:70px 0 36px; margin-top:0}
+.foot-grid{display:grid; grid-template-columns:minmax(0,1.2fr) repeat(3, minmax(0,.8fr)); gap:clamp(26px,4vw,56px)}
+.foot-word{font:700 26px/1.1 var(--f-d); letter-spacing:.06em}
+.foot-word i{font-style:italic; font-weight:340; color:var(--ember2)}
+.foot-tag{color:var(--dim); font-size:13.5px; margin-top:12px; max-width:30ch}
+.foot-col h4{font:600 10.5px/1 var(--f-m); letter-spacing:.28em; text-transform:uppercase; color:var(--gold); margin-bottom:16px}
+.foot-col p{color:var(--dim); font-size:13.5px; line-height:1.9}
+.foot-col a{color:var(--dim); text-decoration:none; border-bottom:1px dotted var(--line2)}
+.foot-col a:hover{color:var(--ember2)}
+.foot-bottom{margin-top:56px; padding-top:24px; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; gap:18px; flex-wrap:wrap}
+.foot-fine{font:400 11px/1.8 var(--f-m); letter-spacing:.06em; color:rgba(179,161,132,.65); max-width:70ch}
+.to-top{display:inline-flex; align-items:center; gap:9px; font:600 10.5px/1 var(--f-m); letter-spacing:.24em; text-transform:uppercase; color:var(--dim); border:1px solid var(--line); padding:11px 16px; border-radius:2px; transition:all .25s}
+.to-top:hover{color:var(--ember2); border-color:var(--line2)}
+
+/* ---------- toasts ---------- */
+#toasts{position:fixed; bottom:22px; left:50%; transform:translateX(-50%); z-index:80; display:flex; flex-direction:column; gap:10px; align-items:center; pointer-events:none; width:min(92vw, 560px)}
+.toast{
+  background:#251A0E; border:1px solid rgba(255,106,30,.4); color:var(--ink);
+  font:400 13px/1.55 var(--f-m); letter-spacing:.03em; padding:13px 20px; border-radius:4px;
+  box-shadow:0 12px 34px rgba(0,0,0,.5);
+  opacity:0; transform:translateY(14px); transition:opacity .35s var(--ease), transform .35s var(--ease);
+  max-width:100%; text-align:center;
+}
+.toast.show{opacity:1; transform:none}
+
+/* ---------- cursor ---------- */
+#cur,#curRing{position:fixed; left:0; top:0; z-index:120; pointer-events:none; display:none}
+@media (pointer:fine){#cur,#curRing{display:block}}
+#cur .c-dot,#curRing .c-ring{transform:translate(-50%,-50%)}
+.c-dot{width:7px; height:7px; border-radius:50%; background:var(--ember2); box-shadow:0 0 10px rgba(255,130,40,.9), 0 0 26px rgba(255,106,30,.4); opacity:.9}
+.c-ring{width:34px; height:34px; border-radius:50%; border:1px solid rgba(255,106,30,.4); transition:width .25s var(--ease), height .25s var(--ease), border-color .25s}
+#curRing.hot .c-ring{width:52px; height:52px; border-color:rgba(255,140,60,.75)}
+
+/* ---------- secret flash ---------- */
+.flash{position:absolute; inset:0; z-index:3; pointer-events:none; background:radial-gradient(60% 50% at 50% 78%, rgba(255,170,80,.5), transparent 70%); opacity:0}
+.flash.go{animation:flashout 1.4s var(--ease) forwards}
+@keyframes flashout{10%{opacity:1}100%{opacity:0}}
+
+/* ---------- responsive ---------- */
+@media (max-width:1020px){
+  .head-nav{display:none}
+  #burgerBtn{display:inline-flex}
+  .story-grid,.book-grid,.visit-grid{grid-template-columns:1fr}
+  .sig-grid{grid-template-columns:1fr 1fr}
+  .foot-grid{grid-template-columns:1fr 1fr}
+  .chef-card{max-width:640px}
+}
+@media (max-width:720px){
+  .head-grid{gap:10px}
+  .head-actions{gap:7px}
+  .logo{gap:8px}
+  .logo-word{font-size:15px; letter-spacing:.06em}
+  .pill #statusText{display:none}
+  .pill{padding:9px 11px}
+  .sig-grid{grid-template-columns:1fr}
+  .hero-inner{padding-bottom:70px}
+  .hero-foot{flex-direction:column; align-items:flex-start; gap:14px}
+  .gauge{align-items:flex-start}
+  .meter{width:130px}
+  .form-grid,.f-row{grid-template-columns:1fr}
+  .hrow{grid-template-columns:86px 1fr auto}
+  .mi-top{flex-wrap:wrap; gap:8px 14px}
+  .lead{display:none}
+  .mi-add{margin-left:auto}
+  .mi-price{order:3}
+  .foot-grid{grid-template-columns:1fr}
+  #toasts{bottom:14px}
+}
+@media (max-width:560px){
+  .hero-title .t2{padding-left:.45em}
+  .menu-note{text-align:left}
+}
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important}
+  .rv{opacity:1; transform:none}
+  .ticker-track{animation:none}
+  .logo-flame,.done-view .big-flame,.mi-name .spark{animation:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#menu">Skip to the menu</a>
+
+<!-- icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-flame" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1.6c1.2 4.4 5.6 6.1 5.6 11.2A5.6 5.6 0 0 1 6.4 12.8c0-2.2.9-4 2.2-5.6.3 1.6 1.1 2.5 2.3 3C10 7 11 4.3 12 1.6z"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l2.3 7.7L22 12l-7.7 2.3L12 22l-2.3-7.7L2 12l7.7-2.3z"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M5 12h14"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.2"/><path d="M15.6 15.6L20.5 20.5"/></g></symbol>
+    <symbol id="i-bag" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M5 8h14l-1.2 12H6.2L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2" stroke-linecap="round"/></g></symbol>
+    <symbol id="i-vol" viewBox="0 0 24 24"><path fill="currentColor" d="M4 9v6h4l5 4V5L8 9H4z"/><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M16 9.4a3.8 3.8 0 0 1 0 5.2"/><path d="M18.4 7a7 7 0 0 1 0 10"/></g></symbol>
+    <symbol id="i-vol-off" viewBox="0 0 24 24"><path fill="currentColor" d="M4 9v6h4l5 4V5L8 9H4z"/><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M16 9.5l5.5 5.5M21.5 9.5L16 15"/></g></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 19V5M6 11l6-6 6 6"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14.5 6l-6 6 6 6"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9.5 6l6 6-6 6"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.2"/><path d="M12 7.5V12l3.2 2"/></g></symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M20 4C10.5 4 4.5 10 4.5 19.5c8.5 0 14-4.5 15.5-15.5z"/><path d="M4.5 19.5C8.5 14 13 9.5 18.5 5.5" stroke-linecap="round"/></g></symbol>
+    <symbol id="i-glass" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"><path d="M4.5 4h15l-7.5 8.5z"/><path d="M12 12.5V20M8 20h8"/></g></symbol>
+    <symbol id="i-cherry" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M8.5 13.5C9.5 9 12.5 5.5 16.5 4.5M14.5 12.5c.3-3.5 1-6.5 2-8"/><circle cx="8" cy="16.8" r="3.1"/><circle cx="15.2" cy="15.4" r="2.9"/></g></symbol>
+    <symbol id="i-pepper" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 4.5c.3-1.4 1.7-2.3 3.4-2"/><path d="M9.5 4.5c.8 5-.5 9.5-4.8 12.6 3.4 2.9 9.2 1.8 11.8-2.4 1.7-2.7 2.4-6 2-8.7-3-.7-6.2-.3-9 1.5z"/></g></symbol>
+  </defs>
+</svg>
+
+<!-- ============ HEADER ============ -->
+<header class="site-head" id="siteHead">
+  <div class="wrap head-grid">
+    <a class="logo" href="#top" aria-label="Fuego Lento — back to top">
+      <svg class="logo-flame" aria-hidden="true"><use href="#i-flame"/></svg>
+      <span class="logo-word">FUEGO&nbsp;<i>LEN</i>TO</span>
+    </a>
+    <nav class="head-nav" aria-label="Primary">
+      <a href="#story" data-nav="story">Story</a>
+      <a href="#fire" data-nav="fire">The Fire</a>
+      <a href="#menu" data-nav="menu">Menu</a>
+      <a href="#book" data-nav="book">Book</a>
+      <a href="#visit" data-nav="visit">Visit</a>
+    </nav>
+    <div class="head-actions">
+      <span class="pill" id="statusPill" title="Live opening status"><span class="dot"></span><span id="statusText">Checking hours…</span></span>
+      <button class="icbtn" id="soundBtn" aria-pressed="false" aria-label="Turn hearth sounds on">
+        <svg class="ic" aria-hidden="true"><use id="soundIco" href="#i-vol-off"/></svg>
+      </button>
+      <button class="icbtn" id="basketBtn" aria-haspopup="dialog" aria-label="Open your order">
+        <svg class="ic" aria-hidden="true"><use href="#i-bag"/></svg>
+        <span class="badge" id="basketCount">0</span>
+      </button>
+      <button class="icbtn" id="burgerBtn" aria-expanded="false" aria-controls="mnav" aria-label="Open navigation">
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none" d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- mobile nav -->
+<nav class="mnav" id="mnav" aria-label="Mobile" hidden>
+  <button class="icbtn mnav-close" id="mnavClose" aria-label="Close navigation"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button>
+  <a class="mnav-link" href="#story" style="transition-delay:.05s">Story <span class="mono">01</span></a>
+  <a class="mnav-link" href="#fire" style="transition-delay:.1s">The fire <span class="mono">02</span></a>
+  <a class="mnav-link" href="#menu" style="transition-delay:.15s">Menu <span class="mono">03</span></a>
+  <a class="mnav-link" href="#book" style="transition-delay:.2s">Book a table <span class="mono">04</span></a>
+  <a class="mnav-link" href="#visit" style="transition-delay:.25s">Find us <span class="mono">05</span></a>
+  <div class="mnav-foot">
+    <span class="mono" style="font-size:11px;letter-spacing:.2em;color:var(--dim)">2114 SE ANKENY ST · PORTLAND OR</span>
+    <a class="mono" style="font-size:12px;letter-spacing:.2em;color:var(--ember2);text-decoration:none" href="tel:+15035550184">+1 (503) 555-0184</a>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top" aria-label="Fuego Lento — live-fire Basque table">
+  <canvas id="heroCanvas" aria-hidden="true"></canvas>
+  <div class="flash" id="flash"></div>
+  <div class="hero-veil" aria-hidden="true"></div>
+  <svg class="hero-grain" aria-hidden="true"><filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#grain)"/></svg>
+  <div class="hero-inner wrap">
+    <p class="hero-over rv">Portland, Oregon — live-fire Basque table — est. 2021</p>
+    <h1 class="hero-title rv" style="--d:.08s">FUEGO<span class="t2">Lento</span></h1>
+    <p class="hero-sub rv" style="--d:.16s">A thirty-eight-seat asador on Ankeny Street. Everything we serve has passed through <strong>oak, ember or ash</strong> — leeks buried whole, beef hung forty days, cheesecake burnt on purpose. No gas line runs to this kitchen. Walk-ins at the bar; book the room for the long tables.</p>
+    <div class="hero-ctas rv" style="--d:.24s">
+      <a class="btn btn-primary" href="#book">Book a table</a>
+      <a class="btn" href="#menu">Tonight&rsquo;s menu</a>
+    </div>
+  </div>
+  <div class="hero-foot">
+    <button class="stoke" id="stokeBtn" aria-label="Hold to stoke the hearth — keeps a secret">· hold to stoke the fire ·</button>
+    <div class="gauge" aria-hidden="true">
+      <div class="gauge-row"><span class="gauge-cap">HEARTH</span><span id="gTemp">412°C</span></div>
+      <div class="meter"><i id="gFill"></i></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TICKER ============ -->
+<div class="ticker" aria-hidden="true"><div class="ticker-track" id="tickerTrack"></div></div>
+
+<style>
+  #roomIllo .flame{transform-origin:50% 100%; animation:flick 2.3s ease-in-out infinite}
+  #roomIllo .flame.f2{animation-duration:3.2s; animation-delay:.4s}
+  #roomIllo .flame.f3{animation-duration:2.7s; animation-delay:.9s}
+  #roomIllo .coal{animation:coalglow 2.6s ease-in-out infinite alternate}
+  @keyframes coalglow{from{opacity:.55}to{opacity:1}}
+</style>
+
+<!-- ============ STORY ============ -->
+<section class="sec" id="story">
+  <div class="wrap">
+    <p class="overline rv">01 · The hearth</p>
+    <h2 class="h2 rv" style="--d:.06s">We built the fire first.<br><em>The room grew around it.</em></h2>
+    <div class="story-grid">
+      <div class="prose">
+        <p class="rv">In the summer of 2020 we bought nine crates of brick from the old Waddell cannery demolition on McLoughlin — a weekend project that got out of hand. Naiara&rsquo;s grandmother cooked over oak in a caserío outside Bilbao, where a low fire isn&rsquo;t a technique, it&rsquo;s the day&rsquo;s clock. We stood a nine-foot hearth in a warehouse on Ankeny Street and started cooking for twelve friends a night.</p>
+        <p class="rv" style="--d:.05s">Five years on, the room seats thirty-eight. The fire is still the only thing we trust with the centre of the plate: lamb hung over vine cuttings, leeks buried in ash until they collapse, bread baked against the ovens that warm the back wall. When the woodpile changes, the menu changes — oak in winter, valley apple and cherry all summer.</p>
+        <p class="rv" style="--d:.1s">We shake our own vermouth? No — we <em>steep</em> it, in charred American oak, and pour it from the tap by the door. We pour sidra from a height and catch two fingers. We burn the cheesecake on purpose. Everything else, we leave alone and let the coals decide.</p>
+        <ul class="house-rules rv" style="--d:.15s">
+          <li>The bar is walk-in only — six stools, first come, best seat in the house.</li>
+          <li>Tables of five or more share the long oak and pass everything family-style.</li>
+          <li>Cash, card, and honest appetites. Tipping is shared with the whole room.</li>
+          <li>Tell us what you can&rsquo;t eat. The fire adapts; it always has.</li>
+        </ul>
+      </div>
+      <div>
+        <figure class="illo-frame rv" style="--d:.1s">
+          <svg id="roomIllo" viewBox="0 0 640 420" role="img" aria-label="Illustration of the Fuego Lento dining room: a brick hearth with a low fire, a mantel of bottles and copper pots, hanging dried peppers and cast-iron pans.">
+            <defs>
+              <linearGradient id="rm-wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1B120A"/><stop offset="1" stop-color="#0E0906"/></linearGradient>
+              <pattern id="rm-brick" width="48" height="24" patternUnits="userSpaceOnUse">
+                <rect width="48" height="24" fill="#241610"/>
+                <rect x="1.5" y="1.5" width="21" height="9.5" rx="1" fill="#33211540"/><rect x="24.5" y="1.5" width="21" height="9.5" rx="1" fill="#3A281A"/>
+                <rect x="-11.5" y="13" width="21" height="9.5" rx="1" fill="#2E1E13"/><rect x="12.5" y="13" width="21" height="9.5" rx="1" fill="#382518"/><rect x="36.5" y="13" width="21" height="9.5" rx="1" fill="#2E1E13"/>
+              </pattern>
+              <radialGradient id="rm-glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FF7A22" stop-opacity=".75"/><stop offset=".45" stop-color="#C24A12" stop-opacity=".35"/><stop offset="1" stop-color="#C24A12" stop-opacity="0"/></radialGradient>
+              <linearGradient id="rm-flame" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#FFD98A"/><stop offset=".4" stop-color="#FF8A2E"/><stop offset="1" stop-color="#D2440E" stop-opacity=".1"/></linearGradient>
+              <linearGradient id="rm-vig" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".55"/><stop offset=".25" stop-color="#000" stop-opacity="0"/><stop offset=".75" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></linearGradient>
+            </defs>
+            <rect width="640" height="420" fill="url(#rm-wall)"/>
+            <!-- hearth arch -->
+            <path d="M128 420V196Q128 84 320 84Q512 84 512 196V420Z" fill="url(#rm-brick)"/>
+            <path d="M128 420V196Q128 84 320 84Q512 84 512 196V420Z" fill="none" stroke="#4E3A22" stroke-width="5"/>
+            <path d="M168 420V210Q168 128 320 128Q472 128 472 210V420Z" fill="#0B0604"/>
+            <ellipse cx="320" cy="405" rx="160" ry="130" fill="url(#rm-glow)"/>
+            <!-- logs & coals -->
+            <g>
+              <rect x="238" y="392" width="150" height="16" rx="8" fill="#1C1008" transform="rotate(-7 313 400)"/>
+              <rect x="258" y="402" width="130" height="14" rx="7" fill="#221207" transform="rotate(6 323 409)"/>
+              <g class="coal">
+                <circle cx="286" cy="404" r="4" fill="#FF7A22"/><circle cx="308" cy="408" r="3" fill="#FFA14D"/><circle cx="332" cy="404" r="4.4" fill="#FF6A1E"/><circle cx="356" cy="408" r="3.2" fill="#FF8A2E"/><circle cx="376" cy="404" r="3.6" fill="#FF9E3E"/>
+              </g>
+            </g>
+            <!-- flames -->
+            <g class="flame">
+              <path d="M262 400C252 372 270 356 264 328C286 350 284 372 282 400Z" fill="url(#rm-flame)" opacity=".9"/>
+            </g>
+            <g class="flame f2">
+              <path d="M316 400C300 362 326 340 314 296C348 332 342 368 344 400Z" fill="url(#rm-flame)"/>
+              <path d="M318 400C310 374 326 358 320 336C336 356 334 378 332 400Z" fill="#FFD98A" opacity=".55"/>
+            </g>
+            <g class="flame f3">
+              <path d="M376 400C368 378 384 360 378 338C398 362 392 380 394 400Z" fill="url(#rm-flame)" opacity=".85"/>
+            </g>
+            <!-- mantel -->
+            <rect x="96" y="70" width="448" height="15" rx="2" fill="#2A1A0E"/>
+            <rect x="96" y="70" width="448" height="4" rx="2" fill="#4E3A22"/>
+            <rect x="96" y="85" width="448" height="7" fill="#1A100A"/>
+            <!-- mantel objects -->
+            <g>
+              <rect x="150" y="34" width="17" height="36" rx="3" fill="#4E2A16"/><rect x="155.5" y="22" width="6" height="14" fill="#4E2A16"/><ellipse cx="158.5" cy="34" rx="4.6" ry="8" fill="#6E3E1E"/>
+              <ellipse cx="232" cy="58" rx="21" ry="9" fill="#8E5A2E"/><rect x="214" y="56" width="36" height="14" rx="3" fill="#7E4E26"/><ellipse cx="232" cy="57" rx="17" ry="7" fill="#A8683A"/><path d="M213 56c-6-3-9-8-8-13" stroke="#8E5A2E" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <g><rect x="296" y="62" width="40" height="4" rx="2" fill="#D9CFB8"/><rect x="298" y="56" width="36" height="4" rx="2" fill="#E8DFC8"/><rect x="300" y="50" width="32" height="4" rx="2" fill="#D9CFB8"/></g>
+              <rect x="382" y="40" width="24" height="30" rx="3" fill="#5C3E1E" opacity=".85"/><rect x="387" y="32" width="14" height="10" rx="2" fill="#5C3E1E" opacity=".85"/>
+              <g><rect x="462" y="42" width="9" height="28" fill="#E8D9B8"/><path d="M466.5 34c3 5 2 8 0 9c-2-1-3-4 0-9z" fill="#FF8A2E" class="coal"/></g>
+            </g>
+            <!-- ristra of peppers -->
+            <g>
+              <path d="M132 85v66" stroke="#5C4426" stroke-width="1.6"/>
+              <ellipse cx="127" cy="102" rx="5" ry="11" fill="#A32E1C" transform="rotate(-14 127 102)"/>
+              <ellipse cx="138" cy="112" rx="5" ry="11" fill="#8E2416" transform="rotate(10 138 112)"/>
+              <ellipse cx="126" cy="126" rx="5" ry="11" fill="#B4461B" transform="rotate(-8 126 126)"/>
+              <ellipse cx="139" cy="136" rx="5" ry="11" fill="#A32E1C" transform="rotate(14 139 136)"/>
+              <ellipse cx="129" cy="148" rx="5" ry="11" fill="#8E2416" transform="rotate(-6 129 148)"/>
+            </g>
+            <!-- hanging pans -->
+            <g fill="none" stroke="#4E3A22" stroke-width="3.4">
+              <path d="M520 85v22"/><circle cx="520" cy="132" r="24"/><path d="M508 108h24"/>
+              <path d="M566 85v14" stroke-width="2.4"/><circle cx="566" cy="116" r="16" stroke-width="3"/><path d="M556 102h20" stroke-width="2.4"/>
+            </g>
+            <!-- floor -->
+            <rect y="396" width="640" height="24" fill="#180F08"/>
+            <rect y="396" width="640" height="3" fill="#2E1E12"/>
+            <rect width="640" height="420" fill="url(#rm-vig)"/>
+          </svg>
+          <figcaption class="illo-cap"><span>The hearth, 9 ft — Waddell cannery brick</span><span>N° 2114</span></figcaption>
+        </figure>
+        <div class="chef-card rv" style="--d:.16s">
+          <p class="chef-quote">If the fire looks angry, we wait. It&rsquo;s almost never angry — it&rsquo;s hungry.</p>
+          <p class="chef-name">Naiara Urrutia</p>
+          <p class="chef-role">Chef &amp; fire keeper</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TONIGHT ON THE FIRE ============ -->
+<section class="sec" id="fire" style="padding-top:0">
+  <div class="wrap">
+    <p class="overline rv">02 · Tonight on the fire</p>
+    <h2 class="h2 rv" style="--d:.06s">Four things worth burning <em>good oak</em> for.</h2>
+    <p class="lede rv" style="--d:.1s">Drawn from tonight&rsquo;s board by hand — no photographs, just the way each one lands at the table. The rest of the menu is below, and it moves with the woodpile.</p>
+    <div class="sig-grid">
+
+      <article class="sig-card rv">
+        <div class="sig-illo">
+          <svg viewBox="0 0 480 320" role="img" aria-label="Illustration of grilled octopus on a dark plate with ash aioli, paprika and a charred lemon half.">
+            <defs>
+              <linearGradient id="sg1-t" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#E08A5F"/><stop offset=".55" stop-color="#B4502C"/><stop offset="1" stop-color="#7E3220"/></linearGradient>
+              <radialGradient id="sg1-g" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FF7A22" stop-opacity=".22"/><stop offset="1" stop-color="#FF7A22" stop-opacity="0"/></radialGradient>
+              <filter id="sg1-soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDev="1.4"/></filter>
+            </defs>
+            <rect width="480" height="320" fill="none"/>
+            <ellipse cx="240" cy="175" rx="215" ry="120" fill="url(#sg1-g)"/>
+            <ellipse cx="240" cy="212" rx="182" ry="54" fill="#211510" stroke="#3A281A" stroke-width="2"/>
+            <ellipse cx="240" cy="209" rx="164" ry="44" fill="#2A1C12"/>
+            <!-- aioli swoosh -->
+            <ellipse cx="132" cy="196" rx="42" ry="15" fill="#EFE6D0" transform="rotate(-9 132 196)"/>
+            <g fill="#B3A184" opacity=".7"><circle cx="118" cy="192" r="1.4"/><circle cx="132" cy="199" r="1.2"/><circle cx="146" cy="194" r="1.5"/><circle cx="126" cy="202" r="1"/></g>
+            <!-- tentacle -->
+            <path d="M78 218C120 158 205 142 265 170C330 200 386 196 406 150C416 126 400 106 378 114C362 120 364 140 380 143" fill="none" stroke="url(#sg1-t)" stroke-width="31" stroke-linecap="round"/>
+            <path d="M78 218C120 158 205 142 265 170C330 200 386 196 406 150" fill="none" stroke="#5A1F12" stroke-width="7" stroke-linecap="round" opacity=".35"/>
+            <!-- suckers -->
+            <g fill="#E8A87C" opacity=".9">
+              <circle cx="130" cy="196" r="5"/><circle cx="160" cy="184" r="5.5"/><circle cx="192" cy="177" r="5"/><circle cx="224" cy="177" r="5.5"/><circle cx="256" cy="182" r="5"/><circle cx="288" cy="188" r="5.5"/><circle cx="318" cy="190" r="5"/><circle cx="348" cy="186" r="5"/><circle cx="374" cy="176" r="4.5"/><circle cx="392" cy="158" r="4"/><circle cx="388" cy="134" r="3.6"/><circle cx="375" cy="126" r="3.2"/>
+            </g>
+            <!-- char marks -->
+            <g stroke="#3A150B" stroke-width="6" stroke-linecap="round" opacity=".75">
+              <path d="M150 160l14 22"/><path d="M186 150l12 23"/><path d="M222 150l10 24"/><path d="M258 158l8 24"/><path d="M294 168l6 24"/><path d="M330 174l4 22"/><path d="M362 168l2 20"/>
+            </g>
+            <!-- paprika dust -->
+            <g fill="#C3391B" opacity=".85">
+              <circle cx="112" cy="170" r="2"/><circle cx="140" cy="163" r="1.6"/><circle cx="170" cy="158" r="2.2"/><circle cx="205" cy="152" r="1.5"/><circle cx="238" cy="156" r="2"/><circle cx="96" cy="182" r="1.6"/><circle cx="126" cy="152" r="1.4"/><circle cx="282" cy="152" r="1.8"/>
+            </g>
+            <!-- charred lemon -->
+            <g filter="url(#sg1-soft)"><circle cx="398" cy="238" r="27" fill="#D9A75C"/></g>
+            <circle cx="398" cy="238" r="27" fill="none" stroke="#4A2A10" stroke-width="3"/>
+            <circle cx="398" cy="238" r="19" fill="#E8C283"/>
+            <g stroke="#C99A4E" stroke-width="2"><path d="M398 219v38M379 238h38M384 224l28 28M412 224l-28 28"/></g>
+            <ellipse cx="240" cy="266" rx="120" ry="9" fill="#0B0705" opacity=".55"/>
+          </svg>
+        </div>
+        <div class="sig-body">
+          <span class="sig-no">№ 01 — pintxo</span>
+          <h3 class="sig-name">Pulpo a la brasa</h3>
+          <p class="sig-desc">Octopus leg kissed by oak until the tips crackle, potato-ash aioli, pimentón, charred lemon. Eaten standing up, ideally.</p>
+          <div class="sig-meta"><span class="sig-price">$16</span><span class="tag tag-gf">GF</span><button class="sig-add" type="button" data-add="pulpo"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Add</button></div>
+        </div>
+      </article>
+
+      <article class="sig-card rv" style="--d:.08s">
+        <div class="sig-illo">
+          <svg viewBox="0 0 480 320" role="img" aria-label="Illustration of a dry-aged ribeye on a board: dark crust, cream fat cap, marbling, grill marks, flaked salt and a melting pat of marrow butter.">
+            <defs>
+              <linearGradient id="sg2-m" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8E3A22"/><stop offset="1" stop-color="#52190D"/></linearGradient>
+              <radialGradient id="sg2-g" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FF7A22" stop-opacity=".2"/><stop offset="1" stop-color="#FF7A22" stop-opacity="0"/></radialGradient>
+            </defs>
+            <ellipse cx="240" cy="168" rx="215" ry="118" fill="url(#sg2-g)"/>
+            <ellipse cx="240" cy="218" rx="186" ry="56" fill="#2E2010" stroke="#4A3418" stroke-width="2"/>
+            <ellipse cx="240" cy="240" rx="98" ry="13" fill="#431007" opacity=".8"/>
+            <!-- steak -->
+            <path d="M116 186C112 148 148 124 202 120C262 114 336 120 366 140C390 156 390 184 362 200C318 222 196 226 148 212C128 206 118 198 116 186Z" fill="url(#sg2-m)" stroke="#2E1006" stroke-width="5"/>
+            <!-- fat cap -->
+            <path d="M132 158C162 132 246 122 318 132" fill="none" stroke="#E9D6B4" stroke-width="13" stroke-linecap="round"/>
+            <!-- marbling -->
+            <g fill="none" stroke="#EFD9C0" stroke-width="2" opacity=".5" stroke-linecap="round">
+              <path d="M160 176c14-6 22 4 36-2s20 6 34 0"/><path d="M190 196c16-5 24 3 40-1"/><path d="M242 168c12-4 20 4 32 0s18 4 28-2"/><path d="M280 190c12-4 20 2 30-2"/><path d="M220 186c8-2 14 2 22 0"/>
+            </g>
+            <!-- grill marks -->
+            <g stroke="#2B0C05" stroke-width="10" stroke-linecap="round" opacity=".85">
+              <path d="M158 198l64-64"/><path d="M198 210l66-66"/><path d="M242 216l66-66"/><path d="M290 214l58-58"/>
+            </g>
+            <!-- marrow butter -->
+            <g transform="rotate(12 306 152)"><rect x="288" y="142" width="34" height="15" rx="3" fill="#F2E3C2"/><path d="M296 157c0 6 4 8 4 12" stroke="#F2E3C2" stroke-width="4" stroke-linecap="round" fill="none"/></g>
+            <!-- salt flakes -->
+            <g fill="#F3E9D2" opacity=".95"><rect x="176" y="146" width="5" height="5" transform="rotate(24 178 148)"/><rect x="214" y="158" width="4" height="4" transform="rotate(-18 216 160)"/><rect x="252" y="146" width="5" height="5" transform="rotate(40 254 148)"/><rect x="336" y="162" width="4" height="4" transform="rotate(12 338 164)"/><rect x="298" y="176" width="4" height="4" transform="rotate(-30 300 178)"/></g>
+            <!-- thyme -->
+            <g><path d="M126 214c-10 6-18 8-26 8" stroke="#5E7040" stroke-width="2.4" fill="none" stroke-linecap="round"/><g fill="#6E8048"><ellipse cx="112" cy="218" rx="4" ry="2.4" transform="rotate(30 112 218)"/><ellipse cx="122" cy="214" rx="4" ry="2.4" transform="rotate(24 122 214)"/><ellipse cx="102" cy="221" rx="4" ry="2.4" transform="rotate(36 102 221)"/></g></g>
+            <ellipse cx="240" cy="276" rx="118" ry="8" fill="#0B0705" opacity=".5"/>
+          </svg>
+        </div>
+        <div class="sig-body">
+          <span class="sig-no">№ 02 — for the table</span>
+          <h3 class="sig-name">Chuletón de vaca</h3>
+          <p class="sig-desc">Forty days dry-aged, carved off the bone at the table, ember salt, bone-marrow butter. Nine hundred grams of opinion.</p>
+          <div class="sig-meta"><span class="sig-price">$58</span><span class="tag tag-gf">GF</span><button class="sig-add" type="button" data-add="chuleta"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Add</button></div>
+        </div>
+      </article>
+
+      <article class="sig-card rv" style="--d:.05s">
+        <div class="sig-illo">
+          <svg viewBox="0 0 480 320" role="img" aria-label="Illustration of two ash-roasted leeks with charred leaf fans, romesco and hazelnuts on a dark plate.">
+            <defs>
+              <linearGradient id="sg3-l" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#EDE6CD"/><stop offset=".75" stop-color="#CBD4A8"/><stop offset="1" stop-color="#9DAF74"/></linearGradient>
+              <linearGradient id="sg3-l2" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#DCD4B8"/><stop offset="1" stop-color="#8FA065"/></linearGradient>
+              <radialGradient id="sg3-g" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FF7A22" stop-opacity=".18"/><stop offset="1" stop-color="#FF7A22" stop-opacity="0"/></radialGradient>
+              <filter id="sg3-soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDev="1.2"/></filter>
+            </defs>
+            <ellipse cx="240" cy="170" rx="215" ry="118" fill="url(#sg3-g)"/>
+            <ellipse cx="240" cy="212" rx="182" ry="54" fill="#211510" stroke="#3A281A" stroke-width="2"/>
+            <ellipse cx="240" cy="209" rx="164" ry="44" fill="#2A1C12"/>
+            <!-- back leek -->
+            <g>
+              <path d="M128 232L318 116" stroke="url(#sg3-l2)" stroke-width="24" stroke-linecap="round"/>
+              <g fill="none" stroke="#5E6B3A" stroke-width="6" stroke-linecap="round">
+                <path d="M318 116l26-28"/><path d="M318 116l30-14"/><path d="M318 116l18-36"/>
+              </g>
+              <g stroke="#241408" stroke-width="7" stroke-linecap="round"><path d="M340 96l8-9"/><path d="M345 103l10-5"/><path d="M334 87l6-9"/></g>
+              <path d="M128 232l-8 14M128 232l4 16M128 232l12 10" stroke="#EFE6D0" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+            </g>
+            <!-- front leek -->
+            <g>
+              <path d="M104 200L306 82" stroke="url(#sg3-l)" stroke-width="28" stroke-linecap="round"/>
+              <path d="M104 200l-10 14M104 200l2 17M104 200l13 12" stroke="#EFE6D0" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+              <g fill="none" stroke="#6E7F4B" stroke-width="7" stroke-linecap="round">
+                <path d="M306 82l30-24"/><path d="M306 82l36-8"/><path d="M306 82l20-38"/><path d="M306 82l8-42"/>
+              </g>
+              <g stroke="#1D0F06" stroke-width="8" stroke-linecap="round"><path d="M332 62l10-8"/><path d="M338 76l12-6"/><path d="M324 50l7-10"/><path d="M313 47l4-11"/></g>
+            </g>
+            <!-- char streaks on shafts -->
+            <g stroke="#3A2A15" stroke-width="5" stroke-linecap="round" opacity=".65">
+              <path d="M170 174l26-16"/><path d="M226 142l24-15"/><path d="M262 120l22-14"/><path d="M196 196l24-15"/>
+            </g>
+            <!-- romesco -->
+            <g filter="url(#sg3-soft)">
+              <ellipse cx="352" cy="212" rx="26" ry="11" fill="#C75B28" transform="rotate(-10 352 212)"/>
+              <ellipse cx="392" cy="228" rx="18" ry="9" fill="#B44E1E" transform="rotate(6 392 228)"/>
+              <ellipse cx="318" cy="230" rx="15" ry="8" fill="#C75B28" transform="rotate(16 318 230)"/>
+            </g>
+            <g fill="#8E3A16"><circle cx="344" cy="210" r="1.6"/><circle cx="360" cy="214" r="1.4"/><circle cx="390" cy="226" r="1.5"/><circle cx="320" cy="228" r="1.4"/></g>
+            <!-- hazelnuts -->
+            <g><circle cx="380" cy="190" r="8" fill="#8A5A33"/><path d="M374 187a8 8 0 0 1 7-5" stroke="#B98352" stroke-width="2.4" fill="none" stroke-linecap="round"/><circle cx="356" cy="244" r="7" fill="#7E5030"/><path d="M351 241a7 7 0 0 1 6-4" stroke="#B98352" stroke-width="2" fill="none" stroke-linecap="round"/></g>
+            <!-- ash dust -->
+            <g fill="#B3A184" opacity=".5"><circle cx="150" cy="160" r="1.6"/><circle cx="200" cy="120" r="1.3"/><circle cx="250" cy="96" r="1.6"/><circle cx="120" cy="190" r="1.3"/><circle cx="230" cy="180" r="1.2"/><circle cx="286" cy="106" r="1.4"/></g>
+            <ellipse cx="240" cy="266" rx="118" ry="8" fill="#0B0705" opacity=".5"/>
+          </svg>
+        </div>
+        <div class="sig-body">
+          <span class="sig-no">№ 03 — from the garden</span>
+          <h3 class="sig-name">Puerros en ceniza</h3>
+          <p class="sig-desc">Whole leeks buried in ash until they surrender, romesco, toasted hazelnut. The quiet signature — order it even if you think you don&rsquo;t like leeks.</p>
+          <div class="sig-meta"><span class="sig-price">$12</span><span class="tag tag-vg">VG</span><button class="sig-add" type="button" data-add="puerros"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Add</button></div>
+        </div>
+      </article>
+
+      <article class="sig-card rv" style="--d:.12s">
+        <div class="sig-illo">
+          <svg viewBox="0 0 480 320" role="img" aria-label="Illustration of burnt Basque cheesecake with a caramelised top, a cut wedge showing the custard, and cherry mosto pooling at the front.">
+            <defs>
+              <linearGradient id="sg4-c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4E6C6"/><stop offset="1" stop-color="#E3C393"/></linearGradient>
+              <linearGradient id="sg4-top" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9E4E1C"/><stop offset=".6" stop-color="#5C2A10"/><stop offset="1" stop-color="#3A1608"/></linearGradient>
+              <radialGradient id="sg4-g" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FF7A22" stop-opacity=".18"/><stop offset="1" stop-color="#FF7A22" stop-opacity="0"/></radialGradient>
+              <filter id="sg4-soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDev="2.2"/></filter>
+            </defs>
+            <ellipse cx="240" cy="172" rx="215" ry="118" fill="url(#sg4-g)"/>
+            <ellipse cx="240" cy="214" rx="182" ry="54" fill="#211510" stroke="#3A281A" stroke-width="2"/>
+            <ellipse cx="240" cy="211" rx="164" ry="44" fill="#2A1C12"/>
+            <!-- body -->
+            <path d="M116 206C116 156 128 128 162 120C206 110 274 110 318 120C352 128 364 156 364 206C364 226 342 234 240 234C138 234 116 226 116 206Z" fill="url(#sg4-c)"/>
+            <!-- cut wedge -->
+            <path d="M288 234L288 140C288 128 300 122 318 120L318 232C308 234 298 234 288 234Z" fill="#F8EDD2"/>
+            <path d="M288 140C288 128 300 122 318 120" fill="none" stroke="#D9BC8C" stroke-width="2"/>
+            <!-- caramel top -->
+            <path d="M114 150C114 112 148 100 240 100C332 100 366 112 366 150C330 134 150 134 114 150Z" fill="url(#sg4-top)"/>
+            <path d="M114 150C150 136 330 136 366 150" fill="none" stroke="#2E1206" stroke-width="3" opacity=".7"/>
+            <!-- char blotches -->
+            <g fill="#1F0B04" opacity=".65" filter="url(#sg4-soft)">
+              <ellipse cx="176" cy="118" rx="16" ry="6"/><ellipse cx="238" cy="108" rx="20" ry="7"/><ellipse cx="300" cy="116" rx="14" ry="6"/><ellipse cx="208" cy="128" rx="10" ry="4"/><ellipse cx="272" cy="126" rx="12" ry="4.5"/><ellipse cx="150" cy="130" rx="9" ry="4"/><ellipse cx="330" cy="128" rx="10" ry="4"/>
+            </g>
+            <ellipse cx="206" cy="106" rx="26" ry="5" fill="#E8A25A" opacity=".35"/>
+            <!-- cherry mosto -->
+            <ellipse cx="240" cy="250" rx="92" ry="15" fill="#5C1120" opacity=".92"/>
+            <ellipse cx="216" cy="247" rx="40" ry="8" fill="#7A1A2E" opacity=".8"/>
+            <g><circle cx="266" cy="246" r="10" fill="#8E1B2B"/><circle cx="286" cy="252" r="8.4" fill="#7A1425"/><path d="M266 236c2-8 8-12 16-14M286 244c0-8 2-14 6-20" stroke="#4A5A2E" stroke-width="2" fill="none" stroke-linecap="round"/><ellipse cx="262" cy="243" rx="3" ry="2" fill="#B45264"/></g>
+            <!-- crumbs -->
+            <g fill="#D9BC8C"><circle cx="150" cy="248" r="2.4"/><circle cx="164" cy="254" r="1.8"/><circle cx="330" cy="252" r="2"/></g>
+            <ellipse cx="240" cy="276" rx="110" ry="7" fill="#0B0705" opacity=".5"/>
+          </svg>
+        </div>
+        <div class="sig-body">
+          <span class="sig-no">№ 04 — dulce</span>
+          <h3 class="sig-name">Tarta de queso quemada</h3>
+          <p class="sig-desc">Burnt Basque cheesecake — shaved top and all — cherry mosto, smoked cream. Custard in the middle, cinders on top, no crumbs left.</p>
+          <div class="sig-meta"><span class="sig-price">$11</span><span class="tag tag-v">V</span><button class="sig-add" type="button" data-add="tarta"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Add</button></div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ MENU ============ -->
+<section class="sec paper" id="menu">
+  <div class="wrap">
+    <div class="menu-head">
+      <div>
+        <p class="overline rv">03 · The menu</p>
+        <h2 class="h2 rv" style="--d:.06s">Eat from the fire.</h2>
+      </div>
+      <p class="menu-note rv" style="--d:.1s">PRICES INCLUDE SERVICE.<br>THE MENU SHIFTS WITH THE WOODPILE — REPRINTED TUESDAYS.<br>ADD WHAT YOU LIKE AND SEND IT TO THE COUNTER.</p>
+    </div>
+
+    <div class="menu-tools rv" style="--d:.12s">
+      <div class="search-wrap">
+        <svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
+        <label class="sr-only" for="menuSearch">Search the menu</label>
+        <input type="search" id="menuSearch" placeholder="Search the menu — try “pulpo”, “burnt” or “smoke”" autocomplete="off" spellcheck="false">
+        <button type="button" id="searchClear" aria-label="Clear search"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button>
+      </div>
+      <div class="chips-row" id="catChips" role="group" aria-label="Menu categories">
+        <span class="cr-label">Course</span>
+        <button class="chip on" type="button" data-cat="all">Everything</button>
+        <button class="chip" type="button" data-cat="pintxos">Pintxos &amp; small</button>
+        <button class="chip" type="button" data-cat="garden">From the garden</button>
+        <button class="chip" type="button" data-cat="fire">From the fire</button>
+        <button class="chip" type="button" data-cat="sweets">Sweets</button>
+        <button class="chip" type="button" data-cat="drinks">To drink</button>
+      </div>
+      <div class="chips-row" id="dietChips" role="group" aria-label="Dietary filters">
+        <span class="cr-label">Diet</span>
+        <button class="chip chip-diet" type="button" data-diet="v" aria-pressed="false">Vegetarian</button>
+        <button class="chip chip-diet" type="button" data-diet="vg" aria-pressed="false">Vegan</button>
+        <button class="chip chip-diet" type="button" data-diet="gf" aria-pressed="false">Gluten-free</button>
+      </div>
+    </div>
+
+    <p class="menu-count rv" id="menuCount" aria-live="polite">— dishes tonight</p>
+    <div id="menuList" class="rv" style="--d:.06s"></div>
+  </div>
+</section>
+
+<!-- ============ ORDER DRAWER ============ -->
+<div class="scrim" id="backdrop"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Your pickup order" hidden>
+  <header class="drawer-head">
+    <div>
+      <h2>Your order</h2>
+      <p class="sub" id="drawerSub">Pickup · pay at the counter</p>
+    </div>
+    <button class="icbtn" id="drawerClose" aria-label="Close order panel"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button>
+  </header>
+
+  <div class="drawer-body" id="drawerBody">
+    <div class="d-empty" id="drawerEmpty">
+      <svg class="ic" aria-hidden="true"><use href="#i-flame"/></svg>
+      <p>Nothing on the plank yet.</p>
+      <p class="dim">The fire&rsquo;s patient. Add a pintxo or two from the menu — or the whole board, we don&rsquo;t judge.</p>
+      <p style="margin-top:22px"><button class="btn" type="button" id="emptyBrowse">Browse the menu</button></p>
+    </div>
+    <div id="basketLines" style="display:none"></div>
+    <div id="orderFormWrap" style="display:none; margin-top:22px">
+      <form id="orderForm" novalidate>
+        <div class="field" style="margin-bottom:14px">
+          <label for="pickupSel">Pickup time</label>
+          <select id="pickupSel" aria-describedby="pickupErr"></select>
+          <span class="err" id="pickupErr">Pick a pickup window — the kitchen boxes to the half hour.</span>
+        </div>
+        <div class="f-row" style="margin-bottom:14px">
+          <div class="field">
+            <label for="ordName">Name</label>
+            <input id="ordName" type="text" autocomplete="name" placeholder="Who&rsquo;s collecting?">
+            <span class="err">A name for the bag — even a nickname.</span>
+          </div>
+          <div class="field">
+            <label for="ordPhone">Phone</label>
+            <input id="ordPhone" type="tel" autocomplete="tel" placeholder="For a ready text">
+            <span class="err">We text when it&rsquo;s boxed — a real number, please.</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="ordNotes">Notes <span style="opacity:.5">— allergies, spice courage, etc.</span></label>
+          <textarea id="ordNotes" rows="2" placeholder="Everything touches fire and flour — tell us what to dodge."></textarea>
+        </div>
+        <p style="margin-top:16px"><button class="btn btn-primary" type="submit" id="orderSubmit" style="width:100%; justify-content:center">Send it to the fire — <span id="orderTotal">$0.00</span></button></p>
+      </form>
+    </div>
+    <div class="done-view" id="orderDone" style="display:none">
+      <svg class="big-flame" aria-hidden="true"><use href="#i-flame"/></svg>
+      <h3>On the fire.</h3>
+      <p class="sub">We&rsquo;ll text when it&rsquo;s boxed. Pay on pickup — show this code at the counter:</p>
+      <p class="done-code" id="ordCode">FL-P000</p>
+      <div class="done-list" id="ordSummary"></div>
+      <p style="margin-top:22px"><button class="btn" type="button" id="orderDoneBtn">Done</button></p>
+    </div>
+  </div>
+
+  <footer class="drawer-foot" id="drawerFoot" style="display:none">
+    <div class="sum-row"><span class="k">Subtotal</span><span class="v" id="basketSub">$0.00</span></div>
+    <p style="font:400 11px/1.7 var(--f-m); color:var(--dim)">Pickup from the bar door on Ankeny. Everything touches fire and flour — tell us your allergies in the notes.</p>
+  </footer>
+</aside>
+
+<!-- ============ RESERVATIONS ============ -->
+<section class="sec" id="book">
+  <div class="wrap">
+    <p class="overline rv">04 · Book</p>
+    <h2 class="h2 rv" style="--d:.06s">Take a table <em>by the fire.</em></h2>
+    <p class="lede rv" style="--d:.1s">Thirty-eight seats, one long counter, six stools kept for walk-ins. We hold your table fifteen minutes; the fire holds its temper longer. Parties above eight — call the room, we&rsquo;ll build you something.</p>
+
+    <div class="book-grid">
+      <div class="panel rv" style="--d:.12s">
+        <div class="banner" id="resBanner" style="display:none">
+          <svg class="ic" style="color:var(--ember2)" aria-hidden="true"><use href="#i-flame"/></svg>
+          <span class="b-txt" id="resBannerText"></span>
+          <button class="btn btn-danger" type="button" id="bannerCancel">Cancel booking</button>
+        </div>
+
+        <form id="resForm" novalidate>
+          <p class="step-label">Party</p>
+          <div class="chips-row" id="partyChips" role="group" aria-label="Party size">
+            <button class="chip" type="button" data-party="1">1</button>
+            <button class="chip on" type="button" data-party="2">2</button>
+            <button class="chip" type="button" data-party="3">3</button>
+            <button class="chip" type="button" data-party="4">4</button>
+            <button class="chip" type="button" data-party="5">5</button>
+            <button class="chip" type="button" data-party="6">6</button>
+            <button class="chip" type="button" data-party="7">7</button>
+            <button class="chip" type="button" data-party="8">8</button>
+            <button class="chip" type="button" data-party="9">9+</button>
+          </div>
+          <p class="time-note" id="partyNote" style="display:none">Nine or more is a long-table night — <a href="tel:+15035550184" style="color:var(--ember2); text-decoration:none">call +1 (503) 555-0184</a> and we&rsquo;ll do something about it.</p>
+
+          <p class="step-label" style="margin-top:30px">Night</p>
+          <div class="strip-nav">
+            <span class="n-label" id="dateLabel">Next three weeks</span>
+            <div class="strip-btns">
+              <button class="icbtn" type="button" id="datePrev" aria-label="Scroll dates back"><svg class="ic" aria-hidden="true"><use href="#i-left"/></svg></button>
+              <button class="icbtn" type="button" id="dateNext" aria-label="Scroll dates forward"><svg class="ic" aria-hidden="true"><use href="#i-right"/></svg></button>
+            </div>
+          </div>
+          <div class="date-strip" id="dateStrip"></div>
+
+          <p class="step-label" style="margin-top:30px">Time</p>
+          <div class="time-grid" id="timeGrid"></div>
+          <p class="time-note" id="timeNote"></p>
+
+          <p class="step-label" style="margin-top:30px">You</p>
+          <div class="form-grid">
+            <div class="field">
+              <label for="resName">Name</label>
+              <input id="resName" type="text" autocomplete="name" placeholder="Under what name?">
+              <span class="err">A name for the booking — even a nickname.</span>
+            </div>
+            <div class="field">
+              <label for="resPhone">Phone</label>
+              <input id="resPhone" type="tel" autocomplete="tel" placeholder="For a reminder text">
+              <span class="err">We text a reminder — a real number, please.</span>
+            </div>
+            <div class="field full">
+              <label for="resNotes">Anything we should know? <span style="opacity:.5">— occasion, allergies, the one friend who&rsquo;s always late</span></label>
+              <input id="resNotes" type="text" placeholder="Anniversary, no shellfish, the birthday cake is coming with us…">
+            </div>
+          </div>
+          <div class="res-submit-row">
+            <button class="btn btn-primary" type="submit" id="resSubmit">Request the table</button>
+            <span class="res-hint">No deposit. No phone tree. Cancel with a tap.</span>
+          </div>
+        </form>
+
+        <div class="done-view" id="resDone" style="display:none">
+          <svg class="big-flame" aria-hidden="true"><use href="#i-flame"/></svg>
+          <h3>Table held.</h3>
+          <p class="sub" id="resSummary"></p>
+          <p class="done-code" id="resCode">FL-000</p>
+          <p class="sub" style="margin-top:14px">Give the name at the desk. Plans change? Cancel below — no questions, no guilt, the fire keeps no grudges.</p>
+          <p style="margin-top:22px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap">
+            <button class="btn" type="button" id="resAnother">Book another</button>
+            <button class="btn btn-danger" type="button" id="resCancelBtn">Cancel this booking</button>
+          </p>
+        </div>
+      </div>
+
+      <aside class="side-note rv" style="--d:.18s">
+        <h3>Good to know</h3>
+        <ul>
+          <li>We hold tables fifteen minutes past your time, then the waitlist eats them.</li>
+          <li>Kitchen takes last orders ninety minutes before close. Sweets until the end.</li>
+          <li>Counter stools are walk-in only — arrive grumpy, leave converted.</li>
+          <li>Tables of five or more eat family-style; the chuletón arrives pre-carved.</li>
+          <li>Step-free entry, accessible WC, dogs at the bar tables if they&rsquo;re calm about fire.</li>
+          <li>Every dish crosses flour and flame — tell us your allergies, we cook around them.</li>
+        </ul>
+        <p class="call-line">Prefer a voice? <a href="tel:+15035550184">+1 (503) 555-0184</a> — Marta answers between four and ten.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VISIT ============ -->
+<section class="sec" id="visit" style="padding-top:0">
+  <div class="wrap">
+    <p class="overline rv">05 · Find us</p>
+    <h2 class="h2 rv" style="--d:.06s">2114 SE Ankeny Street,<br><em>follow the smoke.</em></h2>
+    <div class="visit-grid">
+      <div class="hours-block rv" style="--d:.1s">
+        <h3>Hours</h3>
+        <div class="hours-table" id="hoursTable"></div>
+        <p class="hours-note">Kitchen takes last orders 90 minutes before close. Sidra until the last pour.</p>
+        <div class="spec">
+          <h4>Special nights</h4>
+          <div id="specialList"></div>
+        </div>
+      </div>
+      <div class="addr-block rv" style="--d:.16s">
+        <h3>The room</h3>
+        <p class="addr-line">2114 SE Ankeny Street<br>Portland, Oregon 97214</p>
+        <ul class="here-list">
+          <li style="display:flex; gap:12px; padding:7px 0; color:var(--dim); font-size:14.5px"><span style="color:var(--ember)">·</span>Two blocks off the river, between Grand &amp; 2nd — look for the brick arch and the queue of bikes.</li>
+          <li style="display:flex; gap:12px; padding:7px 0; color:var(--dim); font-size:14.5px"><span style="color:var(--ember)">·</span>Buses 4, 10 and 14 stop at SE Grand &amp; Ankeny; the A-loop streetcar is six blocks north.</li>
+          <li style="display:flex; gap:12px; padding:7px 0; color:var(--dim); font-size:14.5px"><span style="color:var(--ember)">·</span>Covered bike parking out front. Car? Grand has metered spots; Sundays are free.</li>
+        </ul>
+        <figure class="map-frame">
+          <svg viewBox="0 0 420 260" role="img" aria-label="Simple map: SE Grand Avenue runs north to south, SE Ankeny Street crosses east to west, and the restaurant sits on Ankeny just east of Grand, near the Willamette River.">
+            <defs><radialGradient id="mp-g" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FF7A22" stop-opacity=".5"/><stop offset="1" stop-color="#FF7A22" stop-opacity="0"/></radialGradient></defs>
+            <rect width="420" height="260" fill="#191007"/>
+            <path d="M330 -10 C 360 60, 316 120, 352 180 C 374 216, 368 244, 344 270" fill="none" stroke="#182430" stroke-width="46" stroke-linecap="round"/>
+            <path d="M330 -10 C 360 60, 316 120, 352 180 C 374 216, 368 244, 344 270" fill="none" stroke="#22303C" stroke-width="38" stroke-linecap="round"/>
+            <g stroke="#3A281A" stroke-width="10">
+              <path d="M-10 130 H330"/><path d="M-10 44 H330"/><path d="M-10 210 H330"/>
+              <path d="M60 -10 V270"/><path d="M160 -10 V270"/><path d="M240 -10 V270"/>
+            </g>
+            <g stroke="#4E3A22" stroke-width="1.4" stroke-dasharray="7 8">
+              <path d="M-10 130 H330"/><path d="M160 -10 V270"/>
+            </g>
+            <g fill="#221509">
+              <rect x="70" y="54" width="78" height="64"/><rect x="172" y="54" width="56" height="64"/>
+              <rect x="70" y="140" width="78" height="58"/><rect x="172" y="140" width="56" height="58"/>
+            </g>
+            <g font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="2" fill="#B3A184">
+              <text x="14" y="124">SE ANKENY ST</text>
+              <text x="166" y="248">SE GRAND AVE</text>
+              <text x="356" y="150" fill="#5E7890" transform="rotate(78 356 150)">WILLAMETTE</text>
+            </g>
+            <ellipse cx="238" cy="122" rx="60" ry="34" fill="url(#mp-g)"/>
+            <circle cx="238" cy="122" r="14" fill="none" stroke="#FF6A1E" stroke-width="1.6" class="map-ping" style="transform-box:fill-box; transform-origin:center"/>
+            <circle cx="238" cy="122" r="11" fill="#FF6A1E"/>
+            <path d="M238 115.5c.9 3.3 4.2 4.5 4.2 8.3a4.2 4.2 0 0 1-8.4 0c0-1.6.7-3 1.7-4.2.2 1.2.8 1.9 1.7 2.3-.7-2.3 0-4.2.8-6.4z" fill="#1D1006"/>
+            <text x="238" y="150" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9.5" letter-spacing="1.6" fill="#F3E9D2">FUEGO LENTO</text>
+          </svg>
+          <figcaption class="map-cap"><span>Not to scale — the smoke is</span><span>N ↑</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <p class="foot-word">FUEGO&nbsp;<i>LEN</i>TO</p>
+        <p class="foot-tag">Low fire, sharp knives, honest food. Portland, Oregon — since 2021.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Find us</h4>
+        <p>2114 SE Ankeny Street<br>Portland, OR 97214<br>Buses 4 · 10 · 14</p>
+      </div>
+      <div class="foot-col">
+        <h4>Talk to us</h4>
+        <p><a href="tel:+15035550184">+1 (503) 555-0184</a><br><a href="mailto:hola@fuegolento.com">hola@fuegolento.com</a><br>No phone tree — we answer.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Hours</h4>
+        <p>Tue–Thu · 5–10:30 pm<br>Fri–Sat · 12–3 &amp; 5–11:30 pm<br>Sun · 12–9 pm · Mon — the hearth rests</p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <p class="foot-fine">A fictional restaurant, drawn and coded as a single file. The fire is simulated in canvas; the hunger is not. No gas was connected in the making of this kitchen.<br>Type set in Fraunces, Archivo &amp; IBM Plex Mono · Everything else drawn in SVG, canvas &amp; Web Audio · © 2026 Fuego Lento</p>
+      <button class="to-top" type="button" id="toTop">Back to the fire <svg class="ic" style="width:13px;height:13px" aria-hidden="true"><use href="#i-up"/></svg></button>
+    </div>
+  </div>
+</footer>
+
+<div id="toasts" aria-live="polite" aria-atomic="false"></div>
+<div id="cur" aria-hidden="true"><div class="c-dot"></div></div>
+<div id="curRing" aria-hidden="true"><div class="c-ring"></div></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ================= helpers ================= */
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var clamp=function(v,a,b){return Math.max(a,Math.min(b,v))};
+var lerp=function(a,b,t){return a+(b-a)*t};
+var store={
+  get:function(k,fb){ try{var v=localStorage.getItem(k); return v==null?fb:JSON.parse(v);}catch(e){ return fb; } },
+  set:function(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} },
+  del:function(k){ try{ localStorage.removeItem(k); }catch(e){} }
+};
+var pad2=function(n){return String(n).padStart(2,"0")};
+var localISO=function(d){return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate())};
+var minsOf=function(t){var p=t.split(":"),h=+p[0],m=+p[1];return h*60+m};
+function fmtTime(t){var m=minsOf(t),h=Math.floor(m/60),mm=m%60,ap=h>=12?"pm":"am";h=((h+11)%12)+1;return mm?h+":"+pad2(mm)+" "+ap:h+" "+ap}
+function money(p){return p>0?("$"+(p%1?p.toFixed(2):String(p))):"on the house"}
+function hash(str){var h=2166136261,i,c;for(i=0;i<str.length;i++){c=str.charCodeAt(i);h^=c;h=Math.imul(h,16777619)}return ((h>>>0)%100000)/100000}
+function fold(s){return (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")}
+var REDUCED=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
+
+function toast(msg){
+  var root=$("#toasts"); if(!root) return;
+  var el=document.createElement("div"); el.className="toast"; el.textContent=msg;
+  root.appendChild(el);
+  requestAnimationFrame(function(){ el.classList.add("show"); });
+  setTimeout(function(){
+    el.classList.remove("show");
+    setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); },450);
+  },3800);
+}
+
+/* ================= hours data ================= */
+/* index = Date.getDay(); null = closed. Windows are [open, close] 24h strings. */
+var HOURS=[
+  [["12:00","21:00"]],           /* Sun */
+  null,                          /* Mon */
+  [["17:00","22:30"]],
+  [["17:00","22:30"]],
+  [["17:00","22:30"]],
+  [["12:00","15:00"],["17:00","23:30"]],  /* Fri */
+  [["12:00","15:30"],["17:00","23:30"]]   /* Sat */
+];
+var DOW_NAMES=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+var SPECIAL={
+  "2026-11-26":{closed:true, note:"Thanksgiving — the hearth rests."},
+  "2026-12-08":{closed:true, note:"Private night — the room is ours for once."},
+  "2026-12-24":{w:[["17:00","21:30"]], note:"Christmas Eve — early seatings, last pour 9:15 pm."},
+  "2026-12-25":{closed:true, note:"Christmas — leftovers at home, we insist."},
+  "2027-01-01":{w:[["17:00","23:00"]], note:"New Year's Day — recovery dinner, vermouth at five."}
+};
+function windowsFor(iso,dow){
+  var sp=SPECIAL[iso];
+  if(sp){ if(sp.closed) return null; if(sp.w) return sp.w; }
+  var h=HOURS[dow];
+  return h?h:null;
+}
+var todayISO=(function(){var d=new Date();return localISO(d)})();
+var todayDow=(new Date()).getDay();
+var nowMins=(function(){var d=new Date();return d.getHours()*60+d.getMinutes()})();
+
+function openState(now){
+  now=now||new Date();
+  var iso=localISO(now), cur=now.getHours()*60+now.getMinutes();
+  var sp=SPECIAL[iso], ws=windowsFor(iso,now.getDay()), w,i;
+  if(ws){ for(i=0;i<ws.length;i++){ w=ws[i]; if(cur>=minsOf(w[0])&&cur<minsOf(w[1])) return {open:true, close:w[1], note:sp&&sp.note||""}; } }
+  for(var day=0;day<8;day++){
+    var d=new Date(now); d.setDate(d.getDate()+day);
+    var di=localISO(d), sp2=SPECIAL[di], ws2=windowsFor(di,d.getDay());
+    if(!ws2) continue;
+    for(i=0;i<ws2.length;i++){
+      w=ws2[i];
+      if(day===0 && minsOf(w[0])<=cur) continue;
+      return {open:false, day: day===0?"today":(day===1?"tomorrow":DOW_NAMES[d.getDay()].slice(0,3)), at:w[0], reason:(sp&&sp.closed&&sp.note)||(sp2&&sp2.note)||""};
+    }
+  }
+  return {open:false, day:"", at:"", reason:"the hearth rests for a while"};
+}
+function updateStatusPill(){
+  var pill=$("#statusPill"), txt=$("#statusText");
+  if(!pill||!txt) return;
+  var s=openState();
+  if(s.open){
+    pill.classList.add("open");
+    txt.textContent="Open · until "+fmtTime(s.close);
+    pill.title=s.note?("Now: "+s.note):("Serving until "+fmtTime(s.close));
+  }else{
+    pill.classList.remove("open");
+    if(s.reason) txt.textContent="Closed — "+s.reason;
+    else if(s.day) txt.textContent="Opens "+s.day+" "+fmtTime(s.at);
+    else txt.textContent="Closed";
+    pill.title=s.reason?("Closed: "+s.reason):"Closed right now";
+  }
+}
+
+/* ================= menu data ================= */
+var CATS=[
+  {id:"pintxos", label:"Pintxos & small plates", icon:"i-pepper"},
+  {id:"garden",  label:"From the garden", icon:"i-leaf"},
+  {id:"fire",    label:"From the fire", icon:"i-flame"},
+  {id:"sweets",  label:"Sweets", icon:"i-cherry"},
+  {id:"drinks",  label:"To drink", icon:"i-glass"}
+];
+var TAGLBL={v:"Vegetarian", vg:"Vegan", gf:"Gluten-free"};
+var MENU=[
+  {id:"gilda",   cat:"pintxos", name:"La Gilda", price:4.5, tags:["gf"], desc:"The Basque one-bite: salted Cantabrian anchovy, guindilla pepper, Manzanilla olive, a whisper of sherry vinegar. Eat it in one go, like you mean it."},
+  {id:"pan",     cat:"pintxos", name:"Pan de la casa", price:7, tags:["v"], desc:"Sourdough baked against the oven wall — blistered crust, cultured butter whipped with ash oil, smoked salt."},
+  {id:"pulpo",   cat:"pintxos", name:"Pulpo a la brasa", price:16, tags:["gf"], desc:"Octopus leg kissed by oak until the tips crackle, potato-ash aioli, pimentón, charred lemon."},
+  {id:"padrones",cat:"pintxos", name:"Padrones al fuego", price:9, tags:["vg","gf"], desc:"Wood-oven blistered peppers, sea salt, lemon oil. Most are sweet; one of them is a small drama."},
+  {id:"chorizo", cat:"pintxos", name:"Chorizo a la sidra", price:12, tags:[], desc:"House chorizo bubbling in Asturian cider until the fat turns sweet. Bread arrives for the pan juices — it is not optional."},
+  {id:"croquetas",cat:"pintxos", name:"Croquetas de puerro", price:11, tags:["v"], desc:"Smoked leek and Idiazábal sheep's cheese, aged sherry vinegar on the side. Crackly outside, molten manners inside."},
+  {id:"ostras",  cat:"pintxos", name:"Ostras asadas", price:18, tags:["gf"], desc:"Kumamoto oysters, half a minute over coals, green romesco, finger lime. Six of them; no odd numbers."},
+  {id:"orejas",  cat:"pintxos", name:"Orejas crujientes", price:10, tags:[], desc:"Pig ears fried to glass, salsa verde, lime. The dish people come back for and pretend they didn't."},
+  {id:"txangurro",cat:"pintxos", name:"Txangurro en tostada", price:17, tags:[], desc:"Spider crab folded with brandy and chilli, melted over grilled bread. Bilbao's favourite argument."},
+  {id:"alcachofas",cat:"pintxos", name:"Alcachofas a las brasas", price:13, tags:["v","gf"], desc:"Ember-seared artichoke hearts, lemon, smoked olive oil, aged Manchego shaved over the top."},
+  {id:"aceitunas",cat:"pintxos", name:"Aceitunas & almendras", price:6, tags:["v","gf"], desc:"Castelvetrano olives warmed with orange peel and Marcona almonds. The bowl empties itself."},
+  {id:"puerros", cat:"garden", name:"Puerros en ceniza", price:12, tags:["vg"], desc:"Whole leeks buried in ash until they surrender, romesco, toasted hazelnut. The quiet signature."},
+  {id:"zanahorias",cat:"garden", name:"Zanahorias al romero", price:11, tags:["v","gf"], desc:"Ash-roasted carrots, harissa yoghurt, carrot-top salsa, honey from the rooftop hives."},
+  {id:"repollo", cat:"garden", name:"Repollo braseado", price:14, tags:[], desc:"A cabbage wedge charred hard, then steamed soft in cider; anchovy butter, rye crumb. Cabbage, but with a past."},
+  {id:"berenjenas",cat:"garden", name:"Berenjenas al humo", price:13, tags:["vg","gf"], desc:"Fire-smoked eggplant, tahini, pomegranate, mint. All the smoke without the meat."},
+  {id:"pave",    cat:"garden", name:"Pavé de patata", price:10, tags:["v","gf"], desc:"Potato pavé layered for a day, crisped in olive oil, rosemary drippings. Nothing green. No apologies."},
+  {id:"tomates", cat:"garden", name:"Tomates asados", price:12, tags:["v","gf"], desc:"Slow-roasted heirloom tomatoes, whipped sheep's ricotta, basil oil, pearls of sherry."},
+  {id:"chuleta", cat:"fire", name:"Chuletón de vaca", price:58, tags:["gf"], desc:"Forty days dry-aged, carved off the bone at the table, ember salt, bone-marrow butter. Nine hundred grams of opinion."},
+  {id:"lubina",  cat:"fire", name:"Lubina entera", price:34, tags:["gf"], desc:"Whole branzino over vine cuttings, fennel and orange salad, salsa verde. For two — or one person with plans."},
+  {id:"presa",   cat:"fire", name:"Presa ibérica", price:36, tags:["gf"], desc:"Ibérico pork shoulder steak, fast over oak, mojo verde, charred garlic in its skin."},
+  {id:"pollo",   cat:"fire", name:"Pollo al ast", price:29, tags:[], desc:"Half chicken on the vertical spit, lemon and thyme drippings caught in pan bread."},
+  {id:"cordero", cat:"fire", name:"Costillas de cordero", price:44, tags:["gf"], desc:"Rack of lamb hung over cherry wood, mint chimichurri, burnt lemon."},
+  {id:"paella",  cat:"fire", name:"Paella de socarrat", price:26, tags:["gf"], desc:"Wood-fired paella, squid, clams, saffron, and the crackly bottom fought over. Twenty minutes — worth every one."},
+  {id:"setas",   cat:"fire", name:"Arroces de setas", price:22, tags:["v","gf"], desc:"Bomba rice, smoked forest mushrooms, truffle butter, aged parmesan."},
+  {id:"chipirones",cat:"fire", name:"Chipirones encebollados", price:19, tags:[], desc:"Small squid sweated with sweet onions until they melt, squid-ink toasts for the sauce."},
+  {id:"secreto", cat:"fire", name:"Secreto ibérico", price:33, tags:["gf"], desc:"The 'secret' cut of Ibérico pork, sliced thin, lemon and pimentón. The name refers to the cut, not the menu."},
+  {id:"tarta",   cat:"sweets", name:"Tarta de queso quemada", price:11, tags:["v"], desc:"Burnt Basque cheesecake — shaved top and all — cherry mosto, smoked cream."},
+  {id:"torrijas",cat:"sweets", name:"Torrijas", price:10, tags:["v"], desc:"Wood-fired French toast soaked in milk and sherry, caramelised, cold cream. Basque for 'breakfast at 10 pm'."},
+  {id:"chocolate",cat:"sweets", name:"Chocolate, aceite y sal", price:12, tags:["v"], desc:"Seventy-percent chocolate mousse, olive oil, smoked salt, brioche crumb."},
+  {id:"flan",    cat:"sweets", name:"Flan de naranja", price:9, tags:["v","gf"], desc:"Orange flan with burnt honey and candied peel. Wobbles on principle."},
+  {id:"arrozdulce",cat:"sweets", name:"Arroz con leche", price:8, tags:["v","gf"], desc:"Slow rice pudding with a burnt cinnamon top — cold spooned on hot."},
+  {id:"queso",   cat:"sweets", name:"Queso, membrillo & nueces", price:10, tags:["v","gf"], desc:"Manchego curado, quince paste, walnuts. Dessert's grandmother, and still the best argument."},
+  {id:"vermut",  cat:"drinks", name:"Vermut de la casa", price:8, tags:[], desc:"Our vermouth on tap — orange, cinchona, a hint of oak smoke. Olive in, orange twist out."},
+  {id:"ceniza",  cat:"drinks", name:"Ceniza", price:14, tags:[], desc:"Mezcal, charred-pineapple syrup, lime, black salt. Tastes like the hearth after hours."},
+  {id:"rio",     cat:"drinks", name:"El Río", price:13, tags:[], desc:"Gin, Douglas-fir tincture, white vermouth, lemon — the forest across the river, iced."},
+  {id:"sidra",   cat:"drinks", name:"Sidra natural", price:9, tags:[], desc:"Dry Asturian cider, poured from a height into a narrow glass. Two fingers, standing up."},
+  {id:"txakoli", cat:"drinks", name:"Txakoli Getariako", price:12, tags:[], desc:"Green apple and sea spray, poured long from height. By the glass, always."},
+  {id:"vinos",   cat:"drinks", name:"Vinos por copa", price:11, tags:[], desc:"Rioja crianza, Rueda verdejo, Priorat — ask what's open tonight, it changes with the leftovers of good weeks."},
+  {id:"carajillo",cat:"drinks", name:"Carajillo", price:7, tags:["v"], desc:"Espresso threatened with brandy, poured hot and short. The Spanish nightcap."},
+  {id:"humofino",cat:"drinks", name:"Humo fino", price:6, tags:["vg","gf"], desc:"Zero-proof: smoked grape must, tonic, rosemary. All the fire, none of the fog."},
+  {id:"pencha",  cat:"sweets", name:"La Pencha del Cocinero", price:0, tags:[], secret:true, desc:"The cook's snack — whichever cut the fire keeper liked best tonight, sliced thin, dressed in its own drippings, with bread. Ask for it by name. It's a gift, and it's not always sweet."}
+];
+var SYNS={
+  burnt:["quemada","char","charred","burnt"], burn:["quemada","charred"],
+  spicy:["chilli","harissa","picante","brandy"], octopus:["pulpo"], squid:["chipirones"],
+  steak:["chuleton","ribeye","beef","presa"], beef:["chuleton","ribeye"],
+  fish:["lubina","branzino","txangurro","oyster"], crab:["txangurro"],
+  pork:["iberico","presa","chorizo","orejas"], chicken:["pollo"],
+  cheese:["queso","idiazabal","manchego","tarta"], smoke:["ahumado","humo","smoked","ceniza"],
+  sweet:["flan","torrijas","chocolate","membrillo"], wine:["vino","rioja","txakoli","vermouth","vermut"],
+  coffee:["carajillo","espresso"], cider:["sidra"], pepper:["padrones","pimenton","guindilla"],
+  vegan:["vg"], gluten:["gf"], eggplant:["berenjenas"], leek:["puerros","croquetas"],
+  cake:["tarta","queso"], vegetables:["garden","verduras","puerros","repollo","zanahorias","alcachofas"]
+};
+
+/* ================= menu state & render ================= */
+var filters={cat:"all", diets:{}, q:""};
+var unlocked=!!store.get("fl.secret.v1",false);
+
+function haystackOf(it){
+  var s=it.name+" "+it.desc+" "+it.tags.join(" ");
+  return fold(s);
+}
+function termMatch(term,hay){
+  if(hay.indexOf(term)>=0) return true;
+  var syns=SYNS[term];
+  if(syns){ for(var i=0;i<syns.length;i++){ if(hay.indexOf(syns[i])>=0) return true; } }
+  return false;
+}
+function itemPass(it){
+  var d;
+  for(d in filters.diets){ if(filters.diets[d]&&it.tags.indexOf(d)<0) return false; }
+  if(filters.q){
+    var hay=haystackOf(it), terms=fold(filters.q).split(/\s+/), i,t;
+    for(i=0;i<terms.length;i++){ t=terms[i]; if(t&&!termMatch(t,hay)) return false; }
+  }
+  return true;
+}
+function visibleMenu(){
+  var out=[],i;
+  for(i=0;i<MENU.length;i++){
+    var it=MENU[i];
+    if(it.secret&&!unlocked) continue;
+    if(filters.cat!=="all"&&it.cat!==filters.cat) continue;
+    if(itemPass(it)) out.push(it);
+  }
+  return out;
+}
+function tagHTML(it){
+  if(!it.tags.length) return "";
+  var h="",i;
+  for(i=0;i<it.tags.length;i++){
+    var t=it.tags[i];
+    h+='<span class="tag tag-'+t+'" title="'+TAGLBL[t]+'">'+t.toUpperCase()+'</span>';
+  }
+  return '<p class="mi-tags">'+h+'</p>';
+}
+function itemHTML(it){
+  return '<article class="mi'+(it.secret?' mi-secret':'')+'" data-id="'+it.id+'">'+
+    '<div class="mi-top"><h3 class="mi-name">'+esc(it.name)+(it.secret?'<svg class="spark" aria-hidden="true"><use href="#i-spark"/></svg>':'')+
+    '</h3><span class="lead" aria-hidden="true"></span><span class="mi-price">'+money(it.price)+'</span>'+
+    '<button type="button" class="mi-add" data-add="'+it.id+'" aria-label="Add '+esc(it.name)+' to your order"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg></button></div>'+
+    '<p class="mi-desc">'+esc(it.desc)+'</p>'+tagHTML(it)+'</article>';
+}
+function renderMenu(){
+  var list=$("#menuList"), count=$("#menuCount");
+  if(!list) return;
+  var items=visibleMenu();
+  var active=filters.cat!=="all"||filters.q||Object.keys(filters.diets).some(function(k){return filters.diets[k]});
+  var html="", total=0, c,i,it;
+  if(filters.cat==="all"){
+    for(c=0;c<CATS.length;c++){
+      var cat=CATS[c], rows=[];
+      for(i=0;i<items.length;i++){ if(items[i].cat===cat.id){ rows.push(items[i]); } }
+      if(!rows.length) continue;
+      total+=rows.length;
+      html+='<section class="mgroup"><header class="g-head"><svg class="ic" aria-hidden="true"><use href="#'+cat.icon+'"/></svg><h3>'+cat.label+'</h3><span class="g-count">'+rows.length+'</span></header>';
+      for(i=0;i<rows.length;i++) html+=itemHTML(rows[i]);
+      html+='</section>';
+    }
+    var secretRows=items.filter(function(x){return x.secret});
+    if(secretRows.length){
+      total+=secretRows.length;
+      html+='<section class="mgroup"><header class="g-head"><svg class="ic" aria-hidden="true"><use href="#i-spark"/></svg><h3>Off the menu</h3><span class="g-count">✦</span></header>';
+      for(i=0;i<secretRows.length;i++) html+=itemHTML(secretRows[i]);
+      html+='</section>';
+    }
+  }else{
+    for(i=0;i<items.length;i++) total++;
+    for(i=0;i<items.length;i++) html+=itemHTML(items[i]);
+  }
+  if(!total){
+    html='<div class="menu-empty"><p>Nothing by that name tonight.</p><p class="dim">Try “pulpo”, “burnt” or “smoke” — or ask the room; the fire keeper knows more than the menu does.</p><button type="button" class="btn" id="clearFilters">Clear the search</button></div>';
+  }
+  list.innerHTML=html;
+  if(count) count.textContent = total ? (active? total+(total===1?" dish matches":" dishes match") : total+" dishes tonight") : "";
+}
+function clearFilters(){
+  filters={cat:"all", diets:{}, q:""};
+  var si=$("#menuSearch"); if(si) si.value="";
+  var sc=$("#searchClear"); if(sc) sc.classList.remove("show");
+  $$("#catChips .chip").forEach(function(ch){ ch.classList.toggle("on", ch.getAttribute("data-cat")==="all"); });
+  $$("#dietChips .chip").forEach(function(ch){ ch.classList.remove("on"); ch.setAttribute("aria-pressed","false"); });
+  renderMenu();
+}
+
+/* ================= basket ================= */
+var basket={}; /* id -> qty */
+var MAX_QTY=12, MAX_ITEMS=30;
+(function(){ var saved=store.get("fl.basket.v1",{}), k;
+  for(k in saved){ if(saved.hasOwnProperty(k)){ var it=findItem(k); if(it&&saved[k]>0) basket[k]=clamp(Math.floor(saved[k]),1,MAX_QTY); } }
+})();
+function findItem(id){ for(var i=0;i<MENU.length;i++){ if(MENU[i].id===id) return MENU[i]; } return null; }
+function basketCount(){ var n=0,k; for(k in basket){ if(basket.hasOwnProperty(k)) n+=basket[k]; } return n; }
+function basketTotal(){ var t=0,k; for(k in basket){ if(basket.hasOwnProperty(k)){ var it=findItem(k); if(it) t+=it.price*basket[k]; } } return t; }
+function saveBasket(){ store.set("fl.basket.v1",basket); }
+function updateBadge(pop){
+  var b=$("#basketCount"); if(!b) return;
+  var n=basketCount();
+  b.textContent=n>99?"99+":String(n);
+  b.classList.toggle("show",n>0);
+  if(pop&&n>0){ b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop"); }
+}
+function addToBasket(id,quiet){
+  var it=findItem(id); if(!it) return;
+  if(it.secret&&!unlocked) return;
+  var cur=basket[id]||0;
+  if(basketCount()>=MAX_ITEMS){ toast("Even we have one hearth — that's a full order."); return; }
+  if(cur>=MAX_QTY){ toast("That's all the hearth will allow for one dish."); return; }
+  basket[id]=cur+1; saveBasket(); updateBadge(true); renderBasket();
+  if(!quiet) toast("Added — "+it.name+" is on the plank.");
+}
+function setQty(id,q){
+  if(q<=0){ delete basket[id]; } else { basket[id]=clamp(Math.floor(q),1,MAX_QTY); }
+  saveBasket(); updateBadge(false); renderBasket();
+}
+function renderBasket(){
+  var lines=$("#basketLines"), empty=$("#drawerEmpty"), wrap=$("#orderFormWrap"), foot=$("#drawerFoot");
+  var done=$("#orderDone"); if(!lines) return;
+  var k, keys=[];
+  for(k in basket){ if(basket.hasOwnProperty(k)) keys.push(k); }
+  if(!keys.length){
+    if(done&&done.style.display!=="none") return; /* keep the confirmation view up */
+    lines.style.display="none"; if(empty) empty.style.display="";
+    if(wrap) wrap.style.display="none"; if(foot) foot.style.display="none";
+    return;
+  }
+  if(empty) empty.style.display="none";
+  if(done&&done.style.display!=="none") return;
+  var html="",i;
+  keys.sort(function(a,b){ var ia=findItem(a),ib=findItem(b); return (ia&&ib)?(MENU.indexOf(ia)-MENU.indexOf(ib)):0; });
+  for(i=0;i<keys.length;i++){
+    var it=findItem(keys[i]); if(!it) continue;
+    var q=basket[keys[i]];
+    html+='<div class="b-line" data-id="'+it.id+'">'+
+      '<div class="b-info"><p class="b-name">'+esc(it.name)+'</p><p class="b-each">'+money(it.price)+' each'+(it.secret?' · ask by name':'')+'</p></div>'+
+      '<div class="qty"><button type="button" class="qty-btn" data-dec="'+it.id+'" aria-label="One less '+esc(it.name)+'"><svg class="ic" aria-hidden="true"><use href="#i-minus"/></svg></button><span class="qty-num">'+q+'</span><button type="button" class="qty-btn" data-inc="'+it.id+'" aria-label="One more '+esc(it.name)+'"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg></button></div>'+
+      '<span class="b-price">'+(it.price>0?("$"+(it.price*q%1?(it.price*q).toFixed(2):String(it.price*q))):"gift")+'</span>'+
+      '<button type="button" class="b-x" data-del="'+it.id+'" aria-label="Remove '+esc(it.name)+'"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button></div>';
+  }
+  lines.innerHTML=html;
+  lines.style.display="";
+  if(wrap){ wrap.style.display="block"; wrap.style.marginTop="22px"; }
+  if(foot) foot.style.display="";
+  var sub=$("#basketSub"); if(sub) sub.textContent="$"+basketTotal().toFixed(2);
+  var ot=$("#orderTotal"); if(ot) ot.textContent="$"+basketTotal().toFixed(2);
+  buildPickupOptions();
+}
+function flashAdd(id){
+  $$('[data-add="'+id+'"]').forEach(function(btn){
+    btn.classList.add("added");
+    var u=btn.querySelector("use");
+    if(u) u.setAttribute("href","#i-check");
+    setTimeout(function(){ btn.classList.remove("added"); if(u) u.setAttribute("href","#i-plus"); },900);
+  });
+}
+
+/* drawer open/close */
+var lastFocus=null;
+function openDrawer(){
+  var d=$("#drawer"), bd=$("#backdrop");
+  if(!d) return;
+  lastFocus=document.activeElement;
+  renderBasket();
+  d.hidden=false;
+  void d.offsetWidth; /* force layout so the slide-in transition always plays */
+  d.classList.add("open");
+  if(bd) bd.classList.add("show");
+  document.body.classList.add("lock");
+  var closeBtn=$("#drawerClose"); if(closeBtn) closeBtn.focus();
+}
+function closeDrawer(){
+  var d=$("#drawer"), bd=$("#backdrop");
+  if(!d||d.hidden) return;
+  d.classList.remove("open"); if(bd) bd.classList.remove("show");
+  document.body.classList.remove("lock");
+  setTimeout(function(){ d.hidden=true; },420);
+  if(lastFocus&&lastFocus.focus) lastFocus.focus();
+}
+
+/* pickup options */
+var pickupPick={};
+function buildPickupOptions(){
+  var sel=$("#pickupSel"); if(!sel) return;
+  var opts=[], now=new Date(), d,i;
+  for(d=new Date(),i=0; i<8&&opts.length<16; i++, d.setDate(d.getDate()+1), d.setHours(0,0,0,0)){
+    var iso=localISO(d), dow=d.getDay(), ws=windowsFor(iso,dow);
+    if(!ws) continue;
+    for(var wi=0; wi<ws.length; wi++){
+      var w=ws[wi], o=minsOf(w[0]), cl=minsOf(w[1]);
+      if(Math.floor(o/60)<16) continue; /* dinner service only for pickup */
+      var start=o+45, end=cl-45;
+      for(var t=start; t<=end && opts.length<16; t+=30){
+        if(i===0 && t<nowMins+40) continue;
+        var hh=Math.floor(t/60), mm=t%60;
+        var label=(i===0?"Today":(i===1?"Tomorrow":DOW_NAMES[dow].slice(0,3)+" "+pad2(d.getMonth()+1)+"/"+pad2(d.getDate())))+" · "+(hh%12===0?12:hh%12)+(mm?":"+pad2(mm):"")+(hh>=12?" pm":" am");
+        opts.push({label:label, iso:iso, t:hh+":"+pad2(mm)});
+      }
+    }
+  }
+  if(!opts.length){
+    sel.innerHTML='<option value="">— pre-orders pause until we open —</option>';
+    pickupPick={};
+    return;
+  }
+  var html="", j;
+  for(j=0;j<opts.length;j++) html+='<option value="'+j+'">'+esc(opts[j].label)+'</option>';
+  var prevVal=sel.value, prevLabel=(pickupPick._opts&&pickupPick._opts[+prevVal])?pickupPick._opts[+prevVal].label:null;
+  sel.innerHTML=html;
+  pickupPick=opts[0]; pickupPick._opts=opts;
+  var keep=0;
+  if(prevLabel){ for(j=0;j<opts.length;j++){ if(opts[j].label===prevLabel){ keep=j; break; } } }
+  sel.value=String(keep);
+}
+function pickupChoice(){
+  var sel=$("#pickupSel"); if(!sel||!pickupPick._opts) return null;
+  var i=parseInt(sel.value,10);
+  if(isNaN(i)||!pickupPick._opts[i]) return null;
+  var o=pickupPick._opts[i];
+  return {iso:o.iso, t:o.t, label:o.label};
+}
+
+/* ================= reservations ================= */
+var res={party:2, iso:null, time:null};
+function makeCode(seed,pre){
+  var n=Math.floor(hash(seed)*1679616), s=n.toString(36).toUpperCase();
+  while(s.length<4) s="0"+s;
+  return (pre||"FL-")+s;
+}
+function dateLabel(d){ return DOW_NAMES[d.getDay()].slice(0,3)+" "+d.getDate(); }
+function seatingsFor(iso,dow){
+  var ws=windowsFor(iso,dow); if(!ws) return [];
+  var out=[],i,w,o,cl,last;
+  for(i=0;i<ws.length;i++){
+    w=ws[i]; o=minsOf(w[0]); cl=minsOf(w[1]);
+    last=cl-((cl-o)<=180?75:100);
+    for(var t=o;t<=last;t+=15){
+      out.push(pad2(Math.floor(t/60))+":"+pad2(t%60));
+    }
+  }
+  return out;
+}
+function isFull(iso,t,party){
+  var m=minsOf(t), hr=m/60;
+  var prime=hr>=18.5&&hr<=20.5;
+  var th=prime?0.55:0.8;
+  if(party>=5) th-=0.08;
+  if(party>=7) th-=0.12;
+  if(t===firstSeat(iso)) return false;
+  return hash(iso+"|"+t+"|"+party)>th;
+}
+function firstSeat(iso){
+  var d=isoDate(iso), list=seatingsFor(iso,d.getDay());
+  return list.length?list[0]:"";
+}
+function isoDate(iso){ var p=iso.split("-"); return new Date(+p[0],+p[1]-1,+p[2]); }
+function buildDates(){
+  var out=[],d,i;
+  for(d=new Date(),d.setHours(0,0,0,0), i=0;i<21;i++, d.setDate(d.getDate()+1)){
+    var iso=localISO(d), sp=SPECIAL[iso], ws=windowsFor(iso,d.getDay());
+    out.push({iso:iso, dow:d.getDay(), open:!!ws, sp:sp||null, dowL:DOW_NAMES[d.getDay()].slice(0,3), num:d.getDate(), mon:d.toLocaleDateString("en-US",{month:"short"})});
+  }
+  return out;
+}
+var DATES=buildDates();
+function renderDates(){
+  var strip=$("#dateStrip"); if(!strip) return;
+  var html="",i;
+  for(i=0;i<DATES.length;i++){
+    var d=DATES[i], why;
+    if(!d.open) why = d.sp&&d.sp.note ? d.sp.note : "Monday — the hearth rests";
+    html+='<button type="button" class="date-chip'+(res.iso===d.iso?' on':'')+'" data-iso="'+d.iso+'" role="option" aria-selected="'+(res.iso===d.iso)+'"'+(d.open?'':' disabled title="'+esc(why)+'"')+
+      '><span class="d-dow">'+d.dowL+'</span><span class="d-num">'+d.num+'</span><span class="d-mon">'+d.mon+'</span></button>';
+  }
+  strip.innerHTML=html;
+}
+function renderTimes(){
+  var grid=$("#timeGrid"), note=$("#timeNote");
+  if(!grid) return;
+  if(res.party>=9){ grid.innerHTML=""; if(note) note.innerHTML="Long tables for nine or more go through the phone — Marta sorts them out and the fire keeper builds a menu."; return; }
+  if(!res.iso){ grid.innerHTML=""; if(note) note.textContent="Pick a night first — the book fills on weekends."; return; }
+  var times=seatingsFor(res.iso,isoDate(res.iso).getDay());
+  if(!times.length){ grid.innerHTML=""; if(note) note.textContent="No seatings that day — the hearth rests."; return; }
+  var html="", open=0, i;
+  for(i=0;i<times.length;i++){
+    var t=times[i];
+    var past=res.iso===todayISO && minsOf(t)<nowMins+45;
+    var full=isFull(res.iso,t,res.party);
+    if(!past&&!full) open++;
+    html+='<button type="button" class="time-btn'+(full?' full':'')+(res.time===t?' on':'')+'" data-time="'+t+'"'+((past||full)?' disabled':'')+' aria-label="'+fmtTime(t)+(full?", fully booked":", available")+'">'+fmtTime(t)+'</button>';
+  }
+  grid.innerHTML=html;
+  if(note){
+    if(!open) note.innerHTML="That night filled early — walk in for a counter stool, or try another night.";
+    else if(res.iso===todayISO) note.innerHTML="<b>"+open+"</b> seatings left tonight — struck times are taken, dimmed ones have passed.";
+    else note.innerHTML="<b>"+open+"</b> of "+times.length+" seatings open. Ember means held, struck means full.";
+  }
+}
+function setParty(p){
+  res.party=p;
+  if(res.iso&&res.time){
+    if(isFull(res.iso,res.time,p)||(res.iso===todayISO&&minsOf(res.time)<nowMins+45)){ res.time=null; }
+  }
+  $$("#partyChips .chip").forEach(function(ch){ ch.classList.toggle("on", +ch.getAttribute("data-party")===p); });
+  var note=$("#partyNote"); if(note) note.style.display=p>=9?"":"none";
+  renderTimes();
+}
+function setResDate(iso){
+  res.iso=iso; res.time=null;
+  $$("#dateStrip .date-chip").forEach(function(ch){ var on=ch.getAttribute("data-iso")===iso; ch.classList.toggle("on",on); ch.setAttribute("aria-selected",String(on)); });
+  renderTimes();
+}
+function resSummaryText(r){
+  var d=isoDate(r.iso);
+  var ds=DOW_NAMES[d.getDay()]+", "+d.toLocaleDateString("en-US",{month:"short"})+" "+d.getDate();
+  return r.party+" "+(r.party===1?"guest":"guests")+" · "+ds+" · "+fmtTime(r.t);
+}
+function showResDone(r){
+  $("#resForm").style.display="none";
+  var done=$("#resDone"); done.style.display="";
+  $("#resSummary").textContent=resSummaryText(r)+" · under "+r.name;
+  $("#resCode").textContent=r.code;
+  done.scrollIntoView({behavior:REDUCED?"auto":"smooth", block:"center"});
+}
+function showResForm(){
+  $("#resForm").style.display="";
+  $("#resDone").style.display="none";
+}
+function refreshBanner(){
+  var b=$("#resBanner"), r=store.get("fl.resv.v1",null);
+  if(!b) return;
+  if(r&&r.iso&&r.iso>=todayISO&&r.code){
+    $("#resBannerText").innerHTML="You have a table — <b>"+esc(resSummaryText(r))+"</b> · under "+esc(r.name)+" · code <b>"+esc(r.code)+"</b>";
+    b.style.display="";
+  }else{
+    b.style.display="none";
+  }
+}
+function cancelReservation(){
+  store.del("fl.resv.v1");
+  refreshBanner();
+  showResForm();
+  toast("The table's released. The fire keeps no grudges.");
+}
+
+/* ================= visit: hours & specials ================= */
+function fmtRange(w){ return fmtTime(w[0])+" – "+fmtTime(w[1]); }
+function renderHours(){
+  var el=$("#hoursTable"); if(!el) return;
+  var order=[1,2,3,4,5,6,0], html="";
+  order.forEach(function(dow){
+    var ws;
+    if(dow===todayDow){ ws=windowsFor(todayISO,dow); } /* today's row honours special nights */
+    else{ ws=HOURS[dow]; }
+    var wtxt;
+    if(!ws){ wtxt=dow===todayDow?"Closed — special night":"Closed"; }
+    else{ wtxt=ws.map(fmtRange).join(" · "); }
+    var label=DOW_NAMES[dow].slice(0,3);
+    html+='<div class="hrow'+(dow===todayDow?' today':'')+'"><span class="d">'+label+(dow===todayDow?' · today':'')+'</span><span class="w">'+wtxt+'</span>'+(dow===todayDow?'<span class="now">●</span>':'<span></span>')+'</div>';
+  });
+  el.innerHTML=html;
+}
+function renderSpecial(){
+  var el=$("#specialList"); if(!el) return;
+  var keys=Object.keys(SPECIAL).sort(), html="";
+  keys.forEach(function(iso){
+    var sp=SPECIAL[iso], d=isoDate(iso);
+    var ds=DOW_NAMES[d.getDay()].slice(0,3)+" "+d.getDate()+" "+d.toLocaleDateString("en-US",{month:"short"});
+    var what=sp.closed?"Closed":("Open "+sp.w.map(fmtRange).join(" · "));
+    html+='<div class="spec-row"><b>'+ds+'</b><span>'+esc(what)+' — '+esc(sp.note)+'</span></div>';
+  });
+  el.innerHTML=html;
+}
+
+/* ================= ticker ================= */
+function buildTicker(){
+  var track=$("#tickerTrack"); if(!track) return;
+  var items=["Whole lubina over vine cuttings","40-day chuletón carved at the table","Leeks buried in ash","Vermut on tap since four","Burnt cheesecake, cherry mosto","Sidra poured from height","Txakoli by the glass","Six stools kept for walk-ins"];
+  var half='<b>TONIGHT —</b>'+items.map(function(s){return '<span>'+s+'</span><span class="tk-sep">✦</span>'}).join("");
+  track.innerHTML='<div class="ticker-half">'+half+'</div><div class="ticker-half" aria-hidden="true">'+half+'</div>';
+}
+
+/* ================= sound ================= */
+var SFX=(function(){
+  var ctx=null, master=null, NB=null, bed=null, timer=null, started=false, enabled=false;
+  function ensure(){
+    if(ctx) return true;
+    try{
+      var AC=window.AudioContext||window.webkitAudioContext;
+      if(!AC) return false;
+      ctx=new AC();
+      master=ctx.createGain(); master.gain.value=0; master.connect(ctx.destination);
+    }catch(e){ ctx=null; return false; }
+    return true;
+  }
+  function noiseBuf(){
+    var len=Math.floor(ctx.sampleRate*1.5), b=ctx.createBuffer(1,len,ctx.sampleRate), d=b.getChannelData(0), i;
+    for(i=0;i<len;i++) d[i]=Math.random()*2-1;
+    return b;
+  }
+  function bedStart(){
+    try{
+      var s=ctx.createBufferSource(); s.buffer=NB; s.loop=true;
+      var f=ctx.createBiquadFilter(); f.type="lowpass"; f.frequency.value=480;
+      var g=ctx.createGain(); g.gain.value=.025;
+      s.connect(f); f.connect(g); g.connect(master); s.start();
+      bed={s:s,g:g};
+    }catch(e){}
+  }
+  function pop(){
+    if(!ctx||!enabled) return;
+    try{
+      var t0=ctx.currentTime, s=ctx.createBufferSource(); s.buffer=NB;
+      var f=ctx.createBiquadFilter(); f.type="bandpass"; f.frequency.value=700+Math.random()*2800; f.Q.value=1+Math.random()*4;
+      var g=ctx.createGain(); var dur=.02+Math.random()*.09, v=.03+Math.random()*.2;
+      g.gain.setValueAtTime(v,t0); g.gain.exponentialRampToValueAtTime(.0001,t0+dur);
+      s.connect(f); f.connect(g); g.connect(master);
+      s.start(t0); s.stop(t0+dur+.03);
+    }catch(e){}
+    timer=setTimeout(pop,60+Math.random()*520);
+  }
+  function start(){
+    if(!ensure()) return;
+    try{ if(ctx.resume) ctx.resume(); }catch(e){}
+    if(!started){ NB=noiseBuf(); bedStart(); started=true; }
+    try{ master.gain.setTargetAtTime(.85,ctx.currentTime,.3); }catch(e){}
+    enabled=true; clearTimeout(timer); timer=setTimeout(pop,240);
+  }
+  function stop(){
+    if(!ctx) return;
+    try{ master.gain.setTargetAtTime(0,ctx.currentTime,.12); }catch(e){}
+    enabled=false; clearTimeout(timer);
+  }
+  function kick(){ if(ctx&&enabled&&ctx.state==="suspended"){ try{ctx.resume();}catch(e){} } }
+  function blip(f){
+    if(!ctx||!enabled) return;
+    try{
+      var t0=ctx.currentTime, o=ctx.createOscillator(); o.type="sine";
+      o.frequency.setValueAtTime(f||1320,t0); o.frequency.exponentialRampToValueAtTime((f||1320)*.62,t0+.09);
+      var g=ctx.createGain(); g.gain.setValueAtTime(.05,t0); g.gain.exponentialRampToValueAtTime(.0001,t0+.13);
+      o.connect(g); g.connect(master); o.start(t0); o.stop(t0+.15);
+    }catch(e){}
+  }
+  function whoosh(){
+    if(!ctx||!enabled) return;
+    try{
+      var t0=ctx.currentTime, s=ctx.createBufferSource(); s.buffer=NB;
+      var f=ctx.createBiquadFilter(); f.type="bandpass"; f.Q.value=.8;
+      f.frequency.setValueAtTime(200,t0); f.frequency.exponentialRampToValueAtTime(2100,t0+.45);
+      var g=ctx.createGain(); g.gain.setValueAtTime(.0001,t0);
+      g.gain.exponentialRampToValueAtTime(.5,t0+.09); g.gain.exponentialRampToValueAtTime(.0001,t0+.6);
+      s.connect(f); f.connect(g); g.connect(master); s.start(t0); s.stop(t0+.7);
+    }catch(e){}
+  }
+  function pauseForHidden(){ if(enabled){ clearTimeout(timer); } }
+  function resumeForVisible(){ if(enabled&&started){ clearTimeout(timer); timer=setTimeout(pop,300); } }
+  return {start:start, stop:stop, kick:kick, blip:blip, whoosh:whoosh,
+    get on(){ return enabled; }, pauseForHidden:pauseForHidden, resumeForVisible:resumeForVisible};
+})();
+var soundBtn=$("#soundBtn");
+function setSound(on){
+  if(on) SFX.start(); else SFX.stop();
+  store.set("fl.sound",on);
+  if(soundBtn){
+    soundBtn.setAttribute("aria-pressed",on?"true":"false");
+    soundBtn.setAttribute("aria-label",on?"Turn hearth sounds off":"Turn hearth sounds on");
+    var u=$("#soundIco"); if(u) u.setAttribute("href",on?"#i-vol":"#i-vol-off");
+  }
+}
+if(soundBtn) soundBtn.addEventListener("click",function(){ setSound(!SFX.on); if(SFX.on) toast("The hearth is talking now — crackle at your own risk."); });
+document.addEventListener("pointerdown",function(){ if(store.get("fl.sound",false)&&!SFX.on){ setSound(true); } else { SFX.kick(); } },{once:false});
+
+/* ================= canvas fire ================= */
+var Fire=(function(){
+  var cv=$("#heroCanvas"), ctx=null;
+  var api={tick:function(){}, setStoke:function(){}, resize:function(){}, burst:function(){}, staticDraw:function(){}, heat:function(){return 0}, wind:function(){}};
+  if(!cv) return api;
+  try{ ctx=cv.getContext("2d",{alpha:false}); }catch(e){ ctx=null; }
+  if(!ctx) return api;
+  var W=300,H=400,DPR=1,hy=320,hx0=60,hw=180;
+  var heat=.34, stoking=false, boost=0, wind=0, windT=0, t=0, spawnAcc=0, onscreen=true;
+  var COARSE=window.matchMedia&&window.matchMedia("(pointer: coarse)").matches;
+  var PMAX=COARSE?110:190;
+  var pool=[], pc=0, i;
+  for(i=0;i<PMAX;i++) pool.push({on:false,x:0,y:0,vx:0,vy:0,s:1,max:1,life:0,ph:0});
+  var coals=[], smoke=[], SMAX=COARSE?4:7;
+  for(i=0;i<SMAX;i++) smoke.push({on:false,x:0,y:0,r:30,a:0,vy:0,ph:0});
+  var bgg=null, spr=null, off=null, octx=null, offH=260;
+  var blurOK=false;
+  try{ ctx.filter="blur(2px)"; blurOK=(ctx.filter==="blur(2px)"||ctx.filter==="blur(2px) "); ctx.filter="none"; }catch(e){ blurOK=false; }
+
+  spr=document.createElement("canvas"); spr.width=spr.height=64;
+  var sc=spr.getContext("2d");
+  if(sc){
+    var sg=sc.createRadialGradient(32,32,0,32,32,32);
+    sg.addColorStop(0,"#FFEDC0"); sg.addColorStop(.3,"rgba(255,170,70,.9)");
+    sg.addColorStop(.62,"rgba(255,90,20,.4)"); sg.addColorStop(1,"rgba(255,60,10,0)");
+    sc.fillStyle=sg; sc.fillRect(0,0,64,64);
+  }
+  off=document.createElement("canvas"); octx=off.getContext("2d");
+
+  function resize(){
+    var r=cv.getBoundingClientRect();
+    W=Math.max(300,Math.round(r.width||window.innerWidth));
+    H=Math.max(380,Math.round(r.height||600));
+    DPR=Math.min(1.75,window.devicePixelRatio||1);
+    cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    hy=Math.round(H*.8); hw=Math.min(W*.62,760); hx0=Math.round((W-hw)/2);
+    bgg=ctx.createLinearGradient(0,0,0,H);
+    bgg.addColorStop(0,"#0B0705"); bgg.addColorStop(.55,"#130C08"); bgg.addColorStop(1,"#1C1109");
+    off.width=Math.ceil(W*.5); off.height=offH;
+    coals=[];
+    for(var k=0;k<44;k++) coals.push({fx:Math.random(), fy:Math.random()*.14, r:1.6+Math.random()*3.4, ph:Math.random()*6.28});
+    ensureSeeded();
+    draw(0); /* always repaint after a resize — a throttled rAF may not beat the next paint */
+  }
+  function ensureSeeded(){
+    var alive=0,k;
+    for(k=0;k<PMAX;k++){ if(pool[k].on) alive++; }
+    if(alive>=12) return;
+    for(k=0;k<56;k++){
+      var p=pool[k];
+      p.on=true; p.x=hx0+Math.random()*hw; p.y=hy-Math.random()*220;
+      p.vx=(Math.random()-.5)*14; p.vy=-(30+Math.random()*70)*(.75+heat*.6);
+      p.s=.9+Math.random()*2; p.max=2.5+Math.random()*4.5; p.life=p.max*(.3+Math.random()*.4); p.ph=Math.random()*6.28;
+    }
+  }
+  function spawn(fast){
+    for(var k=0;k<PMAX;k++){
+      var p=pool[(pc+k)%PMAX];
+      if(!p.on){
+        pc=(pc+k+1)%PMAX;
+        p.on=true;
+        p.x=hx0+Math.random()*hw+wind*26;
+        p.y=hy-2-Math.random()*8;
+        p.vx=(Math.random()-.5)*18+wind*16;
+        p.vy=-(26+Math.random()*80)*(.75+heat*.6)*(fast?1.8:1);
+        p.s=(.8+Math.random()*2.4)*(fast?1.5:1);
+        p.max=2.5+Math.random()*4.5;
+        p.life=0; p.ph=Math.random()*6.283;
+        return;
+      }
+    }
+  }
+  function burst(n){ for(var k=0;k<n;k++) spawn(true); boost=Math.min(1,boost+.55); }
+  function tongues(){
+    var NT=9, step=hw/NT, arr=[], i;
+    for(i=0;i<NT;i++){
+      var bx=hx0+step*(i+.5)+Math.sin(t*.6+i*2.1)*6;
+      var hh=(40+((i*53)%3)*26)*(0.78+heat*.55)*(0.82+.18*Math.sin(t*1.9+i*1.7))+boost*18;
+      arr.push({x:bx, h:hh, w:step*.42, lean:wind*hh*.38+Math.sin(t*.8+i*1.3)*10});
+    }
+    return arr;
+  }
+  function drawFlames(){
+    if(!octx) return;
+    var top=hy-250;
+    octx.setTransform(1,0,0,1,0,0);
+    octx.clearRect(0,0,off.width,off.height);
+    octx.save();
+    octx.scale(.5,.5);
+    octx.translate(0,-top);
+    var arr=tongues(), i, T;
+    octx.globalCompositeOperation="source-over";
+    for(i=0;i<arr.length;i++){
+      T=arr[i];
+      var g=octx.createLinearGradient(0,hy,0,hy-T.h);
+      g.addColorStop(0,"rgba(255,150,60,.55)"); g.addColorStop(.55,"rgba(255,80,20,.24)"); g.addColorStop(1,"rgba(255,40,5,0)");
+      octx.fillStyle=g;
+      octx.beginPath();
+      octx.moveTo(T.x-T.w,hy+8);
+      octx.bezierCurveTo(T.x-T.w*.7,hy-T.h*.35,T.x+T.lean-5,hy-T.h*.75,T.x+T.lean,hy-T.h);
+      octx.bezierCurveTo(T.x+T.lean+5,hy-T.h*.75,T.x+T.w*.7,hy-T.h*.35,T.x+T.w,hy+8);
+      octx.closePath(); octx.fill();
+    }
+    for(i=0;i<arr.length;i++){
+      T=arr[i];
+      var h2=T.h*.52, w2=T.w*.5, l2=T.lean*1.12;
+      var g2=octx.createLinearGradient(0,hy,0,hy-h2);
+      g2.addColorStop(0,"rgba(255,225,150,.6)"); g2.addColorStop(1,"rgba(255,120,30,0)");
+      octx.fillStyle=g2;
+      octx.beginPath();
+      octx.moveTo(T.x-w2,hy+6);
+      octx.bezierCurveTo(T.x-w2*.6,hy-h2*.4,T.x+l2-3,hy-h2*.7,T.x+l2,hy-h2);
+      octx.bezierCurveTo(T.x+l2+3,hy-h2*.7,T.x+w2*.6,hy-h2*.4,T.x+w2,hy+6);
+      octx.closePath(); octx.fill();
+    }
+    octx.restore();
+    ctx.globalCompositeOperation="screen";
+    /* off canvas is half-scale: restore at 2× so flames land exactly where they were drawn */
+    if(blurOK){ ctx.filter="blur(12px)"; ctx.globalAlpha=.85; ctx.drawImage(off,0,top,W,offH*2); ctx.filter="none"; }
+    ctx.globalAlpha=.9;
+    ctx.drawImage(off,0,top,W,offH*2);
+    ctx.globalAlpha=1;
+    ctx.globalCompositeOperation="source-over";
+  }
+  function drawLogs(){
+    var logs=[[-70,-6,190,17,-8],[10,6,170,15,7],[95,-18,150,13,-18]], k;
+    for(k=0;k<logs.length;k++){
+      var L=logs[k];
+      ctx.save();
+      ctx.translate(W/2+L[0],hy+L[1]);
+      ctx.rotate(L[4]*Math.PI/180);
+      ctx.fillStyle="#19100A";
+      ctx.beginPath();
+      if(ctx.roundRect) ctx.roundRect(-L[2]/2,-L[3]/2,L[2],L[3],8); else ctx.rect(-L[2]/2,-L[3]/2,L[2],L[3]);
+      ctx.fill();
+      ctx.strokeStyle="rgba(255,110,40,"+(.18+.3*heat).toFixed(2)+")";
+      ctx.lineWidth=2;
+      ctx.beginPath();
+      ctx.moveTo(-L[2]/2+8,-L[3]/2);
+      ctx.lineTo(L[2]/2-8,-L[3]/2);
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+  function draw(dt){
+    ctx.globalCompositeOperation="source-over"; ctx.globalAlpha=1;
+    ctx.fillStyle=bgg; ctx.fillRect(0,0,W,H);
+    var gl=.16+.22*heat+boost*.4+.03*Math.sin(t*7.3)+.02*Math.sin(t*13.1);
+    ctx.globalCompositeOperation="lighter";
+    var rg=ctx.createRadialGradient(W/2,hy,10,W/2,hy,Math.max(W*.45,340));
+    rg.addColorStop(0,"rgba(255,110,30,"+Math.min(.62,gl).toFixed(3)+")");
+    rg.addColorStop(1,"rgba(255,60,10,0)");
+    ctx.fillStyle=rg; ctx.fillRect(0,0,W,H);
+    ctx.globalCompositeOperation="source-over";
+    var k,c;
+    for(k=0;k<coals.length;k++){
+      c=coals[k];
+      var ca=(.35+.65*(.5+.5*Math.sin(t*3+c.ph)))*(.45+heat*.75);
+      ctx.fillStyle="rgba(255,140,50,"+ca.toFixed(3)+")";
+      ctx.beginPath();
+      ctx.arc(hx0+c.fx*hw, hy-2+c.fy*40, c.r, 0, 6.283);
+      ctx.fill();
+    }
+    ctx.fillStyle="#0A0603"; ctx.fillRect(0,hy+12,W,Math.max(0,H-hy-12));
+    ctx.fillStyle="rgba(255,120,40,"+(.22+.3*heat).toFixed(2)+")";
+    ctx.fillRect(0,hy+10,W,2.5);
+    drawLogs();
+    drawFlames();
+    ctx.globalCompositeOperation="lighter";
+    for(k=0;k<PMAX;k++){
+      var p=pool[k];
+      if(!p.on) continue;
+      var fade=Math.min(1,p.life*3)*Math.max(0,1-p.life/p.max);
+      if(fade<=0) continue;
+      var al=fade*(.5+.5*Math.sin(t*11+p.ph*7));
+      var s=p.s*3.2;
+      ctx.globalAlpha=clamp(al,0,1);
+      ctx.drawImage(spr,p.x-s,p.y-s,s*2,s*2);
+    }
+    ctx.globalAlpha=1;
+    ctx.globalCompositeOperation="source-over";
+    for(k=0;k<smoke.length;k++){
+      var sm=smoke[k];
+      if(!sm.on) continue;
+      var sg2=ctx.createRadialGradient(sm.x,sm.y,0,sm.x,sm.y,sm.r);
+      sg2.addColorStop(0,"rgba(110,95,88,"+sm.a.toFixed(3)+")");
+      sg2.addColorStop(1,"rgba(110,95,88,0)");
+      ctx.fillStyle=sg2;
+      ctx.beginPath(); ctx.arc(sm.x,sm.y,sm.r,0,6.283); ctx.fill();
+    }
+  }
+  function tick(dt){
+    if(!onscreen||document.hidden) return;
+    t+=dt;
+    heat=clamp(heat+(stoking?dt*.5:-dt*.13),0,1);
+    boost=Math.max(0,boost-dt*1.2);
+    wind+=(windT-wind)*Math.min(1,dt*2.4);
+    spawnAcc+=dt*(15+heat*46+boost*60);
+    while(spawnAcc>1){ spawnAcc--; spawn(false); }
+    var k,p;
+    for(k=0;k<PMAX;k++){
+      p=pool[k];
+      if(!p.on) continue;
+      p.life+=dt;
+      p.vx+=(wind*30+Math.sin(t*2+p.ph)*12-p.vx)*dt*1.6;
+      p.vy-=dt*18;
+      p.x+=(p.vx+Math.sin(t*3+p.ph)*10)*dt;
+      p.y+=p.vy*dt;
+      if(p.life>p.max||p.y<-30||p.x<-40||p.x>W+40) p.on=false;
+    }
+    for(k=0;k<smoke.length;k++){
+      var sm=smoke[k];
+      if(!sm.on){
+        if(Math.random()<dt*.5){
+          sm.on=true; sm.x=hx0+Math.random()*hw; sm.y=hy-160-Math.random()*40;
+          sm.r=26+Math.random()*30; sm.a=.035+Math.random()*.04; sm.vy=-(14+Math.random()*10); sm.ph=0;
+        }
+        continue;
+      }
+      sm.y+=sm.vy*dt; sm.x+=wind*14*dt; sm.r+=dt*10; sm.a-=dt*.008;
+      if(sm.y<H*.12||sm.a<=.008) sm.on=false;
+    }
+    draw(dt);
+  }
+  function staticDraw(){
+    ensureSeeded();
+    draw(0);
+  }
+  function setStoke(on){ stoking=on; }
+  api={tick:tick, resize:resize, burst:burst, staticDraw:staticDraw, setStoke:setStoke,
+    heat:function(){return heat;},
+    wind:function(v){ windT=clamp(v,-1.2,1.2); }};
+  return api;
+})();
+
+/* hero interactions */
+var hero=$("#top"), stokeBtn=$("#stokeBtn"), stoking=false, stokeTaps=0;
+function setStoke(on){
+  if(stoking===on) return;
+  stoking=on;
+  Fire.setStoke(on);
+  if(stokeBtn) stokeBtn.classList.toggle("hot",on);
+  if(on){
+    SFX.whoosh();
+    if(REDUCED){ stokeTaps++; if(stokeTaps>=5) unlockSecret(); }
+  }
+}
+if(stokeBtn){
+  stokeBtn.addEventListener("pointerdown",function(e){ e.preventDefault(); setStoke(true); });
+  stokeBtn.addEventListener("keydown",function(e){ if((e.key===" "||e.key==="Enter")&&!e.repeat){ e.preventDefault(); setStoke(true); } });
+  stokeBtn.addEventListener("keyup",function(e){ if(e.key===" "||e.key==="Enter") setStoke(false); });
+}
+if(hero){
+  hero.addEventListener("pointermove",function(e){
+    var r=hero.getBoundingClientRect();
+    Fire.wind(((e.clientX-r.left)/Math.max(1,r.width)-.5)*2.2);
+  },{passive:true});
+  hero.addEventListener("pointerleave",function(){ Fire.wind(0); });
+  hero.addEventListener("pointerdown",function(e){
+    if(e.target.closest&&e.target.closest("a,button,input,select,textarea")) return;
+    setStoke(true);
+  });
+}
+window.addEventListener("pointerup",function(){ if(stoking) setStoke(false); });
+window.addEventListener("pointercancel",function(){ if(stoking) setStoke(false); });
+
+/* gauge */
+var gTemp=$("#gTemp"), gFill=$("#gFill"), gT=0;
+function updateGauge(){
+  var h=Fire.heat();
+  if(gTemp) gTemp.textContent=Math.round(240+h*240)+"°C";
+  if(gFill) gFill.style.width=(8+h*92).toFixed(0)+"%";
+}
+
+/* secret */
+function unlockSecret(){
+  if(unlocked) return;
+  unlocked=true;
+  store.set("fl.secret.v1",true);
+  Fire.burst(56);
+  var fl=$("#flash");
+  if(fl){ fl.classList.remove("go"); void fl.offsetWidth; fl.classList.add("go"); }
+  SFX.whoosh(); setTimeout(function(){ SFX.blip(1568); },260);
+  toast("✦ The hearth is yours — one dish just slipped onto the menu, off the record.");
+  renderMenu();
+}
+
+/* cursor */
+var Cursor=(function(){
+  if(!window.matchMedia||!window.matchMedia("(pointer: fine)").matches||REDUCED) return {tick:function(){}};
+  var dot=$("#cur"), ring=$("#curRing");
+  if(!dot||!ring) return {tick:function(){}};
+  var x=innerWidth/2,y=innerHeight/2,tx=x,ty=y,rx=x,ry=y,hot=false,live=false;
+  document.addEventListener("pointermove",function(e){
+    tx=e.clientX; ty=e.clientY;
+    if(!live){ live=true; x=tx; y=ty; rx=tx; ry=ty; }
+  },{passive:true});
+  document.addEventListener("mouseleave",function(){ live=false; });
+  document.addEventListener("mouseover",function(e){
+    hot=!!(e.target&&e.target.closest&&e.target.closest("a,button,input,select,textarea,label,[role=button]"));
+    ring.classList.toggle("hot",hot);
+  });
+  return {tick:function(dt){
+    if(!live) return;
+    x=lerp(x,tx,.24); y=lerp(y,ty,.24);
+    rx=lerp(rx,tx,.11); ry=lerp(ry,ty,.11);
+    dot.style.transform="translate("+x.toFixed(1)+"px,"+y.toFixed(1)+"px)";
+    ring.style.transform="translate("+rx.toFixed(1)+"px,"+ry.toFixed(1)+"px)";
+  }};
+})();
+
+/* reveal & nav spy */
+function setupReveal(){
+  var els=$$(".rv");
+  if(REDUCED||!("IntersectionObserver" in window)){ els.forEach(function(el){ el.classList.add("in"); }); return; }
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }
+    });
+  },{threshold:.12, rootMargin:"0px 0px -7% 0px"});
+  var vh=window.innerHeight||document.documentElement.clientHeight;
+  els.forEach(function(el){
+    var r=el.getBoundingClientRect();
+    /* above the fold: show at once — no waiting on a possibly throttled compositor */
+    if(r.top<vh&&r.bottom>0){ el.classList.add("rv-imm"); }
+    else{ io.observe(el); }
+  });
+}
+function setupSpy(){
+  if(!("IntersectionObserver" in window)) return;
+  var links={};
+  $$(".head-nav a[data-nav]").forEach(function(a){ links[a.getAttribute("data-nav")]=a; });
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){
+        var id=en.target.getAttribute("id");
+        Object.keys(links).forEach(function(k){
+          if(k===id) links[k].setAttribute("aria-current","true");
+          else links[k].removeAttribute("aria-current");
+        });
+      }
+    });
+  },{rootMargin:"-38% 0px -55% 0px"});
+  ["story","fire","menu","book","visit"].forEach(function(id){
+    var s=document.getElementById(id);
+    if(s) io.observe(s);
+  });
+}
+
+/* mobile nav */
+var mnav=$("#mnav"), burger=$("#burgerBtn"), mnavClose=$("#mnavClose");
+function openMnav(){
+  if(!mnav) return;
+  mnav.hidden=false;
+  void mnav.offsetWidth;
+  mnav.classList.add("open");
+  if(burger) burger.setAttribute("aria-expanded","true");
+  document.body.classList.add("lock");
+  if(mnavClose) mnavClose.focus();
+}
+function closeMnav(){
+  if(!mnav||mnav.hidden) return;
+  mnav.classList.remove("open");
+  if(burger){ burger.setAttribute("aria-expanded","false"); burger.focus(); }
+  document.body.classList.remove("lock");
+  setTimeout(function(){ mnav.hidden=true; },320);
+}
+if(burger) burger.addEventListener("click",openMnav);
+if(mnavClose) mnavClose.addEventListener("click",closeMnav);
+if(mnav) $$(".mnav-link",mnav).forEach(function(a){ a.addEventListener("click",closeMnav); });
+
+/* header scroll state */
+var head=$("#siteHead");
+function onScroll(){ if(head) head.classList.toggle("scrolled",window.scrollY>10); }
+window.addEventListener("scroll",onScroll,{passive:true});
+onScroll();
+
+/* to top */
+var toTop=$("#toTop");
+if(toTop) toTop.addEventListener("click",function(){ window.scrollTo({top:0,behavior:REDUCED?"auto":"smooth"}); });
+
+/* wiring: menu controls */
+var searchInput=$("#menuSearch");
+if(searchInput){
+  searchInput.addEventListener("input",function(){
+    filters.q=searchInput.value;
+    var sc=$("#searchClear"); if(sc) sc.classList.toggle("show",!!searchInput.value);
+    renderMenu();
+  });
+  searchInput.addEventListener("keydown",function(e){
+    if(e.key==="Escape"){ searchInput.value=""; filters.q=""; $("#searchClear")&&$("#searchClear").classList.remove("show"); renderMenu(); }
+  });
+}
+var searchClear=$("#searchClear");
+if(searchClear) searchClear.addEventListener("click",function(){
+  filters.q=""; if(searchInput) searchInput.value="";
+  searchClear.classList.remove("show");
+  renderMenu(); if(searchInput) searchInput.focus();
+});
+var catChips=$("#catChips");
+if(catChips) catChips.addEventListener("click",function(e){
+  var ch=e.target.closest("[data-cat]"); if(!ch) return;
+  filters.cat=ch.getAttribute("data-cat");
+  $$("#catChips .chip").forEach(function(c){ c.classList.toggle("on",c===ch); });
+  renderMenu();
+});
+var dietChips=$("#dietChips");
+if(dietChips) dietChips.addEventListener("click",function(e){
+  var ch=e.target.closest("[data-diet]"); if(!ch) return;
+  var d=ch.getAttribute("data-diet");
+  filters.diets[d]=!filters.diets[d];
+  ch.classList.toggle("on",filters.diets[d]);
+  ch.setAttribute("aria-pressed",filters.diets[d]?"true":"false");
+  renderMenu();
+});
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-add]");
+  if(b){ var id=b.getAttribute("data-add"); addToBasket(id); flashAdd(id); SFX.blip(1180); return; }
+  if(e.target.closest("#clearFilters")){ clearFilters(); return; }
+});
+
+/* wiring: basket */
+var basketBtn=$("#basketBtn");
+if(basketBtn) basketBtn.addEventListener("click",openDrawer);
+var drawerClose=$("#drawerClose");
+if(drawerClose) drawerClose.addEventListener("click",closeDrawer);
+var backdrop=$("#backdrop");
+if(backdrop) backdrop.addEventListener("click",closeDrawer);
+var basketLines=$("#basketLines");
+if(basketLines) basketLines.addEventListener("click",function(e){
+  var inc=e.target.closest("[data-inc]"), dec=e.target.closest("[data-dec]"), del=e.target.closest("[data-del]");
+  if(inc){ setQty(inc.getAttribute("data-inc"),(basket[inc.getAttribute("data-inc")]||0)+1); }
+  else if(dec){ setQty(dec.getAttribute("data-dec"),(basket[dec.getAttribute("data-dec")]||0)-1); }
+  else if(del){ setQty(del.getAttribute("data-del"),0); toast("Off the plank. The fire forgives."); }
+});
+var emptyBrowse=$("#emptyBrowse");
+if(emptyBrowse) emptyBrowse.addEventListener("click",function(){
+  closeDrawer();
+  var m=$("#menu");
+  if(m) m.scrollIntoView({behavior:REDUCED?"auto":"smooth"});
+});
+var orderForm=$("#orderForm");
+if(orderForm) orderForm.addEventListener("submit",function(e){
+  e.preventDefault();
+  if(!basketCount()){ toast("Nothing on the plank yet — add a dish first."); return; }
+  var name=$("#ordName"), phone=$("#ordPhone"), sel=$("#pickupSel"), ok=true;
+  function flag(el,good){ var f=el.closest(".field"); if(f) f.classList.toggle("bad",!good); if(!good&&ok){ el.focus(); } if(!good) ok=false; }
+  flag(name,name.value.trim().length>=2);
+  flag(phone,phone.value.replace(/\D/g,"").length>=7);
+  flag(sel,!!pickupChoice());
+  if(!ok) return;
+  var btn=$("#orderSubmit"), orig=btn.innerHTML;
+  btn.disabled=true; btn.textContent="Sending to the fire…";
+  setTimeout(function(){
+    var pick=pickupChoice()||{iso:todayISO,t:"18:00",label:"Today"};
+    var code=makeCode("P"+pick.iso+pick.t+name.value.trim(),"FL-P");
+    var html="", keys=Object.keys(basket), total=0, i;
+    keys.sort(function(a,b){ var ia=findItem(a),ib=findItem(b); return (ia&&ib)?(MENU.indexOf(ia)-MENU.indexOf(ib)):0; });
+    for(i=0;i<keys.length;i++){
+      var it=findItem(keys[i]); if(!it) continue;
+      var q=basket[keys[i]], lp=it.price*q;
+      total+=lp;
+      html+='<div><span>'+esc(it.name)+' × '+q+'</span><span>'+(lp>0?("$"+lp.toFixed(2)):"gift")+'</span></div>';
+    }
+    html+='<div><span><b>Total</b></span><span><b>$'+total.toFixed(2)+'</b></span></div>';
+    html+='<div><span>Pickup</span><span>'+esc(pick.label)+'</span></div>';
+    html+='<div><span>Collecting</span><span>'+esc(name.value.trim())+'</span></div>';
+    $("#ordSummary").innerHTML=html;
+    $("#ordCode").textContent=code;
+    $("#orderDone").style.display="";
+    $("#orderFormWrap").style.display="none";
+    $("#drawerFoot").style.display="none";
+    $("#basketLines").style.display="none";
+    $("#drawerEmpty").style.display="none";
+    basket={}; saveBasket(); updateBadge(false);
+    btn.disabled=false; btn.innerHTML=orig;
+    SFX.blip(980);
+  },750);
+});
+var orderDoneBtn=$("#orderDoneBtn");
+if(orderDoneBtn) orderDoneBtn.addEventListener("click",function(){
+  $("#orderDone").style.display="none";
+  closeDrawer();
+  renderBasket();
+});
+
+/* wiring: reservations */
+var partyChips=$("#partyChips");
+if(partyChips) partyChips.addEventListener("click",function(e){
+  var ch=e.target.closest("[data-party]"); if(!ch) return;
+  setParty(+ch.getAttribute("data-party"));
+});
+var dateStrip=$("#dateStrip");
+if(dateStrip) dateStrip.addEventListener("click",function(e){
+  var ch=e.target.closest("[data-iso]"); if(!ch||ch.disabled) return;
+  setResDate(ch.getAttribute("data-iso"));
+});
+var datePrev=$("#datePrev"), dateNext=$("#dateNext");
+if(datePrev) datePrev.addEventListener("click",function(){ dateStrip.scrollBy({left:-320,behavior:REDUCED?"auto":"smooth"}); });
+if(dateNext) dateNext.addEventListener("click",function(){ dateStrip.scrollBy({left:320,behavior:REDUCED?"auto":"smooth"}); });
+var timeGrid=$("#timeGrid");
+if(timeGrid) timeGrid.addEventListener("click",function(e){
+  var b=e.target.closest("[data-time]"); if(!b||b.disabled) return;
+  res.time=b.getAttribute("data-time");
+  $$("#timeGrid .time-btn").forEach(function(x){ x.classList.toggle("on",x===b); });
+});
+var resForm=$("#resForm");
+if(resForm) resForm.addEventListener("submit",function(e){
+  e.preventDefault();
+  if(res.party>=9){ toast("For nine or more, ring the room — Marta will build the night."); return; }
+  if(!res.iso){ toast("Pick a night first — the book fills on weekends."); return; }
+  var name=$("#resName"), phone=$("#resPhone"), ok=true;
+  function flag(el,good){ var f=el.closest(".field"); if(f) f.classList.toggle("bad",!good); if(!good&&ok){ el.focus(); } if(!good) ok=false; }
+  flag(name,name.value.trim().length>=2);
+  flag(phone,phone.value.replace(/\D/g,"").length>=7);
+  if(!res.time){ var tn=$("#timeNote"); if(tn) tn.innerHTML="Pick a time — the full ones are full for a reason."; toast("Pick a time for the table."); return; }
+  if(!ok) return;
+  var btn=$("#resSubmit"), orig=btn.innerHTML;
+  btn.disabled=true; btn.textContent="Checking the book…";
+  setTimeout(function(){
+    var r={code:makeCode(res.iso+res.time+name.value.trim()), iso:res.iso, t:res.time, party:res.party, name:name.value.trim(), notes:($("#resNotes")||{}).value||""};
+    store.set("fl.resv.v1",r);
+    refreshBanner();
+    showResDone(r);
+    btn.disabled=false; btn.innerHTML=orig;
+    SFX.blip(1480);
+  },700);
+});
+var resAnother=$("#resAnother");
+if(resAnother) resAnother.addEventListener("click",function(){
+  showResForm();
+  store.del("fl.resv.v1"); refreshBanner();
+});
+var resCancelBtn=$("#resCancelBtn");
+if(resCancelBtn){
+  resCancelBtn.addEventListener("click",function(){
+    if(resCancelBtn.getAttribute("data-armed")==="1"){ cancelReservation(); resCancelBtn.removeAttribute("data-armed"); resCancelBtn.textContent="Cancel this booking"; }
+    else{ resCancelBtn.setAttribute("data-armed","1"); resCancelBtn.textContent="Really cancel? Tap again";
+      setTimeout(function(){ if(resCancelBtn.getAttribute("data-armed")==="1"){ resCancelBtn.removeAttribute("data-armed"); resCancelBtn.textContent="Cancel this booking"; } },4000);
+    }
+  });
+}
+var bannerCancel=$("#bannerCancel");
+if(bannerCancel){
+  bannerCancel.addEventListener("click",function(){
+    if(bannerCancel.getAttribute("data-armed")==="1"){ cancelReservation(); bannerCancel.removeAttribute("data-armed"); bannerCancel.textContent="Cancel booking"; }
+    else{ bannerCancel.setAttribute("data-armed","1"); bannerCancel.textContent="Really cancel?";
+      setTimeout(function(){ if(bannerCancel.getAttribute("data-armed")==="1"){ bannerCancel.removeAttribute("data-armed"); bannerCancel.textContent="Cancel booking"; } },4000);
+    }
+  });
+}
+
+/* escape closes things; focus trap in drawer */
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"){
+    var d=$("#drawer");
+    if(d&&!d.hidden){ closeDrawer(); return; }
+    if(mnav&&!mnav.hidden){ closeMnav(); return; }
+  }
+  if(e.key==="Tab"){
+    var dr=$("#drawer");
+    if(dr&&!dr.hidden&&dr.classList.contains("open")){
+      var f=$$('a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled])',dr)
+        .filter(function(el){ return el.offsetParent!==null||el===document.activeElement; });
+      if(!f.length) return;
+      var first=f[0], last=f[f.length-1];
+      if(e.shiftKey&&document.activeElement===first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey&&document.activeElement===last){ e.preventDefault(); first.focus(); }
+      else if(!dr.contains(document.activeElement)){ e.preventDefault(); first.focus(); }
+    }
+  }
+});
+
+/* clock refresh */
+var lastDateSig="";
+function refreshClock(){
+  var d=new Date();
+  todayISO=localISO(d); todayDow=d.getDay(); nowMins=d.getHours()*60+d.getMinutes();
+  DATES=buildDates();
+  updateStatusPill();
+  renderHours();
+  if(res.iso&&res.iso===todayISO&&res.time&&minsOf(res.time)<nowMins+45){ res.time=null; }
+  var sig=DATES.map(function(x){return x.iso+(x.open?"o":"c")}).join(",");
+  if(sig!==lastDateSig){
+    lastDateSig=sig;
+    if(res.iso===null||DATES.every(function(x){return x.iso!==res.iso;})){
+      var first=DATES.filter(function(x){return x.open})[0];
+      if(first){ res.iso=first.iso; res.time=null; }
+    }
+    renderDates();
+    renderTimes();
+  } else if(res.iso){ renderTimes(); }
+}
+setInterval(refreshClock,30000);
+document.addEventListener("visibilitychange",function(){
+  if(document.hidden){ SFX.pauseForHidden(); }
+  else{ SFX.resumeForVisible(); refreshClock(); onScroll(); }
+});
+
+/* init */
+function init(){
+  buildTicker();
+  renderMenu();
+  renderHours();
+  renderSpecial();
+  updateBadge(false);
+  updateStatusPill();
+  var firstOpen=DATES.filter(function(x){return x.open})[0];
+  if(firstOpen){ res.iso=firstOpen.iso; }
+  renderDates();
+  renderTimes();
+  setupReveal();
+  setupSpy();
+  Fire.resize();
+  Fire.staticDraw(); /* first frame immediately — the loop takes over when it can */
+  updateGauge();
+  if(REDUCED){ /* single static frame is the whole show */ }
+  else{
+    var last=performance.now();
+    function frame(now){
+      var dt=(now-last)/1000; last=now;
+      if(dt>0.1) dt=0.0167;
+      if(!document.hidden){
+        Fire.tick(dt);
+        Cursor.tick(dt);
+        gT+=dt;
+        if(gT>0.12){ gT=0; updateGauge(); }
+        if(!unlocked&&Fire.heat()>=0.995) unlockSecret();
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+  window.addEventListener("resize",function(){ Fire.resize(); });
+  if(store.get("fl.sound",false)){ setSound(true); }
+}
+init();
+
+})();
+</script>
+</body>
+</html>
