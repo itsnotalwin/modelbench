@@ -12,8 +12,12 @@ export default function Explorer() {
   const [savedOnly, setSavedOnly] = useState(false); const [view, setView] = useState("grid"); const [limit, setLimit] = useState(6);
   const input = useRef<HTMLInputElement>(null); const { preferences } = useLab();
   useEffect(() => {
-    const initial = new URLSearchParams(window.location.search).get("challenge"); if (initial && challenges.some((c) => c.slug === initial)) setChallenge(initial);
-    try { if (localStorage.getItem("modelbench.view") === "list") setView("list"); } catch { /* Optional preference. */ }
+    // Read browser-only preferences after hydration, off the render path.
+    queueMicrotask(() => {
+      const initial = new URLSearchParams(window.location.search).get("challenge");
+      if (initial && challenges.some((c) => c.slug === initial)) setChallenge(initial);
+      try { if (localStorage.getItem("modelbench.view") === "list") setView("list"); } catch { /* Optional preference. */ }
+    });
     function onKey(e: KeyboardEvent) { const t = e.target as HTMLElement; if ((e.key === "/" || (e.key === "k" && (e.metaKey || e.ctrlKey))) && !["INPUT", "TEXTAREA", "SELECT"].includes(t.tagName) && !document.querySelector("dialog[open]")) { e.preventDefault(); input.current?.focus(); } }
     document.addEventListener("keydown", onKey); return () => document.removeEventListener("keydown", onKey);
   }, []);

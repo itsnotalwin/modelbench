@@ -29,7 +29,10 @@ export function LabProvider({ children }: { children: ReactNode }) {
   const initRequest = useRef<Promise<void> | null>(null);
   const notify = useCallback((message: string, error = false) => { if (timer.current) clearTimeout(timer.current); setToast({ message, error }); timer.current = setTimeout(() => setToast(null), 3500); }, []);
   useEffect(() => {
-    try { const value: unknown = JSON.parse(localStorage.getItem("modelbench.compare.v1") || "[]"); if (Array.isArray(value)) setSelected([...new Set(value.filter((s): s is string => typeof s === "string" && runBySlug.has(s)))].slice(0, 3)); } catch { /* A private storage mode does not prevent comparison. */ }
+    // Restore the comparison selection after hydration, off the render path.
+    queueMicrotask(() => {
+      try { const value: unknown = JSON.parse(localStorage.getItem("modelbench.compare.v1") || "[]"); if (Array.isArray(value)) setSelected([...new Set(value.filter((s): s is string => typeof s === "string" && runBySlug.has(s)))].slice(0, 3)); } catch { /* A private storage mode does not prevent comparison. */ }
+    });
     if (!initRequest.current) initRequest.current = fetch("/api/workspace", { cache: "no-store" }).then(async (r) => { if (!r.ok) throw new Error(); const data = await r.json(); setPreferences(data.preferences); }).catch(() => notify("Workspace is unavailable. You can still explore all runs.", true)).finally(() => setReady(true));
     return () => { if (timer.current) clearTimeout(timer.current); };
   }, [notify]);
