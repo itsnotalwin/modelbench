@@ -203,7 +203,8 @@ class ZipMetadataRoutingTests(unittest.TestCase):
             ensure_run=lambda *args: {"manifest_linked": False, "sw_registered": False},
         )
         manifest_stub = SimpleNamespace(main=lambda: None)
-        with patch.dict("sys.modules", {"pwa": pwa_stub, "build_manifest": manifest_stub}):
+        catalog_stub = SimpleNamespace(main=lambda: None)
+        with patch.dict("sys.modules", {"pwa": pwa_stub, "build_manifest": manifest_stub, "sync_catalog": catalog_stub}):
             exit_code = sorter.main()
 
         self.assertEqual(exit_code, 1)
@@ -270,13 +271,19 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
             self.assertIn(f'"prompt": "{challenge["no"]}"', body)
             self.assertIn(f'"prompt_label": "{challenge["title"]}"', body)
 
-    def test_dashboard_describes_one_artifact_per_prompt(self):
-        dashboard = (REPO_ROOT / "index.html").read_text(encoding="utf-8")
-        self.assertNotIn("three separate outputs", dashboard)
-        self.assertIn("one complete project folder", dashboard)
-        self.assertIn("One run, one ZIP", dashboard)
-        self.assertIn("Twenty-two open-ended challenges", dashboard)
-        self.assertIn("Twenty-two mega-prompts", dashboard)
+    def test_explorer_describes_one_artifact_per_prompt(self):
+        src = REPO_ROOT / "src"
+        copy = "\n".join(path.read_text(encoding="utf-8") for path in src.rglob("*.tsx"))
+        self.assertNotIn("three separate outputs", copy)
+        self.assertIn("One prompt. One finished artifact.", copy)
+        self.assertIn("project folder", copy)
+        catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
+        self.assertEqual(len(catalog["prompts"]), 22)
+        manifest = json.loads((REPO_ROOT / "manifest.json").read_text(encoding="utf-8"))
+        self.assertEqual(len(manifest["catalog"]), 22)
+        explorer_catalog = json.loads((REPO_ROOT / "src" / "data" / "catalog.json").read_text(encoding="utf-8"))
+        self.assertEqual(len(explorer_catalog["challenges"]), 22)
+        self.assertEqual(sorted(r["slug"] for r in explorer_catalog["runs"]), sorted(r["slug"] for r in manifest["runs"]))
 
 
     def test_every_prompt_carries_the_submission_contract(self):

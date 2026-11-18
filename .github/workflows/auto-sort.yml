@@ -30,9 +30,7 @@ jobs:
           python-version: "3.x"
       - name: Run importer regression tests
         run: python -m unittest discover -s tests -p "test_sort_inbox.py" -v
-      - name: Run dashboard rating tests
-        run: node --test tests/dashboard-ratings.test.js
-      - name: Sort inbox into runs/ and rebuild manifest
+      - name: Sort inbox into runs/, rebuild manifest and explorer catalog
         id: sort_inbox
         continue-on-error: true
         run: python tools/sort_inbox.py
@@ -41,7 +39,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A runs manifest.json inbox manifest.webmanifest sw.js icons
+          git add -A runs manifest.json inbox src/data/catalog.json public/briefs
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else

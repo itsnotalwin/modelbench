@@ -449,32 +449,13 @@ def main() -> int:
         print(f"MOVED {item.name} -> runs/{run_slug}/")
 
     sys.path.insert(0, str(ROOT / "tools"))
-    import pwa
-    pwa.ensure_root(ROOT)
-    for run_dir in sorted(RUNS.iterdir()):
-        meta_path = run_dir / "meta.json"
-        if not run_dir.is_dir() or run_dir.name.startswith(".") or not meta_path.exists():
-            continue
-        try:
-            meta = json.loads(meta_path.read_text(encoding="utf-8"))
-        except Exception:
-            continue
-        category = PROMPTS.get(meta.get("category"))
-        if not category:
-            continue
-        title = f"{meta.get('model')} · {category['title']} v{meta.get('version', 1)}"
-        status = pwa.ensure_run(
-            run_dir,
-            title,
-            f"{category['summary']} Run by {meta.get('model')}.",
-            category.get("hue", 210),
-        )
-        if meta.get("pwa") != status:
-            meta["pwa"] = status
-            meta_path.write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
-
     import build_manifest
     build_manifest.main()
+
+    # Keep the Next.js explorer's compact catalog in step with the manifest.
+    import sync_catalog
+    sync_catalog.main()
+
     print(f"done: moved={moved} skipped={skipped}")
     # Leave the workflow red when any upload was skipped or rejected, while preserving the ZIP.
     return 1 if skipped else 0

@@ -1,3 +1,12 @@
 __pycache__/
 *.pyc
 .DS_Store
+node_modules/
+.next/
+.env
+.env.local
+*.tsbuildinfo
+.artifacts/
+test-results/
+playwright-report/
+next-env.d.ts
