@@ -1,10 +1,11 @@
 "use client";
 import { challengeLabel, dateLabel, modelName, type Run } from "@/lib/bench";
+import { asset } from "@/lib/assets";
 import { Icon, categoryIcon } from "./icons";
 import { useLab } from "./lab-provider";
 
 export function CoverImage({ run, eager = false, large = false }: { run: Run; eager?: boolean; large?: boolean }) {
-  return <img src={`/art/${run.art}${large ? "" : "-sm"}.webp`} srcSet={`/art/${run.art}-sm.webp 480w, /art/${run.art}.webp 900w`} sizes={large ? "(max-width: 720px) 94vw, 830px" : "(max-width: 600px) 92vw, (max-width: 900px) 45vw, 31vw"} alt={`Editorial cover artwork for ${run.title}`} width="900" height="506" loading={eager ? "eager" : "lazy"} decoding="async"/>;
+  return <img src={asset(`/art/${run.art}${large ? "" : "-sm"}.webp`)} srcSet={`${asset(`/art/${run.art}-sm.webp`)} 480w, ${asset(`/art/${run.art}.webp`)} 900w`} sizes={large ? "(max-width: 720px) 94vw, 830px" : "(max-width: 600px) 92vw, (max-width: 900px) 45vw, 31vw"} alt={`Editorial cover artwork for ${run.title}`} width="900" height="506" loading={eager ? "eager" : "lazy"} decoding="async"/>;
 }
 export function RunCard({ run, index }: { run: Run; index: number }) {
   const { openRun, toggleSave, toggleCompare, preferences, selected, pending } = useLab();

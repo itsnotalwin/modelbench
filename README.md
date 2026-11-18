@@ -12,6 +12,12 @@ A responsive, full-stack explorer for the [ModelBench](https://github.com/itsnot
 
 Bookmarks and scores persist in PostgreSQL. A random, HTTP-only cookie identifies each private browser workspace. HTTPS embeds use secure, partitioned cookies; local HTTP uses same-site cookies. The comparison selection and layout preference are stored locally. There is no sign-in or public/community score aggregation. Clearing cookies creates a new workspace; export ratings to move them between browsers.
 
+## Hosting
+
+GitHub Pages serves a static export of this app at <https://itsnotalwin.github.io/modelbench/>. `.github/workflows/deploy-pages.yml` runs `python tools/build_static.py /modelbench`, which copies the project to a scratch directory without `src/app/api` (route handlers cannot be exported), builds with `output: "export"` and `basePath: "/modelbench"`, and publishes `out/`. The workflow then uploads `out/` with `actions/upload-pages-artifact`.
+
+Static hosting has no database: on Pages the workspace (bookmarks and scorecards) persists in each browser's `localStorage` instead of PostgreSQL. Running the app on a Node host keeps the `DATABASE_URL` path.
+
 ## Performance decisions
 
 The public explorer pages are statically prerendered; no database or upstream GitHub request blocks the initial document. The compact catalog lives in `src/data/catalog.json`. Only six run cards are initially rendered, with responsive local WebP artwork and deferred loading below the first row. Fonts are self-hosted. No charting, icon, or component library is required. Inspector and guide components are code-split. Artifact iframes are never created until a live preview is explicitly requested, and are removed when closed.

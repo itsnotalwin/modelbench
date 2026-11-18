@@ -17,6 +17,12 @@ interface LabContextValue {
 }
 const LabContext = createContext<LabContextValue | null>(null);
 export function useLab() { const value = useContext(LabContext); if (!value) throw new Error("Workspace provider missing"); return value; }
+// GitHub Pages has no API route, so the workspace lives in this browser instead.
+const LOCAL_WORKSPACE = process.env.NEXT_PUBLIC_STATIC === "1";
+const STORE_KEY = "modelbench.workspace.v1";
+function readLocalWorkspace(): Preferences {
+  try { const raw: unknown = JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); return raw && typeof raw === "object" && !Array.isArray(raw) ? (raw as Preferences) : {}; } catch { return {}; }
+}
 export function LabProvider({ children }: { children: ReactNode }) {
   const [preferences, setPreferences] = useState<Preferences>({});
   const [selected, setSelected] = useState<string[]>([]);
@@ -33,13 +39,18 @@ export function LabProvider({ children }: { children: ReactNode }) {
     queueMicrotask(() => {
       try { const value: unknown = JSON.parse(localStorage.getItem("modelbench.compare.v1") || "[]"); if (Array.isArray(value)) setSelected([...new Set(value.filter((s): s is string => typeof s === "string" && runBySlug.has(s)))].slice(0, 3)); } catch { /* A private storage mode does not prevent comparison. */ }
     });
-    if (!initRequest.current) initRequest.current = fetch("/api/workspace", { cache: "no-store" }).then(async (r) => { if (!r.ok) throw new Error(); const data = await r.json(); setPreferences(data.preferences); }).catch(() => notify("Workspace is unavailable. You can still explore all runs.", true)).finally(() => setReady(true));
+    if (LOCAL_WORKSPACE) {
+      queueMicrotask(() => { setPreferences(readLocalWorkspace()); setReady(true); });
+    } else if (!initRequest.current) initRequest.current = fetch("/api/workspace", { cache: "no-store" }).then(async (r) => { if (!r.ok) throw new Error(); const data = await r.json(); setPreferences(data.preferences); }).catch(() => notify("Workspace is unavailable. You can still explore all runs.", true)).finally(() => setReady(true));
     return () => { if (timer.current) clearTimeout(timer.current); };
   }, [notify]);
+  // Static hosting keeps bookmarks and scores in this browser.
+  useEffect(() => { if (!LOCAL_WORKSPACE || !ready) return; try { localStorage.setItem(STORE_KEY, JSON.stringify(preferences)); } catch { /* Private storage still allows exploring. */ } }, [preferences, ready]);
   async function persist(body: object, lock: string) {
     if (locks.current.has(lock)) return false;
     locks.current.add(lock); setPending(new Set(locks.current));
     try {
+      if (LOCAL_WORKSPACE) return true;
       await initRequest.current;
       const r = await fetch("/api/workspace", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       if (!r.ok) { const data = await r.json(); throw new Error(data.error || "Could not save changes."); }

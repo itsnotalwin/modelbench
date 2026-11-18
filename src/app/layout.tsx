@@ -1,9 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
+import localFont from "next/font/local";
 import { LabProvider } from "@/components/lab-provider";
 import { Footer, Header } from "@/components/shell";
 import { challenges, runs } from "@/lib/bench";
 import "./globals.css";
+
+const manrope = localFont({ src: "./manrope.woff2", weight: "400 800", display: "swap", variable: "--font-manrope" });
 
 const runCount = runs.length;
 const challengeCount = challenges.length;
@@ -15,5 +18,5 @@ export const metadata: Metadata = {
 };
 export const viewport: Viewport = { themeColor: "#f7f8f5", width: "device-width", initialScale: 1 };
 export default function RootLayout({ children }: { children: ReactNode }) {
-  return <html lang="en"><head><link rel="preload" href="/fonts/manrope.woff2" as="font" type="font/woff2" crossOrigin="anonymous"/></head><body><a href="#main-content" className="skip-link">Skip to content</a><LabProvider><Header/>{children}<Footer/></LabProvider></body></html>;
+  return <html lang="en" className={manrope.variable}><body><a href="#main-content" className="skip-link">Skip to content</a><LabProvider><Header/>{children}<Footer/></LabProvider></body></html>;
 }
