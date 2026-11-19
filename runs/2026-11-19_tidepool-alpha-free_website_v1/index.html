@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FOLD — a monthly of type, paper and the edge between</title>
+  <meta name="description" content="FOLD is a monthly publication about type, paper and the edge between: five short stories, the practice behind the office, and a way to write to it.">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="assets/favicon.svg">
+  <style>
+    :root {
+      --paper: #ffffff;
+      --ink: #111111;
+      --line: #e4e4e4;
+      --meta: #696969;
+      --hero-bg: #111111;
+      --hero-ink: #f7f7f7;
+      --hero-sheet: #c4c4c4;
+      --stroke: #444444;
+      --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      --font-body: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      color-scheme: light;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 1.0625rem;
+      line-height: 1.68;
+      text-wrap: pretty;
+      text-rendering: optimizeLegibility;
+    }
+
+    ::selection { background-color: #b7b7b7; color: #111111; }
+    :focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+
+    body::before {
+      content: "";
+      position: fixed;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--ink);
+      z-index: 10;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+    }
+    .skip-link:focus-visible {
+      position: fixed;
+      left: 0; top: 0; width: 100%;
+      padding: 0.7rem 1rem;
+      background: var(--ink);
+      color: var(--paper);
+      font-family: var(--font-sans);
+      font-size: 1.0625rem;
+      text-align: center;
+      outline: 2px solid var(--paper);
+      z-index: 100;
+    }
+
+    .site-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 0.75rem 1.25rem;
+      border-bottom: 1px solid var(--line);
+      z-index: 2;
+    }
+    .site-name {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 600;
+      line-height: 1.1;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .site-name:hover { text-decoration: underline; text-decoration-thickness: 1.5px; }
+
+    .site-nav { margin-left: auto; }
+    .site-nav ul {
+      display: flex;
+      align-items: baseline;
+      gap: 0.25rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .site-nav a {
+      color: var(--meta);
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 0.4rem 0.5rem;
+      text-decoration: none;
+    }
+    .site-nav a:hover { color: var(--ink); }
+
+    .hero {
+      --ink: var(--hero-ink);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(14rem, 20rem);
+      align-items: end;
+      gap: 2.5rem;
+      padding: clamp(3rem, 6vh, 5.5rem) 1.25rem;
+      min-height: 55vh;
+      color: var(--hero-ink);
+      background: var(--hero-bg);
+    }
+    .hero-text { max-width: 46ch; }
+    .hero-headline {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 6.5vw, 5.25rem);
+      line-height: 0.95;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .hero-tagline {
+      margin: 0.5rem 0 0 0;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+      line-height: 1.45;
+    }
+
+    .hero-sheet {
+      width: 100%;
+      height: auto;
+      opacity: 0;
+      animation: hero-sheet-in 0.85s ease-out both;
+    }
+    @keyframes hero-sheet-in { from { opacity: 0; } to { opacity: 1; } }
+
+    .sheet {
+      fill: none;
+      stroke: var(--hero-sheet);
+      stroke-width: 2.6;
+      stroke-linejoin: round;
+      animation: sheet-drop 0.85s ease-out both;
+    }
+    .sheet-2 { animation-delay: 0.16s; }
+    .sheet-3 { animation-delay: 0.33s; }
+    @keyframes sheet-drop {
+      from { transform: translateY(-12px); }
+      to { transform: translateY(0); }
+    }
+
+    .hero-letter {
+      opacity: 0;
+      animation: hero-letter-in 0.72s ease-out forwards;
+    }
+    .hero-letter.l2 { animation-delay: 0.15s; }
+    .hero-letter.l3 { animation-delay: 0.32s; }
+    .hero-letter.l4 { animation-delay: 0.49s; }
+    @keyframes hero-letter-in {
+      from { opacity: 0; transform: translateY(0.2em); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section { padding: 4.5rem 1.25rem; }
+    @media (min-width: 48rem) { .section { padding: 6rem 1.25rem; } }
+    .section-head {
+      margin: 0 0 2.25rem 0;
+      font-family: var(--font-display);
+      font-size: clamp(1.75rem, 5vw, 2.25rem);
+      font-weight: 600;
+      line-height: 1.12;
+    }
+
+    .story + .story {
+      margin-top: 0.75rem;
+      padding-top: 2.25rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .story-head {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.25rem 0;
+      list-style: none;
+      cursor: pointer;
+    }
+    .story-glyph {
+      flex: 0 0 auto;
+      width: 1.5rem;
+      height: 1.5rem;
+      display: block;
+      fill: none;
+      stroke: var(--stroke);
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .story-wrap { flex: 1 1 auto; min-width: 0; }
+    .story-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.05rem, 2.6vw, 1.35rem);
+      font-weight: 600;
+      line-height: 1.25;
+    }
+    .story-meta {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.15rem;
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      color: var(--meta);
+    }
+    .story-byline { text-transform: uppercase; letter-spacing: 0.07em; }
+    .story-blurb {
+      margin-top: 0.45rem;
+      font-size: 0.9rem;
+      line-height: 1.52;
+      color: var(--meta);
+    }
+    .story-chevron {
+      flex: 0 0 auto;
+      display: block;
+      width: 1.15rem;
+      height: 1.15rem;
+      fill: none;
+      stroke: var(--stroke);
+      stroke-width: 2;
+      transition: transform 0.25s ease-out;
+    }
+    .story-details[open] .story-chevron { transform: rotate(90deg); }
+
+    .story-body { margin: 0; padding-top: 0.75rem; }
+    .story-details:not([open]) > .story-body { display: none; }
+    .story-body-copy {
+      margin: 0;
+      max-width: 62ch;
+      font-size: clamp(1rem, 2.2vw, 1.125rem);
+      line-height: 1.72;
+      color: var(--ink);
+    }
+
+    .story.revealed { animation: story-bloom 0.6s ease-out; }
+    @keyframes story-bloom {
+      from { opacity: 0.62; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .about-copy { max-width: 62ch; }
+    .about-facts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem 2.2rem;
+      margin: 1.75rem 0 0 0;
+    }
+    .about-facts > div { display: flex; align-items: baseline; gap: 0.45rem; }
+    .about-facts dt {
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--meta);
+      margin: 0;
+    }
+    .about-facts dd { margin: 0; font-size: 0.95rem; }
+    .about-illustration { width: 24rem; max-width: 100%; height: auto; }
+
+    .contact { max-width: 42ch; }
+    .contact-copy { margin: 0 0 0.75rem 0; }
+    .contact-address {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.35rem 0;
+      font-family: var(--font-display);
+      font-size: clamp(1.15rem, 2.4vw, 1.4rem);
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .contact-address svg {
+      flex: 0 0 auto;
+      width: 1.4rem;
+      height: 1.4rem;
+      fill: none;
+      stroke: var(--stroke);
+      stroke-width: 2;
+    }
+    .cta {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 0.65rem 1.45rem;
+      border: 1px solid var(--ink);
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    .cta:hover { background: var(--ink); color: var(--paper); }
+
+    .site-footer { padding: 4rem 1.25rem; border-top: 1px solid var(--line); }
+    .site-footer-name {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(1.35rem, 5vw, 1.75rem);
+      font-weight: 600;
+      line-height: 1.1;
+    }
+    .site-footer-tagline {
+      margin: 0.25rem 0 0 0;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+      color: var(--meta);
+    }
+    .site-footer ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem 1rem;
+      list-style: none;
+      margin: 1rem 0 0 0;
+      padding: 0;
+    }
+    .site-footer a {
+      color: var(--meta);
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.25rem 0;
+    }
+    .site-footer a:hover { color: var(--ink); }
+    .site-footer-copy {
+      margin: 0.75rem 0 0 0;
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      color: var(--meta);
+    }
+
+    @media (max-width: 50rem) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+        align-items: start;
+        gap: 1.75rem;
+        padding: 3.5rem 1.25rem 2.25rem;
+        min-height: 0;
+      }
+      .hero-sheet { align-self: start; }
+    }
+
+    @media (max-width: 30rem) {
+      .site-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+      .site-nav { margin-left: 0; }
+    }
+
+    @media (max-width: 48rem) {
+      .about { gap: 2.5rem; }
+      .about-illustration { width: 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .hero-sheet { opacity: 1; }
+      .sheet { animation: none; }
+      .hero-letter { opacity: 1; animation: none; }
+      .story.revealed { animation: none; }
+      .story-chevron { transition: none; }
+    }
+
+    @media print {
+      body::before { display: none; }
+      .skip-link { display: none; }
+      .site-header, .hero, .hero-sheet, .hero-letter { display: none; }
+      .story-details:not([open]) > .story-body { display: block; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-header">
+    <a class="site-name" href="#main">FOLD</a>
+    <nav class="site-nav" aria-label="Site navigation">
+      <ul>
+        <li><a href="#stories">Stories</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="hero" id="hero">
+      <div class="hero-text">
+        <h1 class="hero-headline">
+          <span class="hero-letter l1">F</span><span class="hero-letter l2">O</span><span class="hero-letter l3">L</span><span class="hero-letter l4">D</span>
+        </h1>
+        <p class="hero-tagline">a monthly of type, paper and the edge between</p>
+      </div>
+      <svg class="hero-sheet" viewBox="0 0 320 190" width="100%" aria-hidden="true" focusable="false">
+        <path class="sheet" d="M16 148 C 20 136, 300 136, 304 148 L 304 178 C 300 166, 20 166, 16 178 Z"/>
+        <path class="sheet sheet-2" d="M18 110 C 22 98, 298 98, 302 110 L 302 128 C 298 116, 22 116, 18 128 Z"/>
+        <path class="sheet sheet-3" d="M20 72 C 24 60, 296 60, 300 72 L 300 92 C 296 80, 24 80, 20 92 Z"/>
+      </svg>
+    </section>
+
+    <section class="section" id="stories">
+      <h2 class="section-head">Stories</h2>
+      <div class="stories">
+        <article class="story">
+          <details class="story-details" name="story-list">
+            <summary class="story-head">
+              <svg class="story-glyph" viewBox="0 0 20 20">
+                <path d="M3 4h16v12h-16z"/>
+                <path d="M14 4 L20 4 L20 10 Z"/>
+              </svg>
+              <span class="story-wrap">
+                <span class="story-title">The Fold in My Grandfather's Hands</span>
+                <span class="story-meta">
+                  <span class="story-byline">by M. Wren</span>
+                  <span class="story-date">3 Nov 2026</span>
+                </span>
+                <span class="story-blurb">A short note on the first thing my grandfather ever made: a sheet with a crease, and how the crease outlasted the sheet.</span>
+              </span>
+              <svg class="story-chevron" viewBox="0 0 20 20">
+                <path d="M5 6 L18 12 L5 18"/>
+              </svg>
+            </summary>
+            <div class="story-body">
+              <p class="story-body-copy">My grandfather never made anything by plan. For one afternoon he made a sheet — a rectangle of newsprint, folded along a line he chose as he went — and that was the whole of his work: the crease, not the paper. The pinch of his thumb at the hinge stayed visible in the ridge. Years later I found a fold still in my own work, under a heavier fold that had covered it, in a drawer that had forgotten it was keeping something. You learn the rule from him: the sheet doesn't make the crease, it accepts it; the fold is made by the hand and remembered by the edge.</p>
+            </div>
+          </details>
+        </article>
+
+        <article class="story">
+          <details class="story-details" name="story-list">
+            <summary class="story-head">
+              <svg class="story-glyph" viewBox="0 0 20 20">
+                <path d="M2 12h16v6h-16z"/>
+                <path d="M2 5h16v5h-16z"/>
+                <circle cx="14.5" cy="18" r="1"/>
+              </svg>
+              <span class="story-wrap">
+                <span class="story-title">Why 32 Lines Fit a Sheet</span>
+                <span class="story-meta">
+                  <span class="story-byline">by S. Clay</span>
+                  <span class="story-date">6 Nov 2026</span>
+                </span>
+                <span class="story-blurb">The arithmetic of a sheet, and what we choose to ignore about measure.</span>
+              </span>
+              <svg class="story-chevron" viewBox="0 0 20 20">
+                <path d="M5 6 L18 12 L5 18"/>
+              </svg>
+            </summary>
+            <div class="story-body">
+              <p class="story-body-copy">Take a sheet of newsprint, 27 by 17 centimetres, and fold it once. The space you lose is the width of the fold. Now set a type for 11 centimetres: you fit thirty-two lines, counting only the whole ones — the last line sits against the rule and is mostly space. We measure more than we mean: measure is the space the eye believes in before it finds the line itself. So we adjust: for a page of sixty lines we allow a second sheet's worth of slack, and call it a margin. None of this is in the rules of the press. It is in the rules of the reader, and that is why it holds. The reader counts; the press only sets.</p>
+            </div>
+          </details>
+        </article>
+
+        <article class="story">
+          <details class="story-details" name="story-list">
+            <summary class="story-head">
+              <svg class="story-glyph" viewBox="0 0 20 20">
+                <path d="M6 2h8v4h-8z"/>
+                <path d="M4.5 9h11v4h-11z"/>
+                <circle cx="10" cy="3" r="0.9"/>
+              </svg>
+              <span class="story-wrap">
+                <span class="story-title">The Waiting Room Is a Fifth Column</span>
+                <span class="story-meta">
+                  <span class="story-byline">by A. Marlowe</span>
+                  <span class="story-date">11 Nov 2026</span>
+                </span>
+                <span class="story-blurb">On the small waiting room that sits between the archives and the city.</span>
+              </span>
+              <svg class="story-chevron" viewBox="0 0 20 20">
+                <path d="M5 6 L18 12 L5 18"/>
+              </svg>
+            </summary>
+            <div class="story-body">
+              <p class="story-body-copy">The waiting room is where the city keeps its unfinished business: not the loud ones, but the small one near the archives — green walls, a door that never quite latches. People come to read the notices and leave; others come and read nothing at all. The staff calls it a fifth column, because it serves no function other than holding you until the next room is ready — a column of space between two rooms that would otherwise meet. You learn its vocabulary: the hum of the radiator is the weather; the clock on the wall is the schedule; the silence between arrivals is the room's own language. The city sends people here on purpose. The room answers with nothing, and that is its answer.</p>
+            </div>
+          </details>
+        </article>
+
+        <article class="story">
+          <details class="story-details" name="story-list">
+            <summary class="story-head">
+              <svg class="story-glyph" viewBox="0 0 20 20">
+                <path d="M2 8 L10 6 L18 8"/>
+                <path d="M2 15 L10 13 L18 15"/>
+              </svg>
+              <span class="story-wrap">
+                <span class="story-title">Paper That Forgets Its Page</span>
+                <span class="story-meta">
+                  <span class="story-byline">by R. Marlowe</span>
+                  <span class="story-date">14 Nov 2026</span>
+                </span>
+                <span class="story-blurb">On how a printed sheet loses where it came from while still knowing what it says.</span>
+              </span>
+              <svg class="story-chevron" viewBox="0 0 20 20">
+                <path d="M5 6 L18 12 L5 18"/>
+              </svg>
+            </summary>
+            <div class="story-body">
+              <p class="story-body-copy">A sheet that has been through a press keeps part of the press in itself: the weight of the cover, the smell of the ink, the irregular edges the guillotine leaves. But the page number, the running head, the name of the edition — that is metadata the sheet can live without. Photocopy a page, put it in another binding, and the words still read; only the margin has changed. Digital print moves faster: a sheet is a number in a queue and knows nothing of its neighbours except the file order. I used to think the page number was the book's memory. The sheets remember the press, not the page.</p>
+            </div>
+          </details>
+        </article>
+
+        <article class="story">
+          <details class="story-details" name="story-list">
+            <summary class="story-head">
+              <svg class="story-glyph" viewBox="0 0 20 20">
+                <path d="M3 2h14v5h-14z"/>
+                <path d="M5.5 10 L5.5 13"/>
+                <path d="M10 10 L10 13"/>
+                <path d="M14.5 10 L14.5 13"/>
+                <path d="M3 14 L17 14"/>
+              </svg>
+              <span class="story-wrap">
+                <span class="story-title">A Dedication to the Unread</span>
+                <span class="story-meta">
+                  <span class="story-byline">by L. Parry</span>
+                  <span class="story-date">19 Nov 2026</span>
+                </span>
+                <span class="story-blurb">A piece written for an audience that will not arrive, and for the reader who arrives late.</span>
+              </span>
+              <svg class="story-chevron" viewBox="0 0 20 20">
+                <path d="M5 6 L18 12 L5 18"/>
+              </svg>
+            </summary>
+            <div class="story-body">
+              <p class="story-body-copy">I wrote this for the reader who buys the paper at the stand and turns it over twice, looking for the headlines. I wrote it for the reader who takes it home and puts it on a shelf where the light is different. I wrote it most of all for the one who arrives to read it later and finds the paper has gone to another hand. A dedication to the unread is a strange thing: it is a promise to someone who never looks. We keep them anyway — on the stand, in the box, in the drawer — because a page without a reader is still a page, and the press believes in them.</p>
+            </div>
+          </details>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <h2 class="section-head">The practice</h2>
+      <div class="about-copy">
+        <p>FOLD is a monthly publication about the things that fold — lines, sheets, pages and the space between two of them. The stories in it are short, and we set them in Georgia.</p>
+        <p>The practice is slow: the type is set once, the sheet is printed once, and if a line reads badly the whole set is taken out and reset. A sheet that is erased is still a sheet, so we keep working back to the second print.</p>
+      </div>
+      <dl class="about-facts">
+        <div><dt>Established</dt><dd>2026</dd></div>
+        <div><dt>Published</dt><dd>Monthly</dd></div>
+        <div><dt>Set in</dt><dd>Georgia</dd></div>
+        <div><dt>Publisher</dt><dd>The Fold Press</dd></div>
+      </dl>
+      <svg class="about-illustration" viewBox="0 0 320 220">
+        <path d="M16 96 L304 96 L304 148 L16 148 Z"/>
+        <path d="M16 78 L304 78 L304 96 L16 96 Z"/>
+        <path d="M30 122 L116 122"/>
+        <path d="M30 138 L116 138"/>
+        <path d="M30 154 L116 154"/>
+        <circle cx="272" cy="166" r="5"/>
+      </svg>
+    </section>
+
+    <section class="section" id="contact">
+      <h2 class="section-head">Write to us</h2>
+      <div class="contact">
+        <p class="contact-copy">We read every letter by hand. Send us a note at the address below; we reply within a week, by mail.</p>
+        <a class="contact-address" href="mailto:fold@mail.example">
+          <svg viewBox="0 0 20 20"><path d="M2 8 L10 6 L18 8 L18 14 L2 14 Z"/></svg>
+          fold@mail.example
+        </a>
+        <a class="cta" href="mailto:fold@mail.example">Send a letter →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p class="site-footer-name">FOLD</p>
+    <p class="site-footer-tagline">a monthly of type, paper and the edge between</p>
+    <nav aria-label="Footer navigation">
+      <ul>
+        <li><a href="#stories">Stories</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <p class="site-footer-copy">© 2026 The Fold Press.</p>
+  </footer>
+
+  <script>
+  (function () {
+    "use strict";
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const stories = document.querySelectorAll(".story");
+    if (reduce.matches) return;
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("revealed");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2, rootMargin: "0px 0px -16px 0px" });
+      stories.forEach((story) => observer.observe(story));
+    } else {
+      stories.forEach((story) => story.classList.add("revealed"));
+    }
+  })();
+  </script>
+</body>
+</html>

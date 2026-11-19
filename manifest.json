@@ -1,6 +1,6 @@
 {
   "generated_from": "runs/",
-  "count": 24,
+  "count": 25,
   "catalog": [
     {
       "no": "01",
@@ -254,6 +254,40 @@
     "performance"
   ],
   "runs": [
+    {
+      "schema_version": 1,
+      "model": "tidepool-alpha-free",
+      "category": "website",
+      "date": "2026-11-19",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "01",
+      "prompt_label": "Website",
+      "notes": "Static, single-entry-point editorial site for the fictional monthly publication FOLD. Hero with a hand-drawn folded-sheet animation, a story list using details accordions with scroll-reveal, an About section with a hand-drawn typewriter illustration, and a Contact section with a mailto address and CTA. All imagery is hand-drawn SVG (hero sheets, per-story glyphs, typewriter); colours are strictly greyscale; favicon is assets/favicon.svg. A small inline script adds scroll reveal with prefers-reduced-motion support. Works from file:// and GitHub Pages via relative paths.",
+      "slug": "2026-11-19_tidepool-alpha-free_website_v1",
+      "path": "runs/2026-11-19_tidepool-alpha-free_website_v1/index.html",
+      "source_file": "website__tidepool-alpha-free__2026-11-19__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "files": [
+        "README.md",
+        "assets/favicon.svg",
+        "index.html",
+        "meta.json"
+      ]
+    },
     {
       "schema_version": 1,
       "model": "ernie-5.5-flash-preview-free",
