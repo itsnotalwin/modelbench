@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "model": "gpt-astra-6.2",
+  "category": "website",
+  "date": "2026-11-19",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "01",
+  "prompt_label": "Website",
+  "notes": "Strata is an offline, dependency-free terrain instrument with four original procedural landforms, editable seeded geometry, local collections, and PNG and OBJ export. No runtime model identifier was exposed. Saved collections are browser-local; when persistent storage is unavailable, they last for the current session only.",
+  "model_label": "unknown-model",
+  "slug": "2026-11-19_gpt-astra-6.2_website_v1",
+  "path": "runs/2026-11-19_gpt-astra-6.2_website_v1/index.html",
+  "source_file": "website__gpt-astra-6.2 __2026-11-19__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}
