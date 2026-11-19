@@ -356,7 +356,7 @@ def process_zip(src: Path) -> str:
         # Every run identity is explicit in validated metadata. Never auto-increment
         # or overwrite: the submitter must choose a new version in meta.json.
         if run_dir.exists():
-            raise IntakeError(f"destination already exists: {run_slug}; increment meta.json version for a retest")
+            raise IntakeError(f"destination already exists: {run_slug}; this metadata identifies an existing run. Correct meta.json only if this is genuinely a different submission; the ZIP filename is ignored.")
 
 
         for noise in ("__MACOSX",):
