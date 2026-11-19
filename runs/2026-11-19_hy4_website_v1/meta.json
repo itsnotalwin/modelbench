@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "hy4",
+  "category": "website",
+  "date": "2026-11-19",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "01",
+  "prompt_label": "Website",
+  "notes": "A standalone, strictly monochrome editorial website about the tones between black and white, with a pointer-reactive Canvas field, a luminance-matching instrument, six procedurally drawn plates, a selectable grey register, inverted theme, print styles and reduced-motion support. No runtime model identifier was exposed, so unknown-model is used as required. No external assets, fonts, libraries or network calls; all imagery is SVG or Canvas. Known limitation: the interactive instruments require JavaScript, although the editorial text and initial captions remain in the HTML. Model identity confirmed by the operator as Hy4.",
+  "slug": "2026-11-19_hy4_website_v1",
+  "path": "runs/2026-11-19_hy4_website_v1/index.html",
+  "source_file": "website__Hy4__2026-11-19__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

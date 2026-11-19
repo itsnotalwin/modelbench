@@ -1,6 +1,6 @@
 {
   "generated_from": "runs/",
-  "count": 30,
+  "count": 32,
   "catalog": [
     {
       "no": "01",
@@ -320,6 +320,76 @@
         "assets/favicon.svg",
         "index.html",
         "meta.json"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "hy4-flash",
+      "category": "website",
+      "date": "2026-11-19",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "01",
+      "prompt_label": "Website",
+      "notes": "Silent Press: a static, strictly monochrome editorial site with a seeded SVG poster generator, six selectable editions, live proofing, SVG download and shareable settings links. All artwork is drawn in code; there are no external assets or dependencies. The runtime exposed no model identifier, so the slug is unknown-model. Requires JavaScript for the generator and interactive controls; the written content remains readable without it. Model identity confirmed by the operator as Hy4 Flash.",
+      "slug": "2026-11-19_hy4-flash_website_v1",
+      "path": "runs/2026-11-19_hy4-flash_website_v1/index.html",
+      "source_file": "website__Hy4_flash__2026-11-19__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "files": [
+        "README.md",
+        "index.html",
+        "js/app.js",
+        "meta.json",
+        "styles.css"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "hy4",
+      "category": "website",
+      "date": "2026-11-19",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "01",
+      "prompt_label": "Website",
+      "notes": "A standalone, strictly monochrome editorial website about the tones between black and white, with a pointer-reactive Canvas field, a luminance-matching instrument, six procedurally drawn plates, a selectable grey register, inverted theme, print styles and reduced-motion support. No runtime model identifier was exposed, so unknown-model is used as required. No external assets, fonts, libraries or network calls; all imagery is SVG or Canvas. Known limitation: the interactive instruments require JavaScript, although the editorial text and initial captions remain in the HTML. Model identity confirmed by the operator as Hy4.",
+      "slug": "2026-11-19_hy4_website_v1",
+      "path": "runs/2026-11-19_hy4_website_v1/index.html",
+      "source_file": "website__Hy4__2026-11-19__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "files": [
+        "app.js",
+        "favicon.svg",
+        "index.html",
+        "meta.json",
+        "styles.css"
       ]
     },
     {
