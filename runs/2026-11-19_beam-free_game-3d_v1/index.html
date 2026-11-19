@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lantern Drift</title>
+<style>
+  html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#05070f;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#e8f0ff;}
+  canvas{display:block;width:100%;height:100%;}
+  #ui{position:fixed;inset:0;pointer-events:none;}
+  .panel{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:radial-gradient(ellipse at center,rgba(10,20,40,.78),rgba(2,4,12,.96));pointer-events:auto;}
+  .panel.hidden{display:none;}
+  h1{font-size:clamp(40px,8vw,84px);margin:0;letter-spacing:2px;background:linear-gradient(180deg,#ffe9b0,#ff9f4a);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 40px rgba(255,180,80,.4);}
+  .subtitle{color:#9fb6e8;font-size:18px;max-width:640px;text-align:center;line-height:1.5;}
+  button{pointer-events:auto;cursor:pointer;border:0;border-radius:12px;padding:12px 28px;font-size:16px;font-weight:600;background:linear-gradient(180deg,#ffbf6b,#e88a2f);color:#1a0f00;box-shadow:0 6px 24px rgba(255,140,40,.35);}
+  button:hover{filter:brightness(1.1);}
+  .hud{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;font-variant-numeric:tabular-nums;}
+  .hud .box{background:rgba(5,10,25,.55);backdrop-filter:blur(6px);border:1px solid rgba(120,160,255,.2);border-radius:10px;padding:8px 14px;font-size:14px;}
+  .hud .hp{color:#ff6b6b;}
+  .hud .orbs{color:#ffd36b;}
+  .center-msg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:28px;font-weight:700;text-align:center;pointer-events:none;text-shadow:0 0 20px rgba(0,0,0,.8);}
+  .center-msg.hidden{display:none;}
+  .controls-hint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-size:12px;color:#9fb6e8;opacity:.85;text-align:center;pointer-events:none;}
+  .touch{position:absolute;inset:0;pointer-events:none;}
+  .tbtn{position:absolute;pointer-events:auto;touch-action:none;width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;user-select:none;}
+  #tJump{right:20px;bottom:90px;}
+  #tDash{right:90px;bottom:20px;}
+  #tPause{right:20px;top:20px;width:44px;height:44px;}
+  .joystick{position:absolute;left:20px;bottom:20px;width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);pointer-events:auto;touch-action:none;}
+  .stick{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,200,120,.5);pointer-events:none;}
+  @media (min-width:900px){.touch{display:none;}}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="ui">
+  <div id="title" class="panel">
+    <h1>Lantern Drift</h1>
+    <div class="subtitle">You are a paper-lantern spirit adrift in a drowned archipelago of floating islands. Gather the lost memory-orbs, evade the shadow wraiths, and ascend through five drifting realms. Every orb remembers something you forgot.</div>
+    <button id="startBtn">Begin Drift</button>
+    <div class="subtitle" style="font-size:14px;opacity:.7;">WASD move · mouse look (click canvas) · Space jump · Shift dash · P pause · Esc menu</div>
+  </div>
+  <div id="hud" class="hidden">
+    <div class="hud">
+      <div class="box">Level <span id="level">1</span> / 5</div>
+      <div class="box orbs">Orbs <span id="orbs">0</span>/<span id="orbsTot">0</span> · Score <span id="score">0</span></div>
+      <div class="box hp">HP <span id="hp">3</span> · Best <span id="best">0</span></div>
+    </div>
+    <div id="centerMsg" class="center-msg hidden"></div>
+    <div class="controls-hint">WASD move · mouse look · Space jump · Shift dash · P pause</div>
+    <div class="touch">
+      <div class="joystick" id="joy"><div class="stick" id="stick"></div></div>
+      <div class="tbtn" id="tJump">⤒</div>
+      <div class="tbtn" id="tDash">⚡</div>
+      <div class="tbtn" id="tPause">❚❚</div>
+    </div>
+  </div>
+  <div id="pause" class="panel hidden">
+    <h1 style="font-size:48px;">Paused</h1>
+    <button id="resumeBtn">Resume</button>
+    <button id="quitBtn" style="background:linear-gradient(180deg,#6b7,#4a6);">Quit to Title</button>
+  </div>
+  <div id="gameover" class="panel hidden">
+    <h1 style="font-size:56px;">Extinguished</h1>
+    <div class="subtitle" id="goText"></div>
+    <button id="retryBtn">Try Again</button>
+    <button id="menuBtn2" style="background:linear-gradient(180deg,#6b7,#4a6);">Menu</button>
+  </div>
+  <div id="victory" class="panel hidden">
+    <h1 style="font-size:56px;">Ascended</h1>
+    <div class="subtitle" id="vicText"></div>
+    <button id="againBtn">Drift Again</button>
+  </div>
+</div>
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+
+// ---------- state ----------
+const state = {
+  phase: 'title',
+  level: 1,
+  score: 0,
+  best: 0,
+  hp: 3,
+  invuln: 0,
+  dashCd: 0,
+  dashing: 0,
+  yaw: 0,
+  keys: {},
+  orbs: [],
+  orbsTotal: 0,
+  orbsCollected: 0,
+  islands: [],
+  wraiths: [],
+  particles: [],
+  player: { x:0,y:3,z:0, vx:0,vy:0,vz:0, onGround:false },
+  levelTransition: 0,
+  centerMsgTimer: 0,
+  touchMove: null,
+  touchJump: false,
+  touchDash: false,
+  gpMove: null,
+  gpJump: false,
+  gpDash: false,
+};
+
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:false });
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(innerWidth,innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x0a1024, 0.035);
+
+const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 200);
+camera.position.set(0,8,-10);
+
+let composer = null;
+
+const amb = new THREE.AmbientLight(0x3a4a7a, 0.5);
+scene.add(amb);
+const sun = new THREE.DirectionalLight(0xffe0b0, 1.2);
+sun.position.set(5,12,4);
+sun.castShadow = true;
+sun.shadow.mapSize.set(1024,1024);
+sun.shadow.camera.near=1; sun.shadow.camera.far=60;
+sun.shadow.camera.left=-30; sun.shadow.camera.right=30;
+sun.shadow.camera.top=30; sun.shadow.camera.bottom=-30;
+scene.add(sun);
+const hemi = new THREE.HemisphereLight(0x6a8cff,0x0a1a2a,0.4);
+scene.add(hemi);
+
+// audio
+let audioCtx = null, masterGain = null, musicTimer = null, musicStep = 0;
+function ensureAudio(){
+  if(audioCtx) return;
+  try {
+    audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.6;
+    masterGain.connect(audioCtx.destination);
+    startMusic();
+  } catch(e){}
+}
+function tone(freq,dur,type='sine',gain=0.15,slide=0){
+  if(!audioCtx) return;
+  const t=audioCtx.currentTime;
+  const o=audioCtx.createOscillator();
+  const g=audioCtx.createGain();
+  o.type=type;
+  o.frequency.setValueAtTime(freq,t);
+  if(slide) o.frequency.exponentialRampToValueAtTime(Math.max(40,freq+slide),t+dur);
+  g.gain.setValueAtTime(gain,t);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g); g.connect(masterGain);
+  o.start(t); o.stop(t+dur);
+}
+function noiseBurst(dur=0.15,gain=0.2){
+  if(!audioCtx) return;
+  const t=audioCtx.currentTime;
+  const buf=audioCtx.createBuffer(1,audioCtx.sampleRate*dur,audioCtx.sampleRate);
+  const d=buf.getChannelData(0);
+  for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*(1-i/d.length);
+  const src=audioCtx.createBufferSource(); src.buffer=buf;
+  const g=audioCtx.createGain(); g.gain.value=gain;
+  const f=audioCtx.createBiquadFilter(); f.type='lowpass'; f.frequency.value=1200;
+  src.connect(f); f.connect(g); g.connect(masterGain);
+  src.start(t); src.stop(t+dur);
+}
+const musicNotes = [261.63,329.63,392.00,523.25,392.00,329.63,261.63,196.00];
+function startMusic(){
+  if(musicTimer) return;
+  musicTimer = setInterval(()=>{
+    if(!audioCtx || state.phase!=='playing') return;
+    const f = musicNotes[musicStep % musicNotes.length];
+    tone(f,0.35,'triangle',0.05);
+    if(musicStep%4===0) tone(f/2,0.5,'sine',0.04);
+    musicStep++;
+  }, 420);
+}
+
+function loadBest(){ try{return parseInt(localStorage.getItem('lantern_best')||'0',10)||0;}catch(e){return 0;} }
+function saveBest(v){ try{localStorage.setItem('lantern_best',String(v));}catch(e){} }
+
+// materials
+const matIsland = new THREE.MeshStandardMaterial({ color:0x1f3a5f, roughness:0.85, metalness:0.05, emissive:0x0a1428, emissiveIntensity:0.4 });
+const matIslandTop = new THREE.MeshStandardMaterial({ color:0x2e5a7a, roughness:0.7, emissive:0x1a3a5a, emissiveIntensity:0.5 });
+const matOrb = new THREE.MeshStandardMaterial({ color:0xffd36b, emissive:0xffaa33, emissiveIntensity:2.2, roughness:0.2, metalness:0.3 });
+const matWraith = new THREE.MeshStandardMaterial({ color:0x0a0a1a, emissive:0x6a3aff, emissiveIntensity:0.6, roughness:0.9, transparent:true, opacity:0.85 });
+const matPlayer = new THREE.MeshStandardMaterial({ color:0xffe9b0, emissive:0xffb060, emissiveIntensity:1.6, roughness:0.3 });
+
+let playerMesh, playerLight, playerHalo;
+
+function createPlayer(){
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(0.35,0.45,0.9,12), matPlayer);
+  body.castShadow=true;
+  g.add(body);
+  const cap = new THREE.Mesh(new THREE.ConeGeometry(0.4,0.35,12), new THREE.MeshStandardMaterial({color:0x3a2a1a,roughness:0.6}));
+  cap.position.y=0.62;
+  g.add(cap);
+  const core = new THREE.Mesh(new THREE.SphereGeometry(0.22,16,16), new THREE.MeshBasicMaterial({color:0xfff0c0}));
+  core.position.y=0.05;
+  g.add(core);
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(0.6,0.04,8,24), new THREE.MeshBasicMaterial({color:0xffd36b}));
+  ring.rotation.x=Math.PI/2;
+  ring.position.y=-0.5;
+  g.add(ring);
+  playerHalo = ring;
+  playerLight = new THREE.PointLight(0xffc070, 1.6, 8);
+  playerLight.position.y=0.2;
+  g.add(playerLight);
+  scene.add(g);
+  playerMesh = g;
+}
+
+function clearLevel(){
+  for(const i of state.islands){ scene.remove(i.mesh); }
+  for(const o of state.orbs){ scene.remove(o.mesh); if(o.light) scene.remove(o.light);}
+  for(const w of state.wraiths){ scene.remove(w.mesh); if(w.light) scene.remove(w.light);}
+  state.islands=[]; state.orbs=[]; state.wraiths=[];
+  for(const p of state.particles){ scene.remove(p.mesh);}
+  state.particles=[];
+}
+
+function makeIsland(x,y,z,sx,sy,sz){
+  const grp = new THREE.Group();
+  const base = new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz), matIsland);
+  base.castShadow=true; base.receiveShadow=true;
+  grp.add(base);
+  const top = new THREE.Mesh(new THREE.BoxGeometry(sx*0.92,0.12,sz*0.92), matIslandTop);
+  top.position.y = sy/2+0.06;
+  top.receiveShadow=true;
+  grp.add(top);
+  const edge = new THREE.Mesh(new THREE.BoxGeometry(sx+0.05,sy+0.05,sz+0.05), new THREE.MeshBasicMaterial({color:0x4a6aff,wireframe:true,transparent:true,opacity:0.08}));
+  grp.add(edge);
+  grp.position.set(x,y,z);
+  scene.add(grp);
+  const obj = { mesh:grp, x,y,z, sx,sy,sz };
+  state.islands.push(obj);
+  return obj;
+}
+
+function buildLevel(n){
+  clearLevel();
+  state.level = n;
+  state.orbsCollected = 0;
+  state.player.x=0; state.player.y=3; state.player.z=0;
+  state.player.vx=0; state.player.vy=0; state.player.vz=0;
+  state.player.onGround=false;
+  state.hp = 3;
+  state.invuln=0; state.dashCd=0; state.dashing=0;
+  state.yaw=0;
+  if(playerMesh){ playerMesh.visible=true; }
+
+  makeIsland(0,0,0,7,1,7);
+
+  let prev={x:0,y:0,z:0};
+  const count = 5 + n*2;
+  for(let i=0;i<count;i++){
+    const ang = i*1.05 + (Math.random()-0.5)*0.7;
+    const step = 3.2 + Math.random()*1.6;
+    let x = prev.x + Math.cos(ang)*step;
+    let z = prev.z + Math.sin(ang)*step;
+    let y = prev.y + (Math.random()-0.5)*1.1;
+    y = Math.max(-1.5, Math.min(2.5, y));
+    y = Math.round(y*2)/2;
+    const sx = 2.6 + Math.random()*1.6;
+    const sz = 2.6 + Math.random()*1.6;
+    makeIsland(x,y,z,sx,1,sz);
+    prev = {x,y,z};
+  }
+  const branches = 2 + n;
+  for(let b=0;b<branches;b++){
+    const base = state.islands[1 + Math.floor(Math.random()*(state.islands.length-1))];
+    const ang = Math.random()*Math.PI*2;
+    const step = 3.5 + Math.random()*1.5;
+    let x = base.x + Math.cos(ang)*step;
+    let z = base.z + Math.sin(ang)*step;
+    let y = base.y + (Math.random()-0.5)*1.2;
+    y = Math.max(-1.5, Math.min(2.5, Math.round(y*2)/2));
+    makeIsland(x,y,z, 2.2+Math.random()*1.4, 1, 2.2+Math.random()*1.4);
+  }
+
+  const orbCount = 4 + n*2;
+  const candidates = state.islands.slice(1);
+  for(let i=0;i<orbCount;i++){
+    const isl = candidates[Math.floor(Math.random()*candidates.length)];
+    const ox = isl.x + (Math.random()-0.5)*(isl.sx*0.6);
+    const oz = isl.z + (Math.random()-0.5)*(isl.sz*0.6);
+    const oy = isl.y + 0.5 + 0.12 + 1.0;
+    const mesh = new THREE.Mesh(new THREE.SphereGeometry(0.32,16,16), matOrb.clone());
+    mesh.position.set(ox,oy,oz);
+    mesh.castShadow=true;
+    const light = new THREE.PointLight(0xffc060, 1.2, 6);
+    light.position.set(ox,oy,oz);
+    scene.add(mesh); scene.add(light);
+    state.orbs.push({ mesh, light, x:ox,y:oy,z:oz, collected:false, phase:Math.random()*6.28 });
+  }
+  state.orbsTotal = state.orbs.length;
+
+  const wCount = 1 + Math.floor(n/1.5);
+  for(let i=0;i<wCount;i++){
+    const isl = candidates[Math.floor(Math.random()*candidates.length)];
+    const mesh = new THREE.Mesh(new THREE.OctahedronGeometry(0.55,0), matWraith.clone());
+    const tend = new THREE.Mesh(new THREE.ConeGeometry(0.15,0.9,6), matWraith.clone());
+    tend.position.y=-0.7; tend.rotation.x=Math.PI;
+    mesh.add(tend);
+    mesh.position.set(isl.x, isl.y+1.4, isl.z);
+    mesh.castShadow=true;
+    const light = new THREE.PointLight(0x6a3aff, 0.8, 5);
+    light.position.copy(mesh.position);
+    scene.add(mesh); scene.add(light);
+    state.wraiths.push({ mesh, light, vx:0, vz:0, speed: 1.6 + n*0.35, phase:Math.random()*6.28 });
+  }
+
+  updateHud();
+}
+
+function spawnParticles(x,y,z,color,count=12,spread=1){
+  for(let i=0;i<count;i++){
+    const m = new THREE.Mesh(new THREE.SphereGeometry(0.08,6,6), new THREE.MeshBasicMaterial({color}));
+    m.position.set(x,y,z);
+    scene.add(m);
+    const a = Math.random()*Math.PI*2;
+    const up = Math.random()*0.5+0.2;
+    const sp = 1.5+Math.random()*2.5;
+    state.particles.push({ mesh:m, vx:Math.cos(a)*sp*spread, vy:up*sp, vz:Math.sin(a)*sp*spread, life:0.6+Math.random()*0.4, maxLife:1.0 });
+  }
+}
+
+function updateHud(){
+  document.getElementById('level').textContent = state.level;
+  document.getElementById('orbs').textContent = state.orbsCollected;
+  document.getElementById('orbsTot').textContent = state.orbsTotal;
+  document.getElementById('score').textContent = state.score;
+  document.getElementById('hp').textContent = state.hp;
+  document.getElementById('best').textContent = state.best;
+}
+
+function showCenter(msg, dur=1.6){
+  state.centerMsg = msg;
+  state.centerMsgTimer = dur;
+  const el = document.getElementById('centerMsg');
+  el.textContent = msg;
+  el.classList.remove('hidden');
+}
+
+// input
+window.addEventListener('keydown', e=>{
+  state.keys[e.code]=true;
+  if(e.code==='KeyP' || e.code==='Escape'){
+    if(state.phase==='playing'){ pauseGame(); }
+    else if(state.phase==='paused'){ resumeGame(); }
+  }
+  if(e.code==='Space') e.preventDefault();
+});
+window.addEventListener('keyup', e=>{ state.keys[e.code]=false; });
+
+let pointerLocked=false;
+canvas.addEventListener('click', ()=>{
+  if(state.phase==='playing' && !pointerLocked){
+    canvas.requestPointerLock?.();
+  }
+});
+document.addEventListener('pointerlockchange', ()=>{ pointerLocked = document.pointerLockElement===canvas; });
+document.addEventListener('mousemove', e=>{
+  if(!pointerLocked || state.phase!=='playing') return;
+  state.yaw -= e.movementX*0.0022;
+});
+
+// touch
+let joyTouch=null, joyStart={x:0,y:0};
+const joyEl = document.getElementById('joy');
+const stickEl = document.getElementById('stick');
+joyEl.addEventListener('touchstart', e=>{
+  e.preventDefault();
+  const t=e.changedTouches[0];
+  joyTouch=t.identifier;
+  const r=joyEl.getBoundingClientRect();
+  joyStart={x:r.left+r.width/2, y:r.top+r.height/2};
+}, {passive:false});
+joyEl.addEventListener('touchmove', e=>{
+  e.preventDefault();
+  for(const t of e.changedTouches){
+    if(t.identifier!==joyTouch) continue;
+    let dx=t.clientX-joyStart.x, dy=t.clientY-joyStart.y;
+    const mag=Math.hypot(dx,dy); const max=45;
+    if(mag>max){ dx=dx/mag*max; dy=dy/mag*max; }
+    stickEl.style.transform=`translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+    state.touchMove = {x: dx/max, y: dy/max};
+  }
+}, {passive:false});
+function endJoy(){
+  joyTouch=null; state.touchMove=null;
+  stickEl.style.transform='translate(-50%,-50%)';
+}
+joyEl.addEventListener('touchend', e=>{ for(const t of e.changedTouches) if(t.identifier===joyTouch) endJoy(); });
+joyEl.addEventListener('touchcancel', endJoy);
+document.getElementById('tJump').addEventListener('touchstart', e=>{ e.preventDefault(); state.touchJump=true; });
+document.getElementById('tJump').addEventListener('touchend', e=>{ state.touchJump=false; });
+document.getElementById('tDash').addEventListener('touchstart', e=>{ e.preventDefault(); state.touchDash=true; });
+document.getElementById('tDash').addEventListener('touchend', e=>{ state.touchDash=false; });
+document.getElementById('tPause').addEventListener('touchstart', e=>{ e.preventDefault(); if(state.phase==='playing') pauseGame(); else if(state.phase==='paused') resumeGame(); });
+
+// gamepad
+function pollGamepad(){
+  const gps = navigator.getGamepads?.() || [];
+  const gp = gps[0];
+  if(!gp) return;
+  const lx = gp.axes[0]||0, ly = gp.axes[1]||0;
+  if(Math.abs(lx)>0.15 || Math.abs(ly)>0.15){
+    state.gpMove = {x:lx, y:ly};
+  } else state.gpMove=null;
+  if(state.phase==='playing'){
+    if(gp.buttons[0]?.pressed) state.gpJump=true;
+    if(gp.buttons[5]?.pressed || gp.buttons[7]?.pressed) state.gpDash=true;
+  }
+  if(gp.buttons[9]?.pressed) { if(state.phase==='playing') pauseGame(); }
+}
+
+// phase control
+function startGame(){
+  ensureAudio();
+  state.score=0;
+  state.level=1;
+  state.best=loadBest();
+  state.phase='playing';
+  document.getElementById('title').classList.add('hidden');
+  document.getElementById('hud').classList.remove('hidden');
+  document.getElementById('gameover').classList.add('hidden');
+  document.getElementById('victory').classList.add('hidden');
+  document.getElementById('pause').classList.add('hidden');
+  buildLevel(1);
+  showCenter('Realm 1', 1.4);
+}
+function pauseGame(){ if(state.phase!=='playing') return; state.phase='paused'; document.getElementById('pause').classList.remove('hidden'); }
+function resumeGame(){ if(state.phase!=='paused') return; state.phase='playing'; document.getElementById('pause').classList.add('hidden'); }
+function gameOver(){
+  state.phase='gameover';
+  document.getElementById('gameover').classList.remove('hidden');
+  document.getElementById('goText').textContent = `You reached realm ${state.level} · score ${state.score}. Best ${state.best}.`;
+  tone(120,0.6,'sawtooth',0.2,-80);
+}
+function victory(){
+  state.phase='victory';
+  document.getElementById('victory').classList.remove('hidden');
+  document.getElementById('vicText').textContent = `All five realms ascended. Final score ${state.score}. Best ${state.best}.`;
+  tone(523,0.4,'triangle',0.2); setTimeout(()=>tone(659,0.4,'triangle',0.2),150); setTimeout(()=>tone(784,0.6,'triangle',0.2),300);
+}
+function toTitle(){
+  state.phase='title';
+  document.getElementById('title').classList.remove('hidden');
+  document.getElementById('hud').classList.add('hidden');
+  document.getElementById('pause').classList.add('hidden');
+  document.getElementById('gameover').classList.add('hidden');
+  document.getElementById('victory').classList.add('hidden');
+  clearLevel();
+}
+
+document.getElementById('startBtn').addEventListener('click', startGame);
+document.getElementById('resumeBtn').addEventListener('click', resumeGame);
+document.getElementById('quitBtn').addEventListener('click', toTitle);
+document.getElementById('retryBtn').addEventListener('click', startGame);
+document.getElementById('menuBtn2').addEventListener('click', toTitle);
+document.getElementById('againBtn').addEventListener('click', startGame);
+
+function onGroundAt(px,py,pz){
+  for(const isl of state.islands){
+    const hx=isl.sx/2, hz=isl.sz/2, hy=isl.sy/2;
+    if(Math.abs(px-isl.x) < hx+0.35 && Math.abs(pz-isl.z) < hz+0.35){
+      const top = isl.y + hy;
+      if(py <= top+0.25 && py >= top-0.6){
+        return top;
+      }
+    }
+  }
+  return null;
+}
+function islandTopAt(x,z){
+  for(const isl of state.islands){
+    if(Math.abs(x-isl.x) < isl.sx/2+0.2 && Math.abs(z-isl.z) < isl.sz/2+0.2){
+      return isl.y + isl.sy/2;
+    }
+  }
+  return null;
+}
+
+const clock = new THREE.Clock();
+let last = performance.now();
+
+function loop(){
+  requestAnimationFrame(loop);
+  const now = performance.now();
+  let dt = (now-last)/1000;
+  last = now;
+  if(dt>0.1) dt=0.1;
+  pollGamepad();
+
+  for(let i=state.particles.length-1;i>=0;i--){
+    const p=state.particles[i];
+    p.life -= dt;
+    p.vy -= 6*dt;
+    p.mesh.position.x += p.vx*dt;
+    p.mesh.position.y += p.vy*dt;
+    p.mesh.position.z += p.vz*dt;
+    const s = Math.max(0.01, p.life/p.maxLife);
+    p.mesh.scale.setScalar(s);
+    if(p.life<=0){ scene.remove(p.mesh); state.particles.splice(i,1); }
+  }
+
+  if(state.centerMsgTimer>0){
+    state.centerMsgTimer -= dt;
+    if(state.centerMsgTimer<=0){
+      document.getElementById('centerMsg').classList.add('hidden');
+    }
+  }
+
+  if(state.levelTransition>0){
+    state.levelTransition -= dt;
+    if(state.levelTransition<=0){
+      if(state.level>=5){ victory(); }
+      else {
+        buildLevel(state.level+1);
+        state.phase='playing';
+        showCenter('Realm '+(state.level),1.4);
+      }
+    }
+  }
+
+  if(state.phase!=='playing'){
+    render();
+    return;
+  }
+
+  const p = state.player;
+  let mx=0, mz=0;
+  if(state.keys['KeyW']||state.keys['ArrowUp']) mz += 1;
+  if(state.keys['KeyS']||state.keys['ArrowDown']) mz -= 1;
+  if(state.keys['KeyA']||state.keys['ArrowLeft']) mx -= 1;
+  if(state.keys['KeyD']||state.keys['ArrowRight']) mx += 1;
+  if(state.touchMove){ mx -= state.touchMove.x; mz -= state.touchMove.y; }
+  if(state.gpMove){ mx -= state.gpMove.x; mz -= state.gpMove.y; }
+
+  const mag = Math.hypot(mx,mz);
+  if(mag>1){ mx/=mag; mz/=mag; }
+
+  const fwdX = Math.sin(state.yaw), fwdZ = Math.cos(state.yaw);
+  const rightX = Math.cos(state.yaw), rightZ = -Math.sin(state.yaw);
+  const wx = mx*rightX + mz*fwdX;
+  const wz = mx*rightZ + mz*fwdZ;
+
+  const speed = (state.dashing>0? 11 : 6.2);
+  const accel = 18;
+  p.vx += (wx*speed - p.vx)*Math.min(1,accel*dt);
+  p.vz += (wz*speed - p.vz)*Math.min(1,accel*dt);
+
+  const jumpPressed = state.keys['Space'] || state.touchJump || state.gpJump;
+  if(jumpPressed && p.onGround){ p.vy=7.2; p.onGround=false; tone(440,0.12,'square',0.08,200); spawnParticles(p.x,p.y-0.5,p.z,0xffe0a0,6,0.6); }
+  state.touchJump=false; state.gpJump=false;
+
+  state.dashCd = Math.max(0, state.dashCd - dt);
+  state.dashing = Math.max(0, state.dashing - dt);
+  state.invuln = Math.max(0, state.invuln - dt);
+  const dashPressed = (state.keys['ShiftLeft']||state.keys['ShiftRight']) || state.touchDash || state.gpDash;
+  if(dashPressed && state.dashCd<=0){
+    state.dashCd=1.1;
+    state.dashing=0.22;
+    state.invuln=0.35;
+    p.vx = fwdX*13; p.vz = fwdZ*13; p.vy = Math.max(p.vy, 1.5);
+    tone(220,0.18,'sawtooth',0.12,-120);
+    noiseBurst(0.12,0.12);
+    spawnParticles(p.x,p.y,p.z,0xffc070,18,1.2);
+  }
+  state.touchDash=false; state.gpDash=false;
+
+  p.vy -= 18*dt;
+  if(p.vy < -22) p.vy=-22;
+
+  p.x += p.vx*dt;
+  p.y += p.vy*dt;
+  p.z += p.vz*dt;
+
+  p.onGround=false;
+  const top = onGroundAt(p.x,p.y,p.z);
+  if(top!==null && p.vy<=0){
+    p.y = top + 0.5;
+    p.vy=0; p.onGround=true;
+  }
+
+  if(p.y < -12){
+    p.x=0;p.y=3;p.z=0; p.vx=p.vy=p.vz=0;
+    state.hp = Math.max(0, state.hp-1);
+    tone(100,0.5,'sawtooth',0.2,-60);
+    spawnParticles(p.x,p.y,p.z,0xff4040,20,1.5);
+    updateHud();
+    if(state.hp<=0){ gameOver(); }
+  }
+
+  for(const o of state.orbs){
+    if(o.collected) continue;
+    const d = Math.hypot(p.x-o.x, p.y-o.y, p.z-o.z);
+    if(d < 1.2){
+      o.collected=true;
+      scene.remove(o.mesh); if(o.light) scene.remove(o.light);
+      state.orbsCollected++;
+      state.score += 10*state.level;
+      tone(660,0.12,'sine',0.15,440);
+      tone(880,0.18,'sine',0.12,0);
+      spawnParticles(o.x,o.y,o.z,0xffd36b,24,1.6);
+      updateHud();
+      if(state.orbsCollected>=state.orbsTotal){
+        state.score += 50*state.level;
+        updateHud();
+        showCenter(`Realm ${state.level} cleared!`, 1.6);
+        tone(523,0.2,'triangle',0.18); setTimeout(()=>tone(659,0.2,'triangle',0.18),120); setTimeout(()=>tone(784,0.3,'triangle',0.18),240);
+        state.levelTransition = 2.0;
+        state.phase='transition';
+      }
+    }
+    if(!o.collected){
+      o.phase += dt*2;
+      o.mesh.position.y = o.y + Math.sin(o.phase)*0.25;
+      o.mesh.rotation.y += dt*2;
+      if(o.light) o.light.position.copy(o.mesh.position);
+    }
+  }
+
+  for(const w of state.wraiths){
+    w.phase += dt*3;
+    const dx = p.x - w.mesh.position.x;
+    const dz = p.z - w.mesh.position.z;
+    const dist = Math.hypot(dx,dz);
+    const targetSpeed = w.speed;
+    if(dist>0.5){
+      const nx=dx/dist, nz=dz/dist;
+      w.vx += (nx*targetSpeed - w.vx)*Math.min(1,6*dt);
+      w.vz += (nz*targetSpeed - w.vz)*Math.min(1,6*dt);
+    }
+    w.mesh.position.x += w.vx*dt;
+    w.mesh.position.z += w.vz*dt;
+    let baseY = 1.4;
+    const gt = islandTopAt(w.mesh.position.x, w.mesh.position.z);
+    if(gt!==null) baseY = gt + 1.4;
+    w.mesh.position.y = baseY + Math.sin(w.phase)*0.25;
+    if(w.light){ w.light.position.copy(w.mesh.position); }
+    w.mesh.rotation.y += dt*2;
+
+    const cd = Math.hypot(p.x-w.mesh.position.x, p.y-w.mesh.position.y, p.z-w.mesh.position.z);
+    if(cd < 1.1 && state.invuln<=0){
+      state.hp = Math.max(0, state.hp-1);
+      state.invuln = 1.0;
+      p.vx = (p.x-w.mesh.position.x)*6;
+      p.vz = (p.z-w.mesh.position.z)*6;
+      p.vy = 3;
+      tone(180,0.3,'square',0.18,-100);
+      noiseBurst(0.15,0.18);
+      spawnParticles(p.x,p.y,p.z,0x9a6aff,16,1.2);
+      updateHud();
+      if(state.hp<=0){ gameOver(); }
+    }
+  }
+
+  if(playerMesh){
+    playerMesh.position.set(p.x,p.y-0.5,p.z);
+    playerMesh.rotation.y = state.yaw;
+    if(playerHalo) playerHalo.rotation.z += dt*3;
+    playerMesh.visible = !(state.invuln>0 && Math.floor(state.invuln*12)%2===0);
+  }
+
+  const camDist=9, camHeight=5;
+  const desiredX = p.x - Math.sin(state.yaw)*camDist;
+  const desiredZ = p.z - Math.cos(state.yaw)*camDist;
+  const desiredY = p.y + camHeight;
+  camera.position.x += (desiredX-camera.position.x)*Math.min(1,8*dt);
+  camera.position.y += (desiredY-camera.position.y)*Math.min(1,8*dt);
+  camera.position.z += (desiredZ-camera.position.z)*Math.min(1,8*dt);
+  camera.lookAt(p.x, p.y+1, p.z);
+
+  if(state.score > state.best){ state.best = state.score; saveBest(state.best); updateHud(); }
+
+  render();
+}
+
+function render(){
+  if(composer) composer.render();
+  else renderer.render(scene,camera);
+}
+
+// bloom (dynamic)
+(async function initBloom(){
+  try {
+    const [a,b,c] = await Promise.all([
+      import('three/addons/postprocessing/EffectComposer.js'),
+      import('three/addons/postprocessing/RenderPass.js'),
+      import('three/addons/postprocessing/UnrealBloomPass.js'),
+    ]);
+    composer = new a.EffectComposer(renderer);
+    composer.addPass(new b.RenderPass(scene,camera));
+    composer.addPass(new c.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight), 0.9, 0.4, 0.85));
+  } catch(e){ console.warn('bloom unavailable', e); composer=null; }
+})();
+
+createPlayer();
+state.best = loadBest();
+updateHud();
+
+window.addEventListener('resize', ()=>{
+  renderer.setSize(innerWidth,innerHeight);
+  camera.aspect = innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  if(composer) composer.setSize(innerWidth,innerHeight);
+});
+
+document.addEventListener('visibilitychange', ()=>{
+  if(document.hidden && state.phase==='playing') pauseGame();
+});
+
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
