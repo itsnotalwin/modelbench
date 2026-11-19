@@ -7,7 +7,7 @@
   "entry": "index.html",
   "prompt": "01",
   "prompt_label": "Website",
-  "notes": "Silent Press: a static, strictly monochrome editorial site with a seeded SVG poster generator, six selectable editions, live proofing, SVG download and shareable settings links. All artwork is drawn in code; there are no external assets or dependencies. The runtime exposed no model identifier, so the slug is unknown-model. Requires JavaScript for the generator and interactive controls; the written content remains readable without it. Model identity confirmed by the operator as Hy4 Flash.",
+  "notes": "Silent Press: a static, strictly monochrome editorial site with a seeded SVG poster generator, six selectable editions, live proofing, SVG download and shareable settings links. All artwork is drawn in code; there are no external assets or dependencies. Model identity was confirmed by the operator as Hy4 Flash. Requires JavaScript for the generator and interactive controls; the written content remains readable without it.",
   "slug": "2026-11-19_hy4-flash_website_v1",
   "path": "runs/2026-11-19_hy4-flash_website_v1/index.html",
   "source_file": "website__Hy4_flash__2026-11-19__v1.zip",
