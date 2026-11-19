@@ -4,7 +4,9 @@ on:
   push:
     branches: [main]
     paths:
-      - "inbox/**"
+      - "inbox/*.zip"
+      - "inbox/*.html"
+      - "inbox/*.htm"
       - "runs/**/meta.json"
       - "prompts/**"
       - "tools/**"
