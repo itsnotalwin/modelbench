@@ -1,6 +1,6 @@
 {
   "generated_from": "runs/",
-  "count": 28,
+  "count": 30,
   "catalog": [
     {
       "no": "01",
@@ -362,6 +362,38 @@
     {
       "schema_version": 1,
       "model": "beam-free",
+      "category": "restaurant",
+      "date": "2026-11-19",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "05",
+      "prompt_label": "Restaurant Website",
+      "notes": "Komorebi, a Japanese-Danish open-fire restaurant in Copenhagen. Single-file site with full 33-item menu, instant search and dietary/category filters, reservation flow with calendar and slot logic, takeaway basket with localStorage persistence and checkout, real-time open/closed status from opening hours, mobile navigation, Web Audio ambient toggle, canvas hero/story/gallery illustrations, and a hidden chef's dish easter egg. No external assets beyond Google Fonts.",
+      "slug": "2026-11-19_beam-free_restaurant_v1",
+      "path": "runs/2026-11-19_beam-free_restaurant_v1/index.html",
+      "source_file": "restaurant__beam-free__2026-11-19__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "files": [
+        "index.html",
+        "meta.json"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "beam-free",
       "category": "game-3d",
       "date": "2026-11-19",
       "version": 1,
@@ -372,6 +404,38 @@
       "slug": "2026-11-19_beam-free_game-3d_v1",
       "path": "runs/2026-11-19_beam-free_game-3d_v1/index.html",
       "source_file": "game-3d__beam-free__2026-11-19__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "files": [
+        "index.html",
+        "meta.json"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "beam-free",
+      "category": "explainer",
+      "date": "2026-11-19",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "06",
+      "prompt_label": "Machine Explainer",
+      "notes": "Interactive four-stroke spark-ignition engine cutaway with thermodynamic cycle, crank-slider kinematics, cam-driven valves, spark ignition, particle flow, live pressure/torque/valve-lift graphs, what-if failures and parameters, exploded view, sound and hidden oil-jet detail. Single-file canvas app; reduced-motion and touch/keyboard supported. Thermodynamics uses a simplified filling-and-emptying model; values are physically plausible but not CFD-grade.",
+      "slug": "2026-11-19_beam-free_explainer_v1",
+      "path": "runs/2026-11-19_beam-free_explainer_v1/index.html",
+      "source_file": "explainer__beam-free__2026-11-19__v1.zip",
       "scores": {
         "completeness": null,
         "robustness": null,
