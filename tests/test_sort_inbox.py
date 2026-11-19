@@ -87,8 +87,19 @@ class ZipMetadataRoutingTests(unittest.TestCase):
         self.assertEqual(saved["model_label"], "GPT 6 Thinking (Preview)")
 
     def test_metadata_overrides_conflicting_zip_name(self):
-            archive = self.make_zip(name="site-brand__wrong-model__2026-01-01__v99.zip")
-            self.assertEqual(sorter.process_zip(archive), "2026-01-01_wrong-model_site-brand_v99")
+        archive = self.make_zip(name="site-brand__wrong-model__2026-01-01__v99.zip")
+        self.assertEqual(sorter.process_zip(archive), "2026-11-09_gpt-6_site-editorial_v2")
+
+    def test_unknown_model_is_not_inferred_from_zip_filename(self):
+        meta = {
+            "model": "unknown-model",
+            "category": "site-editorial",
+            "date": "2026-11-09",
+            "version": 1,
+            "entry": "index.html",
+        }
+        archive = self.make_zip(name="website__pretend-model__2026-01-01__v99.zip", meta=meta)
+        self.assertEqual(sorter.process_zip(archive), "2026-11-09_unknown-model_site-editorial_v1")
 
     def test_root_level_zip_layout_is_supported(self):
         archive = self.make_zip(name="root-layout.zip", wrapped=False)

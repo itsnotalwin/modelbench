@@ -10,6 +10,7 @@ on:
       - "tools/**"
       - "tests/**"
       - "manifest.json"
+      - "src/data/catalog.json"
   workflow_dispatch:
 
 permissions:
@@ -22,19 +23,30 @@ concurrency:
 jobs:
   sort:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
       - uses: actions/setup-python@v5
         with:
           python-version: "3.x"
-      - name: Run importer regression tests
-        run: python -m unittest discover -s tests -p "test_sort_inbox.py" -v
-      - name: Sort inbox into runs/, rebuild manifest and explorer catalog
+
+      # Intake must run before the integrity suite so the manifest and compact
+      # explorer catalog are tested against the same current runs/ snapshot.
+      # continue-on-error lets us commit valid submissions even when another
+      # upload is rejected and must remain in inbox for correction.
+      - name: Sort inbox and rebuild manifest/catalog
         id: sort_inbox
         continue-on-error: true
         run: python tools/sort_inbox.py
-      - name: Commit sorted runs (if any)
+
+      - name: Run importer and catalog regression tests
+        id: tests
+        continue-on-error: true
+        run: python -m unittest discover -s tests -p "test_sort_inbox.py" -v
+
+      - name: Commit accepted runs and generated indexes
         if: always() && steps.sort_inbox.outcome != 'skipped'
         run: |
           git config user.name "github-actions[bot]"
@@ -47,8 +59,13 @@ jobs:
             git push
           fi
 
-      - name: Report rejected inbox uploads
-        if: always() && steps.sort_inbox.outcome == 'failure'
+      - name: Report rejected uploads or regression failures
+        if: always() && (steps.sort_inbox.outcome == 'failure' || steps.tests.outcome == 'failure')
         run: |
-          echo "::error::One or more inbox uploads were rejected or the importer failed. Check the sort step logs; rejected ZIP files remain in inbox/."
+          if [ "${{ steps.sort_inbox.outcome }}" = "failure" ]; then
+            echo "::error::One or more inbox uploads were rejected or the importer failed. See the sort step logs; rejected files remain in inbox/."
+          fi
+          if [ "${{ steps.tests.outcome }}" = "failure" ]; then
+            echo "::error::Importer/catalog regression tests failed. Accepted inbox submissions and generated indexes were still committed for recovery."
+          fi
           exit 1

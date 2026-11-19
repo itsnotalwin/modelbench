@@ -99,26 +99,8 @@ def infer_from_matching_legacy_artifact(project_root: Path, model: str, run_date
     return {**info, "matched_file": filename}
 
 
-def parse_zip_filename(stem: str):
-    """Parse the ZIP filename as a fallback when meta.json model is unknown.
-    Expected: category__model__YYYY-MM-DD__vN (case-insensitive).
-    Tolerates accidental spaces around the __ separators."""
-    clean = re.sub(r'\s*__\s*', '__', stem.strip())
-    match = PATTERN.match(clean)
-    if not match:
-        return None
-    category = match.group("category").lower()
-    if category not in CATEGORIES:
-        return None
-    return {
-        "category": category,
-        "model": normalise_model(match.group("model")),
-        "date": match.group("date"),
-        "v": int(match.group("n")),
-    }
 
-
-def validate_metadata(project_root: Path, zip_stem: str = None) -> tuple:
+def validate_metadata(project_root: Path) -> tuple:
     """Read meta.json and return canonical routing info plus its parsed object."""
     meta_path = project_root / "meta.json"
     if not meta_path.is_file():
@@ -139,12 +121,6 @@ def validate_metadata(project_root: Path, zip_stem: str = None) -> tuple:
     if not MODEL_PATTERN.fullmatch(model):
         raise IntakeError("meta.json model could not be converted into a safe model slug")
 
-    # Fallback: if meta.json model is "unknown-model" and we have the ZIP stem,
-    # try to parse the actual model from the ZIP filename
-    if model == "unknown-model" and zip_stem:
-        zip_info = parse_zip_filename(zip_stem)
-        if zip_info and zip_info["model"] != "unknown-model":
-            model = zip_info["model"]
 
     raw_date = meta.get("date")
     date_source = "date"
@@ -374,24 +350,14 @@ def process_zip(src: Path) -> str:
             raise IntakeError("file is not a valid ZIP archive") from exc
 
         project_root = find_project_root(extract_dir)
-        info, model_meta = validate_metadata(project_root, src.stem)
+        info, model_meta = validate_metadata(project_root)
         run_slug = slug_for(info)
         run_dir = RUNS / run_slug
-        # Only auto-increment version when we fell back to ZIP filename (unknown-model).
-        # Normal meta.json conflicts should still error to protect existing runs.
+        # Every run identity is explicit in validated metadata. Never auto-increment
+        # or overwrite: the submitter must choose a new version in meta.json.
         if run_dir.exists():
-            if info.get("routing_source") == "meta.json":
-                raise IntakeError(f"destination already exists: {run_slug}; increment meta.json version for a retest")
-            # Fallback routing (unknown-model): auto-increment to find a free slot
-            base_v = info["v"]
-            for attempt in range(1, 50):
-                info["v"] = base_v + attempt
-                run_slug = slug_for(info)
-                run_dir = RUNS / run_slug
-                if not run_dir.exists():
-                    break
-            else:
-                raise IntakeError(f"cannot allocate a free version for {slug_for({**info, 'v': base_v})} after 50 attempts")
+            raise IntakeError(f"destination already exists: {run_slug}; increment meta.json version for a retest")
+
 
         for noise in ("__MACOSX",):
             noise_path = project_root / noise
