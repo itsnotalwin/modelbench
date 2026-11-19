@@ -34,6 +34,10 @@ jobs:
         with:
           python-version: "3.x"
 
+      # One-time correction explicitly authorised by the repository owner for two
+      # identified submissions. The script is hash-guarded and only edits meta.json.
+      - name: Apply owner-approved Hy4 model metadata corrections
+        run: python tools/repair_hy_inbox_metadata.py
       # Intake must run before the integrity suite so the manifest and compact
       # explorer catalog are tested against the same current runs/ snapshot.
       # continue-on-error lets us commit valid submissions even when another
