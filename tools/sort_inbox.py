@@ -375,17 +375,23 @@ def process_zip(src: Path) -> str:
 
         project_root = find_project_root(extract_dir)
         info, model_meta = validate_metadata(project_root, src.stem)
-        
-        # Try to find a non-conflicting version, incrementing if needed
-        base_v = info["v"]
-        for attempt in range(50):
-            info["v"] = base_v + attempt
-            run_slug = slug_for(info)
-            run_dir = RUNS / run_slug
-            if not run_dir.exists():
-                break
-        else:
-            raise IntakeError(f"cannot allocate a free version for {slug_for({**info, 'v': base_v})} after 50 attempts")
+        run_slug = slug_for(info)
+        run_dir = RUNS / run_slug
+        # Only auto-increment version when we fell back to ZIP filename (unknown-model).
+        # Normal meta.json conflicts should still error to protect existing runs.
+        if run_dir.exists():
+            if info.get("routing_source") == "meta.json":
+                raise IntakeError(f"destination already exists: {run_slug}; increment meta.json version for a retest")
+            # Fallback routing (unknown-model): auto-increment to find a free slot
+            base_v = info["v"]
+            for attempt in range(1, 50):
+                info["v"] = base_v + attempt
+                run_slug = slug_for(info)
+                run_dir = RUNS / run_slug
+                if not run_dir.exists():
+                    break
+            else:
+                raise IntakeError(f"cannot allocate a free version for {slug_for({**info, 'v': base_v})} after 50 attempts")
 
         for noise in ("__MACOSX",):
             noise_path = project_root / noise
