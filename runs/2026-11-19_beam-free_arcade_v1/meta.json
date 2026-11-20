@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "beam-free",
+  "category": "arcade",
+  "date": "2026-11-19",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "08",
+  "prompt_label": "Arcade Game",
+  "notes": "Aether Drift: neon twin-stick survival with seeded runs, daily seed, run modifiers, power-ups, combos/graze, waves and bosses, meta upgrades, local leaderboard, ghost replay of best run, touch and gamepad support. Known limitations: generative music requires user gesture to start audio; ghost replay stored only for best run.",
+  "slug": "2026-11-19_beam-free_arcade_v1",
+  "path": "runs/2026-11-19_beam-free_arcade_v1/index.html",
+  "source_file": "arcade__beam-free__2026-11-19__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

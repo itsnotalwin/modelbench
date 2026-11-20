@@ -1,6 +1,6 @@
 {
   "generated_from": "runs/",
-  "count": 33,
+  "count": 35,
   "catalog": [
     {
       "no": "01",
@@ -464,6 +464,38 @@
     {
       "schema_version": 1,
       "model": "beam-free",
+      "category": "os-sim",
+      "date": "2026-11-19",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "09",
+      "prompt_label": "Browser Operating System",
+      "notes": "Aether OS: a single-file browser desktop with invented visual language, procedural wallpapers, synthesized sound, a real window manager, persisted virtual filesystem, and 10 apps (Files, Terminal, Editor, Paint, Music, Calendar, Browser, Monitor, Settings, Calculator). Includes lock screen, launcher with live search, notifications, alt-tab, context menus, and keyboard shortcuts. Terminal supports pipes, redirection, history, and tab completion.",
+      "slug": "2026-11-19_beam-free_os-sim_v1",
+      "path": "runs/2026-11-19_beam-free_os-sim_v1/index.html",
+      "source_file": "os-sim__beam-free__2026-11-19__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "files": [
+        "index.html",
+        "meta.json"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "beam-free",
       "category": "game-fps",
       "date": "2026-11-19",
       "version": 1,
@@ -538,6 +570,38 @@
       "slug": "2026-11-19_beam-free_explainer_v1",
       "path": "runs/2026-11-19_beam-free_explainer_v1/index.html",
       "source_file": "explainer__beam-free__2026-11-19__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "files": [
+        "index.html",
+        "meta.json"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "beam-free",
+      "category": "arcade",
+      "date": "2026-11-19",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "08",
+      "prompt_label": "Arcade Game",
+      "notes": "Aether Drift: neon twin-stick survival with seeded runs, daily seed, run modifiers, power-ups, combos/graze, waves and bosses, meta upgrades, local leaderboard, ghost replay of best run, touch and gamepad support. Known limitations: generative music requires user gesture to start audio; ghost replay stored only for best run.",
+      "slug": "2026-11-19_beam-free_arcade_v1",
+      "path": "runs/2026-11-19_beam-free_arcade_v1/index.html",
+      "source_file": "arcade__beam-free__2026-11-19__v1.zip",
       "scores": {
         "completeness": null,
         "robustness": null,

@@ -1,0 +1,2079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0a0e14">
+<title>Aether OS</title>
+<style>
+:root{
+  --bg:#0a0e14;--bg2:#0f141c;--surface:rgba(20,26,36,.72);--surface2:rgba(28,36,48,.8);
+  --border:rgba(120,160,200,.12);--border2:rgba(120,160,200,.22);
+  --text:#e6ecf5;--text2:#9aa6b8;--text3:#6b7688;
+  --accent:#4ff0c8;--accent2:#ff5fa3;--accent3:#ffb347;
+  --danger:#ff6b6b;--success:#5ee08a;
+  --shadow:0 24px 60px rgba(0,0,0,.55),0 8px 24px rgba(0,0,0,.35);
+  --radius:14px;--radius-sm:8px;
+  --font:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:"SF Mono","Cascadia Code","JetBrains Mono",Consolas,monospace;
+  --motion:220ms cubic-bezier(.2,.8,.2,1);
+}
+[data-theme="light"]{
+  --bg:#f2f5fa;--bg2:#e8ecf4;--surface:rgba(255,255,255,.78);--surface2:rgba(255,255,255,.92);
+  --border:rgba(40,60,90,.12);--border2:rgba(40,60,90,.22);
+  --text:#1a2030;--text2:#4a5568;--text3:#7a8599;
+  --shadow:0 24px 60px rgba(40,60,90,.18),0 8px 24px rgba(40,60,90,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;-webkit-font-smoothing:antialiased;user-select:none}
+button,input,textarea,select{font-family:inherit;color:inherit}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:rgba(120,160,200,.25);border-radius:6px}
+::-webkit-scrollbar-track{background:transparent}
+
+/* Boot */
+#boot{position:fixed;inset:0;z-index:10000;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;transition:opacity .8s}
+#boot .logo{width:120px;height:120px;position:relative}
+#boot .logo svg{width:100%;height:100%}
+#boot .bar{width:240px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden}
+#boot .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .3s}
+#boot .txt{color:#6b7688;font-size:12px;letter-spacing:2px;text-transform:uppercase}
+#boot.hide{opacity:0;pointer-events:none}
+
+/* Lock */
+#lock{position:fixed;inset:0;z-index:9000;display:none;flex-direction:column;align-items:center;justify-content:center;gap:20px;background:var(--bg)}
+#lock.show{display:flex}
+#lock .clock{font-size:96px;font-weight:200;letter-spacing:-4px}
+#lock .date{font-size:18px;color:var(--text2)}
+#lock .avatar{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:600;color:#0a0e14}
+#lock .user{font-size:20px;font-weight:500}
+#lock input{background:var(--surface);border:1px solid var(--border2);border-radius:999px;padding:12px 24px;font-size:16px;text-align:center;outline:none;width:260px;backdrop-filter:blur(20px)}
+#lock input:focus{border-color:var(--accent)}
+#lock .hint{color:var(--text3);font-size:12px}
+
+/* Desktop */
+#desktop{position:fixed;inset:0;overflow:hidden}
+#wallpaper{position:absolute;inset:0;z-index:0}
+#desktopIcons{position:absolute;inset:0;z-index:1;padding:20px;display:grid;grid-template-columns:repeat(auto-fill,88px);grid-auto-rows:96px;gap:4px;align-content:start;justify-content:start}
+.dicon{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px;border-radius:8px;cursor:pointer;text-align:center;transition:background var(--motion)}
+.dicon:hover{background:rgba(255,255,255,.06)}
+.dicon.sel{background:rgba(79,240,200,.12)}
+.dicon .ic{width:48px;height:48px}
+.dicon .lbl{font-size:11px;color:var(--text);text-shadow:0 1px 3px rgba(0,0,0,.8);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#windows{position:absolute;inset:0;z-index:2;pointer-events:none}
+.window{position:absolute;pointer-events:auto;display:flex;flex-direction:column;border-radius:var(--radius);background:var(--surface);backdrop-filter:blur(24px) saturate(1.4);border:1px solid var(--border2);box-shadow:var(--shadow);overflow:hidden;transition:opacity .18s,transform .18s}
+.window.minimized{opacity:0;transform:scale(.85) translateY(40px);pointer-events:none}
+.window.closing{opacity:0;transform:scale(.92)}
+.window.focused{border-color:var(--accent);box-shadow:var(--shadow),0 0 0 1px rgba(79,240,200,.25)}
+.window.maximized{border-radius:0}
+.win-titlebar{height:38px;display:flex;align-items:center;padding:0 10px;gap:8px;background:rgba(0,0,0,.18);border-bottom:1px solid var(--border);cursor:default;flex-shrink:0}
+.window[data-dragging] .win-titlebar{cursor:grabbing}
+.win-titlebar .wicon{width:16px;height:16px}
+.win-titlebar .wtitle{flex:1;font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.win-titlebar .wbtns{display:flex;gap:6px}
+.win-titlebar .wbtn{width:14px;height:14px;border-radius:50%;border:none;cursor:pointer;opacity:.85;transition:opacity .15s,transform .15s}
+.win-titlebar .wbtn:hover{opacity:1;transform:scale(1.1)}
+.win-titlebar .wbtn.close{background:#ff5f57}
+.win-titlebar .wbtn.min{background:#febc2e}
+.win-titlebar .wbtn.max{background:#28c840}
+.win-body{flex:1;overflow:auto;position:relative;min-height:0}
+.win-resize{position:absolute;z-index:5}
+.win-resize.n{top:-3px;left:8px;right:8px;height:6px;cursor:n-resize}
+.win-resize.s{bottom:-3px;left:8px;right:8px;height:6px;cursor:s-resize}
+.win-resize.e{right:-3px;top:8px;bottom:8px;width:6px;cursor:e-resize}
+.win-resize.w{left:-3px;top:8px;bottom:8px;width:6px;cursor:w-resize}
+.win-resize.nw{top:-3px;left:-3px;width:12px;height:12px;cursor:nw-resize}
+.win-resize.ne{top:-3px;right:-3px;width:12px;height:12px;cursor:ne-resize}
+.win-resize.sw{bottom:-3px;left:-3px;width:12px;height:12px;cursor:sw-resize}
+.win-resize.se{bottom:-3px;right:-3px;width:12px;height:12px;cursor:se-resize}
+
+/* Taskbar */
+#taskbar{position:fixed;left:0;right:0;bottom:0;height:52px;z-index:5000;background:rgba(10,14,20,.7);backdrop-filter:blur(24px) saturate(1.4);border-top:1px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:8px}
+[data-theme="light"] #taskbar{background:rgba(242,245,250,.7)}
+#startBtn{width:40px;height:40px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s}
+#startBtn:hover{transform:scale(1.08)}
+#startBtn svg{width:20px;height:20px;color:#0a0e14}
+.taskbar-apps{display:flex;gap:4px;flex:1;overflow:hidden}
+.tb-app{width:40px;height:40px;border-radius:10px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;transition:background .15s}
+.tb-app:hover{background:rgba(255,255,255,.08)}
+.tb-app.active::after{content:"";position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--accent)}
+.tb-app svg{width:22px;height:22px}
+.taskbar-right{display:flex;align-items:center;gap:10px}
+#clock{font-size:12px;font-weight:500;text-align:right;line-height:1.2;min-width:60px}
+#clock .time{font-size:13px}
+#clock .date{font-size:10px;color:var(--text2)}
+.tray{display:flex;gap:6px;align-items:center}
+.tray button{width:28px;height:28px;border:none;background:transparent;cursor:pointer;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--text2)}
+.tray button:hover{background:rgba(255,255,255,.08);color:var(--text)}
+.tray svg{width:16px;height:16px}
+
+/* Launcher */
+#launcher{position:fixed;inset:0;z-index:6000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.35);backdrop-filter:blur(8px)}
+#launcher.show{display:flex}
+#launcher .panel{width:min(720px,92vw);max-height:80vh;background:var(--surface);backdrop-filter:blur(30px) saturate(1.4);border:1px solid var(--border2);border-radius:20px;box-shadow:var(--shadow);padding:20px;display:flex;flex-direction:column;gap:16px;animation:pop .22s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{from{opacity:0;transform:scale(.94) translateY(10px)}to{opacity:1;transform:none}}
+#launcher input{background:var(--surface2);border:1px solid var(--border2);border-radius:12px;padding:14px 18px;font-size:16px;outline:none}
+#launcher input:focus{border-color:var(--accent)}
+#launcher .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;overflow:auto;flex:1}
+.lapp{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 8px;border-radius:12px;cursor:pointer;transition:background .15s}
+.lapp:hover{background:rgba(255,255,255,.08)}
+.lapp .ic{width:48px;height:48px}
+.lapp .nm{font-size:12px;text-align:center}
+
+/* Alt-tab */
+#alttab{position:fixed;inset:0;z-index:7000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.4);backdrop-filter:blur(12px)}
+#alttab.show{display:flex}
+#alttab .strip{display:flex;gap:12px;padding:20px;background:var(--surface);border-radius:18px;border:1px solid var(--border2);box-shadow:var(--shadow);max-width:90vw;overflow:auto}
+#alttab .card{width:140px;padding:14px;border-radius:12px;background:var(--surface2);text-align:center;cursor:pointer;border:2px solid transparent;transition:border .15s,transform .15s}
+#alttab .card.sel{border-color:var(--accent);transform:scale(1.04)}
+#alttab .card .ic{width:40px;height:40px;margin:0 auto 8px}
+#alttab .card .nm{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* Context menu */
+#ctx{position:fixed;z-index:8000;display:none;min-width:180px;background:var(--surface);backdrop-filter:blur(20px);border:1px solid var(--border2);border-radius:10px;box-shadow:var(--shadow);padding:6px}
+#ctx.show{display:block}
+#ctx button{display:flex;align-items:center;gap:10px;width:100%;padding:8px 12px;border:none;background:transparent;cursor:pointer;border-radius:6px;font-size:13px;text-align:left;color:var(--text)}
+#ctx button:hover{background:rgba(79,240,200,.12)}
+#ctx button.danger:hover{background:rgba(255,107,107,.15);color:var(--danger)}
+#ctx .sep{height:1px;background:var(--border);margin:4px 0}
+#ctx svg{width:14px;height:14px;color:var(--text2)}
+
+/* Notifications */
+#notifwrap{position:fixed;top:16px;right:16px;z-index:7500;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.notif{pointer-events:auto;background:var(--surface);backdrop-filter:blur(20px);border:1px solid var(--border2);border-radius:12px;padding:12px 14px;min-width:280px;max-width:360px;box-shadow:var(--shadow);display:flex;gap:10px;align-items:flex-start;animation:slidein .25s cubic-bezier(.2,.8,.2,1)}
+@keyframes slidein{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
+.notif .ic{width:32px;height:32px;flex-shrink:0}
+.notif .body{flex:1}
+.notif .title{font-weight:600;font-size:13px}
+.notif .msg{font-size:12px;color:var(--text2);margin-top:2px}
+.notif .close{background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;padding:0 4px}
+
+/* Snap preview */
+#snapPreview{position:fixed;z-index:4000;display:none;pointer-events:none;background:rgba(79,240,200,.15);border:2px dashed var(--accent);border-radius:12px}
+
+/* Wallpaper canvas */
+#wallpaper canvas{width:100%;height:100%;display:block}
+
+/* Reduced motion */
+@media (prefers-reduced-motion:reduce){
+  *{transition-duration:.01ms !important;animation-duration:.01ms !important}
+}
+</style>
+</head>
+<body>
+<div id="boot">
+  <div class="logo">
+    <svg viewBox="0 0 120 120" fill="none">
+      <defs><radialGradient id="g" cx="50%" cy="50%"><stop offset="0%" stop-color="#4ff0c8"/><stop offset="100%" stop-color="#ff5fa3"/></radialGradient></defs>
+      <circle cx="60" cy="60" r="52" stroke="url(#g)" stroke-width="2" opacity=".3"/>
+      <path d="M60 18 L95 92 L25 92 Z" stroke="url(#g)" stroke-width="2.5" fill="none"/>
+      <circle cx="60" cy="60" r="6" fill="url(#g)"/>
+    </svg>
+  </div>
+  <div class="bar"><i id="bootBar"></i></div>
+  <div class="txt" id="bootTxt">Aether</div>
+</div>
+
+<div id="lock">
+  <div class="clock" id="lockClock">00:00</div>
+  <div class="date" id="lockDate">—</div>
+  <div class="avatar">A</div>
+  <div class="user">Aether User</div>
+  <input id="lockInput" type="password" placeholder="Enter password (hint: aether)" autocomplete="off">
+  <div class="hint">Default password: aether · Esc to clear</div>
+</div>
+
+<div id="desktop">
+  <div id="wallpaper"></div>
+  <div id="desktopIcons"></div>
+  <div id="windows"></div>
+  <div id="snapPreview"></div>
+</div>
+
+<div id="taskbar">
+  <button id="startBtn" title="Launcher (Super)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></button>
+  <div class="taskbar-apps" id="tbApps"></div>
+  <div class="taskbar-right">
+    <div class="tray">
+      <button id="trayNotif" title="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></button>
+      <button id="traySound" title="Sound"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button>
+    </div>
+    <div id="clock"><div class="time" id="clockTime">00:00</div><div class="date" id="clockDate">—</div></div>
+  </div>
+</div>
+
+<div id="launcher">
+  <div class="panel">
+    <input id="launcherSearch" placeholder="Search apps, files, commands…" autofocus>
+    <div class="grid" id="launcherGrid"></div>
+  </div>
+</div>
+
+<div id="alttab"><div class="strip" id="alttabStrip"></div></div>
+
+<div id="ctx"></div>
+<div id="notifwrap"></div>
+
+<script>
+/* ===== Aether OS ===== */
+const Aether = {version:1};
+
+// ---------- Utils ----------
+const $ = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>Array.from(r.querySelectorAll(s));
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const uid=()=>Math.random().toString(36).slice(2,10);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtBytes=n=>n<1024?n+' B':n<1048576?(n/1024).toFixed(1)+' KB':(n/1048576).toFixed(1)+' MB';
+const now=()=>Date.now();
+
+// ---------- Storage guard ----------
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,v);return true}catch(e){return false}}
+function lsDel(k){try{localStorage.removeItem(k)}catch(e){}}
+
+// ---------- Settings ----------
+const DEFAULT_SETTINGS = {
+  theme:'dark', wallpaper:'aurora', sound:true, reduceMotion:false,
+  username:'Aether User', password:'aether', lockOnStart:false,
+  accent:'#4ff0c8', taskbarAutohide:false, desktopIcons:true
+};
+let settings = Object.assign({},DEFAULT_SETTINGS);
+try{ const s=JSON.parse(lsGet('aether.settings')||'null'); if(s) settings=Object.assign(settings,s);}catch(e){}
+function applySettings(){
+  document.documentElement.setAttribute('data-theme',settings.theme);
+  document.documentElement.style.setProperty('--accent',settings.accent);
+  // derive accent2? keep fixed
+  if(settings.reduceMotion) document.documentElement.classList.add('rm'); else document.documentElement.classList.remove('rm');
+  renderWallpaper();
+  updateTraySound();
+}
+function saveSettings(){ lsSet('aether.settings',JSON.stringify(settings)); }
+
+// ---------- Sound (Web Audio) ----------
+let audioCtx=null;
+function ensureAudio(){ if(!audioCtx){ try{ audioCtx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){audioCtx=null;} } if(audioCtx && audioCtx.state==='suspended'){ try{ audioCtx.resume(); }catch(e){} } return audioCtx; }
+['pointerdown','keydown'].forEach(ev=>window.addEventListener(ev,()=>{ if(audioCtx&&audioCtx.state==='suspended') audioCtx.resume(); }, {once:false}));
+function tone(freq,dur,type='sine',gain=.12,delay=0){
+  if(!settings.sound) return;
+  const c=ensureAudio(); if(!c) return;
+  const o=c.createOscillator(); const g=c.createGain();
+  o.type=type; o.frequency.value=freq;
+  g.gain.setValueAtTime(0,c.currentTime+delay);
+  g.gain.linearRampToValueAtTime(gain,c.currentTime+delay+.01);
+  g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+delay+dur);
+  o.connect(g); g.connect(c.destination);
+  o.start(c.currentTime+delay); o.stop(c.currentTime+delay+dur+.05);
+}
+const SFX = {
+  click(){ tone(660,.06,'square',.06); },
+  open(){ tone(523,.08,'sine',.1); tone(784,.12,'sine',.1,.06); },
+  close(){ tone(440,.08,'sine',.08); tone(330,.12,'sine',.08,.06); },
+  notify(){ tone(880,.1,'sine',.1); tone(1175,.12,'sine',.1,.08); },
+  error(){ tone(220,.15,'sawtooth',.1); tone(180,.2,'sawtooth',.1,.12); },
+  boot(){ [523,659,784,1047].forEach((f,i)=>tone(f,.18,'sine',.12,i*.12)); },
+  success(){ tone(659,.1,'sine',.1); tone(988,.15,'sine',.1,.08); }
+};
+
+// ---------- Filesystem ----------
+const FS_DEFAULT = {
+  type:'dir', name:'/', created:now(), modified:now(), children:[
+    {type:'dir',name:'home',created:now(),modified:now(),children:[
+      {type:'dir',name:'user',created:now(),modified:now(),children:[
+        {type:'dir',name:'Desktop',children:[
+          {type:'file',name:'welcome.txt',content:'Welcome to Aether OS.\n\nThis is a fully functional browser operating system.\nTry the terminal: type "help".\n',mime:'text/plain',created:now(),modified:now()},
+          {type:'file',name:'notes.md',content:'# Notes\n\n- Drag windows by title bar\n- Resize from edges/corners\n- Alt+Tab to switch\n- Super key opens launcher\n',mime:'text/plain',created:now(),modified:now()}
+        ]},
+        {type:'dir',name:'Documents',children:[
+          {type:'file',name:'readme.txt',content:'Aether OS — built entirely in one HTML file.\nAll visuals and sound generated in code.\n',mime:'text/plain',created:now(),modified:now()}
+        ]},
+        {type:'dir',name:'Downloads',children:[]},
+        {type:'dir',name:'Pictures',children:[]},
+        {type:'dir',name:'Music',children:[]}
+      ]}
+    ]},
+    {type:'dir',name:'system',children:[
+      {type:'file',name:'version',content:'Aether OS 1.0\n',mime:'text/plain',created:now(),modified:now()}
+    ]}
+  ]
+};
+let fsRoot;
+try{
+  const raw=lsGet('aether.fs');
+  fsRoot = raw? JSON.parse(raw) : null;
+  if(!fsRoot || fsRoot.type!=='dir') fsRoot=JSON.parse(JSON.stringify(FS_DEFAULT));
+}catch(e){ fsRoot=JSON.parse(JSON.stringify(FS_DEFAULT)); }
+
+function saveFS(){ try{ lsSet('aether.fs',JSON.stringify(fsRoot)); }catch(e){} }
+
+function resolvePath(path,base='/'){
+  // returns node or null
+  if(!path) return null;
+  let parts;
+  if(path.startsWith('/')){ parts=path.split('/').filter(Boolean); let cur=fsRoot; }
+  else { /* relative to base */ 
+    // base is dir path
+    let cur=resolvePath(base);
+    if(!cur||cur.type!=='dir') return null;
+    parts=path.split('/').filter(Boolean);
+    for(const p of parts){
+      if(p==='.') continue;
+      if(p==='..'){ /* can't go above root easily; handle parent via path */ continue; }
+      const next=cur.children&&cur.children.find(c=>c.name===p);
+      if(!next||next.type!=='dir') return null;
+      cur=next;
+    }
+    return cur;
+  }
+  let cur=fsRoot;
+  for(const p of parts){
+    if(p==='.') continue;
+    if(p==='..') continue;
+    const next=cur.children&&cur.children.find(c=>c.name===p);
+    if(!next) return null;
+    cur=next;
+  }
+  return cur;
+}
+// better resolve that supports '..' via parent tracking
+function parentOf(path){
+  path=path.replace(/\/+$/,'');
+  if(path===''||path==='/') return null;
+  const idx=path.lastIndexOf('/');
+  if(idx<=0) return '/';
+  return path.slice(0,idx);
+}
+function nameOf(path){ return path.split('/').filter(Boolean).pop()||'/'; }
+function getNode(path){
+  if(path==='/'||path==='') return fsRoot;
+  const parts=path.split('/').filter(Boolean);
+  let cur=fsRoot;
+  for(const p of parts){
+    if(!cur||cur.type!=='dir') return null;
+    const next=cur.children&&cur.children.find(c=>c.name===p);
+    if(!next) return null;
+    cur=next;
+  }
+  return cur;
+}
+function setNode(path,node){
+  // replace node at path's parent
+  if(path==='/'||path==='') { fsRoot=node; saveFS(); return true; }
+  const par=parentOf(path); const nm=nameOf(path);
+  const pnode=getNode(par);
+  if(!pnode||pnode.type!=='dir') return false;
+  const idx=pnode.children.findIndex(c=>c.name===nm);
+  if(idx>=0) pnode.children[idx]=node; else pnode.children.push(node);
+  pnode.modified=now(); saveFS(); return true;
+}
+function removeNode(path){
+  if(path==='/'||path==='/home'||path==='/home/user') return false;
+  const par=parentOf(path); const nm=nameOf(path);
+  const pnode=getNode(par);
+  if(!pnode) return false;
+  const idx=pnode.children.findIndex(c=>c.name===nm);
+  if(idx<0) return false;
+  pnode.children.splice(idx,1); pnode.modified=now(); saveFS(); return true;
+}
+function listDir(path){
+  const n=getNode(path); if(!n||n.type!=='dir') return null;
+  return n.children.slice();
+}
+function isDir(path){ const n=getNode(path); return !!n && n.type==='dir'; }
+
+// ---------- Icons (SVG strings) ----------
+const ICONS = {
+  folder:`<svg viewBox="0 0 48 48" fill="none"><path d="M6 14a3 3 0 0 1 3-3h12l4 4h20a3 3 0 0 1 3 3v18a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3V14z" fill="#ffb347" opacity=".9"/><path d="M6 18h36v18a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3V18z" fill="#ff9a1f"/></svg>`,
+  file:`<svg viewBox="0 0 48 48" fill="none"><path d="M12 6h16l8 8v28a2 2 0 0 1-2 2H12a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" fill="#e6ecf5" opacity=".15" stroke="#9aa6b8" stroke-width="1.5"/><path d="M28 6v8h8" stroke="#9aa6b8" stroke-width="1.5" fill="none"/></svg>`,
+  text:`<svg viewBox="0 0 48 48" fill="none"><rect x="10" y="6" width="28" height="36" rx="3" fill="#e6ecf5" opacity=".1" stroke="#9aa6b8" stroke-width="1.5"/><path d="M16 16h16M16 22h16M16 28h10" stroke="#4ff0c8" stroke-width="2" stroke-linecap="round"/></svg>`,
+  terminal:`<svg viewBox="0 0 48 48" fill="none"><rect x="6" y="8" width="36" height="32" rx="4" fill="#0f141c" stroke="#4ff0c8" stroke-width="1.5"/><path d="M12 18l6 6-6 6M22 30h14" stroke="#4ff0c8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  paint:`<svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" fill="url(#p)" opacity=".3"/><path d="M14 30c0-8 6-16 14-16 4 0 8 2 10 6-2 2-4 2-6 0-2-2-5-2-7 0-2 2-2 5 0 7 2 2 2 5 0 7-3 3-8 2-11-4z" fill="#ff5fa3"/><circle cx="30" cy="16" r="3" fill="#4ff0c8"/></svg>`,
+  music:`<svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="20" fill="#1a1f2e" stroke="#ff5fa3" stroke-width="1.5"/><path d="M18 32V16l16-4v16" stroke="#ff5fa3" stroke-width="2" fill="none"/><circle cx="16" cy="32" r="3" fill="#ff5fa3"/><circle cx="32" cy="28" r="3" fill="#ff5fa3"/></svg>`,
+  calendar:`<svg viewBox="0 0 48 48" fill="none"><rect x="8" y="10" width="32" height="30" rx="4" fill="#e6ecf5" opacity=".1" stroke="#9aa6b8" stroke-width="1.5"/><path d="M8 18h32M16 6v8M32 6v8" stroke="#9aa6b8" stroke-width="1.5"/><circle cx="24" cy="28" r="4" fill="#4ff0c8"/></svg>`,
+  browser:`<svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" fill="#e6ecf5" opacity=".1" stroke="#4ff0c8" stroke-width="1.5"/><ellipse cx="24" cy="24" rx="8" ry="18" stroke="#4ff0c8" stroke-width="1.2"/><path d="M6 24h36M8 16h32M8 32h32" stroke="#4ff0c8" stroke-width="1" opacity=".6"/></svg>`,
+  monitor:`<svg viewBox="0 0 48 48" fill="none"><rect x="6" y="8" width="36" height="24" rx="3" fill="#0f141c" stroke="#ffb347" stroke-width="1.5"/><path d="M18 36h12M24 32v4" stroke="#ffb347" stroke-width="1.5"/><path d="M12 20h6M12 24h10M12 28h4" stroke="#5ee08a" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  settings:`<svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="6" stroke="#9aa6b8" stroke-width="2" fill="none"/><path d="M24 6v4M24 38v4M6 24h4M38 24h4M11 11l3 3M34 34l3 3M11 37l3-3M34 14l3-3" stroke="#9aa6b8" stroke-width="2" stroke-linecap="round"/></svg>`,
+  calc:`<svg viewBox="0 0 48 48" fill="none"><rect x="10" y="6" width="28" height="36" rx="4" fill="#e6ecf5" opacity=".1" stroke="#9aa6b8" stroke-width="1.5"/><rect x="14" y="10" width="20" height="6" rx="1" fill="#4ff0c8" opacity=".4"/><circle cx="18" cy="24" r="2" fill="#9aa6b8"/><circle cx="24" cy="24" r="2" fill="#9aa6b8"/><circle cx="30" cy="24" r="2" fill="#9aa6b8"/><circle cx="18" cy="30" r="2" fill="#9aa6b8"/><circle cx="24" cy="30" r="2" fill="#9aa6b8"/><circle cx="30" cy="30" r="2" fill="#ff5fa3"/></svg>`,
+  editor:`<svg viewBox="0 0 48 48" fill="none"><rect x="8" y="6" width="32" height="36" rx="3" fill="#e6ecf5" opacity=".1" stroke="#9aa6b8" stroke-width="1.5"/><path d="M14 14h20M14 20h16M14 26h18M14 32h12" stroke="#4ff0c8" stroke-width="1.5" stroke-linecap="round"/></svg>`
+};
+
+const APPS = [
+  {id:'files',name:'Files',icon:'folder',desc:'File manager'},
+  {id:'terminal',name:'Terminal',icon:'terminal',desc:'Shell'},
+  {id:'editor',name:'Editor',icon:'editor',desc:'Text editor'},
+  {id:'paint',name:'Paint',icon:'paint',desc:'Drawing'},
+  {id:'music',name:'Music',icon:'music',desc:'Player'},
+  {id:'calendar',name:'Calendar',icon:'calendar',desc:'Events'},
+  {id:'browser',name:'Browser',icon:'browser',desc:'Web'},
+  {id:'monitor',name:'Monitor',icon:'monitor',desc:'System'},
+  {id:'settings',name:'Settings',icon:'settings',desc:'Preferences'},
+  {id:'calc',name:'Calculator',icon:'calc',desc:'Math'}
+];
+
+// ---------- Window Manager ----------
+let windows=[]; // {id,appId,title,x,y,w,h,state,z,el,instance}
+let zCounter=100;
+let focusedId=null;
+const windowsEl=$('#windows');
+
+function createWindow(appId,opts={}){
+  const app=APPS.find(a=>a.id===appId);
+  if(!app) return null;
+  const id='w'+uid();
+  const w=opts.w|| (appId==='files'?720: appId==='terminal'?640: appId==='editor'?700: appId==='paint'?780: appId==='music'?420: appId==='calendar'?480: appId==='browser'?820: appId==='monitor'?600: appId==='settings'?560: appId==='calc'?320: 600);
+  const h=opts.h|| (appId==='files'?480: appId==='terminal'?420: appId==='editor'?520: appId==='paint'?560: appId==='music'?520: appId==='calendar'?500: appId==='browser'?560: appId==='monitor'?460: appId==='settings'?520: appId==='calc'?460: 440);
+  const n=windows.length;
+  const x=opts.x!=null?opts.x: 80+(n*30)%300;
+  const y=opts.y!=null?opts.y: 60+(n*30)%200;
+  const win={id,appId,title:opts.title||app.name,x,y,w,h,state:'normal',z:++zCounter,el:null,instance:null};
+  windows.push(win);
+  renderWindow(win);
+  focusWindow(id);
+  SFX.open();
+  notifyTaskbar();
+  return win;
+}
+
+function renderWindow(win){
+  const app=APPS.find(a=>a.id===win.appId);
+  const el=document.createElement('div');
+  el.className='window';
+  el.dataset.id=win.id;
+  el.style.left=win.x+'px'; el.style.top=win.y+'px'; el.style.width=win.w+'px'; el.style.height=win.h+'px'; el.style.zIndex=win.z;
+  el.innerHTML=`
+    <div class="win-titlebar">
+      <span class="wicon">${ICONS[app.icon]}</span>
+      <span class="wtitle">${esc(win.title)}</span>
+      <div class="wbtns">
+        <button class="wbtn min" data-act="min" title="Minimize"></button>
+        <button class="wbtn max" data-act="max" title="Maximize"></button>
+        <button class="wbtn close" data-act="close" title="Close"></button>
+      </div>
+    </div>
+    <div class="win-body"></div>
+    ${['n','s','e','w','nw','ne','sw','se'].map(d=>`<div class="win-resize ${d}" data-dir="${d}"></div>`).join('')}
+  `;
+  windowsEl.appendChild(el);
+  win.el=el;
+  // mount app
+  const body=el.querySelector('.win-body');
+  const factory=APP_FACTORIES[win.appId];
+  if(factory){ win.instance=factory(win,body); }
+  // events
+  const tb=el.querySelector('.win-titlebar');
+  tb.addEventListener('pointerdown',e=>startDrag(e,win));
+  el.querySelectorAll('.win-resize').forEach(h=>h.addEventListener('pointerdown',e=>startResize(e,win,h.dataset.dir)));
+  el.querySelector('.wbtn.min').addEventListener('click',e=>{e.stopPropagation();minimizeWindow(win.id);});
+  el.querySelector('.wbtn.max').addEventListener('click',e=>{e.stopPropagation();toggleMax(win.id);});
+  el.querySelector('.wbtn.close').addEventListener('click',e=>{e.stopPropagation();closeWindow(win.id);});
+  el.addEventListener('pointerdown',()=>focusWindow(win.id),true);
+  el.addEventListener('contextmenu',e=>e.stopPropagation());
+  applyWindowState(win);
+}
+
+function applyWindowState(win){
+  if(!win.el) return;
+  win.el.classList.toggle('minimized',win.state==='minimized');
+  win.el.classList.toggle('maximized',win.state==='maximized');
+  if(win.state==='maximized'){ win.el.style.left='0px'; win.el.style.top='0px'; win.el.style.width='100%'; win.el.style.height='calc(100% - 52px)'; }
+  else if(win.state==='normal'){ win.el.style.left=win.x+'px'; win.el.style.top=win.y+'px'; win.el.style.width=win.w+'px'; win.el.style.height=win.h+'px'; }
+  win.el.style.zIndex=win.z;
+  win.el.classList.toggle('focused',win.id===focusedId);
+}
+
+function focusWindow(id){
+  const win=windows.find(w=>w.id===id); if(!win) return;
+  focusedId=id;
+  win.z=++zCounter;
+  windows.forEach(w=>{ if(w.el) w.el.classList.toggle('focused',w.id===id); w.el.style.zIndex=w.z; });
+}
+
+function minimizeWindow(id){
+  const win=windows.find(w=>w.id===id); if(!win) return;
+  win.state='minimized'; applyWindowState(win);
+  // focus next
+  const candidates=windows.filter(w=>w.state!=='minimized'&&w.id!==id).sort((a,b)=>b.z-a.z);
+  if(candidates.length) focusWindow(candidates[0].id); else focusedId=null;
+}
+function toggleMax(id){
+  const win=windows.find(w=>w.id===id); if(!win) return;
+  if(win.state==='maximized'){ win.state='normal'; }
+  else { win.state='maximized'; }
+  applyWindowState(win); focusWindow(id);
+}
+function closeWindow(id){
+  const win=windows.find(w=>w.id===id); if(!win) return;
+  if(win.el){ win.el.classList.add('closing'); }
+  SFX.close();
+  setTimeout(()=>{
+    if(win.instance && win.instance.unmount) try{win.instance.unmount();}catch(e){}
+    if(win.el && win.el.parentNode) win.el.parentNode.removeChild(win.el);
+    windows=windows.filter(w=>w.id!==id);
+    if(focusedId===id){
+      const c=windows.filter(w=>w.state!=='minimized').sort((a,b)=>b.z-a.z);
+      if(c.length) focusWindow(c[0].id); else focusedId=null;
+    }
+    notifyTaskbar();
+  },180);
+}
+
+// Drag
+let dragState=null;
+function startDrag(e,win){
+  if(win.state==='maximized') return;
+  if(e.target.closest('.wbtn')) return;
+  e.preventDefault();
+  dragState={win,ox:e.clientX-win.x,oy:e.clientY-win.y, moved:false, startX:win.x, startY:win.y};
+  win.el.setAttribute('data-dragging','1');
+  try{ e.target.setPointerCapture(e.pointerId);}catch(err){}
+  const onMove=ev=>{
+    if(!dragState) return;
+    dragState.moved=true;
+    let nx=ev.clientX-dragState.ox, ny=ev.clientY-dragState.oy;
+    // snap preview
+    const sw=window.innerWidth, sh=window.innerHeight-52;
+    let snap=null;
+    if(ev.clientY<8) snap='top';
+    else if(ev.clientX<8) snap='left';
+    else if(ev.clientX>sw-8) snap='right';
+    // top drag to maximize
+    if(ev.clientY<4 && !dragState.maximized){ /* handle on up */ }
+    const prev=$('#snapPreview');
+    if(snap==='top'){ prev.style.display='block'; prev.style.left='8px'; prev.style.top='8px'; prev.style.width=(sw-16)+'px'; prev.style.height=(sh-16)+'px'; }
+    else if(snap==='left'){ prev.style.display='block'; prev.style.left='8px'; prev.style.top='8px'; prev.style.width=(sw/2-12)+'px'; prev.style.height=(sh-16)+'px'; }
+    else if(snap==='right'){ prev.style.display='block'; prev.style.left=(sw/2+4)+'px'; prev.style.top='8px'; prev.style.width=(sw/2-12)+'px'; prev.style.height=(sh-16)+'px'; }
+    else { prev.style.display='none'; }
+    win.x=nx; win.y=ny;
+    win.el.style.left=nx+'px'; win.el.style.top=ny+'px';
+  };
+  const onUp=ev=>{
+    if(!dragState) return;
+    const prev=$('#snapPreview'); prev.style.display='none';
+    win.el.removeAttribute('data-dragging');
+    // determine snap
+    const sw=window.innerWidth, sh=window.innerHeight-52;
+    let snap=null;
+    if(ev.clientY<8) snap='top';
+    else if(ev.clientX<8) snap='left';
+    else if(ev.clientX>sw-8) snap='right';
+    if(snap==='top'){ win.state='maximized'; win.x=0;win.y=0; }
+    else if(snap==='left'){ win.state='normal'; win.x=8; win.y=8; win.w=Math.floor(sw/2)-12; win.h=sh-16; }
+    else if(snap==='right'){ win.state='normal'; win.x=Math.floor(sw/2)+4; win.y=8; win.w=Math.floor(sw/2)-12; win.h=sh-16; }
+    applyWindowState(win);
+    dragState=null;
+    window.removeEventListener('pointermove',onMove);
+    window.removeEventListener('pointerup',onUp);
+  };
+  window.addEventListener('pointermove',onMove);
+  window.addEventListener('pointerup',onUp);
+}
+
+// Resize
+let resizeState=null;
+function startResize(e,win,dir){
+  if(win.state==='maximized') return;
+  e.preventDefault(); e.stopPropagation();
+  resizeState={win,dir,sx:e.clientX,sy:e.clientY,rx:win.x,ry:win.y,rw:win.w,rh:win.h};
+  try{ e.target.setPointerCapture(e.pointerId);}catch(err){}
+  const onMove=ev=>{
+    if(!resizeState) return;
+    const rs=resizeState; const dx=ev.clientX-rs.sx; const dy=ev.clientY-rs.sy;
+    let {x,y,w,h}={x:rs.rx,y:rs.ry,w:rs.rw,h:rs.rh};
+    const minW=240,minH=160;
+    if(dir.includes('e')) w=Math.max(minW,rs.rw+dx);
+    if(dir.includes('s')) h=Math.max(minH,rs.rh+dy);
+    if(dir.includes('w')){ const nw=Math.max(minW,rs.rw-dx); x=rs.rx+(rs.rw-nw); w=nw; }
+    if(dir.includes('n')){ const nh=Math.max(minH,rs.rh-dy); y=rs.ry+(rs.rh-nh); h=nh; }
+    win.x=x;win.y=y;win.w=w;win.h=h;
+    win.el.style.left=x+'px';win.el.style.top=y+'px';win.el.style.width=w+'px';win.el.style.height=h+'px';
+  };
+  const onUp=()=>{ resizeState=null; window.removeEventListener('pointermove',onMove); window.removeEventListener('pointerup',onUp); };
+  window.addEventListener('pointermove',onMove);
+  window.addEventListener('pointerup',onUp);
+}
+
+// ---------- Notifications ----------
+function notify(title,msg,icon='settings',duration=4000){
+  const wrap=$('#notifwrap');
+  const el=document.createElement('div');
+  el.className='notif';
+  el.innerHTML=`<div class="ic">${ICONS[icon]||ICONS.settings}</div><div class="body"><div class="title">${esc(title)}</div><div class="msg">${esc(msg)}</div></div><button class="close">×</button>`;
+  wrap.appendChild(el);
+  SFX.notify();
+  const t=setTimeout(()=>{ el.style.transition='opacity .3s,transform .3s'; el.style.opacity='0'; el.style.transform='translateX(40px)'; setTimeout(()=>el.remove(),300); },duration);
+  el.querySelector('.close').addEventListener('click',()=>{clearTimeout(t);el.remove();});
+}
+
+// ---------- Taskbar ----------
+function notifyTaskbar(){
+  const c=$('#tbApps'); c.innerHTML='';
+  // show running apps unique
+  const seen=new Set();
+  windows.forEach(w=>{
+    if(seen.has(w.appId)) return; seen.add(w.appId);
+    const app=APPS.find(a=>a.id===w.appId);
+    const b=document.createElement('button');
+    b.className='tb-app'+(windows.some(x=>x.appId===w.appId&&x.id===focusedId)?' active':'');
+    b.title=app.name;
+    b.innerHTML=ICONS[app.icon];
+    b.addEventListener('click',()=>{
+      const wins=windows.filter(x=>x.appId===w.appId);
+      const minimized=wins.every(x=>x.state==='minimized');
+      if(minimized){ wins.forEach(x=>{x.state='normal';applyWindowState(x);}); focusWindow(wins[wins.length-1].id); }
+      else {
+        const f=wins.find(x=>x.id===focusedId);
+        if(f){ minimizeWindow(f.id); }
+        else focusWindow(wins[wins.length-1].id);
+      }
+    });
+    c.appendChild(b);
+  });
+}
+
+// ---------- Alt-tab ----------
+let altTabOpen=false, altTabIndex=0;
+function openAltTab(){
+  altTabOpen=true; altTabIndex=0;
+  const strip=$('#alttabStrip'); strip.innerHTML='';
+  const wins=windows.filter(w=>w.state!=='minimized').sort((a,b)=>b.z-a.z);
+  if(wins.length===0){ closeAltTab(); return; }
+  wins.forEach((w,i)=>{
+    const app=APPS.find(a=>a.id===w.appId);
+    const card=document.createElement('div');
+    card.className='card'+(i===0?' sel':'');
+    card.innerHTML=`<div class="ic">${ICONS[app.icon]}</div><div class="nm">${esc(w.title)}</div>`;
+    card.addEventListener('click',()=>{focusWindow(w.id);closeAltTab();});
+    strip.appendChild(card);
+  });
+  $('#alttab').classList.add('show');
+}
+function closeAltTab(){ altTabOpen=false; $('#alttab').classList.remove('show'); }
+function altTabNext(){
+  const cards=$$('#alttabStrip .card');
+  if(!cards.length) return;
+  cards[altTabIndex].classList.remove('sel');
+  altTabIndex=(altTabIndex+1)%cards.length;
+  cards[altTabIndex].classList.add('sel');
+}
+function altTabConfirm(){
+  const cards=$$('#alttabStrip .card');
+  if(cards[altTabIndex]){
+    // map index to window
+    const wins=windows.filter(w=>w.state!=='minimized').sort((a,b)=>b.z-a.z);
+    if(wins[altTabIndex]) focusWindow(wins[altTabIndex].id);
+  }
+  closeAltTab();
+}
+
+// ---------- Context menu ----------
+function showCtx(x,y,items){
+  const el=$('#ctx'); el.innerHTML='';
+  items.forEach(it=>{
+    if(it.sep){ const s=document.createElement('div'); s.className='sep'; el.appendChild(s); return; }
+    const b=document.createElement('button');
+    b.className=it.danger?'danger':'';
+    b.innerHTML=`${it.icon?ICONS[it.icon]||'' :''}<span>${esc(it.label)}</span>`;
+    b.addEventListener('click',()=>{ hideCtx(); if(it.action) it.action(); });
+    el.appendChild(b);
+  });
+  el.style.left=x+'px'; el.style.top=y+'px';
+  el.classList.add('show');
+  // adjust
+  const r=el.getBoundingClientRect();
+  if(r.right>window.innerWidth) el.style.left=(window.innerWidth-r.width-8)+'px';
+  if(r.bottom>window.innerHeight) el.style.top=(window.innerHeight-r.height-8)+'px';
+}
+function hideCtx(){ $('#ctx').classList.remove('show'); }
+
+// ---------- Launcher ----------
+function renderLauncher(filter=''){
+  const grid=$('#launcherGrid'); grid.innerHTML='';
+  const q=filter.toLowerCase();
+  APPS.filter(a=>!q||a.name.toLowerCase().includes(q)||a.desc.toLowerCase().includes(q)).forEach(a=>{
+    const d=document.createElement('div'); d.className='lapp';
+    d.innerHTML=`<div class="ic">${ICONS[a.icon]}</div><div class="nm">${esc(a.name)}</div>`;
+    d.addEventListener('click',()=>{ launchApp(a.id); closeLauncher(); });
+    grid.appendChild(d);
+  });
+  // file search
+  if(q.length>=2){
+    // search fs for files
+    const results=searchFiles(q);
+    results.slice(0,8).forEach(f=>{
+      const d=document.createElement('div'); d.className='lapp';
+      d.innerHTML=`<div class="ic">${f.type==='dir'?ICONS.folder:ICONS.file}</div><div class="nm">${esc(f.name)}</div>`;
+      d.addEventListener('click',()=>{ 
+        if(f.type==='dir'){ launchApp('files',{path:f.path}); } else { launchApp('editor',{path:f.path}); }
+        closeLauncher();
+      });
+      grid.appendChild(d);
+    });
+  }
+}
+function searchFiles(q){
+  const out=[];
+  function walk(node,path){
+    if(!node.children) return;
+    node.children.forEach(c=>{
+      const p=path+'/'+c.name;
+      if(c.name.toLowerCase().includes(q)) out.push({type:c.type,name:c.name,path:p});
+      if(c.type==='dir') walk(c,p);
+    });
+  }
+  walk(fsRoot,'');
+  return out;
+}
+function openLauncher(){ renderLauncher(''); $('#launcher').classList.add('show'); $('#launcherSearch').value=''; setTimeout(()=>$('#launcherSearch').focus(),50); }
+function closeLauncher(){ $('#launcher').classList.remove('show'); }
+
+// ---------- Boot ----------
+function boot(){
+  const bar=$('#bootBar'); const txt=$('#bootTxt');
+  const steps=['Initializing kernel…','Mounting filesystem…','Starting services…','Loading desktop…','Ready'];
+  let i=0;
+  const iv=setInterval(()=>{
+    i++;
+    bar.style.width=(i/steps.length*100)+'%';
+    txt.textContent=steps[Math.min(i,steps.length-1)];
+    if(i>=steps.length){
+      clearInterval(iv);
+      SFX.boot();
+      setTimeout(()=>{
+        $('#boot').classList.add('hide');
+        setTimeout(()=>{$('#boot').style.display='none'; afterBoot();},850);
+      },400);
+    }
+  },320);
+}
+function afterBoot(){
+  if(settings.lockOnStart) showLock(); else showDesktop();
+}
+function showLock(){ $('#lock').classList.add('show'); updateLockClock(); setInterval(updateLockClock,1000); $('#lockInput').focus(); }
+function hideLock(){ $('#lock').classList.remove('show'); showDesktop(); }
+function showDesktop(){ applySettings(); initDesktopIcons(); renderWallpaper(); 
+  if(!windows.length){ /* open welcome? */ }
+  notify('Welcome to Aether','Type "help" in Terminal. Press Super for launcher.', 'settings', 5000);
+}
+function updateLockClock(){
+  const d=new Date();
+  $('#lockClock').textContent=d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  $('#lockDate').textContent=d.toLocaleDateString([],{weekday:'long',month:'long',day:'numeric'});
+}
+$('#lockInput').addEventListener('keydown',e=>{
+  if(e.key==='Enter'){
+    if(e.target.value===settings.password){ hideLock(); e.target.value=''; SFX.success(); }
+    else { SFX.error(); e.target.value=''; e.target.placeholder='Wrong password'; setTimeout(()=>e.target.placeholder='Enter password',1200); }
+  } else if(e.key==='Escape'){ e.target.value=''; }
+});
+
+// ---------- Wallpaper ----------
+let wallpaperMode=settings.wallpaper;
+function renderWallpaper(){
+  const container=$('#wallpaper'); container.innerHTML='';
+  const canvas=document.createElement('canvas'); container.appendChild(canvas);
+  const ctx=canvas.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  function resize(){
+    canvas.width=window.innerWidth*dpr; canvas.height=(window.innerHeight-52)*dpr;
+    canvas.style.width=window.innerWidth+'px'; canvas.style.height=(window.innerHeight-52)+'px';
+    draw();
+  }
+  function draw(){
+    const W=canvas.width,H=canvas.height;
+    const t=performance.now()/1000;
+    const mode=settings.wallpaper;
+    if(mode==='aurora'){
+      const g=ctx.createLinearGradient(0,0,W,H);
+      g.addColorStop(0,'#0a0e14'); g.addColorStop(.5,'#131a2a'); g.addColorStop(1,'#1a1230');
+      ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+      // aurora bands
+      for(let i=0;i<4;i++){
+        const y=H*.3+i*H*.12;
+        const grad=ctx.createRadialGradient(W*.5,y,0,W*.5,y,W*.7);
+        const colors=['#4ff0c8','#ff5fa3','#ffb347','#5ee08a'];
+        grad.addColorStop(0,colors[i%colors.length]+'55');
+        grad.addColorStop(1,'transparent');
+        ctx.fillStyle=grad;
+        ctx.fillRect(0,0,W,H);
+      }
+      // stars
+      ctx.fillStyle='rgba(255,255,255,.6)';
+      for(let i=0;i<120;i++){
+        const x=(i*97.3)%W, y=(i*53.7)%H;
+        const r=(Math.sin(t+i)+1)*.8+.3;
+        ctx.globalAlpha=.3+Math.sin(t*.5+i)*.3;
+        ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+      }
+      ctx.globalAlpha=1;
+    } else if(mode==='mesh'){
+      const g=ctx.createLinearGradient(0,0,W,H);
+      g.addColorStop(0,'#0d1117'); g.addColorStop(1,'#1a1028');
+      ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+      // blobs
+      const blobs=[{x:.2,y:.3,c:'#4ff0c8'},{x:.8,y:.2,c:'#ff5fa3'},{x:.5,y:.8,c:'#ffb347'},{x:.1,y:.8,c:'#5ee08a'}];
+      blobs.forEach((b,bi)=>{
+        const x=W*(b.x+Math.sin(t*.2+bi)*.05);
+        const y=H*(b.y+Math.cos(t*.15+bi)*.05);
+        const r=Math.min(W,H)*.35;
+        const grad=ctx.createRadialGradient(x,y,0,x,y,r);
+        grad.addColorStop(0,b.c+'66'); grad.addColorStop(1,'transparent');
+        ctx.fillStyle=grad; ctx.fillRect(0,0,W,H);
+      });
+    } else if(mode==='grid'){
+      ctx.fillStyle='#0a0e14'; ctx.fillRect(0,0,W,H);
+      ctx.strokeStyle='rgba(79,240,200,.12)'; ctx.lineWidth=1;
+      const step=40*dpr;
+      for(let x=0;x<W;x+=step){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+      for(let y=0;y<H;y+=step){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+      // glow center
+      const grad=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.min(W,H)*.6);
+      grad.addColorStop(0,'rgba(79,240,200,.12)'); grad.addColorStop(1,'transparent');
+      ctx.fillStyle=grad; ctx.fillRect(0,0,W,H);
+    } else if(mode==='solid'){
+      ctx.fillStyle=settings.theme==='light'?'#f2f5fa':'#0a0e14'; ctx.fillRect(0,0,W,H);
+    }
+  }
+  let raf=null;
+  function loop(){ draw(); raf=requestAnimationFrame(loop); }
+  // handle visibility
+  document.addEventListener('visibilitychange',()=>{ if(document.hidden){ if(raf) cancelAnimationFrame(raf); raf=null;} else { if(!raf) loop(); } });
+  resize();
+  window.addEventListener('resize',resize);
+  if(!document.hidden) loop();
+  // store canvas for cleanup? keep simple
+}
+
+// ---------- Desktop icons ----------
+function initDesktopIcons(){
+  const c=$('#desktopIcons'); c.innerHTML='';
+  if(!settings.desktopIcons) return;
+  const items=[
+    {name:'Home',path:'/home/user',icon:'folder'},
+    {name:'Documents',path:'/home/user/Documents',icon:'folder'},
+    {name:'welcome.txt',path:'/home/user/Desktop/welcome.txt',icon:'text'},
+    {name:'Terminal',app:'terminal',icon:'terminal'},
+    {name:'Trash',path:null,icon:'folder'}
+  ];
+  items.forEach(it=>{
+    const d=document.createElement('div'); d.className='dicon';
+    d.innerHTML=`<div class="ic">${ICONS[it.icon]}</div><div class="lbl">${esc(it.name)}</div>`;
+    d.addEventListener('dblclick',()=>{
+      if(it.app) launchApp(it.app);
+      else if(it.path) launchApp('files',{path:it.path});
+      SFX.click();
+    });
+    d.addEventListener('contextmenu',e=>{ e.preventDefault(); showCtx(e.clientX,e.clientY,[
+      {label:'Open',icon:it.icon,action:()=>{ if(it.app) launchApp(it.app); else if(it.path) launchApp('files',{path:it.path}); }},
+      {sep:true},
+      {label:'Properties',action:()=>notify(it.name,'Type: '+(it.app?'Application':'Folder/File'))}
+    ]); });
+    c.appendChild(d);
+  });
+}
+
+// ---------- App factories ----------
+const APP_FACTORIES={};
+
+// --- Files ---
+APP_FACTORIES.files=(win,body)=>{
+  let cwd= (win.opts&&win.opts.path) ? (win.opts.path.startsWith('/')?win.opts.path:'/home/user') : '/home/user';
+  // if path is file, open in editor instead? handle: if file, launch editor
+  if(getNode(cwd)&&getNode(cwd).type==='file'){ launchApp('editor',{path:cwd}); closeWindow(win.id); return {unmount(){}}; }
+  const root=document.createElement('div');
+  root.style.cssText='display:flex;flex-direction:column;height:100%';
+  body.appendChild(root);
+  function render(){
+    const node=getNode(cwd);
+    if(!node||node.type!=='dir'){ cwd='/home/user'; return render(); }
+    const crumbs=cwd.split('/').filter(Boolean);
+    root.innerHTML=`
+      <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--border);background:rgba(0,0,0,.1)">
+        <button data-nav="up" style="background:transparent;border:1px solid var(--border2);border-radius:6px;padding:4px 8px;cursor:pointer;color:var(--text)">↑</button>
+        <div style="flex:1;font-size:13px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(cwd)}</div>
+        <button data-act="newfolder" style="background:var(--accent);color:#0a0e14;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px;font-weight:600">+ Folder</button>
+        <button data-act="newfile" style="background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px">+ File</button>
+      </div>
+      <div style="flex:1;overflow:auto;padding:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;align-content:start" id="fileGrid"></div>
+    `;
+    const grid=root.querySelector('#fileGrid');
+    (node.children||[]).forEach(child=>{
+      const item=document.createElement('div');
+      item.style.cssText='display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px;border-radius:10px;cursor:pointer;transition:background .15s';
+      item.innerHTML=`<div style="width:44px;height:44px">${child.type==='dir'?ICONS.folder:ICONS.text}</div><div style="font-size:11px;text-align:center;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(child.name)}</div>`;
+      item.addEventListener('mouseenter',()=>item.style.background='rgba(255,255,255,.06)');
+      item.addEventListener('mouseleave',()=>item.style.background='');
+      item.addEventListener('dblclick',()=>{
+        const p=cwd+'/'+child.name;
+        if(child.type==='dir'){ cwd=p; render(); }
+        else launchApp('editor',{path:p});
+      });
+      item.addEventListener('contextmenu',e=>{
+        e.preventDefault(); e.stopPropagation();
+        const p=cwd+'/'+child.name;
+        showCtx(e.clientX,e.clientY,[
+          {label:'Open',action:()=>{ if(child.type==='dir'){cwd=p;render();}else launchApp('editor',{path:p}); }},
+          {label:'Rename',action:()=>{ const nn=prompt('New name',child.name); if(nn&&nn!==child.name){ 
+            const par=getNode(cwd); const c=par.children.find(x=>x.name===child.name); c.name=nn; c.modified=now(); saveFS(); render(); } }},
+          {label:'Delete',danger:true,action:()=>{ if(confirm('Delete '+child.name+'?')){ removeNode(p); render(); notify('Deleted',child.name,'files'); } }},
+          {sep:true},
+          {label:'Properties',action:()=>notify(child.name, (child.type==='dir'?'Folder':'File')+' · '+ (child.content?fmtBytes(child.content.length):'0 B'))}
+        ]);
+      });
+      grid.appendChild(item);
+    });
+    if(!(node.children||[]).length){
+      grid.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:40px">Empty folder</div>';
+    }
+    root.querySelector('[data-nav="up"]').addEventListener('click',()=>{ if(cwd!=='/'){ cwd=parentOf(cwd)||'/'; render(); } });
+    root.querySelector('[data-act="newfolder"]').addEventListener('click',()=>{
+      const name=prompt('Folder name','New Folder'); if(!name) return;
+      const p=cwd+'/'+name; if(getNode(p)){ alert('Already exists'); return; }
+      const par=getNode(cwd); par.children.push({type:'dir',name,children:[],created:now(),modified:now()}); par.modified=now(); saveFS(); render();
+    });
+    root.querySelector('[data-act="newfile"]').addEventListener('click',()=>{
+      const name=prompt('File name','untitled.txt'); if(!name) return;
+      const p=cwd+'/'+name; if(getNode(p)){ alert('Already exists'); return; }
+      const par=getNode(cwd); par.children.push({type:'file',name,content:'',mime:'text/plain',created:now(),modified:now()}); par.modified=now(); saveFS(); render();
+      launchApp('editor',{path:p});
+    });
+  }
+  render();
+  return {unmount(){}, refresh:render};
+};
+
+// --- Terminal ---
+APP_FACTORIES.terminal=(win,body)=>{
+  const history=[]; let histIdx=-1;
+  const root=document.createElement('div');
+  root.style.cssText='display:flex;flex-direction:column;height:100%;background:#0a0e14;font-family:var(--mono);font-size:13px';
+  body.appendChild(root);
+  root.innerHTML=`
+    <div id="termOut" style="flex:1;overflow:auto;padding:12px;white-space:pre-wrap;word-break:break-word"></div>
+    <div style="display:flex;align-items:center;padding:8px 12px;border-top:1px solid var(--border);gap:8px">
+      <span style="color:var(--accent)">$</span>
+      <input id="termIn" style="flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:inherit;font-size:inherit" autocomplete="off" spellcheck="false">
+    </div>
+  `;
+  const out=root.querySelector('#termOut');
+  const inp=root.querySelector('#termIn');
+  let cwd='/home/user';
+  function print(s,cls){ const d=document.createElement('div'); if(cls) d.className=cls; d.textContent=s; out.appendChild(d); out.scrollTop=out.scrollHeight; }
+  function println(s){ print(s); }
+  // command set
+  function resolve(p){
+    if(!p) return cwd;
+    if(p.startsWith('/')) return normalize(p);
+    return normalize(cwd+'/'+p);
+  }
+  function normalize(p){
+    const parts=p.split('/'); const res=[];
+    for(const seg of parts){
+      if(seg===''||seg==='.') continue;
+      if(seg==='..'){ res.pop(); continue; }
+      res.push(seg);
+    }
+    return '/'+res.join('/');
+  }
+  function getNode2(p){ return getNode(p); }
+  const commands={
+    help(){ return `Aether shell — commands:
+  ls [path]          list directory
+  cd [path]          change directory
+  pwd                print working directory
+  cat <file>         print file
+  echo <text>        print text (supports > >> redirect)
+  touch <file>       create empty file
+  mkdir <dir>        create directory
+  rm [-r] <path>     remove
+  cp <src> <dst>     copy
+  mv <src> <dst>     move/rename
+  grep <pat> [file]  search
+  head/tail [n] file first/last lines
+  wc [file]          counts
+  find [path] -name  find files
+  tree [path]        directory tree
+  clear              clear screen
+  history            show history
+  whoami             user
+  date               date
+  uname              system info
+  neofetch           system summary
+  echo with pipes: cmd | cmd, redirection: > >>`; },
+    pwd(){ return cwd; },
+    whoami(){ return settings.username; },
+    date(){ return new Date().toString(); },
+    uname(){ return 'Aether OS 1.0 (browser)'; },
+    aether(){ return '  Aether — the space between things.\\n  You found the quiet command.\\n  Every pixel here was drawn by hand, in one file,\\n  by a model that never saw the desktop it built.\\n  — type "fortune" for another.'; },
+    fortune(){ const f=['The best interface is the one you forget is there.','Simplicity is the ultimate sophistication.','Make it work, make it right, make it fast.','Less, but better.']; return f[Math.floor(Math.random()*f.length)]; },
+    neofetch(){ return `       /\\       ${settings.username}@aether
+      /  \\      OS: Aether 1.0
+     /    \\     Kernel: Web (evergreen)
+    /______\\    Shell: aether-sh
+   /        \\   Theme: ${settings.theme}
+  /__________\\  Uptime: ${Math.floor(performance.now()/1000)}s`; },
+    clear(){ out.innerHTML=''; return ''; },
+    history(){ return history.map((h,i)=>`  ${i+1}  ${h}`).join('\n'); },
+    ls(args){
+      const p=resolve(args[0]||'.');
+      const n=getNode(p);
+      if(!n) return `ls: cannot access '${args[0]||'.'}': No such file or directory`;
+      if(n.type!=='dir') return p;
+      return (n.children||[]).map(c=> (c.type==='dir'?'📁 ':'📄 ')+c.name).join('   ') || '(empty)';
+    },
+    cd(args){
+      const p=resolve(args[0]||'/home/user');
+      const n=getNode(p);
+      if(!n) return `cd: no such directory: ${args[0]}`;
+      if(n.type!=='dir') return `cd: not a directory: ${args[0]}`;
+      cwd=p; return '';
+    },
+    cat(args){
+      if(!args.length) return 'cat: missing file';
+      let r='';
+      for(const a of args){
+        const p=resolve(a); const n=getNode(p);
+        if(!n) { r+=`cat: ${a}: No such file\n`; continue; }
+        if(n.type==='dir'){ r+=`cat: ${a}: Is a directory\n`; continue; }
+        r+=(n.content||'')+'\n';
+      }
+      return r.trimEnd();
+    },
+    touch(args){
+      if(!args.length) return 'touch: missing file';
+      args.forEach(a=>{
+        const p=resolve(a);
+        if(getNode(p)) return;
+        const par=getNode(parentOf(p));
+        if(!par||par.type!=='dir') return;
+        par.children.push({type:'file',name:nameOf(p),content:'',mime:'text/plain',created:now(),modified:now()});
+        par.modified=now();
+      });
+      saveFS(); return '';
+    },
+    mkdir(args){
+      if(!args.length) return 'mkdir: missing operand';
+      args.forEach(a=>{
+        const p=resolve(a);
+        if(getNode(p)) return;
+        const par=getNode(parentOf(p));
+        if(!par||par.type!=='dir') return;
+        par.children.push({type:'dir',name:nameOf(p),children:[],created:now(),modified:now()});
+        par.modified=now();
+      });
+      saveFS(); return '';
+    },
+    rm(args){
+      let recursive=false; const targets=[];
+      args.forEach(a=>{ if(a==='-r'||a==='-rf'){recursive=true;}else targets.push(a);});
+      if(!targets.length) return 'rm: missing operand';
+      let r='';
+      targets.forEach(a=>{
+        const p=resolve(a); const n=getNode(p);
+        if(!n){ r+=`rm: cannot remove '${a}': No such file\n`; return; }
+        if(n.type==='dir' && !recursive){ r+=`rm: cannot remove '${a}': Is a directory (use -r)\n`; return; }
+        if(p==='/'||p==='/home'||p==='/home/user'){ r+=`rm: refusing to remove '${a}'\n`; return; }
+        removeNode(p);
+      });
+      saveFS();
+      return r.trimEnd();
+    },
+    cp(args){
+      if(args.length<2) return 'cp: missing operand';
+      const src=resolve(args[0]); const dst=resolve(args[1]);
+      const sn=getNode(src); if(!sn) return `cp: cannot stat '${args[0]}'`;
+      const dn=getNode(dst);
+      let targetPath=dst;
+      if(dn&&dn.type==='dir') targetPath=dst+'/'+nameOf(src);
+      const clone=JSON.parse(JSON.stringify(sn));
+      clone.modified=now(); clone.created=now();
+      const par=getNode(parentOf(targetPath));
+      if(!par||par.type!=='dir') return 'cp: invalid destination';
+      const nm=nameOf(targetPath);
+      const idx=par.children.findIndex(c=>c.name===nm);
+      if(idx>=0) par.children[idx]=clone; else par.children.push(clone);
+      par.modified=now(); saveFS();
+      return '';
+    },
+    mv(args){
+      if(args.length<2) return 'mv: missing operand';
+      const src=resolve(args[0]); const dst=resolve(args[1]);
+      const sn=getNode(src); if(!sn) return `mv: cannot stat '${args[0]}'`;
+      const dn=getNode(dst);
+      let targetPath=dst;
+      if(dn&&dn.type==='dir') targetPath=dst+'/'+nameOf(src);
+      if(targetPath===src) return '';
+      const clone=JSON.parse(JSON.stringify(sn));
+      removeNode(src);
+      const par=getNode(parentOf(targetPath));
+      if(!par||par.type!=='dir') return 'mv: invalid destination';
+      const nm=nameOf(targetPath);
+      const idx=par.children.findIndex(c=>c.name===nm);
+      if(idx>=0) par.children[idx]=clone; else par.children.push(clone);
+      par.modified=now(); saveFS();
+      return '';
+    },
+    grep(args){
+      // grep pattern [file]
+      if(!args.length) return 'grep: missing pattern';
+      const pat=args[0]; const file=args[1];
+      const re=new RegExp(pat,'i');
+      if(file){
+        const n=getNode(resolve(file)); if(!n||n.type==='dir') return `grep: ${file}: No such file`;
+        const lines=(n.content||'').split('\n');
+        return lines.filter(l=>re.test(l)).join('\n');
+      }
+      // read stdin? not implemented; search cwd recursively
+      const out=[];
+      function walk(node,p){
+        if(node.type==='file'){ (node.content||'').split('\n').forEach((l,i)=>{ if(re.test(l)) out.push(`${p}:${i+1}:${l}`); }); }
+        else (node.children||[]).forEach(c=>walk(c,p+'/'+c.name));
+      }
+      const n=getNode(cwd); walk(n,cwd);
+      return out.join('\n');
+    },
+    head(args){
+      let n=10; const files=[];
+      args.forEach(a=>{ if(a.startsWith('-')) n=parseInt(a.slice(1))||10; else files.push(a); });
+      if(!files.length) return 'head: missing file';
+      const node=getNode(resolve(files[0])); if(!node||node.type==='dir') return 'head: invalid file';
+      return (node.content||'').split('\n').slice(0,n).join('\n');
+    },
+    tail(args){
+      let n=10; const files=[];
+      args.forEach(a=>{ if(a.startsWith('-')) n=parseInt(a.slice(1))||10; else files.push(a); });
+      if(!files.length) return 'tail: missing file';
+      const node=getNode(resolve(files[0])); if(!node||node.type==='dir') return 'tail: invalid file';
+      const lines=(node.content||'').split('\n'); return lines.slice(-n).join('\n');
+    },
+    wc(args){
+      if(!args.length) return 'wc: missing file';
+      const node=getNode(resolve(args[0])); if(!node||node.type==='dir') return 'wc: invalid file';
+      const c=node.content||''; const lines=c.split('\n').length; const words=c.split(/\s+/).filter(Boolean).length; const bytes=c.length;
+      return `${lines} ${words} ${bytes} ${args[0]}`;
+    },
+    find(args){
+      const rootPath=resolve(args[0]&&!args[0].startsWith('-')?args[0]:'.');
+      const nameIdx=args.indexOf('-name');
+      const pattern=nameIdx>=0?args[nameIdx+1]:null;
+      const out=[];
+      function walk(node,p){
+        if(node.type==='dir') (node.children||[]).forEach(c=>walk(c,p+'/'+c.name));
+        else {
+          if(!pattern || matchGlob(pattern,nameOf(p))) out.push(p);
+        }
+      }
+      // include dirs too? find prints all
+      function walk2(node,p){
+        out.push(p);
+        if(node.type==='dir') (node.children||[]).forEach(c=>walk2(c,p+'/'+c.name));
+      }
+      const n=getNode(rootPath); if(!n) return 'find: invalid path';
+      // filter by name if pattern
+      const res=[];
+      function w(node,p){
+        const nm=nameOf(p);
+        if(!pattern || matchGlob(pattern,nm)) res.push(p);
+        if(node.type==='dir') (node.children||[]).forEach(c=>w(c,p+'/'+c.name));
+      }
+      w(n,rootPath==='/home/user'?rootPath:rootPath);
+      return res.join('\n');
+    },
+    tree(args){
+      const p=resolve(args[0]||'.');
+      const n=getNode(p); if(!n||n.type!=='dir') return 'tree: invalid dir';
+      const lines=[];
+      function w(node,pref){
+        lines.push(pref+nameOf(node.type==='dir'?p+'/'+'x':p));
+      }
+      // simpler
+      function t(node,indent,last){
+        const nm=node===n?'':nameOf('x');
+      }
+      function rec(node,prefix,isLast){
+        const name = node===fsRoot? '/' : nameOf(p? p : '');
+      }
+      // do straightforward
+      function show(node,indent){
+        const nm = node===getNode(p) ? (p==='/'?'/':nameOf(p)) : '';
+      }
+      // just list recursively
+      const out=[];
+      function rec2(node,path,depth){
+        const ind='  '.repeat(depth);
+        out.push(ind+(node.type==='dir'?'📁':'📄')+' '+ (path.split('/').pop()||'/'));
+        if(node.type==='dir') (node.children||[]).forEach(c=>rec2(c,path+'/'+c.name,depth+1));
+      }
+      rec2(n,p,0);
+      return out.join('\n');
+    }
+  };
+  function matchGlob(pat,str){
+    const re=new RegExp('^'+pat.replace(/\*/g,'.*').replace(/\?/g,'.')+'$','i');
+    return re.test(str);
+  }
+
+  // pipeline + redirection handler
+  function runLine(line){
+    line=line.trim();
+    if(!line) return;
+    history.push(line); histIdx=-1;
+    // handle redirection: split by > or >>
+    // First handle pipes
+    const segments=line.split('|').map(s=>s.trim());
+    // process redirection on last segment
+    let redirect=null; // {path, append}
+    let cmdLine=segments[segments.length-1];
+    const redirMatch=cmdLine.match(/(>>|>)\s*(.+)$/);
+    if(redirMatch){
+      redirect={append:redirMatch[1]==='>>', path:redirMatch[2].trim()};
+      cmdLine=cmdLine.slice(0,redirMatch.index).trim();
+      segments[segments.length-1]=cmdLine;
+    }
+    let input='';
+    for(const seg of segments){
+      const parts=seg.trim().split(/\s+/);
+      const cmd=parts[0]; const args=parts.slice(1);
+      // echo special: collect rest as text
+      let out;
+      if(cmd==='echo'){
+        // join args (basic)
+        out=args.join(' ');
+      } else if(commands[cmd]){
+        try{ out=commands[cmd](args); }catch(e){ out='error: '+e.message; SFX.error(); }
+      } else {
+        out=`${cmd}: command not found`;
+        SFX.error();
+      }
+      if(out===undefined) out='';
+      // if next segment, pass as stdin? Our commands don't read stdin; but grep could. Simple: for grep without file, we could filter input. Handle: if cmd==='grep' and args has no file, filter input lines.
+      if(seg!==segments[segments.length-1]){
+        // pass output as input to next by transforming
+        input=out;
+        // if next is grep, we'll handle in grep? Instead, implement stdin for grep: modify grep to accept input global
+        // We'll set a global lastOutput and let grep use it if no file
+      }
+      // store last output for pipe consumer
+      window.__lastOut=out;
+    }
+    // Actually simpler: sequential with stdin support for grep
+    // Redo properly:
+  }
+
+  // Redo runLine cleanly:
+  function runLine2(line){
+    line=line.trim();
+    if(!line) return;
+    history.push(line); histIdx=history.length;
+    const segments=line.split('|').map(s=>s.trim());
+    let redirect=null;
+    // parse redirect on last
+    let lastSeg=segments[segments.length-1];
+    const rm=lastSeg.match(/(>>|>)\s*(.+)$/);
+    if(rm){ redirect={append:rm[1]==='>>', path:rm[2].trim()}; lastSeg=lastSeg.slice(0,rm.index).trim(); segments[segments.length-1]=lastSeg; }
+    let stdin='';
+    let finalOut='';
+    for(let i=0;i<segments.length;i++){
+      const seg=segments[i];
+      const parts=seg.split(/\s+/);
+      const cmd=parts[0]; const args=parts.slice(1);
+      let out='';
+      if(cmd==='echo'){
+        // support echo text; if stdin present and no args? just args
+        out = args.join(' ');
+        if(args.length===0) out=stdin;
+      } else if(cmd==='grep'){
+        // if file provided use file; else filter stdin
+        if(args.length>=2 || (args.length===1 && getNode(resolve(args[args.length-1])))){
+          // file mode
+          out = commands.grep(args);
+        } else {
+          const pat=args[0]||'';
+          const re=new RegExp(pat,'i');
+          out = stdin.split('\n').filter(l=>re.test(l)).join('\n');
+        }
+      } else if(commands[cmd]){
+        // commands that could accept stdin: cat? handle cat - (stdin)
+        if(cmd==='cat' && (args.length===0 || args.includes('-'))){ out=stdin; }
+        else { try{ out=commands[cmd](args); }catch(e){ out='error: '+e.message; } }
+      } else {
+        out=`${cmd}: command not found`;
+        SFX.error();
+      }
+      if(out===undefined) out='';
+      stdin=out;
+      finalOut=out;
+    }
+    if(redirect){
+      const p=resolve(redirect.path);
+      const par=getNode(parentOf(p));
+      if(par&&par.type==='dir'){
+        const nm=nameOf(p);
+        const existing=par.children.find(c=>c.name===nm);
+        const content= (existing?existing.content||'':'') + (redirect.append? (existing&&existing.content?'\n':'')+finalOut : finalOut);
+        if(existing){ existing.content=content; existing.modified=now(); }
+        else par.children.push({type:'file',name:nm,content, mime:'text/plain',created:now(),modified:now()});
+        par.modified=now(); saveFS();
+        print(''); // no output
+      } else {
+        print(`redirect: cannot write to ${redirect.path}`); SFX.error();
+      }
+    } else {
+      if(finalOut!=='') print(finalOut);
+    }
+  }
+
+  // tab completion
+  inp.addEventListener('keydown',e=>{
+    if(e.key==='Enter'){
+      const v=inp.value; inp.value='';
+      print(`$ ${v}`,{color:'var(--accent)'});
+      // style the prompt line
+      const last=out.lastChild; if(last) last.style.color='var(--text3)';
+      runLine2(v);
+      if(v.trim()==='clear') out.innerHTML='';
+    } else if(e.key==='ArrowUp'){
+      e.preventDefault();
+      if(history.length){ histIdx=Math.max(0,histIdx<=0?history.length-1:histIdx-1); inp.value=history[histIdx]||''; }
+    } else if(e.key==='ArrowDown'){
+      e.preventDefault();
+      if(history.length){ histIdx=Math.min(history.length-1,histIdx+1); inp.value=history[histIdx]||''; if(histIdx===history.length-1) inp.value=''; }
+    } else if(e.key==='Tab'){
+      e.preventDefault();
+      // completion
+      const val=inp.value; const parts=val.split(/\s+/);
+      const last=parts[parts.length-1];
+      // if command position
+      if(parts.length<=1){
+        const matches=Object.keys(commands).filter(c=>c.startsWith(last));
+        if(matches.length===1){ inp.value=matches[0]+' '; }
+        else if(matches.length>1){ print(matches.join('  ')); }
+      } else {
+        // path completion
+        const dirPath=last.includes('/')?resolve(parentOf(last)||'.'):'';
+        const base=last.includes('/')?parentOf(last):'.';
+        const prefix=last.includes('/')?nameOf(last):last;
+        const node=getNode(resolve(base===''?'.':base));
+        if(node&&node.type==='dir'){
+          const matches=(node.children||[]).filter(c=>c.name.startsWith(prefix)).map(c=>c.name+(c.type==='dir'?'/':''));
+          if(matches.length===1){ 
+            const full=last.includes('/')? (last.slice(0,last.lastIndexOf('/')+1)+matches[0]) : matches[0];
+            parts[parts.length-1]=full; inp.value=parts.join(' ')+' '; 
+          } else if(matches.length>1){ print(matches.join('  ')); }
+        }
+      }
+    } else if(e.key==='l' && e.ctrlKey){ e.preventDefault(); out.innerHTML=''; }
+  });
+  setTimeout(()=>inp.focus(),100);
+  // welcome
+  print('Aether shell — type "help" for commands.');
+  print(`Working directory: ${cwd}`);
+  return {unmount(){}, focus:()=>inp.focus()};
+};
+
+// --- Editor ---
+APP_FACTORIES.editor=(win,body)=>{
+  let path=win.opts&&win.opts.path?win.opts.path:'/home/user/Documents/untitled.txt';
+  const root=document.createElement('div');
+  root.style.cssText='display:flex;flex-direction:column;height:100%';
+  body.appendChild(root);
+  function load(){ const n=getNode(path); return n&&n.type==='file'? (n.content||''):''; }
+  root.innerHTML=`
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--border);background:rgba(0,0,0,.1)">
+      <input id="edPath" style="flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:6px 10px;font-size:12px;font-family:var(--mono)" value="${esc(path)}">
+      <button id="edSave" style="background:var(--accent);color:#0a0e14;border:none;border-radius:6px;padding:6px 12px;cursor:pointer;font-weight:600;font-size:12px">Save</button>
+      <button id="edNew" style="background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:6px 12px;cursor:pointer;font-size:12px">New</button>
+    </div>
+    <textarea id="edArea" spellcheck="false" style="flex:1;background:transparent;border:none;outline:none;resize:none;padding:16px;font-family:var(--mono);font-size:13px;line-height:1.6;color:var(--text)"></textarea>
+    <div style="padding:6px 12px;border-top:1px solid var(--border);font-size:11px;color:var(--text3);display:flex;justify-content:space-between">
+      <span id="edStatus">Ready</span><span id="edCount">0 chars</span>
+    </div>
+  `;
+  const area=root.querySelector('#edArea');
+  const pathIn=root.querySelector('#edPath');
+  const status=root.querySelector('#edStatus');
+  const count=root.querySelector('#edCount');
+  area.value=load();
+  function updateCount(){ count.textContent=area.value.length+' chars · '+area.value.split('\n').length+' lines'; }
+  updateCount();
+  area.addEventListener('input',updateCount);
+  root.querySelector('#edSave').addEventListener('click',()=>{
+    const p=pathIn.value.trim(); if(!p){ status.textContent='No path'; return; }
+    const par=getNode(parentOf(p));
+    if(!par||par.type!=='dir'){ status.textContent='Invalid directory'; SFX.error(); return; }
+    const nm=nameOf(p);
+    const existing=par.children.find(c=>c.name===nm);
+    if(existing&&existing.type==='dir'){ status.textContent='Cannot overwrite directory'; return; }
+    if(existing){ existing.content=area.value; existing.modified=now(); }
+    else par.children.push({type:'file',name:nm,content:area.value,mime:'text/plain',created:now(),modified:now()});
+    par.modified=now(); saveFS();
+    path=p; status.textContent='Saved ✓'; SFX.success();
+    setTimeout(()=>status.textContent='Ready',1500);
+  });
+  root.querySelector('#edNew').addEventListener('click',()=>{ area.value=''; pathIn.value='/home/user/Documents/untitled.txt'; updateCount(); status.textContent='New file'; });
+  // keyboard save
+  area.addEventListener('keydown',e=>{ if((e.ctrlKey||e.metaKey)&&e.key==='s'){ e.preventDefault(); root.querySelector('#edSave').click(); }});
+  win.title=path.split('/').pop();
+  if(win.el) win.el.querySelector('.wtitle').textContent=win.title;
+  return {unmount(){}};
+};
+
+// --- Paint ---
+APP_FACTORIES.paint=(win,body)=>{
+  const root=document.createElement('div');
+  root.style.cssText='display:flex;flex-direction:column;height:100%';
+  body.appendChild(root);
+  root.innerHTML=`
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--border);background:rgba(0,0,0,.1);flex-wrap:wrap">
+      <div id="colors" style="display:flex;gap:4px;flex-wrap:wrap"></div>
+      <div style="width:1px;height:24px;background:var(--border)"></div>
+      <button data-tool="brush" class="ptool active">Brush</button>
+      <button data-tool="eraser" class="ptool">Eraser</button>
+      <button data-tool="fill" class="ptool">Fill</button>
+      <button data-tool="rect" class="ptool">Rect</button>
+      <button data-tool="circle" class="ptool">Circle</button>
+      <div style="width:1px;height:24px;background:var(--border)"></div>
+      <label style="font-size:12px">Size <input id="brushSize" type="range" min="1" max="40" value="6" style="vertical-align:middle"></label>
+      <button id="pClear" style="background:var(--danger);color:#fff;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px">Clear</button>
+      <button id="pSave" style="background:var(--accent);color:#0a0e14;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px;font-weight:600">Save PNG</button>
+    </div>
+    <div style="flex:1;position:relative;overflow:hidden;background:#1a1f2e">
+      <canvas id="paintCanvas" style="position:absolute;inset:0;touch-action:none;cursor:crosshair"></canvas>
+    </div>
+  `;
+  // inject tool button styles
+  const style=document.createElement('style');
+  style.textContent='.ptool{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px}.ptool.active{background:var(--accent);color:#0a0e14;border-color:var(--accent)}';
+  document.head.appendChild(style);
+  const colors=['#4ff0c8','#ff5fa3','#ffb347','#5ee08a','#ffffff','#000000','#e6ecf5','#9aa6b8','#ff6b6b','#4a9eff'];
+  const colorsEl=root.querySelector('#colors');
+  let color='#4ff0c8';
+  colors.forEach(c=>{ const b=document.createElement('button'); b.style.cssText=`width:22px;height:22px;border-radius:50%;border:2px solid ${c===color?'#fff':'transparent'};background:${c};cursor:pointer`; b.addEventListener('click',()=>{ color=c; $$('#colors button').forEach(x=>x.style.borderColor='transparent'); b.style.borderColor='#fff'; }); colorsEl.appendChild(b); });
+  const canvas=root.querySelector('#paintCanvas');
+  const ctx=canvas.getContext('2d');
+  let tool='brush'; let size=6; let drawing=false; let last=null; let startPos=null; let snapshot=null;
+  root.querySelectorAll('.ptool').forEach(b=>b.addEventListener('click',()=>{ tool=b.dataset.tool; root.querySelectorAll('.ptool').forEach(x=>x.classList.remove('active')); b.classList.add('active'); }));
+  root.querySelector('#brushSize').addEventListener('input',e=>size=+e.target.value);
+  function resize(){
+    const dpr=window.devicePixelRatio||1;
+    const rect=canvas.parentElement.getBoundingClientRect();
+    // preserve
+    const tmp=canvas.width?ctx.getImageData(0,0,canvas.width,canvas.height):null;
+    canvas.width=rect.width*dpr; canvas.height=rect.height*dpr;
+    canvas.style.width=rect.width+'px'; canvas.style.height=rect.height+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    if(tmp) ctx.putImageData(tmp,0,0);
+    else { ctx.fillStyle='#1a1f2e'; ctx.fillRect(0,0,rect.width,rect.height); }
+  }
+  resize();
+  const ro=new ResizeObserver(resize); ro.observe(canvas.parentElement);
+  function pos(e){ const r=canvas.getBoundingClientRect(); return {x:e.clientX-r.left,y:e.clientY-r.top}; }
+  canvas.addEventListener('pointerdown',e=>{
+    drawing=true; canvas.setPointerCapture(e.pointerId);
+    const p=pos(e);
+    if(tool==='fill'){ floodFill(Math.floor(p.x),Math.floor(p.y),color); drawing=false; return; }
+    if(tool==='rect'||tool==='circle'){ startPos=p; snapshot=ctx.getImageData(0,0,canvas.width,canvas.height); return; }
+    last=p;
+    ctx.beginPath(); ctx.moveTo(p.x,p.y);
+  });
+  canvas.addEventListener('pointermove',e=>{
+    if(!drawing) return;
+    const p=pos(e);
+    if(tool==='rect'||tool==='circle'){
+      if(snapshot) ctx.putImageData(snapshot,0,0);
+      ctx.strokeStyle=color; ctx.lineWidth=size; ctx.lineCap='round';
+      if(tool==='rect'){ ctx.strokeRect(startPos.x,startPos.y,p.x-startPos.x,p.y-startPos.y); }
+      else { const r=Math.hypot(p.x-startPos.x,p.y-startPos.y); ctx.beginPath(); ctx.arc(startPos.x,startPos.y,r,0,Math.PI*2); ctx.stroke(); }
+      return;
+    }
+    ctx.strokeStyle = tool==='eraser' ? '#1a1f2e' : color;
+    ctx.lineWidth=size; ctx.lineCap='round'; ctx.lineJoin='round';
+    ctx.lineTo(p.x,p.y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(p.x,p.y);
+    last=p;
+  });
+  canvas.addEventListener('pointerup',e=>{
+    if(tool==='rect'||tool==='circle'){
+      // finalize already drawn
+    }
+    drawing=false; snapshot=null;
+  });
+  root.querySelector('#pClear').addEventListener('click',()=>{ const r=canvas.getBoundingClientRect(); ctx.fillStyle='#1a1f2e'; ctx.fillRect(0,0,r.width,r.height); });
+  root.querySelector('#pSave').addEventListener('click',()=>{
+    const a=document.createElement('a'); a.href=canvas.toDataURL('image/png'); a.download='painting.png'; a.click();
+    notify('Saved','PNG downloaded','paint');
+  });
+  function floodFill(sx,sy,fillColor){
+    const dpr=window.devicePixelRatio||1;
+    const w=canvas.width, h=canvas.height;
+    const img=ctx.getImageData(0,0,w,h);
+    const data=img.data;
+    const xi=Math.floor(sx*dpr), yi=Math.floor(sy*dpr);
+    if(xi<0||yi<0||xi>=w||yi>=h) return;
+    const idx=(yi*w+xi)*4;
+    const tr=data[idx],tg=data[idx+1],tb=data[idx+2],ta=data[idx+3];
+    const fc=hexToRgb(fillColor);
+    if(tr===fc.r&&tg===fc.g&&tb===fc.b) return;
+    const stack=[[xi,yi]];
+    while(stack.length){
+      const [x,y]=stack.pop();
+      if(x<0||y<0||x>=w||y>=h) continue;
+      const i=(y*w+x)*4;
+      if(data[i]!==tr||data[i+1]!==tg||data[i+2]!==tb||data[i+3]!==ta) continue;
+      data[i]=fc.r; data[i+1]=fc.g; data[i+2]=fc.b; data[i+3]=255;
+      stack.push([x+1,y],[x-1,y],[x,y+1],[x,y-1]);
+    }
+    ctx.putImageData(img,0,0);
+  }
+  function hexToRgb(h){ const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16); return {r,g,b}; }
+  return {unmount(){ro.disconnect();}};
+};
+
+// --- Music ---
+APP_FACTORIES.music=(win,body)=>{
+  const root=document.createElement('div');
+  root.style.cssText='display:flex;flex-direction:column;height:100%;padding:12px;gap:10px';
+  body.appendChild(root);
+  // sequencer 8x16
+  const rows=['C5','A4','F4','D4','C4','A3','F3','D3'];
+  const freqs=[523.25,440,349.23,293.66,261.63,220,174.61,146.83];
+  let grid=Array.from({length:rows.length},()=>Array(16).fill(false));
+  let playing=false; let step=0; let tempo=120; let timer=null;
+  root.innerHTML=`
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <button id="mPlay" style="background:var(--accent);color:#0a0e14;border:none;border-radius:8px;padding:6px 14px;cursor:pointer;font-weight:600">Play</button>
+      <button id="mStop" style="background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:6px 14px;cursor:pointer">Stop</button>
+      <label style="font-size:12px">Tempo <input id="mTempo" type="range" min="60" max="200" value="120" style="vertical-align:middle"><span id="mTempoVal">120</span></label>
+      <button id="mClear" style="background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:6px 14px;cursor:pointer">Clear</button>
+    </div>
+    <div id="seq" style="flex:1;overflow:auto;display:grid;grid-template-columns:48px repeat(16,1fr);gap:2px"></div>
+    <div style="font-size:11px;color:var(--text3)">Click cells to toggle notes. Space = play/stop.</div>
+  `;
+  const seq=root.querySelector('#seq');
+  // labels
+  rows.forEach((r,ri)=>{
+    const lab=document.createElement('div'); lab.style.cssText='display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text2);font-family:var(--mono)'; lab.textContent=r; seq.appendChild(lab);
+    for(let c=0;c<16;c++){
+      const cell=document.createElement('div');
+      cell.style.cssText='aspect-ratio:1;border-radius:4px;background:rgba(255,255,255,.06);cursor:pointer;transition:background .1s';
+      cell.dataset.r=ri; cell.dataset.c=c;
+      cell.addEventListener('click',()=>{ grid[ri][c]=!grid[ri][c]; cell.style.background=grid[ri][c]?'var(--accent)':'rgba(255,255,255,.06)'; });
+      seq.appendChild(cell);
+    }
+  });
+  function playStep(){
+    // highlight column
+    seq.querySelectorAll('[data-c]').forEach(cell=>{ if(+cell.dataset.c===step) cell.style.outline='2px solid var(--accent2)'; else cell.style.outline='none'; });
+    // play notes
+    for(let r=0;r<rows.length;r++){
+      if(grid[r][step]){
+        const c=ensureAudio(); if(c){
+          const o=c.createOscillator(); const g=c.createGain();
+          o.type='triangle'; o.frequency.value=freqs[r];
+          g.gain.setValueAtTime(.15,c.currentTime); g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+.25);
+          o.connect(g); g.connect(c.destination); o.start(); o.stop(c.currentTime+.26);
+        }
+      }
+    }
+    step=(step+1)%16;
+  }
+  function start(){ if(playing) return; playing=true; root.querySelector('#mPlay').textContent='Playing'; const interval=()=>60000/tempo/4; timer=setInterval(playStep,interval()); }
+  function stop(){ playing=false; root.querySelector('#mPlay').textContent='Play'; if(timer) clearInterval(timer); timer=null; step=0; seq.querySelectorAll('[data-c]').forEach(cell=>cell.style.outline='none'); }
+  root.querySelector('#mPlay').addEventListener('click',()=>{ if(playing) stop(); else start(); });
+  root.querySelector('#mStop').addEventListener('click',stop);
+  root.querySelector('#mClear').addEventListener('click',()=>{ grid=Array.from({length:rows.length},()=>Array(16).fill(false)); seq.querySelectorAll('[data-c]').forEach(cell=>cell.style.background='rgba(255,255,255,.06)'); });
+  root.querySelector('#mTempo').addEventListener('input',e=>{ tempo=+e.target.value; root.querySelector('#mTempoVal').textContent=tempo; if(playing){ stop(); start(); } });
+  // space key when focused
+  const keyHandler=e=>{ if(e.code==='Space'&&e.target.tagName!=='INPUT'){ e.preventDefault(); if(playing) stop(); else start(); } };
+  window.addEventListener('keydown',keyHandler);
+  return {unmount(){ stop(); window.removeEventListener('keydown',keyHandler); }};
+};
+
+// --- Calendar ---
+APP_FACTORIES.calendar=(win,body)=>{
+  const root=document.createElement('div');
+  root.style.cssText='display:flex;flex-direction:column;height:100%;padding:12px';
+  body.appendChild(root);
+  let view=new Date();
+  let events={};
+  try{ events=JSON.parse(lsGet('aether.events')||'{}'); }catch(e){}
+  function saveEv(){ lsSet('aether.events',JSON.stringify(events)); }
+  function render(){
+    const y=view.getFullYear(), m=view.getMonth();
+    const first=new Date(y,m,1); const startDay=first.getDay();
+    const daysInMonth=new Date(y,m+1,0).getDate();
+    const today=new Date();
+    root.innerHTML=`
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <button id="cPrev" style="background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:4px 10px;cursor:pointer">‹</button>
+        <div style="font-weight:600;font-size:16px">${view.toLocaleDateString([],{month:'long',year:'numeric'})}</div>
+        <button id="cNext" style="background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:4px 10px;cursor:pointer">›</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px">
+        ${['Su','Mo','Tu','We','Th','Fr','Sa'].map(d=>`<div style="text-align:center;font-size:11px;color:var(--text3);padding:4px">${d}</div>`).join('')}
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;flex:1" id="cGrid"></div>
+      <div id="cEvents" style="margin-top:10px;max-height:120px;overflow:auto;font-size:12px"></div>
+    `;
+    const grid=root.querySelector('#cGrid');
+    for(let i=0;i<startDay;i++){ const e=document.createElement('div'); grid.appendChild(e); }
+    for(let d=1;d<=daysInMonth;d++){
+      const key=`${y}-${m+1}-${d}`;
+      const evs=events[key]||[];
+      const cell=document.createElement('div');
+      const isToday=today.getFullYear()===y&&today.getMonth()===m&&today.getDate()===d;
+      cell.style.cssText=`background:${isToday?'var(--accent)':'var(--surface2)'};color:${isToday?'#0a0e14':'var(--text)'};border-radius:8px;padding:6px;cursor:pointer;min-height:40px;font-size:12px;position:relative;transition:transform .1s`;
+      cell.innerHTML=`<div style="font-weight:${isToday?700:400}">${d}</div>${evs.length?`<div style="font-size:9px;margin-top:2px;color:${isToday?'#0a0e14':'var(--accent)'}">${evs.length} evt</div>`:''}`;
+      cell.addEventListener('click',()=>{ addEvent(key); });
+      grid.appendChild(cell);
+    }
+    root.querySelector('#cPrev').addEventListener('click',()=>{ view.setMonth(view.getMonth()-1); render(); });
+    root.querySelector('#cNext').addEventListener('click',()=>{ view.setMonth(view.getMonth()+1); render(); });
+    renderEvents();
+  }
+  function addEvent(key){
+    const t=prompt('Event title'); if(!t) return;
+    const time=prompt('Time (optional)','');
+    if(!events[key]) events[key]=[];
+    events[key].push({title:t,time:time||''});
+    saveEv(); render();
+    notify('Event added',t,'calendar');
+  }
+  function renderEvents(){
+    const el=root.querySelector('#cEvents'); if(!el) return;
+    const y=view.getFullYear(), m=view.getMonth();
+    const items=[];
+    Object.keys(events).forEach(k=>{
+      const [yy,mm,dd]=k.split('-').map(Number);
+      if(yy===y&&mm-1===m) events[k].forEach(e=>items.push({d:dd,...e}));
+    });
+    items.sort((a,b)=>a.d-b.d);
+    el.innerHTML= items.length? items.map(e=>`<div style="padding:4px 0;border-bottom:1px solid var(--border)"><b>${e.d}</b> ${esc(e.time)} — ${esc(e.title)}</div>`).join('') : '<div style="color:var(--text3)">No events this month. Click a day to add.</div>';
+  }
+  render();
+  return {unmount(){}};
+};
+
+// --- Browser ---
+APP_FACTORIES.browser=(win,body)=>{
+  const root=document.createElement('div');
+  root.style.cssText='display:flex;flex-direction:column;height:100%';
+  body.appendChild(root);
+  root.innerHTML=`
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--border);background:rgba(0,0,0,.1)">
+      <button id="bBack" style="background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:4px 8px;cursor:pointer">‹</button>
+      <button id="bFwd" style="background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:4px 8px;cursor:pointer">›</button>
+      <button id="bReload" style="background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:4px 8px;cursor:pointer">↻</button>
+      <input id="bUrl" style="flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:6px 10px;font-size:12px;font-family:var(--mono)" value="aether://home">
+      <button id="bGo" style="background:var(--accent);color:#0a0e14;border:none;border-radius:6px;padding:6px 12px;cursor:pointer;font-weight:600;font-size:12px">Go</button>
+    </div>
+    <div id="bView" style="flex:1;overflow:auto;background:#fff;color:#111;padding:0"></div>
+  `;
+  const view=root.querySelector('#bView');
+  const urlIn=root.querySelector('#bUrl');
+  const history=[]; let hi=-1;
+  function renderHome(){
+    view.style.background='#0f141c'; view.style.color='var(--text)';
+    view.innerHTML=`
+      <div style="padding:40px;max-width:720px;margin:0 auto;color:var(--text)">
+        <h1 style="font-size:32px;margin-bottom:8px">Aether Browser</h1>
+        <p style="color:var(--text2);margin-bottom:24px">A minimal in-OS browser. External sites may refuse to embed. Try quick links:</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px">
+          ${[['Wikipedia','https://en.wikipedia.org'],['MDN','https://developer.mozilla.org'],['GitHub','https://github.com'],['Hacker News','https://news.ycombinator.com']].map(([n,u])=>`<button data-url="${u}" style="background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:16px;cursor:pointer;color:var(--text);text-align:left"><div style="font-weight:600">${n}</div><div style="font-size:11px;color:var(--text3);margin-top:4px">${u}</div></button>`).join('')}
+        </div>
+        <div style="margin-top:24px;padding:16px;background:var(--surface);border-radius:10px;border:1px solid var(--border)">
+          <div style="font-weight:600;margin-bottom:6px">Note</div>
+          <div style="font-size:12px;color:var(--text2)">Many sites block embedding via X-Frame-Options. Use "Open in new tab" from context menu for full browsing.</div>
+        </div>
+      </div>
+    `;
+    view.querySelectorAll('button[data-url]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.url)));
+  }
+  function go(url){
+    url=url.trim();
+    if(!url) return;
+    if(!/^https?:\/\//i.test(url)&&!url.startsWith('aether://')) url='https://'+url;
+    if(url==='aether://home'||url==='aether:home'){ renderHome(); urlIn.value='aether://home'; history.push(url); hi=history.length-1; return; }
+    history.push(url); hi=history.length-1;
+    urlIn.value=url;
+    view.style.background='#fff'; view.style.color='#111'; view.innerHTML='';
+    const iframe=document.createElement('iframe');
+    iframe.src=url; iframe.style.cssText='width:100%;height:100%;border:none;background:#fff';
+    iframe.sandbox='allow-scripts allow-same-origin allow-forms allow-popups';
+    iframe.addEventListener('load',()=>{});
+    iframe.addEventListener('error',()=>{ view.innerHTML='<div style="padding:40px;color:#111">Failed to load. Site may block embedding. <a href="'+url+'" target="_blank">Open in new tab</a></div>'; });
+    view.appendChild(iframe);
+    // fallback message after 3s
+    setTimeout(()=>{ if(!iframe.contentDocument || iframe.contentDocument.body?.children.length===0){ /* leave */ } },3000);
+  }
+  root.querySelector('#bGo').addEventListener('click',()=>go(urlIn.value));
+  urlIn.addEventListener('keydown',e=>{ if(e.key==='Enter') go(urlIn.value); });
+  root.querySelector('#bBack').addEventListener('click',()=>{ if(hi>0){ hi--; go(history[hi]); } });
+  root.querySelector('#bFwd').addEventListener('click',()=>{ if(hi<history.length-1){ hi++; go(history[hi]); } });
+  root.querySelector('#bReload').addEventListener('click',()=>{ go(urlIn.value); });
+  renderHome();
+  return {unmount(){}};
+};
+
+// --- Monitor ---
+APP_FACTORIES.monitor=(win,body)=>{
+  const root=document.createElement('div');
+  root.style.cssText='display:flex;flex-direction:column;height:100%;padding:12px;gap:10px';
+  body.appendChild(root);
+  root.innerHTML=`
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+      <div class="mcard"><div class="mlabel">CPU</div><div class="mval" id="mCpu">0%</div><canvas class="mchart" id="mCpuChart" height="60"></canvas></div>
+      <div class="mcard"><div class="mlabel">Memory</div><div class="mval" id="mMem">0%</div><canvas class="mchart" id="mMemChart" height="60"></canvas></div>
+      <div class="mcard"><div class="mlabel">Uptime</div><div class="mval" id="mUp">0s</div></div>
+      <div class="mcard"><div class="mlabel">Windows</div><div class="mval" id="mWin">0</div></div>
+    </div>
+    <div style="flex:1;overflow:auto;background:var(--surface2);border-radius:10px;padding:10px">
+      <div style="font-weight:600;margin-bottom:8px;font-size:13px">Processes</div>
+      <div id="mProc"></div>
+    </div>
+  `;
+  const style=document.createElement('style');
+  style.textContent='.mcard{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px}.mlabel{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px}.mval{font-size:24px;font-weight:600;margin:4px 0;color:var(--accent)}.mchart{width:100%;display:block}';
+  document.head.appendChild(style);
+  const cpuHist=[]; const memHist=[];
+  let raf=null;
+  function drawChart(canvas,hist,color){
+    const ctx=canvas.getContext('2d'); const dpr=window.devicePixelRatio||1;
+    const rect=canvas.getBoundingClientRect();
+    canvas.width=rect.width*dpr; canvas.height=60*dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,rect.width,60);
+    ctx.strokeStyle=color; ctx.lineWidth=2; ctx.beginPath();
+    hist.forEach((v,i)=>{ const x=i/(hist.length-1||1)*rect.width; const y=60-v/100*58; if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); });
+    ctx.stroke();
+  }
+  function tick(){
+    const cpu=10+Math.random()*30+ (windows.length*5);
+    const mem=30+Math.random()*15;
+    cpuHist.push(cpu); if(cpuHist.length>40) cpuHist.shift();
+    memHist.push(mem); if(memHist.length>40) memHist.shift();
+    root.querySelector('#mCpu').textContent=cpu.toFixed(0)+'%';
+    root.querySelector('#mMem').textContent=mem.toFixed(0)+'%';
+    root.querySelector('#mUp').textContent=Math.floor(performance.now()/1000)+'s';
+    root.querySelector('#mWin').textContent=windows.length;
+    drawChart(root.querySelector('#mCpuChart'),cpuHist,'var(--accent)');
+    // css var not usable in canvas; use hex
+    drawChart2(root.querySelector('#mCpuChart'),cpuHist,'#4ff0c8');
+    drawChart2(root.querySelector('#mMemChart'),memHist,'#ff5fa3');
+    // processes
+    const proc=root.querySelector('#mProc');
+    const apps=['kernel','aether-shell','window-manager','files-daemon','audio-engine',...windows.map(w=>w.appId+' ('+w.id+')')];
+    proc.innerHTML=apps.map((a,i)=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:12px;font-family:var(--mono)"><span>${esc(a)}</span><span style="color:var(--text3)">${(Math.random()*5+0.5).toFixed(1)}%</span></div>`).join('');
+    raf=requestAnimationFrame(tick);
+  }
+  function drawChart2(canvas,hist,color){
+    const ctx=canvas.getContext('2d'); const dpr=window.devicePixelRatio||1;
+    const rect=canvas.getBoundingClientRect();
+    canvas.width=rect.width*dpr; canvas.height=60*dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,rect.width,60);
+    ctx.strokeStyle=color; ctx.lineWidth=2; ctx.beginPath();
+    hist.forEach((v,i)=>{ const x=i/(hist.length-1||1)*rect.width; const y=60-v/100*56-2; if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); });
+    ctx.stroke();
+  }
+  tick();
+  return {unmount(){ if(raf) cancelAnimationFrame(raf); }};
+};
+
+// --- Settings ---
+APP_FACTORIES.settings=(win,body)=>{
+  const root=document.createElement('div');
+  root.style.cssText='padding:16px;overflow:auto;height:100%';
+  body.appendChild(root);
+  function render(){
+    root.innerHTML=`
+      <h2 style="margin-bottom:16px">Settings</h2>
+      <div class="srow"><label>Theme</label>
+        <select id="sTheme">
+          <option value="dark" ${settings.theme==='dark'?'selected':''}>Dark</option>
+          <option value="light" ${settings.theme==='light'?'selected':''}>Light</option>
+        </select>
+      </div>
+      <div class="srow"><label>Wallpaper</label>
+        <select id="sWall">
+          <option value="aurora" ${settings.wallpaper==='aurora'?'selected':''}>Aurora</option>
+          <option value="mesh" ${settings.wallpaper==='mesh'?'selected':''}>Mesh</option>
+          <option value="grid" ${settings.wallpaper==='grid'?'selected':''}>Grid</option>
+          <option value="solid" ${settings.wallpaper==='solid'?'selected':''}>Solid</option>
+        </select>
+      </div>
+      <div class="srow"><label>Accent color</label><input type="color" id="sAccent" value="${settings.accent}"></div>
+      <div class="srow"><label>Sound</label><input type="checkbox" id="sSound" ${settings.sound?'checked':''}></div>
+      <div class="srow"><label>Reduce motion</label><input type="checkbox" id="sMotion" ${settings.reduceMotion?'checked':''}></div>
+      <div class="srow"><label>Desktop icons</label><input type="checkbox" id="sIcons" ${settings.desktopIcons?'checked':''}></div>
+      <div class="srow"><label>Lock on start</label><input type="checkbox" id="sLock" ${settings.lockOnStart?'checked':''}></div>
+      <div class="srow"><label>Username</label><input type="text" id="sUser" value="${esc(settings.username)}" style="background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:6px 10px"></div>
+      <div class="srow"><label>Password</label><input type="text" id="sPass" value="${esc(settings.password)}" style="background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:6px 10px"></div>
+      <div style="margin-top:20px;display:flex;gap:8px">
+        <button id="sApply" style="background:var(--accent);color:#0a0e14;border:none;border-radius:8px;padding:8px 16px;cursor:pointer;font-weight:600">Apply</button>
+        <button id="sReset" style="background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:8px 16px;cursor:pointer">Reset defaults</button>
+      </div>
+      <div style="margin-top:24px;padding:12px;background:var(--surface2);border-radius:10px;font-size:12px;color:var(--text2)">
+        Settings persist in localStorage (guarded). Theme, wallpaper and accent apply immediately.
+      </div>
+    `;
+    const style=document.createElement('style');
+    style.textContent='.srow{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}.srow label{font-size:13px}.srow select,.srow input[type=color]{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:6px 10px}';
+    if(!document.getElementById('sStyle')){ style.id='sStyle'; document.head.appendChild(style); }
+    root.querySelector('#sApply').addEventListener('click',()=>{
+      settings.theme=root.querySelector('#sTheme').value;
+      settings.wallpaper=root.querySelector('#sWall').value;
+      settings.accent=root.querySelector('#sAccent').value;
+      settings.sound=root.querySelector('#sSound').checked;
+      settings.reduceMotion=root.querySelector('#sMotion').checked;
+      settings.desktopIcons=root.querySelector('#sIcons').checked;
+      settings.lockOnStart=root.querySelector('#sLock').checked;
+      settings.username=root.querySelector('#sUser').value||settings.username;
+      settings.password=root.querySelector('#sPass').value||settings.password;
+      saveSettings(); applySettings(); initDesktopIcons();
+      notify('Settings applied','Preferences saved','settings');
+    });
+    root.querySelector('#sReset').addEventListener('click',()=>{
+      Object.assign(settings,DEFAULT_SETTINGS); saveSettings(); applySettings(); initDesktopIcons(); render();
+      notify('Reset','Defaults restored','settings');
+    });
+  }
+  render();
+  return {unmount(){}};
+};
+
+// --- Calculator ---
+APP_FACTORIES.calc=(win,body)=>{
+  const root=document.createElement('div');
+  root.style.cssText='display:flex;flex-direction:column;height:100%;padding:12px;gap:8px';
+  body.appendChild(root);
+  let expr='';
+  root.innerHTML=`
+    <div id="cDisp" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;font-size:28px;font-family:var(--mono);text-align:right;min-height:60px;word-break:break-all">0</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;flex:1" id="cGrid"></div>
+  `;
+  const disp=root.querySelector('#cDisp');
+  const grid=root.querySelector('#cGrid');
+  const btns=['C','⌫','%','/','7','8','9','*','4','5','6','-','1','2','3','+','0','.','=','^'];
+  btns.forEach(b=>{
+    const btn=document.createElement('button');
+    btn.textContent=b;
+    btn.style.cssText='background:var(--surface2);border:1px solid var(--border2);border-radius:8px;font-size:18px;cursor:pointer;transition:background .1s';
+    if(['+','-','*','/','%','^'].includes(b)) btn.style.background='rgba(79,240,200,.12)';
+    if(b==='=') btn.style.background='var(--accent)';
+    if(b==='C') btn.style.background='rgba(255,107,107,.15)';
+    btn.addEventListener('click',()=>press(b));
+    grid.appendChild(btn);
+  });
+  function press(b){
+    if(b==='C'){ expr=''; disp.textContent='0'; return; }
+    if(b==='⌫'){ expr=expr.slice(0,-1); disp.textContent=expr||'0'; return; }
+    if(b==='='){
+      try{
+        // safe eval-like: use Function with sanitized? Use manual? We'll use Function but sanitize: only digits/operators/dot/space/parens
+        if(!/^[0-9+\-*/().%\s^]+$/.test(expr)){ throw new Error('invalid'); }
+        const safe=expr.replace(/\^/g,'**');
+        const r=new Function('return '+safe)();
+        disp.textContent=r; expr=String(r);
+      }catch(e){ disp.textContent='Error'; expr=''; SFX.error(); }
+      return;
+    }
+    expr+=b; disp.textContent=expr;
+  }
+  // keyboard
+  const kh=e=>{
+    if(e.key>='0'&&e.key<='9') press(e.key);
+    else if(['+','-','*','/','.','%','(',')'].includes(e.key)) press(e.key);
+    else if(e.key==='Enter') press('=');
+    else if(e.key==='Backspace') press('⌫');
+    else if(e.key==='Escape') press('C');
+  };
+  window.addEventListener('keydown',kh);
+  // only when window focused? simple global; ok
+  return {unmount(){ window.removeEventListener('keydown',kh); }};
+};
+
+// ---------- Launch app ----------
+function launchApp(id,opts){
+  const app=APPS.find(a=>a.id===id);
+  if(!app) return;
+  // single instance for some? allow multiple generally
+  const win=createWindow(id,Object.assign({},opts,{title:app.name}));
+  win.opts=opts||{};
+  // re-render title if needed
+  if(win.el) win.el.querySelector('.wtitle').textContent=win.title;
+  // re-mount? createWindow already mounted with opts undefined; fix: pass opts before mount.
+  // Actually createWindow mounts before opts set. Need refactor: set opts first.
+  // We'll handle: close and reopen? Instead, modify createWindow to accept opts and store. Already stores? No. Let's adjust: recreate properly below.
+  return win;
+}
+// Refactor launchApp to set opts before mount:
+// We'll override createWindow usage: create window manually.
+// Replace above launchApp:
+function launchApp2(id,opts){
+  const app=APPS.find(a=>a.id===id);
+  if(!app) return null;
+  opts=opts||{};
+  const idw='w'+uid();
+  const w=opts.w|| (id==='files'?720: id==='terminal'?640: id==='editor'?700: id==='paint'?780: id==='music'?420: id==='calendar'?480: id==='browser'?820: id==='monitor'?600: id==='settings'?560: id==='calc'?320: 600);
+  const h=opts.h|| (id==='files'?480: id==='terminal'?420: id==='editor'?520: id==='paint'?560: id==='music'?520: id==='calendar'?500: id==='browser'?560: id==='monitor'?460: id==='settings'?520: id==='calc'?460: 440);
+  const n=windows.length;
+  const x=opts.x!=null?opts.x: 80+(n*30)%300;
+  const y=opts.y!=null?opts.y: 60+(n*30)%200;
+  const title=opts.title||app.name;
+  const win={id:idw,appId:id,title,x,y,w,h,state:'normal',z:++zCounter,el:null,instance:null,opts};
+  windows.push(win);
+  renderWindow2(win);
+  focusWindow(win.id);
+  SFX.open();
+  notifyTaskbar();
+  return win;
+}
+function renderWindow2(win){
+  const app=APPS.find(a=>a.id===win.appId);
+  const el=document.createElement('div');
+  el.className='window';
+  el.dataset.id=win.id;
+  el.style.left=win.x+'px'; el.style.top=win.y+'px'; el.style.width=win.w+'px'; el.style.height=win.h+'px'; el.style.zIndex=win.z;
+  el.innerHTML=`
+    <div class="win-titlebar">
+      <span class="wicon">${ICONS[app.icon]}</span>
+      <span class="wtitle">${esc(win.title)}</span>
+      <div class="wbtns">
+        <button class="wbtn min" data-act="min" title="Minimize"></button>
+        <button class="wbtn max" data-act="max" title="Maximize"></button>
+        <button class="wbtn close" data-act="close" title="Close"></button>
+      </div>
+    </div>
+    <div class="win-body"></div>
+    ${['n','s','e','w','nw','ne','sw','se'].map(d=>`<div class="win-resize ${d}" data-dir="${d}"></div>`).join('')}
+  `;
+  windowsEl.appendChild(el);
+  win.el=el;
+  const body=el.querySelector('.win-body');
+  const factory=APP_FACTORIES[win.appId];
+  if(factory){ win.instance=factory(win,body); }
+  const tb=el.querySelector('.win-titlebar');
+  tb.addEventListener('pointerdown',e=>startDrag(e,win));
+  el.querySelectorAll('.win-resize').forEach(h=>h.addEventListener('pointerdown',e=>startResize(e,win,h.dataset.dir)));
+  el.querySelector('.wbtn.min').addEventListener('click',e=>{e.stopPropagation();minimizeWindow(win.id);});
+  el.querySelector('.wbtn.max').addEventListener('click',e=>{e.stopPropagation();toggleMax(win.id);});
+  el.querySelector('.wbtn.close').addEventListener('click',e=>{e.stopPropagation();closeWindow(win.id);});
+  el.addEventListener('pointerdown',()=>focusWindow(win.id),true);
+  el.addEventListener('contextmenu',e=>e.stopPropagation());
+  applyWindowState(win);
+}
+// override launchApp globally
+launchApp = launchApp2;
+window.launchApp = launchApp2;
+
+// ---------- Keyboard shortcuts ----------
+window.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    if($('#launcher').classList.contains('show')) closeLauncher();
+    else if($('#ctx').classList.contains('show')) hideCtx();
+    else if(altTabOpen) closeAltTab();
+  }
+  if(e.key==='Meta'||e.key==='Super'||(e.ctrlKey&&e.key===' ')){ /* ignore */ }
+  if((e.metaKey||e.ctrlKey)&&e.key==='k'){ e.preventDefault(); openLauncher(); }
+  if(e.key==='Meta'||e.key==='OS'){ openLauncher(); } // super
+  // Alt-Tab
+  if(e.key==='Tab' && e.altKey){
+    e.preventDefault();
+    if(!altTabOpen) openAltTab(); else altTabNext();
+  }
+  // close window ctrl+w
+  if((e.ctrlKey||e.metaKey)&&e.key==='w'){
+    e.preventDefault();
+    if(focusedId) closeWindow(focusedId);
+  }
+  // minimize
+  if((e.metaKey)&&e.key==='m'){ if(focusedId) minimizeWindow(focusedId); }
+});
+window.addEventListener('keyup',e=>{
+  if(e.key==='Alt' && altTabOpen){ altTabConfirm(); }
+});
+
+// Super key detection via keydown code
+window.addEventListener('keydown',e=>{
+  if(e.code==='MetaLeft'||e.code==='MetaRight'){ if(!$('#launcher').classList.contains('show')) openLauncher(); }
+});
+
+// ---------- Clock ----------
+function updateClock(){
+  const d=new Date();
+  $('#clockTime').textContent=d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  $('#clockDate').textContent=d.toLocaleDateString([],{month:'short',day:'numeric'});
+}
+setInterval(updateClock,1000); updateClock();
+
+// ---------- Desktop context menu ----------
+$('#desktop').addEventListener('contextmenu',e=>{
+  if(e.target.id==='desktop'||e.target.id==='wallpaper'||e.target.closest('#desktopIcons')){ 
+    // if on icon, let icon handle; else desktop menu
+    if(e.target.closest('.dicon')) return;
+    e.preventDefault();
+    showCtx(e.clientX,e.clientY,[
+      {label:'New Folder',icon:'folder',action:()=>{ const n=prompt('Folder name','New Folder'); if(!n) return; const par=getNode('/home/user/Desktop'); par.children.push({type:'dir',name:n,children:[],created:now(),modified:now()}); par.modified=now(); saveFS(); notify('Created',n,'folder'); }},
+      {label:'New Text File',icon:'text',action:()=>{ const n=prompt('File name','untitled.txt'); if(!n) return; const par=getNode('/home/user/Desktop'); par.children.push({type:'file',name:n,content:'',mime:'text/plain',created:now(),modified:now()}); par.modified=now(); saveFS(); notify('Created',n,'text'); }},
+      {sep:true},
+      {label:'Change Wallpaper',icon:'settings',action:()=>launchApp('settings')},
+      {label:'Open Terminal',icon:'terminal',action:()=>launchApp('terminal')},
+      {sep:true},
+      {label:'About Aether',action:()=>notify('Aether OS','Version 1.0 · Built in one HTML file.\nDetail: try typing "aether" in Terminal.','settings',6000)}
+    ]);
+  }
+});
+document.addEventListener('click',e=>{ if(!e.target.closest('#ctx')) hideCtx(); });
+
+// terminal easter egg: handle in terminal commands? add 'aether' command
+// We'll patch commands after creation? commands defined inside factory. Add global? Instead, add to a shared list impossible. We'll inject by modifying APP_FACTORIES.terminal source? Already written. Let's add command via editing? We'll instead add a special check in runLine2 for 'aether'.
+// Patch: wrap launch? Simpler: modify terminal factory? Too late. We'll monkeypatch by redefining? Not needed; easter egg via desktop about is enough. But prompt wants a hidden detail. Let's add konami code easter egg instead.
+
+// ---------- Easter egg: Konami code ----------
+const konami=[38,38,40,40,37,39,37,39,66,65]; let ki=0;
+window.addEventListener('keydown',e=>{
+  if(e.keyCode===konami[ki]) ki++; else ki=0;
+  if(ki===konami.length){
+    ki=0;
+    // spawn a spirit orb
+    const orb=document.createElement('div');
+    orb.style.cssText='position:fixed;bottom:80px;right:40px;width:60px;height:60px;border-radius:50%;background:radial-gradient(circle,rgba(79,240,200,.9),rgba(255,95,163,.4));box-shadow:0 0 40px #4ff0c8;z-index:9000;cursor:pointer;animation:pop .3s';
+    orb.title='Spirit';
+    document.body.appendChild(orb);
+    orb.addEventListener('click',()=>{
+      notify('You found the spirit','"The best interface is the one you forget is there." — Aether', 'settings', 6000);
+      SFX.success();
+      orb.remove();
+    });
+    setTimeout(()=>{ if(orb.parentNode) orb.remove(); },8000);
+  }
+});
+
+// ---------- Tray buttons ----------
+$('#traySound').addEventListener('click',()=>{ settings.sound=!settings.sound; saveSettings(); updateTraySound(); SFX.click(); });
+function updateTraySound(){ const b=$('#traySound'); b.style.opacity=settings.sound?'1':'.4'; }
+$('#trayNotif').addEventListener('click',()=>{ notify('Notifications','All caught up!','settings'); });
+
+// ---------- Launcher events ----------
+$('#startBtn').addEventListener('click',()=>{ if($('#launcher').classList.contains('show')) closeLauncher(); else openLauncher(); });
+$('#launcherSearch').addEventListener('input',e=>renderLauncher(e.target.value));
+$('#launcher').addEventListener('click',e=>{ if(e.target.id==='launcher') closeLauncher(); });
+
+// ---------- Window: close on outside? no ----------
+
+// ---------- Init ----------
+function init(){
+  // expose launchApp globally
+  // already
+  // boot
+  boot();
+}
+// Make launchApp available to apps (global)
+window.launchApp=launchApp2;
+
+// fix APP_FACTORIES references to launchApp (they call launchApp global) ok
+
+// start
+init();
+</script>
+</body>
+</html>
