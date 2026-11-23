@@ -1,0 +1,1315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<title>Cinder &amp; Salt — A fire kitchen in Copenhagen</title>
+<meta name="description" content="Cinder & Salt is a wood-fire and fermentation kitchen on Refshalevej, Copenhagen. Fire, salt, time. Book a table or order for the counter.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2312110F'/%3E%3Cpath d='M16 27c-7-4-9-10-6-16 3 3 4 6 3 9 3-5 6-7 5-12 7 6 8 13 4 19z' fill='%23DF6334'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Fraunces:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#12110F; --ink2:#1A1815; --ink3:#24211C;
+  --bone:#F2EADD; --bone-dim:#D7CBB9; --ash:#9C9082;
+  --ember:#DF6334; --ember-hi:#F5A169; --moss:#778262;
+  --line:rgba(242,234,221,.15); --pline:rgba(18,17,15,.16);
+  --serif:"Fraunces","Iowan Old Style","Palatino Linotype",Georgia,serif;
+  --sans:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"DM Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --ease:cubic-bezier(.22,.75,.22,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:88px}
+body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body.locked{overflow:hidden}
+img,svg{display:block;max-width:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4,p{margin-top:0}
+::selection{background:var(--ember);color:#150C06}
+:focus-visible{outline:2px solid var(--ember-hi);outline-offset:3px}
+.wrap{width:min(100% - 2.5rem,1240px);margin-inline:auto}
+.skip{position:fixed;left:1rem;top:-4rem;z-index:200;background:var(--bone);color:var(--ink);padding:.7rem 1rem;font-family:var(--mono);font-size:.75rem;transition:top .2s}
+.skip:focus{top:1rem}
+.label{font-family:var(--mono);font-size:.67rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ash)}
+.section-title{font-family:var(--serif);font-weight:600;font-size:clamp(2.4rem,5.4vw,4.8rem);line-height:1.02;letter-spacing:-.035em;margin:.8rem 0 1.2rem}
+.rule{height:1px;background:var(--line);border:0;margin:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.65rem;padding:.95rem 1.4rem;border:1px solid var(--line);background:transparent;color:var(--bone);font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;transition:background .25s,color .25s,border-color .25s,transform .25s var(--ease)}
+.btn:hover{transform:translateY(-2px);border-color:var(--ember)}
+.btn--ember{background:var(--ember);border-color:var(--ember);color:#180D07;font-weight:500}
+.btn--ember:hover{background:var(--ember-hi);border-color:var(--ember-hi)}
+.btn--small{padding:.6rem .9rem;font-size:.65rem}
+.icon-btn{width:40px;height:40px;display:inline-grid;place-items:center;border:1px solid var(--line);background:transparent;color:var(--bone);transition:border-color .25s,background .25s,color .25s}
+.icon-btn:hover{border-color:var(--ember);color:var(--ember-hi)}
+.icon-btn svg{width:18px;height:18px}
+.count{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;padding:0 4px;border-radius:9px;background:var(--ember);color:#170C06;font-family:var(--mono);font-size:.6rem;display:grid;place-items:center;line-height:1}
+.count[hidden]{display:none}
+.nav-wrap{position:relative}
+/* progress */
+#progress{position:fixed;left:0;top:0;height:2px;width:100%;background:linear-gradient(90deg,var(--ember),var(--ember-hi));transform:scaleX(0);transform-origin:left;z-index:95;pointer-events:none}
+/* navigation */
+.site-nav{position:fixed;inset:0 0 auto;z-index:60;border-bottom:1px solid transparent;transition:background .4s,border-color .4s,backdrop-filter .4s}
+.site-nav.scrolled{background:rgba(18,17,15,.9);backdrop-filter:blur(16px);border-color:var(--line)}
+.nav-inner{height:82px;display:flex;align-items:center;justify-content:space-between;gap:1.5rem}
+.brand{display:flex;align-items:center;gap:.7rem;flex:0 0 auto}
+.brand-mark{width:34px;height:40px;color:var(--ember)}
+.brand-name{font-family:var(--serif);font-size:1.08rem;font-weight:600;line-height:1;letter-spacing:.01em}
+.brand-name small{display:block;font-family:var(--mono);font-size:.53rem;letter-spacing:.24em;color:var(--ash);margin-top:.35rem;font-weight:400}
+.nav-links{display:flex;align-items:center;gap:2.2rem;font-family:var(--mono);font-size:.68rem;letter-spacing:.15em;text-transform:uppercase}
+.nav-links a{position:relative;padding:.4rem 0}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--ember);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-actions{display:flex;align-items:center;gap:.55rem}
+.status-pill{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--bone-dim);padding:.45rem .7rem;border:1px solid var(--line);white-space:nowrap}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--moss);box-shadow:0 0 0 3px rgba(119,130,98,.16)}
+.dot.closed{background:#8B6558;box-shadow:0 0 0 3px rgba(139,101,88,.15)}
+.menu-toggle{display:none}
+/* hero */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;padding:10rem 0 7rem;overflow:hidden;background:radial-gradient(ellipse at 72% 74%,#2A1710 0%,#151210 42%,#100F0D 100%)}
+#embers{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(12,11,10,.86) 0%,rgba(12,11,10,.5) 45%,transparent 78%),linear-gradient(0deg,rgba(12,11,10,.9),transparent 28%)}
+.hero-hearth{position:absolute;right:-5vw;top:50%;transform:translateY(-48%);width:min(56vw,760px);opacity:.34;z-index:1;pointer-events:none}
+.hero-inner{position:relative;z-index:3}
+.hero-eyebrow{display:flex;align-items:center;flex-wrap:wrap;gap:.9rem;margin-bottom:1.8rem}
+.hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(3.3rem,9.4vw,8.7rem);line-height:.9;letter-spacing:-.055em;margin:0 0 1.7rem;max-width:15ch}
+.hero h1 em{font-style:italic;color:var(--ember-hi)}
+.hero-lede{max-width:46ch;font-size:clamp(1rem,1.5vw,1.18rem);color:var(--bone-dim);line-height:1.65;margin-bottom:2.4rem}
+.hero-actions{display:flex;flex-wrap:wrap;gap:.8rem}
+.hero-foot{position:absolute;left:0;right:0;bottom:2rem;z-index:3;display:flex;justify-content:space-between;align-items:end;gap:2rem;font-family:var(--mono);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ash)}
+.scroll-cue{display:flex;align-items:center;gap:.8rem}
+.scroll-cue i{display:block;width:1px;height:34px;background:linear-gradient(var(--ember),transparent);animation:cue 2.2s ease-in-out infinite}
+@keyframes cue{0%,100%{transform:scaleY(.4);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}}
+/* ticker */
+.ticker{overflow:hidden;border-block:1px solid var(--line);background:var(--ink2);padding:.95rem 0}
+.ticker-track{display:flex;width:max-content;gap:3rem;animation:ticker 34s linear infinite;font-family:var(--mono);font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ash)}
+.ticker-track b{color:var(--ember);font-weight:400;margin-right:1rem}
+@keyframes ticker{to{transform:translateX(-50%)}}
+/* story */
+.story{padding:9rem 0 7rem;position:relative;overflow:hidden}
+.story-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:6rem;align-items:center}
+.statement{font-family:var(--serif);font-size:clamp(2.1rem,4.1vw,3.7rem);line-height:1.12;letter-spacing:-.03em;font-weight:600;margin-bottom:2rem}
+.statement em{font-style:italic;color:var(--ember-hi)}
+.body-copy{color:var(--bone-dim);max-width:54ch;line-height:1.8;margin-bottom:1.4rem}
+.chef-note{border-left:2px solid var(--ember);padding-left:1.6rem;margin:2.4rem 0 1rem}
+.chef-note p{font-family:var(--serif);font-style:italic;font-size:1.2rem;line-height:1.55;color:var(--bone);margin-bottom:.6rem}
+.hearth-art{width:100%;max-width:540px;margin-inline:auto;filter:drop-shadow(0 30px 60px rgba(0,0,0,.5))}
+.flame-a,.flame-b,.flame-c{transform-origin:50% 100%;animation:flicker 3.1s ease-in-out infinite alternate}
+.flame-b{animation-duration:2.4s;animation-delay:-.7s}
+.flame-c{animation-duration:3.8s;animation-delay:-1.4s}
+@keyframes flicker{0%{transform:scaleX(.94) scaleY(.97) rotate(-1deg)}100%{transform:scaleX(1.04) scaleY(1.05) rotate(1.5deg)}}
+/* features */
+.features{padding:4rem 0 9rem}
+.features-head{display:flex;align-items:end;justify-content:space-between;gap:2rem;flex-wrap:wrap;margin-bottom:2.5rem}
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.15rem}
+.dish-card{position:relative;background:var(--ink2);border:1px solid var(--line);padding:1.4rem 1.4rem 1.5rem;overflow:hidden;transition:transform .5s var(--ease),border-color .5s,background .5s}
+.dish-card::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 36%,rgba(223,99,52,.1),transparent 60%);opacity:0;transition:opacity .5s;pointer-events:none}
+.dish-card:hover{transform:translateY(-7px);border-color:rgba(223,99,52,.5)}
+.dish-card:hover::before{opacity:1}
+.dish-art{height:250px;display:grid;place-items:center;position:relative;z-index:1}
+.dish-art svg{width:100%;height:100%;max-height:250px}
+.dish-card h3{font-family:var(--serif);font-size:1.65rem;font-weight:600;letter-spacing:-.02em;margin:.4rem 0 .55rem}
+.dish-card p{font-size:.88rem;color:var(--bone-dim);line-height:1.6;min-height:4.2em;margin-bottom:1.1rem}
+.dish-foot{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-top:1rem;border-top:1px solid var(--line)}
+.dish-foot .price{font-family:var(--mono);font-size:.9rem;color:var(--ember-hi)}
+/* paper section shared */
+.paper{background:var(--bone);color:var(--ink)}
+.paper .label{color:#877968}
+.paper .section-title{color:var(--ink)}
+/* menu */
+.menu-section{padding:8.5rem 0 9rem;position:relative}
+.menu-head{display:flex;justify-content:space-between;align-items:end;gap:2rem;flex-wrap:wrap}
+.menu-head p{max-width:42ch;color:#5D5246;line-height:1.7;margin:0}
+.menu-controls{margin:2.8rem 0 1.6rem;display:grid;grid-template-columns:1fr auto;gap:1.2rem;align-items:center}
+.chips{display:flex;flex-wrap:wrap;gap:.45rem}
+.chip{border:1px solid rgba(18,17,15,.24);background:transparent;color:var(--ink);padding:.55rem .9rem;border-radius:999px;font-family:var(--mono);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{border-color:var(--ember)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bone);border-color:var(--ink)}
+.search-box{position:relative;display:flex;align-items:center}
+.search-box svg{position:absolute;left:.9rem;width:16px;height:16px;color:#7C7063}
+.search-box input{width:min(290px,100%);background:transparent;border:0;border-bottom:1px solid rgba(18,17,15,.35);padding:.7rem .5rem .7rem 2.3rem;font-family:var(--mono);font-size:.78rem;color:var(--ink);border-radius:0}
+.search-box input::placeholder{color:#8C8072}
+.search-box input:focus{outline:0;border-color:var(--ember)}
+.menu-meta{display:flex;justify-content:space-between;align-items:center;gap:1rem;border-top:1px solid var(--pline);padding:.85rem 0;font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#776A5C}
+.link-btn{border:0;background:transparent;color:#8C3F22;text-decoration:underline;text-underline-offset:3px;padding:0;font-family:inherit;font-size:inherit;letter-spacing:inherit;text-transform:inherit}
+.menu-list{border-top:1px solid var(--pline)}
+.menu-item{display:grid;grid-template-columns:46px 1fr 124px;gap:1.4rem;align-items:start;padding:1.5rem .2rem;border-bottom:1px solid var(--pline);transition:background .25s,padding .25s}
+.menu-item:hover{background:rgba(18,17,15,.035);padding-inline:.8rem}
+.menu-item__no{font-family:var(--mono);font-size:.7rem;color:#9A8C7C;padding-top:.4rem}
+.menu-item__name{font-family:var(--serif);font-size:1.5rem;font-weight:600;letter-spacing:-.02em;line-height:1.15;margin-bottom:.4rem}
+.menu-item__desc{font-size:.9rem;line-height:1.65;color:#5B5045;max-width:64ch;margin:0}
+.tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.7rem}
+.tag{font-family:var(--mono);font-size:.58rem;letter-spacing:.08em;border:1px solid rgba(18,17,15,.22);padding:.15rem .38rem;border-radius:2px;color:#6B5F52}
+.menu-item__side{display:flex;align-items:center;justify-content:flex-end;gap:1rem;padding-top:.15rem}
+.price{font-family:var(--mono);font-size:.9rem;white-space:nowrap}
+.add-btn{width:38px;height:38px;flex:0 0 auto;border:1px solid rgba(18,17,15,.35);border-radius:50%;background:transparent;display:grid;place-items:center;font-size:1.2rem;line-height:1;color:var(--ink);transition:background .25s,color .25s,transform .25s,border-color .25s}
+.add-btn:hover,.add-btn.added{background:var(--ember);border-color:var(--ember);color:#170C06;transform:rotate(90deg)}
+.empty{padding:4rem 1rem;text-align:center;border-bottom:1px solid var(--pline)}
+.empty h3{font-family:var(--serif);font-size:1.8rem;margin-bottom:.5rem}
+.empty p{color:#6B5F52;margin-bottom:1.3rem}
+/* reservation */
+.reserve{padding:9rem 0;background:var(--ink2);border-top:1px solid var(--line)}
+.reserve-grid{display:grid;grid-template-columns:.82fr 1.18fr;gap:5.5rem;align-items:start}
+.reserve-copy p{color:var(--bone-dim);line-height:1.8;max-width:42ch;margin-bottom:1.4rem}
+.reserve-facts{list-style:none;padding:0;margin:2.3rem 0 0;border-top:1px solid var(--line)}
+.reserve-facts li{display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--line);font-size:.88rem;color:var(--bone-dim)}
+.reserve-facts b{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--ember-hi);min-width:82px;padding-top:.2rem;font-weight:400}
+.form-card{background:#151310;border:1px solid var(--line);padding:2.2rem}
+.form-top{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1.8rem}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.field{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.3rem;min-width:0}
+.field label{font-family:var(--mono);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ash)}
+.field input,.field select,.field textarea{width:100%;background:#100F0D;border:1px solid var(--line);border-radius:0;padding:.85rem .9rem;color:var(--bone);font-size:.9rem;min-height:46px}
+.field textarea{resize:vertical;min-height:82px}
+.field input:focus,.field select:focus,.field textarea:focus{outline:0;border-color:var(--ember)}
+.field.invalid input,.field.invalid select,.field.invalid textarea{border-color:#C8543F}
+.field-hint{font-family:var(--mono);font-size:.62rem;color:var(--ash);line-height:1.5}
+.slots-label{font-family:var(--mono);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ash);display:block;margin-bottom:.7rem}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:.45rem;margin-bottom:.6rem}
+.slot{padding:.7rem .3rem;border:1px solid var(--line);background:transparent;color:var(--bone);font-family:var(--mono);font-size:.78rem;transition:background .2s,border-color .2s,color .2s}
+.slot:hover:not(:disabled){border-color:var(--ember);color:var(--ember-hi)}
+.slot[aria-pressed="true"]{background:var(--ember);border-color:var(--ember);color:#180D07}
+.slot:disabled{opacity:.3;text-decoration:line-through;cursor:not-allowed}
+.slot-note{font-family:var(--mono);font-size:.62rem;color:var(--ash);min-height:1.5em;margin-bottom:1rem}
+.form-error{color:#ED8D72;font-family:var(--mono);font-size:.72rem;line-height:1.6;min-height:1.2em;margin:0 0 1rem}
+.form-success{background:rgba(119,130,98,.12);border:1px solid rgba(119,130,98,.5);padding:1.4rem;margin-bottom:1.5rem}
+.form-success h3{font-family:var(--serif);font-size:1.9rem;margin-bottom:.5rem}
+.form-success p{color:var(--bone-dim);font-size:.9rem;margin-bottom:.4rem}
+.confirm-grid{display:grid;grid-template-columns:auto 1fr;gap:.3rem 1.2rem;font-family:var(--mono);font-size:.75rem;margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid var(--line)}
+.confirm-grid dt{color:var(--ash)}
+.confirm-grid dd{margin:0;color:var(--bone)}
+.panel .field label{color:#6B5F52}
+.panel .field input,.panel .field select,.panel .field textarea{background:#F8F3E9;color:var(--ink);border-color:var(--pline)}
+.panel .field input:focus,.panel .field select:focus,.panel .field textarea:focus{border-color:var(--ember)}
+.panel .form-error{color:#9E3E28}
+.panel .field.invalid input{border-color:#B4432C}
+/* visit */
+.visit{padding:8.5rem 0;background:var(--bone);color:var(--ink)}
+.visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem}
+.visit-block{margin-bottom:3rem}
+.visit-block h3{font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:#877968;margin-bottom:1.1rem;font-weight:400}
+.visit-block p{color:#544A3F;line-height:1.75;max-width:44ch}
+.hours-row{display:flex;justify-content:space-between;gap:1rem;padding:.7rem 0;border-bottom:1px solid var(--pline);font-size:.92rem}
+.hours-row span:first-child{color:#544A3F}
+.hours-row.special span{color:#98502E;font-style:italic;font-family:var(--serif);font-size:1rem}
+.status-large{display:inline-flex;align-items:center;gap:.7rem;font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(18,17,15,.25);padding:.6rem .85rem;margin-bottom:1.6rem}
+.status-large .dot{background:var(--moss)}
+.status-large.closed .dot{background:#A2634F}
+.map-art{border:1px solid var(--pline);background:#E9DFCE;padding:1rem;margin-top:1.5rem}
+.map-art svg{width:100%;height:auto}
+/* footer */
+.footer{padding:6rem 0 2.2rem;background:#0B0A09;border-top:1px solid var(--line)}
+.footer-grid{display:grid;grid-template-columns:1.5fr .8fr 1fr;gap:3rem;padding-bottom:4rem}
+.footer .brand-mark{width:42px;height:48px}
+.footer-wordmark{font-family:var(--serif);font-size:2.1rem;font-weight:600;letter-spacing:-.03em;margin:1rem 0 .7rem}
+.footer p{color:var(--ash);font-size:.87rem;max-width:34ch;line-height:1.7}
+.footer h4{font-family:var(--mono);font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ash);font-weight:400;margin-bottom:1.2rem}
+.footer-list{list-style:none;padding:0;margin:0}
+.footer-list li{margin-bottom:.65rem}
+.footer-list a,.footer-list button{border:0;background:none;padding:0;color:var(--bone-dim);font-size:.9rem;text-align:left;transition:color .2s}
+.footer-list a:hover,.footer-list button:hover{color:var(--ember-hi)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;gap:1.5rem;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:1.7rem;font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;color:#776F66}
+.match-btn{display:inline-flex;align-items:center;gap:.5rem;border:0;background:transparent;color:#776F66;font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;padding:.4rem;transition:color .3s}
+.match-btn:hover{color:var(--ember-hi)}
+.match-btn svg{width:14px;height:18px}
+/* overlays */
+.scrim{position:fixed;inset:0;background:rgba(7,6,5,.72);backdrop-filter:blur(5px);z-index:70;opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
+.scrim.show{opacity:1;visibility:visible}
+.panel{position:fixed;z-index:80;background:var(--bone);color:var(--ink);box-shadow:-30px 0 80px rgba(0,0,0,.4)}
+.drawer{top:0;right:0;height:100dvh;width:min(460px,100%);display:flex;flex-direction:column;transform:translateX(101%);transition:transform .45s var(--ease)}
+.drawer.show{transform:none}
+.panel-head{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1.5rem 1.6rem;border-bottom:1px solid var(--pline)}
+.panel-head h2{font-family:var(--serif);font-size:1.8rem;font-weight:600;margin:0;letter-spacing:-.02em}
+.panel-head .icon-btn{color:var(--ink);border-color:var(--pline)}
+.panel-body{padding:1.5rem 1.6rem;overflow-y:auto;flex:1}
+.panel-foot{padding:1.4rem 1.6rem;border-top:1px solid var(--pline);background:#E9DFCE}
+.basket-empty{text-align:center;padding:3.5rem 1rem}
+.basket-empty svg{width:64px;height:64px;margin:0 auto 1.2rem;color:#A39484}
+.basket-empty h3{font-family:var(--serif);font-size:1.6rem;margin-bottom:.5rem}
+.basket-empty p{color:#6B5F52;font-size:.9rem;margin-bottom:1.5rem}
+.basket-line{display:grid;grid-template-columns:1fr auto;gap:.5rem 1rem;padding:1rem 0;border-bottom:1px solid var(--pline)}
+.basket-line h3{font-family:var(--serif);font-size:1.1rem;font-weight:600;margin:0 0 .25rem}
+.basket-line p{font-family:var(--mono);font-size:.65rem;color:#7C7063;margin:0}
+.qty{display:inline-flex;align-items:center;gap:.7rem;margin-top:.6rem}
+.qty button{width:27px;height:27px;border:1px solid rgba(18,17,15,.3);background:transparent;display:grid;place-items:center;font-size:.95rem;line-height:1;border-radius:50%}
+.qty button:hover{background:var(--ink);color:var(--bone)}
+.qty span{font-family:var(--mono);font-size:.8rem;min-width:1.5ch;text-align:center}
+.qty .remove{width:auto;border:0;border-radius:0;text-decoration:underline;font-family:var(--mono);font-size:.62rem;text-underline-offset:2px;color:#8C3F22;margin-left:.3rem}
+.subtotal{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.82rem;margin-bottom:.5rem}
+.subtotal.total{font-size:1rem;font-weight:500;padding-top:.8rem;border-top:1px solid var(--pline);margin-top:.8rem}
+.fineprint{font-family:var(--mono);font-size:.62rem;color:#776A5C;line-height:1.6;margin:.7rem 0 1.2rem}
+.mobile-nav{inset:0;transform:translateY(-101%);transition:transform .45s var(--ease);padding:2rem 1.6rem;display:flex;flex-direction:column}
+.mobile-nav.show{transform:none}
+.mobile-nav .panel-head{padding:0 0 1.5rem;border-color:var(--pline)}
+.mobile-nav nav{display:flex;flex-direction:column;gap:.4rem;margin-top:2rem}
+.mobile-nav nav a{font-family:var(--serif);font-size:clamp(2.2rem,9vw,3.4rem);font-weight:600;letter-spacing:-.03em;padding:.5rem 0;border-bottom:1px solid var(--pline)}
+.mobile-nav .mnav-foot{margin-top:auto;font-family:var(--mono);font-size:.68rem;color:#776A5C;line-height:1.8}
+/* toast, grain, warmth */
+.toast-stack{position:fixed;left:50%;bottom:1.6rem;transform:translateX(-50%);z-index:110;display:flex;flex-direction:column;gap:.5rem;align-items:center;pointer-events:none;width:min(92vw,520px)}
+.toast{background:var(--ember);color:#190D06;padding:.75rem 1.1rem;font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;box-shadow:0 10px 30px rgba(0,0,0,.35);animation:toastIn .35s var(--ease)}
+.toast.out{animation:toastOut .3s forwards}
+@keyframes toastIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes toastOut{to{opacity:0;transform:translateY(-8px)}}
+.grain{position:fixed;inset:0;z-index:56;pointer-events:none;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.warm-glow{position:fixed;inset:0;z-index:55;pointer-events:none;opacity:0;transition:opacity .55s;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(255,156,78,.36),rgba(223,99,52,.12) 32%,transparent 68%);mix-blend-mode:screen}
+.warm-glow.on{opacity:1}
+/* reveal */
+[data-reveal]{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:var(--d,0ms)}
+[data-reveal].in{opacity:1;transform:none}
+@media(max-width:1040px){
+  .story-grid,.reserve-grid,.visit-grid{gap:3rem}
+  .nav-links{gap:1.2rem}
+  .status-pill{display:none}
+}
+@media(max-width:860px){
+  .nav-links{display:none}
+  .menu-toggle{display:inline-grid}
+  .nav-inner{height:72px}
+  .feature-grid{grid-template-columns:1fr;max-width:560px;margin-inline:auto}
+  .story-grid,.reserve-grid,.visit-grid{grid-template-columns:1fr}
+  .hearth-art{max-width:420px}
+  .menu-controls{grid-template-columns:1fr}
+  .search-box input{width:100%}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .footer-grid>div:first-child{grid-column:1/-1}
+}
+@media(max-width:620px){
+  .wrap{width:calc(100% - 1.8rem)}
+  .hero{min-height:92svh;padding:8rem 0 6rem}
+  .hero-foot>span:last-child{display:none}
+  .hero-hearth{opacity:.2;right:-30vw;width:100vw}
+  .field-row{grid-template-columns:1fr;gap:0}
+  .form-card{padding:1.4rem}
+  .menu-item{grid-template-columns:28px 1fr;gap:.5rem .8rem;padding:1.25rem 0}
+  .menu-item__side{grid-column:2;justify-content:flex-start;padding-top:0}
+  .menu-item__no{padding-top:.3rem}
+  .menu-item__name{font-size:1.3rem}
+  .story,.reserve,.visit,.menu-section{padding:6rem 0}
+  .features{padding:2rem 0 6rem}
+  .footer-grid{grid-template-columns:1fr}
+  .footer-grid>div:first-child{grid-column:auto}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  [data-reveal]{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div id="progress" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="warm-glow" id="warmGlow" aria-hidden="true"></div>
+
+<header class="site-nav" id="siteNav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top" aria-label="Cinder and Salt, back to top">
+      <svg class="brand-mark" viewBox="0 0 44 50" fill="none" aria-hidden="true">
+        <path d="M4 46V22C4 10.4 13.4 1.5 22 1.5S40 10.4 40 22v24" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M10 46V23c0-7.2 5.4-12.8 12-12.8S34 15.8 34 23v23" stroke="currentColor" stroke-width="1" opacity=".42"/>
+        <path d="M22 40c-5-3-7-7-6-12 3 2 4 4 4 6 1-5 4-8 3-13 5 4 7 9 5 14-1 2-3 4-6 5z" fill="currentColor"/>
+        <circle cx="22" cy="14" r="1.5" fill="currentColor"/><circle cx="29" cy="9" r="1" fill="currentColor" opacity=".7"/>
+      </svg>
+      <span class="brand-name">Cinder &amp; Salt<small>REFSHAL EVEJ · KBH</small></span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#story">Story</a><a href="#menu">Menu</a><a href="#reserve">Book</a><a href="#visit">Visit</a>
+    </nav>
+    <div class="nav-actions">
+      <span class="status-pill" id="navStatus"><i class="dot"></i><span id="navStatusText">checking hours</span></span>
+      <button class="icon-btn" id="soundBtn" type="button" aria-label="Turn on fire ambience" aria-pressed="false">
+        <svg id="soundIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 9h4l5-4v14l-5-4H4z"/><path class="waves" d="M16 9a4 4 0 0 1 0 6"/><path class="waves" d="M18.5 6.5a7.5 7.5 0 0 1 0 11"/>
+        </svg>
+      </button>
+      <button class="icon-btn nav-wrap" id="basketBtn" type="button" aria-label="Open your order basket">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h16l-1.5 12h-13z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        <span class="count" id="basketCount" hidden>0</span>
+      </button>
+      <button class="icon-btn menu-toggle" id="menuToggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileNav">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<section class="hero" id="top" aria-labelledby="heroTitle">
+  <canvas id="embers" aria-hidden="true"></canvas>
+  <svg class="hero-hearth" viewBox="0 0 600 640" fill="none" aria-hidden="true">
+    <defs>
+      <radialGradient id="hglow" cx=".5" cy=".8" r=".55"><stop stop-color="#E85B24" stop-opacity=".55"/><stop offset="1" stop-color="#E85B24" stop-opacity="0"/></radialGradient>
+      <linearGradient id="hlog" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#42281B"/><stop offset="1" stop-color="#17100C"/></linearGradient>
+      <linearGradient id="hflame" x1="0" y1="1" x2="0" y2="0"><stop stop-color="#FFD08A"/><stop offset=".45" stop-color="#E0602F"/><stop offset="1" stop-color="#8B2A0F" stop-opacity="0"/></linearGradient>
+    </defs>
+    <path d="M30 610V275a270 270 0 0 1 540 0v335" stroke="#F2EADD" stroke-opacity=".2" stroke-width="2"/>
+    <path d="M70 610V278a230 230 0 0 1 460 0v332" stroke="#F2EADD" stroke-opacity=".1"/>
+    <ellipse cx="300" cy="562" rx="235" ry="90" fill="url(#hglow)"/>
+    <g transform="rotate(-8 300 540)"><rect x="155" y="525" width="290" height="34" rx="16" fill="url(#hlog)" stroke="#7B4A2B" stroke-opacity=".5"/><path d="M180 535h250" stroke="#A86A3D" stroke-opacity=".3"/></g>
+    <g transform="rotate(9 300 555)"><rect x="165" y="545" width="275" height="32" rx="15" fill="url(#hlog)" stroke="#7B4A2B" stroke-opacity=".4"/></g>
+    <path class="flame-a" d="M268 540c-30-40-8-78 6-104-2 30 18 40 16 62 12-24 24-36 18-66 36 36 42 78 22 108z" fill="url(#hflame)"/>
+    <path class="flame-b" d="M302 542c-16-30-4-62 8-84 2 22 14 34 12 52 10-18 16-28 12-48 22 28 24 60 8 80z" fill="url(#hflame)" opacity=".8"/>
+    <path class="flame-c" d="M240 540c-14-26-2-50 8-68 2 18 12 26 10 42 10-16 14-24 10-40 18 24 20 48 8 66z" fill="url(#hflame)" opacity=".55"/>
+    <circle cx="225" cy="385" r="2.4" fill="#FFB36B" opacity=".8"/><circle cx="366" cy="342" r="1.7" fill="#FFB36B" opacity=".6"/><circle cx="330" cy="296" r="1.3" fill="#FFB36B" opacity=".5"/>
+  </svg>
+  <div class="wrap hero-inner">
+    <div class="hero-eyebrow label"><span>Refshalevej 213A · Copenhagen</span><span aria-hidden="true">✳</span><span id="heroStatus">checking the fire</span></div>
+    <h1 id="heroTitle">Cooked in fire,<br><em>kept in time.</em></h1>
+    <p class="hero-lede">A wood-fire and fermentation kitchen at the edge of the harbour. We cure what the sea gives us, bury roots in the coals, and never rush a thing that wants to wait.</p>
+    <div class="hero-actions">
+      <a class="btn btn--ember" href="#reserve">Book a table <span aria-hidden="true">↗</span></a>
+      <a class="btn" href="#menu">Read the menu</a>
+    </div>
+  </div>
+  <div class="wrap hero-foot">
+    <span class="scroll-cue"><i aria-hidden="true"></i> Scroll to the kitchen</span>
+    <span>Est. 2016 &nbsp;·&nbsp; North Sea to wood fire</span>
+  </div>
+</section>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span><b>✳</b>Birch fire</span><span><b>✳</b>Six-week ferment</span><span><b>✳</b>Line-caught fish</span><span><b>✳</b>Nothing wasted</span><span><b>✳</b>Last seating 90 minutes before close</span><span><b>✳</b>Birch fire</span><span><b>✳</b>Six-week ferment</span><span><b>✳</b>Line-caught fish</span><span><b>✳</b>Nothing wasted</span><span><b>✳</b>Last seating 90 minutes before close</span>
+  </div>
+</div>
+
+<section class="story" id="story" aria-labelledby="storyTitle">
+  <div class="wrap story-grid">
+    <div>
+      <span class="label" data-reveal>01 / Our fire</span>
+      <h2 class="statement" id="storyTitle" data-reveal style="--d:80ms">We don't have a <em>signature dish.</em> We have a signature way of paying attention.</h2>
+      <p class="body-copy" data-reveal style="--d:140ms">Cinder &amp; Salt began as a bet between two people who were tired of food that shouted. In 2016 we took a derelict harbour workshop, built a hearth from reclaimed brick, and decided that the fire would decide the menu. What arrives on the boat, what comes out of the garden, what the jars have been quietly turning into — that is the card we write each morning.</p>
+      <p class="body-copy" data-reveal style="--d:190ms">The room is small. The lights are low. The bread is torn, never sliced. Nothing is wasted, and nothing leaves the kitchen before it is ready.</p>
+      <div class="chef-note" data-reveal style="--d:240ms">
+        <p>“I keep a fire in the corner of the kitchen. Everything that can touch it, eventually does. That's the whole idea.”</p>
+        <span class="label">Ingrid Voss · Chef &amp; co-founder</span>
+      </div>
+    </div>
+    <div data-reveal style="--d:120ms">
+      <svg class="hearth-art" viewBox="0 0 520 560" fill="none" role="img" aria-label="Illustration of our brick hearth with birch logs and an open flame">
+        <defs>
+          <radialGradient id="sglow" cx=".5" cy=".78" r=".6"><stop stop-color="#E8642C" stop-opacity=".7"/><stop offset="1" stop-color="#E8642C" stop-opacity="0"/></radialGradient>
+          <linearGradient id="sbrick" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#3A2B22"/><stop offset="1" stop-color="#1A140F"/></linearGradient>
+          <linearGradient id="slog" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#573825"/><stop offset="1" stop-color="#1D120C"/></linearGradient>
+          <linearGradient id="sflame" x1="0" y1="1" x2="0" y2="0"><stop stop-color="#FFE0A3"/><stop offset=".42" stop-color="#E76A2F"/><stop offset="1" stop-color="#7B240D" stop-opacity="0"/></linearGradient>
+        </defs>
+        <path d="M28 530V236a232 232 0 0 1 464 0v294" fill="url(#sbrick)" stroke="#6C5441" stroke-opacity=".45" stroke-width="2"/>
+        <path d="M62 530V240a198 198 0 0 1 396 0v290" fill="#0D0B09" stroke="#6C5441" stroke-opacity=".3"/>
+        <g stroke="#6C5441" stroke-opacity=".22" stroke-width="1">
+          <path d="M28 300h464M28 360h464M28 420h464M28 480h464"/>
+          <path d="M100 240v290M172 236v294M260 232v298M348 236v294M420 240v290"/>
+        </g>
+        <ellipse cx="260" cy="470" rx="205" ry="80" fill="url(#sglow)"/>
+        <g transform="rotate(-9 260 480)"><rect x="116" y="465" width="290" height="36" rx="17" fill="url(#slog)" stroke="#93613E" stroke-opacity=".45"/><path d="M145 476h240" stroke="#C08552" stroke-opacity=".22"/></g>
+        <g transform="rotate(8 260 500)"><rect x="130" y="490" width="270" height="34" rx="16" fill="url(#slog)" stroke="#93613E" stroke-opacity=".35"/></g>
+        <path class="flame-a" d="M223 478c-38-52-10-102 8-134-3 40 24 52 21 82 16-32 32-48 24-87 49 48 56 104 29 139z" fill="url(#sflame)"/>
+        <path class="flame-b" d="M262 480c-22-40-5-82 11-112 2 29 19 45 16 69 13-24 21-37 16-64 29 38 31 80 11 107z" fill="url(#sflame)" opacity=".85"/>
+        <path class="flame-c" d="M192 478c-18-34-3-66 10-90 3 24 16 34 13 55 13-21 19-32 13-53 24 32 26 63 10 88z" fill="url(#sflame)" opacity=".6"/>
+        <g fill="#FFB975" opacity=".75"><circle cx="182" cy="290" r="2.6"/><circle cx="336" cy="252" r="2"/><circle cx="300" cy="204" r="1.6"/><circle cx="376" cy="316" r="1.4"/><circle cx="142" cy="348" r="1.5"/></g>
+        <path d="M46 530h428" stroke="#6C5441" stroke-opacity=".5" stroke-width="2"/>
+        <text x="260" y="553" text-anchor="middle" fill="#9C9082" font-family="monospace" font-size="11" letter-spacing="4">THE HEARTH · BUILT 2016</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="features" aria-labelledby="featuresTitle">
+  <div class="wrap">
+    <div class="features-head">
+      <div data-reveal><span class="label">02 / On the fire tonight</span><h2 class="section-title" id="featuresTitle">Three things<br>we'd order.</h2></div>
+      <p class="label" data-reveal style="--d:100ms">Drawn by hand · served until gone</p>
+    </div>
+    <div class="feature-grid">
+      <article class="dish-card" data-reveal>
+        <div class="dish-art">
+          <svg viewBox="0 0 320 260" role="img" aria-label="Illustration of ember-roasted carrots on whipped labneh with pistachio">
+            <defs>
+              <radialGradient id="d1plate" cx=".4" cy=".32" r=".75"><stop stop-color="#FAF5EA"/><stop offset="1" stop-color="#D2C3AD"/></radialGradient>
+              <linearGradient id="d1carrot" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#8E2C15"/><stop offset=".45" stop-color="#D4652A"/><stop offset="1" stop-color="#EE9C50"/></linearGradient>
+              <filter id="d1blur"><feGaussianBlur stdDeviation="6"/></filter>
+            </defs>
+            <ellipse cx="160" cy="211" rx="122" ry="34" fill="#000" opacity=".4" filter="url(#d1blur)"/>
+            <ellipse cx="160" cy="194" rx="122" ry="46" fill="url(#d1plate)"/><ellipse cx="160" cy="190" rx="99" ry="33" fill="#F0E6D3" opacity=".85"/>
+            <path d="M79 184c22-28 63-37 96-24 24 9 44 20 65 13-14 27-54 40-91 36-29-3-53-11-70-25z" fill="#FCF8F0"/>
+            <path d="M96 181c26-13 62-14 91-3" stroke="#E4D9C6" stroke-width="2" fill="none"/>
+            <g transform="translate(120 167) rotate(-20)">
+              <path d="M-10 5C-8-18-3-39 4-52c9 14 14 35 10 55-3 13-18 13-24 2z" fill="url(#d1carrot)"/>
+              <path d="M-4-35c5 0 9 2 12 5M-6-23c5-1 10 1 14 4M-7-10c5-1 11 1 15 4" stroke="#4A190B" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+              <path d="M4-52c-5-8-11-12-18-14M4-52c1-9 5-15 12-18M4-52c7-4 13-4 19-2" stroke="#4E6B3E" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            <g transform="translate(166 174) rotate(4)">
+              <path d="M-10 5C-8-20-2-42 5-55c9 14 14 38 10 56-3 13-18 13-25-1z" fill="url(#d1carrot)"/>
+              <path d="M-4-38c5 0 10 2 13 5M-6-25c5-1 10 1 14 4M-7-12c5-1 11 1 15 4" stroke="#4A190B" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+              <path d="M5-55c-5-8-11-12-18-14M5-55c1-9 5-15 12-18M5-55c7-4 13-4 19-2" stroke="#4E6B3E" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            <g transform="translate(207 168) rotate(17)">
+              <path d="M-9 5C-7-17-2-36 5-48c8 13 13 33 9 51-3 12-17 12-23 1z" fill="url(#d1carrot)"/>
+              <path d="M-3-32c5 0 9 2 12 5M-5-20c5-1 10 1 14 4M-6-8c5-1 10 1 14 4" stroke="#4A190B" stroke-width="3" stroke-linecap="round" opacity=".5"/>
+              <path d="M5-48c-5-7-10-11-16-13M5-48c1-8 5-13 11-16M5-48c7-4 12-4 17-2" stroke="#4E6B3E" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            <g fill="#7E8B52"><circle cx="103" cy="199" r="3"/><circle cx="143" cy="205" r="2.5"/><circle cx="185" cy="207" r="3.2"/><circle cx="224" cy="197" r="2.6"/><circle cx="160" cy="213" r="2"/></g>
+            <g fill="#D9B45C"><circle cx="112" cy="205" r="1.4"/><circle cx="195" cy="199" r="1.4"/><circle cx="232" cy="188" r="1.2"/></g>
+            <g fill="#FFE9C7" opacity=".8"><circle cx="130" cy="190" r="1.8"/><circle cx="174" cy="199" r="1.5"/><circle cx="209" cy="185" r="1.6"/></g>
+          </svg>
+        </div>
+        <span class="label">From the fire · 08</span>
+        <h3>Ember-roasted carrots</h3>
+        <p>Blackened carrots, whipped labneh, pistachio dukkah and carrot-top oil. Sweet, sharp and smoky in the same bite.</p>
+        <div class="dish-foot"><span class="price">135 kr</span><button class="btn btn--small" type="button" data-add="ember-carrots">Add to order +</button></div>
+      </article>
+      <article class="dish-card" data-reveal style="--d:90ms">
+        <div class="dish-art">
+          <svg viewBox="0 0 320 260" role="img" aria-label="Illustration of charred mackerel with rhubarb and fennel">
+            <defs>
+              <radialGradient id="d2plate" cx=".4" cy=".3" r=".75"><stop stop-color="#F8F2E6"/><stop offset="1" stop-color="#CFC0AA"/></radialGradient>
+              <linearGradient id="d2fish" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#92A7AC"/><stop offset=".5" stop-color="#4B6872"/><stop offset="1" stop-color="#203A44"/></linearGradient>
+              <linearGradient id="d2rhu" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#E58A8A"/><stop offset="1" stop-color="#A63E50"/></linearGradient>
+              <filter id="d2blur"><feGaussianBlur stdDeviation="6"/></filter>
+            </defs>
+            <ellipse cx="160" cy="211" rx="122" ry="34" fill="#000" opacity=".4" filter="url(#d2blur)"/>
+            <ellipse cx="160" cy="194" rx="122" ry="46" fill="url(#d2plate)"/><ellipse cx="160" cy="191" rx="99" ry="33" fill="#EEE3D0" opacity=".8"/>
+            <path d="M93 170c30-13 54-22 86-22 27 0 45 9 60 20-18 25-51 38-86 36-29-2-51-14-60-34z" fill="#E9DEC8"/>
+            <path d="M85 166c26-24 69-36 112-26 25 6 42 17 53 29-21 26-64 40-105 33-30-5-51-19-60-36z" fill="url(#d2fish)"/>
+            <path d="M250 169l34-26-9 30 12 24-40-16z" fill="#38525C"/><path d="M250 169l34-26-9 30 12 24-40-16z" stroke="#1E333B" stroke-width="1.5"/>
+            <path d="M104 151c-2 12-1 25 3 36M126 144c-2 14 0 28 5 41M150 140c-1 15 2 30 7 44M175 139c0 15 4 30 9 43M200 143c1 13 5 25 10 35" stroke="#182E37" stroke-width="5" stroke-linecap="round" opacity=".5"/>
+            <path d="M96 172c22-10 55-15 88-11" stroke="#D7E1DE" stroke-width="2" opacity=".55" fill="none"/>
+            <circle cx="101" cy="164" r="3" fill="#101A1E"/><circle cx="100" cy="163" r="1" fill="#F2EADD"/>
+            <g fill="url(#d2rhu)"><ellipse cx="137" cy="205" rx="17" ry="8" transform="rotate(-12 137 205)"/><ellipse cx="171" cy="213" rx="14" ry="7" transform="rotate(9 171 213)"/><ellipse cx="204" cy="204" rx="12" ry="6" transform="rotate(-6 204 204)"/></g>
+            <g stroke="#527044" stroke-width="2" stroke-linecap="round" fill="none"><path d="M222 199c10-13 22-18 34-19M222 199c8-6 16-8 26-7M222 199c12-3 22-1 31 4"/></g>
+            <g transform="translate(103 203) rotate(-18)"><path d="M0 0a17 17 0 0 1 34 0z" fill="#F3D98C" stroke="#D9B45C" stroke-width="1.5"/><path d="M17 0v-17M17 0l12-12M17 0L5-12" stroke="#D9B45C" stroke-width="1"/></g>
+            <g fill="#A9B96F"><circle cx="158" cy="198" r="2"/><circle cx="191" cy="191" r="1.7"/><circle cx="118" cy="195" r="1.6"/></g>
+          </svg>
+        </div>
+        <span class="label">From the sea · 03</span>
+        <h3>Coal-grilled mackerel</h3>
+        <p>Charred skin, rhubarb compote, fennel pollen and a slick of green olive oil. The sea, met by the fire.</p>
+        <div class="dish-foot"><span class="price">195 kr</span><button class="btn btn--small" type="button" data-add="coal-mackerel">Add to order +</button></div>
+      </article>
+      <article class="dish-card" data-reveal style="--d:180ms">
+        <div class="dish-art">
+          <svg viewBox="0 0 320 260" role="img" aria-label="Illustration of a slice of burnt honey tart with cream and sea salt">
+            <defs>
+              <radialGradient id="d3plate" cx=".4" cy=".3" r=".75"><stop stop-color="#F8F2E6"/><stop offset="1" stop-color="#D1C2AC"/></radialGradient>
+              <linearGradient id="d3crust" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#C68A48"/><stop offset="1" stop-color="#7A4A22"/></linearGradient>
+              <linearGradient id="d3honey" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#F0AC55"/><stop offset=".5" stop-color="#A95118"/><stop offset="1" stop-color="#5B280D"/></linearGradient>
+              <filter id="d3blur"><feGaussianBlur stdDeviation="6"/></filter>
+            </defs>
+            <ellipse cx="160" cy="211" rx="122" ry="34" fill="#000" opacity=".4" filter="url(#d3blur)"/>
+            <ellipse cx="160" cy="194" rx="122" ry="46" fill="url(#d3plate)"/><ellipse cx="160" cy="191" rx="99" ry="33" fill="#EFE5D2" opacity=".85"/>
+            <g transform="translate(160 185)">
+              <path d="M-78 23L44-58 88 48z" fill="url(#d3crust)"/>
+              <path d="M-78 23L44-58 88 48z" fill="none" stroke="#5F3718" stroke-opacity=".4" stroke-width="2"/>
+              <path d="M-62 16L41-44 70 39z" fill="url(#d3honey)"/>
+              <path d="M-48 8C-22-18 14-29 42-23c9 2 15 6 20 11-24 15-59 25-89 30z" fill="#FBF2DD" opacity=".92"/>
+              <path d="M-44 10C-18-12 13-22 40-18" stroke="#E2D3B8" stroke-width="2" fill="none"/>
+              <path d="M-31 22c18-4 38-11 54-20" stroke="#F5C77D" stroke-width="2" stroke-linecap="round" opacity=".7" fill="none"/>
+              <g fill="#FFFDF4"><path d="M-24-2l4-3 3 4-4 3z"/><path d="M5-14l4-3 3 4-4 3z"/><path d="M30-8l3-3 3 4-3 3z"/><path d="M-8 16l3-2 2 3-3 2z"/></g>
+              <g fill="#F4C87C" opacity=".8"><circle cx="-40" cy="18" r="2"/><circle cx="52" cy="25" r="1.6"/><circle cx="12" cy="34" r="1.4"/></g>
+            </g>
+          </svg>
+        </div>
+        <span class="label">Something sweet · 29</span>
+        <h3>Burnt honey tart</h3>
+        <p>Dark, sticky honey, crème fraîche and flakes of sea salt. Made with the bees from the harbour allotments.</p>
+        <div class="dish-foot"><span class="price">110 kr</span><button class="btn btn--small" type="button" data-add="burnt-honey-tart">Add to order +</button></div>
+      </article>
+    </div>
+  </div>
+</section>
+<section class="menu-section paper" id="menu" aria-labelledby="menuTitle">
+  <div class="wrap">
+    <div class="menu-head">
+      <div data-reveal><span class="label">03 / The card</span><h2 class="section-title" id="menuTitle">What the fire<br>feels like today.</h2></div>
+      <p data-reveal style="--d:90ms">Written each morning, changed when the boats come in. Prices in Danish kroner. Tell us about allergies — we'd rather know than guess.</p>
+    </div>
+    <div class="menu-controls" data-reveal style="--d:120ms">
+      <div class="chips" role="group" aria-label="Filter by category">
+        <button class="chip" type="button" data-cat="all" aria-pressed="true">Everything</button>
+        <button class="chip" type="button" data-cat="fire" aria-pressed="false">From the fire</button>
+        <button class="chip" type="button" data-cat="sea" aria-pressed="false">From the sea</button>
+        <button class="chip" type="button" data-cat="garden" aria-pressed="false">From the garden</button>
+        <button class="chip" type="button" data-cat="bread" aria-pressed="false">Bread &amp; ferment</button>
+        <button class="chip" type="button" data-cat="sweet" aria-pressed="false">Sweet</button>
+        <button class="chip" type="button" data-cat="drink" aria-pressed="false">To drink</button>
+      </div>
+      <label class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg>
+        <input id="menuSearch" type="search" placeholder="Search the menu" aria-label="Search the menu" autocomplete="off">
+      </label>
+    </div>
+    <div class="menu-controls" data-reveal style="margin:0 0 .6rem;--d:140ms">
+      <div class="chips" role="group" aria-label="Filter by dietary need">
+        <span class="label" style="align-self:center;margin-right:.4rem">Also show</span>
+        <button class="chip" type="button" data-diet="v" aria-pressed="false" title="Vegetarian">Vegetarian</button>
+        <button class="chip" type="button" data-diet="vg" aria-pressed="false" title="Vegan">Vegan</button>
+        <button class="chip" type="button" data-diet="gf" aria-pressed="false" title="Gluten free">Gluten free</button>
+        <button class="chip" type="button" data-diet="df" aria-pressed="false" title="Dairy free">Dairy free</button>
+      </div>
+    </div>
+    <div class="menu-meta"><span id="menuCount">Showing all dishes</span><button class="link-btn" id="clearFilters" type="button">Clear filters</button></div>
+    <div class="menu-list" id="menuList"></div>
+    <div class="empty" id="menuEmpty" hidden>
+      <h3>Nothing on the card matches that.</h3>
+      <p>Try a different word, or loosen a filter. The carrots are still waiting either way.</p>
+      <button class="btn btn--small" type="button" id="emptyClear">Clear filters</button>
+    </div>
+  </div>
+</section>
+
+<section class="reserve" id="reserve" aria-labelledby="reserveTitle">
+  <div class="wrap reserve-grid">
+    <div class="reserve-copy">
+      <span class="label" data-reveal>04 / A table for you</span>
+      <h2 class="section-title" id="reserveTitle" data-reveal style="--d:70ms">Come hungry.<br>Stay a while.</h2>
+      <p data-reveal style="--d:120ms">We seat guests from 17:30 and take last orders ninety minutes before we close. Tables are held for fifteen minutes — if you're running late, call us and we'll keep the fire going.</p>
+      <p data-reveal style="--d:160ms">For groups of nine or more, write to us and we'll make a night of it.</p>
+      <ul class="reserve-facts" data-reveal style="--d:200ms">
+        <li><b>Walk-ins</b><span>Six seats at the counter, first come, first served.</span></li>
+        <li><b>Children</b><span>Welcome until 21:00. We'll bring bread early.</span></li>
+        <li><b>Dogs</b><span>Well-behaved ones are welcome at the counter.</span></li>
+        <li><b>Phone</b><span><a href="tel:+4532194416" style="color:var(--ember-hi)">+45 32 19 44 16</a></span></li>
+      </ul>
+    </div>
+    <div class="form-card" data-reveal style="--d:120ms" id="reservationCard">
+      <div id="resFormWrap">
+        <div class="form-top"><span class="label">Reservation request</span><span class="label">Table for 1–8</span></div>
+        <form id="resForm" novalidate>
+          <div class="field-row">
+            <div class="field" id="f-name"><label for="resName">Your name</label><input id="resName" name="name" type="text" autocomplete="name" placeholder="e.g. Ida Nielsen"></div>
+            <div class="field" id="f-email"><label for="resEmail">Email</label><input id="resEmail" name="email" type="email" autocomplete="email" placeholder="ida@example.dk"></div>
+          </div>
+          <div class="field-row">
+            <div class="field" id="f-date"><label for="resDate">Date</label><input id="resDate" name="date" type="date"><span class="field-hint">Copenhagen time · up to 90 days ahead</span></div>
+            <div class="field" id="f-guests"><label for="resGuests">Guests</label><select id="resGuests" name="guests"><option value="">Choose a number</option><option value="1">1 guest</option><option value="2" selected>2 guests</option><option value="3">3 guests</option><option value="4">4 guests</option><option value="5">5 guests</option><option value="6">6 guests</option><option value="7">7 guests</option><option value="8">8 guests</option></select></div>
+          </div>
+          <div class="field" id="f-time"><span class="slots-label">Available times</span><div class="slots" id="resSlots" role="group" aria-label="Choose a time"></div><span class="slot-note" id="slotNote">Choose a date to see the sittings.</span></div>
+          <div class="field-row">
+            <div class="field"><label for="resOccasion">Occasion <span style="text-transform:none;letter-spacing:0">(optional)</span></label><select id="resOccasion" name="occasion"><option value="">Just dinner</option><option>Birthday</option><option>Anniversary</option><option>Working dinner</option><option>Something else</option></select></div>
+            <div class="field"><label for="resNotes">Anything we should know <span style="text-transform:none;letter-spacing:0">(optional)</span></label><input id="resNotes" name="notes" type="text" placeholder="Allergies, a high chair, a quiet corner…"></div>
+          </div>
+          <p class="form-error" id="resError" role="alert" aria-live="polite"></p>
+          <button class="btn btn--ember" type="submit" style="width:100%">Request this table <span aria-hidden="true">↗</span></button>
+          <p class="fineprint" style="margin-bottom:0">No payment taken here. We confirm by email, usually within the hour.</p>
+        </form>
+      </div>
+      <div id="resDone" hidden>
+        <div class="form-success">
+          <span class="label" style="color:var(--ember-hi)">Table requested</span>
+          <h3 id="doneTitle">We'll save you a seat.</h3>
+          <p id="doneLine">A confirmation is on its way.</p>
+          <dl class="confirm-grid">
+            <dt>Reference</dt><dd id="doneRef">—</dd>
+            <dt>When</dt><dd id="doneWhen">—</dd>
+            <dt>Party</dt><dd id="doneParty">—</dd>
+          </dl>
+        </div>
+        <div style="display:flex;gap:.6rem;flex-wrap:wrap">
+          <a class="btn btn--small" id="icsLink" href="#" download="cinder-and-salt-reservation.ics">Add to calendar</a>
+          <button class="btn btn--small" type="button" id="bookAgain">Book another table</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="visit" id="visit" aria-labelledby="visitTitle">
+  <div class="wrap">
+    <div class="menu-head" style="margin-bottom:3rem">
+      <div data-reveal><span class="label">05 / Find us</span><h2 class="section-title" id="visitTitle">At the end<br>of the road.</h2></div>
+      <p data-reveal style="--d:90ms">Look for the brick arch and the smoke. We're on the harbour side of Refshalevej, past the old crane.</p>
+    </div>
+    <div class="visit-grid">
+      <div data-reveal>
+        <div class="status-large" id="visitStatus"><i class="dot"></i><span id="visitStatusText">checking hours</span></div>
+        <div class="visit-block">
+          <h3>Address</h3>
+          <p>Cinder &amp; Salt<br>Refshalevej 213A<br>1432 Copenhagen K<br>Denmark</p>
+          <button class="btn btn--small" type="button" id="copyAddress" style="margin-top:1.2rem">Copy address</button>
+        </div>
+        <div class="visit-block">
+          <h3>Getting here</h3>
+          <p>Bus 2A to Refshaleøen, then a six-minute walk along the water. Bikes can be left by the door. There's limited parking in the yard.</p>
+        </div>
+        <div class="visit-block">
+          <h3>Contact</h3>
+          <p><a href="tel:+4532194416" style="color:#98502E">+45 32 19 44 16</a><br><a href="mailto:hej@cinderandsalt.dk" style="color:#98502E">hej@cinderandsalt.dk</a></p>
+        </div>
+      </div>
+      <div data-reveal style="--d:100ms">
+        <div class="visit-block">
+          <h3>Opening hours · Copenhagen time</h3>
+          <div id="hoursList"></div>
+          <p class="field-hint" style="margin-top:1rem;color:#877968">Closed the first Tuesday of every month for a staff supper. Kitchen stops thirty minutes before closing; last seating is ninety minutes before.</p>
+        </div>
+        <div class="map-art" aria-hidden="true">
+          <svg viewBox="0 0 520 250" fill="none">
+            <defs><pattern id="maphatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="10" stroke="#C9BBA5" stroke-width="1"/></pattern></defs>
+            <rect width="520" height="250" fill="#E9DFCE"/>
+            <path d="M0 170c80-30 120 10 200-20s120-60 200-30 90 0 120-10v140H0z" fill="#C6D2C9"/>
+            <path d="M0 170c80-30 120 10 200-20s120-60 200-30 90 0 120-10" stroke="#8FA394" stroke-width="2"/>
+            <path d="M40 0l60 250M180 0l-20 250M330 0l40 250M450 0l-10 250" stroke="#CFC1AC" stroke-width="12"/>
+            <path d="M0 70h520M0 125h520" stroke="#D8CBB7" stroke-width="6"/>
+            <rect x="120" y="20" width="90" height="45" fill="url(#maphatch)" opacity=".6"/><rect x="250" y="20" width="60" height="45" fill="url(#maphatch)" opacity=".6"/>
+            <g transform="translate(292 118)"><circle r="20" fill="#DF6334" fill-opacity=".18"/><circle r="7" fill="#DF6334"/><path d="M0-34v14M0 20v14M-34 0h14M20 0h14" stroke="#DF6334" stroke-width="2"/></g>
+            <text x="318" y="122" fill="#5D5246" font-family="monospace" font-size="12" letter-spacing="2">YOU ARE HERE</text>
+            <text x="24" y="232" fill="#8C8072" font-family="monospace" font-size="10" letter-spacing="3">REFSHALEVEJ · HARBOUR EDGE</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <svg class="brand-mark" viewBox="0 0 44 50" fill="none" aria-hidden="true" style="color:#DF6334"><path d="M4 46V22C4 10.4 13.4 1.5 22 1.5S40 10.4 40 22v24" stroke="currentColor" stroke-width="1.4"/><path d="M22 40c-5-3-7-7-6-12 3 2 4 4 4 6 1-5 4-8 3-13 5 4 7 9 5 14-1 2-3 4-6 5z" fill="currentColor"/></svg>
+        <div class="footer-wordmark">Cinder &amp; Salt</div>
+        <p>A small fire kitchen on the harbour. Built by Ingrid Voss and Mikkel Lund in 2016, still cooked by hand.</p>
+      </div>
+      <div><h4>Find your way</h4><ul class="footer-list"><li><a href="#story">Our story</a></li><li><a href="#menu">Tonight's menu</a></li><li><a href="#reserve">Book a table</a></li><li><a href="#visit">Hours &amp; address</a></li></ul></div>
+      <div><h4>Say hello</h4><ul class="footer-list"><li><a href="tel:+4532194416">+45 32 19 44 16</a></li><li><a href="mailto:hej@cinderandsalt.dk">hej@cinderandsalt.dk</a></li><li><button type="button" id="basketFooterBtn">Look at your order</button></li><li><button type="button" id="topBtn">Back to the top ↑</button></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 CINDER &amp; SALT · REFSHALEVEJ 213A · COPENHAGEN</span>
+      <button class="match-btn" id="matchBtn" type="button" title="Strike a match" aria-label="Strike a match and warm the room">
+        <svg viewBox="0 0 14 18" fill="none" aria-hidden="true"><path d="M7 18V6" stroke="currentColor" stroke-width="1.2"/><path d="M7 6C4 5 4 2 6 0c0 2 2 2 2 4 1-1 2-1 2-3 2 2 2 5-3 5z" fill="currentColor"/></svg>
+        <span>strike a match</span>
+      </button>
+    </div>
+  </div>
+</footer>
+
+<div class="scrim" id="scrim" aria-hidden="true"></div>
+
+<aside class="panel drawer" id="basketDrawer" role="dialog" aria-modal="true" aria-labelledby="basketTitle" aria-hidden="true">
+  <div class="panel-head"><h2 id="basketTitle">Your order</h2><button class="icon-btn" type="button" data-close aria-label="Close order basket">✕</button></div>
+  <div class="panel-body" id="basketBody"></div>
+  <div class="panel-foot" id="basketFoot" hidden>
+    <div class="subtotal"><span>Subtotal</span><span id="basketSubtotal">0 kr</span></div>
+    <div class="subtotal total"><span>Total</span><span id="basketTotal">0 kr</span></div>
+    <p class="fineprint">No payment here. We settle at the counter. Service is included.</p>
+    <button class="btn btn--ember" type="button" id="checkoutBtn" style="width:100%">Continue to collection →</button>
+  </div>
+</aside>
+
+<aside class="panel mobile-nav" id="mobileNav" role="dialog" aria-modal="true" aria-labelledby="mnavTitle" aria-hidden="true">
+  <div class="panel-head"><h2 id="mnavTitle">Cinder &amp; Salt</h2><button class="icon-btn" type="button" data-close aria-label="Close navigation menu">✕</button></div>
+  <nav aria-label="Mobile"><a href="#story">Our story</a><a href="#menu">The menu</a><a href="#reserve">Book a table</a><a href="#visit">Find us</a></nav>
+  <div class="mnav-foot">REFSHAL EVEJ 213A · COPENHAGEN<br>OPEN LATE, COOKED SLOW<br><a href="tel:+4532194416" style="color:#98502E">+45 32 19 44 16</a></div>
+</aside>
+
+<div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="false"></div>
+<script>
+(function(){
+'use strict';
+var $ = function(s,r){ return (r||document).querySelector(s); };
+var $$ = function(s,r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+var prefersReduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+function esc(v){ return String(v).replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function toast(msg){
+  var stack=$('#toastStack'); if(!stack) return;
+  var el=document.createElement('div'); el.className='toast'; el.textContent=msg; stack.appendChild(el);
+  while(stack.children.length>3) stack.removeChild(stack.firstChild);
+  window.setTimeout(function(){ el.classList.add('out'); window.setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); },320); },2900);
+}
+var boostEmbers=function(){};
+
+/* ---------------------------------------------------------------- menu data */
+var MENU=[
+ {id:'hearth-bread',cat:'fire',name:'Hearth bread & cultured butter',desc:'A loaf baked in the coals, torn at the table, with butter churned in-house and a pinch of flaky salt.',price:85,diet:['v']},
+ {id:'ember-carrots',cat:'fire',name:'Ember-roasted carrots',desc:'Three carrots, blackened then sweet, over whipped labneh, pistachio dukkah and carrot-top oil.',price:135,diet:['v','gf']},
+ {id:'coal-mackerel',cat:'fire',name:'Coal-grilled mackerel',desc:'Line-caught mackerel, charred skin, rhubarb compote, fennel pollen and a slick of green olive oil.',price:195,diet:['gf','df']},
+ {id:'short-rib',cat:'fire',name:'36-hour short rib',desc:'Salted, sugared and smoked, then cooked low until it gives up. Bone marrow jus, burnt onion, horseradish.',price:285,diet:['gf','df']},
+ {id:'fire-chicken',cat:'fire',name:'Fire-roasted chicken',desc:'Brined for a day and hung over birch, with pan dripping jus, roasted garlic and sour leaves.',price:235,diet:['gf','df']},
+ {id:'charred-leeks',cat:'fire',name:'Charred leeks & smoked eel',desc:'Leeks soft in the ash, smoked eel, brown butter hollandaise, sorrel and crisp shallots.',price:175,diet:['gf']},
+ {id:'lamb-sausage',cat:'fire',name:'Grilled lamb sausage',desc:'House-ground lamb, fennel seed and sheep’s milk, with fermented mustard and a sharp little salad.',price:165,diet:['gf']},
+ {id:'ash-beetroot',cat:'fire',name:'Ash-baked beetroot',desc:'Beetroot buried in the coals, with skyr, horseradish, toasted buckwheat and a little dill.',price:145,diet:['v','gf']},
+ {id:'oyster-granita',cat:'sea',name:'Oyster & green apple granita',desc:'Two cold oysters, a spoon of green apple ice, cucumber and a whisper of dill oil.',price:165,diet:['gf','df']},
+ {id:'cured-trout',cat:'sea',name:'Cured trout & dark rye',desc:'Trout cured with juniper and salt, on dark rye with cultured cream, dill and lemon.',price:155,diet:[]},
+ {id:'salt-cod',cat:'sea',name:'Salt cod croquettes',desc:'Three small bombs, crisp and hot, with lemon aioli and a fistful of flat-leaf parsley.',price:135,diet:[]},
+ {id:'langoustine',cat:'sea',name:'Langoustine & burned butter',desc:'Four langoustines, head jus, burnt butter, lemon verbena and sourdough for the bowl.',price:295,diet:['gf']},
+ {id:'kombu-salmon',cat:'sea',name:'Seaweed-cured salmon',desc:'Cured in kombu and salt for thirty-six hours, with cucumber, capers and cold buttermilk.',price:185,diet:['gf']},
+ {id:'mussels',cat:'sea',name:'Mussels in cider & cream',desc:'A pot of blue mussels, dry cider, leek and crème fraîche. Bread is not optional.',price:195,diet:['gf']},
+ {id:'eel-potato',cat:'sea',name:'Smoked eel & warm potato',desc:'Warm potato, smoked eel, chive oil, crisp rye crumbs and a sharp mustard cream.',price:175,diet:['gf']},
+ {id:'green-tomato',cat:'garden',name:'Green tomato & herb salad',desc:'Green tomatoes, three kinds of herbs, sheep’s yogurt, toasted seeds and a sharp green dressing.',price:135,diet:['v','gf']},
+ {id:'fermented-cabbage',cat:'garden',name:'Fermented cabbage & apple',desc:'Our own sauerkraut, sharp apple, caraway, toasted hazelnut and a little brown butter.',price:125,diet:['v','gf']},
+ {id:'celeriac',cat:'garden',name:'Roasted celeriac & hazelnut',desc:'Celeriac roasted until sweet, hazelnut cream, burnt honey and a few fried sage leaves.',price:155,diet:['v','gf']},
+ {id:'nettles',cat:'garden',name:'Wild nettles & ricotta',desc:'Blanched nettles, warm ricotta, lemon zest and a single thread of chilli oil.',price:145,diet:['v','gf']},
+ {id:'charred-cucumber',cat:'garden',name:'Charred cucumber & skyr',desc:'Cucumber blistered over the flame, cold skyr, dill, cucumber ice and flaky sea salt.',price:125,diet:['v','gf']},
+ {id:'mushroom-barley',cat:'garden',name:'Mushroom & barley “risotto”',desc:'Pearl barley cooked like risotto with roasted mushrooms, aged cheese and thyme.',price:165,diet:['v']},
+ {id:'broad-beans',cat:'garden',name:'Broad beans & mint',desc:'The first of the season, barely cooked, with mint, lemon and a spoon of cultured cream.',price:135,diet:['v','gf']},
+ {id:'sourdough',cat:'bread',name:'Sourdough & three butters',desc:'Today’s loaf with cultured butter, smoked butter and a savoury yeast butter.',price:95,diet:['v']},
+ {id:'kombu-bread',cat:'bread',name:'Kombu sourdough',desc:'Rye and wheat with toasted kombu, sesame and a long, cool ferment. Cut to order.',price:90,diet:['v','vg','df']},
+ {id:'chili-honey',cat:'bread',name:'Fermented chilli honey',desc:'Hot honey fermented for six weeks, spooned over warm bread with a slice of aged cheese.',price:110,diet:['v','gf']},
+ {id:'pickle-plate',cat:'bread',name:'The pickle plate',desc:'Five things we put in jars: cucumber, onion, carrot, cauliflower and something surprising.',price:95,diet:['v','vg','gf','df']},
+ {id:'cultured-cream',cat:'bread',name:'Cultured cream & rye crisps',desc:'Thick cultured cream, rye crisps, dill flowers and flaky salt. Simple, and we mean it.',price:105,diet:['v','gf']},
+ {id:'kvass',cat:'bread',name:'House kvass',desc:'A small glass of our own fermented bread drink — dry, faintly sweet, deeply nostalgic.',price:65,diet:['v','vg','gf','df']},
+ {id:'honey-tart',cat:'sweet',name:'Burnt honey tart',desc:'A dark, sticky tart with crème fraîche and a little sea salt on top.',price:110,diet:['v']},
+ {id:'skyr-rhubarb',cat:'sweet',name:'Skyr & rhubarb',desc:'Cold skyr, poached rhubarb, oat crumble and a spoon of rhubarb ice.',price:105,diet:['v','gf']},
+ {id:'chocolate',cat:'sweet',name:'Chocolate & sea salt',desc:'Dark chocolate mousse, olive oil, flaky salt and a single coffee bean on the side.',price:115,diet:['v','gf']},
+ {id:'apple-cake',cat:'sweet',name:'Apple & cinnamon cake',desc:'Warm cake, fermented apple, cinnamon cream and a spoon of cider caramel.',price:105,diet:['v']},
+ {id:'lemon-ice',cat:'sweet',name:'Lemon & elderflower ice',desc:'A sharp, cold scoop with lemon curd and tiny meringues.',price:95,diet:['v','gf']},
+ {id:'old-fashioned',cat:'drink',name:'Ember Old Fashioned',desc:'Bourbon, burnt honey, orange peel and a single coal-smoked cherry.',price:135,diet:['gf','df']},
+ {id:'sea-glass',cat:'drink',name:'Sea Glass',desc:'Gin, cucumber, green apple, dill and a salty rim. Cold as the harbour in February.',price:125,diet:['gf','df']},
+ {id:'kombucha',cat:'drink',name:'Kombucha & elderflower',desc:'Our own ferment, elderflower and lemon. Sparkling, dry and very moreish.',price:85,diet:['v','vg','gf','df']},
+ {id:'negroni',cat:'drink',name:'Copenhagen Negroni',desc:'Gin, sweet vermouth, a dash of coastal amaro and a fat orange twist.',price:125,diet:['gf','df']},
+ {id:'house-red',cat:'drink',name:'House red, by the glass',desc:'A light, juicy red from the Loire. Chilled slightly when the weather bothers.',price:95,diet:['gf','df']},
+ {id:'firelight',cat:'drink',name:'Firelight (alcohol-free)',desc:'Roasted barley, cherry, lemon and soda. Tastes the way a bonfire smells.',price:85,diet:['v','vg','gf','df']}
+];
+/* fix the one feature-card id that differs from the menu id */
+MENU[28].id='burnt-honey-tart';
+var DIET_LABEL={v:'Vegetarian',vg:'Vegan',gf:'Gluten free',df:'Dairy free'};
+var CAT_LABEL={fire:'From the fire',sea:'From the sea',garden:'From the garden',bread:'Bread & ferment',sweet:'Sweet',drink:'To drink'};
+var byId={}; MENU.forEach(function(m){ byId[m.id]=m; });
+
+/* ------------------------------------------------------------ menu filtering */
+var filterState={cat:'all',diet:[],q:''};
+var menuList=$('#menuList'), menuEmpty=$('#menuEmpty');
+function tagsHtml(m){ return m.diet.map(function(d){ return '<span class="tag" title="'+esc(DIET_LABEL[d])+'">'+esc(DIET_LABEL[d])+'</span>'; }).join(''); }
+function renderMenu(){
+  var q=filterState.q.trim().toLowerCase();
+  var shown=MENU.filter(function(m){
+    if(filterState.cat!=='all' && m.cat!==filterState.cat) return false;
+    for(var i=0;i<filterState.diet.length;i++){ if(m.diet.indexOf(filterState.diet[i])===-1) return false; }
+    if(q){ var hay=(m.name+' '+m.desc+' '+CAT_LABEL[m.cat]).toLowerCase(); if(hay.indexOf(q)===-1) return false; }
+    return true;
+  });
+  menuList.innerHTML=shown.map(function(m,i){
+    return '<article class="menu-item" data-id="'+esc(m.id)+'">'+
+      '<span class="menu-item__no">'+String(i+1).padStart(2,'0')+'</span>'+
+      '<div class="menu-item__body"><h3 class="menu-item__name">'+esc(m.name)+'</h3>'+
+      '<p class="menu-item__desc">'+esc(m.desc)+'</p>'+
+      (m.diet.length?'<div class="tags">'+tagsHtml(m)+'</div>':'')+'</div>'+
+      '<div class="menu-item__side"><span class="price">'+m.price+' kr</span>'+
+      '<button class="add-btn" type="button" data-add="'+esc(m.id)+'" aria-label="Add '+esc(m.name)+' to your order" title="Add to order">+</button></div></article>';
+  }).join('');
+  $('#menuCount').textContent='Showing '+shown.length+' of '+MENU.length+' dishes';
+  menuEmpty.hidden=shown.length>0;
+  menuList.hidden=shown.length===0;
+}
+$$('[data-cat]').forEach(function(btn){ btn.addEventListener('click',function(){
+  filterState.cat=btn.getAttribute('data-cat');
+  $$('[data-cat]').forEach(function(b){ b.setAttribute('aria-pressed',String(b===btn)); });
+  renderMenu();
+}); });
+$$('[data-diet]').forEach(function(btn){ btn.addEventListener('click',function(){
+  var d=btn.getAttribute('data-diet'), i=filterState.diet.indexOf(d);
+  if(i>=0) filterState.diet.splice(i,1); else filterState.diet.push(d);
+  btn.setAttribute('aria-pressed',String(i<0)); renderMenu();
+}); });
+$('#menuSearch').addEventListener('input',function(e){ filterState.q=e.target.value; renderMenu(); });
+function clearFilters(){
+  filterState={cat:'all',diet:[],q:''};
+  $('#menuSearch').value='';
+  $$('[data-cat]').forEach(function(b){ b.setAttribute('aria-pressed',String(b.getAttribute('data-cat')==='all')); });
+  $$('[data-diet]').forEach(function(b){ b.setAttribute('aria-pressed','false'); });
+  renderMenu();
+}
+$('#clearFilters').addEventListener('click',clearFilters);
+$('#emptyClear').addEventListener('click',clearFilters);
+renderMenu();
+
+/* ------------------------------------------------------------------- basket */
+var BASKET_KEY='cinder_salt_basket_v1';
+function loadBasket(){
+  try{
+    var raw=localStorage.getItem(BASKET_KEY); if(!raw) return {};
+    var parsed=JSON.parse(raw), out={};
+    if(!parsed || typeof parsed!=='object' || Array.isArray(parsed)) return out;
+    Object.keys(parsed).forEach(function(k){
+      var n=Number(parsed[k]);
+      if(byId[k] && isFinite(n) && n>0) out[k]=Math.min(99,Math.floor(n));
+    });
+    return out;
+  }catch(e){ return {}; }
+}
+var basket=loadBasket();
+function saveBasket(){ try{ localStorage.setItem(BASKET_KEY,JSON.stringify(basket)); }catch(e){} }
+function basketQty(){ var n=0; Object.keys(basket).forEach(function(k){ n+=basket[k]; }); return n; }
+function basketTotal(){ var t=0; Object.keys(basket).forEach(function(k){ if(byId[k]) t+=byId[k].price*basket[k]; }); return t; }
+function updateCount(){
+  var el=$('#basketCount'), n=basketQty();
+  el.textContent=String(n); el.hidden=n===0;
+}
+var basketStep='list';
+function addToBasket(id,qty){
+  if(!byId[id]) return;
+  var n=Math.min(99,(basket[id]||0)+(qty||1)); basket[id]=n; saveBasket(); updateCount();
+  toast('Added to your order · '+byId[id].name);
+  $$('[data-add="'+id+'"]').forEach(function(b){
+    b.classList.add('added'); if(b.classList.contains('add-btn')) b.textContent='✓';
+    window.setTimeout(function(){ b.classList.remove('added'); if(b.classList.contains('add-btn')) b.textContent='+'; },850);
+  });
+  if(basketStep==='done') basketStep='list';
+}
+document.addEventListener('click',function(e){
+  var t=e.target.closest ? e.target.closest('[data-add]') : null;
+  if(t){ addToBasket(t.getAttribute('data-add'),1); }
+});
+function renderBasket(){
+  var body=$('#basketBody'), foot=$('#basketFoot');
+  var keys=Object.keys(basket).filter(function(k){ return byId[k] && basket[k]>0; });
+  if(basketStep==='list'){
+    foot.hidden=keys.length===0;
+    if(!keys.length){
+      body.innerHTML='<div class="basket-empty">'+
+        '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M10 22h44l-4 34H14z"/><path d="M24 22v-6a8 8 0 0 1 16 0v6"/><path d="M26 36l5 5 9-10"/></svg>'+
+        '<h3>The basket is empty.</h3><p>The fire is still on, though. Start with the bread.</p>'+
+        '<button class="btn btn--small" type="button" id="browseMenu">Browse the menu</button></div>';
+      return;
+    }
+    body.innerHTML='<p class="label" style="margin-bottom:.6rem">For collection at the counter</p>'+keys.map(function(k){
+      var m=byId[k];
+      return '<div class="basket-line"><div><h3>'+esc(m.name)+'</h3><p>'+esc(CAT_LABEL[m.cat])+'</p>'+
+        '<div class="qty"><button type="button" data-op="dec" data-id="'+esc(k)+'" aria-label="Remove one '+esc(m.name)+'">−</button>'+
+        '<span>'+basket[k]+'</span><button type="button" data-op="inc" data-id="'+esc(k)+'" aria-label="Add one '+esc(m.name)+'">+</button>'+
+        '<button class="remove" type="button" data-op="del" data-id="'+esc(k)+'">remove</button></div></div>'+
+        '<span class="price">'+(m.price*basket[k])+' kr</span></div>';
+    }).join('')+'<button class="link-btn" type="button" id="emptyBasket" style="margin-top:1.2rem">Empty the basket</button>';
+    $('#basketSubtotal').textContent=basketTotal()+' kr'; $('#basketTotal').textContent=basketTotal()+' kr';
+  } else if(basketStep==='checkout'){
+    foot.hidden=true;
+    var t=minutesToClock(15);
+    body.innerHTML='<p class="label" style="margin-bottom:1rem">Almost there</p>'+
+      '<form id="checkoutForm" novalidate>'+
+      '<div class="field" id="coNameField"><label for="coName">Name for the order</label><input id="coName" type="text" autocomplete="name" placeholder="e.g. Ida"></div>'+
+      '<div class="field"><label for="coWhen">Collect</label><select id="coWhen"><option value="15">As soon as possible · around '+t+'</option><option value="30">In 30 minutes</option><option value="45">In 45 minutes</option><option value="60">In an hour</option></select></div>'+
+      '<div class="field"><label for="coNote">Note <span style="text-transform:none;letter-spacing:0">(optional)</span></label><input id="coNote" type="text" placeholder="No coriander, please"></div>'+
+      '<p class="form-error" id="coError" role="alert"></p>'+
+      '<div style="display:flex;gap:.6rem;flex-wrap:wrap"><button class="btn btn--ember btn--small" type="submit">Place the order</button>'+
+      '<button class="btn btn--small" type="button" id="backToBasket">Back</button></div></form>'+
+      '<p class="fineprint" style="margin-top:1.2rem">We’ll have it ready at the counter. Nothing is charged now.</p>';
+  } else {
+    foot.hidden=true;
+    body.innerHTML='<div class="basket-empty"><div style="font-size:3rem;color:var(--ember)">✳</div>'+
+      '<h3>Order '+esc(window.__lastOrderRef||'CS-0000')+' is in.</h3>'+
+      '<p>'+esc(window.__lastOrderName||'Your food')+', your food will be waiting at the counter around '+esc(window.__lastOrderEta||'soon')+'.</p>'+
+      '<p class="fineprint">Nothing to pay until you collect. Bring this number with you.</p>'+
+      '<button class="btn btn--small" type="button" id="orderDone">Back to the table</button></div>';
+  }
+}
+function minutesToClock(mins){
+  var d=new Date(Date.now()+mins*60000);
+  try{ return new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Copenhagen',hour:'2-digit',minute:'2-digit',hour12:false}).format(d); }
+  catch(e){ return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
+}
+$('#basketBody').addEventListener('click',function(e){
+  var btn=e.target.closest ? e.target.closest('button') : null; if(!btn) return;
+  if(btn.id==='browseMenu'){ closePanel($('#basketDrawer')); goTo('#menu'); return; }
+  if(btn.id==='emptyBasket'){ basket={}; saveBasket(); updateCount(); renderBasket(); toast('Basket emptied.'); return; }
+  if(btn.id==='backToBasket'){ basketStep='list'; renderBasket(); return; }
+  if(btn.id==='orderDone'){ closePanel($('#basketDrawer')); return; }
+  var op=btn.getAttribute('data-op'), id=btn.getAttribute('data-id');
+  if(!op||!byId[id]) return;
+  if(op==='inc') basket[id]=Math.min(99,(basket[id]||0)+1);
+  else if(op==='dec') basket[id]=(basket[id]||1)-1;
+  else if(op==='del') delete basket[id];
+  if(basket[id]<=0) delete basket[id];
+  saveBasket(); updateCount(); renderBasket();
+});
+$('#basketBody').addEventListener('submit',function(e){
+  if(e.target.id!=='checkoutForm') return;
+  e.preventDefault();
+  var name=$('#coName').value.trim(), err=$('#coError');
+  if(name.length<2){ err.textContent='Please tell us a name to put on the order.'; $('#coNameField').classList.add('invalid'); $('#coName').focus(); return; }
+  var mins=Number($('#coWhen').value)||15;
+  var ref='CS-'+String(1000+Math.floor(Math.random()*9000));
+  var eta=minutesToClock(mins);
+  window.__lastOrderRef=ref; window.__lastOrderName=name; window.__lastOrderEta=eta;
+  basket={}; saveBasket(); updateCount(); basketStep='done'; renderBasket();
+  toast('Order placed · '+ref);
+});
+$('#checkoutBtn').addEventListener('click',function(){ basketStep='checkout'; renderBasket(); var f=$('#coName'); if(f) f.focus(); });
+updateCount();
+renderBasket();
+/* ------------------------------------------------- opening hours & real time */
+var DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+var HOURS=[
+  {open:0,close:0,label:'Closed'},
+  {open:1050,close:1320,label:'17:30 – 22:00'},
+  {open:1050,close:1320,label:'17:30 – 22:00'},
+  {open:1050,close:1380,label:'17:30 – 23:00'},
+  {open:1020,close:1410,label:'17:00 – 23:30'},
+  {open:720,close:1410,label:'12:00 – 23:30'},
+  {open:720,close:1200,label:'12:00 – 20:00'}
+];
+var SPECIALS={
+  '2026-11-26':{open:0,close:0,label:'Private event — closed',special:true},
+  '2026-12-24':{open:0,close:0,label:'Christmas Eve — closed',special:true},
+  '2026-12-25':{open:0,close:0,label:'Christmas Day — closed',special:true},
+  '2026-12-31':{open:1020,close:1560,label:'17:00 – 02:00 · New Year’s Eve',special:true},
+  '2027-01-01':{open:1080,close:1380,label:'18:00 – 23:00 · New Year’s Day',special:true}
+};
+function cphParts(date){
+  var fmt=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Copenhagen',weekday:'short',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});
+  var o={}; try{ fmt.formatToParts(date).forEach(function(p){ if(p.type!=='literal') o[p.type]=p.value; }); }catch(e){ var d=new Date(); o={weekday:DAYS[(d.getDay()+6)%7],year:String(d.getFullYear()),month:String(d.getMonth()+1).padStart(2,'0'),day:String(d.getDate()).padStart(2,'0'),hour:String(d.getHours()).padStart(2,'0'),minute:String(d.getMinutes()).padStart(2,'0')}; }
+  return {ymd:o.year+'-'+o.month+'-'+o.day,dow:Math.max(0,DAYS.indexOf(o.weekday)),mins:(Number(o.hour)%24)*60+Number(o.minute)};
+}
+function dowOf(ymd){ var d=new Date(ymd+'T00:00:00Z'); return (d.getUTCDay()+6)%7; }
+function shiftYmd(ymd,days){ var d=new Date(ymd+'T00:00:00Z'); d.setUTCDate(d.getUTCDate()+days); return d.toISOString().slice(0,10); }
+function hoursFor(ymd,dow){
+  if(SPECIALS[ymd]) return SPECIALS[ymd];
+  if(dow===1 && Number(ymd.slice(-2))<=7) return {open:0,close:0,label:'Staff supper — closed',special:true};
+  return HOURS[dow];
+}
+function clock(mins){ var m=((mins%1440)+1440)%1440; return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0'); }
+function statusNow(){
+  var p=cphParts(new Date()), h=hoursFor(p.ymd,p.dow);
+  if(h.open>0 && p.mins>=h.open && p.mins<h.close) return {open:true,label:h.label,close:h.close};
+  var py=shiftYmd(p.ymd,-1), ph=hoursFor(py,dowOf(py));
+  if(ph.close>1440 && p.mins<ph.close-1440) return {open:true,label:ph.label,close:ph.close};
+  var next='';
+  for(var i=0;i<8;i++){
+    var y=shiftYmd(p.ymd,i), nh=hoursFor(y,dowOf(y));
+    if(nh.open>0 && (i>0 || p.mins<nh.open)){ next=(i===0?'Today':DAYS[dowOf(y)])+' '+clock(nh.open); break; }
+  }
+  return {open:false,label:h.label,next:next||'soon'};
+}
+function updateStatus(){
+  var s=statusNow(), line=s.open?('Open now · until '+clock(s.close)):('Closed · opens '+s.next);
+  var a=$('#navStatusText'), b=$('#heroStatus'), c=$('#visitStatusText');
+  if(a) a.textContent=line; if(b) b.textContent=s.open?'The fire is on':'The fire is resting'; if(c) c.textContent=line;
+  $('#navStatus').classList.toggle('closed',!s.open); $('#visitStatus').classList.toggle('closed',!s.open);
+}
+updateStatus();
+window.setInterval(updateStatus,60000);
+(function renderHours(){
+  var rows=HOURS.map(function(h,i){ return '<div class="hours-row"><span>'+DAYS[i]+'</span><span>'+(h.open?h.label:'Closed')+'</span></div>'; });
+  rows.push('<div class="hours-row special"><span>First Tuesday</span><span>Staff supper · closed</span></div>');
+  var start=cphParts(new Date()).ymd, seen={};
+  for(var i=0;i<75;i++){
+    var y=shiftYmd(start,i), h=hoursFor(y,dowOf(y));
+    if(h.special && !seen[y]){
+      seen[y]=1;
+      var d=new Date(y+'T00:00:00Z');
+      var pretty=new Intl.DateTimeFormat('en-GB',{timeZone:'UTC',day:'numeric',month:'short'}).format(d);
+      rows.push('<div class="hours-row special"><span>'+esc(pretty)+'</span><span>'+esc(h.label)+'</span></div>');
+    }
+  }
+  $('#hoursList').innerHTML=rows.join('');
+})();
+
+/* -------------------------------------------------------------- reservation */
+var dateInput=$('#resDate'), slotsBox=$('#resSlots'), selectedTime='';
+var todayYmd=cphParts(new Date()).ymd;
+dateInput.min=todayYmd; dateInput.max=shiftYmd(todayYmd,90); dateInput.value=todayYmd;
+function slotBusy(ymd,dow,t){
+  var seed=Number(ymd.replace(/-/g,''))+t*7;
+  if(seed%11===0) return true;
+  if((dow===4||dow===5) && t>=1140 && t<1260 && seed%3===0) return true;
+  return false;
+}
+function buildSlots(){
+  var ymd=dateInput.value;
+  selectedTime='';
+  if(!ymd){ slotsBox.innerHTML=''; $('#slotNote').textContent='Choose a date to see the sittings.'; return; }
+  var dow=dowOf(ymd), h=hoursFor(ymd,dow);
+  if(!h.open){
+    slotsBox.innerHTML='<p class="slot-note" style="grid-column:1/-1;margin:0">We’re closed on this date — '+esc(h.label.toLowerCase())+'. Pick another evening.</p>';
+    $('#slotNote').textContent='No sittings on a closed day.'; return;
+  }
+  var arr=[];
+  for(var t=h.open+30;t<=h.close-90 && arr.length<18;t+=30) arr.push(t);
+  var free=arr.filter(function(t){ return !slotBusy(ymd,dow,t); });
+  if(!free.length && arr.length){ var override=arr[0]; var busyFn=function(t){ return t!==override && slotBusy(ymd,dow,t); }; }
+  else busyFn=function(t){ return slotBusy(ymd,dow,t); };
+  slotsBox.innerHTML=arr.map(function(t){
+    var b=busyFn(t), label=clock(t);
+    return '<button class="slot" type="button" data-time="'+label+'" aria-pressed="false"'+(b?' disabled title="Fully booked" aria-label="'+label+' fully booked"':' aria-label="Book for '+label+'"')+'>'+label+'</button>';
+  }).join('');
+  $('#slotNote').textContent='Crossed-out times are fully booked · last seating '+clock(h.close-90)+'.';
+}
+var busyFn=function(){ return false; };
+buildSlots();
+dateInput.addEventListener('change',function(){ buildSlots(); $('#resError').textContent=''; });
+slotsBox.addEventListener('click',function(e){
+  var b=e.target.closest ? e.target.closest('.slot') : null; if(!b||b.disabled) return;
+  selectedTime=b.getAttribute('data-time');
+  $$('.slot',slotsBox).forEach(function(s){ s.setAttribute('aria-pressed',String(s===b)); });
+  $('#resError').textContent='';
+});
+function setInvalid(id,bad){ var f=$(id); if(f) f.classList.toggle('invalid',bad); }
+$('#resForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  var name=$('#resName').value.trim(), email=$('#resEmail').value.trim();
+  var ymd=dateInput.value, guests=$('#resGuests').value, errs=[];
+  var badName=name.length<2, badEmail=!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  var badDate=!ymd || ymd<todayYmd || ymd>dateInput.max;
+  var h=badDate?null:hoursFor(ymd,dowOf(ymd));
+  var badGuests=!guests;
+  var badTime=!selectedTime || !h || !h.open;
+  if(badName) errs.push('a name of at least two letters');
+  if(badEmail) errs.push('a valid email address');
+  if(badDate) errs.push('a date within the next 90 days');
+  if(!h || !h.open) errs.push('one of our opening nights');
+  else if(badTime) errs.push('an available time');
+  if(badGuests) errs.push('a party size');
+  setInvalid('#f-name',badName); setInvalid('#f-email',badEmail); setInvalid('#f-date',badDate); setInvalid('#f-guests',badGuests); setInvalid('#f-time',badTime);
+  if(errs.length){ $('#resError').textContent='Please give us '+errs.join(', ')+'.'; return; }
+  var ref='CS-'+String(1000+Math.floor(Math.random()*9000));
+  var pretty=new Intl.DateTimeFormat('en-GB',{timeZone:'UTC',weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date(ymd+'T12:00:00Z'));
+  $('#doneRef').textContent=ref;
+  $('#doneWhen').textContent=pretty+' · '+selectedTime;
+  $('#doneParty').textContent=guests+' '+(guests==='1'?'guest':'guests')+(name?' · '+name:'');
+  $('#doneLine').textContent='We’ve noted '+($('#resNotes').value.trim()?'your message and ':'')+'sent a confirmation to '+email+'.';
+  $('#icsLink').href=makeIcs(ymd,selectedTime,ref,guests);
+  $('#resFormWrap').hidden=true; $('#resDone').hidden=false;
+  toast('Table requested · '+ref);
+});
+function makeIcs(ymd,time,ref,guests){
+  var mins=Number(time.slice(0,2))*60+Number(time.slice(3));
+  var endMins=mins+90, end=clock(endMins).replace(':','')+'00', endDay=endMins>=1440?shiftYmd(ymd,1):ymd;
+  var stamp=new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z';
+  var text='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Cinder and Salt//Reservations//EN\r\nBEGIN:VEVENT\r\nUID:'+ref+'@cinderandsalt.dk\r\nDTSTAMP:'+stamp+'\r\nDTSTART:'+ymd.replace(/-/g,'')+'T'+time.replace(':','')+'00\r\nDTEND:'+endDay.replace(/-/g,'')+'T'+end+'\r\nSUMMARY:Dinner at Cinder \\& Salt\r\nLOCATION:Refshalevej 213A\\, 1432 Copenhagen K\r\nDESCRIPTION:Party of '+guests+'\\. Reference '+ref+'.\\nWe look forward to seeing you.\r\nEND:VEVENT\r\nEND:VCALENDAR';
+  return 'data:text/calendar;charset=utf-8,'+encodeURIComponent(text);
+}
+$('#bookAgain').addEventListener('click',function(){
+  $('#resForm').reset(); dateInput.value=todayYmd; selectedTime=''; buildSlots();
+  $$('.field').forEach(function(f){ f.classList.remove('invalid'); });
+  $('#resError').textContent=''; $('#resDone').hidden=true; $('#resFormWrap').hidden=false; $('#resName').focus();
+});
+
+/* ------------------------------------------------------ panels & navigation */
+var activePanel=null, lastFocus=null;
+function openPanel(el,trigger){
+  if(!el) return;
+  if(activePanel && activePanel!==el) closePanel(activePanel,true);
+  lastFocus=trigger||document.activeElement;
+  el.classList.add('show'); el.setAttribute('aria-hidden','false');
+  $('#scrim').classList.add('show'); document.body.classList.add('locked'); activePanel=el;
+  var f=$('button, a[href], input',el); if(f) window.setTimeout(function(){ try{ f.focus(); }catch(e){} },60);
+}
+function closePanel(el,skipFocus){
+  if(!el) return;
+  el.classList.remove('show'); el.setAttribute('aria-hidden','true');
+  $('#scrim').classList.remove('show'); document.body.classList.remove('locked');
+  if(activePanel===el) activePanel=null;
+  if(!skipFocus && lastFocus && lastFocus.focus) try{ lastFocus.focus(); }catch(e){}
+}
+function goTo(sel){ var el=$(sel); if(el) el.scrollIntoView({behavior:prefersReduced?'auto':'smooth',block:'start'}); }
+$('#basketBtn').addEventListener('click',function(){ renderBasket(); openPanel($('#basketDrawer'),this); });
+$('#basketFooterBtn').addEventListener('click',function(){ renderBasket(); openPanel($('#basketDrawer'),this); });
+$('#menuToggle').addEventListener('click',function(){
+  var open=$('#mobileNav').classList.contains('show');
+  this.setAttribute('aria-expanded',String(!open));
+  if(open) closePanel($('#mobileNav')); else openPanel($('#mobileNav'),this);
+});
+$$('[data-close]').forEach(function(b){ b.addEventListener('click',function(){ closePanel(b.closest('.panel')); if(b.closest('.panel')===$('#mobileNav')) $('#menuToggle').setAttribute('aria-expanded','false'); }); });
+$('#scrim').addEventListener('click',function(){ var p=activePanel; closePanel(p); if(p===$('#mobileNav')) $('#menuToggle').setAttribute('aria-expanded','false'); });
+$$('#mobileNav nav a').forEach(function(a){ a.addEventListener('click',function(){ closePanel($('#mobileNav')); $('#menuToggle').setAttribute('aria-expanded','false'); }); });
+$('#topBtn').addEventListener('click',function(){ goTo('#top'); });
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape' && activePanel){ var p=activePanel; closePanel(p); if(p===$('#mobileNav')) $('#menuToggle').setAttribute('aria-expanded','false'); return; }
+  if(e.key!=='Tab' || !activePanel) return;
+  var f=$$('a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])',activePanel).filter(function(el){ return el.offsetParent!==null || el===document.activeElement; });
+  if(!f.length) return;
+  var first=f[0], last=f[f.length-1];
+  if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+  else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+});
+
+/* ---------------------------------------------------------- generated sound */
+var Sound=(function(){
+  var ac=null, amb=null, crackleTimer=0, enabled=false;
+  function getCtx(){ if(ac) return ac; try{ var C=window.AudioContext||window.webkitAudioContext; if(!C) return null; ac=new C(); return ac; }catch(e){ return null; } }
+  function noise(c,sec){ try{ var b=c.createBuffer(1,Math.max(1,Math.floor(c.sampleRate*sec)),c.sampleRate), d=b.getChannelData(0); for(var i=0;i<d.length;i++) d[i]=Math.random()*2-1; return b; }catch(e){ return null; } }
+  function crackle(strong){
+    var c=getCtx(); if(!c) return;
+    try{
+      var dur=strong?.3:.07, src=c.createBufferSource(), b=noise(c,dur+.03); if(!b) return;
+      src.buffer=b; var bp=c.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=strong?850:1500+Math.random()*2400; bp.Q.value=.9;
+      var g=c.createGain(), t=c.currentTime; g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(strong?.13:.045,t+.008); g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+      src.connect(bp); bp.connect(g); g.connect(c.destination); src.start(t); src.stop(t+dur+.04);
+    }catch(e){}
+  }
+  function schedule(){ window.clearTimeout(crackleTimer); if(!enabled) return; crackleTimer=window.setTimeout(function(){ crackle(false); schedule(); },180+Math.random()*720); }
+  function startAmb(){
+    var c=getCtx(); if(!c) return false;
+    try{
+      if(c.state==='suspended') c.resume();
+      var src=c.createBufferSource(), b=noise(c,2.5); if(!b) return false; src.buffer=b; src.loop=true;
+      var lp=c.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=390;
+      var g=c.createGain(); g.gain.setValueAtTime(.0001,c.currentTime); g.gain.exponentialRampToValueAtTime(.026,c.currentTime+1.5);
+      src.connect(lp); lp.connect(g); g.connect(c.destination); src.start();
+      var hum=c.createOscillator(); hum.type='sine'; hum.frequency.value=52;
+      var hg=c.createGain(); hg.gain.value=.005; hum.connect(hg); hg.connect(c.destination); hum.start();
+      amb={src:src,hum:hum,g:g}; schedule(); return true;
+    }catch(e){ return false; }
+  }
+  function stopAmb(){
+    var a=amb; amb=null; window.clearTimeout(crackleTimer);
+    if(!a||!ac) return;
+    try{ a.g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+.4); }catch(e){}
+    window.setTimeout(function(){ try{ a.src.stop(); a.hum.stop(); }catch(e){} },560);
+  }
+  function strike(){
+    var c=getCtx(); if(!c) return;
+    try{
+      if(c.state==='suspended') c.resume();
+      var t=c.currentTime, src=c.createBufferSource(), b=noise(c,.3); if(!b) return; src.buffer=b;
+      var hp=c.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=680;
+      var g=c.createGain(); g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.1,t+.02); g.gain.exponentialRampToValueAtTime(.0001,t+.28);
+      src.connect(hp); hp.connect(g); g.connect(c.destination); src.start(t); src.stop(t+.32);
+      var o=c.createOscillator(); o.type='sine'; o.frequency.setValueAtTime(170,t); o.frequency.exponentialRampToValueAtTime(72,t+.2);
+      var og=c.createGain(); og.gain.setValueAtTime(.0001,t); og.gain.exponentialRampToValueAtTime(.045,t+.015); og.gain.exponentialRampToValueAtTime(.0001,t+.25);
+      o.connect(og); og.connect(c.destination); o.start(t); o.stop(t+.27);
+      crackle(true);
+    }catch(e){}
+  }
+  return {
+    setEnabled:function(v){ enabled=v; if(v){ var ok=startAmb(); if(!ok) enabled=false; return ok; } stopAmb(); return true; },
+    strike:strike
+  };
+})();
+$('#soundBtn').addEventListener('click',function(){
+  var on=this.getAttribute('aria-pressed')!=='true';
+  if(!Sound.setEnabled(on)){ toast('Sound isn’t available in this browser.'); return; }
+  this.setAttribute('aria-pressed',String(on));
+  this.setAttribute('aria-label',on?'Turn off fire ambience':'Turn on fire ambience');
+  $$('#soundIcon .waves').forEach(function(w){ w.style.opacity=on?'1':'.2'; });
+  toast(on?'Fire ambience on. Lean in.':'Fire ambience off.');
+});
+$$('#soundIcon .waves').forEach(function(w){ w.style.opacity='.2'; });
+
+/* ---------------------------------------------- matchstick: a small secret */
+var matchTimer=0;
+function strikeMatch(ev){
+  var x=50,y=50;
+  if(ev && typeof ev.clientX==='number' && ev.clientX){ x=(ev.clientX/window.innerWidth)*100; y=(ev.clientY/window.innerHeight)*100; }
+  var glow=$('#warmGlow'); glow.style.setProperty('--mx',x+'%'); glow.style.setProperty('--my',y+'%');
+  glow.classList.add('on'); boostEmbers(); Sound.strike();
+  toast('You struck a match. The room warms for a moment.');
+  window.clearTimeout(matchTimer);
+  matchTimer=window.setTimeout(function(){ glow.classList.remove('on'); },8500);
+}
+$('#matchBtn').addEventListener('click',strikeMatch);
+
+/* ------------------------------------------------------------ ember canvas */
+var resizeEmbers=function(){};
+(function(){
+  var canvas=$('#embers'); if(!canvas) return;
+  var ctx=canvas.getContext('2d'); if(!ctx) return;
+  var w=1,h=1,dpr=1,parts=[],raf=0,last=0,visible=true,boost=0,boostTimer=0;
+  var pointer={x:-9999,y:-9999,active:false};
+  function sprite(inner,mid){
+    var c=document.createElement('canvas'); c.width=c.height=64;
+    var g2=c.getContext('2d'); if(!g2) return c;
+    var g=g2.createRadialGradient(32,32,0,32,32,32);
+    g.addColorStop(0,inner); g.addColorStop(.3,mid); g.addColorStop(1,'rgba(0,0,0,0)');
+    g2.fillStyle=g; g2.fillRect(0,0,64,64); return c;
+  }
+  var warmSprite=sprite('rgba(255,232,176,1)','rgba(255,168,84,.5)');
+  var emberSprite=sprite('rgba(255,186,112,1)','rgba(223,99,52,.45)');
+  function spawn(initial){
+    return {x:Math.random()*w,y:initial?Math.random()*h:h+Math.random()*40,vx:(Math.random()-.5)*12,vy:-12-Math.random()*22,r:.7+Math.random()*2,life:initial?Math.random():0,dur:4+Math.random()*5,phase:Math.random()*6.28,warm:Math.random()<.28};
+  }
+  function resize(){
+    var rect=canvas.getBoundingClientRect();
+    w=Math.max(1,rect.width); h=Math.max(1,rect.height); dpr=Math.min(window.devicePixelRatio||1,2);
+    canvas.width=Math.round(w*dpr); canvas.height=Math.round(h*dpr); ctx.setTransform(dpr,0,0,dpr,0,0);
+    var n=Math.min(80,Math.max(28,Math.round(w*h/17000)));
+    parts=[]; for(var i=0;i<n;i++) parts.push(spawn(true));
+    draw();
+  }
+  function step(dt){
+    for(var i=0;i<parts.length;i++){
+      var p=parts[i]; p.life+=dt/p.dur; p.phase+=dt*1.5;
+      p.x+=p.vx*dt+Math.sin(p.phase)*7*dt; p.y+=p.vy*dt;
+      if(pointer.active){ var dx=p.x-pointer.x, dy=p.y-pointer.y, d=Math.hypot(dx,dy); if(d<115&&d>1){ var f=(1-d/115)*95*dt; p.vx+=dx/d*f; p.vy+=dy/d*f; } }
+      p.vx*=.985; p.vy+=(-17-p.vy)*.1*dt;
+      if(p.life>1 || p.y<-25 || p.x<-40 || p.x>w+40){ parts[i]=spawn(false); }
+    }
+  }
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    var g=ctx.createLinearGradient(0,h,0,h-170);
+    g.addColorStop(0,'rgba(223,80,32,'+(0.14+boost*.09)+')'); g.addColorStop(1,'rgba(223,80,32,0)');
+    ctx.fillStyle=g; ctx.fillRect(0,h-170,w,170);
+    ctx.globalCompositeOperation='lighter';
+    var t=performance.now()/2600;
+    for(var i=0;i<7;i++){
+      var x=(i+.5)*w/7+Math.sin(i*2.1+t)*18, rad=68+boost*36;
+      var rg=ctx.createRadialGradient(x,h-12,0,x,h-12,rad);
+      rg.addColorStop(0,'rgba(255,140,62,'+(.12+boost*.11)+')'); rg.addColorStop(1,'rgba(255,90,30,0)');
+      ctx.fillStyle=rg; ctx.fillRect(x-rad,h-12-rad,rad*2,rad*2);
+    }
+    for(var j=0;j<parts.length;j++){
+      var p=parts[j], a=Math.sin(p.life*Math.PI)*.8; if(a<=0) continue;
+      var r=p.r*(1+boost*.45)*7, img=p.warm?warmSprite:emberSprite;
+      ctx.globalAlpha=a; ctx.drawImage(img,p.x-r,p.y-r,r*2,r*2);
+    }
+    ctx.globalAlpha=1; ctx.globalCompositeOperation='source-over';
+  }
+  function loop(now){
+    if(!last) last=now;
+    var dt=Math.min(.05,(now-last)/1000); last=now;
+    if(boost>0) boost=Math.max(0,boost-dt*.13);
+    step(dt); draw(); raf=requestAnimationFrame(loop);
+  }
+  function start(){ if(raf||prefersReduced||!visible||document.hidden) return; last=0; raf=requestAnimationFrame(loop); }
+  function stop(){ if(raf) cancelAnimationFrame(raf); raf=0; }
+  resizeEmbers=resize;
+  boostEmbers=function(){ boost=1; window.clearTimeout(boostTimer); boostTimer=window.setTimeout(function(){ boost=0; },8000); };
+  resize(); start();
+  window.addEventListener('resize',function(){ resize(); });
+  document.addEventListener('visibilitychange',function(){ if(document.hidden) stop(); else start(); });
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(entries){ visible=entries[0].isIntersecting; if(visible) start(); else stop(); },{threshold:.01});
+    io.observe(canvas);
+  }
+  canvas.parentNode.addEventListener('pointermove',function(e){
+    var r=canvas.getBoundingClientRect(); pointer.x=e.clientX-r.left; pointer.y=e.clientY-r.top; pointer.active=true;
+  });
+  canvas.parentNode.addEventListener('pointerleave',function(){ pointer.active=false; });
+})();
+
+/* -------------------------------------------------------------- small stuff */
+function copyAddress(){
+  var text='Cinder & Salt, Refshalevej 213A, 1432 Copenhagen K, Denmark';
+  var done=function(){ toast('Address copied to your clipboard.'); };
+  try{
+    if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(text).then(done).catch(function(){ fallback(); }); }
+    else fallback();
+  }catch(e){ fallback(); }
+  function fallback(){
+    try{
+      var ta=document.createElement('textarea'); ta.value=text; ta.setAttribute('readonly',''); ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select(); var ok=document.execCommand('copy'); document.body.removeChild(ta);
+      if(ok) done(); else toast('Copy blocked — Refshalevej 213A, 1432 Copenhagen K.');
+    }catch(e){ toast('Copy blocked — Refshalevej 213A, 1432 Copenhagen K.'); }
+  }
+}
+$('#copyAddress').addEventListener('click',copyAddress);
+
+if('IntersectionObserver' in window && !prefersReduced){
+  var revealIo=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); revealIo.unobserve(en.target); } });
+  },{threshold:.12,rootMargin:'0px 0px -35px 0px'});
+  $$('[data-reveal]').forEach(function(el){ revealIo.observe(el); });
+} else { $$('[data-reveal]').forEach(function(el){ el.classList.add('in'); }); }
+
+var scrollQueued=false;
+function onScroll(){
+  if(scrollQueued) return; scrollQueued=true;
+  window.requestAnimationFrame(function(){
+    var y=window.pageYOffset||document.documentElement.scrollTop||0;
+    var max=Math.max(1,document.documentElement.scrollHeight-window.innerHeight);
+    $('#progress').style.transform='scaleX('+Math.min(1,y/max)+')';
+    $('#siteNav').classList.toggle('scrolled',y>32);
+    scrollQueued=false;
+  });
+}
+window.addEventListener('scroll',onScroll,{passive:true});
+window.addEventListener('resize',onScroll);
+onScroll();
+})();
+</script>
+</body>
+</html>

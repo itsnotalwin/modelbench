@@ -1,6 +1,6 @@
 {
   "generated_from": "runs/",
-  "count": 5,
+  "count": 6,
   "catalog": [
     {
       "no": "01",
@@ -155,6 +155,38 @@
     "performance"
   ],
   "runs": [
+    {
+      "schema_version": 1,
+      "model": "big-pickle",
+      "category": "restaurant",
+      "date": "2026-11-24",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "03",
+      "prompt_label": "Restaurant Website",
+      "notes": "Cinder & Salt, an invented Copenhagen wood-fire and fermentation kitchen. One self-contained index.html: hand-drawn SVG wordmark, dish and hearth illustrations, a procedural ember canvas, generated Web Audio ambience, a 39-item searchable menu with dietary filters, a persistent basket with collection checkout, and a reservation flow using Copenhagen-time hours, special dates and unavailable slots. Orders and bookings are client-side only; there is no backend. Google Fonts is the sole optional external request, with a full offline fallback stack.",
+      "slug": "2026-11-24_big-pickle_restaurant_v1",
+      "path": "runs/2026-11-24_big-pickle_restaurant_v1/index.html",
+      "source_file": "restaurant__big-pickle__2026-11-24__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "files": [
+        "index.html",
+        "meta.json"
+      ]
+    },
     {
       "schema_version": 1,
       "model": "tidepool-alpha-free",
