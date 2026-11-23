@@ -1,0 +1,614 @@
+/*
+  The Press House
+  A monochrome study of paper, type and the slow machinery that turns one into the other.
+  Palette: paper, ghost, rule, mid, deep, ink — every colour is a shade of grey.
+*/
+
+:root {
+  --paper: #f5f5f5;
+  --ghost: #e6e6e6;
+  --rule: #d4d4d4;
+  --mid: #999999;
+  --deep: #222222;
+  --ink: #1a1a1a;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1.02rem/1.62 "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: var(--ghost);
+  color: var(--ink);
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ---------- Topbar ---------- */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+}
+
+.topbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 52rem;
+  min-height: 3.5rem;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+.brand {
+  color: var(--deep);
+  font: 600 0.85rem/1.2 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.menu-toggle {
+  display: none;
+  align-items: center;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--deep);
+  border-radius: 3px;
+  background: var(--paper);
+  color: var(--deep);
+  font: 600 0.72rem/1 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.menu-toggle:hover {
+  background: var(--ghost);
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+}
+
+.site-nav ul {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-nav a {
+  color: var(--deep);
+  font: 600 0.78rem/1 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.site-nav a:hover {
+  border-bottom: 1px solid var(--mid);
+}
+
+:focus-visible {
+  outline: 2px solid var(--deep);
+  outline-offset: 2px;
+}
+
+/* ---------- Skip link ---------- */
+
+.skip-link {
+  position: absolute;
+  inset-inline-start: 1.25rem;
+  inset-block-start: 0.75rem;
+  z-index: 30;
+  padding: 0.4rem 0.8rem;
+  background: var(--deep);
+  color: var(--paper);
+  font: 600 0.72rem/1.2 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  clip-path: inset(50%);
+  transition: clip-path 0.15s ease;
+}
+
+.skip-link:focus {
+  clip-path: inset(0);
+}
+
+/* ---------- Layout ---------- */
+
+main {
+  max-width: 52rem;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 0.95fr 0.6fr;
+  align-items: center;
+  gap: 2rem;
+  padding: 4.5rem 0 3rem;
+}
+
+.hero-copy {
+  animation: rise 0.9s ease 0.15s both;
+}
+
+.hero-title {
+  margin: 0;
+  font: 400 clamp(2.2rem, 7vw, 4.6rem)/1.04 "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  letter-spacing: -0.02em;
+  color: var(--deep);
+}
+
+.hero-text {
+  margin: 1rem 0 0;
+  color: var(--ink);
+  font-size: 1.04rem;
+  line-height: 1.6;
+}
+
+.hero-sheet {
+  aspect-ratio: 15 / 11;
+  background: var(--ghost);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  opacity: 0.55;
+  pointer-events: none;
+  transform: rotate(-1.5deg);
+}
+
+.former,
+.press,
+.sheets,
+.ages {
+  padding: 0 0 3.5rem;
+}
+
+.section-head {
+  margin: 0 0 2.25rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.6rem;
+  color: var(--deep);
+  font: 600 0.72rem/1.3 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.section-head h2 {
+  margin: 0;
+  font: 400 clamp(1.85rem, 4.5vw, 2.6rem)/1.2 "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  color: var(--deep);
+}
+
+.section-sub {
+  margin: 0.9rem 0 0;
+  color: var(--ink);
+  font-size: 1.04rem;
+  line-height: 1.6;
+}
+
+/* ---------- 01 Pulp ---------- */
+
+.prose {
+  font-size: 1.1rem;
+}
+
+.prose p {
+  margin: 0 0 1.5rem;
+}
+
+.prose blockquote {
+  margin: 1.75rem 0;
+  padding: 0 0 0 1.25rem;
+  border-left: 2px solid var(--rule);
+  color: var(--deep);
+  font: italic 1.02rem/1.65 "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+}
+
+/* ---------- 02 The press ---------- */
+
+.press-stage {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 1.75rem 0 0;
+}
+
+.press-svg {
+  display: block;
+  width: 100%;
+  max-width: 24rem;
+  height: auto;
+  margin: 0 auto;
+  animation: rise 1s ease 0.4s both;
+}
+
+.press-svg .cylinder {
+  fill: none;
+  stroke: var(--deep);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.press-svg .tick {
+  fill: var(--deep);
+}
+
+.press-svg .bed {
+  fill: var(--paper);
+  stroke: var(--rule);
+  stroke-width: 2.5;
+}
+
+.press-svg .label {
+  fill: var(--deep);
+  font: 600 9px ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.press-readout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.6rem 1.2rem;
+  margin: 1.5rem 0 0;
+  color: var(--deep);
+}
+
+.readout-value {
+  font-weight: 700;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.readout-state {
+  font-size: 0.8rem;
+}
+
+.press-controls {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.press-toggle {
+  padding: 0.6rem 1.2rem;
+  border: 1px solid var(--deep);
+  border-radius: 3px;
+  background: var(--paper);
+  color: var(--deep);
+  font: 600 0.78rem/1 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.press-toggle:hover {
+  background: var(--ghost);
+}
+
+.press-hint {
+  margin: 0.7rem 0 0;
+  text-align: center;
+  color: var(--deep);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+/* ---------- 03 Sheets ---------- */
+
+.sheet-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 2.25rem 3.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sheet-face {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.sheet-pattern {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+}
+
+.sheet-info {
+  display: none;
+  max-width: 17rem;
+}
+
+.sheet-face[aria-expanded="true"] + .sheet-info {
+  display: block;
+}
+
+.sheet-info h3 {
+  margin: 0;
+  color: var(--deep);
+  font: 600 0.95rem/1.45 ui-sans-serif, system-ui, sans-serif;
+}
+
+.sheet-info p {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+
+.sheet-stipple circle {
+  fill: var(--deep);
+}
+
+.sheet-skeleton .gridline {
+  stroke: var(--deep);
+  stroke-width: 1.4;
+}
+
+.sheet-wordcut .cut-face {
+  fill: var(--deep);
+}
+
+.sheet-wordcut .cut-text {
+  fill: var(--paper);
+  font: 700 34px ui-sans-serif, system-ui, sans-serif;
+}
+
+.sheet-folio .folio-body {
+  fill: var(--paper);
+  stroke: var(--rule);
+  stroke-width: 1.5;
+}
+
+.sheet-folio .folio-fold {
+  fill: var(--ghost);
+}
+
+.sheet-folio .folio-crease {
+  stroke: var(--deep);
+  stroke-width: 1.2;
+}
+
+/* ---------- 04 Ages ---------- */
+
+.timeline {
+  position: relative;
+  margin: 1.75rem 0 0;
+  padding: 0 0 0 2.25rem;
+  list-style: none;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 1rem;
+  top: 0.25rem;
+  bottom: 0.25rem;
+  width: 1px;
+  background: var(--rule);
+}
+
+.timeline-item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 0 0 2.5rem;
+  opacity: 0;
+  transform: translateY(0.4rem);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-item.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.timeline-dot {
+  flex: 0 0 auto;
+  margin-top: 0.35rem;
+  width: 0.7rem;
+  height: 0.7rem;
+  border: 1.6px solid var(--deep);
+  border-radius: 50%;
+  background: var(--paper);
+}
+
+.timeline-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.timeline-year {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--deep);
+  font: 600 0.72rem/1.3 ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.timeline-body p {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+/* ---------- 05 Footer ---------- */
+
+.footer {
+  border-top: 1px solid var(--rule);
+  padding: 3rem 0 3.5rem;
+}
+
+.footer-text {
+  max-width: 22rem;
+  margin: 0.75rem 0 0;
+  color: var(--ink);
+  font-size: 1.04rem;
+  line-height: 1.62;
+}
+
+.footer-keys {
+  margin: 1.5rem 0 0;
+  color: var(--deep);
+  font: 600 0.8rem/1.6 ui-sans-serif, system-ui, sans-serif;
+}
+
+.footer-keys kbd,
+.footer-keys code {
+  font: 600 0.75rem/1.6 ui-sans-serif, system-ui, sans-serif;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- Mobile: hamburger reveals the topbar nav below itself ---------- */
+
+@media (max-width: 40rem) {
+  .topbar-inner {
+    min-height: 3rem;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+  }
+
+  .site-nav {
+    display: none;
+  }
+
+  .site-nav.is-open {
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 11;
+    padding: 0.75rem 0;
+    background: var(--paper);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .site-nav.is-open ul {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0 1rem;
+  }
+
+  .site-nav.is-open a {
+    font-size: 0.8rem;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-sheet {
+    height: 15rem;
+    transform: rotate(-2.5deg);
+  }
+
+  .hero-text {
+    font-size: 1rem;
+  }
+
+  main {
+    padding: 0 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-copy {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .press-svg {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .timeline-item {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="The Press House: a monochrome study of paper, type and the slow machinery that turns one into the other."
+    />
+    <title>The Press House</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#hero">Skip to main content</a>
+
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="#hero">The Press House</a>
+        <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="site-nav">
+          Menu
+        </button>
+        <nav class="site-nav" id="site-nav" aria-label="Site">
+          <ul>
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#former">Pulp</a></li>
+            <li><a href="#press">Press</a></li>
+            <li><a href="#sheets">Sheets</a></li>
+            <li><a href="#ages">Ages</a></li>
+            <li><a href="#footer">About</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Issue 03 · a paper study</p>
+          <h1 class="hero-title">The Press House</h1>
+          <p class="hero-text">
+            A study in paper, type and the slow machinery that turns one into the other.
+            Written and drawn inline — every shade is grey, every line is black or white,
+            and nothing comes from anywhere else.
+          </p>
+        </div>
+        <div class="hero-sheet" aria-hidden="true"></div>
+      </section>
+
+      <section class="former" id="former">
+        <header class="section-head">
+          <p class="eyebrow">01 · pulp</p>
+          <h2>What pulp was</h2>
+          <p class="section-sub">Before anything is pressed, the page is a mass of short fibers in a bath of water.</p>
+        </header>
+        <div class="prose">
+          <p>Paper began as pulp. A beater drove the fibers down to a slurry; the mold set a mesh of them; the press lifted the water out of the sheet. Rags were the raw material for centuries, and the sheet that had served its purpose was torn down and turned again.</p>
+          <p>Three things mattered in that bath: the beater, the setter of the mold, and the press that dripped. The world called the result paper, and the sheet only knew itself as the second life of another.</p>
+          <blockquote>Every sheet of type grew from a pulp bath; the ink sat on the surface, and the water left beneath it.</blockquote>
+        </div>
+      </section>
+
+      <section class="press" id="press">
+        <header class="section-head">
+          <p class="eyebrow">02 · the press</p>
+          <h2>The cylinder turns</h2>
+          <p class="section-sub">A schematic of a cylinder set on the bed of a type-setting press, drawn in deep ink on paper. The ring of dots turns; the angle and state are live.</p>
+        </header>
+        <div class="press-stage">
+          <svg class="press-svg" viewBox="0 0 380 300" role="img" aria-label="Schematic of the cylinder of a type-setting press" focusable="false">
+            <circle class="cylinder" cx="190" cy="150" r="62" />
+            <g class="press-ring" transform="rotate(0 190 150)">
+              <circle class="tick" cx="248" cy="150" r="3.5" />
+              <circle class="tick" cx="231" cy="191" r="3.5" />
+              <circle class="tick" cx="190" cy="208" r="3.5" />
+              <circle class="tick" cx="149" cy="191" r="3.5" />
+              <circle class="tick" cx="128" cy="150" r="3.5" />
+              <circle class="tick" cx="149" cy="109" r="3.5" />
+              <circle class="tick" cx="190" cy="92" r="3.5" />
+              <circle class="tick" cx="231" cy="109" r="3.5" />
+            </g>
+            <rect class="bed" x="35" y="216" width="310" height="46" rx="2" />
+            <text class="label" x="300" y="48" text-anchor="middle">cylinder</text>
+            <text class="label" x="190" y="268" text-anchor="middle">bed</text>
+          </svg>
+          <div class="press-readout" role="status" aria-live="polite">
+            <span class="readout-value" id="press-angle">0°</span>
+            <span class="readout-state" id="press-state">Paused</span>
+          </div>
+        </div>
+        <div class="press-controls">
+          <button type="button" class="press-toggle" aria-pressed="false" aria-describedby="press-hint">Toggle the cylinder</button>
+          <p class="press-hint" id="press-hint">
+            Activate the button, or press Enter or Space while it is focused. Under reduced motion, activating the cylinder steps it through static angles.
+          </p>
+        </div>
+      </section>
+
+      <section class="sheets" id="sheets">
+        <header class="section-head">
+          <p class="eyebrow">03 · sheets</p>
+          <h2>Sheets of type, cut from one edition</h2>
+          <p class="section-sub">Each face draws its sheet inline; activating a face opens a note on how that sheet was made.</p>
+        </header>
+        <ul class="sheet-list" aria-label="Sheets of the edition">
+          <li class="sheet">
+            <button type="button" class="sheet-face" aria-expanded="false" aria-controls="sheet-stipple">
+              <svg class="sheet-pattern sheet-stipple" viewBox="0 0 260 160" aria-hidden="true">
+                <circle cx="6" cy="10" r="2.6" />
+                <circle cx="36" cy="10" r="2.6" />
+                <circle cx="66" cy="10" r="2.6" />
+                <circle cx="96" cy="10" r="2.6" />
+                <circle cx="126" cy="10" r="2.6" />
+                <circle cx="156" cy="10" r="2.6" />
+                <circle cx="186" cy="10" r="2.6" />
+                <circle cx="216" cy="10" r="2.6" />
+                <circle cx="246" cy="10" r="2.6" />
+                <circle cx="6" cy="50" r="2.6" />
+                <circle cx="36" cy="50" r="2.6" />
+                <circle cx="66" cy="50" r="2.6" />
+                <circle cx="96" cy="50" r="2.6" />
+                <circle cx="126" cy="50" r="2.6" />
+                <circle cx="156" cy="50" r="2.6" />
+                <circle cx="186" cy="50" r="2.6" />
+                <circle cx="216" cy="50" r="2.6" />
+                <circle cx="246" cy="50" r="2.6" />
+                <circle cx="6" cy="90" r="2.6" />
+                <circle cx="36" cy="90" r="2.6" />
+                <circle cx="66" cy="90" r="2.6" />
+                <circle cx="96" cy="90" r="2.6" />
+                <circle cx="126" cy="90" r="2.6" />
+                <circle cx="156" cy="90" r="2.6" />
+                <circle cx="186" cy="90" r="2.6" />
+                <circle cx="216" cy="90" r="2.6" />
+                <circle cx="246" cy="90" r="2.6" />
+                <circle cx="6" cy="130" r="2.6" />
+                <circle cx="36" cy="130" r="2.6" />
+                <circle cx="66" cy="130" r="2.6" />
+                <circle cx="96" cy="130" r="2.6" />
+                <circle cx="126" cy="130" r="2.6" />
+                <circle cx="156" cy="130" r="2.6" />
+                <circle cx="186" cy="130" r="2.6" />
+                <circle cx="216" cy="130" r="2.6" />
+                <circle cx="246" cy="130" r="2.6" />
+              </svg>
+              <span class="sr-only">Stipple — activate to read the note</span>
+            </button>
+            <div class="sheet-info" id="sheet-stipple">
+              <h3>Stipple</h3>
+              <p>A sheet on which every mark is a dot; there is no line, only the pattern of the dots and the paper between them.</p>
+            </div>
+          </li>
+          <li class="sheet">
+            <button type="button" class="sheet-face" aria-expanded="false" aria-controls="sheet-skeleton">
+              <svg class="sheet-pattern sheet-skeleton" viewBox="0 0 260 160" aria-hidden="true">
+                <line class="gridline" x1="6" y1="16" x2="254" y2="16" />
+                <line class="gridline" x1="6" y1="68" x2="254" y2="68" />
+                <line class="gridline" x1="6" y1="120" x2="254" y2="120" />
+                <line class="gridline" x1="6" y1="150" x2="254" y2="150" />
+                <line class="gridline" x1="6" y1="4" x2="6" y2="156" />
+                <line class="gridline" x1="36" y1="4" x2="36" y2="156" />
+                <line class="gridline" x1="66" y1="4" x2="66" y2="156" />
+                <line class="gridline" x1="96" y1="4" x2="96" y2="156" />
+                <line class="gridline" x1="126" y1="4" x2="126" y2="156" />
+                <line class="gridline" x1="156" y1="4" x2="156" y2="156" />
+                <line class="gridline" x1="186" y1="4" x2="186" y2="156" />
+                <line class="gridline" x1="216" y1="4" x2="216" y2="156" />
+                <line class="gridline" x1="246" y1="4" x2="246" y2="156" />
+              </svg>
+              <span class="sr-only">Skeleton — activate to read the note</span>
+            </button>
+            <div class="sheet-info" id="sheet-skeleton">
+              <h3>Skeleton</h3>
+              <p>A ruled sheet reduced to the minimum of structure: a handful of lines in both directions, leaving the reading of the paper to the margins.</p>
+            </div>
+          </li>
+          <li class="sheet">
+            <button type="button" class="sheet-face" aria-expanded="false" aria-controls="sheet-wordcut">
+              <svg class="sheet-pattern sheet-wordcut" viewBox="0 0 260 160" aria-hidden="true">
+                <rect class="cut-face" x="0" y="0" width="260" height="160" />
+                <text class="cut-text" x="130" y="88" text-anchor="middle">PRESS</text>
+              </svg>
+              <span class="sr-only">Word cut — activate to read the note</span>
+            </button>
+            <div class="sheet-info" id="sheet-wordcut">
+              <h3>Word cut</h3>
+              <p>The word PRESS cut from the sheet: black paper with the type cut from it, figure and ground inverted in the simplest form.</p>
+            </div>
+          </li>
+          <li class="sheet">
+            <button type="button" class="sheet-face" aria-expanded="false" aria-controls="sheet-folio">
+              <svg class="sheet-pattern sheet-folio" viewBox="0 0 260 160" aria-hidden="true">
+                <rect class="folio-body" x="0" y="0" width="260" height="160" />
+                <rect class="folio-fold" x="40" y="60" width="200" height="90" />
+                <line class="folio-crease" x1="40" y1="60" x2="240" y2="60" />
+              </svg>
+              <span class="sr-only">Folio — activate to read the note</span>
+            </button>
+            <div class="sheet-info" id="sheet-folio">
+              <h3>Folio</h3>
+              <p>A folded sheet of the book: the body and the fold, the crease and the margin of the gutter.</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="ages" id="ages">
+        <header class="section-head">
+          <p class="eyebrow">04 · ages</p>
+          <h2>The page, from stalk to sheet</h2>
+        </header>
+        <ol class="timeline" aria-label="Timeline of the page, from stalk to sheet">
+          <li class="timeline-item">
+            <span class="timeline-dot" aria-hidden="true"></span>
+            <div class="timeline-body">
+              <span class="timeline-year">3000 BCE</span>
+              <p>Papyrus, Egypt: the first sheets, made from the stalk of the marsh reed, pressed flat. The page is a surface of light paper, not yet paper at all.</p>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <span class="timeline-dot" aria-hidden="true"></span>
+            <div class="timeline-body">
+              <span class="timeline-year">1150</span>
+              <p>Xàtiva, Spain: the first European paper mill, under the Moors. The sheet arrived from the Islamic world, and it was not yet in the books of the West.</p>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <span class="timeline-dot" aria-hidden="true"></span>
+            <div class="timeline-body">
+              <span class="timeline-year">1293</span>
+              <p>Fabriano, Italy: watermarks, a signature written in water, are invented here. The maker's mark on the sheet.</p>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <span class="timeline-dot" aria-hidden="true"></span>
+            <div class="timeline-body">
+              <span class="timeline-year">1450</span>
+              <p>The printing press: paper, once rare and costly, becomes a commodity. Pages are set in type and run through the press again and again.</p>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <span class="timeline-dot" aria-hidden="true"></span>
+            <div class="timeline-body">
+              <span class="timeline-year">1806</span>
+              <p>The continuous paper machine (Fourdrinier): the sheet never stops being made; speed and length grow with it.</p>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <span class="timeline-dot" aria-hidden="true"></span>
+            <div class="timeline-body">
+              <span class="timeline-year">1867</span>
+              <p>The web rotary press (Bullock): news and book stacks run at speed; the world of the page moves with them.</p>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <span class="timeline-dot" aria-hidden="true"></span>
+            <div class="timeline-body">
+              <span class="timeline-year">1971</span>
+              <p>The laser printer (Xerox PARC): type returns set by light; the plate is gone and the beam sets it again, page by page.</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+    </main>
+
+    <footer class="footer" id="footer">
+      <p class="eyebrow">05 · about</p>
+      <h2>The Press House</h2>
+      <p class="footer-text">
+        A monochrome study of paper and type. Built as a single static page — text, patterns, animation and interactivity — with no external files or dependencies. Every colour on this page is a shade of grey.
+      </p>
+      <p class="footer-keys">
+        Keys: <kbd>Tab</kbd> moves focus, <kbd>Enter</kbd> and <kbd>Space</kbd> activate. The page opens as <code>index.html</code>, from the file system or from GitHub Pages.
+      </p>
+    </footer>
+
+    <script src="js/app.js"></script>
+  </body>
+</html>

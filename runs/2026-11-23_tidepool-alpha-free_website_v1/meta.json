@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "tidepool-alpha-free",
+  "category": "website",
+  "date": "2026-11-23",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "01",
+  "prompt_label": "Website",
+  "notes": "Monochrome study of paper and type built as a single static page: the pulp section, an animated type-setting press, four drawn sheets, and a papermaking timeline. All text, diagrams, motion and interactivity are inline in index.html, styles.css and js/app.js — no external files, fonts or dependencies, and the page opens from file:// and from a GitHub Pages subfolder. Known limitation: reduced motion swaps the running press for static stepped angles, and the decorative hero sheet is a flat card.",
+  "slug": "2026-11-23_tidepool-alpha-free_website_v1",
+  "path": "runs/2026-11-23_tidepool-alpha-free_website_v1/index.html",
+  "source_file": "website__tidepool-alpha-free__2026-11-23__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}
