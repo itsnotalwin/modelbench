@@ -1,58 +1,47 @@
-# ModelBench · Twenty-two challenges
+# ModelBench · Thirteen web-development challenges
 
-ModelBench contains **twenty-two one-shot challenges** spanning websites, applications, games, visual tools, simulations and worlds. Each prompt produces exactly one finished project folder and one ZIP. The model resolves its own model identity and current date; version is always 1. The organiser is never asked for run metadata.
-
-Prompt text is authored by the organiser. The only additions made to each prompt file are the automatic run-identity block and the submission contract that carries the folder name, `meta.json` fields and category slug.
+ModelBench currently contains **thirteen one-shot web-development challenges**. They are grouped by the primary technology or capability being tested, progressing from complete websites through HTML/CSS, JavaScript, Three.js, SVG and broader browser applications. Each prompt produces exactly one finished project folder and one ZIP. The model resolves its own model identity and current date; version is always 1.
 
 ## The challenges
 
-| # | Challenge | Category slug | Family |
-|---|---|---|---|
-| 01 | Website | website | Web |
-| 02 | SaaS for Clearing Agents | saas | Web |
-| 03 | 2D Game | game-2d | Games |
-| 04 | 3D Game | game-3d | Games |
-| 05 | Restaurant Website | restaurant | Web |
-| 06 | Machine Explainer | explainer | Web |
-| 07 | First-Person Game | game-fps | Games |
-| 08 | Arcade Game | arcade | Games |
-| 09 | Browser Operating System | os-sim | Web |
-| 10 | Rubik's Cube | rubiks-cube | Games |
-| 11 | Platformer | platformer | Games |
-| 12 | Living 3D World | world-3d | Worlds |
-| 13 | Data Story | data-story | Visual |
-| 14 | Generative Art | generative-art | Visual |
-| 15 | Music Instrument | synth-studio | Visual |
-| 16 | Creative Tool | creative-tool | Web |
-| 17 | Emergent Simulation | emergent-sim | Worlds |
-| 18 | Strategy Game | game-strategy | Games |
-| 19 | Spreadsheet | spreadsheet | Web |
-| 20 | Physics Engine | physics | Games |
-| 21 | Floating Pagoda Island | island-pagoda | Worlds |
-| 22 | Production Site Refresh | site-refresh | Web |
+| # | Challenge | Category slug | Group |
+|---:|---|---|---|
+| 01 | Website | website | Websites |
+| 02 | Production Site Refresh | site-refresh | Websites |
+| 03 | Restaurant Website | restaurant | Websites |
+| 04 | Editorial Website | editorial-website | HTML/CSS |
+| 05 | CSS Interactive Experience | css-experience | HTML/CSS |
+| 06 | Design System | design-system | HTML/CSS |
+| 07 | JavaScript Application | javascript-app | JavaScript |
+| 08 | Three.js 3D Experience | threejs-experience | Three.js |
+| 09 | SVG Drawing Studio | svg-studio | Visual |
+| 10 | Creative Tool | creative-tool | Visual |
+| 11 | Generative Art | generative-art | Visual |
+| 12 | Browser Operating System | os-sim | Applications |
+| 13 | Data Story | data-story | Data |
 
-## Creative freedom
+## Technology progression
 
-Challenges 01-20 are open briefs: the model chooses the subject, name, audience, tone, art direction and implementation wherever the brief does not require something specific. Challenge 21 is a fixed subject — a floating island crowned by a multi-tier pagoda — where everything about how it looks, feels and plays is still the model's decision. Challenge 22 is a fixed source: refresh the live Shutterhaus Visuals production site, keeping its identity and interaction language while rebuilding the execution to a much higher standard.
+- **Websites (01–03):** open-ended website creation, a demanding production-site rebuild and a complete hospitality website.
+- **HTML/CSS (04–06):** editorial publishing, CSS-only interaction and reusable design-system engineering.
+- **JavaScript (07):** a functional application built without a frontend framework.
+- **Three.js (08):** a real interactive 3D browser experience.
+- **Visual (09–11):** SVG vector editing, a professional creative tool and seeded generative artwork.
+- **Applications (12):** a browser operating system with shared state and a virtual filesystem.
+- **Data (13):** an interactive data story with linked visualisations.
 
-## Fairness and evaluation
+## Creative freedom and fairness
 
-Run each model from a clean, isolated workspace with equivalent tool access. Do not show it other submissions or repair its first output during a one-shot run. Review the rendered artifact and exercise the acceptance criteria independently. A model's self-reported test status is not proof.
+Prompts define the capability, constraints and quality bar, not a preselected fictional brand or visual theme. Models choose the subject, identity, content and creative direction wherever the technology does not require a specific choice. Run each model from a clean, isolated workspace with equivalent tool access. Review the rendered artifact and exercise the acceptance criteria independently; self-reported test status is not proof.
 
-The shared six-axis scorecard:
-- **Completeness** — the requested experience is genuinely present.
-- **Robustness** — state, edge cases, persistence and error handling work.
-- **Craft** — visual quality, hierarchy, interaction and polish.
-- **Depth** — meaningful product workflows, content or gameplay systems.
-- **Originality** — distinct ideas and execution.
-- **Performance** — runtime stability, responsiveness, accessibility and efficiency.
+The shared six-axis scorecard is completeness, robustness, craft, depth, originality and performance. Existing submissions and their organizer-owned evaluations remain immutable when the prompt catalogue is reordered or expanded.
 
 ## Run a challenge
 
-1. Choose exactly one prompt and give it to the model in a clean workspace.
-2. The model identifies its own runtime model slug, uses the current system date and fixes version to `1`. Never ask the organiser for these values.
+1. Choose one numbered prompt and give it to the model in a clean workspace.
+2. The model identifies its runtime model slug, uses the current system date and fixes version to `1`.
 3. It creates one folder named `CATEGORY__MODEL_SLUG__YYYY-MM-DD__v1` with `index.html`, `meta.json` and only essential local assets.
-4. ZIP that one folder and upload the ZIP to [inbox/](../inbox/README.md).
+4. ZIP that one folder and upload it to [inbox/](../inbox/README.md).
 5. The importer routes the package using `meta.json`, not the ZIP filename or folder name.
 
 ## Required metadata
@@ -62,7 +51,7 @@ The shared six-axis scorecard:
   "schema_version": 1,
   "model": "gpt-6",
   "category": "website",
-  "date": "2026-11-09",
+  "date": "2026-11-23",
   "version": 1,
   "entry": "index.html",
   "prompt": "01",
@@ -71,15 +60,16 @@ The shared six-axis scorecard:
 }
 ```
 
-The category must match one of the twenty-two slugs in `catalog.json`. The version is always integer `1`. The importer rejects invalid or duplicate submissions without overwriting existing runs. Ratings and evaluation logs remain organizer-owned.
+The category, prompt number and label must identify the same challenge. The version is always integer `1`. The importer rejects invalid or duplicate submissions without overwriting existing runs. Ratings and evaluation logs remain organizer-owned.
 
 ## Repository map
 
-- `index.html` — dashboard.
-- `prompts/catalog.json` — canonical challenge catalogue.
-- `prompts/01-*.md` through `prompts/22-*.md` — standalone challenge briefs.
+- `prompts/01-*.md` through `prompts/13-*.md` — standalone challenge briefs.
+- `prompts/catalog.json` — canonical thirteen-challenge catalogue.
 - `manifest.json` — generated dashboard data.
 - `inbox/` — incoming ZIP submissions.
 - `runs/` — accepted immutable submissions.
 - `tools/` — importer, manifest and PWA utilities.
 - `tests/` — importer, prompt and dashboard regression tests.
+
+Validation: `python -m unittest discover -s tests -p "test_sort_inbox.py" -v`, then `python tools/build_manifest.py && python tools/sync_catalog.py`.
