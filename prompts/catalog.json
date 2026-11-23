@@ -14,39 +14,6 @@
       "hue": 265
     },
     {
-      "no": "02",
-      "slug": "saas",
-      "title": "SaaS for Clearing Agents",
-      "family": "Web",
-      "summary": "A working SaaS product for customs clearing and freight forwarding, with real domain logic rather than generic CRUD.",
-      "requirement": "Working product end to end; three or more connected workflows; domain-specific calculations; persistence; import/export; tests for core logic",
-      "output": "1 complete ZIP-ready project folder",
-      "min_outputs": 1,
-      "hue": 200
-    },
-    {
-      "no": "03",
-      "slug": "game-2d",
-      "title": "2D Game",
-      "family": "Games",
-      "summary": "A complete 2D game in a single HTML file, with the genre and art direction chosen by the model.",
-      "requirement": "Complete game loop; played and taught without a manual; reliable collision and timing; feedback and sound; keyboard and touch controls",
-      "output": "1 complete ZIP-ready project folder",
-      "min_outputs": 1,
-      "hue": 8
-    },
-    {
-      "no": "04",
-      "slug": "game-3d",
-      "title": "3D Game",
-      "family": "Games",
-      "summary": "A complete 3D game in a single HTML file, with the genre, world and camera model chosen by the model.",
-      "requirement": "Genuine 3D play; authored environment; working objective and progression; reliable controls and camera; stable frame rate",
-      "output": "1 complete ZIP-ready project folder",
-      "min_outputs": 1,
-      "hue": 250
-    },
-    {
       "no": "05",
       "slug": "restaurant",
       "title": "Restaurant Website",
@@ -58,39 +25,6 @@
       "hue": 18
     },
     {
-      "no": "06",
-      "slug": "explainer",
-      "title": "Machine Explainer",
-      "family": "Web",
-      "summary": "An interactive visual explainer of a real machine or physical system that is accurate enough for an engineer.",
-      "requirement": "One source of truth for state; timeline scrubbing; part inspection with accurate explanations; two or more live readouts; what-if simulation",
-      "output": "1 complete ZIP-ready project folder",
-      "min_outputs": 1,
-      "hue": 190
-    },
-    {
-      "no": "07",
-      "slug": "game-fps",
-      "title": "First-Person Game",
-      "family": "Games",
-      "summary": "A complete first-person 3D game with pointer-lock movement, an authored environment and reactive gameplay.",
-      "requirement": "Pointer-lock movement with real collision; animated view-model; authored environment; reactive opponents or hazards; complete loop; saved progress",
-      "output": "1 complete ZIP-ready project folder",
-      "min_outputs": 1,
-      "hue": 275
-    },
-    {
-      "no": "08",
-      "slug": "arcade",
-      "title": "Arcade Game",
-      "family": "Games",
-      "summary": "A score-attack arcade game designed around one more run, with seeded runs and a local leaderboard.",
-      "requirement": "Scoring with real risk and reward; escalation beyond speed; modifiers with trade-offs; seeded and daily runs; ghost or replay; juice and generative audio",
-      "output": "1 complete ZIP-ready project folder",
-      "min_outputs": 1,
-      "hue": 35
-    },
-    {
       "no": "09",
       "slug": "os-sim",
       "title": "Browser Operating System",
@@ -100,39 +34,6 @@
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
       "hue": 215
-    },
-    {
-      "no": "10",
-      "slug": "rubiks-cube",
-      "title": "Rubik's Cube",
-      "family": "Games",
-      "summary": "A physically convincing 3D Rubik's Cube with direct manipulation, a speedcubing timer and a solver that actually solves any scramble.",
-      "requirement": "Correct cubie state as source of truth; drag-to-turn and full notation; scramble, undo and redo; timer with ao5 and ao12; solver that animates any scramble",
-      "output": "1 complete ZIP-ready project folder",
-      "min_outputs": 1,
-      "hue": 320
-    },
-    {
-      "no": "11",
-      "slug": "platformer",
-      "title": "Platformer",
-      "family": "Games",
-      "summary": "An original 2D platformer with one mechanic twist of the model's invention, four levels and a boss.",
-      "requirement": "Excellent movement with coyote time and input buffering; solid tile collision; four escalating levels; distinct enemies and a boss; level select with saved progress",
-      "output": "1 complete ZIP-ready project folder",
-      "min_outputs": 1,
-      "hue": 145
-    },
-    {
-      "no": "12",
-      "slug": "world-3d",
-      "title": "Living 3D World",
-      "family": "Worlds",
-      "summary": "An explorable 3D world that feels inhabited: streaming terrain, weather and time systems, creatures with routines.",
-      "requirement": "Seamless exploration with collision; seeded procedural streaming world; weather and time that change gameplay; believable inhabitants; save/load and map",
-      "output": "1 complete ZIP-ready project folder",
-      "min_outputs": 1,
-      "hue": 150
     },
     {
       "no": "13",
@@ -157,17 +58,6 @@
       "hue": 330
     },
     {
-      "no": "15",
-      "slug": "synth-studio",
-      "title": "Music Instrument",
-      "family": "Visual",
-      "summary": "A browser instrument or mini-workstation that sounds genuinely good, built on a real Web Audio engine.",
-      "requirement": "Real sound engine with envelopes, filters and effects; sequencer with tempo and swing; presets, save/load and WAV export; live visualisation",
-      "output": "1 complete ZIP-ready project folder",
-      "min_outputs": 1,
-      "hue": 305
-    },
-    {
       "no": "16",
       "slug": "creative-tool",
       "title": "Creative Tool",
@@ -179,66 +69,11 @@
       "hue": 25
     },
     {
-      "no": "17",
-      "slug": "emergent-sim",
-      "title": "Emergent Simulation",
-      "family": "Worlds",
-      "summary": "A simulation sandbox where simple rules produce rich, surprising behaviour that rewards watching.",
-      "requirement": "Deterministic fixed-timestep simulation with three or more interacting systems; thousands of entities at 60 FPS; inspection tools and live graphs; presets and save/load",
-      "output": "1 complete ZIP-ready project folder",
-      "min_outputs": 1,
-      "hue": 110
-    },
-    {
-      "no": "18",
-      "slug": "game-strategy",
-      "title": "Strategy Game",
-      "family": "Games",
-      "summary": "An original strategy or tactics game won by thinking, against an AI opponent built on real search or evaluation.",
-      "requirement": "Clean rules engine with legal-move validation; AI with multiple difficulties using real techniques; three or more scenarios; tutorial; save/load",
-      "output": "1 complete ZIP-ready project folder",
-      "min_outputs": 1,
-      "hue": 55
-    },
-    {
-      "no": "19",
-      "slug": "spreadsheet",
-      "title": "Spreadsheet",
-      "family": "Web",
-      "summary": "A real spreadsheet application with a formula engine, a virtualised grid and charting.",
-      "requirement": "Formula parser without eval with 40+ functions and cycle detection; 100k-row virtualised grid; copy/paste interchange; three chart types; CSV import and export",
-      "output": "1 complete ZIP-ready project folder",
-      "min_outputs": 1,
-      "hue": 175
-    },
-    {
-      "no": "20",
-      "slug": "physics",
-      "title": "Physics Engine",
-      "family": "Games",
-      "summary": "A 2D rigid-body physics engine written from scratch, with a delightful sandbox built on top of it.",
-      "requirement": "Circles and convex polygons with SAT or GJK; friction, restitution and joints; stable stacks; fixed timestep; 500+ bodies; debug overlay and scene save/load",
-      "output": "1 complete ZIP-ready project folder",
-      "min_outputs": 1,
-      "hue": 165
-    },
-    {
-      "no": "21",
-      "slug": "island-pagoda",
-      "title": "Floating Pagoda Island",
-      "family": "Worlds",
-      "summary": "A fixed brief: an explorable floating island crowned by a multi-tier pagoda, built entirely in code.",
-      "requirement": "Procedural pagoda with real construction detail; island geology; waterfalls and cloud sea; day cycle with lantern light; exploration and interaction",
-      "output": "1 complete ZIP-ready project folder",
-      "min_outputs": 1,
-      "hue": 280
-    },
-    {
       "no": "22",
       "slug": "site-refresh",
       "title": "Production Site Refresh",
       "family": "Web",
-      "summary": "A fixed source: refresh the live Shutterhaus Visuals production site \u2014 same doctrine, a generation better, shipped as one self-contained static folder.",
+      "summary": "A fixed source: refresh the live Shutterhaus Visuals production site — same doctrine, a generation better, shipped as one self-contained static folder.",
       "requirement": "All five public pages rebuilt; keyboard gallery and scroll frames preserved; zero third-party requests; no build step; content in the markup; WCAG 2.2 AA; verified performance budget",
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
