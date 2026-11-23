@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "iceman-free",
+  "category": "website",
+  "date": "2026-11-23",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "1",
+  "prompt_label": "Website",
+  "notes": "GRAIN is a fictional monochrome film laboratory website built as a static, dependency-free single-page experience. It includes original SVG artwork, a canvas-based interactive grain simulator, accessible navigation/filter/form behaviors, and responsive editorial layout. Limitations: the contact form is client-side only (no backend submission), the mailto address uses an .example domain, and canvas grain rendering is randomized per adjustment rather than seeded for deterministic frames.",
+  "slug": "2026-11-23_iceman-free_website_v1",
+  "path": "runs/2026-11-23_iceman-free_website_v1/index.html",
+  "source_file": "website__iceman-free__2026-11-23__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

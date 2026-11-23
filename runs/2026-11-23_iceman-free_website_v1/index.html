@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GRAIN — Monochrome Film Laboratory</title>
+  <meta name="description" content="GRAIN is an independent monochrome film laboratory specialising in hand processing, silver gelatin printing, and archival photographic craft.">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="#top" aria-label="GRAIN home">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <rect width="32" height="32" fill="none"/>
+          <rect x="4" y="4" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"/>
+          <rect x="10" y="10" width="12" height="12" fill="currentColor"/>
+          <circle cx="16" cy="16" r="3" fill="var(--white, #fff)"/>
+        </svg>
+        <span>Grain</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#manifesto">Manifesto</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#gallery">Archive</a></li>
+        <li><a href="#lab">Lab</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <p class="kicker">Independent Film Laboratory / Est. 2026</p>
+          <h1 class="display" id="hero-title">The art of<br>light &amp; silver.</h1>
+          <p class="lead">GRAIN is a monochrome film laboratory devoted to hand processing, silver gelatin printing, and the quiet discipline of photographic craft. No colour. No shortcuts. Just the image.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#contact">
+              Book a session
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a class="btn btn-ghost" href="#gallery">View archive</a>
+          </div>
+          <dl class="hero-meta" aria-label="Studio highlights">
+            <div class="meta-item">
+              <dt class="value">35mm–8×10</dt>
+              <dd class="label">Formats processed</dd>
+            </div>
+            <div class="meta-item">
+              <dt class="value">Silver</dt>
+              <dd class="label">Gelatin prints</dd>
+            </div>
+            <div class="meta-item">
+              <dt class="value">100%</dt>
+              <dd class="label">Monochrome practice</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="hero-visual reveal" aria-hidden="true">
+          <svg viewBox="0 0 800 1000" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Abstract monochrome photographic composition">
+            <defs>
+              <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#f7f7f7"/>
+                <stop offset="48%" stop-color="#cfcfcf"/>
+                <stop offset="72%" stop-color="#6a6a6a"/>
+                <stop offset="100%" stop-color="#141414"/>
+              </linearGradient>
+              <radialGradient id="sun" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="100%" stop-color="#d9d9d9"/>
+              </radialGradient>
+              <filter id="paper-noise">
+                <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" result="noise"/>
+                <feColorMatrix type="matrix" values="1 0 0 0 0  1 0 0 0 0  1 0 0 0 0  0 0 0 0.08 0" in="noise" result="softNoise"/>
+                <feComposite in="softNoise" in2="SourceGraphic" operator="over"/>
+              </filter>
+              <clipPath id="hero-frame"><rect x="0" y="0" width="800" height="1000"/></clipPath>
+            </defs>
+            <g clip-path="url(#hero-frame)" filter="url(#paper-noise)">
+              <rect width="800" height="1000" fill="url(#sky)"/>
+              <circle cx="585" cy="280" r="88" fill="url(#sun)"/>
+              <circle cx="585" cy="280" r="140" fill="none" stroke="#fff" stroke-opacity="0.18" stroke-width="1"/>
+              <circle cx="585" cy="280" r="200" fill="none" stroke="#fff" stroke-opacity="0.1" stroke-width="1"/>
+              <path d="M0 690 L145 500 L280 640 L430 420 L590 600 L800 470 L800 1000 L0 1000 Z" fill="#1d1d1d"/>
+              <path d="M0 760 L170 640 L330 730 L500 580 L680 700 L800 630 L800 1000 L0 1000 Z" fill="#0f0f0f"/>
+              <rect x="0" y="830" width="800" height="170" fill="#050505"/>
+              <line x1="0" y1="830" x2="800" y2="830" stroke="#fff" stroke-opacity="0.18" stroke-width="2"/>
+              <g stroke="#fff" stroke-opacity="0.07" stroke-width="1">
+                <line x1="40" y1="0" x2="40" y2="1000"/><line x1="760" y1="0" x2="760" y2="1000"/>
+                <line x1="0" y1="40" x2="800" y2="40"/><line x1="0" y1="960" x2="800" y2="960"/>
+              </g>
+              <g fill="#000" fill-opacity="0.04">
+                <rect x="0" y="0" width="800" height="20"/><rect x="0" y="980" width="800" height="20"/>
+              </g>
+              <text x="40" y="80" font-family="monospace" font-size="14" fill="#333" letter-spacing="4">GRAIN LAB / FRAME 001</text>
+              <text x="40" y="940" font-family="monospace" font-size="14" fill="#bbb" letter-spacing="3">SILVER GELATIN STUDY</text>
+            </g>
+          </svg>
+          <div class="frame-label">Frame 001 <span>/ Horizon Study</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="manifesto" aria-labelledby="manifesto-title">
+      <div class="container grid-2">
+        <div class="reveal">
+          <p class="kicker">Manifesto</p>
+          <h2 class="h2" id="manifesto-title">The craft is<br>the point.</h2>
+          <div class="manifesto-text" style="margin-top:2rem;">
+            <p>In a world saturated with instant colour and disposable images, GRAIN works in deliberate opposition. We believe the limits of monochrome are not a constraint but a clarity — a way of seeing that strips photography back to its essential elements: light, shadow, texture, and time.</p>
+            <p>Every roll that enters our lab is handled by hand, from development to final print. We measure, we wait, we inspect. The chemistry is familiar, but the outcome never is. Each negative carries its own decisions.</p>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="statements" aria-label="Studio principles">
+            <div class="statement">
+              <span class="statement-num">01</span>
+              <p><strong>Material honesty.</strong> We work with film, paper, and chemistry as physical materials — not as filters to simulate later.</p>
+            </div>
+            <div class="statement">
+              <span class="statement-num">02</span>
+              <p><strong>Deliberate pace.</strong> Good prints take time. We favour careful judgement over fast turnaround and volume.</p>
+            </div>
+            <div class="statement">
+              <span class="statement-num">03</span>
+              <p><strong>Archival intent.</strong> From washing to storage, every step is chosen for longevity. A print should outlast its maker.</p>
+            </div>
+            <div class="statement">
+              <span class="statement-num">04</span>
+              <p><strong>Monochrome only.</strong> By removing colour, we make room for tone, grain, and the full weight of an image.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark" id="process" aria-labelledby="process-title">
+      <div class="container">
+        <div class="reveal">
+          <p class="kicker">Process</p>
+          <h2 class="h2" id="process-title">From negative<br>to print.</h2>
+          <p class="lead" style="margin-top:1.5rem; color:#bbb; max-width:40rem;">Three stages, each treated as its own craft. The lab is quiet by design — attention is part of the chemistry.</p>
+        </div>
+
+        <div class="process-grid reveal" role="list">
+          <article class="process-card" role="listitem">
+            <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true" focusable="false">
+              <circle cx="28" cy="28" r="20" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              <circle cx="28" cy="28" r="12" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              <circle cx="28" cy="28" r="4" fill="currentColor"/>
+              <path d="M28 4v8M28 44v8M4 28h8M44 28h8" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            <p class="step">01 / Develop</p>
+            <h3>Hand processing</h3>
+            <p>Film is developed by hand in small batches. Temperature, agitation, and timing are controlled for the character of each emulsion — not forced into a standard profile.</p>
+          </article>
+
+          <article class="process-card" role="listitem">
+            <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true" focusable="false">
+              <rect x="8" y="10" width="40" height="36" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M8 36l10-8 8 6 10-12 12 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <circle cx="20" cy="20" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            <p class="step">02 / Expose</p>
+            <h3>Darkroom printing</h3>
+            <p>Silver gelatin prints are made under the enlarger, with dodging and burning shaped by eye. Every print is an interpretation, not a copy.</p>
+          </article>
+
+          <article class="process-card" role="listitem">
+            <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true" focusable="false">
+              <rect x="10" y="6" width="36" height="44" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M18 18h20M18 26h20M18 34h12" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M34 42l4 4 8-8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <p class="step">03 / Archive</p>
+            <h3>Archival finish</h3>
+            <p>Prints are washed, dried flat, and inspected under neutral light. Final works are signed, sleeved, and prepared for long-term storage or display.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="gallery" aria-labelledby="gallery-title">
+      <div class="container">
+        <div class="gallery-head reveal">
+          <div>
+            <p class="kicker">Archive</p>
+            <h2 class="h2" id="gallery-title">Selected studies.</h2>
+          </div>
+          <div>
+            <div class="filters" role="group" aria-label="Filter archive by category">
+              <button class="filter-btn" type="button" data-filter="all" aria-pressed="true">All</button>
+              <button class="filter-btn" type="button" data-filter="landscape" aria-pressed="false">Landscape</button>
+              <button class="filter-btn" type="button" data-filter="still" aria-pressed="false">Still Life</button>
+              <button class="filter-btn" type="button" data-filter="study" aria-pressed="false">Study</button>
+            </div>
+            <p class="sr-only" id="gallery-status" aria-live="polite">6 works shown.</p>
+          </div>
+        </div>
+
+        <div class="gallery-grid">
+          <article class="work reveal" data-category="landscape">
+            <div class="work-figure">
+              <svg viewBox="0 0 640 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Contact Sheet: a grid of darkroom frames over a landscape horizon">
+                <rect width="640" height="800" fill="#f0f0f0"/>
+                <rect x="40" y="40" width="560" height="720" fill="#fff" stroke="#111" stroke-width="2"/>
+                <g stroke="#111" stroke-width="1.5" fill="none">
+                  <rect x="70" y="80" width="150" height="180"/><rect x="245" y="80" width="150" height="180"/><rect x="420" y="80" width="150" height="180"/>
+                  <rect x="70" y="290" width="150" height="180"/><rect x="245" y="290" width="150" height="180"/><rect x="420" y="290" width="150" height="180"/>
+                  <rect x="70" y="500" width="150" height="180"/><rect x="245" y="500" width="150" height="180"/><rect x="420" y="500" width="150" height="180"/>
+                </g>
+                <g fill="#222"><rect x="70" y="190" width="150" height="70"/><rect x="245" y="195" width="150" height="65"/><rect x="420" y="185" width="150" height="75"/></g>
+                <g fill="#444"><rect x="70" y="400" width="150" height="70"/><rect x="245" y="405" width="150" height="65"/><rect x="420" y="395" width="150" height="75"/></g>
+                <g fill="#666"><rect x="70" y="610" width="150" height="70"/><rect x="245" y="615" width="150" height="65"/><rect x="420" y="605" width="150" height="75"/></g>
+                <g fill="#dcdcdc"><rect x="70" y="80" width="150" height="110"/><rect x="245" y="80" width="150" height="115"/><rect x="420" y="80" width="150" height="105"/></g>
+                <text x="70" y="730" font-family="monospace" font-size="12" fill="#555" letter-spacing="2">CONTACT SHEET / ROLL 04</text>
+              </svg>
+            </div>
+            <div class="work-caption">
+              <h3 class="work-title">Contact Sheet</h3>
+              <p class="work-meta">Landscape / 35mm</p>
+            </div>
+          </article>
+
+          <article class="work reveal" data-category="study">
+            <div class="work-figure">
+              <svg viewBox="0 0 640 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Silver Halide: concentric circles and grain fields representing photographic emulsion">
+                <defs>
+                  <radialGradient id="halide" cx="50%" cy="45%" r="55%">
+                    <stop offset="0%" stop-color="#fff"/>
+                    <stop offset="55%" stop-color="#999"/>
+                    <stop offset="100%" stop-color="#111"/>
+                  </radialGradient>
+                </defs>
+                <rect width="640" height="800" fill="#111"/>
+                <circle cx="320" cy="360" r="260" fill="url(#halide)"/>
+                <g fill="none" stroke="#fff" stroke-opacity="0.25">
+                  <circle cx="320" cy="360" r="60" stroke-width="1"/><circle cx="320" cy="360" r="110" stroke-width="1"/><circle cx="320" cy="360" r="170" stroke-width="1"/><circle cx="320" cy="360" r="230" stroke-width="1"/>
+                </g>
+                <g fill="#fff" opacity="0.12">
+                  <circle cx="180" cy="200" r="2"/><circle cx="460" cy="240" r="1.5"/><circle cx="250" cy="480" r="2"/><circle cx="400" cy="520" r="1.5"/><circle cx="320" cy="160" r="1.5"/><circle cx="150" cy="400" r="1"/><circle cx="490" cy="420" r="1.5"/><circle cx="360" cy="560" r="2"/>
+                </g>
+                <text x="48" y="740" font-family="monospace" font-size="12" fill="#aaa" letter-spacing="2">SILVER HALIDE / STUDY 02</text>
+              </svg>
+            </div>
+            <div class="work-caption">
+              <h3 class="work-title">Silver Halide</h3>
+              <p class="work-meta">Study / Medium Format</p>
+            </div>
+          </article>
+
+          <article class="work reveal" data-category="still">
+            <div class="work-figure">
+              <svg viewBox="0 0 640 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Darkroom: an abstract still life of bottles and geometric shapes in grayscale">
+                <rect width="640" height="800" fill="#e8e8e8"/>
+                <rect x="0" y="560" width="640" height="240" fill="#bdbdbd"/>
+                <rect x="130" y="280" width="90" height="280" fill="#2a2a2a"/>
+                <rect x="155" y="240" width="40" height="45" fill="#2a2a2a"/>
+                <ellipse cx="175" cy="280" rx="45" ry="10" fill="#3a3a3a"/>
+                <rect x="280" y="340" width="120" height="220" fill="#fff" stroke="#111" stroke-width="2"/>
+                <ellipse cx="340" cy="340" rx="60" ry="14" fill="#f5f5f5" stroke="#111" stroke-width="2"/>
+                <circle cx="430" cy="470" r="90" fill="none" stroke="#111" stroke-width="2"/>
+                <circle cx="430" cy="470" r="60" fill="#555"/>
+                <line x1="60" y1="560" x2="580" y2="560" stroke="#111" stroke-width="2"/>
+                <text x="48" y="740" font-family="monospace" font-size="12" fill="#555" letter-spacing="2">DARKROOM / STILL 01</text>
+              </svg>
+            </div>
+            <div class="work-caption">
+              <h3 class="work-title">Darkroom Still</h3>
+              <p class="work-meta">Still Life / 4×5</p>
+            </div>
+          </article>
+
+          <article class="work reveal" data-category="landscape">
+            <div class="work-figure">
+              <svg viewBox="0 0 640 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Horizon Study: layered mountain ridges fading into mist">
+                <defs>
+                  <linearGradient id="mist" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#fafafa"/>
+                    <stop offset="100%" stop-color="#8a8a8a"/>
+                  </linearGradient>
+                </defs>
+                <rect width="640" height="800" fill="url(#mist)"/>
+                <path d="M0 420 L80 340 L160 390 L260 280 L360 370 L460 260 L560 350 L640 300 L640 800 L0 800 Z" fill="#9a9a9a"/>
+                <path d="M0 500 L100 430 L200 480 L320 360 L440 450 L540 380 L640 430 L640 800 L0 800 Z" fill="#666"/>
+                <path d="M0 580 L120 520 L220 560 L340 460 L460 540 L560 490 L640 540 L640 800 L0 800 Z" fill="#333"/>
+                <path d="M0 660 L140 610 L260 650 L380 570 L500 640 L640 600 L640 800 L0 800 Z" fill="#111"/>
+                <rect x="0" y="720" width="640" height="80" fill="#050505"/>
+                <text x="48" y="760" font-family="monospace" font-size="12" fill="#bbb" letter-spacing="2">HORIZON STUDY / 120 FILM</text>
+              </svg>
+            </div>
+            <div class="work-caption">
+              <h3 class="work-title">Horizon Study</h3>
+              <p class="work-meta">Landscape / 120 Film</p>
+            </div>
+          </article>
+
+          <article class="work reveal" data-category="study">
+            <div class="work-figure">
+              <svg viewBox="0 0 640 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Emulsion: microscopic grain texture with a developing frame border">
+                <defs>
+                  <filter id="grainFilter">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/>
+                    <feColorMatrix type="saturate" values="0"/>
+                    <feComponentTransfer><feFuncA type="table" tableValues="0 0.35"/></feComponentTransfer>
+                  </filter>
+                </defs>
+                <rect width="640" height="800" fill="#d8d8d8"/>
+                <rect width="640" height="800" filter="url(#grainFilter)" opacity="0.7"/>
+                <rect x="60" y="60" width="520" height="680" fill="none" stroke="#111" stroke-width="8"/>
+                <rect x="80" y="80" width="480" height="640" fill="none" stroke="#111" stroke-width="1"/>
+                <rect x="220" y="300" width="200" height="200" fill="#111" fill-opacity="0.08" stroke="#111" stroke-width="1.5"/>
+                <line x1="320" y1="280" x2="320" y2="520" stroke="#111" stroke-width="1"/>
+                <line x1="200" y1="400" x2="440" y2="400" stroke="#111" stroke-width="1"/>
+                <text x="100" y="690" font-family="monospace" font-size="12" fill="#333" letter-spacing="2">EMULSION / GRAIN FIELD</text>
+              </svg>
+            </div>
+            <div class="work-caption">
+              <h3 class="work-title">Emulsion</h3>
+              <p class="work-meta">Study / 35mm</p>
+            </div>
+          </article>
+
+          <article class="work reveal" data-category="still">
+            <div class="work-figure">
+              <svg viewBox="0 0 640 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Proof: a photographic proof sheet with crop marks and tonal blocks">
+                <rect width="640" height="800" fill="#f5f5f5"/>
+                <g stroke="#111" stroke-width="1">
+                  <line x1="320" y1="30" x2="320" y2="60"/><line x1="320" y1="740" x2="320" y2="770"/>
+                  <line x1="30" y1="400" x2="60" y2="400"/><line x1="580" y1="400" x2="610" y2="400"/>
+                </g>
+                <rect x="80" y="90" width="480" height="560" fill="#fff" stroke="#111" stroke-width="2"/>
+                <g>
+                  <rect x="80" y="90" width="96" height="560" fill="#000"/>
+                  <rect x="176" y="90" width="96" height="560" fill="#333"/>
+                  <rect x="272" y="90" width="96" height="560" fill="#777"/>
+                  <rect x="368" y="90" width="96" height="560" fill="#bbb"/>
+                  <rect x="464" y="90" width="96" height="560" fill="#eee"/>
+                </g>
+                <rect x="80" y="90" width="480" height="560" fill="none" stroke="#111" stroke-width="2"/>
+                <text x="80" y="700" font-family="monospace" font-size="12" fill="#555" letter-spacing="2">PROOF / TONAL SCALE</text>
+              </svg>
+            </div>
+            <div class="work-caption">
+              <h3 class="work-title">Proof</h3>
+              <p class="work-meta">Still Life / Silver Print</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark" id="lab" aria-labelledby="lab-title">
+      <div class="container">
+        <div class="reveal">
+          <p class="kicker">Lab Tool</p>
+          <h2 class="h2" id="lab-title">Grain simulator.</h2>
+          <p class="lead" style="margin-top:1.5rem; color:#bbb; max-width:40rem;">Film grain is not noise to remove — it is texture to shape. Adjust the parameters below to see how density, contrast, and grain scale change the character of an image.</p>
+        </div>
+
+        <div class="lab-layout" style="margin-top:clamp(2.5rem,5vw,4rem);">
+          <div class="lab-canvas-wrap reveal">
+            <canvas id="grain-canvas" aria-label="Interactive grain simulation showing a monochrome landscape with adjustable film grain"></canvas>
+            <div class="lab-readout" id="lab-readout" aria-live="polite">Grain 35 / Contrast 50 / Scale 1.0×</div>
+          </div>
+
+          <div class="lab-controls reveal">
+            <div class="control">
+              <div class="control-head">
+                <label for="density">Grain density</label>
+                <output id="density-out" for="density">35</output>
+              </div>
+              <input type="range" id="density" name="density" min="0" max="100" value="35" step="1">
+            </div>
+            <div class="control">
+              <div class="control-head">
+                <label for="contrast">Contrast</label>
+                <output id="contrast-out" for="contrast">50</output>
+              </div>
+              <input type="range" id="contrast" name="contrast" min="0" max="100" value="50" step="1">
+            </div>
+            <div class="control">
+              <div class="control-head">
+                <label for="scale">Grain scale</label>
+                <output id="scale-out" for="scale">1.0×</output>
+              </div>
+              <input type="range" id="scale" name="scale" min="1" max="4" value="1" step="0.5">
+            </div>
+            <p class="lab-note">The simulation renders a monochrome landscape study and applies grain in real time. Use it as a rough guide to the tactile quality of different film stocks and push processes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact" aria-labelledby="contact-title">
+      <div class="container contact-layout">
+        <div class="reveal">
+          <p class="kicker">Contact</p>
+          <h2 class="h2" id="contact-title">Bring your<br>negatives.</h2>
+          <p class="lead" style="margin-top:1.5rem;">Whether you have a single roll or an archive to print, tell us about the project. We’ll reply with timing, recommendations, and a clear estimate.</p>
+
+          <div class="contact-details">
+            <div class="contact-detail">
+              <span class="label">Studio</span>
+              <p>12 Silver Lane, Darkroom District<br>London, EC1A 1AA</p>
+            </div>
+            <div class="contact-detail">
+              <span class="label">Email</span>
+              <p><a href="mailto:studio@grainlab.example">studio@grainlab.example</a></p>
+            </div>
+            <div class="contact-detail">
+              <span class="label">Hours</span>
+              <p>Tuesday – Friday, 10:00 – 18:00<br>Saturday by appointment</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <form class="contact-form" id="contact-form" novalidate>
+            <div class="field">
+              <label for="name">Full name</label>
+              <input id="name" name="name" type="text" autocomplete="name" required aria-describedby="name-error" aria-invalid="false" placeholder="Your name">
+              <p class="field-error" id="name-error"></p>
+            </div>
+            <div class="field">
+              <label for="email">Email address</label>
+              <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="email-error" aria-invalid="false" placeholder="name@example.com">
+              <p class="field-error" id="email-error"></p>
+            </div>
+            <div class="field">
+              <label for="project">Project type</label>
+              <select id="project" name="project" required aria-describedby="project-error" aria-invalid="false">
+                <option value="">Select a project type</option>
+                <option value="develop">Film development</option>
+                <option value="print">Silver gelatin printing</option>
+                <option value="archive">Archival scanning &amp; storage</option>
+                <option value="commission">Commissioned shoot</option>
+              </select>
+              <p class="field-error" id="project-error"></p>
+            </div>
+            <div class="field">
+              <label for="message">Project brief</label>
+              <textarea id="message" name="message" required aria-describedby="message-error" aria-invalid="false" placeholder="Tell us about your film, format, and what you want to make."></textarea>
+              <p class="field-error" id="message-error"></p>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn btn-primary" type="submit">Send enquiry</button>
+              <p class="label" style="margin:0;">No spam. No mailing list.</p>
+            </div>
+            <div class="form-status" id="form-status" role="status" aria-live="polite" tabindex="-1"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; 2026 GRAIN Monochrome Film Laboratory. All rights reserved.</p>
+      <ul class="footer-links" aria-label="Footer links">
+        <li><a href="#manifesto">Manifesto</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="mailto:studio@grainlab.example">Email</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>

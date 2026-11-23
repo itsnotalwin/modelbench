@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#ffffff">
+<meta name="description" content="The Quiet Index — an illustrated field guide to silence, its measurements, its textures and the places that keep it.">
+<title>The Quiet Index — a field guide to silence</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the index</a>
+
+<div class="grain" aria-hidden="true"></div>
+
+<header class="masthead" id="top">
+  <div class="masthead-inner">
+    <a class="wordmark" href="#top" aria-label="The Quiet Index, back to top">
+      <svg class="mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <path d="M2 16h4M9 11v10M14 7v18M19 11v10M24 16h6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/>
+        <path d="M16 3v26" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.35"/>
+      </svg>
+      <span>The Quiet Index</span>
+    </a>
+    <nav class="topnav" aria-label="Sections">
+      <a href="#chambers">Chambers</a>
+      <a href="#field">Field notes</a>
+      <a href="#measure">Measure</a>
+      <a href="#about">About</a>
+    </nav>
+    <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false" aria-label="Sound off" aria-describedby="soundHelp">
+      <span class="toggle-glyph" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="toggle-text">Sound off</span>
+      <span class="sr-only" id="soundHelp">Turn the generated low tone on or off.</span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" aria-labelledby="heroTitle">
+    <div class="hero-rule" aria-hidden="true"><span>Vol. 01</span><span>An atlas of hush</span><span>2026</span></div>
+
+    <h1 id="heroTitle" class="hero-title">
+      <span class="line line-1">Listening to</span>
+      <span class="line line-2">the absence</span>
+      <span class="line line-3">of sound.</span>
+    </h1>
+
+    <div class="hero-foot">
+      <p class="hero-deck">A field guide to the quietest places on earth — how we build it, measure it, and why we keep going back.</p>
+      <a class="enter" href="#chambers"><span>Begin at the threshold</span><span class="enter-line" aria-hidden="true"></span></a>
+    </div>
+
+    <div class="fade-field" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  </section>
+
+  <section class="instrument" id="chambers" aria-labelledby="instTitle">
+    <div class="section-head">
+      <p class="kicker">01 · The instrument</p>
+      <h2 id="instTitle">Step inside the anechoic chamber.</h2>
+      <p class="section-intro">Move your pointer across the diagram or use the arrow keys. The room answers with the sound of your own presence — and the floor you cannot hear.</p>
+    </div>
+
+    <div class="chamber-wrap">
+      <figure class="chamber-figure">
+        <svg id="chamber" class="chamber" viewBox="0 0 1000 600" role="img" aria-labelledby="chamberTitle chamberDesc" tabindex="0">
+          <title id="chamberTitle">Interactive diagram of an anechoic chamber</title>
+          <desc id="chamberDesc">A seated listener at the centre of a room lined with wedge-shaped foam. A movable probe reveals the sound level at any distance from the listener.</desc>
+          <defs>
+            <pattern id="wedgeH" width="28" height="28" patternUnits="userSpaceOnUse">
+              <path d="M0 0L28 14L0 28Z" fill="#d4d4d4"/>
+              <path d="M0 0L28 14L0 28" fill="none" stroke="#ffffff" stroke-width="1"/>
+            </pattern>
+            <pattern id="wedgeV" width="28" height="28" patternUnits="userSpaceOnUse">
+              <path d="M0 0L14 28L28 0Z" fill="#d4d4d4"/>
+              <path d="M0 0L14 28L28 0" fill="none" stroke="#ffffff" stroke-width="1"/>
+            </pattern>
+            <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+              <stop offset="72%" stop-color="#ffffff" stop-opacity="0"/>
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0.9"/>
+            </radialGradient>
+            <clipPath id="roomClip"><rect x="56" y="56" width="888" height="488"/></clipPath>
+          </defs>
+
+          <rect x="0" y="0" width="1000" height="600" fill="#f4f4f4"/>
+          <rect x="56" y="56" width="888" height="488" fill="#e9e9e9" stroke="#111111" stroke-width="1.5"/>
+
+          <g clip-path="url(#roomClip)">
+            <rect x="56" y="56" width="888" height="38" fill="url(#wedgeV)"/>
+            <rect x="56" y="506" width="888" height="38" fill="url(#wedgeV)"/>
+            <rect x="56" y="94" width="38" height="412" fill="url(#wedgeH)"/>
+            <rect x="906" y="94" width="38" height="412" fill="url(#wedgeH)"/>
+            <rect x="94" y="94" width="812" height="412" fill="#e9e9e9"/>
+          </g>
+
+          <g class="rings" fill="none" stroke="#111111" opacity="0.16">
+            <circle cx="500" cy="326" r="64"/><circle cx="500" cy="326" r="126"/>
+            <circle cx="500" cy="326" r="190"/><circle cx="500" cy="326" r="254"/>
+          </g>
+
+          <g id="waves" fill="none" stroke="#111111" stroke-width="1" opacity="0.5">
+            <circle class="wave wave-1" cx="500" cy="326" r="70"/>
+            <circle class="wave wave-2" cx="500" cy="326" r="70"/>
+            <circle class="wave wave-3" cx="500" cy="326" r="70"/>
+          </g>
+
+          <g class="listener" transform="translate(500 326)" aria-hidden="true">
+            <circle r="35" fill="#111111"/>
+            <path d="M-26 30C-40 52-44 76-44 96H44C44 76 40 52 26 30Z" fill="#111111"/>
+            <path d="M-44 96h88" stroke="#111111" stroke-width="2"/>
+            <circle r="47" fill="none" stroke="#111111" stroke-width="0.7" opacity="0.5"/>
+          </g>
+
+          <g id="probe" aria-hidden="true">
+            <line id="probeLine" x1="500" y1="326" x2="500" y2="200" stroke="#111111" stroke-width="1" stroke-dasharray="3 4" opacity="0.55"/>
+            <circle id="probeDot" cx="500" cy="200" r="7" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+            <circle id="probeHalo" cx="500" cy="200" r="17" fill="none" stroke="#111111" stroke-width="0.7" opacity="0.4"/>
+          </g>
+
+          <g class="axis" aria-hidden="true" font-family="Arial, sans-serif" font-size="10" fill="#111111">
+            <path d="M94 500h812" stroke="#111111" stroke-width="0.7" opacity="0.4"/>
+            <text x="94" y="520">WEDGE ABSORBER</text>
+            <text x="906" y="520" text-anchor="end">WEDGE ABSORBER</text>
+            <text x="500" y="584" text-anchor="middle" font-size="11" letter-spacing="2">LISTENER AT CENTRE · −20.3 dB FS</text>
+          </g>
+        </svg>
+        <figcaption>Fig. 1 — Plan view. Each wedge is 1.2 m deep; the room is anechoic above 80 Hz. Below that frequency, the floor still speaks.</figcaption>
+      </figure>
+
+      <aside class="readout">
+        <p class="sr-only" id="probeAnnounce" aria-live="polite" aria-atomic="true"></p>
+        <div class="readout-top">
+          <span class="readout-label">Probe reading</span>
+          <span class="readout-num" id="dbValue">−20.3</span>
+          <span class="readout-unit">dB</span>
+        </div>
+        <div class="meter" aria-hidden="true"><div class="meter-fill" id="meterFill"></div><div class="meter-ticks"></div></div>
+        <dl class="readout-data">
+          <div><dt>Distance</dt><dd id="distValue">1.83 m</dd></div>
+          <div><dt>Environment</dt><dd id="envValue">Anechoic</dd></div>
+          <div><dt>Threshold</dt><dd>0 dB · hearing</dd></div>
+        </dl>
+        <p class="readout-note" id="readoutNote">The quietest measurable place is never the quietest felt place. Your body is the loudest thing in the room.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="ledger" id="field" aria-labelledby="ledgerTitle">
+    <div class="section-head">
+      <p class="kicker">02 · Field notes</p>
+      <h2 id="ledgerTitle">Seven places where silence is kept.</h2>
+      <p class="section-intro">A measured selection, from absolute rooms to weather that swallows a landscape. Select a row to read its entry.</p>
+    </div>
+
+    <div class="ledger-grid">
+      <ol class="ledger-list" id="ledgerList">
+        <li><button type="button" class="ledger-row is-active" data-index="0" aria-expanded="true" aria-controls="entryPanel">
+          <span class="row-num">01</span><span class="row-name">Anechoic chamber</span><span class="row-loc">Orfield Labs, Minneapolis</span><span class="row-val">−20.3 dB</span>
+        </button></li>
+        <li><button type="button" class="ledger-row" data-index="1" aria-expanded="false" aria-controls="entryPanel">
+          <span class="row-num">02</span><span class="row-name">Snow, after falling</span><span class="row-loc">Finnish Lapland</span><span class="row-val">−12 dB</span>
+        </button></li>
+        <li><button type="button" class="ledger-row" data-index="2" aria-expanded="false" aria-controls="entryPanel">
+          <span class="row-num">03</span><span class="row-name">Reading room</span><span class="row-loc">Stockholm Public Library</span><span class="row-val">28 dBA</span>
+        </button></li>
+        <li><button type="button" class="ledger-row" data-index="3" aria-expanded="false" aria-controls="entryPanel">
+          <span class="row-num">04</span><span class="row-name">Frozen lake, dawn</span><span class="row-loc">Lake Baikal, Siberia</span><span class="row-val">−9 dB</span>
+        </button></li>
+        <li><button type="button" class="ledger-row" data-index="4" aria-expanded="false" aria-controls="entryPanel">
+          <span class="row-num">05</span><span class="row-name">Desert, after wind</span><span class="row-loc">Namib, Namibia</span><span class="row-val">16 dBA</span>
+        </button></li>
+        <li><button type="button" class="ledger-row" data-index="5" aria-expanded="false" aria-controls="entryPanel">
+          <span class="row-num">06</span><span class="row-name">Under thick ice</span><span class="row-loc">Antarctic shelf</span><span class="row-val">−4 dB</span>
+        </button></li>
+        <li><button type="button" class="ledger-row" data-index="6" aria-expanded="false" aria-controls="entryPanel">
+          <span class="row-num">07</span><span class="row-name">The moment before</span><span class="row-loc">Anywhere, held breath</span><span class="row-val">0.0 s</span>
+        </button></li>
+      </ol>
+
+      <article class="entry-panel" id="entryPanel" aria-live="polite">
+        <div class="entry-art" id="entryArt" aria-hidden="true"></div>
+        <div class="entry-copy">
+          <p class="entry-index" id="entryIndex">Entry 01 / 07</p>
+          <h3 id="entryTitle">Anechoic chamber</h3>
+          <p class="entry-place" id="entryPlace">Orfield Labs, Minneapolis</p>
+          <p class="entry-body" id="entryBody">Up to thirty minutes, the room is a curiosity. After that it becomes a mirror. The walls remove every reflection, so the only sound left is the blood in your ears and the click of your own joints. Most people ask to leave. The record for staying is not a matter of endurance but of learning to accept that you are the noise.</p>
+          <p class="entry-foot" id="entryFoot">Measured: −20.3 dB FS · Category: constructed</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="measure" id="measure" aria-labelledby="measureTitle">
+    <div class="section-head">
+      <p class="kicker">03 · Measure</p>
+      <h2 id="measureTitle">How loud is nothing?</h2>
+      <p class="section-intro">The decibel scale is logarithmic. Every ten decibels is a tenfold change in energy, yet a halving of what you hear. Drag the marker to see how hush stacks up against ordinary life.</p>
+    </div>
+
+    <div class="scale-wrap">
+      <div class="scale" id="scale" role="slider" tabindex="0" aria-label="Sound level in decibels" aria-valuemin="-20" aria-valuemax="120" aria-valuenow="0" aria-valuetext="0 decibels, threshold of hearing" aria-orientation="horizontal">
+        <div class="scale-track" aria-hidden="true"><div class="scale-fill" id="scaleFill"></div></div>
+        <div class="scale-marks" id="scaleMarks" aria-hidden="true"></div>
+        <div class="scale-handle" id="scaleHandle" aria-hidden="true"><span id="handleLabel">0 dB</span></div>
+      </div>
+      <div class="scale-readout">
+        <div class="scale-number" id="scaleNumber">0</div>
+        <div class="scale-desc"><p class="scale-name" id="scaleName">Threshold of hearing</p><p id="scaleDetail">The softest sound a healthy young ear can detect. Not silence — a reference point.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about" id="about" aria-labelledby="aboutTitle">
+    <div class="about-inner">
+      <p class="kicker">04 · About</p>
+      <h2 id="aboutTitle">Quiet is not the absence of something. It is the presence of everything else.</h2>
+      <div class="about-cols">
+        <p>This index began with a wrong assumption: that silence was a single thing. It isn't. It has texture, temperature, architecture and a physics that changes with the weather. A library keeps it with carpet and habit. Snow keeps it by trapping air between crystals. An anechoic chamber keeps it by spending a great deal of money on foam.</p>
+        <p>What all of them share is attention. In a quiet place, the small sounds stop being background and become events. That is the whole argument for going: not that silence is pure, but that it makes the world legible again.</p>
+      </div>
+      <p class="colophon">Built as a single static page. Every drawing is vector or generated in code. No images, no libraries, no network calls.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <span>The Quiet Index</span>
+    <span>End of volume 01</span>
+    <a href="#top">Return to the beginning</a>
+  </div>
+</footer>
+
+<script src="js/app.js"></script>
+</body>
+</html>
