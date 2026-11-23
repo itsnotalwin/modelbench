@@ -43,7 +43,7 @@ The thumbnails are original editorial covers, not screenshots of the runs. The l
 | --- | --- |
 | `inbox/` | Drop uploads here: a ZIP with `meta.json` + `index.html` at its root, or a legacy `category__model__YYYY-MM-DD__vN.html`. |
 | `runs/` | One folder per graded run, written by `tools/sort_inbox.py`. Artifacts stay byte-identical to the upload. |
-| `prompts/` | Source briefs (`01-website.md` … `22-site-refresh.md`) and `catalog.json` (v15, 22 challenges). |
+| `prompts/` | Source briefs (`01-website.md` … `13-data-story.md`) and `catalog.json` (v16, 13 challenges). |
 | `manifest.json` | Machine index built by `tools/build_manifest.py`. |
 | `src/data/catalog.json` | Compact snapshot the explorer imports at build time. |
 | `legacy/static-dashboard/` | The retired single-file `index.html` dashboard and its PWA generator, kept for reference. |
