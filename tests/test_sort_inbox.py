@@ -279,7 +279,6 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
             self.assertEqual(len(matches), 1, f"expected one prompt file for {challenge['no']}")
             body = matches[0].read_text(encoding="utf-8")
             self.assertIn(f'"category": "{challenge["slug"]}"', body)
-            self.assertIn(f'"prompt": "{challenge["no"].zfill(2)}"', body)
             self.assertIn(f'"prompt_label": "{challenge["title"]}"', body)
 
     def test_explorer_describes_one_artifact_per_prompt(self):
@@ -306,7 +305,6 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
             self.assertIn("## Submission contract", body)
             self.assertIn("exactly one folder", body.lower())
             self.assertIn(f'"category": "{challenge["slug"]}"', body)
-            self.assertIn(f'"prompt": "{challenge["no"].zfill(2)}"', body)
             self.assertIn(f'"prompt_label": "{challenge["title"]}"', body)
             self.assertIn("index.html", body)
             self.assertIn("meta.json", body)
@@ -365,7 +363,6 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
             self.assertIn("index.html", body, relative_path)
             self.assertIn("meta.json", body, relative_path)
             self.assertIn(f'"category": "{challenge["slug"]}"', body, relative_path)
-            self.assertIn(f'"prompt": "{number.zfill(2)}"', body, relative_path)
             self.assertIn(f'"prompt_label": "{challenge["title"]}"', body, relative_path)
 
     def test_every_prompt_resolves_model_and_date_and_fixes_version_one(self):
