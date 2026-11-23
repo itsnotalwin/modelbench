@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PENUMBRA — Studies in the grey between</title>
+<meta name="description" content="Penumbra is an independent exhibition of six generative monochrome studies, drawn live in your browser. No images. No colour. Only interval.">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230a0a0a'/%3E%3Cg fill='none' stroke='%23ededed' stroke-width='1.1'%3E%3Ccircle cx='16' cy='16' r='11.2'/%3E%3Ccircle cx='16' cy='16' r='7.4'/%3E%3Ccircle cx='16' cy='16' r='3.6'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<header class="site-head" id="siteHead">
+  <a class="brand" href="#top" aria-label="Penumbra, back to top">PENUMBRA</a>
+  <nav class="nav" aria-label="Sections">
+    <a href="#works">Works</a>
+    <a href="#scale">Grey Scale</a>
+    <a href="#notes">Colophon</a>
+  </nav>
+  <p class="head-mark" aria-hidden="true">001</p>
+</header>
+
+<main id="main" tabindex="-1">
+
+  <!-- ───────────────────────── hero ───────────────────────── -->
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <canvas class="hero-field" id="heroField" aria-hidden="true"></canvas>
+    <div class="hero-veil" aria-hidden="true"></div>
+
+    <div class="hero-inner wrap">
+      <div class="hero-top">
+        <p class="label label-inv">Exhibition 001 <span class="sep">/</span> Generative Monochrome</p>
+        <p class="label label-inv hero-year">MMXXVI</p>
+      </div>
+
+      <h1 class="hero-title" id="hero-title">
+        <span class="ltr" aria-hidden="true"><i style="--i:0">P</i></span><span class="ltr" aria-hidden="true"><i style="--i:1">E</i></span><span class="ltr" aria-hidden="true"><i style="--i:2">N</i></span><span class="ltr" aria-hidden="true"><i style="--i:3">U</i></span><span class="ltr" aria-hidden="true"><i style="--i:4">M</i></span><span class="ltr" aria-hidden="true"><i style="--i:5">B</i></span><span class="ltr" aria-hidden="true"><i style="--i:6">R</i></span><span class="ltr" aria-hidden="true"><i style="--i:7">A</i></span>
+      </h1>
+
+      <div class="hero-bottom">
+        <p class="hero-sub">Studies in the grey between<br>black and white.</p>
+        <p class="hero-meta">Six works, drawn live in your browser.<br>No images. No colour. Only interval.</p>
+        <a class="cue" href="#statement"><span>Begin</span><span class="cue-line" aria-hidden="true"></span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────── statement ─────────────────────── -->
+  <section class="statement" id="statement" aria-labelledby="statement-label">
+    <div class="wrap">
+      <div class="statement-grid">
+        <div class="statement-aside">
+          <p class="label" id="statement-label">01 <span class="sep">/</span> Statement</p>
+          <p class="aside-note">Penumbra is the partial shadow — the region where light is only partly blocked. It is the most common condition of the visible world and the least discussed.</p>
+        </div>
+
+        <div class="statement-main">
+          <p class="lede reveal-lines" id="lede">A photograph is mostly grey. So is a shadow, a stone, a winter field, the inside of an eyelid. Colour is the exception. The interval is the rule.</p>
+
+          <div class="statement-cols">
+            <p class="body reveal">This exhibition is built from that interval. Six studies, each generated from a number, each different every time it is drawn, each restricted to the eleven values between chalk and ink. There is no image file anywhere on this page. What you are looking at is arithmetic, resolved in your browser at the moment you arrived.</p>
+            <p class="body reveal">The constraint is the subject. Remove hue and the remaining decisions — weight, interval, edge, density, the exact position of a line — stop being decoration and become the entire argument. A grey scale is not a limitation on form. It is form, with nothing left to hide behind.</p>
+          </div>
+
+          <p class="pull reveal">“Colour is what you notice first.<br>Grey is what you remember.”</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── works ───────────────────────── -->
+  <section class="works" id="works" aria-labelledby="works-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="sec-head-a">
+          <p class="label label-inv">02 <span class="sep">/</span> Works</p>
+          <h2 class="sec-title" id="works-title">Six studies in grey</h2>
+        </div>
+        <p class="sec-note">Select a work to open it full frame. Each is drawn from a seed — change the seed and the drawing changes with it.</p>
+      </div>
+
+      <div class="grid">
+
+        <article class="work w1">
+          <button class="work-btn" type="button" data-mode="contour" data-seed="1841" aria-haspopup="dialog">
+            <span class="frame"><canvas aria-hidden="true"></canvas><span class="view" aria-hidden="true">Open&nbsp;&nbsp;↗</span></span>
+            <span class="work-meta"><span class="work-idx">01</span><span class="work-name">Contour</span><span class="work-med">Plotter study, 2026</span></span>
+          </button>
+        </article>
+
+        <article class="work w2">
+          <button class="work-btn" type="button" data-mode="halftone" data-seed="7712" aria-haspopup="dialog">
+            <span class="frame"><canvas aria-hidden="true"></canvas><span class="view" aria-hidden="true">Open&nbsp;&nbsp;↗</span></span>
+            <span class="work-meta"><span class="work-idx">02</span><span class="work-name">Halftone</span><span class="work-med">Dot field, 2026</span></span>
+          </button>
+        </article>
+
+        <article class="work w3">
+          <button class="work-btn" type="button" data-mode="weave" data-seed="3390" aria-haspopup="dialog">
+            <span class="frame"><canvas aria-hidden="true"></canvas><span class="view" aria-hidden="true">Open&nbsp;&nbsp;↗</span></span>
+            <span class="work-meta"><span class="work-idx">03</span><span class="work-name">Weave</span><span class="work-med">Stria study, 2026</span></span>
+          </button>
+        </article>
+
+        <article class="work w4">
+          <button class="work-btn" type="button" data-mode="orbit" data-seed="5204" aria-haspopup="dialog">
+            <span class="frame"><canvas aria-hidden="true"></canvas><span class="view" aria-hidden="true">Open&nbsp;&nbsp;↗</span></span>
+            <span class="work-meta"><span class="work-idx">04</span><span class="work-name">Orbit</span><span class="work-med">Orbital study, 2026</span></span>
+          </button>
+        </article>
+
+        <article class="work w5">
+          <button class="work-btn" type="button" data-mode="strata" data-seed="9061" aria-haspopup="dialog">
+            <span class="frame"><canvas aria-hidden="true"></canvas><span class="view" aria-hidden="true">Open&nbsp;&nbsp;↗</span></span>
+            <span class="work-meta"><span class="work-idx">05</span><span class="work-name">Strata</span><span class="work-med">Dither study, 2026</span></span>
+          </button>
+        </article>
+
+        <article class="work w6">
+          <button class="work-btn" type="button" data-mode="aperture" data-seed="2468" aria-haspopup="dialog">
+            <span class="frame"><canvas aria-hidden="true"></canvas><span class="view" aria-hidden="true">Open&nbsp;&nbsp;↗</span></span>
+            <span class="work-meta"><span class="work-idx">06</span><span class="work-name">Aperture</span><span class="work-med">Ring study, 2026</span></span>
+          </button>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────── grey scale ─────────────────────── -->
+  <section class="scale" id="scale" aria-labelledby="scale-title">
+    <div class="wrap">
+      <div class="sec-head sec-head-light">
+        <div class="sec-head-a">
+          <p class="label">03 <span class="sep">/</span> Index</p>
+          <h2 class="sec-title" id="scale-title">The Grey Scale</h2>
+        </div>
+        <p class="sec-note">Eleven values, named. Nothing between them is a colour; everything between them is a decision. Select one to read it.</p>
+      </div>
+
+      <div class="scale-list" id="scaleList" role="group" aria-label="Grey values">
+        <button class="swatch" type="button" aria-pressed="true" data-hex="#f2f2f2" data-name="Chalk" data-note="Paper white. The value the page is printed on, and the one every other value is measured against." style="--v:#f2f2f2"><span class="sw-name">Chalk</span></button>
+        <button class="swatch" type="button" aria-pressed="false" data-hex="#e8e8e8" data-name="Bone" data-note="A half-step down. Warmth removed, brightness kept — the grey of unbleached paper in flat light." style="--v:#e8e8e8"><span class="sw-name">Bone</span></button>
+        <button class="swatch" type="button" aria-pressed="false" data-hex="#dcdcdc" data-name="Ash" data-note="The residue of something burned cleanly. Light enough to read black type at full strength." style="--v:#dcdcdc"><span class="sw-name">Ash</span></button>
+        <button class="swatch" type="button" aria-pressed="false" data-hex="#cfcfcf" data-name="Fog" data-note="Distance without detail. The value at which edges begin to cost more than they return." style="--v:#cfcfcf"><span class="sw-name">Fog</span></button>
+        <button class="swatch" type="button" aria-pressed="false" data-hex="#bfbfbf" data-name="Pewter" data-note="The middle of the light half. Neither paper nor ink; the first value that behaves like a material." style="--v:#bfbfbf"><span class="sw-name">Pewter</span></button>
+        <button class="swatch" type="button" aria-pressed="false" data-hex="#ababab" data-name="Slate" data-note="Exactly halfway. Black and white at equal strength — the only value here with no direction." style="--v:#ababab"><span class="sw-name">Slate</span></button>
+        <button class="swatch" type="button" aria-pressed="false" data-hex="#949494" data-name="Steel" data-note="Past the midpoint. White type now reads more cleanly than black; the page begins to invert." style="--v:#949494"><span class="sw-name">Steel</span></button>
+        <button class="swatch" type="button" aria-pressed="false" data-hex="#787878" data-name="Graphite" data-note="Dry, matte, slightly reluctant. The grey of pencil rather than ink." style="--v:#787878"><span class="sw-name">Graphite</span></button>
+        <button class="swatch" type="button" aria-pressed="false" data-hex="#575757" data-name="Flint" data-note="Dark enough to hold a shadow of its own. Detail survives here; texture does not." style="--v:#575757"><span class="sw-name">Flint</span></button>
+        <button class="swatch" type="button" aria-pressed="false" data-hex="#333333" data-name="Char" data-note="Almost black, but not. The difference is the whole point — a black that admits it was once something else." style="--v:#333333"><span class="sw-name">Char</span></button>
+        <button class="swatch" type="button" aria-pressed="false" data-hex="#0d0d0d" data-name="Ink" data-note="The floor. No value below this is available, and none is needed — every other grey is a distance from here." style="--v:#0d0d0d"><span class="sw-name">Ink</span></button>
+      </div>
+
+      <div class="readout" id="readout">
+        <div class="readout-preview" id="roPreview" style="--v:#f2f2f2">
+          <span class="ro-aa" id="roAa">Aa</span>
+          <span class="ro-tag" id="roTag">The quick grey fox</span>
+        </div>
+        <div class="readout-body">
+          <p class="label">Selected value</p>
+          <h3 class="readout-name" id="roName">Chalk</h3>
+          <p class="readout-hex" id="roHex">#f2f2f2</p>
+          <p class="readout-note" id="roNote">Paper white. The value the page is printed on, and the one every other value is measured against.</p>
+          <p class="readout-hint">Use ← → to step through the scale.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── notes ───────────────────────── -->
+  <section class="notes" id="notes" aria-labelledby="notes-title">
+    <div class="wrap">
+      <div class="sec-head sec-head-light">
+        <div class="sec-head-a">
+          <p class="label">04 <span class="sep">/</span> Colophon</p>
+          <h2 class="sec-title" id="notes-title">How it is made</h2>
+        </div>
+        <p class="sec-note">Four notes on the construction of this page. There is no build step, no framework and no image file.</p>
+      </div>
+
+      <ol class="notes-list">
+        <li class="note reveal">
+          <span class="note-n">01</span>
+          <h3 class="note-h">Method</h3>
+          <p class="note-p">Every image on this page is drawn at the moment you look at it. A seeded generator picks the numbers, value noise decides where the ink goes, and a threshold turns it into a mark. Nothing is fetched. Nothing is pre-rendered. Nothing is a photograph.</p>
+        </li>
+        <li class="note reveal">
+          <span class="note-n">02</span>
+          <h3 class="note-h">Palette</h3>
+          <p class="note-p">Eleven greys, from chalk to ink. No hue appears anywhere on this page — not in the type, not in the rules, not in the shadows, not in the grain, not in the favicon. The restriction is absolute and it is the entire design.</p>
+        </li>
+        <li class="note reveal">
+          <span class="note-n">03</span>
+          <h3 class="note-h">Type</h3>
+          <p class="note-p">A serif carries the voice, a grotesque carries the facts, a monospace carries the coordinates. All three are whatever your system already owns, which is why the page weighs almost nothing and renders the same everywhere.</p>
+        </li>
+        <li class="note reveal">
+          <span class="note-n">04</span>
+          <h3 class="note-h">Motion</h3>
+          <p class="note-p">Movement is used to explain, never to decorate. Ask your system for less motion and this page gives you less motion. Ask for none and it stops entirely — every drawing still renders, nothing is hidden behind an animation.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-top">
+      <p class="foot-lede">An independent exhibition<br>of generative monochrome.</p>
+      <div class="foot-cols">
+        <p class="foot-col"><span class="label label-inv">Set</span><br>System serif, grotesque<br>and monospace</p>
+        <p class="foot-col"><span class="label label-inv">Drawn</span><br>Canvas 2D, no assets<br>Seeded, repeatable</p>
+        <p class="foot-col"><span class="label label-inv">Edition</span><br>001 — MMXXVI<br>Six works, eleven greys</p>
+      </div>
+    </div>
+
+    <div class="foot-mark" aria-hidden="true">PENUMBRA</div>
+
+    <div class="foot-bottom">
+      <p class="label label-inv">No colour was used in the making of this page.</p>
+      <a class="foot-top-link" href="#top">Back to top <span aria-hidden="true">↑</span></a>
+    </div>
+  </div>
+</footer>
+
+<!-- ───────────────────────── work dialog ───────────────────────── -->
+<dialog class="dlg" id="dlg" aria-labelledby="dlg-title">
+  <div class="dlg-panel">
+    <header class="dlg-head">
+      <div class="dlg-head-text">
+        <p class="label label-inv" id="dlg-med">Plotter study, 2026</p>
+        <h2 class="dlg-title" id="dlg-title">Contour</h2>
+      </div>
+      <div class="dlg-actions">
+        <button class="btn-solid" id="saveBtn" type="button">Save PNG</button>
+        <button class="btn-close" id="closeBtn" type="button" aria-label="Close work">Close <span aria-hidden="true">✕</span></button>
+      </div>
+    </header>
+
+    <div class="dlg-stage" id="dlgStage">
+      <canvas id="dlgCanvas" role="img" aria-label="Generative drawing"></canvas>
+    </div>
+
+    <div class="dlg-controls">
+      <div class="ctl">
+        <label class="ctl-label" for="seedInput">Seed</label>
+        <div class="ctl-row">
+          <input class="ctl-num" id="seedInput" type="number" min="1" max="99999" step="1" value="1841" inputmode="numeric">
+          <button class="btn-ghost" id="reseedBtn" type="button">Randomise</button>
+        </div>
+      </div>
+
+      <div class="ctl">
+        <label class="ctl-label" for="scaleInput">Scale</label>
+        <input class="ctl-range" id="scaleInput" type="range" min="50" max="200" step="1" value="100">
+        <output class="ctl-out" id="scaleOut" for="scaleInput">1.00</output>
+      </div>
+
+      <div class="ctl">
+        <label class="ctl-label" for="contrastInput">Contrast</label>
+        <input class="ctl-range" id="contrastInput" type="range" min="40" max="200" step="1" value="100">
+        <output class="ctl-out" id="contrastOut" for="contrastInput">1.00</output>
+      </div>
+
+      <div class="ctl ctl-switch">
+        <span class="ctl-label" id="invertLabel">Invert</span>
+        <button class="switch" id="invertBtn" type="button" role="switch" aria-checked="false" aria-labelledby="invertLabel"><span class="switch-dot"></span></button>
+      </div>
+
+      <div class="ctl ctl-reset">
+        <button class="btn-ghost" id="resetBtn" type="button">Reset</button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<noscript>
+  <p class="noscript">This exhibition draws its works with JavaScript. Without it the page still reads, but the six plates and the hero field will be empty.</p>
+</noscript>
+
+<script src="js/art.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

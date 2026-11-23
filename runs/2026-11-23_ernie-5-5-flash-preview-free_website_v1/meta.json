@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "ernie-5-5-flash-preview-free",
+  "category": "website",
+  "date": "2026-11-23",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "1",
+  "prompt_label": "Website",
+  "notes": "PENUMBRA — a single-page monochrome exhibition of six generative artworks, all drawn at runtime with Canvas 2D from seeded value-noise and an ordered-dither pass; no image files, no external dependencies, no build step. Each work opens into a dialog with live controls (seed, scale, contrast, invert) and PNG export. Includes a keyboard-operable eleven-value grey scale, a scroll-progress rule, scroll reveals, a permanently fixed difference-blend header, and full prefers-reduced-motion, focus-visible, print and noscript fallbacks. Known limitations: the hero dot field animates only while visible and is capped near 30fps, so lower-power devices may drop frames; the serif and grotesque are system-font stacks, so letterforms shift slightly between platforms; the difference-blend header can lose contrast over mid-grey artwork frames.",
+  "slug": "2026-11-23_ernie-5-5-flash-preview-free_website_v1",
+  "path": "runs/2026-11-23_ernie-5-5-flash-preview-free_website_v1/index.html",
+  "source_file": "website__ernie-5-5-flash-preview-free__2026-11-23__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}
