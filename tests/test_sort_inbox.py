@@ -270,8 +270,8 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
     def test_catalog_covers_all_challenges(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
         prompts = catalog["prompts"]
-        self.assertEqual(len(prompts), 22)
-        self.assertEqual([p["no"] for p in prompts], [f"{n:02d}" for n in range(1, 23)])
+        self.assertEqual(len(prompts), 7)
+        self.assertEqual([p["no"] for p in prompts], [str(n) for n in range(1, 8)])
         self.assertEqual(len({p["slug"] for p in prompts}), 22)
         self.assertTrue({p["family"] for p in prompts} <= {"Web", "Games", "Visual", "Worlds"})
         for challenge in prompts:
@@ -279,7 +279,7 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
             self.assertEqual(len(matches), 1, f"expected one prompt file for {challenge['no']}")
             body = matches[0].read_text(encoding="utf-8")
             self.assertIn(f'"category": "{challenge["slug"]}"', body)
-            self.assertIn(f'"prompt": "{challenge["no"]}"', body)
+            self.assertIn(f'"prompt": "{challenge["no"].zfill(2)}"', body)
             self.assertIn(f'"prompt_label": "{challenge["title"]}"', body)
 
     def test_explorer_describes_one_artifact_per_prompt(self):
@@ -289,11 +289,11 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
         self.assertIn("One prompt. One finished artifact.", copy)
         self.assertIn("project folder", copy)
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
-        self.assertEqual(len(catalog["prompts"]), 22)
+        self.assertEqual(len(catalog["prompts"]), 7)
         manifest = json.loads((REPO_ROOT / "manifest.json").read_text(encoding="utf-8"))
-        self.assertEqual(len(manifest["catalog"]), 22)
+        self.assertEqual(len(manifest["catalog"]), 7)
         explorer_catalog = json.loads((REPO_ROOT / "src" / "data" / "catalog.json").read_text(encoding="utf-8"))
-        self.assertEqual(len(explorer_catalog["challenges"]), 22)
+        self.assertEqual(len(explorer_catalog["challenges"]), 7)
         self.assertEqual(sorted(r["slug"] for r in explorer_catalog["runs"]), sorted(r["slug"] for r in manifest["runs"]))
 
 
@@ -306,32 +306,24 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
             self.assertIn("## Submission contract", body)
             self.assertIn("exactly one folder", body.lower())
             self.assertIn(f'"category": "{challenge["slug"]}"', body)
-            self.assertIn(f'"prompt": "{challenge["no"]}"', body)
+            self.assertIn(f'"prompt": "{challenge["no"].zfill(2)}"', body)
             self.assertIn(f'"prompt_label": "{challenge["title"]}"', body)
             self.assertIn("index.html", body)
             self.assertIn("meta.json", body)
 
     def test_open_challenges_leave_creative_direction_to_the_model(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
-        prompts = {p["no"]: p for p in catalog["prompts"]}
-        open_challenges = {"03": "game-2d", "04": "game-3d", "12": "world-3d", "14": "generative-art"}
-        for number, slug in open_challenges.items():
-            self.assertEqual(prompts[number]["slug"], slug)
-            body = next((REPO_ROOT / "prompts").glob(f"{number}-*.md")).read_text(encoding="utf-8")
-            self.assertTrue(
-                any(term in body.lower() for term in ("up to you", "you choose", "you invent", "entirely up to", "is yours", "are yours")),
-                f"challenge {number} should leave the concept open",
-            )
+        prompts = {p["slug"]: p for p in catalog["prompts"]}
+        self.assertIn("generative-art", prompts)
+        body = (REPO_ROOT / "prompts" / "4-generative-art.md").read_text(encoding="utf-8")
+        self.assertIn("Technique is yours", body)
+        self.assertIn("three or more distinct movements or scenes", body)
 
-    def test_two_d_game_prompt_does_not_prescribe_a_genre(self):
-        body = (REPO_ROOT / "prompts" / "03-game-2d.md").read_text(encoding="utf-8")
-        self.assertIn("entirely up to you", body)
-        self.assertNotIn("six designed, solvable stages", body.lower())
-        challenge = next(
-            p for p in json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))["prompts"]
-            if p["no"] == "03"
-        )
-        self.assertNotIn("puzzle", challenge["requirement"].lower())
+    def test_creative_tool_prompt_leaves_the_application_choice_open(self):
+        body = (REPO_ROOT / "prompts" / "3-creative-tool.md").read_text(encoding="utf-8")
+        self.assertIn("in a category of your choice", body)
+        self.assertIn("Pick one", body)
+        self.assertNotIn("must be a photo editor", body.lower())
 
     def test_manifest_matches_runs_directory_and_six_prompt_catalog(self):
         """The manifest must always describe exactly what is in runs/ — the old
@@ -354,12 +346,12 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
         self.assertGreaterEqual(catalog["version"], 1)
         self.assertEqual(catalog["outputs_per_prompt"], 1)
         self.assertGreater(len(prompts), 0)
-        self.assertEqual([p["no"] for p in prompts], [f"{n:02d}" for n in range(1, len(prompts) + 1)])
+        self.assertEqual([p["no"] for p in prompts], [str(n) for n in range(1, len(prompts) + 1)])
         self.assertEqual(len({p["slug"] for p in prompts}), len(prompts))
         self.assertTrue(all(p["min_outputs"] == 1 for p in prompts))
 
-        numbered_files = sorted((REPO_ROOT / "prompts").glob("[0-9][0-9]-*.md"))
-        file_numbers = [path.name[:2] for path in numbered_files]
+        numbered_files = sorted((REPO_ROOT / "prompts").glob("[0-9]*-*.md"))
+        file_numbers = [path.name.split("-", 1)[0] for path in numbered_files]
         self.assertEqual(sorted(file_numbers), [p["no"] for p in prompts])
         self.assertEqual(len(file_numbers), len(set(file_numbers)))
 
@@ -373,7 +365,7 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
             self.assertIn("index.html", body, relative_path)
             self.assertIn("meta.json", body, relative_path)
             self.assertIn(f'"category": "{challenge["slug"]}"', body, relative_path)
-            self.assertIn(f'"prompt": "{number}"', body, relative_path)
+            self.assertIn(f'"prompt": "{number.zfill(2)}"', body, relative_path)
             self.assertIn(f'"prompt_label": "{challenge["title"]}"', body, relative_path)
 
     def test_every_prompt_resolves_model_and_date_and_fixes_version_one(self):
