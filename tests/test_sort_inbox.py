@@ -317,7 +317,7 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
         self.assertIn("generative-art", prompts)
         body = (REPO_ROOT / "prompts" / "4-generative-art.md").read_text(encoding="utf-8")
         self.assertIn("Technique is yours", body)
-        self.assertIn("three or more distinct movements or scenes", body)
+        self.assertIn("At least three distinct movements or scenes", body)
 
     def test_creative_tool_prompt_leaves_the_application_choice_open(self):
         body = (REPO_ROOT / "prompts" / "3-creative-tool.md").read_text(encoding="utf-8")
