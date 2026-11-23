@@ -272,7 +272,7 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
         prompts = catalog["prompts"]
         self.assertEqual(len(prompts), 7)
         self.assertEqual([p["no"] for p in prompts], [str(n) for n in range(1, 8)])
-        self.assertEqual(len({p["slug"] for p in prompts}), 22)
+        self.assertEqual(len({p["slug"] for p in prompts}), len(prompts))
         self.assertTrue({p["family"] for p in prompts} <= {"Web", "Games", "Visual", "Worlds"})
         for challenge in prompts:
             matches = list((REPO_ROOT / "prompts").glob(f"{challenge['no']}-*.md"))
