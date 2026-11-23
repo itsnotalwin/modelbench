@@ -14,7 +14,7 @@
       "hue": 265
     },
     {
-      "no": "22",
+      "no": "2",
       "slug": "site-refresh",
       "title": "Production Site Refresh",
       "family": "Web",
@@ -25,7 +25,7 @@
       "hue": 42
     },
     {
-      "no": "16",
+      "no": "3",
       "slug": "creative-tool",
       "title": "Creative Tool",
       "family": "Web",
@@ -36,7 +36,7 @@
       "hue": 25
     },
     {
-      "no": "14",
+      "no": "4",
       "slug": "generative-art",
       "title": "Generative Art",
       "family": "Visual",
@@ -47,7 +47,7 @@
       "hue": 330
     },
     {
-      "no": "9",
+      "no": "5",
       "slug": "os-sim",
       "title": "Browser Operating System",
       "family": "Web",
@@ -58,7 +58,7 @@
       "hue": 215
     },
     {
-      "no": "5",
+      "no": "6",
       "slug": "restaurant",
       "title": "Restaurant Website",
       "family": "Web",
@@ -69,7 +69,7 @@
       "hue": 18
     },
     {
-      "no": "13",
+      "no": "7",
       "slug": "data-story",
       "title": "Data Story",
       "family": "Visual",
