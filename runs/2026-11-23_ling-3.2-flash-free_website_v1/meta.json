@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "ling-3.2-flash-free",
+  "category": "website",
+  "date": "2026-11-23",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "1",
+  "prompt_label": "Website",
+  "notes": "A monochrome generative-art gallery site: animated hero flow-field canvas, six seeded procedural artworks (ridgelines, harmonograph, moire, halftone bloom, ordered dither, paper weave) with re-run and expand controls, an interactive halftone lab with contrast/gamma/cell/angle/pattern controls and working PNG export, manifesto, colophon and footer. Vanilla HTML/CSS/JS, zero dependencies, relative paths, works from file:// and GitHub Pages. Known limitations: system font stacks only (no webfont files, to stay dependency-free); artwork appearance varies by seed since every image is generated at run time; canvases require JavaScript.",
+  "slug": "2026-11-23_ling-3.2-flash-free_website_v1",
+  "path": "runs/2026-11-23_ling-3.2-flash-free_website_v1/index.html",
+  "source_file": "website__ling-3.2-flash-free_2026-11-23_v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

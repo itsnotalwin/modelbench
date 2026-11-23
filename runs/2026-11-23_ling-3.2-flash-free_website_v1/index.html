@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MONO® — A Grayscale Practice</title>
+<meta name="description" content="MONO is an independent grayscale design practice. Six seeded generative studies, a tunable halftone lab and a manifesto — every image drawn by code in your browser, in black, white and the 254 shades between.">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#000000">
+<meta property="og:type" content="website">
+<meta property="og:title" content="MONO® — A Grayscale Practice">
+<meta property="og:description" content="No colour. Only value. Generative monochrome studies drawn live in your browser.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MONO® — A Grayscale Practice">
+<meta name="twitter:description" content="Generative monochrome studies, drawn live in your browser.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23000'/%3E%3Ctext x='32' y='45' font-family='Arial,sans-serif' font-size='38' font-weight='700' fill='%23fff' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+<script src="js/app.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<p id="live" class="visually-hidden" role="status" aria-live="polite"></p>
+
+<header class="site-header" id="site-header">
+  <div class="wrap header-inner">
+    <a class="logo" href="#top">MONO<sup>®</sup></a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="#works" data-link="works">Works</a>
+      <a href="#lab" data-link="lab">Lab</a>
+      <a href="#manifesto" data-link="manifesto">Manifesto</a>
+      <a href="#colophon" data-link="colophon">Colophon</a>
+    </nav>
+    <button id="menu-btn" class="menu-btn mono" type="button" aria-expanded="false" aria-controls="mobile-nav">Menu</button>
+  </div>
+  <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile">
+    <a href="#works">Works</a>
+    <a href="#lab">Lab</a>
+    <a href="#manifesto">Manifesto</a>
+    <a href="#colophon">Colophon</a>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- ── Hero ─────────────────────────────────────────────── -->
+  <section class="hero on-dark" id="top" aria-label="Introduction">
+    <canvas id="hero-canvas" aria-hidden="true"></canvas>
+    <div class="hero-inner wrap">
+      <p class="kicker mono">MONO® — Independent grayscale practice</p>
+      <h1 class="hero-title">No colour.<br><span class="outline">Only</span> value.</h1>
+      <p class="hero-sub">We design with a single instrument: value. Every image on this page is drawn by code, in your browser, the moment you arrive — no photography, no stock, no colour, on purpose.</p>
+      <div class="hero-actions">
+        <a class="btn" href="#works">View the works</a>
+        <button class="btn" type="button" id="hero-rerun">Rerun the field</button>
+      </div>
+      <p class="hero-meta mono">
+        <span>Field live — move your pointer through it</span>
+        <span>Seed <span id="hero-seed">000000</span></span>
+      </p>
+    </div>
+    <a class="hero-cue mono" href="#works" aria-label="Scroll to the works">Scroll ↓</a>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track mono">
+      <span>Black · White · Grey · Value · Form · Restraint · MONO® · Black · White · Grey · Value · Form · Restraint · MONO® · </span>
+      <span>Black · White · Grey · Value · Form · Restraint · MONO® · Black · White · Grey · Value · Form · Restraint · MONO® · </span>
+    </div>
+  </div>
+
+  <!-- ── Works ────────────────────────────────────────────── -->
+  <section class="section works" id="works">
+    <div class="wrap">
+      <header class="sec-head reveal">
+        <p class="sec-index mono">01 / Selected works</p>
+        <h2>Six seeded studies, drawn live.</h2>
+        <p class="sec-lede">No files, no photographs, no stock. Each piece is a small algorithm with a seed; re-run any of them to grow a new variant, or expand one to give it the whole wall.</p>
+      </header>
+
+      <div class="works-grid" id="works-grid">
+
+        <figure class="work reveal" data-work="ridgeline" data-seed="73214">
+          <div class="work-frame">
+            <canvas role="img" aria-label="Generative artwork: Ridgeline Study — stacked horizon lines in shades of grey"></canvas>
+          </div>
+          <figcaption class="work-cap">
+            <div class="work-head"><span class="work-index mono">01</span><h3>Ridgeline Study</h3></div>
+            <p class="work-note">Sixty-plus seeded horizon lines, stacked, jittered and graded from ink to ash.</p>
+            <p class="work-meta mono">Technique: layered sine fields · Seed <span class="seed-val">73214</span></p>
+            <div class="work-actions">
+              <button class="btn btn-small" type="button" data-action="rerun">Re-run</button>
+              <button class="btn btn-small" type="button" data-action="expand" aria-pressed="false">Expand</button>
+            </div>
+          </figcaption>
+        </figure>
+
+        <figure class="work reveal" data-work="harmonograph" data-seed="10293">
+          <div class="work-frame">
+            <canvas role="img" aria-label="Generative artwork: Harmonograph — decaying Lissajous ribbon in shades of grey"></canvas>
+          </div>
+          <figcaption class="work-cap">
+            <div class="work-head"><span class="work-index mono">02</span><h3>Harmonograph №4</h3></div>
+            <p class="work-note">A decaying four-pendulum swing, 2,600 segments of ink that never quite settle.</p>
+            <p class="work-meta mono">Technique: damped Lissajous · Seed <span class="seed-val">10293</span></p>
+            <div class="work-actions">
+              <button class="btn btn-small" type="button" data-action="rerun">Re-run</button>
+              <button class="btn btn-small" type="button" data-action="expand" aria-pressed="false">Expand</button>
+            </div>
+          </figcaption>
+        </figure>
+
+        <figure class="work reveal" data-work="moire" data-seed="55512">
+          <div class="work-frame">
+            <canvas role="img" aria-label="Generative artwork: Moiré Lattice — offset concentric circles creating interference fringes"></canvas>
+          </div>
+          <figcaption class="work-cap">
+            <div class="work-head"><span class="work-index mono">03</span><h3>Moiré Lattice</h3></div>
+            <p class="work-note">Two sets of concentric circles, offset by a hair. The interference is the image.</p>
+            <p class="work-meta mono">Technique: offset radial fields · Seed <span class="seed-val">55512</span></p>
+            <div class="work-actions">
+              <button class="btn btn-small" type="button" data-action="rerun">Re-run</button>
+              <button class="btn btn-small" type="button" data-action="expand" aria-pressed="false">Expand</button>
+            </div>
+          </figcaption>
+        </figure>
+
+        <figure class="work reveal" data-work="bloom" data-seed="80808">
+          <div class="work-frame">
+            <canvas role="img" aria-label="Generative artwork: Halftone Bloom — field of variable grey dots blooming from seeded centres"></canvas>
+          </div>
+          <figcaption class="work-cap">
+            <div class="work-head"><span class="work-index mono">04</span><h3>Halftone Bloom</h3></div>
+            <p class="work-note">A seeded field of Gaussian blooms, re-rendered as variable dots on white paper.</p>
+            <p class="work-meta mono">Technique: radial dot screen · Seed <span class="seed-val">80808</span></p>
+            <div class="work-actions">
+              <button class="btn btn-small" type="button" data-action="rerun">Re-run</button>
+              <button class="btn btn-small" type="button" data-action="expand" aria-pressed="false">Expand</button>
+            </div>
+          </figcaption>
+        </figure>
+
+        <figure class="work reveal" data-work="dither" data-seed="31415">
+          <div class="work-frame">
+            <canvas role="img" aria-label="Generative artwork: Ordered Dither — gradient field broken into Bayer-matrix black and white cells"></canvas>
+          </div>
+          <figcaption class="work-cap">
+            <div class="work-head"><span class="work-index mono">05</span><h3>Ordered Dither</h3></div>
+            <p class="work-note">A five-stop gradient passed through an 8×8 Bayer matrix, one decision per cell.</p>
+            <p class="work-meta mono">Technique: ordered thresholding · Seed <span class="seed-val">31415</span></p>
+            <div class="work-actions">
+              <button class="btn btn-small" type="button" data-action="rerun">Re-run</button>
+              <button class="btn btn-small" type="button" data-action="expand" aria-pressed="false">Expand</button>
+            </div>
+          </figcaption>
+        </figure>
+
+        <figure class="work reveal" data-work="weave" data-seed="90210">
+          <div class="work-frame">
+            <canvas role="img" aria-label="Generative artwork: Paper Weave — interlaced vertical and horizontal strips in fourteen greys"></canvas>
+          </div>
+          <figcaption class="work-cap">
+            <div class="work-head"><span class="work-index mono">06</span><h3>Paper Weave</h3></div>
+            <p class="work-note">Interlaced strips, alternating over and under, shaded across fourteen grey steps.</p>
+            <p class="work-meta mono">Technique: over–under lattice · Seed <span class="seed-val">90210</span></p>
+            <div class="work-actions">
+              <button class="btn btn-small" type="button" data-action="rerun">Re-run</button>
+              <button class="btn btn-small" type="button" data-action="expand" aria-pressed="false">Expand</button>
+            </div>
+          </figcaption>
+        </figure>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Lab ──────────────────────────────────────────────── -->
+  <section class="section lab on-dark" id="lab">
+    <div class="wrap">
+      <header class="sec-head reveal">
+        <p class="sec-index mono">02 / The halftone lab</p>
+        <h2>One composition, many pressings.</h2>
+        <p class="sec-lede">A procedural still life, re-printed through a tunable halftone plate. Set the contrast, gamma, cell and pattern — then pull the PNG and keep it.</p>
+      </header>
+
+      <div class="lab-grid">
+        <figure class="lab-frame reveal">
+          <canvas id="lab-canvas" role="img" aria-label="Halftone rendering of a procedural still life, updated live from the controls"></canvas>
+          <figcaption class="mono">Plate seed <span id="lab-seed">48113</span> · export at full size</figcaption>
+        </figure>
+
+        <div class="lab-controls reveal" role="group" aria-label="Halftone plate controls">
+          <div class="ctl">
+            <label class="mono" for="c-contrast">Contrast <output id="o-contrast">110%</output></label>
+            <input type="range" id="c-contrast" min="40" max="260" step="1" value="110">
+          </div>
+          <div class="ctl">
+            <label class="mono" for="c-gamma">Gamma <output id="o-gamma">1.00</output></label>
+            <input type="range" id="c-gamma" min="20" max="300" step="1" value="100">
+          </div>
+          <div class="ctl">
+            <label class="mono" for="c-cell">Cell size <output id="o-cell">6 px</output></label>
+            <input type="range" id="c-cell" min="3" max="14" step="1" value="6">
+          </div>
+          <div class="ctl">
+            <label class="mono" for="c-angle">Plate angle <output id="o-angle">0°</output></label>
+            <input type="range" id="c-angle" min="0" max="45" step="1" value="0">
+          </div>
+
+          <fieldset class="ctl">
+            <legend class="mono">Pattern</legend>
+            <div class="radios">
+              <label><input type="radio" name="pattern" value="dot" checked> Dots</label>
+              <label><input type="radio" name="pattern" value="square"> Squares</label>
+              <label><input type="radio" name="pattern" value="diamond"> Diamonds</label>
+              <label><input type="radio" name="pattern" value="line"> Lines</label>
+            </div>
+          </fieldset>
+
+          <p class="lab-seed mono">Every pressing is deterministic: same seed, same plate, same image.</p>
+
+          <div class="lab-actions">
+            <button class="btn" type="button" id="lab-new">New composition</button>
+            <button class="btn btn-solid" type="button" id="lab-dl">Download PNG</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Manifesto ────────────────────────────────────────── -->
+  <section class="section manifesto" id="manifesto">
+    <div class="wrap narrow">
+      <p class="sec-index mono reveal">03 / Manifesto</p>
+      <p class="big-line reveal">Colour is a habit.</p>
+      <p class="big-line reveal stroke">Value is a discipline.</p>
+      <p class="big-line reveal">Remove the habit,</p>
+      <p class="big-line reveal">and the discipline speaks.</p>
+      <p class="mani-copy reveal">MONO began as a wager between two designers: that a practice stripped of hue would see farther, not less. Five years later the wager holds. Black, white and the greys between carry all the weight we have ever needed — weight, edge, rhythm, rest. The machine draws; the human decides where to look.</p>
+      <ul class="principles reveal">
+        <li><span class="mono">01</span>Constraint is generosity.</li>
+        <li><span class="mono">02</span>Grey is not a compromise.</li>
+        <li><span class="mono">03</span>The machine draws; the human decides.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Colophon ─────────────────────────────────────────── -->
+  <section class="section colophon" id="colophon">
+    <div class="wrap">
+      <p class="sec-index mono reveal">04 / Colophon</p>
+      <h2 class="reveal">Made of one thing.</h2>
+      <dl class="colo-grid reveal">
+        <div><dt>Practice</dt><dd>MONO® — grayscale design &amp; generative imagery</dd></div>
+        <div><dt>Type</dt><dd>System grotesks (Helvetica Neue, Arial) with a ui-monospace voice for data</dd></div>
+        <div><dt>Grid</dt><dd>Twelve columns, one-pixel hairlines, no rounded corners</dd></div>
+        <div><dt>Palette</dt><dd>#000000 → #FFFFFF, 254 steps in between, none other</dd></div>
+        <div><dt>Motion</dt><dd>Transform-only, 120–400 ms, switched off by prefers-reduced-motion</dd></div>
+        <div><dt>Runtime</dt><dd>Vanilla ES2019, zero dependencies, one thread, your browser</dd></div>
+        <div><dt>Imagery</dt><dd>100% procedural canvas — generated on load, never stored</dd></div>
+        <div><dt>Contact</dt><dd><a href="mailto:studio@mono.example">studio@mono.example</a></dd></div>
+      </dl>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── Footer ─────────────────────────────────────────────── -->
+<footer class="footer on-dark">
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track mono">
+      <span>Black · White · Grey · Value · Form · Restraint · MONO® · Black · White · Grey · Value · Form · Restraint · MONO® · </span>
+      <span>Black · White · Grey · Value · Form · Restraint · MONO® · Black · White · Grey · Value · Form · Restraint · MONO® · </span>
+    </div>
+  </div>
+  <div class="wrap footer-grid">
+    <p class="footer-word" aria-hidden="true">MONO<sup>®</sup></p>
+    <nav class="footer-nav" aria-label="Footer">
+      <a href="#works">Works</a>
+      <a href="#lab">Lab</a>
+      <a href="#manifesto">Manifesto</a>
+      <a href="#colophon">Colophon</a>
+      <a href="mailto:studio@mono.example">studio@mono.example</a>
+    </nav>
+    <p class="footer-note mono">© 2026 MONO Studio.<br>Drawn, not photographed.<br>All artwork generated locally in your browser.</p>
+  </div>
+  <div class="wrap footer-bar mono">
+    <span>MONO® — a grayscale practice</span>
+    <a class="btn btn-small" href="#top">Back to top ↑</a>
+  </div>
+</footer>
+
+<noscript><p style="padding:1rem;text-align:center;font-family:monospace">This gallery draws its images with JavaScript; please enable it to see the works.</p></noscript>
+</body>
+</html>
