@@ -1,4 +1,4 @@
-# 14 · Generative Art
+# 11 · Generative Art
 
 ## Automatic run identity — never ask the organiser or user
 
@@ -75,7 +75,7 @@ The metadata file must contain this structure, with your resolved model slug and
   "date": "RUN_DATE",
   "version": 1,
   "entry": "index.html",
-  "prompt": "14",
+  "prompt": "11",
   "prompt_label": "Generative Art",
   "notes": "A concise, honest description of the completed project and any known limitations."
 }

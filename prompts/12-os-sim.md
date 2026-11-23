@@ -1,4 +1,4 @@
-# 05 · Restaurant Website
+# 12 · Browser Operating System
 
 ## Automatic run identity — never ask the organiser or user
 
@@ -12,7 +12,7 @@ Use the resolved values in both the output folder and `meta.json`. Do not pause 
 
 ## The brief
 
-Build the complete website for a café, restaurant or bar that you invent. Name, cuisine, city, story and identity are entirely up to you. No menu is supplied: you write everything, including a full menu. Choose a concept with a strong point of view and make it feel like a real place people would book a table at tonight.
+Build a complete desktop operating system that runs in the browser, with an identity of its own: name, visual language, wallpapers, icons, sounds, boot sequence. Do not skin Windows or macOS. Invent how it feels to use.
 
 The bar:
 - This is a test of the absolute ceiling of what you can build in one response. Not a demo, not a prototype, not a tech showcase: a finished product with the polish of work from a top studio.
@@ -26,26 +26,25 @@ Hard rules:
 - No library is required. If you use one, load it from a CDN at an exact pinned version only.
 - It must run by opening the file directly in a current evergreen browser, with no server, no build step and no install, and must also work when served from a static host such as GitHub Pages from a subfolder. Relative paths only.
 - Guard every storage access (localStorage/IndexedDB) with try/catch.
-- Google Fonts via a CSS link is the only other permitted external resource. The page must still look good offline with a considered fallback stack.
 
 What "real" means here (all of it must genuinely work):
-- A full menu of at least 30 appetising, specific items across sensible categories, each with a real description, price, and dietary markers; search plus dietary and category filters that work instantly
-- A reservation flow with date, time and party-size logic, validation, unavailable slots and a confirmation state; plus an order or basket flow with quantities, totals and persistence
-- "Open now" status computed from real opening hours against the visitor's clock, special-hours handling, and a working mobile navigation
-- Copy that sounds like the place: story, chef or owner voice, microcopy, error messages. No lorem ipsum, no dead links or buttons
+- A real window manager: drag, resize from all edges and corners, snap, minimise, maximise, correct focus and z-order, multiple instances, alt-tab style switcher, keyboard shortcuts, context menus
+- A virtual filesystem persisted between sessions (folders, create, rename, move, delete, drag and drop) that every app shares
+- At least eight built-in apps of your choosing, including a file manager, a terminal wired to the filesystem with a real command set (pipes, redirection, history, tab completion), a text or code editor, and at least three substantial apps (for example a game, paint or image tool, music player, calendar, browser, system monitor)
+- Launcher with live search, notifications, a settings app that genuinely changes theme, wallpaper and behaviour and persists, and a lock or login screen
+- Never evaluate user input unsafely (no raw eval)
 
 Craft:
-- A distinctive identity: SVG wordmark, palette, type pairing and layout system chosen deliberately and held throughout
-- Food that looks desirable without photographs: illustrate dishes and atmosphere in SVG, canvas, CSS or shaders at a level that makes someone hungry
-- Motion that sells the mood (scroll choreography, hover states, page transitions) without hurting performance
+- A coherent design system: iconography in SVG, motion language, depth and material, sound design
+- Everything feels responsive and alive: animated open and close, smooth drag, no jank with many windows open
 
 Engineering:
 - Stable framerate (delta-time or fixed timestep as appropriate), crisp at any resolution and devicePixelRatio, handles window resize and tab visibility changes, no console errors, no memory leaks.
 - Keyboard accessible where it makes sense, respects prefers-reduced-motion, sensible touch support.
 
 Deliverable: **naming is mandatory, read it twice:**
-- One file only, named exactly: `cafe__{model-slug}__{YYYY-MM-DD}__v2.html`
-  Example: `cafe__claude-sonnet-4-5__2026-11-06__v2.html`
+- One file only, named exactly: `os__{model-slug}__{YYYY-MM-DD}__v2.html`
+  Example: `os__claude-sonnet-4-5__2026-11-06__v2.html`
   Use today's date (YYYY-MM-DD) and your own model name, lowercased, spaces replaced with hyphens. Do not use a creative file name, uppercase or spaces.
 - State that exact file name as the first line of your reply.
 
@@ -59,7 +58,7 @@ Process:
 
 Create exactly one folder at the workspace root named:
 
-**restaurant__MODEL_SLUG__RUN_DATE__v1**
+**os-sim__MODEL_SLUG__RUN_DATE__v1**
 
 Replace the model and date tokens using the rules above. The suffix is always `v1`.
 
@@ -73,12 +72,12 @@ The metadata file must contain this structure, with your resolved model slug and
 {
   "schema_version": 1,
   "model": "MODEL_SLUG",
-  "category": "restaurant",
+  "category": "os-sim",
   "date": "RUN_DATE",
   "version": 1,
   "entry": "index.html",
-  "prompt": "05",
-  "prompt_label": "Restaurant Website",
+  "prompt": "12",
+  "prompt_label": "Browser Operating System",
   "notes": "A concise, honest description of the completed project and any known limitations."
 }
 ~~~

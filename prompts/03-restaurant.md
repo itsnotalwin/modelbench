@@ -1,4 +1,4 @@
-# 16 · Creative Tool
+# 03 · Restaurant Website
 
 ## Automatic run identity — never ask the organiser or user
 
@@ -12,7 +12,7 @@ Use the resolved values in both the output folder and `meta.json`. Do not pause 
 
 ## The brief
 
-Build a professional-grade creative tool that runs in the browser, in a category of your choice: photo editor, vector illustration, pixel-art studio, lettering and type design, generative pattern maker, 3D sculpting, motion design. Pick one and make it feel like a real product that people could use for actual work.
+Build the complete website for a café, restaurant or bar that you invent. Name, cuisine, city, story and identity are entirely up to you. No menu is supplied: you write everything, including a full menu. Choose a concept with a strong point of view and make it feel like a real place people would book a table at tonight.
 
 The bar:
 - This is a test of the absolute ceiling of what you can build in one response. Not a demo, not a prototype, not a tech showcase: a finished product with the polish of work from a top studio.
@@ -26,23 +26,26 @@ Hard rules:
 - No library is required. If you use one, load it from a CDN at an exact pinned version only.
 - It must run by opening the file directly in a current evergreen browser, with no server, no build step and no install, and must also work when served from a static host such as GitHub Pages from a subfolder. Relative paths only.
 - Guard every storage access (localStorage/IndexedDB) with try/catch.
+- Google Fonts via a CSS link is the only other permitted external resource. The page must still look good offline with a considered fallback stack.
 
 What "real" means here (all of it must genuinely work):
-- Handles real files: open via picker and drag-and-drop, export in appropriate formats (PNG, SVG, JSON, or whatever suits), and ships with sample content generated in code so it works on first launch
-- A layered or non-destructive workflow with full undo and redo history, at least eight meaningful tools or operations that work together, keyboard shortcuts, and autosave that restores your work
-- Smooth zoom and pan on large canvases at 60 FPS, with GPU acceleration where it helps
+- A full menu of at least 30 appetising, specific items across sensible categories, each with a real description, price, and dietary markers; search plus dietary and category filters that work instantly
+- A reservation flow with date, time and party-size logic, validation, unavailable slots and a confirmation state; plus an order or basket flow with quantities, totals and persistence
+- "Open now" status computed from real opening hours against the visitor's clock, special-hours handling, and a working mobile navigation
+- Copy that sounds like the place: story, chef or owner voice, microcopy, error messages. No lorem ipsum, no dead links or buttons
 
 Craft:
-- A dense, professional, panelled interface with considered iconography, micro-interactions, tooltips and states
-- Output quality that holds up: precise rendering, correct colour handling, no visible artefacts
+- A distinctive identity: SVG wordmark, palette, type pairing and layout system chosen deliberately and held throughout
+- Food that looks desirable without photographs: illustrate dishes and atmosphere in SVG, canvas, CSS or shaders at a level that makes someone hungry
+- Motion that sells the mood (scroll choreography, hover states, page transitions) without hurting performance
 
 Engineering:
 - Stable framerate (delta-time or fixed timestep as appropriate), crisp at any resolution and devicePixelRatio, handles window resize and tab visibility changes, no console errors, no memory leaks.
 - Keyboard accessible where it makes sense, respects prefers-reduced-motion, sensible touch support.
 
 Deliverable: **naming is mandatory, read it twice:**
-- One file only, named exactly: `tool__{model-slug}__{YYYY-MM-DD}__v1.html`
-  Example: `tool__claude-sonnet-4-5__2026-11-06__v1.html`
+- One file only, named exactly: `cafe__{model-slug}__{YYYY-MM-DD}__v2.html`
+  Example: `cafe__claude-sonnet-4-5__2026-11-06__v2.html`
   Use today's date (YYYY-MM-DD) and your own model name, lowercased, spaces replaced with hyphens. Do not use a creative file name, uppercase or spaces.
 - State that exact file name as the first line of your reply.
 
@@ -56,7 +59,7 @@ Process:
 
 Create exactly one folder at the workspace root named:
 
-**creative-tool__MODEL_SLUG__RUN_DATE__v1**
+**restaurant__MODEL_SLUG__RUN_DATE__v1**
 
 Replace the model and date tokens using the rules above. The suffix is always `v1`.
 
@@ -70,12 +73,12 @@ The metadata file must contain this structure, with your resolved model slug and
 {
   "schema_version": 1,
   "model": "MODEL_SLUG",
-  "category": "creative-tool",
+  "category": "restaurant",
   "date": "RUN_DATE",
   "version": 1,
   "entry": "index.html",
-  "prompt": "16",
-  "prompt_label": "Creative Tool",
+  "prompt": "03",
+  "prompt_label": "Restaurant Website",
   "notes": "A concise, honest description of the completed project and any known limitations."
 }
 ~~~

@@ -5,7 +5,7 @@ A responsive, full-stack explorer for the [ModelBench](https://github.com/itsnot
 ## Workspace
 
 - **Explore:** search actual artifact notes and titles, filter models and challenges, sort, bookmark, and switch gallery layouts.
-- **Challenges:** browse all 22 original briefs by family. Read, copy, or download the unmodified prompt.
+- **Challenges:** browse all 13 web-development briefs by family. Read, copy, or download the unmodified prompt.
 - **Inspect:** review original run notes, launch an upstream artifact, or open an isolated, on-demand preview in desktop, tablet, or phone dimensions.
 - **Compare:** compare up to three runs, their six-axis scorecards, and opt-in live previews.
 - **Leaderboard:** organizer-owned evaluations on the original 0–5 scale, in half-point steps. A run only ranks after all six axes are filled. Import and export the original ModelBench v1 ratings JSON format.
@@ -43,7 +43,7 @@ The thumbnails are original editorial covers, not screenshots of the runs. The l
 | --- | --- |
 | `inbox/` | Drop uploads here: a ZIP with `meta.json` + `index.html` at its root, or a legacy `category__model__YYYY-MM-DD__vN.html`. |
 | `runs/` | One folder per graded run, written by `tools/sort_inbox.py`. Artifacts stay byte-identical to the upload. |
-| `prompts/` | Source briefs (`01-website.md` … `22-site-refresh.md`) and `catalog.json` (v15, 22 challenges). |
+| `prompts/` | Source briefs (`01-website.md` … `13-data-story.md`) and `catalog.json` (v16, 13 challenges). |
 | `manifest.json` | Machine index built by `tools/build_manifest.py`. |
 | `src/data/catalog.json` | Compact snapshot the explorer imports at build time. |
 | `legacy/static-dashboard/` | The retired single-file `index.html` dashboard and its PWA generator, kept for reference. |

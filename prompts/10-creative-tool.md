@@ -1,4 +1,4 @@
-# 09 · Browser Operating System
+# 10 · Creative Tool
 
 ## Automatic run identity — never ask the organiser or user
 
@@ -12,7 +12,7 @@ Use the resolved values in both the output folder and `meta.json`. Do not pause 
 
 ## The brief
 
-Build a complete desktop operating system that runs in the browser, with an identity of its own: name, visual language, wallpapers, icons, sounds, boot sequence. Do not skin Windows or macOS. Invent how it feels to use.
+Build a professional-grade creative tool that runs in the browser, in a category of your choice: photo editor, vector illustration, pixel-art studio, lettering and type design, generative pattern maker, 3D sculpting, motion design. Pick one and make it feel like a real product that people could use for actual work.
 
 The bar:
 - This is a test of the absolute ceiling of what you can build in one response. Not a demo, not a prototype, not a tech showcase: a finished product with the polish of work from a top studio.
@@ -28,23 +28,21 @@ Hard rules:
 - Guard every storage access (localStorage/IndexedDB) with try/catch.
 
 What "real" means here (all of it must genuinely work):
-- A real window manager: drag, resize from all edges and corners, snap, minimise, maximise, correct focus and z-order, multiple instances, alt-tab style switcher, keyboard shortcuts, context menus
-- A virtual filesystem persisted between sessions (folders, create, rename, move, delete, drag and drop) that every app shares
-- At least eight built-in apps of your choosing, including a file manager, a terminal wired to the filesystem with a real command set (pipes, redirection, history, tab completion), a text or code editor, and at least three substantial apps (for example a game, paint or image tool, music player, calendar, browser, system monitor)
-- Launcher with live search, notifications, a settings app that genuinely changes theme, wallpaper and behaviour and persists, and a lock or login screen
-- Never evaluate user input unsafely (no raw eval)
+- Handles real files: open via picker and drag-and-drop, export in appropriate formats (PNG, SVG, JSON, or whatever suits), and ships with sample content generated in code so it works on first launch
+- A layered or non-destructive workflow with full undo and redo history, at least eight meaningful tools or operations that work together, keyboard shortcuts, and autosave that restores your work
+- Smooth zoom and pan on large canvases at 60 FPS, with GPU acceleration where it helps
 
 Craft:
-- A coherent design system: iconography in SVG, motion language, depth and material, sound design
-- Everything feels responsive and alive: animated open and close, smooth drag, no jank with many windows open
+- A dense, professional, panelled interface with considered iconography, micro-interactions, tooltips and states
+- Output quality that holds up: precise rendering, correct colour handling, no visible artefacts
 
 Engineering:
 - Stable framerate (delta-time or fixed timestep as appropriate), crisp at any resolution and devicePixelRatio, handles window resize and tab visibility changes, no console errors, no memory leaks.
 - Keyboard accessible where it makes sense, respects prefers-reduced-motion, sensible touch support.
 
 Deliverable: **naming is mandatory, read it twice:**
-- One file only, named exactly: `os__{model-slug}__{YYYY-MM-DD}__v2.html`
-  Example: `os__claude-sonnet-4-5__2026-11-06__v2.html`
+- One file only, named exactly: `tool__{model-slug}__{YYYY-MM-DD}__v1.html`
+  Example: `tool__claude-sonnet-4-5__2026-11-06__v1.html`
   Use today's date (YYYY-MM-DD) and your own model name, lowercased, spaces replaced with hyphens. Do not use a creative file name, uppercase or spaces.
 - State that exact file name as the first line of your reply.
 
@@ -58,7 +56,7 @@ Process:
 
 Create exactly one folder at the workspace root named:
 
-**os-sim__MODEL_SLUG__RUN_DATE__v1**
+**creative-tool__MODEL_SLUG__RUN_DATE__v1**
 
 Replace the model and date tokens using the rules above. The suffix is always `v1`.
 
@@ -72,12 +70,12 @@ The metadata file must contain this structure, with your resolved model slug and
 {
   "schema_version": 1,
   "model": "MODEL_SLUG",
-  "category": "os-sim",
+  "category": "creative-tool",
   "date": "RUN_DATE",
   "version": 1,
   "entry": "index.html",
-  "prompt": "09",
-  "prompt_label": "Browser Operating System",
+  "prompt": "10",
+  "prompt_label": "Creative Tool",
   "notes": "A concise, honest description of the completed project and any known limitations."
 }
 ~~~

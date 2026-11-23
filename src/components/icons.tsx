@@ -55,5 +55,6 @@ export function Icon({ name, size = 18, className = "", style, filled = false }:
 export function BrandMark({ size = 34 }: { size?: number }) {
   return <svg aria-hidden="true" width={size} height={size} viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="8" fill="#1C201B"/><path d="m6.5 24 6.8-14h4.5l-6.5 14H6.5Zm10.1 0-3.3-7 2.4-5 3.3 7-2.4 5Zm1.7 0 6.5-14h4.7L23 24h-4.7Z" fill="#C4F478"/></svg>;
 }
-export const familyIcon = (family: string) => ({ Web: "globe", Games: "game", Visual: "color", Worlds: "world" }[family] || "box");
+export const familyIcon = (family: string) => ({ "Websites": "globe", "HTML/CSS": "code", "JavaScript": "code", "Three.js": "box", "Visual": "color", "Applications": "layers", "Data": "axis" }[family] || "box");
+export const familyTone = (family: string) => ({ "Websites": "web", "HTML/CSS": "web", "JavaScript": "games", "Three.js": "worlds", "Visual": "visual", "Applications": "web", "Data": "worlds" }[family] || "web");
 export const categoryIcon = (slug: string) => slug === "restaurant" ? "food" : slug.includes("game") ? "game" : slug === "saas" ? "layers" : "globe";

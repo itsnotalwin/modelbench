@@ -270,10 +270,10 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
     def test_catalog_covers_all_challenges(self):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
         prompts = catalog["prompts"]
-        self.assertEqual(len(prompts), 7)
-        self.assertEqual([p["no"] for p in prompts], [str(n) for n in range(1, 8)])
+        self.assertEqual(len(prompts), 13)
+        self.assertEqual([p["no"] for p in prompts], [f"{n:02d}" for n in range(1, 14)])
         self.assertEqual(len({p["slug"] for p in prompts}), len(prompts))
-        self.assertTrue({p["family"] for p in prompts} <= {"Web", "Games", "Visual", "Worlds"})
+        self.assertTrue({p["family"] for p in prompts} <= {"Websites", "HTML/CSS", "JavaScript", "Three.js", "Visual", "Applications", "Data"})
         for challenge in prompts:
             matches = list((REPO_ROOT / "prompts").glob(f"{challenge['no']}-*.md"))
             self.assertEqual(len(matches), 1, f"expected one prompt file for {challenge['no']}")
@@ -290,9 +290,9 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
         self.assertEqual(len(catalog["prompts"]), 7)
         manifest = json.loads((REPO_ROOT / "manifest.json").read_text(encoding="utf-8"))
-        self.assertEqual(len(manifest["catalog"]), 7)
+        self.assertEqual(len(manifest["catalog"]), 13)
         explorer_catalog = json.loads((REPO_ROOT / "src" / "data" / "catalog.json").read_text(encoding="utf-8"))
-        self.assertEqual(len(explorer_catalog["challenges"]), 7)
+        self.assertEqual(len(explorer_catalog["challenges"]), 13)
         self.assertEqual(sorted(r["slug"] for r in explorer_catalog["runs"]), sorted(r["slug"] for r in manifest["runs"]))
 
 
@@ -344,7 +344,7 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
         self.assertGreaterEqual(catalog["version"], 1)
         self.assertEqual(catalog["outputs_per_prompt"], 1)
         self.assertGreater(len(prompts), 0)
-        self.assertEqual([p["no"] for p in prompts], [str(n) for n in range(1, len(prompts) + 1)])
+        self.assertEqual([p["no"] for p in prompts], [f"{n:02d}" for n in range(1, len(prompts) + 1)])
         self.assertEqual(len({p["slug"] for p in prompts}), len(prompts))
         self.assertTrue(all(p["min_outputs"] == 1 for p in prompts))
 
@@ -417,6 +417,23 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
         manifest = json.loads((REPO_ROOT / "manifest.json").read_text(encoding="utf-8"))
         self.assertEqual(manifest.get("catalog"), source["prompts"])
 
+
+    def test_webdev_prompts_are_grouped_by_technology_in_order(self):
+        catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
+        self.assertEqual([p["family"] for p in catalog["prompts"]], ["Websites", "Websites", "Websites", "HTML/CSS", "HTML/CSS", "HTML/CSS", "JavaScript", "Three.js", "Visual", "Visual", "Visual", "Applications", "Data"])
+        self.assertEqual([p["title"] for p in catalog["prompts"][3:9]], ["Editorial Website", "CSS Interactive Experience", "Design System", "JavaScript Application", "Three.js 3D Experience", "SVG Drawing Studio"])
+        checks = {
+            "04-editorial-website.md": ["semantic HTML5 and CSS3", "two additional content pages"],
+            "05-css-experience.md": ["HTML and CSS only", "JavaScript is not permitted"],
+            "06-design-system.md": ["design system", "CSS custom properties"],
+            "07-javascript-app.md": ["vanilla JavaScript", "Do not use React"],
+            "08-threejs-experience.md": ["Three.js", "0.160.0"],
+            "09-svg-studio.md": ["SVG must be the primary rendering format", "undo and redo"],
+        }
+        for filename, phrases in checks.items():
+            body = (REPO_ROOT / "prompts" / filename).read_text(encoding="utf-8")
+            for phrase in phrases:
+                self.assertIn(phrase, body)
 
 
 if __name__ == "__main__":
