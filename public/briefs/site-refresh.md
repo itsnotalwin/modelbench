@@ -1,4 +1,4 @@
-# 22 · Production Site Refresh
+# 02 · Production Site Refresh
 
 ## Automatic run identity — never ask the organiser or user
 
@@ -108,7 +108,7 @@ The metadata file must contain this structure, with your resolved model slug and
   "date": "RUN_DATE",
   "version": 1,
   "entry": "index.html",
-  "prompt": "22",
+  "prompt": "02",
   "prompt_label": "Production Site Refresh",
   "notes": "The commit studied, refresh or rebrand and why, what changed, which series are fiction, what could not be verified, and any known limitations — under 1200 characters."
 }

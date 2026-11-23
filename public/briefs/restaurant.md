@@ -1,4 +1,4 @@
-# 05 · Restaurant Website
+# 03 · Restaurant Website
 
 ## Automatic run identity — never ask the organiser or user
 
@@ -77,7 +77,7 @@ The metadata file must contain this structure, with your resolved model slug and
   "date": "RUN_DATE",
   "version": 1,
   "entry": "index.html",
-  "prompt": "05",
+  "prompt": "03",
   "prompt_label": "Restaurant Website",
   "notes": "A concise, honest description of the completed project and any known limitations."
 }

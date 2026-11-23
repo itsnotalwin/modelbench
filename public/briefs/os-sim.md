@@ -1,4 +1,4 @@
-# 09 · Browser Operating System
+# 12 · Browser Operating System
 
 ## Automatic run identity — never ask the organiser or user
 
@@ -76,7 +76,7 @@ The metadata file must contain this structure, with your resolved model slug and
   "date": "RUN_DATE",
   "version": 1,
   "entry": "index.html",
-  "prompt": "09",
+  "prompt": "12",
   "prompt_label": "Browser Operating System",
   "notes": "A concise, honest description of the completed project and any known limitations."
 }

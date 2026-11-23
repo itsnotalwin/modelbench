@@ -1,4 +1,4 @@
-# 16 · Creative Tool
+# 10 · Creative Tool
 
 ## Automatic run identity — never ask the organiser or user
 
@@ -74,7 +74,7 @@ The metadata file must contain this structure, with your resolved model slug and
   "date": "RUN_DATE",
   "version": 1,
   "entry": "index.html",
-  "prompt": "16",
+  "prompt": "10",
   "prompt_label": "Creative Tool",
   "notes": "A concise, honest description of the completed project and any known limitations."
 }
