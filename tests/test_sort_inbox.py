@@ -344,7 +344,7 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
         self.assertGreaterEqual(catalog["version"], 1)
         self.assertEqual(catalog["outputs_per_prompt"], 1)
         self.assertGreater(len(prompts), 0)
-        self.assertEqual([p["no"] for p in prompts], [str(n) for n in range(1, len(prompts) + 1)])
+        self.assertEqual([p["no"] for p in prompts], [f"{n:02d}" for n in range(1, len(prompts) + 1)])
         self.assertEqual(len({p["slug"] for p in prompts}), len(prompts))
         self.assertTrue(all(p["min_outputs"] == 1 for p in prompts))
 
