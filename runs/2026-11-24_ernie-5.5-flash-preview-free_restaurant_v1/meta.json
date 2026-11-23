@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "ernie-5.5-flash-preview-free",
+  "category": "restaurant",
+  "date": "2026-11-24",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "03",
+  "prompt_label": "Restaurant Website",
+  "notes": "VERDIGRIS, an invented oyster bar and Atlantic wine house in Saint-Malo intra-muros, built as one self-contained HTML file with inline CSS, JS, SVG illustration and Web Audio sound. 52 dishes, wines and cocktails with descriptions, prices and dietary markers; instant search plus category and dietary filters; a live open/closed status computed from real weekly hours and special holiday services; a custom calendar reservation flow with party-size-aware deterministic availability, inline validation, confirmation, .ics download and cancellation; a takeaway basket ('Le Comptoir') with quantities, collection slots, totals and localStorage persistence. Table availability is simulated deterministically (no backend) and all state is local to the browser; every storage access is guarded. Google Fonts (Fraunces, Archivo, DM Mono) is the only external request, with local fallback stacks, so the page also works offline. Responsive down to 360px, keyboard operable, focus-trapped overlays, reduced-motion support, DPR-aware canvas. Known limitations: no real payment or email delivery, and opening hours are fictional.",
+  "slug": "2026-11-24_ernie-5.5-flash-preview-free_restaurant_v1",
+  "path": "runs/2026-11-24_ernie-5.5-flash-preview-free_restaurant_v1/index.html",
+  "source_file": "restaurant__ernie-5.5-flash-preview-free__2026-11-24__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

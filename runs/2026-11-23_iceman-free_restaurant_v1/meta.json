@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "iceman-free",
+  "category": "restaurant",
+  "date": "2026-11-23",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "03",
+  "prompt_label": "Restaurant Website",
+  "notes": "BRASA is a single-file live-fire osteria site for a fictional Fishtown, Philadelphia restaurant. Includes a 32-item illustrated SVG menu with instant search/category/dietary filters, localStorage-backed basket with quantities and totals, reservation flow with date/party-aware unavailable slots and confirmation, real-time open/closed hours with special-hours handling, mobile nav, scroll reveals, and an interactive ember canvas. Known limitation: no real backend for reservations/orders; map and confirmations are simulated client-side.",
+  "slug": "2026-11-23_iceman-free_restaurant_v1",
+  "path": "runs/2026-11-23_iceman-free_restaurant_v1/index.html",
+  "source_file": "restaurant__iceman-free__2026-11-23__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}
