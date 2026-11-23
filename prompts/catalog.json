@@ -3,7 +3,7 @@
   "outputs_per_prompt": 1,
   "prompts": [
     {
-      "no": "01",
+      "no": "1",
       "slug": "website",
       "title": "Website",
       "family": "Web",
@@ -14,48 +14,15 @@
       "hue": 265
     },
     {
-      "no": "05",
-      "slug": "restaurant",
-      "title": "Restaurant Website",
+      "no": "22",
+      "slug": "site-refresh",
+      "title": "Production Site Refresh",
       "family": "Web",
-      "summary": "A restaurant or cafe website with a full menu, reservations and a distinctive art direction.",
-      "requirement": "Real menu with 30+ items; reservation and order flows with validation; opening-hours logic; strong identity; responsive and accessible",
+      "summary": "A fixed source: refresh the live Shutterhaus Visuals production site — same doctrine, a generation better, shipped as one self-contained static folder.",
+      "requirement": "All five public pages rebuilt; keyboard gallery and scroll frames preserved; zero third-party requests; no build step; content in the markup; WCAG 2.2 AA; verified performance budget",
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
-      "hue": 18
-    },
-    {
-      "no": "09",
-      "slug": "os-sim",
-      "title": "Browser Operating System",
-      "family": "Web",
-      "summary": "A complete desktop operating system in the browser with its own identity, window management and a shared filesystem.",
-      "requirement": "Window manager with snap and z-order; persisted shared filesystem; eight or more apps including a terminal and editor; launcher search; persistent settings",
-      "output": "1 complete ZIP-ready project folder",
-      "min_outputs": 1,
-      "hue": 215
-    },
-    {
-      "no": "13",
-      "slug": "data-story",
-      "title": "Data Story",
-      "family": "Visual",
-      "summary": "An interactive data-driven story built on a generated dataset, told through linked custom visualisations.",
-      "requirement": "Four or more hand-built visual forms with linked interaction; a genuine insight with a narrative arc; annotations, tooltips and CSV export; responsive redraw",
-      "output": "1 complete ZIP-ready project folder",
-      "min_outputs": 1,
-      "hue": 45
-    },
-    {
-      "no": "14",
-      "slug": "generative-art",
-      "title": "Generative Art",
-      "family": "Visual",
-      "summary": "A seeded generative artwork that evolves in real time and is worth watching rather than a screensaver.",
-      "requirement": "Deterministic seeding from the URL; three or more scenes or developments; collaborative interaction; high-resolution PNG export; adaptive resolution",
-      "output": "1 complete ZIP-ready project folder",
-      "min_outputs": 1,
-      "hue": 330
+      "hue": 42
     },
     {
       "no": "16",
@@ -69,15 +36,48 @@
       "hue": 25
     },
     {
-      "no": "22",
-      "slug": "site-refresh",
-      "title": "Production Site Refresh",
-      "family": "Web",
-      "summary": "A fixed source: refresh the live Shutterhaus Visuals production site — same doctrine, a generation better, shipped as one self-contained static folder.",
-      "requirement": "All five public pages rebuilt; keyboard gallery and scroll frames preserved; zero third-party requests; no build step; content in the markup; WCAG 2.2 AA; verified performance budget",
+      "no": "14",
+      "slug": "generative-art",
+      "title": "Generative Art",
+      "family": "Visual",
+      "summary": "A seeded generative artwork that evolves in real time and is worth watching rather than a screensaver.",
+      "requirement": "Deterministic seeding from the URL; three or more scenes or developments; collaborative interaction; high-resolution PNG export; adaptive resolution",
       "output": "1 complete ZIP-ready project folder",
       "min_outputs": 1,
-      "hue": 42
+      "hue": 330
+    },
+    {
+      "no": "9",
+      "slug": "os-sim",
+      "title": "Browser Operating System",
+      "family": "Web",
+      "summary": "A complete desktop operating system in the browser with its own identity, window management and a shared filesystem.",
+      "requirement": "Window manager with snap and z-order; persisted shared filesystem; eight or more apps including a terminal and editor; launcher search; persistent settings",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 215
+    },
+    {
+      "no": "5",
+      "slug": "restaurant",
+      "title": "Restaurant Website",
+      "family": "Web",
+      "summary": "A restaurant or cafe website with a full menu, reservations and a distinctive art direction.",
+      "requirement": "Real menu with 30+ items; reservation and order flows with validation; opening-hours logic; strong identity; responsive and accessible",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 18
+    },
+    {
+      "no": "13",
+      "slug": "data-story",
+      "title": "Data Story",
+      "family": "Visual",
+      "summary": "An interactive data-driven story built on a generated dataset, told through linked custom visualisations.",
+      "requirement": "Four or more hand-built visual forms with linked interaction; a genuine insight with a narrative arc; annotations, tooltips and CSV export; responsive redraw",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 45
     }
   ]
 }
