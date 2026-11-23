@@ -5,7 +5,7 @@ A responsive, full-stack explorer for the [ModelBench](https://github.com/itsnot
 ## Workspace
 
 - **Explore:** search actual artifact notes and titles, filter models and challenges, sort, bookmark, and switch gallery layouts.
-- **Challenges:** browse all 22 original briefs by family. Read, copy, or download the unmodified prompt.
+- **Challenges:** browse all 13 web-development briefs by family. Read, copy, or download the unmodified prompt.
 - **Inspect:** review original run notes, launch an upstream artifact, or open an isolated, on-demand preview in desktop, tablet, or phone dimensions.
 - **Compare:** compare up to three runs, their six-axis scorecards, and opt-in live previews.
 - **Leaderboard:** organizer-owned evaluations on the original 0–5 scale, in half-point steps. A run only ranks after all six axes are filled. Import and export the original ModelBench v1 ratings JSON format.
