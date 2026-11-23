@@ -288,7 +288,7 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
         self.assertIn("One prompt. One finished artifact.", copy)
         self.assertIn("project folder", copy)
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
-        self.assertEqual(len(catalog["prompts"]), 7)
+        self.assertEqual(len(catalog["prompts"]), 13)
         manifest = json.loads((REPO_ROOT / "manifest.json").read_text(encoding="utf-8"))
         self.assertEqual(len(manifest["catalog"]), 13)
         explorer_catalog = json.loads((REPO_ROOT / "src" / "data" / "catalog.json").read_text(encoding="utf-8"))
@@ -313,12 +313,12 @@ class PromptCatalogIntegrityTests(unittest.TestCase):
         catalog = json.loads((REPO_ROOT / "prompts" / "catalog.json").read_text(encoding="utf-8"))
         prompts = {p["slug"]: p for p in catalog["prompts"]}
         self.assertIn("generative-art", prompts)
-        body = (REPO_ROOT / "prompts" / "4-generative-art.md").read_text(encoding="utf-8")
+        body = (REPO_ROOT / "prompts" / "11-generative-art.md").read_text(encoding="utf-8")
         self.assertIn("Technique is yours", body)
         self.assertIn("At least three distinct movements or scenes", body)
 
     def test_creative_tool_prompt_leaves_the_application_choice_open(self):
-        body = (REPO_ROOT / "prompts" / "3-creative-tool.md").read_text(encoding="utf-8")
+        body = (REPO_ROOT / "prompts" / "10-creative-tool.md").read_text(encoding="utf-8")
         self.assertIn("in a category of your choice", body)
         self.assertIn("Pick one", body)
         self.assertNotIn("must be a photo editor", body.lower())
