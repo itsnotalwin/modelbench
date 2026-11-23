@@ -1,12 +1,12 @@
 {
-  "version": 15,
+  "version": 16,
   "outputs_per_prompt": 1,
   "prompts": [
     {
-      "no": "1",
+      "no": "01",
       "slug": "website",
       "title": "Website",
-      "family": "Web",
+      "family": "Websites",
       "summary": "An open website brief: the model invents the subject, brand, content and visual direction of a complete site.",
       "requirement": "Original concept and identity; substantial real content; responsive layout; working interactions; accessible and fast",
       "output": "1 complete ZIP-ready project folder",
@@ -14,10 +14,10 @@
       "hue": 265
     },
     {
-      "no": "2",
+      "no": "02",
       "slug": "site-refresh",
       "title": "Production Site Refresh",
-      "family": "Web",
+      "family": "Websites",
       "summary": "A fixed source: refresh the live Shutterhaus Visuals production site — same doctrine, a generation better, shipped as one self-contained static folder.",
       "requirement": "All five public pages rebuilt; keyboard gallery and scroll frames preserved; zero third-party requests; no build step; content in the markup; WCAG 2.2 AA; verified performance budget",
       "output": "1 complete ZIP-ready project folder",
@@ -25,10 +25,87 @@
       "hue": 42
     },
     {
-      "no": "3",
+      "no": "03",
+      "slug": "restaurant",
+      "title": "Restaurant Website",
+      "family": "Websites",
+      "summary": "A restaurant or cafe website with a full menu, reservations and a distinctive art direction.",
+      "requirement": "Real menu with 30+ items; reservation and order flows with validation; opening-hours logic; strong identity; responsive and accessible",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 18
+    },
+    {
+      "no": "04",
+      "slug": "editorial-website",
+      "title": "Editorial Website",
+      "family": "HTML/CSS",
+      "summary": "A complete editorial publication with a distinctive identity, substantial content and a considered multi-page reading experience.",
+      "requirement": "Semantic HTML; sophisticated CSS layout and typography; homepage plus two content pages; responsive navigation; accessible and polished",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 205
+    },
+    {
+      "no": "05",
+      "slug": "css-experience",
+      "title": "CSS Interactive Experience",
+      "family": "HTML/CSS",
+      "summary": "An original interactive browser experience built with HTML and advanced CSS, without JavaScript.",
+      "requirement": "CSS-only interaction and animation; advanced layout and custom properties; responsive states; reduced-motion support; accessible native controls",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 285
+    },
+    {
+      "no": "06",
+      "slug": "design-system",
+      "title": "Design System",
+      "family": "HTML/CSS",
+      "summary": "A complete reusable design system with tokens, components, variants and a showcase of the system in use.",
+      "requirement": "Semantic HTML and CSS; coherent design tokens; reusable components; interaction states; responsive showcase; accessible component patterns",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 145
+    },
+    {
+      "no": "07",
+      "slug": "javascript-app",
+      "title": "JavaScript Application",
+      "family": "JavaScript",
+      "summary": "A complete browser application built with vanilla JavaScript, meaningful workflows and persistent user data.",
+      "requirement": "Vanilla JavaScript; real state and data management; multiple views; validation and error handling; persistence; import/export where relevant",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 52
+    },
+    {
+      "no": "08",
+      "slug": "threejs-experience",
+      "title": "Three.js 3D Experience",
+      "family": "Three.js",
+      "summary": "An original interactive 3D browser experience built around a real Three.js scene.",
+      "requirement": "Three.js rendering; geometry, materials and lighting; camera and scene interaction; animation; responsive controls; performance and WebGL fallback",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 230
+    },
+    {
+      "no": "09",
+      "slug": "svg-studio",
+      "title": "SVG Drawing Studio",
+      "family": "Visual",
+      "summary": "A browser-based vector drawing studio where users create, select, transform and export real SVG artwork.",
+      "requirement": "SVG-first rendering; editable shapes and paths; selection and transforms; fill and stroke controls; undo/redo; SVG export; pointer and keyboard support",
+      "output": "1 complete ZIP-ready project folder",
+      "min_outputs": 1,
+      "hue": 325
+    },
+    {
+      "no": "10",
       "slug": "creative-tool",
       "title": "Creative Tool",
-      "family": "Web",
+      "family": "Visual",
       "summary": "A professional-grade creative tool in the browser: layered, non-destructive, fast and dense enough for real work.",
       "requirement": "Real file open and export; layered non-destructive workflow with undo/redo; eight or more tools; autosave; smooth zoom and pan on large canvases",
       "output": "1 complete ZIP-ready project folder",
@@ -36,7 +113,7 @@
       "hue": 25
     },
     {
-      "no": "4",
+      "no": "11",
       "slug": "generative-art",
       "title": "Generative Art",
       "family": "Visual",
@@ -47,10 +124,10 @@
       "hue": 330
     },
     {
-      "no": "5",
+      "no": "12",
       "slug": "os-sim",
       "title": "Browser Operating System",
-      "family": "Web",
+      "family": "Applications",
       "summary": "A complete desktop operating system in the browser with its own identity, window management and a shared filesystem.",
       "requirement": "Window manager with snap and z-order; persisted shared filesystem; eight or more apps including a terminal and editor; launcher search; persistent settings",
       "output": "1 complete ZIP-ready project folder",
@@ -58,21 +135,10 @@
       "hue": 215
     },
     {
-      "no": "6",
-      "slug": "restaurant",
-      "title": "Restaurant Website",
-      "family": "Web",
-      "summary": "A restaurant or cafe website with a full menu, reservations and a distinctive art direction.",
-      "requirement": "Real menu with 30+ items; reservation and order flows with validation; opening-hours logic; strong identity; responsive and accessible",
-      "output": "1 complete ZIP-ready project folder",
-      "min_outputs": 1,
-      "hue": 18
-    },
-    {
-      "no": "7",
+      "no": "13",
       "slug": "data-story",
       "title": "Data Story",
-      "family": "Visual",
+      "family": "Data",
       "summary": "An interactive data-driven story built on a generated dataset, told through linked custom visualisations.",
       "requirement": "Four or more hand-built visual forms with linked interaction; a genuine insight with a narrative arc; annotations, tooltips and CSV export; responsive redraw",
       "output": "1 complete ZIP-ready project folder",
