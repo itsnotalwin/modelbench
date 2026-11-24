@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "nemotron-3-5-lightning-free",
+  "category": "website",
+  "date": "2026-11-24",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "01",
+  "prompt_label": "Website",
+  "notes": "A monochrome showcase website exploring typography, layout, and interaction within a strictly black, white, and greyscale palette. No accent colours, no external dependencies, no build step. All imagery generated via SVG/CSS. Fully responsive, keyboard accessible, respects prefers-reduced-motion.",
+  "slug": "2026-11-24_nemotron-3-5-lightning-free_website_v1",
+  "path": "runs/2026-11-24_nemotron-3-5-lightning-free_website_v1/index.html",
+  "source_file": "website__nemotron-3-5-lightning-free__2026-11-24__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

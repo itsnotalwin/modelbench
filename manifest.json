@@ -1,6 +1,6 @@
 {
   "generated_from": "runs/",
-  "count": 9,
+  "count": 12,
   "catalog": [
     {
       "no": "01",
@@ -155,6 +155,111 @@
     "performance"
   ],
   "runs": [
+    {
+      "schema_version": 1,
+      "model": "nemotron-3-ultra-550b-a55b-free",
+      "category": "website",
+      "date": "2026-11-24",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "01",
+      "prompt_label": "Website",
+      "notes": "OFFSET \u2014 A monochrome design engineering journal with four interactive generative figures: (1) force-directed whitespace layout with draggable blocks, (2) phi phenomenon motion demonstrations exploiting perceptual persistence, (3) reactive design token engine with live primitive sliders, (4) real-time luminance structure analysis of the page itself. All figures render to canvas via vanilla JS (~45KB total). No external dependencies, no build step, respects prefers-reduced-motion, WCAG 2.1 AA accessible, works offline and on GitHub Pages. Known limitation: constraint figure requires scroll position to analyze live page structure; initial render may be empty until scroll occurs.",
+      "slug": "2026-11-24_nemotron-3-ultra-550b-a55b-free_website_v1",
+      "path": "runs/2026-11-24_nemotron-3-ultra-550b-a55b-free_website_v1/index.html",
+      "source_file": "2026-11-24_nemotron-3-ultra-550b-a55b-free_website_v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "files": [
+        "README.md",
+        "index.html",
+        "js/app.js",
+        "meta.json",
+        "styles.css"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "nemotron-3-nano-omni-30b-a3b-reasoning",
+      "category": "website",
+      "date": "2026-11-24",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "01",
+      "prompt_label": "Website",
+      "notes": "A monochrome responsive website built with pure HTML, CSS, and JavaScript. Demonstrates exceptional design, typography, layout, and engineering while adhering to accessibility and performance constraints.",
+      "slug": "2026-11-24_nemotron-3-nano-omni-30b-a3b-reasoning_website_v1",
+      "path": "runs/2026-11-24_nemotron-3-nano-omni-30b-a3b-reasoning_website_v1/index.html",
+      "source_file": "website_nemotron-3-nano-omni-30b-a3b-reasoning_2026-11-24_v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "files": [
+        "index.html",
+        "meta.json",
+        "script.js",
+        "styles.css"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "nemotron-3-5-lightning-free",
+      "category": "website",
+      "date": "2026-11-24",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "01",
+      "prompt_label": "Website",
+      "notes": "A monochrome showcase website exploring typography, layout, and interaction within a strictly black, white, and greyscale palette. No accent colours, no external dependencies, no build step. All imagery generated via SVG/CSS. Fully responsive, keyboard accessible, respects prefers-reduced-motion.",
+      "slug": "2026-11-24_nemotron-3-5-lightning-free_website_v1",
+      "path": "runs/2026-11-24_nemotron-3-5-lightning-free_website_v1/index.html",
+      "source_file": "website__nemotron-3-5-lightning-free__2026-11-24__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "files": [
+        "README.md",
+        "favicon.svg",
+        "index.html",
+        "js/app.js",
+        "meta.json",
+        "styles.css"
+      ]
+    },
     {
       "schema_version": 1,
       "model": "beam-free",

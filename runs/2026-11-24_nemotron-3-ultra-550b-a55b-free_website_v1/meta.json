@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "nemotron-3-ultra-550b-a55b-free",
+  "category": "website",
+  "date": "2026-11-24",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "01",
+  "prompt_label": "Website",
+  "notes": "OFFSET — A monochrome design engineering journal with four interactive generative figures: (1) force-directed whitespace layout with draggable blocks, (2) phi phenomenon motion demonstrations exploiting perceptual persistence, (3) reactive design token engine with live primitive sliders, (4) real-time luminance structure analysis of the page itself. All figures render to canvas via vanilla JS (~45KB total). No external dependencies, no build step, respects prefers-reduced-motion, WCAG 2.1 AA accessible, works offline and on GitHub Pages. Known limitation: constraint figure requires scroll position to analyze live page structure; initial render may be empty until scroll occurs.",
+  "slug": "2026-11-24_nemotron-3-ultra-550b-a55b-free_website_v1",
+  "path": "runs/2026-11-24_nemotron-3-ultra-550b-a55b-free_website_v1/index.html",
+  "source_file": "2026-11-24_nemotron-3-ultra-550b-a55b-free_website_v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

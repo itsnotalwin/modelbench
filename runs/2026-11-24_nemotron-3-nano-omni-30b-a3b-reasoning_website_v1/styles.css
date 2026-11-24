@@ -1,0 +1,67 @@
+:root {
+  --bg: #fff;
+  --txt: #000;
+  --mid: #777;
+}
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--txt);
+}
+header {
+  padding: 2rem;
+  text-align: center;
+  background: var(--mid);
+  color: var(--txt);
+}
+nav {
+  margin: 1rem auto;
+  width: fit-content;
+}
+nav a {
+  color: var(--txt);
+  text-decoration: none;
+}
+main {
+  padding: 2rem;
+  max-width: 800px;
+  margin: auto;
+  line-height: 1.6;
+}
+button {
+  padding: 0.5rem 1rem;
+  background: var(--mid);
+  color: var(--txt);
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+footer {
+  text-align: center;
+  padding: 1rem;
+  background: var(--mid);
+  color: var(--txt);
+}
+a:focus, button:focus {
+  outline: 2px solid var(--mid);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+.inverse {
+  --bg: #000;
+  --txt: #fff;
+  --mid: #555;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000;
+    --txt: #fff;
+    --mid: #555;
+  }
+}

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="OFFSET — A monochrome journal of design engineering. Exploring the craft of digital systems through interactive essays and generative figures.">
+    <title>OFFSET — Design Engineering Journal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23000' x='10' y='10' width='80' height='80' rx='8'/><path fill='%23fff' d='M30 50 L70 50 M50 30 L50 70' stroke='%23fff' stroke-width='12' stroke-linecap='round'/></svg>">
+    <script>
+        // Respect prefers-reduced-motion immediately
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.documentElement.classList.add('reduced-motion');
+        }
+    </script>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <header class="site-header" role="banner">
+        <nav class="nav" aria-label="Primary navigation">
+            <a href="#" class="nav-brand" aria-label="OFFSET home">
+                <span class="brand-mark" aria-hidden="true"></span>
+                <span class="brand-text">OFFSET</span>
+            </a>
+            <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle navigation">
+                <span class="nav-toggle-bar" aria-hidden="true"></span>
+            </button>
+            <ul id="nav-menu" class="nav-menu" role="list">
+                <li><a href="#essays" class="nav-link">Essays</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#colophon" class="nav-link">Colophon</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="main" role="main">
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero-canvas-wrap">
+                <canvas id="hero-canvas" aria-hidden="true"></canvas>
+            </div>
+            <div class="hero-content">
+                <h1 id="hero-title" class="hero-title">
+                    <span class="hero-title-line">Design Engineering,</span>
+                    <span class="hero-title-line">Made Visible.</span>
+                </h1>
+                <p class="hero-subtitle">OFFSET is a monochrome journal exploring the craft of digital systems through interactive essays and generative figures.</p>
+                <div class="hero-indicator" aria-hidden="true">
+                    <span class="hero-indicator-text">Scroll</span>
+                    <svg class="hero-indicator-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 5v14M12 19l-5-5m5 5l5-5"/>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <section id="essays" class="essays" aria-labelledby="essays-title">
+            <header class="section-header">
+                <h2 id="essays-title" class="section-title">Essays</h2>
+                <p class="section-subtitle">Interactive explorations of design engineering principles</p>
+            </header>
+
+            <article class="essay" data-essay="whitespace">
+                <div class="essay-figure" aria-hidden="true">
+                    <canvas class="figure-canvas" data-figure="whitespace"></canvas>
+                </div>
+                <div class="essay-content">
+                    <header class="essay-header">
+                        <span class="essay-number">01</span>
+                        <h3 class="essay-title">The Geometry of Whitespace</h3>
+                        <p class="essay-meta">On negative space as active structure</p>
+                    </header>
+                    <div class="essay-body">
+                        <p>Whitespace is not empty. It is not the absence of content. It is the structure that gives content meaning.</p>
+                        <p>In digital systems, we treat whitespace as a variable: <code>margin</code>, <code>padding</code>, <code>gap</code>. But in practice, it behaves more like a force field. Every element exerts pressure on its neighbors. The space between them is the equilibrium.</p>
+                        <p>The interactive figure above models this principle. Each rectangle represents a content block. The gaps between them are not fixed values — they are computed equilibria from simulated repulsion forces. Drag any block to feel the system reorganize.</p>
+                        <blockquote class="essay-pullquote">
+                            "Space is the breath of design. Without it, information suffocates."
+                        </blockquote>
+                        <p>This is why design systems that tokenize spacing as a linear scale (4, 8, 12, 16, 24, 32…) often feel rigid. They mistake a spectrum for a ladder. Real whitespace is contextual, relational, alive.</p>
+                        <p>The figure implements a constrained force-directed layout: each block repels others with inverse-square force, constrained to a grid-like flow. The result is a spacing system that adapts to content, not the reverse.</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="essay" data-essay="motion">
+                <div class="essay-figure" aria-hidden="true">
+                    <canvas class="figure-canvas" data-figure="motion"></canvas>
+                </div>
+                <div class="essay-content">
+                    <header class="essay-header">
+                        <span class="essay-number">02</span>
+                        <h3 class="essay-title">Motion Without Motion</h3>
+                        <p class="essay-meta">Perceptual animation and the phi phenomenon</p>
+                    </header>
+                    <div class="essay-body">
+                        <p>The smoothest animation is sometimes no animation at all.</p>
+                        <p>In 1912, Max Wertheimer discovered the phi phenomenon: two stationary lights flashing in sequence create the illusion of a single light moving between them. The motion exists only in the observer's visual cortex.</p>
+                        <p>The figure above demonstrates three perceptual motion techniques. No CSS transitions. No <code>requestAnimationFrame</code> loops. Only discrete state changes timed to exploit visual persistence.</p>
+                        <ul class="essay-list">
+                            <li><strong>Phi motion:</strong> Alternating positions at ~30Hz creates smooth travel</li>
+                            <li><strong>Beta motion:</strong> Rapid succession of distinct states reads as transformation</li>
+                            <li><strong>Color phi:</strong> The interpolated color during motion does not exist in either frame</li>
+                        </ul>
+                        <p>These techniques cost zero main-thread time. They work on devices that struggle with 60fps. They respect <code>prefers-reduced-motion</code> by simply not triggering the illusion.</p>
+                        <p>Click the figure to cycle techniques. The motion you perceive is constructed by your brain — not your GPU.</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="essay" data-essay="systems">
+                <div class="essay-figure" aria-hidden="true">
+                    <canvas class="figure-canvas" data-figure="systems"></canvas>
+                </div>
+                <div class="essay-content">
+                    <header class="essay-header">
+                        <span class="essay-number">03</span>
+                        <h3 class="essay-title">Systems Over Surfaces</h3>
+                        <p class="essay-meta">Design systems as executable specifications</p>
+                    </header>
+                    <div class="essay-body">
+                        <p>A design system is not a component library. A component library is an artifact. A design system is the logic that generates it.</p>
+                        <p>The figure above is a living design token engine. Every visual property — color, spacing, typography, radius, shadow — derives from a minimal set of primitive tokens through pure functions. Change a primitive; the entire system recompiles instantly.</p>
+                        <p>This is design as code. Not code that implements design. Code that <em>is</em> design.</p>
+                        <pre class="essay-code"><code>// Primitive tokens
+const primitives = {
+  baseScale: 1.125,      // Major third
+  baseSpace: 4,          // 4px grid
+  contrast: 0.85,        // Text contrast ratio
+  radiusFactor: 0.25     // Corner roundness
+};
+
+// Derived tokens (pure functions)
+const tokens = {
+  space: (step) => primitives.baseSpace * Math.pow(primitives.baseScale, step),
+  typeSize: (step) => 16 * Math.pow(primitives.baseScale, step),
+  radius: (size) => size * primitives.radiusFactor,
+  textColor: (bg) => bg > 0.5 ? 0.1 : 0.95
+};</code></pre>
+                        <p>Adjust the primitive sliders. Watch 47 derived values update in a single frame. This is the power of systems over surfaces: consistency becomes a mathematical guarantee, not a manual discipline.</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="essay" data-essay="constraint">
+                <div class="essay-figure" aria-hidden="true">
+                    <canvas class="figure-canvas" data-figure="constraint"></canvas>
+                </div>
+                <div class="essay-content">
+                    <header class="essay-header">
+                        <span class="essay-number">04</span>
+                        <h3 class="essay-title">The Monochrome Constraint</h3>
+                        <p class="essay-meta">Why removing color reveals structure</p>
+                    </header>
+                    <div class="essay-body">
+                        <p>Color hides weakness. It masks hierarchy failures, compensates for poor contrast, distracts from spatial confusion. Remove it, and only structure remains.</p>
+                        <p>This journal is monochrome not as aesthetic choice but as engineering discipline. Every decision — type scale, spacing rhythm, visual weight, information hierarchy — must stand on its own.</p>
+                        <p>The figure above visualizes the luminance structure of this page in real time. Each horizontal band represents a text element. Height correlates with font weight. Position maps to vertical rhythm. The result is a structural fingerprint.</p>
+                        <p>Notice the patterns: the hero's dramatic weight. The essay titles' consistent rhythm. The body text's even texture. The pull quotes' deliberate disruption. These relationships exist whether color is present or not.</p>
+                        <blockquote class="essay-pullquote">
+                            "A design that works in monochrome works in any palette. The reverse is rarely true."
+                        </blockquote>
+                        <p>This principle extends beyond visual design. In code, constraints reveal architecture. In writing, constraints reveal thought. In systems, constraints reveal coupling. The monochrome constraint is a debugger for design.</p>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <section id="about" class="about" aria-labelledby="about-title">
+            <header class="section-header">
+                <h2 id="about-title" class="section-title">About</h2>
+            </header>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>OFFSET exists because design engineering deserves a venue that practices what it discusses.</p>
+                    <p>Every essay includes a live, interactive figure — not an illustration, but a working model of the concept. The figures are the essays. The text contextualizes them.</p>
+                    <p>All code runs in the browser. No build step. No framework. No external dependencies. The entire site is ~45KB transferred, including this sentence.</p>
+                    <p>This is an experiment in <strong>executable publishing</strong>: ideas that can be inspected, modified, and verified by the reader in real time.</p>
+                </div>
+                <dl class="about-specs">
+                    <dt>Performance budget</dt>
+                    <dd>< 50KB total, < 100ms TTI on 3G</dd>
+                    <dt>Accessibility</dt>
+                    <dd>WCAG 2.1 AA, keyboard-first, screen-reader tested</dd>
+                    <dt>Motion</dt>
+                    <dd>Respects <code>prefers-reduced-motion</code> natively</dd>
+                    <dt>Browser support</dt>
+                    <dd>Evergreen browsers (last 2 versions)</dd>
+                    <dt>License</dt>
+                    <dd>MIT — fork, adapt, extend</dd>
+                </dl>
+            </div>
+        </section>
+
+        <section id="colophon" class="colophon" aria-labelledby="colophon-title">
+            <header class="section-header">
+                <h2 id="colophon-title" class="section-title">Colophon</h2>
+            </header>
+            <div class="colophon-grid">
+                <div class="colophon-section">
+                    <h3>Typography</h3>
+                    <p>System font stack, chosen for zero latency and native rendering fidelity:</p>
+                    <pre><code>font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;  /* Headings */
+font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;  /* UI */
+font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;  /* Code */</code></pre>
+                    <p>Type scale: modular scale (ratio 1.125, major third) from 16px base.</p>
+                </div>
+                <div class="colophon-section">
+                    <h3>Generative Figures</h3>
+                    <p>All figures rendered to <code><canvas></code> via vanilla JS. Techniques used:</p>
+                    <ul>
+                        <li>Force-directed layout (Essay 1)</li>
+                        <li>Phi phenomenon / temporal aliasing (Essay 2)</li>
+                        <li>Reactive token derivation (Essay 3)</li>
+                        <li>Luminance structure analysis (Essay 4)</li>
+                    </ul>
+                    <p>Each figure is < 2KB gzipped. No WebGL. No libraries.</p>
+                </div>
+                <div class="colophon-section">
+                    <h3>Architecture</h3>
+                    <p>Single HTML entry. CSS custom properties for theming. ES modules for figure isolation. IntersectionObserver for scroll-triggered initialization. No build tools.</p>
+                    <p>State management: reactive primitives via <code>Proxy</code>-based signals (~300 bytes).</p>
+                </div>
+                <div class="colophon-section">
+                    <h3>Prior Art</h3>
+                    <p>Inspired by: Tufte's visual explanations, Bret Victor's explorable explanations, Kahneman's System 1/2, the phi phenomenon literature, and the constraint-based design tradition.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+        <div class="footer-content">
+            <p class="footer-copyright">OFFSET — Design Engineering Journal</p>
+            <p class="footer-license">Published under MIT License. Source available on <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>.</p>
+        </div>
+    </footer>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

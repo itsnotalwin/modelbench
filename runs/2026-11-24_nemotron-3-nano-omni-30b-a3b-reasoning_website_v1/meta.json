@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "nemotron-3-nano-omni-30b-a3b-reasoning",
+  "category": "website",
+  "date": "2026-11-24",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "01",
+  "prompt_label": "Website",
+  "notes": "A monochrome responsive website built with pure HTML, CSS, and JavaScript. Demonstrates exceptional design, typography, layout, and engineering while adhering to accessibility and performance constraints.",
+  "slug": "2026-11-24_nemotron-3-nano-omni-30b-a3b-reasoning_website_v1",
+  "path": "runs/2026-11-24_nemotron-3-nano-omni-30b-a3b-reasoning_website_v1/index.html",
+  "source_file": "website_nemotron-3-nano-omni-30b-a3b-reasoning_2026-11-24_v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

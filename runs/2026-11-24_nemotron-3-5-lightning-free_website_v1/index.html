@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monochrome — A Study in Black and White</title>
+  <meta name="description" content="A monochrome showcase of typography, layout, and interaction in black and white">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="skip-link">
+    <a href="#main">Skip to main content</a>
+  </header>
+
+  <main id="main" class="page-main">
+    <nav class="main-nav" aria-label="Main navigation">
+      <ul>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#works" class="nav-link">Works</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+    </nav>
+
+    <section class="hero" aria-labelledby="hero-title" role="region">
+      <h1 id="hero-title" class="hero-heading">Monochrome</h1>
+      <p class="hero-subheading">A study in black and white</p>
+    </section>
+
+    <section id="about" class="about section">
+      <div class="section-header">
+        <h2 class="section-title">About</h2>
+      </div>
+      <div class="about-content">
+        <p>This website is a deliberate exploration of what's possible within a strictly monochrome palette. Every element — typography, spacing, shadow, and form — works within black, white, and the shades of grey between them.</p>
+        <p>No accent colours. No imagery borrowed from elsewhere. No build step, no framework, no dependencies. Just clean HTML, CSS, and the creative choices that emerge when you strip away the noise.</p>
+      </div>
+    </section>
+
+    <section id="works" class="works section">
+      <div class="section-header">
+        <h2 class="section-title">Works</h2>
+      </div>
+      <div class="works-grid" aria-label="Gallery of monochrome works">
+        <article class="work-item" role="article">
+          <h3 class="work-title">Interference</h3>
+          <p class="work-description">Generative pattern exploring wave interference in monochrome</p>
+        </article>
+        <article class="work-item" role="article">
+          <h3 class="work-title">Strata</h3>
+          <p class="work-description">Layered geometric forms creating depth through value alone</p>
+        </article>
+        <article class="work-item" role="article">
+          <h3 class="work-title">Contrast</h3>
+          <p class="work-description">High-precision typographic contrast study</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="contact" class="contact section">
+      <div class="section-header">
+        <h2 class="section-title">Contact</h2>
+      </div>
+      <div class="contact-content">
+        <p>Built with care as a monochrome exercise. Made with HTML and CSS only.</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
