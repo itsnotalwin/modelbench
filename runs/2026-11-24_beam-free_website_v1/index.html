@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SHADES — A Grayscale Photography Exhibition</title>
+<meta name="description" content="SHADES is a fictional exhibition of grayscale photography: eight studies in light, absence and the space between black and white.">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230a0a0a'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23e8e8e8' stroke-width='1.5'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23e8e8e8'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+<script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js');</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header" id="top">
+  <div class="header-inner">
+    <a class="brand" href="#top" aria-label="SHADES, home">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name">SHADES</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-list" aria-label="Toggle navigation">
+        <span></span><span></span>
+      </button>
+      <ul id="nav-list">
+        <li><a href="#statement">Statement</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#colophon">Colophon</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="hero-title">
+    <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="hero-content">
+      <p class="eyebrow">Exhibition No. 04 · Winter 2026</p>
+      <h1 id="hero-title" class="hero-title">
+        <span class="line">SHADES</span>
+        <span class="line line-soft">of grey</span>
+      </h1>
+      <p class="hero-lede">
+        Eight studies in light, absence and the distance between black and white.
+        A grayscale exhibition in monochrome only.
+      </p>
+      <div class="hero-meta">
+        <dl>
+          <div><dt>Venue</dt><dd>Mara Voss Gallery, Berlin</dd></div>
+          <div><dt>Dates</dt><dd>14 Nov — 12 Dec 2026</dd></div>
+          <div><dt>Works</dt><dd>8 studies · 3 rooms</dd></div>
+        </dl>
+      </div>
+      <a class="cta" href="#gallery">
+        <span>Enter the gallery</span>
+        <svg class="cta-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+    <div class="scroll-cue" aria-hidden="true">
+      <span>Scroll</span>
+      <span class="scroll-line"></span>
+    </div>
+  </section>
+
+  <!-- STATEMENT -->
+  <section class="statement" id="statement" aria-labelledby="statement-title">
+    <div class="container narrow">
+      <p class="section-label">01 · Statement</p>
+      <h2 id="statement-title" class="statement-title">Colour is a distraction. Grey is a decision.</h2>
+      <div class="statement-body">
+        <p>
+          Every image here was made with a single constraint: no hue. No warmth, no
+          coolness, no accent to lean on. Just value — the slow negotiation between
+          light and its absence.
+        </p>
+        <p>
+          The work is not about what is removed. It is about what remains when
+          everything unnecessary is taken away: structure, rhythm, weight, silence.
+          Eight studies. Three rooms. One spectrum, walked slowly.
+        </p>
+        <p class="statement-sign">— Mara Voss, curator</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery" id="gallery" aria-labelledby="gallery-title">
+    <div class="container">
+      <header class="section-head">
+        <p class="section-label">02 · Gallery</p>
+        <h2 id="gallery-title">The works</h2>
+        <p class="section-lede">Eight studies. Select any to view in detail. Use arrow keys to navigate.</p>
+      </header>
+      <div class="gallery-grid" id="gallery-grid">
+        <figure class="work" tabindex="0" data-index="0" data-title="Threshold" data-desc="A dithered field where light decides what survives. Gelatin silver print, 2026.">
+          <div class="work-media">
+            <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Threshold">
+              <defs>
+                <filter id="n1"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0"/></filter>
+                <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f2f2f2"/><stop offset="1" stop-color="#0a0a0a"/></linearGradient>
+              </defs>
+              <rect width="400" height="500" fill="url(#g1)"/>
+              <rect width="400" height="500" filter="url(#n1)" opacity="0.35"/>
+              <line x1="0" y1="250" x2="400" y2="250" stroke="#ffffff" stroke-width="0.5" opacity="0.4"/>
+            </svg>
+          </div>
+          <figcaption><span class="work-num">I</span><span class="work-name">Threshold</span><span class="work-meta">2026 · 60×75 cm</span></figcaption>
+        </figure>
+
+        <figure class="work" tabindex="0" data-index="1" data-title="Meridian" data-desc="Concentric rings marking distance from a centre that no longer exists. Archival pigment, 2026.">
+          <div class="work-media">
+            <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Meridian">
+              <defs>
+                <radialGradient id="r2" cx="50%" cy="45%" r="60%"><stop offset="0" stop-color="#d9d9d9"/><stop offset="1" stop-color="#0a0a0a"/></radialGradient>
+              </defs>
+              <rect width="400" height="500" fill="#0a0a0a"/>
+              <circle cx="200" cy="225" r="180" fill="none" stroke="#e8e8e8" stroke-width="0.6" opacity="0.7"/>
+              <circle cx="200" cy="225" r="130" fill="none" stroke="#b0b0b0" stroke-width="0.6" opacity="0.7"/>
+              <circle cx="200" cy="225" r="80" fill="none" stroke="#7a7a7a" stroke-width="0.6" opacity="0.7"/>
+              <circle cx="200" cy="225" r="30" fill="#e8e8e8"/>
+              <rect width="400" height="500" fill="url(#r2)" opacity="0.25" style="mix-blend-mode:screen"/>
+            </svg>
+          </div>
+          <figcaption><span class="work-num">II</span><span class="work-name">Meridian</span><span class="work-meta">2026 · 60×75 cm</span></figcaption>
+        </figure>
+
+        <figure class="work" tabindex="0" data-index="2" data-title="Strata" data-desc="Layered planes of value, stacked until depth becomes weight. Carbon print, 2026.">
+          <div class="work-media">
+            <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Strata">
+              <defs>
+                <linearGradient id="s3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0a0a0a"/><stop offset="0.5" stop-color="#5a5a5a"/><stop offset="1" stop-color="#f2f2f2"/></linearGradient>
+              </defs>
+              <rect width="400" height="500" fill="#1a1a1a"/>
+              <g opacity="0.9">
+                <rect x="0" y="60" width="400" height="40" fill="#2a2a2a"/>
+                <rect x="0" y="120" width="400" height="55" fill="#3a3a3a"/>
+                <rect x="0" y="195" width="400" height="30" fill="#5a5a5a"/>
+                <rect x="0" y="245" width="400" height="70" fill="#7a7a7a"/>
+                <rect x="0" y="335" width="400" height="45" fill="#a0a0a0"/>
+                <rect x="0" y="400" width="400" height="100" fill="#d0d0d0"/>
+              </g>
+              <rect width="400" height="500" fill="url(#s3)" opacity="0.15" style="mix-blend-mode:overlay"/>
+            </svg>
+          </div>
+          <figcaption><span class="work-num">III</span><span class="work-name">Strata</span><span class="work-meta">2026 · 60×75 cm</span></figcaption>
+        </figure>
+
+        <figure class="work" tabindex="0" data-index="3" data-title="Quiet" data-desc="A single tone held for longer than is comfortable. Silver gelatin, 2026.">
+          <div class="work-media">
+            <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Quiet">
+              <rect width="400" height="500" fill="#b8b8b8"/>
+              <circle cx="200" cy="250" r="6" fill="#0a0a0a"/>
+              <circle cx="200" cy="250" r="90" fill="none" stroke="#0a0a0a" stroke-width="0.4" opacity="0.3"/>
+              <circle cx="200" cy="250" r="160" fill="none" stroke="#0a0a0a" stroke-width="0.4" opacity="0.15"/>
+            </svg>
+          </div>
+          <figcaption><span class="work-num">IV</span><span class="work-name">Quiet</span><span class="work-meta">2026 · 60×75 cm</span></figcaption>
+        </figure>
+
+        <figure class="work" tabindex="0" data-index="4" data-title="Frequency" data-desc="Parallel lines whose spacing is governed by a sine wave. Plotter drawing, 2026.">
+          <div class="work-media">
+            <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Frequency">
+              <rect width="400" height="500" fill="#0a0a0a"/>
+              <g stroke="#e8e8e8" stroke-width="0.8" fill="none">
+                <path d="M0,40 Q100,20 200,40 T400,40"/>
+                <path d="M0,70 Q100,95 200,70 T400,70"/>
+                <path d="M0,105 Q100,75 200,105 T400,105"/>
+                <path d="M0,145 Q100,175 200,145 T400,145"/>
+                <path d="M0,190 Q100,160 200,190 T400,190"/>
+                <path d="M0,240 Q100,280 200,240 T400,240"/>
+                <path d="M0,295 Q100,260 200,295 T400,295"/>
+                <path d="M0,355 Q100,395 200,355 T400,355"/>
+                <path d="M0,420 Q100,385 200,420 T400,420"/>
+                <path d="M0,475 Q100,505 200,475 T400,475"/>
+              </g>
+            </svg>
+          </div>
+          <figcaption><span class="work-num">V</span><span class="work-name">Frequency</span><span class="work-meta">2026 · 60×75 cm</span></figcaption>
+        </figure>
+
+        <figure class="work" tabindex="0" data-index="5" data-title="Eclipse" data-desc="Light consumed by its own shadow. Photogravure, 2026.">
+          <div class="work-media">
+            <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Eclipse">
+              <defs>
+                <radialGradient id="e6" cx="50%" cy="50%" r="40%"><stop offset="0" stop-color="#0a0a0a" stop-opacity="0"/><stop offset="0.6" stop-color="#0a0a0a" stop-opacity="0.6"/><stop offset="1" stop-color="#0a0a0a" stop-opacity="1"/></radialGradient>
+              </defs>
+              <rect width="400" height="500" fill="#e8e8e8"/>
+              <circle cx="200" cy="250" r="120" fill="#ffffff"/>
+              <circle cx="200" cy="250" r="120" fill="url(#e6)"/>
+              <circle cx="230" cy="250" r="120" fill="#0a0a0a"/>
+            </svg>
+          </div>
+          <figcaption><span class="work-num">VI</span><span class="work-name">Eclipse</span><span class="work-meta">2026 · 60×75 cm</span></figcaption>
+        </figure>
+
+        <figure class="work" tabindex="0" data-index="6" data-title="Grain" data-desc="Noise as subject. The photograph that photographs nothing. Chromogenic, 2026.">
+          <div class="work-media">
+            <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Grain">
+              <defs>
+                <filter id="gn7"><feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="3" seed="11"/><feColorMatrix type="saturate" values="0"/></filter>
+              </defs>
+              <rect width="400" height="500" fill="#7a7a7a"/>
+              <rect width="400" height="500" filter="url(#gn7)" opacity="0.9"/>
+            </svg>
+          </div>
+          <figcaption><span class="work-num">VII</span><span class="work-name">Grain</span><span class="work-meta">2026 · 60×75 cm</span></figcaption>
+        </figure>
+
+        <figure class="work" tabindex="0" data-index="7" data-title="Last Light" data-desc="The final value before dark. Platinum palladium, 2026.">
+          <div class="work-media">
+            <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Last Light">
+              <defs>
+                <linearGradient id="ll8" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0a0a0a"/><stop offset="0.85" stop-color="#0a0a0a"/><stop offset="1" stop-color="#f2f2f2"/></linearGradient>
+              </defs>
+              <rect width="400" height="500" fill="url(#ll8)"/>
+              <rect x="330" y="0" width="70" height="500" fill="#f2f2f2" opacity="0.08"/>
+              <line x1="340" y1="0" x2="340" y2="500" stroke="#f2f2f2" stroke-width="0.5" opacity="0.6"/>
+            </svg>
+          </div>
+          <figcaption><span class="work-num">VIII</span><span class="work-name">Last Light</span><span class="work-meta">2026 · 60×75 cm</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>`,
+ "oldString">
+      <div class="gallery-grid" id="gallery-grid">
+        <!-- Works injected? No — inline for SSR/no-JS. We'll render inline SVGs -->
+      </div>
+    </div>
+  </section>`)
+
+  <!-- PROCESS -->
+  <section class="process" id="process" aria-labelledby="process-title">
+    <div class="container">
+      <header class="section-head">
+        <p class="section-label">03 · Process</p>
+        <h2 id="process-title">How a study is made</h2>
+        <p class="section-lede">A small generative engine, written in plain canvas. No libraries. Regenerate to see a new composition.</p>
+      </header>
+      <div class="process-layout">
+        <div class="process-canvas-wrap">
+          <canvas id="process-canvas" width="640" height="640" aria-label="Generated grayscale composition"></canvas>
+          <div class="process-controls">
+            <button class="btn" id="regen-btn" type="button">Regenerate</button>
+            <button class="btn btn-ghost" id="download-btn" type="button">Download PNG</button>
+          </div>
+        </div>
+        <div class="process-text">
+          <h3>The method</h3>
+          <ol class="process-steps">
+            <li><span>Seed</span> A deterministic seed drives every decision, so a composition can be reproduced.</li>
+            <li><span>Layers</span> Grayscale planes are stacked with varying opacity to build depth.</li>
+            <li><span>Texture</span> A noise field is thresholded into a dithered grain.</li>
+            <li><span>Restraint</span> Nothing is added that does not earn its place.</li>
+          </ol>
+          <pre class="code-block" aria-label="Generator pseudocode"><code>seed → layers → noise → threshold → compose</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLOPHON -->
+  <section class="colophon" id="colophon" aria-labelledby="colophon-title">
+    <div class="container narrow">
+      <p class="section-label">04 · Colophon</p>
+      <h2 id="colophon-title">Colophon</h2>
+      <div class="colophon-body">
+        <p>
+          <strong>SHADES</strong> is a fictional exhibition site built as a monochrome
+          showcase. All imagery is generated: inline SVG for the gallery works,
+          canvas for the hero field and the process engine. No external assets.
+        </p>
+        <dl class="colophon-dl">
+          <div><dt>Type</dt><dd>System serif for display, system sans for body.</dd></div>
+          <div><dt>Palette</dt><dd>Black, white and the greys between. Nothing else.</dd></div>
+          <div><dt>Motion</dt><dd>Respects <code>prefers-reduced-motion</code>. Animations pause when off-screen.</dd></div>
+          <div><dt>Access</dt><dd>Keyboard navigable, skip link, focus rings, semantic landmarks, ARIA labels.</dd></div>
+          <div><dt>Tech</dt><dd>Plain HTML, CSS and JavaScript. No build step, no dependencies. GitHub Pages ready.</dd></div>
+        </dl>
+        <p class="colophon-note">
+          Built with restraint. If you are reading this, you are looking too closely — which is the point.
+        </p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span>© 2026 Mara Voss Gallery · Fictional exhibition</span>
+    <a href="#top" class="back-to-top">Back to top ↑</a>
+  </div>
+</footer>
+
+<!-- Lightbox dialog -->
+<dialog id="lightbox" class="lightbox" aria-labelledby="lb-title">
+  <button class="lb-close" id="lb-close" type="button" aria-label="Close">✕</button>
+  <button class="lb-nav lb-prev" id="lb-prev" type="button" aria-label="Previous work">‹</button>
+  <button class="lb-nav lb-next" id="lb-next" type="button" aria-label="Next work">›</button>
+  <div class="lb-stage" id="lb-stage"></div>
+  <div class="lb-caption">
+    <h3 id="lb-title"></h3>
+    <p id="lb-desc"></p>
+    <span id="lb-counter" class="lb-counter"></span>
+  </div>
+</dialog>
+
+<script src="js/app.js" defer></script>
+</body>
+</html>

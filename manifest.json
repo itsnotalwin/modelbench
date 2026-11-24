@@ -1,6 +1,6 @@
 {
   "generated_from": "runs/",
-  "count": 8,
+  "count": 9,
   "catalog": [
     {
       "no": "01",
@@ -155,6 +155,40 @@
     "performance"
   ],
   "runs": [
+    {
+      "schema_version": 1,
+      "model": "beam-free",
+      "category": "website",
+      "date": "2026-11-24",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "01",
+      "prompt_label": "Website",
+      "notes": "Single-page monochrome exhibition site 'SHADES': hero canvas field, editorial statement, eight inline-SVG gallery works with lightbox, generative canvas process engine with regenerate/download, colophon. Plain HTML/CSS/JS, no build step, no dependencies, GitHub Pages ready. Respects prefers-reduced-motion, keyboard accessible. Known limitations: gallery SVG IDs are not namespaced across clones (cosmetic only); process canvas redraws are synchronous.",
+      "slug": "2026-11-24_beam-free_website_v1",
+      "path": "runs/2026-11-24_beam-free_website_v1/index.html",
+      "source_file": "website__beam-free__2026-11-24__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "files": [
+        "index.html",
+        "js/app.js",
+        "meta.json",
+        "styles.css"
+      ]
+    },
     {
       "schema_version": 1,
       "model": "ernie-5.5-flash-preview-free",
