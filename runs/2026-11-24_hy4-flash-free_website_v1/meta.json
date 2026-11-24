@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "hy4-flash-free",
+  "category": "website",
+  "date": "2026-11-24",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "01",
+  "prompt_label": "Website",
+  "notes": "GRAIN is a strictly monochrome editorial journal: six deterministic generative canvas plates, an interactive stipple studio with live controls and PNG export, and system-font typography. Pure static HTML/CSS/JS with no external assets or dependencies. Known limitation: the generative imagery requires JavaScript; the written editorial content remains readable without it.",
+  "slug": "2026-11-24_hy4-flash-free_website_v1",
+  "path": "runs/2026-11-24_hy4-flash-free_website_v1/index.html",
+  "source_file": "website__hy4-flash-free__2026-11-24__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}
