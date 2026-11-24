@@ -13,6 +13,7 @@ on:
       - "tests/**"
       - "manifest.json"
       - "src/data/catalog.json"
+      - ".github/workflows/auto-sort.yml"
   workflow_dispatch:
 
 permissions:
@@ -62,10 +63,12 @@ jobs:
             git push
           fi
 
-      # GITHUB_TOKEN pushes do not trigger another push workflow. Explicitly
-      # dispatch Pages after the sorter commits its generated manifest/catalog.
+      # A rejected duplicate upload should not block deployment of other
+      # accepted submissions. Deploy the committed, test-verified catalogue
+      # whenever regression tests pass, even if intake reports a rejection.
+      # GITHUB_TOKEN pushes do not trigger another push workflow.
       - name: Deploy the newly indexed runs to GitHub Pages
-        if: always() && steps.sort_inbox.outcome == 'success'
+        if: always() && steps.tests.outcome == 'success'
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run deploy-pages.yml --ref main
