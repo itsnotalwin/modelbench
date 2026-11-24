@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Umbra: scroll through a total solar eclipse</title>
+<meta name="description" content="A scroll-driven total solar eclipse drawn live on one canvas, with the five contacts, the next shadows on the calendar, and how to look safely.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Ccircle cx='16' cy='16' r='9' fill='%23000' stroke='%23fff' stroke-width='3'/%3E%3C/svg%3E">
+<style>
+:root{--p:clamp(1.1rem,3.2vw,3rem);--fg:#f5f5f5;--mu:#9a9a9a;--ln:#2b2b2b;--d:"Bodoni 72","Bodoni MT",Didot,"Playfair Display","Noto Serif Display",Georgia,serif;--s:ui-sans-serif,system-ui,"Helvetica Neue",Arial,sans-serif}
+*{box-sizing:border-box;margin:0}
+html{background:#000;color:var(--fg);scroll-behavior:smooth}
+body{font:1.0625rem/1.65 var(--s);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:2px solid #fff;outline-offset:4px}
+.skip{position:absolute;left:1rem;top:-4rem;background:#fff;color:#000;padding:.6rem 1rem;z-index:9}
+.skip:focus{top:1rem}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#track{height:600vh;position:relative}
+#stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+#sky{position:absolute;inset:0;width:100%;height:100%;display:block}
+.top{position:absolute;top:0;left:0;right:0;padding:1.3rem var(--p);font-size:.95rem}
+.top a{margin-right:1.6rem;color:var(--mu);text-decoration:none}
+.top a:hover{color:#fff;text-decoration:underline;text-underline-offset:.3em}
+.bot{position:absolute;left:0;right:0;bottom:0;padding:0 var(--p) 1.2rem}
+.row{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem}
+.say{display:grid}
+.say>*{grid-area:1/1;align-self:end}
+h1{font:400 clamp(4.6rem,17vw,16rem)/.74 var(--d);letter-spacing:-.045em;margin-left:-.04em;padding-bottom:.08em;mix-blend-mode:difference;color:#fff}
+.hint{color:var(--mu);font-size:.95rem;margin-top:1.1rem}
+.say>div:first-child{display:flex;flex-direction:column}
+#cap{max-width:27rem;opacity:0}
+.ph{font:italic 400 clamp(1.9rem,3.4vw,3rem)/1.05 var(--d);margin-bottom:.6rem}
+#tx{color:#d0d0d0;font-size:1rem;line-height:1.6}
+.num{text-align:right;font-variant-numeric:tabular-nums;flex:none}
+.num b{display:block;font:400 clamp(1.5rem,3vw,2.6rem)/1 var(--s);letter-spacing:-.02em}
+.num span{color:var(--mu);font-size:.9rem}
+.rail{margin-top:1.4rem}
+.bar{height:1px;background:var(--ln)}
+.bar i{display:block;height:1px;background:#fff;width:0}
+#cts{list-style:none;padding:0;display:grid;grid-template-columns:repeat(5,1fr)}
+#cts button{display:block;width:100%;background:none;border:0;font:inherit;font-size:.85rem;line-height:1.35;text-align:left;padding:.8rem .3rem .2rem 0;color:var(--mu);cursor:pointer}
+#cts button:hover,#cts button[aria-current=step]{color:#fff}
+#cts button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+#cts b{display:block;font-weight:500}
+#cts span{font-variant-numeric:tabular-nums}
+.sec{padding:clamp(5rem,13vw,11rem) var(--p)}
+.wrap{max-width:74rem;margin:0 auto}
+.big{font:400 clamp(2rem,5vw,4.4rem)/1.1 var(--d);letter-spacing:-.025em;max-width:22em}
+.w{opacity:.2;transition:opacity .45s}
+.w.on{opacity:1}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:2rem 4rem;margin-top:clamp(3rem,7vw,6rem);max-width:58rem;color:#d0d0d0}
+h2{font:400 clamp(2.6rem,7vw,6rem)/.95 var(--d);letter-spacing:-.035em;margin-bottom:1.5rem}
+.lead{color:#d0d0d0;max-width:36rem;margin-bottom:3rem}
+.tw{overflow-x:auto}
+table{width:100%;min-width:42rem;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:1.2rem 1.2rem 1.2rem 0;border-top:1px solid var(--ln);vertical-align:middle;font-weight:400}
+thead th{color:var(--mu);font-size:.85rem;border-top:0;padding-bottom:.8rem}
+tbody th{font:400 1.55rem/1.1 var(--d);white-space:nowrap}
+td.bl{width:24%}
+td.bl i{display:block;height:.5rem;background:#fff;width:var(--w)}
+tr.pt th,tr.pt td{color:var(--mu)}
+tr.pt i{background:#666}
+.st{white-space:nowrap}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));gap:3rem}
+h3{font:italic 400 1.75rem/1.1 var(--d);margin-bottom:.8rem}
+.cols p{color:#d0d0d0;max-width:36ch}
+footer{padding:3rem var(--p) 4rem;border-top:1px solid var(--ln);display:flex;flex-wrap:wrap;gap:1.5rem;justify-content:space-between;align-items:center;color:var(--mu);font-size:.95rem}
+#up{background:none;border:1px solid #666;color:#fff;font:inherit;padding:.7rem 1.3rem;border-radius:999px;cursor:pointer}
+#up:hover{background:#fff;color:#000}
+@media(max-width:720px){
+ .row{flex-direction:column-reverse;align-items:flex-start;gap:.9rem}
+ .num{text-align:left}
+ #cts button{font-size:.72rem}
+ .top a{margin-right:1.1rem}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.w{opacity:1;transition:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#why">Skip the eclipse</a>
+<main>
+<section id="track" aria-label="Eclipse simulation. Scrolling moves the Moon across the Sun.">
+ <div id="stage">
+  <canvas id="sky" role="img" aria-label="The Moon crossing the Sun, drawn live. It moves as you scroll."></canvas>
+  <header class="top"><nav aria-label="Sections"><a href="#why">Why look up</a><a href="#atlas">Next shadows</a><a href="#rules">How to look</a></nav></header>
+  <div class="bot">
+   <div class="row">
+    <div class="say">
+     <div><h1 id="ttl">Umbra</h1><p class="hint" id="hint">Scroll to move the Moon across the Sun.</p></div>
+     <div id="cap"><p class="ph" id="ph" aria-live="polite">Whole Sun</p><p id="tx">The Moon’s shadow is already racing across the planet. From here, the Sun is still whole.</p></div>
+    </div>
+    <div class="num"><b id="t">T−01:15:07</b><span id="ob">0% of the Sun covered</span></div>
+   </div>
+   <div class="rail">
+    <div class="bar"><i id="bar"></i></div>
+    <ol id="cts" aria-label="Jump to a contact">
+     <li><button type="button"><b>First contact</b><span>T−01:15:07</span></button></li>
+     <li><button type="button"><b>Second contact</b><span>T−00:01:07</span></button></li>
+     <li><button type="button"><b>Maximum</b><span>T+00:00:00</span></button></li>
+     <li><button type="button"><b>Third contact</b><span>T+00:01:07</span></button></li>
+     <li><button type="button"><b>Fourth contact</b><span>T+01:15:07</span></button></li>
+    </ol>
+   </div>
+  </div>
+  <noscript><p style="position:absolute;top:4rem;left:var(--p);color:#d0d0d0">The eclipse is drawn with JavaScript. The sections below work without it.</p></noscript>
+ </div>
+</section>
+
+<section id="why" class="sec"><div class="wrap">
+ <p class="big">For a few minutes the day forgets itself. Birds go quiet, the horizon turns to dusk in every direction, and the one thing you were taught never to look at becomes the only thing worth looking at.</p>
+ <div class="two">
+  <p>The Sun is about 400 times wider than the Moon and about 400 times farther away, so from Earth they look nearly the same size. When the Moon looks a little larger, you get totality. When it looks a little smaller, you get a bright ring instead.</p>
+  <p>In this model the Moon looks 3 percent wider than the Sun. Scroll distance is stretched around the middle, so totality, which lasts 2 minutes 13 seconds here, takes real effort to pass through.</p>
+ </div>
+</div></section>
+
+<section id="atlas" class="sec"><div class="wrap">
+ <h2>The next shadows</h2>
+ <p class="lead">Total solar eclipses on the calendar, with the longest totality of each. The bars are drawn to scale.</p>
+ <div class="tw" role="region" aria-label="Eclipse table, scrolls sideways on small screens" tabindex="0">
+ <table>
+  <caption class="sr">Total solar eclipses from 2026 to 2030</caption>
+  <thead><tr><th scope="col">Date</th><th scope="col">Where the path runs</th><th scope="col">Longest totality</th><th scope="col"><span class="sr">Length to scale</span></th><th scope="col">Status</th></tr></thead>
+  <tbody>
+   <tr class="pt" data-d="2026-08-12"><th scope="row"><time datetime="2026-08-12">12 Aug 2026</time></th><td>Greenland, Iceland, Spain</td><td>2 min 18 s</td><td class="bl" aria-hidden="true"><i style="--w:36%"></i></td><td class="st">Completed</td></tr>
+   <tr data-d="2027-08-02"><th scope="row"><time datetime="2027-08-02">2 Aug 2027</time></th><td>Spain, North Africa, Egypt, Arabian Peninsula</td><td>6 min 23 s</td><td class="bl" aria-hidden="true"><i style="--w:100%"></i></td><td class="st">Upcoming</td></tr>
+   <tr data-d="2028-07-22"><th scope="row"><time datetime="2028-07-22">22 Jul 2028</time></th><td>Australia, New Zealand</td><td>5 min 10 s</td><td class="bl" aria-hidden="true"><i style="--w:81%"></i></td><td class="st">Upcoming</td></tr>
+   <tr data-d="2030-11-25"><th scope="row"><time datetime="2030-11-25">25 Nov 2030</time></th><td>Southern Africa, Indian Ocean, Australia</td><td>3 min 44 s</td><td class="bl" aria-hidden="true"><i style="--w:58%"></i></td><td class="st">Upcoming</td></tr>
+  </tbody>
+ </table>
+ </div>
+</div></section>
+
+<section id="rules" class="sec"><div class="wrap">
+ <h2>How to look</h2>
+ <div class="cols">
+  <div><h3>Until the last sliver is gone</h3><p>Use eclipse glasses or a handheld viewer marked ISO 12312-2. Sunglasses, smoked glass and stacked film do not count. Outside the path of totality, the Sun is never safe to watch without a filter.</p></div>
+  <div><h3>During totality</h3><p>Once no bright part of the Sun remains, bare eyes are safe. The corona is faint, wide and shaped by the Sun’s magnetic field. Look for as long as totality lasts, and not a second longer.</p></div>
+  <div><h3>When the bead returns</h3><p>The first spark of light on the far edge is third contact. Put the glasses back on before you look again. Cameras need a solar filter on the lens before and after totality.</p></div>
+ </div>
+</div></section>
+</main>
+<footer><p>Umbra is a simulation, drawn live on one canvas, with no images and no outside code.</p><button type="button" id="up">Back to the whole Sun</button></footer>
+
+<script>
+(()=>{
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],
+RM=matchMedia('(prefers-reduced-motion: reduce)'),
+tr=$('#track'),st=$('#stage'),cv=$('#sky'),g=cv.getContext('2d'),
+K=2.2,P=1.6,T=2220,S1=1,S2=1.03,DC1=S1+S2,DC2=S2-S1,PI=Math.PI,
+cl=(v,a=0,b=1)=>Math.min(b,Math.max(a,v)),
+sm=(a,b,v)=>{v=cl((v-a)/(b-a));return v*v*(3-2*v)},
+dd=u=>Math.sign(u)*Math.pow(Math.abs(u),P)*K,
+uo=d=>Math.pow(d/K,1/P),
+cover=d=>{d=Math.abs(d);if(d>=DC1)return 0;if(d<=DC2)return 1;
+ const a=Math.acos(cl((d*d+S1*S1-S2*S2)/(2*d*S1),-1,1)),b=Math.acos(cl((d*d+S2*S2-S1*S1)/(2*d*S2),-1,1)),
+ k=.5*Math.sqrt(Math.max(0,(-d+S1+S2)*(d+S1-S2)*(d-S1+S2)*(d+S1+S2)));
+ return cl((S1*S1*a+S2*S2*b-k)/(PI*S1*S1))},
+f2=n=>String(n).padStart(2,'0'),
+fmt=s=>{const r=Math.round(s),a=Math.abs(r);return(r<0?'T−':'T+')+f2(a/3600|0)+':'+f2((a/60|0)%60)+':'+f2(a%60)},
+fr=v=>v-Math.floor(v);
+
+const N=['Whole Sun','Partial eclipse','Diamond ring','Totality','Whole Sun again'],
+X=['The Moon’s shadow is already racing across the planet. From here, the Sun is still whole.',
+'A bite grows out of the Sun. Light thins, shadows sharpen, and gaps between leaves throw tiny crescents on the ground.',
+'One last bright sliver rides the Moon’s edge beside the first glow of the corona. Glasses stay on until it is gone.',
+'The corona, the Sun’s outer atmosphere, appears. It is hundreds of times hotter than the surface beneath it. Here it lasts '+Math.floor(2*DC2*T/60)+' min '+Math.round(2*DC2*T%60)+' s.',
+'The shadow has moved on. The Sun is whole again and the ordinary day comes back.'],
+CU=[-uo(DC1),-uo(DC2),0,uo(DC2),uo(DC1)];
+
+let W,H,dp,cx,cy,R;
+function size(){dp=Math.min(devicePixelRatio||1,2);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dp;cv.height=H*dp;
+ const n=W<720;R=n?W*.2:Math.min(W*.14,H*.2);cx=n?W/2:W*.62;cy=H*(n?.34:.44)}
+
+function draw(u,t){
+ const d=dd(u),o=cover(d),ca=sm(.93,.999,o),gl=Math.pow(1-o,1.6),ad=Math.abs(d),A=-.3,
+ mx=cx-Math.cos(A)*d*R,my=cy-Math.sin(A)*d*R,ts=RM.matches?0:t/7000;
+ g.setTransform(dp,0,0,dp,0,0);g.globalCompositeOperation='source-over';g.fillStyle='#000';g.fillRect(0,0,W,H);
+ if(ca>0){for(let i=0;i<70;i++){const x=fr(Math.sin(i*91.7)*1e4)*W,y=fr(Math.sin(i*47.3)*1e4)*H;
+  g.fillStyle='rgba(255,255,255,'+(ca*(.15+.5*fr(i*.618)))+')';g.fillRect(x,y,1.4,1.4)}}
+ g.globalCompositeOperation='lighter';
+ if(gl>.002){const q=g.createRadialGradient(cx,cy,R*.9,cx,cy,R*(2+gl*5));
+  q.addColorStop(0,'rgba(255,255,255,'+.4*gl+')');q.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=q;g.fillRect(0,0,W,H)}
+ if(ca>0){
+  let q=g.createRadialGradient(cx,cy,R*.95,cx,cy,R*2.8);
+  q.addColorStop(0,'rgba(255,255,255,'+.6*ca+')');q.addColorStop(.25,'rgba(255,255,255,'+.2*ca+')');q.addColorStop(1,'rgba(255,255,255,0)');
+  g.fillStyle=q;g.beginPath();g.arc(cx,cy,R*2.8,0,2*PI);g.fill();
+  g.beginPath();
+  for(let i=0;i<240;i++){const th=i*2*PI/240+Math.sin(i*12.9898)*.02,
+   n=.5+.5*(Math.sin(th*3+1.3)*.5+Math.sin(th*7+.4+ts)*.3+Math.sin(th*13+2.1-ts*1.7)*.2),
+   eq=.45+.55*Math.pow(Math.abs(Math.cos(th-.3)),1.5),
+   L=R*(.12+3.3*n*n*eq*(.3+.7*fr(Math.sin(i*78.233)*43758.5453))),c=Math.cos(th),s=Math.sin(th);
+   g.moveTo(cx+c*R,cy+s*R);g.lineTo(cx+c*(R+L),cy+s*(R+L))}
+  q=g.createRadialGradient(cx,cy,R,cx,cy,R*4.2);q.addColorStop(0,'rgba(255,255,255,'+.16*ca+')');q.addColorStop(1,'rgba(255,255,255,0)');
+  g.strokeStyle=q;g.lineWidth=R*.07;g.stroke();
+  q=g.createRadialGradient(cx,cy,R,cx,cy,R*4.2);q.addColorStop(0,'rgba(255,255,255,'+.55*ca+')');q.addColorStop(1,'rgba(255,255,255,0)');
+  g.strokeStyle=q;g.lineWidth=Math.max(1,R*.012);g.stroke()}
+ g.globalCompositeOperation='source-over';
+ if(o<1){g.shadowColor='#fff';g.shadowBlur=R*.5*(1-o)+4;g.fillStyle='#fff';g.beginPath();g.arc(cx,cy,R,0,2*PI);g.fill();g.shadowBlur=0}
+ g.fillStyle='#000';g.beginPath();g.arc(mx,my,R*S2,0,2*PI);g.fill();
+ g.strokeStyle='rgba(255,255,255,'+.12*ca+')';g.lineWidth=1;g.stroke();
+ if(ad>DC2&&ad<.3){const f=Math.pow(1-(ad-DC2)/(.3-DC2),2)*sm(DC2,DC2+.012,ad),
+  px=cx-(mx-cx)/(ad*R)*R,py=cy-(my-cy)/(ad*R)*R;
+  g.globalCompositeOperation='lighter';
+  const q=g.createRadialGradient(px,py,0,px,py,R*(.2+.9*f));q.addColorStop(0,'rgba(255,255,255,'+.95*f+')');q.addColorStop(1,'rgba(255,255,255,0)');
+  g.fillStyle=q;g.beginPath();g.arc(px,py,R*(.2+.9*f),0,2*PI);g.fill();
+  const L=R*(.4+1.4*f);g.strokeStyle='rgba(255,255,255,'+.8*f+')';g.lineWidth=1.5;g.beginPath();
+  g.moveTo(px-L,py);g.lineTo(px+L,py);g.moveTo(px,py-L*.7);g.lineTo(px,py+L*.7);g.stroke();
+  g.globalCompositeOperation='source-over'}
+}
+
+const el={ttl:$('#ttl'),hint:$('#hint'),cap:$('#cap'),ph:$('#ph'),tx:$('#tx'),t:$('#t'),ob:$('#ob'),bar:$('#bar')},
+btns=$$('#cts button');
+let pi=-1,ci=-2,pt='',po='';
+function ui(u){
+ const d=dd(u),a=Math.abs(d),o=cover(d),i=a>=DC1?0:a>.25?1:a>DC2?2:3,k=i===0&&u>0?4:i;
+ if(k!==pi){pi=k;el.ph.textContent=N[k];el.tx.textContent=X[k]}
+ const tt=fmt(d*T);if(tt!==pt){pt=tt;el.t.textContent=tt}
+ const v=o>=1?'100':(o<.9?Math.round(o*100):Math.min(99.9,Math.floor(o*1000)/10).toFixed(1))+'';
+ if(v!==po){po=v;el.ob.textContent=v+'% of the Sun covered'}
+ const x=(u+1)/.08;
+ el.ttl.style.opacity=1-sm(0,.5,x);el.hint.style.opacity=1-sm(0,.4,x);el.cap.style.opacity=sm(.6,1,x);
+ el.bar.style.width=(u+1)*50+'%';
+ const c=CU.filter(z=>u>=z-1e-3).length-1;
+ if(c!==ci){ci=c;btns.forEach((b,j)=>j===c?b.setAttribute('aria-current','step'):b.removeAttribute('aria-current'))}
+}
+
+const span=()=>Math.max(1,tr.offsetHeight-st.offsetHeight);
+let tg=-1,cu=-1,on=false;
+const meas=()=>{tg=cl(-tr.getBoundingClientRect().top/span()*2-1,-1,1)};
+function frame(t){cu+=(tg-cu)*(RM.matches?1:.14);if(Math.abs(tg-cu)<1e-4)cu=tg;draw(cu,t);ui(cu);if(on)requestAnimationFrame(frame)}
+new IntersectionObserver(e=>{const v=e[0].isIntersecting;if(v&&!on){on=true;requestAnimationFrame(frame)}else if(!v)on=false},{rootMargin:'100px'}).observe(tr);
+addEventListener('scroll',()=>{meas();lit()},{passive:true});
+addEventListener('resize',()=>{size();meas();lit()});
+btns.forEach((b,j)=>b.addEventListener('click',()=>scrollTo({top:tr.offsetTop+(CU[j]+1)/2*span(),behavior:RM.matches?'auto':'smooth'})));
+$('#up').addEventListener('click',()=>scrollTo({top:0,behavior:RM.matches?'auto':'smooth'}));
+
+const big=$('#why .big');
+big.innerHTML=big.textContent.trim().split(/\s+/).map(w=>'<span class="w">'+w+'</span>').join(' ');
+const ws=$$('#why .w');
+function lit(){const r=big.getBoundingClientRect(),q=cl((innerHeight*.8-r.top)/(r.height+innerHeight*.25)),n=Math.round(q*ws.length*1.15);
+ ws.forEach((w,i)=>w.classList.toggle('on',i<n))}
+
+$$('#atlas tbody tr').forEach(r=>{const n=Math.ceil((Date.parse(r.dataset.d)-Date.now())/864e5);
+ r.querySelector('.st').textContent=n<0?'Completed':n===0?'Today':'In '+n+' day'+(n>1?'s':'')});
+
+size();meas();cu=tg;lit();draw(cu,0);ui(cu);
+})();
+</script>
+</body>
+</html>

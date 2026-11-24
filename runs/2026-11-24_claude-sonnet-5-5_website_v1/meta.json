@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "claude-sonnet-5-5",
+  "category": "website",
+  "date": "2026-11-24",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "01",
+  "prompt_label": "Website",
+  "notes": "Umbra: a single-file, strictly monochrome, scroll-driven total solar eclipse. One canvas draws the Sun, Moon, corona, diamond ring and stars; page scroll moves the Moon through five contacts, using the exact circle-overlap area for obscuration. Below it are a short manifesto, a table of upcoming total eclipses with live day counts, and eye-safety guidance. Honest limits: it was not opened in a real browser by the author (none was available), only syntax-checked and smoke-tested in Node with a stubbed DOM and canvas; visual tuning of the corona and layout is therefore unverified. Type uses system font stacks (Didone-style display where installed, otherwise Georgia), so appearance varies by platform. Eclipse dates, paths and durations were written from memory and are approximate.",
+  "slug": "2026-11-24_claude-sonnet-5-5_website_v1",
+  "path": "runs/2026-11-24_claude-sonnet-5-5_website_v1/index.html",
+  "source_file": "website__claude-sonnet-5-5__2026-11-24__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}
