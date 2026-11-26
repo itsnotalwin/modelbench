@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
     paths:
+      - "*.zip"
+      - "*.ZIP"
       - "inbox/*.zip"
       - "inbox/*.html"
       - "inbox/*.htm"
@@ -36,6 +38,23 @@ jobs:
         with:
           python-version: "3.x"
 
+      - name: Recover misplaced root ZIP uploads
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          inbox = Path("inbox")
+          for source in sorted(Path(".").iterdir()):
+              if not source.is_file() or source.is_symlink() or source.suffix.lower() != ".zip":
+                  continue
+              target = inbox / (source.stem + ".zip")
+              counter = 1
+              while target.exists():
+                  target = inbox / f"{source.stem}.recovered-{counter}.zip"
+                  counter += 1
+              source.rename(target)
+              print(f"Recovered {source} -> {target}")
+          PY
+
       # Intake must run before the integrity suite so the manifest and compact
       # explorer catalog are tested against the same current runs/ snapshot.
       # continue-on-error lets us commit valid submissions even when another
@@ -56,6 +75,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A runs manifest.json inbox src/data/catalog.json public/briefs
+          git ls-files -d -z -- ':(top,glob)*.zip' ':(top,glob)*.ZIP' | xargs -0 -r git add -u --
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
