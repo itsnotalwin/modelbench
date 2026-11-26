@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "gpt-6.2",
+  "category": "site-refresh",
+  "date": "2026-11-26",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "02",
+  "prompt_label": "Production Site Refresh",
+  "notes": "Repository main commit 3354e6a0628682988b1afbbdf501105a809df442 studied. Standalone editorial refresh. Procedural monochrome substitute artwork, not original client photographs; fallback typography. Live release and browser accessibility/performance not verified.",
+  "slug": "2026-11-26_gpt-6.2_site-refresh_v1",
+  "path": "runs/2026-11-26_gpt-6.2_site-refresh_v1/index.html",
+  "source_file": "site-refresh__gpt-6.2__2026-11-26__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}
