@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="STILL is a fictional monochrome design studio. A self-contained showcase of typography, layout, generated imagery, motion and accessible interaction — black, white and grey only.">
+  <meta name="color-scheme" content="light dark">
+  <title>STILL — a monochrome studio</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+  <noscript><style>.js-only{display:none!important}.reveal{opacity:1!important;transform:none!important}</style></noscript>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header" id="top">
+    <div class="header-inner">
+      <a class="brand" href="#top" aria-label="STILL — back to top">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <rect width="32" height="32" fill="currentColor"/>
+          <rect x="8" y="8" width="16" height="16" fill="var(--bg)"/>
+          <rect x="13" y="13" width="6" height="6" fill="currentColor"/>
+        </svg>
+        <span class="brand-name">STILL</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <ul>
+          <li><a href="#work">Work</a></li>
+          <li><a href="#studio">Studio</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#process">Process</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false" aria-label="Invert colours">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/>
+        </svg>
+        <span class="theme-toggle-label">Invert</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-art" id="hero-art" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <p class="eyebrow reveal">Fictional studio · Est. 2026 · Strictly monochrome</p>
+        <h1 class="hero-title reveal" id="hero-title">
+          Black, white,<br>and the space<br><span class="hero-title-accent">between.</span>
+        </h1>
+        <p class="hero-lead reveal">
+          STILL is a design studio that builds brands, editorial systems and digital objects in a single tone.
+          No accent colour. No stock photography. Everything on this page was made by hand and by code, and every control actually works.
+        </p>
+        <div class="hero-actions reveal">
+          <a class="btn btn-solid" href="#work">See the work</a>
+          <a class="btn btn-ghost" href="#contact">Start a conversation</a>
+        </div>
+        <dl class="hero-stats reveal">
+          <div><dt>1</dt><dd>colour, plus its absence</dd></div>
+          <div><dt>0</dt><dd>external dependencies</dd></div>
+          <div><dt>100%</dt><dd>keyboard reachable</dd></div>
+          <div><dt>∞</dt><dd>grey shades available</dd></div>
+        </dl>
+      </div>
+      <a class="scroll-cue reveal" href="#work" aria-label="Scroll to work">
+        <span>Scroll</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 4v14M6 12l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Monochrome by conviction&nbsp;·&nbsp;Contrast is a moral choice&nbsp;·&nbsp;No accent colour&nbsp;·&nbsp;Form follows attention&nbsp;·&nbsp;Nothing hidden&nbsp;·&nbsp;</span>
+        <span>Monochrome by conviction&nbsp;·&nbsp;Contrast is a moral choice&nbsp;·&nbsp;No accent colour&nbsp;·&nbsp;Form follows attention&nbsp;·&nbsp;Nothing hidden&nbsp;·&nbsp;</span>
+      </div>
+    </div>
+
+    <!-- WORK -->
+    <section class="section" id="work" aria-labelledby="work-title">
+      <div class="section-head reveal">
+        <p class="eyebrow">Selected work</p>
+        <h2 class="section-title" id="work-title">Six projects, one tone.</h2>
+        <p class="section-lead">Every image here is generated in the browser as SVG — original, reproducible, and yours to download. Filter by discipline, then open any piece for a closer look.</p>
+      </div>
+
+      <div class="filters reveal" role="group" aria-label="Filter projects by discipline">
+        <button type="button" class="filter" data-filter="all" aria-pressed="true">All</button>
+        <button type="button" class="filter" data-filter="identity" aria-pressed="false">Identity</button>
+        <button type="button" class="filter" data-filter="editorial" aria-pressed="false">Editorial</button>
+        <button type="button" class="filter" data-filter="systems" aria-pressed="false">Systems</button>
+        <button type="button" class="filter" data-filter="campaign" aria-pressed="false">Campaign</button>
+      </div>
+      <p class="filter-status" id="filter-status" role="status" aria-live="polite"></p>
+
+      <ul class="work-grid" id="work-grid"></ul>
+
+      <noscript><p>Project imagery is generated with JavaScript. Enable it to view the work grid.</p></noscript>
+    </section>
+
+    <!-- STUDIO -->
+    <section class="section section-alt" id="studio" aria-labelledby="studio-title">
+      <div class="section-head reveal">
+        <p class="eyebrow">Studio</p>
+        <h2 class="section-title" id="studio-title">We remove colour to find the work.</h2>
+      </div>
+      <div class="studio-layout">
+        <div class="studio-copy reveal">
+          <p class="lead-quote">“A second colour is an excuse. Grey is where honest hierarchy lives.”</p>
+          <p>
+            STILL is a small, fictional studio created to demonstrate what careful craft looks like with almost nothing to hide behind.
+            We strip palette, stock imagery and noise away, then rebuild meaning with type scale, rhythm, spacing, contrast and motion.
+          </p>
+          <p>
+            The result is calm and unmistakable: pages that read at a glance, print cleanly, work in either light or dark, and never rely on colour to convey meaning.
+            Everything is built as static HTML, CSS and vanilla JavaScript — no frameworks, no CDNs, no tracking, no build step.
+          </p>
+          <ul class="principles">
+            <li><span class="principle-num">01</span><span><strong>One tone.</strong> Black, white and grey only — including shadows, gradients, art and icons.</span></li>
+            <li><span class="principle-num">02</span><span><strong>Real interaction.</strong> Nothing is a placeholder; every button does something and every link goes somewhere.</span></li>
+            <li><span class="principle-num">03</span><span><strong>Accessible by default.</strong> Keyboard, focus, contrast, reduced motion and screen-reader semantics are not optional.</span></li>
+            <li><span class="principle-num">04</span><span><strong>No dependencies.</strong> It opens from a file, serves from any path, and runs offline.</span></li>
+          </ul>
+        </div>
+        <figure class="studio-figure reveal">
+          <div class="studio-art" id="studio-art" aria-hidden="true"></div>
+          <figcaption>A still life, rendered as generated SVG. No photograph was used.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="section" id="services" aria-labelledby="services-title">
+      <div class="section-head reveal">
+        <p class="eyebrow">Services</p>
+        <h2 class="section-title" id="services-title">What we make.</h2>
+      </div>
+      <ul class="services-grid">
+        <li class="service reveal">
+          <span class="service-index">01</span>
+          <h3>Identity &amp; type</h3>
+          <p>Monochrome brand systems: marks, wordmarks, type hierarchy, tone-of-voice, and rules that survive reproduction at any size, in any order.</p>
+        </li>
+        <li class="service reveal">
+          <span class="service-index">02</span>
+          <h3>Editorial &amp; print</h3>
+          <p>Publications, reports and art books engineered for contrast, readability and rhythm. Designed to look intentional in pure black on white.</p>
+        </li>
+        <li class="service reveal">
+          <span class="service-index">03</span>
+          <h3>Digital systems</h3>
+          <p>Static-first websites and component libraries: responsive, keyboard accessible, dark/light inversion, and fast without a build pipeline.</p>
+        </li>
+        <li class="service reveal">
+          <span class="service-index">04</span>
+          <h3>Motion &amp; interaction</h3>
+          <p>Restrained motion that clarifies, honours <code>prefers-reduced-motion</code>, and degrades gracefully. No gratuitous animation.</p>
+        </li>
+        <li class="service reveal">
+          <span class="service-index">05</span>
+          <h3>Generated imagery</h3>
+          <p>Original art made in code — SVG, canvas and procedural patterns — so nothing is sourced, stocked, or copyrighted elsewhere.</p>
+        </li>
+        <li class="service reveal">
+          <span class="service-index">06</span>
+          <h3>Accessibility audit</h3>
+          <p>Contrast, focus order, semantics, and reduced-motion review to make monochrome work for every reader.</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- PROCESS -->
+    <section class="section section-alt" id="process" aria-labelledby="process-title">
+      <div class="section-head reveal">
+        <p class="eyebrow">Process</p>
+        <h2 class="section-title" id="process-title">Four moves, then it ships.</h2>
+      </div>
+      <ol class="process-list">
+        <li class="process-step reveal">
+          <span class="process-num" aria-hidden="true">01</span>
+          <div><h3>Listen</h3><p>We start with the problem, the audience and the one message that must survive. No mood boards before the brief is clear.</p></div>
+        </li>
+        <li class="process-step reveal">
+          <span class="process-num" aria-hidden="true">02</span>
+          <div><h3>Strip</h3><p>We remove every element that isn't earning its place, including — always — colour. What remains is structure.</p></div>
+        </li>
+        <li class="process-step reveal">
+          <span class="process-num" aria-hidden="true">03</span>
+          <div><h3>Build</h3><p>We make it real: responsive, accessible, generated, and shipped as plain files. Reviewable by anyone, forever.</p></div>
+        </li>
+        <li class="process-step reveal">
+          <span class="process-num" aria-hidden="true">04</span>
+          <div><h3>Refine</h3><p>We test keyboard, contrast, reduced motion and reproduction, fix what's weak, and leave a clear record of trade-offs.</p></div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section contact" id="contact" aria-labelledby="contact-title">
+      <div class="contact-inner reveal">
+        <p class="eyebrow">Contact</p>
+        <h2 class="section-title" id="contact-title">Tell us what to strip back.</h2>
+        <p class="section-lead">STILL is a fictional studio for demonstration; no mail is sent from this page. Copy the address and reach a real inbox yourself, or use the button to copy it.</p>
+        <div class="contact-row">
+          <span class="contact-email" id="contact-email">hello@still.example</span>
+          <button type="button" class="btn btn-solid" id="copy-email">Copy email address</button>
+        </div>
+        <p class="contact-status" id="contact-status" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="brand-name">STILL</span>
+        <p>A fictional monochrome studio. Black, white and grey only.</p>
+      </div>
+      <nav class="footer-nav" aria-label="Footer">
+        <ul>
+          <li><a href="#work">Work</a></li>
+          <li><a href="#studio">Studio</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#process">Process</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#top">Back to top</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="footer-base">
+      <p>© <span id="year">2026</span> STILL. This demonstration site is self-contained: no external fonts, scripts, images or tracking.</p>
+      <p class="footer-meta">Strictly monochrome · Keyboard accessible · Respects reduced motion</p>
+    </div>
+  </footer>
+
+  <!-- LIGHTBOX -->
+  <dialog class="lightbox" id="lightbox" aria-labelledby="lightbox-title">
+    <div class="lightbox-panel">
+      <button type="button" class="lightbox-close" id="lightbox-close" aria-label="Close dialog">Close ✕</button>
+      <div class="lightbox-art" id="lightbox-art"></div>
+      <div class="lightbox-body">
+        <p class="eyebrow" id="lightbox-category"></p>
+        <h3 class="lightbox-title" id="lightbox-title"></h3>
+        <p class="lightbox-desc" id="lightbox-desc"></p>
+        <div class="lightbox-actions">
+          <button type="button" class="btn btn-solid" id="lightbox-download">Download SVG</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+</body>
+</html>

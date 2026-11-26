@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "mimo-v2.6-flash-free",
+  "category": "website",
+  "date": "2026-11-24",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "01",
+  "prompt_label": "Website",
+  "notes": "Achroma: a strictly monochrome, single-page interactive field guide to seeing without colour. Six movements — a prelude, a 24-step grey ladder with keyboard roving focus, live canvas halftone and dither plates (threshold, Bayer 8x8, Floyd-Steinberg), a pointer-driven extruded-type shadow study, and a colophon. All imagery is generated at run time (tiled film grain, procedurally drawn landscape and shaded sphere, hand-written SVG dial); no external requests, no dependencies, no build step, relative paths only, so it opens from file:// and from a GitHub Pages subfolder. Known limitations: system font stacks rather than a bespoke typeface; the clipboard write falls back to execCommand and reports honestly if both routes are unavailable; the hero dial and shadow study respond to pointer movement only and are decorative (aria-hidden) rather than keyboard-operable.",
+  "slug": "2026-11-24_mimo-v2.6-flash-free_website_v1",
+  "path": "runs/2026-11-24_mimo-v2.6-flash-free_website_v1/index.html",
+  "source_file": "website__mimo-v2.6-flash-free__2026-11-24__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

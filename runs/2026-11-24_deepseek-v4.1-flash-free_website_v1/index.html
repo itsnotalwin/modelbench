@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grey Matter — Printing light with ink</title>
+<meta name="description" content="A broadsheet on the halftone dot: a live screen you can turn, a short history of printing tone, and three ways to say grey with black and white.">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23101010'/%3E%3Cg fill='%23f2f2f2'%3E%3Ccircle cx='8' cy='8' r='4.4'/%3E%3Ccircle cx='24' cy='8' r='2.2'/%3E%3Ccircle cx='8' cy='24' r='2.2'/%3E%3Ccircle cx='24' cy='24' r='4.4'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+<script>document.documentElement.className = 'js';</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+<header class="masthead">
+  <div class="wrap masthead__bar">
+    <p class="brand">
+      <svg class="brand__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <circle cx="5" cy="5" r="3.2"/><circle cx="12" cy="5" r="1.6"/><circle cx="19" cy="5" r="2.4"/>
+        <circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="2.4"/><circle cx="19" cy="12" r="1.2"/>
+        <circle cx="5" cy="19" r="2.4"/><circle cx="12" cy="19" r="1.2"/><circle cx="19" cy="19" r="3.2"/>
+      </svg>
+      <span>Grey Matter</span>
+    </p>
+    <p class="masthead__sub">A broadsheet on the printed dot</p>
+    <p class="masthead__issue">No. 01 <span aria-hidden="true">·</span> 24 Nov 2026</p>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="hero wrap" aria-labelledby="hero-title">
+    <p class="kicker">An essay in five screens</p>
+    <h1 id="hero-title">Printing light<br><em>with ink.</em></h1>
+    <div class="hero__foot">
+      <p class="standfirst">Every photograph in a newspaper is a hundred thousand small decisions about where ink should not go. This is a short study of the dot that carries them: its geometry, its history, and the peculiar beauty of a picture made entirely of decisions.</p>
+      <dl class="colophon-list hero__meta">
+        <div><dt>Plates</dt><dd>Four</dd></div>
+        <div><dt>Colour</dt><dd>None</dd></div>
+        <div><dt>Ink</dt><dd>Drawn live</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <nav class="contents wrap" aria-label="Contents">
+    <ol>
+      <li><a href="#plate-01"><span>01</span>The press</a></li>
+      <li><a href="#screen"><span>02</span>The screen</a></li>
+      <li><a href="#dot"><span>03</span>The dot</a></li>
+      <li><a href="#dither"><span>04</span>The dither</a></li>
+      <li><a href="#moire"><span>05</span>The angle</a></li>
+      <li><a href="#colophon"><span>06</span>Colophon</a></li>
+    </ol>
+  </nav>
+
+  <section id="plate-01" class="press wrap" aria-labelledby="plate-01-title">
+    <h2 id="plate-01-title" class="sr-only">Plate 01 — the press</h2>
+    <figure class="plate reveal">
+      <div class="plate__head">
+        <span>Plate 01</span>
+        <span class="plate__head-mid">Low sun, four dunes, one screen</span>
+        <span>Computed</span>
+      </div>
+      <div class="plate__stage" id="stage" tabindex="0" role="group" aria-label="Live halftone plate. Use the arrow keys to move the magnifier; press Escape to hide it.">
+        <canvas id="canvas-plate" width="960" height="600" role="img" aria-label="A greyscale landscape of dunes and a low sun, rendered as a halftone dot screen."></canvas>
+        <div class="lens" id="lens" aria-hidden="true">
+          <canvas id="canvas-lens" width="320" height="320"></canvas>
+        </div>
+        <span class="reg reg--tl" aria-hidden="true"></span>
+        <span class="reg reg--tr" aria-hidden="true"></span>
+        <span class="reg reg--bl" aria-hidden="true"></span>
+        <span class="reg reg--br" aria-hidden="true"></span>
+      </div>
+      <figcaption>
+        <span class="plate__no" aria-hidden="true">1</span>
+        <p>Nothing here is a photograph and nothing is a file. The landscape is computed from layered noise — sky, sun, four dunes — and then broken into marks. Hover it, or focus it and use the arrow keys, to inspect the screen at three times its size.</p>
+      </figcaption>
+    </figure>
+
+    <div class="controls reveal">
+      <p class="controls__title">Screen settings</p>
+
+      <fieldset class="control">
+        <legend>Method</legend>
+        <div class="segmented">
+          <input type="radio" name="method" id="m-halftone" value="halftone" checked>
+          <label for="m-halftone">Halftone</label>
+          <input type="radio" name="method" id="m-dither" value="dither">
+          <label for="m-dither">Dither</label>
+        </div>
+      </fieldset>
+
+      <div class="control">
+        <div class="control__row">
+          <label for="angle">Screen angle</label>
+          <output for="angle" id="out-angle">45°</output>
+        </div>
+        <input type="range" id="angle" min="0" max="90" step="1" value="45" aria-describedby="plate-readout">
+      </div>
+
+      <div class="control">
+        <div class="control__row">
+          <label for="pitch">Dot pitch</label>
+          <output for="pitch" id="out-pitch">4 px</output>
+        </div>
+        <input type="range" id="pitch" min="3" max="16" step="1" value="4">
+      </div>
+
+      <div class="control">
+        <div class="control__row">
+          <label for="gain">Dot gain</label>
+          <output for="gain" id="out-gain">100 %</output>
+        </div>
+        <input type="range" id="gain" min="60" max="145" step="5" value="100">
+      </div>
+
+      <button class="btn" id="reset" type="button">Reset plate</button>
+      <p class="readout" id="plate-readout" aria-live="polite">Halftone · round dots · 45° · 4 px pitch · 100 % gain</p>
+    </div>
+  </section>
+
+  <section id="screen" class="chapter wrap reveal" aria-labelledby="screen-title">
+    <header class="chip">
+      <span class="chip__no" aria-hidden="true">02</span>
+      <h2 id="screen-title">The screen</h2>
+      <span class="chip__meta">Ruled glass · 1882</span>
+    </header>
+    <div class="chapter__body">
+      <p class="lede"><span class="lead-in">In 1882 a Munich engraver</span> named Georg Meisenbach patented a way to turn a photograph into a printable surface. The problem he solved was one of grammar. A photograph is a continuum of tone; a letterpress plate is a binary instrument. Ink is either there or it is not.</p>
+
+      <aside class="note">
+        <p><span class="note__no" aria-hidden="true">1</span>Meisenbach’s patent covered a process for making copper printing plates from photographs. The cross-line screen that followed is usually credited to Max Levy, working in Philadelphia in the early 1890s. <a class="note__back" href="#screen" aria-label="Back to the text">↩</a></p>
+      </aside>
+
+      <p>His answer was to break the picture into a grid and let the size of each mark carry the tone. Where the photograph was bright the mark shrank; where it darkened the mark swelled until its neighbours touched and the paper vanished between them. At reading distance the eye averages the marks back into a smooth gradient. Close up, the illusion collapses into arithmetic: a field of dots, evenly spaced, unevenly fed.</p>
+
+      <p>Within a decade the halftone had swallowed the illustrated press. Every newspaper photograph ever printed is a descendant of that grid — as is every laser-printed invoice, every dithered gradient in a photograph app, and, in a sense, this page.</p>
+
+      <blockquote class="pull">
+        <p>A photograph is continuous. A press is binary. The dot is the argument between them.</p>
+        <footer>Working definition</footer>
+      </blockquote>
+    </div>
+  </section>
+
+  <section id="dot" class="chapter wrap reveal" aria-labelledby="dot-title">
+    <header class="chip">
+      <span class="chip__no" aria-hidden="true">03</span>
+      <h2 id="dot-title">The dot</h2>
+      <span class="chip__meta">Pitch · angle · gain</span>
+    </header>
+    <div class="chapter__body">
+      <dl class="terms">
+        <div><dt>Pitch</dt><dd>Distance between dot centres</dd><dd class="terms__val">4 px</dd></div>
+        <div><dt>Angle</dt><dd>Rotation of the grid against the page</dd><dd class="terms__val">45°</dd></div>
+        <div><dt>Gain</dt><dd>Ink spread, as a share of the nominal dot</dd><dd class="terms__val">100 %</dd></div>
+      </dl>
+
+      <p>Two numbers govern a screen. <strong>Pitch</strong> is the distance between dot centres; it decides how much detail survives and how coarse the texture feels. <strong>Angle</strong> is the rotation of the grid against the page: forty-five degrees for a single black plate, because the eye is least sensitive to diagonal structure, and because a grid set square to the type would beat against the letterforms.</p>
+
+      <p>Then there is <strong>dot gain</strong>. Ink does not stop at the edge of a dot: it spreads into the paper, so a dot drawn at forty per cent covers more than forty per cent, and the midtones darken first. Pressmen compensated by etching the plate lighter. Digital screens inherit the same problem in a different costume — a pixel is a square, and squares spread when they are resampled.</p>
+
+      <figure class="wedge">
+        <figcaption class="wedge__cap"><span>Specimen</span><span>Ink coverage, 10–90 %</span></figcaption>
+        <div class="wedge__row" role="img" aria-label="Step wedge: five patches of grey, from ten per cent to ninety per cent ink coverage.">
+          <div class="step" style="--v:#e6e6e6"><span>10</span></div>
+          <div class="step" style="--v:#b3b3b3"><span>30</span></div>
+          <div class="step" style="--v:#808080"><span>50</span></div>
+          <div class="step" style="--v:#4d4d4d"><span>70</span></div>
+          <div class="step step--dark" style="--v:#1a1a1a"><span>90</span></div>
+        </div>
+      </figure>
+
+      <p>A printer calls this a step wedge: five patches of ink, from almost nothing to almost everything. It is the least glamorous object in this essay and the most useful. Every plate on this page is calibrated against something like it.</p>
+    </div>
+  </section>
+
+  <section id="dither" class="chapter chapter--ink" aria-labelledby="dither-title">
+    <div class="wrap">
+      <header class="chip reveal">
+        <span class="chip__no" aria-hidden="true">04</span>
+        <h2 id="dither-title">The dither</h2>
+        <span class="chip__meta">Two words for grey</span>
+      </header>
+      <div class="chapter__body reveal">
+        <p class="lede"><span class="lead-in">The digital screen</span> inherited the problem and changed the rules: a computer can put a dot anywhere. Two families of answer appeared within four years of each other, and they are still the ones we use.</p>
+        <p><strong>Ordered dithering</strong> uses a repeating threshold matrix. In 1973 Bryce Bayer, working at Kodak, published a small recursive table that decides which pixels to light. The result looks like a screen — regular, calm, stubbornly intact after compression, and almost impossible to animate without visible crawling.</p>
+        <p><strong>Error diffusion</strong> does the opposite. In 1976 Robert Floyd and Louis Steinberg described a method that rounds each pixel to black or white and passes the remainder to its neighbours, so the mistake is never lost, only postponed. Bill Atkinson’s variant, written for the first Macintosh in the mid-1980s, deliberately throws most of the error away: highlights stay open, shadows stay clean, and the grain becomes part of the picture.</p>
+        <p>Ordered or diffused, both answer the same question: how do you say grey with only two words?</p>
+      </div>
+
+      <div class="triptych reveal">
+        <figure>
+          <div class="mini"><canvas id="p-bayer" width="360" height="225" role="img" aria-label="The landscape dithered with an ordered Bayer four by four matrix."></canvas></div>
+          <figcaption><b>Bayer 4 × 4</b><span>Ordered matrix · 1973</span></figcaption>
+        </figure>
+        <figure>
+          <div class="mini"><canvas id="p-fs" width="360" height="225" role="img" aria-label="The landscape dithered with Floyd–Steinberg error diffusion."></canvas></div>
+          <figcaption><b>Floyd–Steinberg</b><span>Error diffusion · 1976</span></figcaption>
+        </figure>
+        <figure>
+          <div class="mini"><canvas id="p-atkinson" width="360" height="225" role="img" aria-label="The landscape dithered with Atkinson error diffusion."></canvas></div>
+          <figcaption><b>Atkinson</b><span>Error diffusion · c. 1984</span></figcaption>
+        </figure>
+      </div>
+      <p class="triptych__note reveal">Same landscape, three hundred and sixty pixels across, printed in two inks. No image files were harmed, or used.</p>
+    </div>
+  </section>
+
+  <section id="moire" class="chapter wrap reveal" aria-labelledby="angle-title">
+    <header class="chip">
+      <span class="chip__no" aria-hidden="true">05</span>
+      <h2 id="angle-title">The angle</h2>
+      <span class="chip__meta">Moiré · a beat frequency</span>
+    </header>
+    <div class="chapter__body">
+      <p>Rotate one screen against another and the grids interfere. The pattern you see is not in the ink; it is a beat frequency, produced where two periodic structures are sampled by an eye of fixed resolution. Printers call it moiré and spend their working lives avoiding it.</p>
+      <p>In four-colour work the plates are separated by thirty degrees so the interference collapses into a rosette too fine to notice. A single black plate has nothing to separate from, so it takes the diagonal — where the eye is least attentive — and trusts the paper to hide the rest.</p>
+    </div>
+
+    <div class="moire">
+      <div class="moire__stage">
+        <svg viewBox="0 0 600 380" role="img" aria-labelledby="moire-desc" focusable="false">
+          <title id="moire-desc">Two line screens, one rotated against the other, producing a moiré pattern.</title>
+          <defs>
+            <pattern id="moire-a" x="0" y="0" width="15" height="15" patternUnits="userSpaceOnUse">
+              <path d="M0 0H15M0 0V15" fill="none" stroke="#101010" stroke-width="2.4"/>
+            </pattern>
+            <pattern id="moire-b" x="0" y="0" width="15" height="15" patternUnits="userSpaceOnUse">
+              <path d="M0 0H15M0 0V15" fill="none" stroke="#101010" stroke-width="2.4"/>
+            </pattern>
+            <radialGradient id="moire-vig" cx="50%" cy="50%" r="72%">
+              <stop offset="55%" stop-color="#000" stop-opacity="0"/>
+              <stop offset="100%" stop-color="#000" stop-opacity=".55"/>
+            </radialGradient>
+          </defs>
+          <rect width="600" height="380" fill="#f7f7f7"/>
+          <rect width="600" height="380" fill="url(#moire-a)"/>
+          <rect width="600" height="380" fill="url(#moire-b)" id="moire-rotor" opacity=".78"/>
+          <rect width="600" height="380" fill="url(#moire-vig)"/>
+        </svg>
+      </div>
+      <div class="moire__ctl">
+        <div class="control__row">
+          <label for="moire-angle">Second screen</label>
+          <output for="moire-angle" id="out-moire">6.0°</output>
+        </div>
+        <input type="range" id="moire-angle" min="0" max="45" step="0.5" value="6">
+        <p class="hint">Drag slowly. The wide bands are the beat between two grids — not a third grid.</p>
+        <p class="readout" id="moire-readout" aria-live="polite">Screens separated by 6 degrees.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="colophon" class="chapter wrap reveal" aria-labelledby="colophon-title">
+    <header class="chip">
+      <span class="chip__no" aria-hidden="true">06</span>
+      <h2 id="colophon-title">Colophon</h2>
+      <span class="chip__meta">How this sheet was made</span>
+    </header>
+    <div class="colophon">
+      <div class="colophon__text">
+        <p>Grey Matter is set in the serif and monospaced faces already on your machine. No webfont is downloaded, so the page should weigh less than the picture it describes. Every mark is drawn in the browser: one landscape computed from layered noise, then screened four ways.</p>
+        <p>There are no image files, no build step, no analytics, and no colour. White, black, and the greys that fall between them.</p>
+      </div>
+      <dl class="specs">
+        <div><dt>Type</dt><dd>System serif, system monospace</dd></div>
+        <div><dt>Plates</dt><dd>Canvas 2D · SVG patterns</dd></div>
+        <div><dt>Build</dt><dd>Static HTML, CSS, one script</dd></div>
+        <div><dt>Requests</dt><dd>Four, all local</dd></div>
+        <div><dt>Access</dt><dd>Keyboard operable · reduced-motion aware · print stylesheet</dd></div>
+      </dl>
+    </div>
+    <div class="printbar">
+      <button class="btn btn--wide" id="print" type="button">Print this sheet</button>
+      <p class="hint">A print stylesheet turns the dark chapter back into ink on paper and leaves the controls behind.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__inner">
+    <p>Grey Matter <span aria-hidden="true">·</span> No. 01 <span aria-hidden="true">·</span> MMXXVI</p>
+    <p class="foot__mid">Drawn in the browser. No images loaded.</p>
+    <a href="#main">Return to top <span aria-hidden="true">↑</span></a>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

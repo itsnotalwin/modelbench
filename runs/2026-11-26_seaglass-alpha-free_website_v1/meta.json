@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "seaglass-alpha-free",
+  "category": "website",
+  "date": "2026-11-26",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "01",
+  "prompt_label": "Website",
+  "notes": "Self-contained, strictly monochrome (black/white/grey only) static site for a fictional studio named STILL. No build step, no external dependencies, relative paths; works from file:// and any subpath. All imagery is generated SVG/CSS; no stock assets. Includes responsive layout, keyboard focus, a dark/light inversion toggle, native dialog lightbox, filterable project grid, SVG download, copy-to-clipboard contact, and prefers-reduced-motion support. Content is fictional demonstration copy. Known limitations: contact is client-side only (no backend; nothing is sent), artworks are generated at runtime, theme preference uses localStorage (gracefully degrades on file://), and there is no automated test suite.",
+  "slug": "2026-11-26_seaglass-alpha-free_website_v1",
+  "path": "runs/2026-11-26_seaglass-alpha-free_website_v1/index.html",
+  "source_file": "website__seaglass-alpha-free__2026-11-26__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

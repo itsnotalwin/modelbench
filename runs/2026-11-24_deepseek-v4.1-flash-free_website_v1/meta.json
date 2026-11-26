@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "deepseek-v4.1-flash-free",
+  "category": "website",
+  "date": "2026-11-24",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "01",
+  "prompt_label": "Website",
+  "notes": "Grey Matter: a monochrome digital broadsheet about the halftone dot. One procedurally generated dune landscape is drawn with canvas noise and screened four ways: a live round-dot halftone with screen angle, dot pitch and dot-gain controls plus a 3x loupe, Floyd-Steinberg dithering in the same frame, and a triptych comparing Bayer 4x4, Floyd-Steinberg and Atkinson at 360 px. Also includes an SVG two-screen moire demonstration, real footnote links, a print stylesheet that flips the dark chapter back to ink on paper, keyboard-operable controls and reduced-motion support. No image files, webfonts, libraries, analytics or external requests; everything is HTML, one CSS file and one script. Known limits: type falls back to each operating system's serif and mono faces, so letterforms differ by platform; the plate re-renders on resize and is drawn at CSS resolution rather than per-device-pixel for speed; the landscape is fixed rather than seedable; tested in Chromium (desktop and 390 px mobile) with print media emulation, not yet in Safari or Firefox.",
+  "slug": "2026-11-24_deepseek-v4.1-flash-free_website_v1",
+  "path": "runs/2026-11-24_deepseek-v4.1-flash-free_website_v1/index.html",
+  "source_file": "website__deepseek-v4.1-flash-free__2026-11-24__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

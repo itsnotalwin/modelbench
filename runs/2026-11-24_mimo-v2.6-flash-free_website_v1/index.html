@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Achroma — A Field Guide to Seeing Without Colour</title>
+<meta name="description" content="Achroma is a strictly monochrome interactive field guide: five instruments on grey — the ladder, the dot, the error, the shadow and the record — with imagery computed live in the browser. No colour, no dependencies, no external assets.">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0b0b0b">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<script>
+(function () {
+  var d = document.documentElement;
+  d.className += ' js';
+  try {
+    var t = localStorage.getItem('achroma-theme');
+    if (t === 'light' || t === 'dark') { d.setAttribute('data-theme', t); }
+    else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) { d.setAttribute('data-theme', 'light'); }
+  } catch (e) {}
+})();
+</script>
+</head>
+<body id="top">
+
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="grain" aria-hidden="true"><canvas id="grain"></canvas></div>
+<div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+<header class="site-head">
+  <a class="mark" href="#top">Achroma<span class="mark__glyph" aria-hidden="true"></span></a>
+
+  <nav class="site-nav" aria-label="Movements">
+    <ul>
+      <li><a href="#prelude" data-nav>00 Prelude</a></li>
+      <li><a href="#ladder" data-nav>01 Ladder</a></li>
+      <li><a href="#dot" data-nav>02 Dot</a></li>
+      <li><a href="#error" data-nav>03 Error</a></li>
+      <li><a href="#shadow" data-nav>04 Shadow</a></li>
+      <li><a href="#record" data-nav>05 Record</a></li>
+    </ul>
+  </nav>
+
+  <div class="head-actions">
+    <button id="theme-toggle" class="btn" type="button">
+      <span class="btn__dot" aria-hidden="true"></span>
+      <span id="theme-label">Dark</span>
+    </button>
+    <button id="menu-toggle" class="btn btn--index" type="button" aria-expanded="false" aria-controls="index-menu">Index</button>
+  </div>
+</header>
+
+<div class="index-menu" id="index-menu">
+  <nav aria-label="Movement index">
+    <ol class="index-menu__list">
+      <li><a href="#prelude"><i>00</i> Prelude</a></li>
+      <li><a href="#ladder"><i>01</i> The Ladder</a></li>
+      <li><a href="#dot"><i>02</i> The Dot</a></li>
+      <li><a href="#error"><i>03</i> The Error</a></li>
+      <li><a href="#shadow"><i>04</i> The Shadow</a></li>
+      <li><a href="#record"><i>05</i> The Record</a></li>
+    </ol>
+  </nav>
+  <button id="menu-close" class="btn" type="button">Close index</button>
+</div>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap hero__grid">
+
+      <div class="hero__head">
+        <p class="eyebrow">Field guide &middot; edition 01 &middot; <time datetime="2026-11-24">24 November 2026</time></p>
+
+        <h1 class="hero__title" id="hero-title">
+          <span class="hero__l" style="--i:0" aria-hidden="true">A</span><span
+            class="hero__l" style="--i:1" aria-hidden="true">C</span><span
+            class="hero__l" style="--i:2" aria-hidden="true">H</span><span
+            class="hero__l" style="--i:3" aria-hidden="true">R</span><span
+            class="hero__l" style="--i:4" aria-hidden="true">O</span><span
+            class="hero__l" style="--i:5" aria-hidden="true">M</span><span
+            class="hero__l" style="--i:6" aria-hidden="true">A</span>
+          <span class="visually-hidden">Achroma</span>
+        </h1>
+      </div>
+
+      <div class="hero__text">
+        <p class="hero__lede">An instrument for seeing without colour. Five movements on grey &mdash;
+          the ladder, the dot, the error, the shadow, the record &mdash; each one drawn, computed and
+          set in type by the page itself.</p>
+
+        <dl class="hero__facts">
+          <div><dt>Palette</dt><dd>Black, white, 24 greys</dd></div>
+          <div><dt>Imagery</dt><dd>Computed at run time</dd></div>
+          <div><dt>Dependencies</dt><dd>None at all</dd></div>
+        </dl>
+
+        <p class="hero__cue"><a href="#prelude">Begin <span aria-hidden="true">&darr;</span></a></p>
+      </div>
+
+      <div class="hero__dial" aria-hidden="true">
+        <svg class="dial" viewBox="0 0 400 400" width="400" height="400" focusable="false">
+          <circle class="dial__ring" cx="200" cy="200" r="192"/>
+          <circle class="dial__ticks" cx="200" cy="200" r="170" stroke-width="16" stroke-dasharray="2 13"/>
+          <circle class="dial__ring" cx="200" cy="200" r="146"/>
+          <circle class="dial__ring dial__ring--faint" cx="200" cy="200" r="104"/>
+          <circle class="dial__disc" cx="200" cy="200" r="66"/>
+          <g class="dial__needle" id="dial-needle">
+            <line x1="200" y1="212" x2="200" y2="44"/>
+            <circle class="dial__tip" cx="200" cy="44" r="6"/>
+          </g>
+          <circle class="dial__hub" cx="200" cy="200" r="9"/>
+        </svg>
+        <p class="dial__read"><span id="dial-angle">045</span><span class="dial__deg">&deg;</span>
+          <span class="dial__cap">incident light</span></p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ 00 PRELUDE ============ -->
+  <section class="movement" id="prelude" aria-labelledby="t-prelude">
+    <div class="wrap movement__grid">
+      <div class="movement__meta">
+        <p class="movement__num">00</p>
+        <p class="movement__name">Prelude</p>
+      </div>
+      <div class="movement__body">
+        <h2 id="t-prelude" data-reveal>Colour is a decision. <em>Grey is a fact.</em></h2>
+
+        <div class="prose" data-reveal style="--d:1">
+          <p>Take the colour away and nothing that mattered is lost. What survives is the only
+            information a shadow, a printed page or a black-and-white photograph has ever carried:
+            how much light, and where. Structure. Weight. Distance. Attention. Everything colour is
+            usually asked to fix is usually asked to fix structure.</p>
+          <p><strong>Achroma</strong> is a field guide to that constraint, and an instrument panel
+            for it. Every image on this page &mdash; the grain over the type, the printed plate, the
+            sphere being taken apart one decision at a time &mdash; is computed in your browser from
+            a little arithmetic. No stock photography, no imported fonts, no external requests. If
+            something here looks photographic, it is because light behaves the same way whether or
+            not you paint it.</p>
+          <p>Five instruments follow, in order: a ladder you can climb, a dot you can count, an
+            error you can see, a shadow you can move, and a record of how it was all made. Turn the
+            page.</p>
+        </div>
+
+        <ul class="tally" data-reveal style="--d:2">
+          <li><b>06</b><span>movements</span></li>
+          <li><b>24</b><span>grey steps</span></li>
+          <li><b>03</b><span>live images</span></li>
+          <li><b>00</b><span>external requests</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <!-- ============ 01 THE LADDER ============ -->
+  <section class="movement" id="ladder" aria-labelledby="t-ladder">
+    <div class="wrap movement__grid">
+      <div class="movement__meta">
+        <p class="movement__num">01</p>
+        <p class="movement__name">The Ladder</p>
+      </div>
+      <div class="movement__body">
+        <h2 id="t-ladder" data-reveal>Twenty-four steps between <em>nothing</em> and everything.</h2>
+
+        <div class="prose" data-reveal style="--d:1">
+          <p>Ansel Adams called it the zone system: evenly spaced steps from paper white to maximum
+            black, and the whole craft of the print lying in knowing which step a thing belongs to.
+            The ladder is not decoration on a darkroom wall. It is the ruler.</p>
+          <p>These steps are evenly spaced in <em>code value</em>, which is not the same thing as
+            evenly spaced in <em>perceived light</em> &mdash; a fact that bites every time. So the
+            readout gives you the number, the hex, the perceptual luminance and the honest contrast
+            ratio against this page. A value without its ratio is a rumour.</p>
+        </div>
+
+        <div class="readout" data-reveal style="--d:2">
+          <p class="readout__hex" id="ld-hex">#7A7A7A</p>
+          <ul class="readout__data">
+            <li><span>Step</span><b id="ld-step">12 / 24</b></li>
+            <li><span>Code</span><b id="ld-val">122</b></li>
+            <li><span>Luminance</span><b id="ld-lum">19.5 %</b></li>
+            <li><span>Contrast on page</span><b id="ld-cr">4.59 : 1</b></li>
+          </ul>
+        </div>
+
+        <div class="ladder-shell" data-reveal style="--d:3">
+          <div class="ladder" id="ladder-rail" role="toolbar" aria-label="Grey ladder, 24 steps. Use the arrow keys to move between steps."></div>
+          <div class="ladder__ends" aria-hidden="true"><span>000 &mdash; black</span><span>255 &mdash; white</span></div>
+        </div>
+
+        <p class="note" data-reveal style="--d:4"><span class="note__mark" aria-hidden="true">&#9633;</span>
+          <span class="note__body">Click or press <kbd>Enter</kbd> on a step to adopt it: it becomes the working
+          tone of the hairlines, the progress rule and the index, and its hex is copied to your clipboard.
+          <span class="note__status" id="ld-status" role="status" aria-live="polite"></span></span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 02 THE DOT ============ -->
+  <section class="movement" id="dot" aria-labelledby="t-dot">
+    <div class="wrap movement__grid">
+      <div class="movement__meta">
+        <p class="movement__num">02</p>
+        <p class="movement__name">The Dot</p>
+      </div>
+      <div class="movement__body">
+        <h2 id="t-dot" data-reveal>An image you can <em>count</em>.</h2>
+
+        <div class="prose" data-reveal style="--d:1">
+          <p>A newspaper has never printed grey. It printed black dots on white paper at densities
+            the eye agreed to average, and the agreement held right up until you held it up to the
+            light. Halftone is a contract between a printer and a viewer, renewed at every distance.</p>
+          <p>Below, a landscape is resolved into one shape per cell. The cell is the resolution of
+            the contract; the angle is the oldest trick in the trade &mdash; rotate the screen and
+            the dots stop lining up into moir&eacute;. Move the controls and watch a picture
+            dissolve back into arithmetic.</p>
+        </div>
+
+        <figure class="plate" data-reveal style="--d:2">
+          <canvas id="ht-canvas" width="960" height="600" role="img"
+            aria-label="A generated monochrome landscape — hills beneath a low sun — rendered as a halftone screen of black dots on paper."></canvas>
+          <figcaption class="plate__cap">
+            <span>Plate I &mdash; halftone screen, generated at run time</span>
+            <span id="ht-stat">Cell 08 px &middot; Angle 045&deg; &middot; Circle</span>
+          </figcaption>
+        </figure>
+
+        <div class="controls" data-reveal style="--d:3">
+          <div class="control">
+            <label for="ht-cell">Cell size <output for="ht-cell" id="ht-cell-out">8 px</output></label>
+            <input type="range" id="ht-cell" min="4" max="22" step="1" value="8">
+          </div>
+          <div class="control">
+            <label for="ht-angle">Screen angle <output for="ht-angle" id="ht-angle-out">45&deg;</output></label>
+            <input type="range" id="ht-angle" min="0" max="180" step="1" value="45">
+          </div>
+          <fieldset class="control control--seg">
+            <legend>Dot shape</legend>
+            <div class="seg">
+              <input type="radio" name="ht-shape" id="ht-shape-c" value="circle" checked><label for="ht-shape-c">Circle</label>
+              <input type="radio" name="ht-shape" id="ht-shape-s" value="square"><label for="ht-shape-s">Square</label>
+              <input type="radio" name="ht-shape" id="ht-shape-l" value="line"><label for="ht-shape-l">Line</label>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 03 THE ERROR ============ -->
+  <section class="movement" id="error" aria-labelledby="t-error">
+    <div class="wrap movement__grid">
+      <div class="movement__meta">
+        <p class="movement__num">03</p>
+        <p class="movement__name">The Error</p>
+      </div>
+      <div class="movement__body">
+        <h2 id="t-error" data-reveal>The mistake that looks like <em>a photograph</em>.</h2>
+
+        <div class="prose" data-reveal style="--d:1">
+          <p>Two levels, one decision per pixel: on or off. The naive version &mdash; a flat
+            threshold &mdash; is a cliff, and everything on one side falls off it together.
+            Dithering is the trick of spreading the debt: decide wrongly here, and owe the
+            difference to your neighbours.</p>
+          <p>Floyd and Steinberg paid it forward along the scanline in seventeenths. Bayer paid it
+            out of a fixed matrix of thresholds tiled like a mosaic, which is why ordered dithering
+            has a rhythm you can actually see. Both are running below on the same shaded sphere:
+            one light, one direction, one floor, two colours.</p>
+        </div>
+
+        <figure class="plate plate--inverted" data-reveal style="--d:2">
+          <canvas id="ds-canvas" width="400" height="400" role="img"
+            aria-label="A generated shaded sphere on a plane with a cast shadow, reduced to two levels of grey by the selected dithering algorithm."></canvas>
+          <figcaption class="plate__cap">
+            <span>Plate II &mdash; two-level rendition of a shaded sphere</span>
+            <span id="ds-stat">Floyd&ndash;Steinberg &middot; 160,000 px &middot; 2 levels &middot; T 128</span>
+          </figcaption>
+        </figure>
+
+        <div class="controls" data-reveal style="--d:3">
+          <fieldset class="control control--seg control--wide">
+            <legend>Algorithm</legend>
+            <div class="seg">
+              <input type="radio" name="ds-mode" id="ds-m-t" value="threshold"><label for="ds-m-t">Threshold</label>
+              <input type="radio" name="ds-mode" id="ds-m-b" value="bayer"><label for="ds-m-b">Bayer 8&times;8</label>
+              <input type="radio" name="ds-mode" id="ds-m-f" value="fs" checked><label for="ds-m-f">Floyd&ndash;Steinberg</label>
+            </div>
+          </fieldset>
+          <div class="control">
+            <label for="ds-bias">Decision level <output for="ds-bias" id="ds-bias-out">128</output></label>
+            <input type="range" id="ds-bias" min="40" max="216" step="1" value="128">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 04 THE SHADOW ============ -->
+  <section class="movement" id="shadow" aria-labelledby="t-shadow">
+    <div class="wrap movement__grid">
+      <div class="movement__meta">
+        <p class="movement__num">04</p>
+        <p class="movement__name">The Shadow</p>
+      </div>
+      <div class="movement__body">
+        <h2 id="t-shadow" data-reveal>Form is what light does <em>on the way past</em> an object.</h2>
+
+        <div class="prose" data-reveal style="--d:1">
+          <p>A sphere is a circle until something illuminates it. The moment light arrives from a
+            direction the circle acquires a terminator, a core shadow, a lit edge bounced back from
+            the floor, and a cast shadow that anchors it &mdash; and the eye stops seeing geometry
+            and starts seeing a thing.</p>
+          <p>The word below is built from forty stacked copies of itself, each one a step further
+            from the paper's tone. That is how an extruded letterform is drawn, and it is also, more
+            or less, how a shadow is made.</p>
+        </div>
+
+        <div class="shadow-lab" data-reveal style="--d:2">
+          <p class="shadow-lab__word" id="shadow-word">Penumbra</p>
+          <div class="controls controls--tight">
+            <div class="control">
+              <label for="shadow-angle">Light angle <output for="shadow-angle" id="shadow-angle-out">045&deg;</output></label>
+              <input type="range" id="shadow-angle" min="0" max="360" step="1" value="45">
+            </div>
+            <p class="control control--hint">Move the pointer across the word, or use the slider.
+              <span id="shadow-read" class="control--hint-val">Shadow falls to the lower right.</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 05 THE RECORD ============ -->
+  <section class="movement" id="record" aria-labelledby="t-record">
+    <div class="wrap movement__grid">
+      <div class="movement__meta">
+        <p class="movement__num">05</p>
+        <p class="movement__name">The Record</p>
+      </div>
+      <div class="movement__body">
+        <h2 id="t-record" data-reveal>Colophon, and <em>an honest account</em> of the making.</h2>
+
+        <div class="prose" data-reveal style="--d:1">
+          <p>This page is a single static folder: one HTML file, one stylesheet, one script, one
+            favicon. It opens from a disk, from a repository subfolder or from any static host with
+            nothing to install and nothing to build.</p>
+        </div>
+
+        <dl class="record" data-reveal style="--d:2">
+          <div class="record__row">
+            <dt>Imagery</dt>
+            <dd>Three images are computed rather than fetched: the film grain over the page
+              (a tiled noise pattern redrawn ten times a second), the halftone plate (a landscape
+              built from gradients and summed sine ridges, then screened cell by cell), and the
+              sphere study (Lambert shading plus a soft cast shadow, then thresholded, matrix-dithered
+              or error-diffused in place). The dial in the masthead is hand-written SVG.</dd>
+          </div>
+          <div class="record__row">
+            <dt>Type</dt>
+            <dd>A system serif for the argument, a system monospace for the instruments. Nothing is
+              downloaded, so nothing blocks paint and no third party is asked to identify you.</dd>
+          </div>
+          <div class="record__row">
+            <dt>Palette</dt>
+            <dd>One hue, deliberately absent. Every value on the page &mdash; type, rules, shadows,
+              gradients, focus rings, favicon &mdash; is a shade of grey. The theme switch in the
+              masthead inverts the ladder; it does not introduce a colour.</dd>
+          </div>
+          <div class="record__row">
+            <dt>Access</dt>
+            <dd>Skip link, one <code>h1</code>, landmarks and labelled controls; the ladder is a
+              roving-focus toolbar with arrow, <kbd>Home</kbd> and <kbd>End</kbd> keys; the plates
+              carry textual alternatives; text sits at 4.5:1 contrast or better in both themes; and
+              every animation stops under <code>prefers-reduced-motion</code>.</dd>
+          </div>
+          <div class="record__row">
+            <dt>Reading</dt>
+            <dd>Ansel Adams, <cite>The Negative</cite> (1981) &middot; Josef Albers,
+              <cite>Interaction of Color</cite> (1963) &middot; R. W. Floyd &amp; L. Steinberg,
+              &ldquo;An adaptive algorithm for spatial grayscale&rdquo;, <cite>SID Symposium
+              Digest</cite> 7 (1976) &middot; B. E. Bayer, &ldquo;An optimum method for two-level
+              rendition of continuous-tone pictures&rdquo;, <cite>IEEE Int. Conf. on
+              Communications</cite> (1973).</dd>
+          </div>
+        </dl>
+
+        <p class="updown" data-reveal style="--d:3">
+          <a class="btn btn--big" href="#top">Back to the top <span aria-hidden="true">&uarr;</span></a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap site-foot__grid">
+    <p class="site-foot__mark">Achroma</p>
+    <p class="site-foot__meta">Edition 01 &middot; <time datetime="2026-11-24">2026-11-24</time> &middot;
+      Strictly monochrome &middot; No colour was used in the making of this page.</p>
+  </div>
+</footer>
+
+<script src="js/app.js" defer></script>
+</body>
+</html>
