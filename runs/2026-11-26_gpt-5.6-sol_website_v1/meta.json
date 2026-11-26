@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "gpt-5.6-sol",
+  "category": "website",
+  "date": "2026-11-26",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "01",
+  "prompt_label": "Website",
+  "notes": "A self-contained monochrome interactive web essay and timing instrument that measures a visitor's subjective ten-second interval, stores up to 12 attempts locally, and includes procedural canvas visuals, responsive layouts, keyboard controls, and reduced-motion support. No external assets, dependencies, analytics, or network calls.",
+  "slug": "2026-11-26_gpt-5.6-sol_website_v1",
+  "path": "runs/2026-11-26_gpt-5.6-sol_website_v1/index.html",
+  "source_file": "website__gpt-5.6-sol__2026-11-26__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}
