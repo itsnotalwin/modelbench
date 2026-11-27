@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0c0e">
+<meta name="description" content="NOCTURNE FIELD — a seeded, evolving generative artwork. Reproducible from a seed in the URL hash.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230b0c0e'/%3E%3Ccircle cx='8' cy='8' r='3' fill='%23e2653f'/%3E%3C/svg%3E">
+<title>NOCTURNE FIELD</title>
+<style>
+  /* ---------- Art direction ----------
+     Night ink ground, restrained palette: bone + ember + cool.
+     No external fonts. Hairline UI. Everything generated in code. */
+  :root{
+    --bg:#0b0c0e;
+    --ink:#ece6d8;
+    --dim:rgba(236,230,216,.42);
+    --faint:rgba(236,230,216,.16);
+    --ember:#e2653f;
+    --cool:#6fa8c9;
+    --hair:rgba(236,230,216,.14);
+    --panel:rgba(11,12,14,.46);
+    --serif:ui-serif,"Iowan Old Style","Palatino Linotype",Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono","Segoe UI Mono",Menlo,Consolas,monospace;
+    --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;width:100%;overflow:hidden;background:var(--bg);color:var(--ink)}
+  body{font-family:var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  #stage{position:fixed;inset:0;display:block;width:100%;height:100%;touch-action:none;cursor:crosshair;outline:none}
+  #stage:focus-visible{outline:1px solid var(--faint);outline-offset:-3px}
+  body.hide-cursor #stage{cursor:none}
+  body.fullscreen #stage{cursor:none}
+
+  /* Skip link for keyboard users */
+  .skip{position:absolute;left:-9999px;top:0;z-index:50;background:var(--bg);color:var(--ink);
+    padding:.6em 1em;border:1px solid var(--hair);border-radius:4px;font-size:13px}
+  .skip:focus{left:12px;top:12px}
+
+  /* ---------- Chrome (fades away) ---------- */
+  .chrome{position:fixed;z-index:20;transition:opacity .6s ease, transform .6s ease;opacity:1}
+  .chrome.idle{opacity:0;pointer-events:none}
+  .chrome.idle:focus-within{opacity:1;pointer-events:auto}
+
+  .masthead{top:0;left:0;right:0;padding:22px 26px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;
+    background:linear-gradient(to bottom,rgba(11,12,14,.55),transparent);pointer-events:none}
+  .wordmark{font-family:var(--serif);font-weight:500;letter-spacing:.34em;font-size:15px;text-transform:uppercase;color:var(--ink)}
+  .wordmark .dot{color:var(--ember)}
+  .subtitle{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+  .movement{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);text-align:right;pointer-events:none}
+  .movement b{color:var(--ink);font-weight:500}
+  .movement .n{color:var(--ember)}
+
+  /* Bottom control bar */
+  .bar{left:0;right:0;bottom:0;padding:18px 22px 20px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;
+    background:linear-gradient(to top,rgba(11,12,14,.62),transparent)}
+  .grp{display:flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--hair);border-radius:999px;
+    background:var(--panel);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .btn{appearance:none;border:1px solid transparent;background:transparent;color:var(--ink);cursor:pointer;
+    width:34px;height:34px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;
+    font-size:15px;line-height:1;transition:background .18s ease,color .18s ease,border-color .18s ease,transform .1s ease;font-family:var(--sans)}
+  .btn:hover{background:rgba(236,230,216,.08);border-color:var(--hair)}
+  .btn:active{transform:scale(.92)}
+  .btn:focus-visible{outline:2px solid var(--ember);outline-offset:2px}
+  .btn[aria-pressed="true"]{color:var(--ember);border-color:rgba(226,101,63,.5);background:rgba(226,101,63,.10)}
+  .btn svg{width:17px;height:17px;display:block;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+  .btn .fill{fill:currentColor;stroke:none}
+  .label{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);padding:0 4px;white-space:nowrap}
+  .seed{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--dim);padding:0 6px;user-select:text;cursor:text;white-space:nowrap}
+  .seed b{color:var(--ink);font-weight:500}
+  .divider{width:1px;height:18px;background:var(--hair);margin:0 2px}
+
+  /* ---------- Help / about panel ---------- */
+  .help{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;padding:24px;
+    background:rgba(6,7,9,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+    opacity:0;pointer-events:none;transition:opacity .35s ease}
+  .help.open{opacity:1;pointer-events:auto}
+  .card{max-width:560px;width:100%;max-height:86vh;overflow:auto;background:rgba(14,15,18,.96);border:1px solid var(--hair);
+    border-radius:14px;padding:30px 32px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+  .card h1{font-family:var(--serif);font-weight:500;letter-spacing:.16em;font-size:22px;text-transform:uppercase;margin-bottom:4px}
+  .card h1 .dot{color:var(--ember)}
+  .card .tag{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:18px}
+  .card p{font-size:14px;line-height:1.6;color:rgba(236,230,216,.82);margin-bottom:14px}
+  .card .muted{color:var(--dim);font-size:12.5px}
+  .keys{display:grid;grid-template-columns:auto 1fr;gap:7px 18px;margin:16px 0 18px;font-size:13px}
+  .keys dt{font-family:var(--mono);font-size:11.5px;color:var(--ember);white-space:nowrap}
+  .keys dd{color:rgba(236,230,216,.78)}
+  kbd{font-family:var(--mono);font-size:11px;background:rgba(236,230,216,.08);border:1px solid var(--hair);border-bottom-width:2px;
+    border-radius:4px;padding:1px 6px;color:var(--ink);margin:0 1px}
+  .card .close{margin-top:8px;appearance:none;background:transparent;border:1px solid var(--hair);color:var(--ink);
+    border-radius:8px;padding:9px 16px;cursor:pointer;font-family:var(--sans);font-size:13px;letter-spacing:.04em}
+  .card .close:hover{border-color:var(--ember);color:var(--ember)}
+  .card .close:focus-visible{outline:2px solid var(--ember);outline-offset:2px}
+
+  /* Live region */
+  .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+  /* Fallback message */
+  .fallback{position:fixed;inset:0;display:none;align-items:center;justify-content:center;text-align:center;padding:32px;z-index:60;background:var(--bg)}
+  .fallback.show{display:flex}
+  .fallback .inner{max-width:440px}
+  .fallback h1{font-family:var(--serif);letter-spacing:.16em;text-transform:uppercase;font-size:18px;margin-bottom:12px}
+  .fallback p{color:var(--dim);font-size:14px;line-height:1.6}
+
+  /* ---------- Reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce){
+    .chrome{transition:opacity .2s ease}
+    .btn{transition:none}
+  }
+  @media (max-width:560px){
+    .masthead{padding:16px 18px}
+    .wordmark{font-size:13px;letter-spacing:.28em}
+    .subtitle{font-size:9.5px}
+    .movement{font-size:9.5px}
+    .bar{padding:14px 12px 16px;gap:8px}
+    .label{display:none}
+    .seed{font-size:10px}
+  }
+</style>
+</head>
+<body>
+  <a class="skip" href="#stage">Skip to artwork</a>
+
+  <canvas id="stage" tabindex="0" role="application" aria-label="NOCTURNE FIELD generative artwork. Use arrow keys to steer a force, space to pause, r to reseed, m to change movement, s for sound, p to export a PNG, f for fullscreen, question mark for help."></canvas>
+
+  <!-- Minimal chrome -->
+  <header class="chrome masthead" id="masthead">
+    <div>
+      <div class="wordmark">Nocturne<span class="dot">·</span>Field</div>
+      <div class="subtitle">a seeded evolving artwork · reproducible from seed</div>
+    </div>
+    <div class="movement" id="movementLabel" aria-hidden="true">
+      <span class="n" id="movementIndex">I</span> · <b id="movementName">Still Air</b><br>
+      <span id="movementTimer">0:00</span>
+    </div>
+  </header>
+
+  <footer class="chrome bar" id="bar" role="toolbar" aria-label="Artwork controls">
+    <div class="grp" role="group" aria-label="Transport">
+      <button class="btn" id="pauseBtn" type="button" aria-pressed="false" aria-label="Pause" title="Pause (Space)">
+        <svg viewBox="0 0 24 24" id="pauseIcon"><rect class="fill" x="6" y="5" width="4" height="14" rx="1"/><rect class="fill" x="14" y="5" width="4" height="14" rx="1"/></svg>
+      </button>
+      <button class="btn" id="slowerBtn" type="button" aria-label="Slower" title="Slower (−)">
+        <svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>
+      </button>
+      <button class="btn" id="fasterBtn" type="button" aria-label="Faster" title="Faster (+)">
+        <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+      <span class="label" id="speedLabel">1.0×</span>
+    </div>
+
+    <div class="grp" role="group" aria-label="Movement">
+      <button class="btn" id="prevBtn" type="button" aria-label="Previous movement" title="Previous movement ([)">
+        <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="btn" id="autoBtn" type="button" aria-pressed="true" aria-label="Toggle automatic movement" title="Automatic movements (A)">
+        <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg>
+      </button>
+      <button class="btn" id="nextBtn" type="button" aria-label="Next movement" title="Next movement (])">
+        <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+
+    <div class="grp" role="group" aria-label="Sound and seed">
+      <button class="btn" id="soundBtn" type="button" aria-pressed="false" aria-label="Toggle generative soundscape" title="Soundscape (S)">
+        <svg viewBox="0 0 24 24" id="soundIcon">
+          <path d="M4 9v6h4l5 4V5L8 9H4z"/>
+          <path class="soundwave" d="M16 9a3 3 0 0 1 0 6M18.5 6.5a7 7 0 0 1 0 11"/>
+        </svg>
+      </button>
+      <span class="divider" aria-hidden="true"></span>
+      <span class="seed" id="seedLabel" title="Current seed · shared in the URL hash">seed <b id="seedValue">—</b></span>
+      <button class="btn" id="reseedBtn" type="button" aria-label="New random seed" title="New seed (R)">
+        <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><circle class="fill" cx="9" cy="9" r="1.4"/><circle class="fill" cx="15" cy="9" r="1.4"/><circle class="fill" cx="9" cy="15" r="1.4"/><circle class="fill" cx="15" cy="15" r="1.4"/></svg>
+      </button>
+    </div>
+
+    <div class="grp" role="group" aria-label="Output">
+      <button class="btn" id="pngBtn" type="button" aria-label="Export high-resolution PNG" title="Export PNG (P)">
+        <svg viewBox="0 0 24 24"><path d="M12 3v12M8 11l4 4 4-4"/><path d="M5 19h14"/></svg>
+      </button>
+      <button class="btn" id="fullBtn" type="button" aria-label="Toggle fullscreen" title="Fullscreen (F)">
+        <svg viewBox="0 0 24 24" id="fullIcon"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+      </button>
+      <button class="btn" id="helpBtn" type="button" aria-label="Help and about" title="Help (?)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 4.8 1c0 1.5-2.3 2-2.3 3.2"/><circle class="fill" cx="12" cy="17" r="1.1"/></svg>
+      </button>
+    </div>
+  </footer>
+
+  <!-- Help -->
+  <div class="help" id="help" role="dialog" aria-modal="true" aria-labelledby="helpTitle" hidden>
+    <div class="card">
+      <h1 id="helpTitle">Nocturne<span class="dot">·</span>Field</h1>
+      <div class="tag">generative artwork · one file · zero assets</div>
+      <p>A night field of luminous particles advected by a deterministic curl-noise flow. It evolves through four
+         movements — <em>Still Air</em>, <em>Interlace</em>, <em>Tide</em>, <em>Retreat</em> — and never repeats.
+         Everything you see is generated in code; the piece is fully reproducible from a seed held in the URL hash.</p>
+      <p class="muted">Try <kbd>P</kbd> to save a high-resolution PNG. Steer the field with pointer or arrow keys.
+         Let it sit still and watch closely.</p>
+      <dl class="keys">
+        <dt><kbd>Space</kbd></dt><dd>pause / resume</dd>
+        <dt><kbd>R</kbd></dt><dd>new random seed</dd>
+        <dt><kbd>M</kbd> <kbd>[</kbd> <kbd>]</kbd></dt><dd>next / previous movement</dd>
+        <dt><kbd>A</kbd></dt><dd>toggle automatic movements</dd>
+        <dt><kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd></dt><dd>steer a force (with pointer: drag)</dd>
+        <dt><kbd>Shift</kbd>+drag / right-drag</dt><dd>repel instead of attract</dd>
+        <dt><kbd>+</kbd> <kbd>−</kbd></dt><dd>faster / slower</dd>
+        <dt><kbd>0</kbd></dt><dd>reset speed &amp; movement</dd>
+        <dt><kbd>S</kbd></dt><dd>toggle generative soundscape</dd>
+        <dt><kbd>P</kbd></dt><dd>export high-resolution PNG</dd>
+        <dt><kbd>F</kbd></dt><dd>fullscreen</dd>
+        <dt><kbd>H</kbd></dt><dd>hide / show controls</dd>
+        <dt><kbd>?</kbd></dt><dd>this panel</dd>
+        <dt><kbd>Esc</kbd></dt><dd>close</dd>
+      </dl>
+      <p class="muted">Your seed lives in <code>#seed=…</code>. Copy the URL to share exactly what you see.
+         Add <code>&amp;t=seconds</code> to resume at a point in time. Sound is synthesized live; nothing is downloaded.</p>
+      <button class="close" id="helpClose" type="button">Close</button>
+    </div>
+  </div>
+
+  <div class="fallback" id="fallback" role="alert">
+    <div class="inner">
+      <h1>Nocturne<span style="color:#e2653f">·</span>Field</h1>
+      <p id="fallbackMsg">This artwork needs a current evergreen browser with canvas support. Please try the latest Chrome, Edge, Firefox or Safari.</p>
+    </div>
+  </div>
+
+  <div class="sr" id="live" aria-live="polite" role="status"></div>
+
+<script>
+"use strict";
+/* ============================================================================
+   NOCTURNE FIELD — a seeded, evolving generative artwork.
+   Single file. No external assets. Deterministic from a seed in the URL hash.
+
+   Concept     : a night field of luminous particles advected by deterministic
+                 curl-noise flow, over a procedural deep-ink shader backdrop.
+   Movements   : Still Air → Interlace → Tide → Retreat (crossfaded, looping).
+   Rendering   : WebGL2 (instanced-free POINTS) + procedural FBM background,
+                 ordered dithering, vignette, grain; Canvas2D fallback.
+   Determinism : sfc32 PRNG + integer-hashed value noise; fixed timestep;
+                 reproducible state from seed + tick count; seed in URL hash.
+   Sound       : WebAudio synthesized pad + generated reverb + sparse pings.
+   ========================================================================== */
+
+/* ----------------------------- small utilities ---------------------------- */
+const TAU = Math.PI * 2;
+const clamp = (x, a, b) => (x < a ? a : x > b ? b : x);
+const lerp = (a, b, t) => a + (b - a) * t;
+const smoothstep = (e0, e1, x) => { const t = clamp((x - e0) / (e1 - e0), 0, 1); return t * t * (3 - 2 * t); };
+const easeInOut = t => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+const nowMs = () => (typeof performance !== "undefined" && performance.now ? performance.now() : Date.now());
+
+function safe(fn, fallback) { try { return fn(); } catch (_) { return fallback; } }
+
+/* ------------------------- seeded randomness ------------------------------ */
+// xmur3 string hash → uint32 seed
+function xmur3(str) {
+  let h = 1779033703 ^ str.length;
+  for (let i = 0; i < str.length; i++) {
+    h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
+    h = (h << 13) | (h >>> 19);
+  }
+  return function () {
+    h = Math.imul(h ^ (h >>> 16), 2246822507);
+    h = Math.imul(h ^ (h >>> 13), 3266489909);
+    h ^= h >>> 16;
+    return h >>> 0;
+  };
+}
+// sfc32 PRNG
+function sfc32(a, b, c, d) {
+  return function () {
+    a >>>= 0; b >>>= 0; c >>>= 0; d >>>= 0;
+    let t = (a + b) | 0;
+    a = b ^ (b >>> 9);
+    b = (c + (c << 3)) | 0;
+    c = (c << 21) | (c >>> 11);
+    d = (d + 1) | 0;
+    t = (t + d) | 0;
+    c = (c + t) | 0;
+    return (t >>> 0) / 4294967296;
+  };
+}
+function makeRng(seedStr) {
+  const h = xmur3(String(seedStr));
+  return sfc32(h(), h(), h(), h());
+}
+// integer hash for spatial noise (deterministic, no trig)
+function ihash(x, y, seed) {
+  let h = Math.imul(x | 0, 374761393) + Math.imul(y | 0, 668265263) + Math.imul(seed | 0, 1440662683);
+  h = Math.imul(h ^ (h >>> 13), 1274126177);
+  h ^= h >>> 16;
+  return (h >>> 0) / 4294967296;
+}
+
+/* --------------------- deterministic 2D value noise ----------------------- */
+function valueNoise(x, y, seed) {
+  const xi = Math.floor(x), yi = Math.floor(y);
+  const xf = x - xi, yf = y - yi;
+  const u = xf * xf * (3 - 2 * xf);
+  const v = yf * yf * (3 - 2 * yf);
+  const a = ihash(xi, yi, seed);
+  const b = ihash(xi + 1, yi, seed);
+  const c = ihash(xi, yi + 1, seed);
+  const d = ihash(xi + 1, yi + 1, seed);
+  return lerp(lerp(a, b, u), lerp(c, d, u), v); // 0..1
+}
+function fbm(x, y, seed, octaves) {
+  let sum = 0, amp = 0.5, freq = 1, norm = 0;
+  for (let i = 0; i < octaves; i++) {
+    sum += amp * (valueNoise(x * freq, y * freq, seed + i * 1013) * 2 - 1);
+    norm += amp; amp *= 0.5; freq *= 2;
+  }
+  return norm > 0 ? sum / norm : 0; // -1..1
+}
+/* ------------------------------ palette ----------------------------------- */
+const PAL = {
+  bg0: [0.043, 0.047, 0.055],   // warm near-black
+  bg1: [0.055, 0.063, 0.078],
+  ink: [0.925, 0.898, 0.847],   // bone
+  ember: [0.886, 0.396, 0.247], // warm accent
+  cool: [0.435, 0.659, 0.788],  // cool accent
+};
+
+/* ------------------------------ movements --------------------------------- */
+// Four distinct, crossfaded movements. Params tuned for restraint + life.
+const MOVEMENTS = [
+  {
+    name: "Still Air", roman: "I", duration: 48,
+    swirl: 0.10, attract: 0.10, turbulence: 0.42, speed: 0.78, pulse: 0.05, pulseFreq: 0.18,
+    accent: PAL.ember, accentAmt: 0.10, accent2: PAL.cool, accent2Amt: 0.05, brightness: 0.92, sizeScale: 1.0,
+    sound: { root: 55.0, chord: [0, 7, 12, 16], cutoff: 520, rate: 1.0, padGain: 0.9 }, // A1-ish open fifth
+  },
+  {
+    name: "Interlace", roman: "II", duration: 52,
+    swirl: 0.55, attract: 0.16, turbulence: 0.60, speed: 1.05, pulse: 0.10, pulseFreq: 0.30,
+    accent: PAL.ember, accentAmt: 0.22, accent2: PAL.cool, accent2Amt: 0.14, brightness: 1.0, sizeScale: 0.92,
+    sound: { root: 49.0, chord: [0, 5, 12, 17], cutoff: 760, rate: 1.35, padGain: 1.0 }, // G1 sus
+  },
+  {
+    name: "Tide", roman: "III", duration: 50,
+    swirl: 0.22, attract: 0.34, turbulence: 0.50, speed: 1.25, pulse: 0.34, pulseFreq: 0.22,
+    accent: PAL.ember, accentAmt: 0.30, accent2: PAL.cool, accent2Amt: 0.10, brightness: 1.08, sizeScale: 1.12,
+    sound: { root: 61.7, chord: [0, 7, 12, 19], cutoff: 980, rate: 1.7, padGain: 1.12 }, // B1
+  },
+  {
+    name: "Retreat", roman: "IV", duration: 46,
+    swirl: 0.14, attract: 0.22, turbulence: 0.34, speed: 0.62, pulse: 0.06, pulseFreq: 0.14,
+    accent: PAL.cool, accentAmt: 0.14, accent2: PAL.ember, accent2Amt: 0.06, brightness: 0.86, sizeScale: 1.06,
+    sound: { root: 43.65, chord: [0, 12, 19, 24], cutoff: 440, rate: 0.8, padGain: 0.82 }, // F1
+  },
+];
+
+/* ------------------------------ shaders ----------------------------------- */
+const BG_VS = `#version 300 es
+precision highp float;
+out vec2 v_uv;
+void main(){
+  // attribute-less fullscreen triangle
+  vec2 p = vec2((gl_VertexID == 1) ? 3.0 : -1.0, (gl_VertexID == 2) ? 3.0 : -1.0);
+  v_uv = p * 0.5 + 0.5;
+  gl_Position = vec4(p, 0.0, 1.0);
+}`;
+
+const BG_FS = `#version 300 es
+precision highp float;
+in vec2 v_uv;
+out vec4 frag;
+
+uniform vec2  u_resolution;
+uniform float u_time;
+uniform float u_seed;
+uniform float u_aspect;
+uniform vec3  u_bg0;
+uniform vec3  u_bg1;
+uniform vec3  u_ink;
+uniform vec3  u_accent;
+uniform vec3  u_accent2;
+uniform float u_accentAmt;
+uniform float u_accent2Amt;
+uniform float u_brightness;
+uniform float u_energy;      // 0..1 live field energy
+uniform float u_stillness;   // 0..1 idle reveal
+uniform float u_reduced;     // reduced motion 0/1
+uniform float u_movementMix; // crossfade phase
+uniform vec2  u_constellation[32];
+uniform int   u_constellationCount;
+
+float hash21(vec2 p){
+  p = fract(p * vec2(123.34, 456.21));
+  p += dot(p, p + 45.32);
+  return fract(p.x * p.y);
+}
+float noise(vec2 p, float seed){
+  vec2 i = floor(p); vec2 f = fract(p);
+  vec2 u = f * f * (3.0 - 2.0 * f);
+  float a = hash21(i + seed);
+  float b = hash21(i + vec2(1.0, 0.0) + seed);
+  float c = hash21(i + vec2(0.0, 1.0) + seed);
+  float d = hash21(i + vec2(1.0, 1.0) + seed);
+  return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
+}
+float fbm(vec2 p, float seed){
+  float sum = 0.0, amp = 0.5, norm = 0.0, freq = 1.0;
+  for(int i = 0; i < 5; i++){
+    sum += amp * noise(p * freq, seed + float(i) * 13.0);
+    norm += amp; amp *= 0.5; freq *= 2.0;
+  }
+  return norm > 0.0 ? sum / norm : 0.0;
+}
+// 8x8 ordered dithering (no banding)
+float bayer8(vec2 fragCoord){
+  const float m[64] = float[64](
+     0.0, 32.0,  8.0, 40.0,  2.0, 34.0, 10.0, 42.0,
+    48.0, 16.0, 56.0, 24.0, 50.0, 18.0, 58.0, 26.0,
+    12.0, 44.0,  4.0, 36.0, 14.0, 46.0,  6.0, 38.0,
+    60.0, 28.0, 52.0, 20.0, 62.0, 30.0, 54.0, 22.0,
+     3.0, 35.0, 11.0, 43.0,  1.0, 33.0,  9.0, 41.0,
+    51.0, 19.0, 59.0, 27.0, 49.0, 17.0, 57.0, 25.0,
+    15.0, 47.0,  7.0, 39.0, 13.0, 45.0,  5.0, 37.0,
+    63.0, 31.0, 55.0, 23.0, 61.0, 29.0, 53.0, 21.0);
+  int x = int(mod(fragCoord.x, 8.0));
+  int y = int(mod(fragCoord.y, 8.0));
+  return m[y * 8 + x] / 64.0 - 0.5;
+}
+
+void main(){
+  vec2 uv = v_uv;
+  vec2 p = (uv * 2.0 - 1.0);
+  p.x *= u_aspect;
+  float t = u_reduced > 0.5 ? u_time * 0.25 : u_time;
+
+  // slow domain-warped field, very low contrast, central negative space
+  float seed = u_seed * 0.0001;
+  vec2 warp = vec2(
+    fbm(p * 0.55 + vec2(0.0, t * 0.012), seed + 3.0),
+    fbm(p * 0.55 + vec2(5.2, 1.3) - t * 0.010, seed + 11.0));
+  vec2 q = p + 0.18 * warp;
+
+  float field = fbm(q * 0.85 + t * 0.018, seed);
+  float field2 = fbm(q * 1.9 - t * 0.022, seed + 7.0);
+
+  float r = length(p);
+  // negative space in the centre — a calm well of night
+  float centre = smoothstep(0.0, 0.85, r);
+  float amp = (0.030 + 0.028 * field + 0.014 * field2) * centre;
+
+  vec3 col = mix(u_bg0, u_bg1, clamp(0.5 + 0.5 * field * centre + uv.y * 0.06, 0.0, 1.0));
+
+  // faint accent breathing in outer regions, never in the centre
+  float breath = 0.5 + 0.5 * sin(t * 0.20 + field * 2.0);
+  col += u_accent * u_accentAmt * 0.10 * centre * breath * (0.4 + 0.6 * field2);
+  col += u_accent2 * u_accent2Amt * 0.08 * centre * (1.0 - breath) * smoothstep(0.4, 1.1, r);
+  // live energy lifts the field very slightly
+  col += (u_accent * 0.04 + u_ink * 0.015) * u_energy * centre * (0.5 + 0.5 * field);
+  col *= u_brightness;
+
+  // vignette — keep edges dark, draw eye inward
+  float vig = smoothstep(1.55, 0.35, r);
+  col *= mix(0.55, 1.0, vig);
+
+  // subtle chromatic fringe at the very edges
+  float fringe = smoothstep(0.6, 1.4, r) * 0.006;
+  col.r += fringe * field; col.b -= fringe * field;
+
+  /* ---- hidden detail: a faint seed-unique constellation, revealed in stillness ---- */
+  float reveal = u_stillness * (1.0 - u_reduced * 0.35);
+  if(reveal > 0.001 && u_constellationCount > 1){
+    float cAmt = 0.0;
+    vec2 cp = p;
+    // gentle slow rotation of the revealed figure
+    float a = t * 0.02;
+    float ca = cos(a), sa = sin(a);
+    cp = mat2(ca, -sa, sa, ca) * cp;
+    for(int i = 0; i < 31; i++){
+      if(i + 1 >= u_constellationCount) break;
+      vec2 s0 = u_constellation[i];
+      vec2 s1 = u_constellation[i + 1];
+      // distance to segment s0→s1
+      vec2 sd = s1 - s0; float L2 = max(dot(sd, sd), 1e-5);
+      float h = clamp(dot(cp - s0, sd) / L2, 0.0, 1.0);
+      vec2 closest = s0 + sd * h;
+      float dseg = length(cp - closest);
+      cAmt += smoothstep(0.004, 0.0, dseg);             // faint thread
+      float d0 = length(cp - s0);
+      cAmt += 0.5 * smoothstep(0.010, 0.0, d0);         // star dot
+    }
+    cAmt = clamp(cAmt, 0.0, 1.0);
+    vec3 ccol = mix(u_ink, u_accent, 0.35);
+    col += ccol * cAmt * reveal * 0.10;
+  }
+
+  /* ---- film grain + ordered dither to kill banding ---- */
+  float grain = (hash21(uv * u_resolution + t * 60.0) - 0.5);
+  col += grain * 0.010 * centre;
+  float dither = bayer8(gl_FragCoord.xy) / 255.0;
+  col += dither + (hash21(gl_FragCoord.xy) - 0.5) * (1.0 / 255.0);
+
+  frag = vec4(clamp(col, 0.0, 1.0), 1.0);
+}`;
+
+const PT_VS = `#version 300 es
+precision highp float;
+in vec2 a_pos;     // NDC
+in vec3 a_color;
+in float a_size;   // pixels at scale 1
+in float a_alpha;
+in float a_seed;
+uniform float u_pointScale;
+uniform float u_maxPoint;
+out vec3 v_color;
+out float v_alpha;
+out float v_seed;
+void main(){
+  gl_Position = vec4(a_pos, 0.0, 1.0);
+  gl_PointSize = clamp(a_size * u_pointScale, 1.0, u_maxPoint);
+  v_color = a_color;
+  v_alpha = a_alpha;
+  v_seed = a_seed;
+}`;
+
+const PT_FS = `#version 300 es
+precision highp float;
+in vec3 v_color;
+in float v_alpha;
+in float v_seed;
+out vec4 frag;
+void main(){
+  vec2 c = gl_PointCoord * 2.0 - 1.0;
+  float d = dot(c, c);
+  if(d > 1.0) discard;
+  float a = smoothstep(1.0, 0.0, d);
+  // soft core + halo, no hard edge
+  float core = smoothstep(0.55, 0.0, d);
+  float sprite = clamp(a * 0.55 + core * 0.7, 0.0, 1.0);
+  // additive light
+  frag = vec4(v_color * sprite * v_alpha, 1.0);
+}`;
+
+/* ------------------------------ GL helpers -------------------------------- */
+function compileShader(gl, type, src) {
+  const sh = gl.createShader(type);
+  gl.shaderSource(sh, src);
+  gl.compileShader(sh);
+  if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+    const log = gl.getShaderInfoLog(sh);
+    gl.deleteShader(sh);
+    throw new Error("Shader compile failed: " + log);
+  }
+  return sh;
+}
+function linkProgram(gl, vsSrc, fsSrc) {
+  const vs = compileShader(gl, gl.VERTEX_SHADER, vsSrc);
+  const fs = compileShader(gl, gl.FRAGMENT_SHADER, fsSrc);
+  const prog = gl.createProgram();
+  gl.attachShader(prog, vs);
+  gl.attachShader(prog, fs);
+  gl.linkProgram(prog);
+  gl.deleteShader(vs);
+  gl.deleteShader(fs);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+    const log = gl.getProgramInfoLog(prog);
+    gl.deleteProgram(prog);
+    throw new Error("Program link failed: " + log);
+  }
+  return prog;
+}
+
+/* ============================ Particle system ============================== */
+const SIM_DT = 1 / 120;       // fixed timestep → deterministic
+const MAX_STEPS_PER_FRAME = 5;
+const NOISE_SCALE = 0.9;      // spatial scale of flow
+const FLOW_SPEED = 0.55;      // temporal evolution of flow
+const WORLD_MARGIN = 0.35;
+
+class Particles {
+  constructor(count, seedStr, rng) {
+    this.count = count;
+    this.seedStr = seedStr;
+    this.rng = rng;
+    this.seed = xmur3(seedStr)() >>> 0;
+    // reusable typed arrays
+    this.pos = new Float32Array(count * 2);
+    this.vel = new Float32Array(count * 2);
+    this.col = new Float32Array(count * 3);
+    this.baseCol = new Float32Array(count * 3);
+    this.size = new Float32Array(count);
+    this.alpha = new Float32Array(count);
+    this.pseed = new Float32Array(count);
+    this.life = new Float32Array(count);
+    this.maxLife = new Float32Array(count);
+    this.kind = new Uint8Array(count);
+    this.tint = new Float32Array(count);
+    this.instance = new Float32Array(count * 8); // pos2 col3 size alpha seed
+    this.aspect = 1;
+    this.t = 0;
+    this.init();
+  }
+  init() {
+    const rng = this.rng;
+    for (let i = 0; i < this.count; i++) {
+      // distribute in a calm disc + a sparse outer halo
+      const ring = rng() < 0.82 ? Math.sqrt(rng()) * 0.78 : 0.82 + rng() * 0.5;
+      const ang = rng() * TAU;
+      const asp = this.aspect || 1;
+      this.pos[i * 2] = Math.cos(ang) * ring * asp;
+      this.pos[i * 2 + 1] = Math.sin(ang) * ring;
+      this.vel[i * 2] = (rng() - 0.5) * 0.02;
+      this.vel[i * 2 + 1] = (rng() - 0.5) * 0.02;
+      // palette: mostly bone, some accent-touched; one rare accent kind per field
+      const k = rng();
+      let base;
+      if (k > 0.985) { base = PAL.ember; this.kind[i] = 2; }
+      else if (k > 0.90) { base = PAL.cool; this.kind[i] = 1; }
+      else { base = PAL.ink; this.kind[i] = 0; }
+      // per-particle brightness/size variation (craft, no repetition)
+      const shade = 0.55 + rng() * 0.45;
+      this.baseCol[i * 3] = base[0] * shade;
+      this.baseCol[i * 3 + 1] = base[1] * shade;
+      this.baseCol[i * 3 + 2] = base[2] * shade;
+      this.tint[i] = rng();
+      this.size[i] = (this.kind[i] === 2 ? 2.6 : 1.1 + rng() * 2.2);
+      this.pseed[i] = rng() * 1000;
+      this.maxLife[i] = 6 + rng() * 14;
+      this.life[i] = rng() * this.maxLife[i];
+      this.alpha[i] = 0;
+    }
+    this.updateColors(PAL.ember, PAL.cool, 0.1, 0.05, 1);
+  }
+  // respawn deterministically using the running seeded stream
+  respawn(i, asp) {
+    const rng = this.rng;
+    const ring = rng() < 0.85 ? Math.sqrt(rng()) * 0.8 : 0.82 + rng() * 0.5;
+    const ang = rng() * TAU;
+    this.pos[i * 2] = Math.cos(ang) * ring * asp;
+    this.pos[i * 2 + 1] = Math.sin(ang) * ring;
+    this.vel[i * 2] = (rng() - 0.5) * 0.02;
+    this.vel[i * 2 + 1] = (rng() - 0.5) * 0.02;
+    this.life[i] = 0;
+    this.maxLife[i] = 6 + rng() * 14;
+  }
+  // current palette blend for accents (called each frame)
+  updateColors(accent, accent2, accentAmt, accent2Amt, brightness) {
+    for (let i = 0; i < this.count; i++) {
+      const kind = this.kind[i];
+      let r, g, b;
+      if (kind === 2) { r = PAL.ember[0]; g = PAL.ember[1]; b = PAL.ember[2]; }
+      else if (kind === 1) { r = PAL.cool[0]; g = PAL.cool[1]; b = PAL.cool[2]; }
+      else { r = this.baseCol[i * 3]; g = this.baseCol[i * 3 + 1]; b = this.baseCol[i * 3 + 2]; }
+      // accent tint driven by movement
+      const amt = kind === 0 ? accentAmt * 0.5 : accentAmt;
+      const a2 = kind === 0 ? accent2Amt * 0.5 : accent2Amt;
+      r = lerp(r, accent[0], amt); g = lerp(g, accent[1], amt); b = lerp(b, accent[2], amt);
+      r = lerp(r, accent2[0], a2); g = lerp(g, accent2[1], a2); b = lerp(b, accent2[2], a2);
+      // subtle per-particle brightness flicker source
+      const shade = kind === 0 ? 1 : 0.9 + 0.1 * this.tint[i];
+      this.col[i * 3] = clamp(r * shade * brightness, 0, 1.4);
+      this.col[i * 3 + 1] = clamp(g * shade * brightness, 0, 1.4);
+      this.col[i * 3 + 2] = clamp(b * shade * brightness, 0, 1.4);
+    }
+  }
+  // fixed-step simulation
+  step(dt, params, interaction) {
+    const N = this.count;
+    const asp = this.aspect || 1;
+    const seed = this.seed;
+    const t = this.t;
+    const swirl = params.swirl, attract = params.attract, turb = params.turbulence, speed = params.speed;
+    const pulse = params.pulse, pulseFreq = params.pulseFreq;
+    const pulseWave = pulse * Math.sin(t * pulseFreq * TAU);
+    // tide radial pulse for movement III feel
+    const radial = attract + pulseWave;
+
+    for (let i = 0; i < N; i++) {
+      let x = this.pos[i * 2], y = this.pos[i * 2 + 1];
+      let vx = this.vel[i * 2], vy = this.vel[i * 2 + 1];
+
+      // deterministic curl-noise flow (divergence-free)
+      const cx = x * NOISE_SCALE, cy = y * NOISE_SCALE;
+      const ft = t * FLOW_SPEED;
+      // time-evolve field by offsetting domain
+      const fx = fbm(cx + ft * 0.3, cy + 11.0 + ft * 0.15, seed, 3);
+      const fy = fbm(cx + 5.2 + ft * 0.22, cy + ft * 0.3, seed + 7, 3);
+      const e = 0.001;
+      // curl via finite differences on a scalar potential = fbm
+      const pot = (px, py) => fbm(px + ft * 0.3, py + ft * 0.15, seed + 3, 3);
+      const curlx = (pot(cx, cy + e) - pot(cx, cy - e)) / (2 * e);
+      const curly = -(pot(cx + e, cy) - pot(cx - e, cy)) / (2 * e);
+      // blend potential-curl with a cheap directional flow
+      let ax = curlx * turb * 0.6 + fx * turb * 0.25;
+      let ay = curly * turb * 0.6 + fy * turb * 0.25;
+
+      // swirl around centre
+      const r2 = x * x + y * y;
+      const rr = Math.sqrt(r2) + 1e-4;
+      ax += (-y / rr) * swirl * 0.9;
+      ay += (x / rr) * swirl * 0.9;
+
+      // central attraction / tidal breathing
+      const pull = radial * 0.55;
+      ax += (-x / rr) * pull * Math.min(1.0, rr * 1.2);
+      ay += (-y / rr) * pull * Math.min(1.0, rr * 1.2);
+
+      // viewer interaction — collaboration, not disruption
+      if (interaction.active) {
+        const dx = interaction.x - x, dy = interaction.y - y;
+        const d2 = dx * dx + dy * dy;
+        const d = Math.sqrt(d2) + 1e-4;
+        const infl = interaction.strength * Math.exp(-d2 * interaction.radiusInv);
+        const sign = interaction.repel ? -1 : 1;
+        // attract/repel + local vortex
+        ax += sign * (dx / d) * infl * 2.2 + (-dy / d) * infl * interaction.swirl;
+        ay += sign * (dy / d) * infl * 2.2 + (dx / d) * infl * interaction.swirl;
+      }
+      // keyboard "virtual force"
+      if (interaction.key.active) {
+        const dx = interaction.key.x - x, dy = interaction.key.y - y;
+        const d = Math.sqrt(dx * dx + dy * dy) + 1e-4;
+        const infl = interaction.key.strength * Math.exp(-d * d * 2.0);
+        ax += (dx / d) * infl * 1.6;
+        ay += (dy / d) * infl * 1.6;
+      }
+
+      // integrate (semi-implicit Euler), damped
+      const accel = speed * 1.4;
+      vx += ax * accel * dt;
+      vy += ay * accel * dt;
+      const damp = Math.exp(-2.2 * dt);
+      vx *= damp; vy *= damp;
+      // clamp speed
+      const sp = Math.hypot(vx, vy);
+      const maxSp = 1.2;
+      if (sp > maxSp) { vx = vx / sp * maxSp; vy = vy / sp * maxSp; }
+      x += vx * dt * 2.0;
+      y += vy * dt * 2.0;
+
+      // soft wrap at margins (no hard pop)
+      const mx = asp + WORLD_MARGIN, my = 1 + WORLD_MARGIN;
+      if (x > mx) x -= 2 * mx; else if (x < -mx) x += 2 * mx;
+      if (y > my) y -= 2 * my; else if (y < -my) y += 2 * my;
+
+      this.pos[i * 2] = x; this.pos[i * 2 + 1] = y;
+      this.vel[i * 2] = vx; this.vel[i * 2 + 1] = vy;
+
+      // life + fade envelope (alpha breathes)
+      this.life[i] += dt;
+      if (this.life[i] >= this.maxLife[i]) this.respawn(i, asp);
+    }
+    this.t += dt;
+  }
+  // per-frame alpha envelope + pack instance buffer
+  pack(noTrackAlpha) {
+    const N = this.count;
+    for (let i = 0; i < N; i++) {
+      const lifeT = this.life[i] / this.maxLife[i];
+      // smooth fade in/out across life
+      const env = Math.sin(clamp(lifeT, 0, 1) * Math.PI);
+      const base = this.kind[i] === 2 ? 0.95 : (this.kind[i] === 1 ? 0.62 : 0.5);
+      const a = base * (0.25 + 0.75 * env);
+      // twinkle
+      const tw = 0.78 + 0.22 * Math.sin(this.t * (1.1 + this.tint[i]) + this.pseed[i]);
+      const o = i * 8;
+      // world → NDC (x normalized by aspect, y already in [-1,1])
+      this.instance[o] = this.pos[i * 2] / (this.aspect || 1);
+      this.instance[o + 1] = this.pos[i * 2 + 1];
+      this.instance[o + 2] = this.col[i * 3];
+      this.instance[o + 3] = this.col[i * 3 + 1];
+      this.instance[o + 4] = this.col[i * 3 + 2];
+      this.instance[o + 5] = this.size[i];
+      this.instance[o + 6] = noTrackAlpha ? a : a * tw;
+      this.instance[o + 7] = this.pseed[i];
+    }
+    return this.instance;
+  }
+  // external impulse (nova / interaction) applied to nearby particles
+  impulse(x, y, strength, radius) {
+    const N = this.count, asp = this.aspect || 1;
+    const r2 = radius * radius;
+    for (let i = 0; i < N; i++) {
+      const dx = this.pos[i * 2] - x, dy = this.pos[i * 2 + 1] - y;
+      const d2 = dx * dx + dy * dy;
+      if (d2 < r2) {
+        const d = Math.sqrt(d2) + 1e-4;
+        const f = strength * (1 - d2 / r2);
+        this.vel[i * 2] += (dx / d) * f;
+        this.vel[i * 2 + 1] += (dy / d) * f;
+      }
+    }
+  }
+  energy() {
+    // mean speed → 0..1
+    let s = 0;
+    const N = this.count;
+    for (let i = 0; i < N; i++) s += Math.hypot(this.vel[i * 2], this.vel[i * 2 + 1]);
+    return clamp((s / N) * 3.2, 0, 1);
+  }
+}
+
+/* ============================ WebGL renderer =============================== */
+class GLRenderer {
+  constructor(canvas, gl) {
+    this.canvas = canvas; this.gl = gl;
+    this.bgProg = linkProgram(gl, BG_VS, BG_FS);
+    this.ptProg = linkProgram(gl, PT_VS, PT_FS);
+    // cache uniforms
+    this.u = {};
+    const grab = (prog, names, prefix) => { for (const n of names) this.u[prefix + n] = gl.getUniformLocation(prog, n); };
+    grab(this.bgProg, ["u_resolution","u_time","u_seed","u_aspect","u_bg0","u_bg1","u_ink","u_accent","u_accent2","u_accentAmt","u_accent2Amt","u_brightness","u_energy","u_stillness","u_reduced","u_movementMix","u_constellation","u_constellationCount"], "bg_");
+    grab(this.ptProg, ["u_pointScale", "u_maxPoint"], "pt_");
+    // attribute locations
+    this.aPos = gl.getAttribLocation(this.ptProg, "a_pos");
+    this.aColor = gl.getAttribLocation(this.ptProg, "a_color");
+    this.aSize = gl.getAttribLocation(this.ptProg, "a_size");
+    this.aAlpha = gl.getAttribLocation(this.ptProg, "a_alpha");
+    this.aSeed = gl.getAttribLocation(this.ptProg, "a_seed");
+    this.ptVAO = gl.createVertexArray();
+    this.ptBuf = gl.createBuffer();
+    gl.bindVertexArray(this.ptVAO);
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.ptBuf);
+    const stride = 8 * 4;
+    gl.enableVertexAttribArray(this.aPos); gl.vertexAttribPointer(this.aPos, 2, gl.FLOAT, false, stride, 0);
+    gl.enableVertexAttribArray(this.aColor); gl.vertexAttribPointer(this.aColor, 3, gl.FLOAT, false, stride, 8);
+    gl.enableVertexAttribArray(this.aSize); gl.vertexAttribPointer(this.aSize, 1, gl.FLOAT, false, stride, 20);
+    gl.enableVertexAttribArray(this.aAlpha); gl.vertexAttribPointer(this.aAlpha, 1, gl.FLOAT, false, stride, 24);
+    gl.enableVertexAttribArray(this.aSeed); gl.vertexAttribPointer(this.aSeed, 1, gl.FLOAT, false, stride, 28);
+    gl.bindVertexArray(null);
+    // empty VAO for fullscreen triangle
+    this.bgVAO = gl.createVertexArray();
+    // size query
+    this.maxTex = gl.getParameter(gl.MAX_TEXTURE_SIZE) || 4096;
+    this.maxPoint = (gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE) || [1, 64])[1];
+    this.instanceCap = 0;
+  }
+  _ensureCap(floats) {
+    const gl = this.gl;
+    if (floats > this.instanceCap) {
+      this.instanceCap = floats;
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.ptBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, floats * 4, gl.DYNAMIC_DRAW);
+    }
+  }
+  // render full scene into currently bound framebuffer of size W×H
+  renderScene(W, H, state) {
+    const gl = this.gl;
+    gl.viewport(0, 0, W, H);
+    const aspect = H > 0 ? W / H : 1;
+    gl.clearColor(PAL.bg0[0], PAL.bg0[1], PAL.bg0[2], 1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    // ---- background ----
+    gl.disable(gl.BLEND);
+    gl.useProgram(this.bgProg);
+    gl.bindVertexArray(this.bgVAO);
+    const set = (k, ...v) => { const loc = this.u["bg_" + k]; if (loc == null) return; if (v.length === 1) gl.uniform1f(loc, v[0]); else if (v.length === 2) gl.uniform2f(loc, v[0], v[1]); else if (v.length === 3) gl.uniform3f(loc, v[0], v[1], v[2]); };
+    set("u_resolution", W, H);
+    set("u_time", state.time);
+    set("u_seed", state.seedNumeric);
+    set("u_aspect", aspect);
+    set("u_bg0", PAL.bg0[0], PAL.bg0[1], PAL.bg0[2]);
+    set("u_bg1", PAL.bg1[0], PAL.bg1[1], PAL.bg1[2]);
+    set("u_ink", PAL.ink[0], PAL.ink[1], PAL.ink[2]);
+    set("u_accent", state.accent[0], state.accent[1], state.accent[2]);
+    set("u_accent2", state.accent2[0], state.accent2[1], state.accent2[2]);
+    set("u_accentAmt", state.accentAmt);
+    set("u_accent2Amt", state.accent2Amt);
+    set("u_brightness", state.brightness);
+    set("u_energy", state.energy);
+    set("u_stillness", state.stillness);
+    set("u_reduced", state.reduced ? 1 : 0);
+    set("u_movementMix", state.movementMix);
+    // constellation
+    const con = state.constellation || [];
+    const count = Math.min(con.length, 32);
+    const flat = new Float32Array(32 * 2);
+    for (let i = 0; i < count; i++) { flat[i * 2] = con[i][0]; flat[i * 2 + 1] = con[i][1]; }
+    gl.uniform2fv(this.u["bg_u_constellation"], flat);
+    gl.uniform1i(this.u["bg_u_constellationCount"], count);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+    // ---- particles (additive) ----
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+    gl.useProgram(this.ptProg);
+    gl.bindVertexArray(this.ptVAO);
+    const pts = state.particles;
+    this._ensureCap(pts.length * 4);
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.ptBuf);
+    gl.bufferSubData(gl.ARRAY_BUFFER, 0, pts);
+    // point scale relative to render target size vs CSS
+    const pointScale = clamp((W / Math.max(1, state.cssW)) , 0.5, 8) * state.sizeScale;
+    gl.uniform1f(this.u["pt_u_pointScale"], pointScale);
+    gl.uniform1f(this.u["pt_u_maxPoint"], this.maxPoint || 64);
+    gl.drawArrays(gl.POINTS, 0, state.particleCount);
+    gl.bindVertexArray(null);
+    gl.disable(gl.BLEND);
+  }
+  render(W, H, state) { this.renderScene(W, H, state); }
+  // high-resolution PNG export into a fresh offscreen framebuffer
+  renderToPNG(W, H, state, cb) {
+    const gl = this.gl;
+    const w = Math.min(W, this.maxTex, 8192), h = Math.min(H, this.maxTex, 8192);
+    const fbo = gl.createFramebuffer();
+    const tex = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+    // render with point scale matching the larger target
+    const exportState = Object.assign({}, state, { cssW: state.cssW * (w / Math.max(1, W)), sizeScale: state.sizeScale });
+    const prevViewport = gl.getParameter(gl.VIEWPORT);
+    this.renderScene(w, h, exportState);
+    // read pixels
+    const pixels = new Uint8Array(w * h * 4);
+    gl.readPixels(0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+    // restore
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.viewport(prevViewport[0], prevViewport[1], prevViewport[2], prevViewport[3]);
+    gl.deleteFramebuffer(fbo);
+    gl.deleteTexture(tex);
+    // flip vertically + emit
+    const out = document.createElement("canvas");
+    out.width = w; out.height = h;
+    const octx = out.getContext("2d");
+    const img = octx.createImageData(w, h);
+    const rowBytes = w * 4;
+    for (let y = 0; y < h; y++) {
+      const src = (h - 1 - y) * rowBytes;
+      img.data.set(pixels.subarray(src, src + rowBytes), y * rowBytes);
+    }
+    octx.putImageData(img, 0, 0);
+    out.toBlob(blob => cb(blob, w, h), "image/png");
+  }
+}
+
+/* ============================ Canvas2D fallback ============================ */
+class Canvas2DRenderer {
+  constructor(canvas, ctx) { this.canvas = canvas; this.ctx = ctx; this.maxTex = 8192; }
+  render(W, H, state) {
+    const ctx = this.ctx;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    // background gradient + subtle field
+    const g = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.max(W, H) * 0.75);
+    g.addColorStop(0, "rgb(14,16,20)");
+    g.addColorStop(1, "rgb(8,9,11)");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    // particles
+    const pts = state.particles; const n = state.particleCount;
+    const aspect = W / H; const s = W / (state.cssW || W);
+    ctx.globalCompositeOperation = "lighter";
+    for (let i = 0; i < n; i++) {
+      const o = i * 8;
+      const x = (pts[o] * 0.5 + 0.5) * W;
+      const y = (1 - (pts[o + 1] * 0.5 + 0.5)) * H;
+      const r = Math.max(1, pts[o + 5] * s * state.sizeScale * 0.5);
+      const a = pts[o + 6];
+      const cr = Math.round(clamp(pts[o + 2], 0, 1) * 255);
+      const cg = Math.round(clamp(pts[o + 3], 0, 1) * 255);
+      const cb = Math.round(clamp(pts[o + 4], 0, 1) * 255);
+      const grd = ctx.createRadialGradient(x, y, 0, x, y, r * 3);
+      grd.addColorStop(0, `rgba(${cr},${cg},${cb},${clamp(a,0,1)})`);
+      grd.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
+      ctx.fillStyle = grd;
+      ctx.beginPath(); ctx.arc(x, y, r * 3, 0, TAU); ctx.fill();
+    }
+    ctx.globalCompositeOperation = "source-over";
+    // vignette
+    const v = ctx.createRadialGradient(W/2,H/2,Math.min(W,H)*0.3,W/2,H/2,Math.max(W,H)*0.75);
+    v.addColorStop(0,"rgba(0,0,0,0)"); v.addColorStop(1,"rgba(0,0,0,0.45)");
+    ctx.fillStyle = v; ctx.fillRect(0,0,W,H);
+  }
+  renderToPNG(W, H, state, cb) {
+    const w = Math.min(W, 8192), h = Math.min(H, 8192);
+    const tmp = document.createElement("canvas"); tmp.width = w; tmp.height = h;
+    const tctx = tmp.getContext("2d");
+    const saved = this.ctx; this.ctx = tctx;
+    this.render(w, h, Object.assign({}, state, { cssW: state.cssW * (w / Math.max(1, W)) }));
+    this.ctx = saved;
+    tmp.toBlob(blob => cb(blob, w, h), "image/png");
+  }
+}
+
+/* ============================== Sound engine =============================== */
+class Sound {
+  constructor() {
+    this.ctx = null; this.master = null; this.reverb = null; this.dry = null;
+    this.filter = null; this.padGain = null; this.pads = []; this.enabled = false;
+    this.pingTimer = 0; this.nextPing = 0; this.lastPing = 0;
+    this.energy = 0; this.root = 55; this.chord = [0,7,12,16]; this.cutoff = 520; this.rate = 1; this.padLevel = 0.9;
+    this._supported = typeof (window.AudioContext || window.webkitAudioContext) !== "undefined";
+  }
+  supported() { return this._supported; }
+  _makeImpulse(seconds, decay) {
+    const ctx = this.ctx; const rate = ctx.sampleRate; const len = Math.max(1, Math.floor(seconds * rate));
+    const buf = ctx.createBuffer(2, len, rate);
+    // deterministic noise for reverb tail (seeded, no assets)
+    let seed = 0x9e3779b9;
+    const rnd = () => { seed ^= seed << 13; seed ^= seed >>> 17; seed ^= seed << 5; return ((seed >>> 0) / 4294967296) * 2 - 1; };
+    for (let ch = 0; ch < 2; ch++) {
+      const data = buf.getChannelData(ch);
+      for (let i = 0; i < len; i++) data[i] = rnd() * Math.pow(1 - i / len, decay);
+    }
+    return buf;
+  }
+  start() {
+    if (!this._supported || this.ctx) return;
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      this.ctx = new AC();
+      const ctx = this.ctx;
+      this.master = ctx.createGain(); this.master.gain.value = 0.0; this.master.connect(ctx.destination);
+      this.dry = ctx.createGain(); this.dry.gain.value = 0.75; this.dry.connect(this.master);
+      this.reverb = ctx.createConvolver(); this.reverb.buffer = this._makeImpulse(3.2, 3.0);
+      const wet = ctx.createGain(); wet.gain.value = 0.45; this.reverb.connect(wet); wet.connect(this.master);
+      this.filter = ctx.createBiquadFilter(); this.filter.type = "lowpass"; this.filter.frequency.value = this.cutoff; this.filter.Q.value = 0.6;
+      this.filter.connect(this.dry); this.filter.connect(this.reverb);
+      this.padGain = ctx.createGain(); this.padGain.gain.value = 0.0; this.padGain.connect(this.filter);
+      // pad voices
+      const voices = this.chord.slice(0, 4);
+      this.pads = [];
+      for (let v = 0; v < 4; v++) {
+        const osc1 = ctx.createOscillator(); const osc2 = ctx.createOscillator();
+        osc1.type = v === 0 ? "sine" : "triangle"; osc2.type = "sine";
+        const vg = ctx.createGain(); vg.gain.value = 0.16;
+        osc1.connect(vg); osc2.connect(vg); vg.connect(this.padGain);
+        // slow LFO on detune
+        const lfo = ctx.createOscillator(); lfo.frequency.value = 0.05 + v * 0.017;
+        const lfoGain = ctx.createGain(); lfoGain.gain.value = 3.5; lfo.connect(lfoGain); lfoGain.connect(osc2.detune);
+        osc1.detune.value = -4; osc2.detune.value = 4;
+        osc1.start(); osc2.start(); lfo.start();
+        this.pads.push({ osc1, osc2, vg, lfo, ratio: voices[v] || 0 });
+      }
+      this._retune(0);
+    } catch (_) { this.ctx = null; this._supported = false; }
+  }
+  _retune(root) {
+    if (!this.ctx) return;
+    this.root = root || this.root;
+    const t = this.ctx.currentTime;
+    for (let v = 0; v < this.pads.length; v++) {
+      const p = this.pads[v];
+      const semis = this.chord[v] || 0;
+      const freq = this.root * Math.pow(2, semis / 12);
+      p.osc1.frequency.setTargetAtTime(freq, t, 0.4);
+      p.osc2.frequency.setTargetAtTime(freq, t, 0.4);
+    }
+  }
+  setMovement(snd) {
+    if (!snd) return;
+    this.chord = snd.chord || this.chord;
+    this.cutoff = snd.cutoff || this.cutoff;
+    this.rate = snd.rate || 1;
+    this.padLevel = snd.padGain || 1;
+    this._retune(snd.root || this.root);
+  }
+  enable(on) {
+    this.enabled = !!on;
+    if (this.enabled) { this.start(); if (this.ctx && this.ctx.state === "suspended") safe(() => this.ctx.resume(), null); }
+    if (this.ctx) {
+      const t = this.ctx.currentTime;
+      this.master.gain.cancelScheduledValues(t);
+      this.master.gain.setTargetAtTime(this.enabled ? 0.5 : 0.0, t, 0.25);
+      this.padGain.gain.setTargetAtTime(this.enabled ? 0.5 * this.padLevel : 0.0, t, 0.4);
+    }
+  }
+  setEnergy(e) { this.energy = clamp(e, 0, 1); }
+  // called per frame
+  update(dt, stillness, movementMix) {
+    if (!this.ctx || !this.enabled) return;
+    const t = this.ctx.currentTime;
+    // filter cutoff follows visual energy + movement
+    const base = this.cutoff;
+    const target = base + this.energy * base * 0.9 + movementMix * 120 + stillness * 80;
+    this.filter.frequency.setTargetAtTime(target, t, 0.15);
+    this.padGain.gain.setTargetAtTime(0.5 * this.padLevel * (0.8 + 0.2 * this.energy + 0.1 * stillness), t, 0.3);
+    // sparse pings
+    this.nextPing -= dt;
+    if (this.nextPing <= 0) {
+      this.ping();
+      const base2 = lerp(1.6, 0.45, clamp(this.energy + movementMix * 0.3, 0, 1)) / clamp(this.rate, 0.4, 2.5);
+      this.nextPing = base2 * (0.6 + Math.random() * 0.9);
+    }
+  }
+  ping(force) {
+    if (!this.ctx || (!this.enabled && !force)) return;
+    try {
+      const ctx = this.ctx; const t = ctx.currentTime;
+      const osc = ctx.createOscillator(); const g = ctx.createGain();
+      osc.type = "sine";
+      // scale notes from the current chord
+      const semis = (this.chord.length ? this.chord[Math.floor(Math.random() * this.chord.length)] : 12);
+      const oct = 12 * (2 + Math.floor(Math.random() * 2));
+      const freq = this.root * Math.pow(2, (semis + oct) / 12);
+      osc.frequency.value = freq;
+      const peak = 0.06 + this.energy * 0.05;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(peak, t + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 1.4);
+      osc.connect(g); g.connect(this.dry); g.connect(this.reverb);
+      osc.start(t); osc.stop(t + 1.5);
+      osc.onended = () => { safe(() => osc.disconnect(), null); safe(() => g.disconnect(), null); };
+    } catch (_) { /* ignore */ }
+  }
+  nova() { this.ping(true); this.ping(true); }
+  suspend() { if (this.ctx) safe(() => this.ctx.suspend(), null); }
+  resume() { if (this.ctx && this.enabled) safe(() => this.ctx.resume(), null); }
+}
+
+/* ================================ App ====================================== */
+(function () {
+  const canvas = document.getElementById("stage");
+  const fallback = document.getElementById("fallback");
+  const fallbackMsg = document.getElementById("fallbackMsg");
+  const live = document.getElementById("live");
+  const REDUCED_MQ = safe(() => window.matchMedia("(prefers-reduced-motion: reduce)"), null);
+  const STORAGE_KEY = "nocturne-field.v1";
+
+  /* ---- persistent, guarded settings ---- */
+  const store = {
+    get(k, d) { try { const v = window.localStorage.getItem(STORAGE_KEY + "." + k); return v == null ? d : JSON.parse(v); } catch (_) { return d; } },
+    set(k, v) { try { window.localStorage.setItem(STORAGE_KEY + "." + k, JSON.stringify(v)); } catch (_) { /* private mode */ } },
+  };
+
+  /* ---- runtime state ---- */
+  const S = {
+    seedStr: "", seedNumeric: 0, rng: null,
+    particles: null, renderer: null, gl: null, ctx2d: null, isGL: false,
+    // sizing
+    cssW: 1, cssH: 1, dpr: 1, renderScale: 1, maxRender: 2,
+    // time
+    time: 0, simTicks: 0, accumulator: 0, lastFrame: 0, speedScale: 1, paused: false,
+    // movement
+    movement: 0, movementTime: 0, movementMix: 0, autoMovement: true,
+    // input
+    pointer: { x: 0, y: 0, active: false, strength: 0, repel: false, swirl: 0.35, radiusInv: 3.0, down: false },
+    key: { x: 0, y: 0, active: false, strength: 0, dir: [0,0] },
+    lastInput: nowMs(), stillness: 0, pendingNova: false,
+    clicks: [], // rapid-click tracking for hidden nova
+    // output
+    energy: 0, reduced: !!(REDUCED_MQ && REDUCED_MQ.matches),
+    // adaptive resolution
+    frameTimes: [], lastAdapt: 0, adaptAccum: 0, adaptCount: 0,
+    // derived render state
+    sizeScale: 1, accent: PAL.ember.slice(), accent2: PAL.cool.slice(), accentAmt: 0.1, accent2Amt: 0.05, brightness: 1,
+    constellation: [], hidden: false, soundEnabled: false,
+    running: true, visible: true, uiHidden: false, idleUI: false,
+  };
+
+  const sound = new Sound();
+
+  /* ---- soundscape preference (guarded) ---- */
+  S.soundEnabled = store.get("sound", false) === true;
+  S.uiHidden = store.get("uiHidden", false) === true;
+  S.speedScale = clamp(Number(store.get("speed", 1)) || 1, 0.25, 3);
+  S.autoMovement = store.get("auto", true) !== false;
+
+  /* ----------------------------- seed handling ---------------------------- */
+  function parseHash() {
+    const h = (location.hash || "").replace(/^#/, "");
+    const params = {};
+    h.split("&").forEach(part => {
+      if (!part) return;
+      const eq = part.indexOf("=");
+      const k = eq < 0 ? part : part.slice(0, eq);
+      const raw = eq < 0 ? "" : part.slice(eq + 1);
+      const v = eq < 0 ? "" : safe(() => decodeURIComponent(raw), raw);
+      params[k] = v;
+    });
+    return params;
+  }
+  function writeHash() {
+    const p = parseHash();
+    const out = [];
+    out.push("seed=" + encodeURIComponent(S.seedStr));
+    if (p.t) out.push("t=" + p.t);
+    const hash = "#" + out.join("&");
+    safe(() => { history.replaceState(null, "", hash); }, () => { safe(() => { location.hash = hash; }, null); });
+  }
+  function randomSeedString() {
+    try {
+      const arr = new Uint32Array(2);
+      (window.crypto || window.msCrypto).getRandomValues(arr);
+      return (arr[0].toString(36) + arr[1].toString(36)).replace(/[^a-z0-9]/g, "").slice(0, 10) || "field";
+    } catch (_) { return (Math.floor(Math.random() * 1e9)).toString(36); }
+  }
+  function buildConstellation(seedStr) {
+    // seed-unique, gently clustered constellation in a ring
+    const rng = makeRng("constellation::" + seedStr);
+    const pts = []; const n = 14 + Math.floor(rng() * 8);
+    const cx = (rng() - 0.5) * 0.4, cy = (rng() - 0.5) * 0.4;
+    let ang = rng() * TAU;
+    for (let i = 0; i < n; i++) {
+      ang += 0.5 + rng() * 1.1;
+      const rad = 0.42 + rng() * 0.5;
+      pts.push([cx + Math.cos(ang) * rad, cy + Math.sin(ang) * rad * 0.85]);
+    }
+    return pts;
+  }
+  function setSeed(seedStr, opts) {
+    opts = opts || {};
+    S.seedStr = String(seedStr);
+    S.seedNumeric = xmur3(S.seedStr)() >>> 0;
+    S.rng = makeRng(S.seedStr + "::field");
+    S.constellation = buildConstellation(S.seedStr);
+    S.time = 0; S.simTicks = 0; S.accumulator = 0; S.movementTime = 0; S.movement = 0; S.movementMix = 0;
+    // rebuild particles deterministically
+    const count = S.particles ? S.particles.count : particleCountFor(S.cssW * S.cssH);
+    S.particles = new Particles(count, S.seedStr, makeRng(S.seedStr + "::particles"));
+    S.particles.aspect = S.cssW / Math.max(1, S.cssH);
+    // fast-forward to a shared time if requested
+    let fastT = 0;
+    if (opts.t != null) fastT = clamp(Number(opts.t) || 0, 0, 3600);
+    if (!opts.skipFastForward && fastT > 0) fastForward(fastT);
+    updateSeedUI();
+    writeHash();
+  }
+  function fastForward(seconds) {
+    const target = Math.min(Math.floor(seconds / SIM_DT), 200000);
+    // silence interaction during deterministic replay
+    const idle = { active: false, strength: 0, repel: false, swirl: 0.35, radiusInv: 3.0, key: { active: false, x: 0, y: 0, strength: 0 } };
+    for (let k = 0; k < target; k++) {
+      // recompute blended params each tick — identical order to real-time tick()
+      S.particles.step(SIM_DT, currentParams(), idle);
+      advanceMovement(SIM_DT);
+      S.time += SIM_DT;
+      S.simTicks++;
+    }
+  }
+  function particleCountFor(area) {
+    // scale particle count with viewport, clamped; independent of render scale
+    const base = Math.sqrt(Math.max(1, area)) * 3.2;
+    return clamp(Math.round(base), 1200, 9000);
+  }
+
+  /* ----------------------------- movement logic --------------------------- */
+  // pure per-step dynamics params (pacing lives in the accumulator, NOT here,
+  // so per-step evolution is identical regardless of speed / reduced-motion)
+  function currentParams() {
+    return blendedMovement().params;
+  }
+  function blendedMovement() {
+    const cur = MOVEMENTS[S.movement];
+    const next = MOVEMENTS[(S.movement + 1) % MOVEMENTS.length];
+    const dur = cur.duration;
+    const crossfade = Math.min(4, dur * 0.25);
+    let mix = 0;
+    if (S.movementTime > dur - crossfade) mix = clamp((S.movementTime - (dur - crossfade)) / crossfade, 0, 1);
+    mix = easeInOut(mix);
+    const P = (a, b) => lerp(a, b, mix);
+    const params = {
+      swirl: P(cur.swirl, next.swirl), attract: P(cur.attract, next.attract), turbulence: P(cur.turbulence, next.turbulence),
+      speed: P(cur.speed, next.speed), pulse: P(cur.pulse, next.pulse), pulseFreq: P(cur.pulseFreq, next.pulseFreq),
+    };
+    const accent = [P(cur.accent[0], next.accent[0]), P(cur.accent[1], next.accent[1]), P(cur.accent[2], next.accent[2])];
+    const accent2 = [P(cur.accent2[0], next.accent2[0]), P(cur.accent2[1], next.accent2[1]), P(cur.accent2[2], next.accent2[2])];
+    const sound = mix > 0.5 ? next.sound : cur.sound;
+    return {
+      params, accent, accent2,
+      accentAmt: P(cur.accentAmt, next.accentAmt), accent2Amt: P(cur.accent2Amt, next.accent2Amt),
+      brightness: P(cur.brightness, next.brightness), sizeScale: P(cur.sizeScale, next.sizeScale),
+      sound, mix, cur, next,
+    };
+  }
+  function advanceMovement(dt) {
+    const cur = MOVEMENTS[S.movement];
+    S.movementTime += dt;
+    if (S.autoMovement && S.movementTime >= cur.duration) {
+      S.movementTime -= cur.duration;
+      S.movement = (S.movement + 1) % MOVEMENTS.length;
+      onMovementChange();
+    }
+  }
+  function gotoMovement(idx) {
+    S.movement = ((idx % MOVEMENTS.length) + MOVEMENTS.length) % MOVEMENTS.length;
+    S.movementTime = 0; S.movementMix = 0;
+    onMovementChange();
+  }
+  function onMovementChange() {
+    const m = MOVEMENTS[S.movement];
+    updateMovementUI();
+    sound.setMovement(m.sound);
+    announce("Movement " + m.roman + ", " + m.name);
+  }
+
+  /* ------------------------------- rendering ------------------------------ */
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
+    const cssW = Math.max(1, Math.round(rect.width || window.innerWidth || 1));
+    const cssH = Math.max(1, Math.round(rect.height || window.innerHeight || 1));
+    S.cssW = cssW; S.cssH = cssH;
+    S.dpr = clamp(window.devicePixelRatio || 1, 1, S.maxRender);
+    applyCanvasSize();
+    if (S.particles) {
+      S.particles.aspect = cssW / cssH;
+      // note: particle world keeps coordinates; aspect change just remaps
+    }
+  }
+  function applyCanvasSize() {
+    const scale = clamp(S.renderScale, 0.4, 1) * S.dpr;
+    const w = Math.max(1, Math.round(S.cssW * scale));
+    const h = Math.max(1, Math.round(S.cssH * scale));
+    if (canvas.width !== w) canvas.width = w;
+    if (canvas.height !== h) canvas.height = h;
+  }
+
+  /* ---- adaptive resolution to hold ~60fps ---- */
+  function adapt(frameMs) {
+    S.adaptAccum += frameMs; S.adaptCount++;
+    if (S.adaptCount < 30) return;
+    const avg = S.adaptAccum / S.adaptCount; S.adaptAccum = 0; S.adaptCount = 0;
+    const maxScale = 1; // renderScale multiplies dpr separately; cap CSS scale at 1
+    const minScale = S.dpr >= 2 ? 0.5 : 0.55;
+    let rs = S.renderScale;
+    if (avg > 17.5 && rs > minScale) rs = Math.max(minScale, rs - 0.08);
+    else if (avg < 13.5 && rs < maxScale) rs = Math.min(maxScale, rs + 0.05);
+    if (rs !== S.renderScale) { S.renderScale = rs; applyCanvasSize(); }
+  }
+
+  /* ------------------------------ main loop ------------------------------- */
+  function frame(now) {
+    if (!S.running) return;
+    requestAnimationFrame(frame);
+    try { tick(now); } catch (err) { reportError(err); }
+  }
+  function tick(now) {
+    if (!S.visible) { S.lastFrame = now; return; }
+    if (!S.lastFrame) S.lastFrame = now;
+    let dt = (now - S.lastFrame) / 1000;
+    S.lastFrame = now;
+    if (!isFinite(dt) || dt < 0) dt = 0;
+    dt = Math.min(dt, 0.25); // clamp after tab switches
+    const frameMs = dt * 1000;
+    if (frameMs > 0) adapt(frameMs);
+
+    const reducedScale = S.reduced ? 0.45 : 1;
+    const effSpeed = S.speedScale * reducedScale;
+
+    // smooth pointer strength decay
+    const interaction = S.pointer;
+    interaction.strength *= Math.pow(0.001, dt); // ease out
+    if (!interaction.active) interaction.strength = lerp(interaction.strength, 0, clamp(dt * 3, 0, 1));
+    // keyboard force easing
+    if (S.key.active) S.key.strength = clamp(S.key.strength + dt * 1.5, 0, 1); else S.key.strength = lerp(S.key.strength, 0, clamp(dt * 4, 0, 1));
+
+    // stillness (for hidden reveal + calm)
+    const idleMs = nowMs() - S.lastInput;
+    const stillTarget = S.paused ? 1 : clamp((idleMs - 5000) / 4000, 0, 1);
+    S.stillness = lerp(S.stillness, stillTarget, clamp(dt * 0.6, 0, 1));
+
+    // nova (hidden rapid-click) — apply impulse + flash
+    if (S.pendingNova && S.particles) {
+      S.particles.impulse(interaction.x, interaction.y, 1.4, 0.5);
+      sound.nova();
+      S.pendingNova = false;
+    }
+
+    // fixed-step simulation
+    if (!S.paused) {
+      S.accumulator += dt * effSpeed;
+      let steps = 0;
+      const inter = {
+        active: interaction.active || interaction.strength > 0.01,
+        x: interaction.x, y: interaction.y, strength: interaction.active ? 0.3 + interaction.strength * 0.6 : interaction.strength * 0.5,
+        repel: interaction.repel, swirl: interaction.swirl, radiusInv: interaction.radiusInv,
+        key: { active: S.key.active || S.key.strength > 0.01, x: S.key.x, y: S.key.y, strength: S.key.strength },
+      };
+      while (S.accumulator >= SIM_DT && steps < MAX_STEPS_PER_FRAME) {
+        // recompute blended params each tick — identical order to fast-forward replay
+        S.particles.step(SIM_DT, currentParams(), inter);
+        advanceMovement(SIM_DT);
+        S.time += SIM_DT; S.simTicks++;
+        S.accumulator -= SIM_DT; steps++;
+      }
+      if (steps === MAX_STEPS_PER_FRAME) S.accumulator = 0; // avoid spiral of death
+    }
+
+    // blend derived render params
+    const bm = blendedMovement();
+    S.accent = bm.accent; S.accent2 = bm.accent2; S.accentAmt = bm.accentAmt; S.accent2Amt = bm.accent2Amt;
+    S.brightness = bm.brightness; S.sizeScale = bm.sizeScale; S.movementMix = bm.mix;
+    S.energy = S.particles.energy();
+    S.particles.updateColors(bm.accent, bm.accent2, bm.accentAmt, bm.accent2Amt, bm.brightness);
+    const packed = S.particles.pack();
+
+    // sound
+    sound.setEnergy(S.energy + (interaction.active ? 0.2 : 0));
+    sound.update(dt, S.stillness, bm.mix);
+
+    // render
+    const state = {
+      time: S.time, seedNumeric: S.seedNumeric, energy: S.energy, stillness: S.stillness, reduced: S.reduced,
+      movementMix: bm.mix, accent: S.accent, accent2: S.accent2, accentAmt: S.accentAmt, accent2Amt: S.accent2Amt,
+      brightness: S.brightness, sizeScale: S.sizeScale, particles: packed, particleCount: S.particles.count,
+      cssW: S.cssW, constellation: S.constellation,
+    };
+    if (S.isGL) S.renderer.render(canvas.width, canvas.height, state);
+    else S.renderer.render(canvas.width, canvas.height, state);
+
+    // UI movement timer
+    updateMovementTimer();
+
+    // idle UI fade
+    if (!S.uiHidden) {
+      const idle = nowMs() - S.lastInput;
+      document.body.classList.toggle("hide-cursor", idle > 2500 && interaction.active === false);
+      setIdleUI(idle > 2600);
+    }
+  }
+  let idleUiState = false;
+  function setIdleUI(idle) {
+    if (idle === idleUiState) return; idleUiState = idle;
+    document.getElementById("masthead").classList.toggle("idle", idle);
+    document.getElementById("bar").classList.toggle("idle", idle);
+  }
+
+  /* ------------------------------- events --------------------------------- */
+  function announce(msg) { safe(() => { live.textContent = msg; }, null); }
+  let errorShown = false;
+  function reportError(err) {
+    if (errorShown) return; errorShown = true;
+    // never spam the console; surface once
+    safe(() => console.error("Nocturne Field:", err && err.message ? err.message : err), null);
+  }
+
+  function canvasToWorld(clientX, clientY) {
+    const rect = canvas.getBoundingClientRect();
+    const nx = ((clientX - rect.left) / Math.max(1, rect.width)) * 2 - 1;
+    const ny = -(((clientY - rect.top) / Math.max(1, rect.height)) * 2 - 1);
+    const aspect = S.cssW / Math.max(1, S.cssH);
+    return [nx * aspect, ny];
+  }
+  function markInput() { S.lastInput = nowMs(); }
+
+  canvas.addEventListener("pointermove", e => {
+    markInput();
+    const w = canvasToWorld(e.clientX, e.clientY);
+    S.pointer.x = w[0]; S.pointer.y = w[1];
+    S.pointer.repel = !!(e.shiftKey || (e.buttons & 2));
+    if (S.pointer.down) S.pointer.strength = clamp(S.pointer.strength + 0.04, 0, 1);
+  }, { passive: true });
+  canvas.addEventListener("pointerdown", e => {
+    markInput();
+    canvas.focus();
+    const w = canvasToWorld(e.clientX, e.clientY);
+    S.pointer.x = w[0]; S.pointer.y = w[1]; S.pointer.down = true; S.pointer.active = true;
+    S.pointer.repel = !!(e.shiftKey || e.button === 2);
+    S.pointer.strength = clamp(S.pointer.strength + 0.5, 0, 1);
+    safe(() => canvas.setPointerCapture(e.pointerId), null);
+    // hidden nova: 5 rapid clicks in the same neighbourhood
+    const t = nowMs(); S.clicks.push(t);
+    S.clicks = S.clicks.filter(c => t - c < 800);
+    if (S.clicks.length >= 5) { S.pendingNova = true; S.clicks = []; }
+  });
+  function endPointer(e) {
+    S.pointer.down = false; S.pointer.active = false;
+    safe(() => { if (e && e.pointerId != null) canvas.releasePointerCapture(e.pointerId); }, null);
+  }
+  canvas.addEventListener("pointerup", endPointer);
+  canvas.addEventListener("pointercancel", endPointer);
+  canvas.addEventListener("pointerleave", () => { S.pointer.active = false; S.pointer.down = false; });
+  canvas.addEventListener("contextmenu", e => e.preventDefault());
+  // pointer hover (no button) still collaborates gently
+  canvas.addEventListener("pointerenter", () => { S.pointer.active = true; });
+
+  /* keyboard */
+  const KEYS = new Set();
+  window.addEventListener("keydown", e => {
+    const target = e.target;
+    const tag = target && target.tagName ? target.tagName.toLowerCase() : "";
+    const editing = tag === "input" || tag === "textarea" || (target && target.isContentEditable);
+    if (editing) return;
+    markInput();
+    const k = e.key;
+    // help open?
+    const help = document.getElementById("help");
+    if (k === "Escape") { if (help.classList.contains("open")) { closeHelp(); e.preventDefault(); return; } }
+    if (k === "?" || k === "F1") { toggleHelp(); e.preventDefault(); return; }
+    if (help.classList.contains("open")) return; // let dialog handle keys
+
+    switch (k) {
+      case " ": case "Spacebar": togglePause(); e.preventDefault(); break;
+      case "r": case "R": setSeed(randomSeedString()); announce("New seed " + S.seedStr); break;
+      case "m": case "M": gotoMovement(S.movement + 1); break;
+      case "[": gotoMovement(S.movement - 1); break;
+      case "]": gotoMovement(S.movement + 1); break;
+      case "a": case "A": toggleAuto(); break;
+      case "s": case "S": toggleSound(); break;
+      case "p": case "P": exportPNG(); break;
+      case "f": case "F": toggleFullscreen(); e.preventDefault(); break;
+      case "h": case "H": toggleUI(); break;
+      case "0": resetAll(); break;
+      case "+": case "=": setSpeed(S.speedScale + 0.1); break;
+      case "-": case "_": setSpeed(S.speedScale - 0.1); break;
+      case "ArrowLeft": nudge(-1, 0, e); e.preventDefault(); break;
+      case "ArrowRight": nudge(1, 0, e); e.preventDefault(); break;
+      case "ArrowUp": nudge(0, 1, e); e.preventDefault(); break;
+      case "ArrowDown": nudge(0, -1, e); e.preventDefault(); break;
+    }
+    KEYS.add(k);
+  });
+  window.addEventListener("keyup", e => { KEYS.delete(e.key); if (e.key === "Shift") S.pointer.repel = !!(S.pointer.down); });
+
+  function nudge(dx, dy, e) {
+    // keyboard "virtual force" at a roving point
+    S.key.x = clamp(S.key.x + dx * 0.12, -(S.cssW / S.cssH), S.cssW / S.cssH);
+    S.key.y = clamp(S.key.y + dy * 0.12, -1, 1);
+    S.key.active = true;
+    S.key.strength = 1;
+    clearTimeout(S.key._t);
+    S.key._t = setTimeout(() => { S.key.active = false; }, 220);
+  }
+
+  /* --------------------------- control wiring ----------------------------- */
+  const $ = id => document.getElementById(id);
+  $("pauseBtn").addEventListener("click", togglePause);
+  $("slowerBtn").addEventListener("click", () => setSpeed(S.speedScale - 0.1));
+  $("fasterBtn").addEventListener("click", () => setSpeed(S.speedScale + 0.1));
+  $("prevBtn").addEventListener("click", () => gotoMovement(S.movement - 1));
+  $("nextBtn").addEventListener("click", () => gotoMovement(S.movement + 1));
+  $("autoBtn").addEventListener("click", toggleAuto);
+  $("soundBtn").addEventListener("click", toggleSound);
+  $("reseedBtn").addEventListener("click", () => { setSeed(randomSeedString()); announce("New seed " + S.seedStr); });
+  $("pngBtn").addEventListener("click", exportPNG);
+  $("fullBtn").addEventListener("click", toggleFullscreen);
+  $("helpBtn").addEventListener("click", toggleHelp);
+  $("helpClose").addEventListener("click", closeHelp);
+  $("help").addEventListener("click", e => { if (e.target === $("help")) closeHelp(); });
+
+  function togglePause() { setPaused(!S.paused); }
+  function setPaused(paused) {
+    S.paused = !!paused;
+    const btn = $("pauseBtn");
+    btn.setAttribute("aria-pressed", String(S.paused));
+    btn.setAttribute("aria-label", S.paused ? "Resume" : "Pause");
+    btn.setAttribute("title", (S.paused ? "Resume" : "Pause") + " (Space)");
+    // paused → show play; running → show pause bars
+    $("pauseIcon").innerHTML = S.paused
+      ? '<path class="fill" d="M7 5l11 7-11 7z"/>'
+      : '<rect class="fill" x="6" y="5" width="4" height="14" rx="1"/><rect class="fill" x="14" y="5" width="4" height="14" rx="1"/>';
+    announce(S.paused ? "Paused" : "Resumed");
+    markInput();
+  }
+  function setSpeed(v) {
+    S.speedScale = clamp(Math.round(v * 100) / 100, 0.25, 3);
+    $("speedLabel").textContent = S.speedScale.toFixed(1) + "×";
+    store.set("speed", S.speedScale); markInput();
+  }
+  function toggleAuto() {
+    S.autoMovement = !S.autoMovement;
+    $("autoBtn").setAttribute("aria-pressed", String(S.autoMovement));
+    store.set("auto", S.autoMovement);
+    announce(S.autoMovement ? "Automatic movements on" : "Automatic movements off"); markInput();
+  }
+  function toggleSound() {
+    S.soundEnabled = !S.soundEnabled;
+    sound.enable(S.soundEnabled);
+    $("soundBtn").setAttribute("aria-pressed", String(S.soundEnabled));
+    $("soundBtn").setAttribute("aria-label", S.soundEnabled ? "Mute soundscape" : "Toggle generative soundscape");
+    // muted icon state
+    $("soundIcon").innerHTML = S.soundEnabled
+      ? '<path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9a3 3 0 0 1 0 6M18.5 6.5a7 7 0 0 1 0 11"/>'
+      : '<path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M22 9l-5 6M17 9l5 6"/>';
+    store.set("sound", S.soundEnabled);
+    announce(S.soundEnabled ? "Soundscape on" : "Soundscape off"); markInput();
+  }
+  function toggleUI() {
+    S.uiHidden = !S.uiHidden;
+    document.getElementById("masthead").classList.toggle("idle", S.uiHidden);
+    document.getElementById("bar").classList.toggle("idle", S.uiHidden);
+    store.set("uiHidden", S.uiHidden); markInput();
+  }
+  function resetAll() { setSpeed(1); gotoMovement(0); setPaused(false); markInput(); }
+
+  /* fullscreen */
+  function isFullscreen() { return !!(document.fullscreenElement || document.webkitFullscreenElement); }
+  function toggleFullscreen() {
+    markInput();
+    try {
+      if (isFullscreen()) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); }
+      else {
+        const el = document.documentElement;
+        (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
+      }
+    } catch (_) { /* fallback to CSS */ document.body.classList.toggle("fullscreen"); onFullscreenChange(); }
+  }
+  function onFullscreenChange() {
+    document.body.classList.toggle("fullscreen", isFullscreen() || document.body.classList.contains("fullscreen"));
+    $("fullIcon").innerHTML = isFullscreen()
+      ? '<path d="M9 4v5H4M20 9h-5V4M4 15h5v5M15 20v-5h5"/>'
+      : '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>';
+    // let layout settle, then resize
+    setTimeout(resize, 60);
+  }
+  document.addEventListener("fullscreenchange", onFullscreenChange);
+  document.addEventListener("webkitfullscreenchange", onFullscreenChange);
+
+  /* help */
+  let lastFocus = null;
+  function toggleHelp() { const h = $("help"); if (h.classList.contains("open")) closeHelp(); else openHelp(); }
+  function openHelp() {
+    const h = $("help"); h.hidden = false; requestAnimationFrame(() => h.classList.add("open"));
+    lastFocus = document.activeElement; markInput(); setTimeout(() => $("helpClose").focus(), 30);
+  }
+  function closeHelp() {
+    const h = $("help"); h.classList.remove("open");
+    setTimeout(() => { h.hidden = true; }, 350);
+    if (lastFocus && lastFocus.focus) lastFocus.focus(); markInput();
+  }
+
+  /* ----------------------------- PNG export ------------------------------- */
+  function exportPNG() {
+    markInput();
+    const scale = S.dpr >= 2 ? 4 : 5; // high-resolution export, independent of adaptive render scale
+    const baseW = Math.round(S.cssW * S.dpr), baseH = Math.round(S.cssH * S.dpr);
+    const W = baseW * scale, H = baseH * scale;
+    // rebuild a clean, full state for export
+    const bm = blendedMovement();
+    const packed = S.particles.pack();
+    const state = {
+      time: S.time, seedNumeric: S.seedNumeric, energy: S.energy, stillness: S.stillness, reduced: S.reduced,
+      movementMix: bm.mix, accent: S.accent, accent2: S.accent2, accentAmt: S.accentAmt, accent2Amt: S.accent2Amt,
+      brightness: S.brightness, sizeScale: S.sizeScale, particles: packed, particleCount: S.particles.count,
+      cssW: S.cssW, constellation: S.constellation,
+    };
+    const fname = "nocturne-field__" + sanitizeFile(S.seedStr) + "__" + S.movement + "__" +
+      Math.round(S.time) + ".png";
+    const done = (blob) => safe(() => {
+      if (!blob) { announce("Export failed"); return; }
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = fname; a.style.display = "none";
+      document.body.appendChild(a); a.click();
+      setTimeout(() => { safe(() => URL.revokeObjectURL(url), null); safe(() => a.remove(), null); }, 1000);
+      announce("PNG exported");
+    }, null);
+    try {
+      // re-render into an offscreen high-resolution target, then restore on-screen
+      S.renderer.renderToPNG(W, H, state, done);
+      if (S.isGL) S.renderer.render(canvas.width, canvas.height, state);
+    } catch (err) { reportError(err); announce("Export failed"); }
+  }
+  function sanitizeFile(s) { return String(s).replace(/[^a-z0-9]+/gi, "-").replace(/^-+|-+$/g, "").slice(0, 40) || "seed"; }
+
+  /* ----------------------------- UI updates ------------------------------- */
+  function updateSeedUI() { $("seedValue").textContent = S.seedStr; }
+  function updateMovementUI() {
+    const m = MOVEMENTS[S.movement];
+    $("movementIndex").textContent = m.roman;
+    $("movementName").textContent = m.name;
+  }
+  function updateMovementTimer() {
+    const m = MOVEMENTS[S.movement];
+    const rem = Math.max(0, Math.ceil(m.duration - S.movementTime));
+    const sec = Math.floor(S.time % 60), min = Math.floor(S.time / 60);
+    $("movementTimer").textContent = min + ":" + String(sec).padStart(2, "0") +
+      (S.autoMovement ? " · next " + rem + "s" : "");
+  }
+
+  /* ------------------------------ visibility ------------------------------ */
+  document.addEventListener("visibilitychange", () => {
+    S.visible = document.visibilityState !== "hidden";
+    if (!S.visible) { S.accumulator = 0; sound.suspend(); }
+    else { S.lastFrame = nowMs(); sound.resume(); markInput(); }
+  });
+  window.addEventListener("blur", () => { S.accumulator = 0; });
+  window.addEventListener("focus", () => { S.lastFrame = nowMs(); markInput(); });
+
+  /* ------------------------------- resize --------------------------------- */
+  let resizeTimer = null;
+  window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(resize, 80); }, { passive: true });
+  window.addEventListener("orientationchange", () => setTimeout(resize, 120), { passive: true });
+  if (window.ResizeObserver) { try { new ResizeObserver(() => resize()).observe(canvas); } catch (_) {} }
+
+  /* reduced motion */
+  function onReducedMotionChange() { S.reduced = !!(REDUCED_MQ && REDUCED_MQ.matches); markInput(); }
+  if (REDUCED_MQ) {
+    safe(() => { if (REDUCED_MQ.addEventListener) REDUCED_MQ.addEventListener("change", onReducedMotionChange); else REDUCED_MQ.addListener(onReducedMotionChange); }, null);
+  }
+
+  /* -------------------------------- boot ---------------------------------- */
+  function initRenderer() {
+    // Primary: WebGL2 (our shaders are GLSL ES 3.00). 
+    let gl = safe(() => canvas.getContext("webgl2", { alpha: false, antialias: true, premultipliedAlpha: false, powerPreference: "high-performance", preserveDrawingBuffer: false }), null);
+    if (gl) {
+      // shaders are validated; if construction somehow fails we report rather than
+      // reusing a canvas that already owns a WebGL context for 2D.
+      S.renderer = new GLRenderer(canvas, gl); S.gl = gl; S.isGL = true;
+      canvas.addEventListener("webglcontextlost", e => { e.preventDefault(); S.isGL = false; }, false);
+      return;
+    }
+    // Fallback: Canvas2D (canvas has no context yet if we reach here).
+    const ctx = safe(() => canvas.getContext("2d", { alpha: false }), null);
+    if (ctx) { S.renderer = new Canvas2DRenderer(canvas, ctx); S.isGL = false; return; }
+    throw new Error("no rendering context");
+  }
+
+  function boot() {
+    try { initRenderer(); }
+    catch (err) {
+      fallback.classList.add("show");
+      if (fallbackMsg) fallbackMsg.textContent = "This artwork could not initialise a canvas in your browser. Please try a current evergreen browser (Chrome, Edge, Firefox, Safari).";
+      reportError(err); return;
+    }
+
+    // sizing
+    S.renderScale = 1;
+    resize();
+
+    // seed from URL hash or fresh
+    const params = parseHash();
+    const initialSeed = params.seed && params.seed.length ? params.seed : randomSeedString();
+    const initialT = params.t != null ? params.t : null;
+    // restore sound default from storage if not explicit
+    setSeed(initialSeed, { t: initialT });
+
+    // apply persisted UI
+    document.getElementById("bar").classList.toggle("idle", S.uiHidden);
+    document.getElementById("masthead").classList.toggle("idle", S.uiHidden);
+    $("speedLabel").textContent = S.speedScale.toFixed(1) + "×";
+    $("autoBtn").setAttribute("aria-pressed", String(S.autoMovement));
+    $("soundBtn").setAttribute("aria-pressed", String(S.soundEnabled));
+    updateMovementUI();
+
+    // start soundscape only if previously enabled AND we can (user gesture may be required)
+    if (S.soundEnabled) { /* will actually start on first interaction to satisfy autoplay policy */ }
+
+    S.lastFrame = nowMs();
+    S.running = true;
+    requestAnimationFrame(frame);
+
+    announce("Nocturne Field ready. Seed " + S.seedStr + ".");
+  }
+
+  // A soundscape requested on load still needs a user gesture on most browsers;
+  // start it on first interaction if preference says on.
+  function maybeStartSoundOnGesture() {
+    if (S.soundEnabled && sound.ctx == null) sound.enable(true);
+  }
+  ["pointerdown", "keydown", "touchstart"].forEach(ev => window.addEventListener(ev, maybeStartSoundOnGesture, { once: false }));
+
+  safe(boot, err => { fallback.classList.add("show"); reportError(err); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "unknown-model",
+  "category": "threejs-experience",
+  "date": "2026-11-27",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "08",
+  "prompt_label": "Three.js 3D Experience",
+  "notes": "Original abstract grove 'Lumen Grove': procedurally generated luminous tree (seeded recursion), instanced branches/leaves, drifting motes, animated emissive core, gentle ambient motion; meaningful interaction = custom orbit/pan/zoom camera (mouse, keyboard, touch) plus clicking/tapping a leaf or core to send a pulse of light propagating across instanced leaves; Pulse/Reset/Pause/Pulse-speed controls; keyboard shortcuts; ARIA labels, instructions, aria-live status; responsive + ResizeObserver + devicePixelRatio cap 2; prefers-reduced-motion respected; WebGL/WebGLRenderer failure detection with deliberate fallback + retry; no build step, no extra libraries, no local assets. Three.js exactly pinned 0.160.0 from jsDelivr CDN; requires network access to the CDN and a WebGL-capable browser. MODEL_SLUG resolved as 'unknown-model': the active model identity is withheld per confidentiality policy and not disclosed in this submission; no identity is invented. Known limitations: pulse propagation is CPU-side per-instance color animation (fine for ~300 leaves); no persistence; single static scene.",
+  "slug": "2026-11-27_unknown-model_threejs-experience_v1",
+  "path": "runs/2026-11-27_unknown-model_threejs-experience_v1/index.html",
+  "source_file": "threejs-experience__unknown-model__2026-11-27__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

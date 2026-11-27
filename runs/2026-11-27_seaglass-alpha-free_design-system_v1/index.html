@@ -1,0 +1,1236 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vireo Design System — a calm team workspace, in pure HTML &amp; CSS</title>
+  <meta name="description" content="Vireo: a complete, accessible, reusable design system. Semantic HTML + CSS only, no JavaScript, no build step. Tokens, components, variants, states, and a realistic showcase.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f8f6f1">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230f6e5e'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='sans-serif'%3EV%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/showcase.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- ============================ SITE HEADER ============================ -->
+  <header class="app-header">
+    <div class="app-header-inner">
+      <a class="brand" href="#main" aria-label="Vireo Design System, home">
+        <span class="brand-mark" aria-hidden="true">V</span>
+        <span>Vireo <span class="text-muted" style="font-weight:var(--weight-normal)">Design System</span></span>
+      </a>
+
+      <input type="checkbox" id="nav-open" class="nav-toggle sr-only" aria-controls="primary-nav">
+      <label for="nav-open" class="nav-toggle-label">
+        <span aria-hidden="true">☰</span><span class="sr-only">Open menu</span>Menu
+      </label>
+
+      <nav class="header-nav" id="primary-nav" aria-label="Primary">
+        <a href="#overview" aria-current="page">Overview</a>
+        <a href="#showcase">Showcase</a>
+        <a href="#tokens">Tokens</a>
+        <a href="#components">Components</a>
+        <a href="#accessibility">Accessibility</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ============================== OVERVIEW ============================ -->
+    <section class="hero section" id="overview" aria-labelledby="overview-title">
+      <div class="container">
+        <p class="eyebrow">Vireo · Design System · v1</p>
+        <h1 id="overview-title">A calm team workspace, built in pure HTML &amp; CSS.</h1>
+        <p class="lede">
+          <strong>Vireo</strong> is an imaginary tool for small studios and research teams to run projects,
+          capture notes, and keep decisions in one place. This is its complete, reusable design system:
+          a considered token layer, accessible components with real states, layout rules, and a polished
+          showcase — <strong>semantic HTML and CSS only</strong>. No JavaScript, no framework, no build step.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary btn-lg" href="#components">Browse components</a>
+          <a class="btn btn-lg" href="#showcase">See the showcase</a>
+          <a class="btn btn-lg btn-ghost" href="assets/css/tokens.css" download="vireo-tokens.css">Download tokens.css</a>
+        </div>
+
+        <div class="grid grid-3" style="margin-top:var(--space-12)">
+          <div class="card">
+            <span class="badge badge-accent" style="margin-bottom:var(--space-2)">Tokens</span>
+            <h3 class="card-title">Considered token system</h3>
+            <p class="text-sm text-muted">Colour, typography, spacing, sizing, borders, radii, elevation and motion as CSS custom properties, in light and dark themes.</p>
+          </div>
+          <div class="card">
+            <span class="badge badge-success" style="margin-bottom:var(--space-2)">Components</span>
+            <h3 class="card-title">Real component library</h3>
+            <p class="text-sm text-muted">Buttons, links, forms, navigation, alerts, badges, dialogs, panels, tables and more — with meaningful variants and states.</p>
+          </div>
+          <div class="card">
+            <span class="badge badge-info" style="margin-bottom:var(--space-2)">Accessibility</span>
+            <h3 class="card-title">Keyboard &amp; screen reader ready</h3>
+            <p class="text-sm text-muted">Semantic markup, visible focus, sufficient contrast, reduced-motion support, and a skip link. No JavaScript required.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== SHOWCASE =========================== -->
+    <section class="section" id="showcase" aria-labelledby="showcase-title">
+      <div class="container">
+        <div class="section-header">
+          <p class="eyebrow">Realistic combination</p>
+          <h2 id="showcase-title">A real interface, not isolated specimens</h2>
+          <p class="text-muted">
+            Everything below is one Vireo project — “Orion redesign” — composed from the same tokens and
+            components documented later on this page: app shell, navigation, tabs, stats, alerts, a filter
+            form, a data table, badges, avatars, cards, and a create-action form. Every control is functional.
+          </p>
+        </div>
+
+        <div class="example">
+          <div class="app-shell">
+            <!-- Sidebar -->
+            <aside class="app-sidebar" aria-label="Workspace">
+              <a class="brand" href="#showcase"><span class="brand-mark" aria-hidden="true">V</span>Vireo</a>
+              <nav class="nav" aria-label="Workspace sections">
+                <ul class="nav-list">
+                  <li><a class="nav-link" href="#showcase"><span class="nav-icon" aria-hidden="true">▦</span>Dashboard</a></li>
+                  <li><a class="nav-link" href="#showcase-projects" aria-current="page"><span class="nav-icon" aria-hidden="true">◇</span>Projects</a></li>
+                  <li><a class="nav-link" href="#showcase-tasks"><span class="nav-icon" aria-hidden="true">☑</span>My tasks</a></li>
+                </ul>
+              </nav>
+              <div style="margin-top:auto">
+                <div class="callout" style="font-size:var(--text-xs)">
+                  <p class="callout-title">Plan: Studio</p>
+                  <p>8 of 10 seats used.</p>
+                  <progress class="progress" value="8" max="10" aria-label="Seats used: 8 of 10">8 of 10</progress>
+                </div>
+              </div>
+            </aside>
+
+            <!-- Main -->
+            <section class="app-main" id="showcase-projects" aria-labelledby="proj-title">
+              <div class="app-topbar">
+                <div class="row">
+                  <h3 id="proj-title" style="margin:0">Orion redesign</h3>
+                  <span class="badge badge-success"><span class="dot dot-success" aria-hidden="true"></span>On track</span>
+                </div>
+                <div class="row">
+                  <a class="btn btn-sm" href="#dialog-new-task">New task</a>
+                  <a class="btn btn-sm btn-primary" href="mailto:?subject=Check%20out%20Orion%20redesign&amp;body=Take%20a%20look%20at%20this%20project.">Share</a>
+                </div>
+              </div>
+
+              <div class="app-content">
+                <!-- Breadcrumb -->
+                <nav class="breadcrumb" aria-label="Breadcrumb">
+                  <ol>
+                    <li><a href="#showcase">Projects</a></li>
+                    <li><a href="#showcase-projects">Orion redesign</a></li>
+                    <li><span aria-current="page">Overview</span></li>
+                  </ol>
+                </nav>
+
+                <!-- CSS-only tabs -->
+                <div class="tabs" role="group" aria-label="Project sections">
+                  <input class="tab-input sr-only" type="radio" name="proj-tabs" id="pt-overview" checked>
+                  <label class="tab" for="pt-overview">Overview</label>
+                  <input class="tab-input sr-only" type="radio" name="proj-tabs" id="pt-board">
+                  <label class="tab" for="pt-board">Board</label>
+                  <input class="tab-input sr-only" type="radio" name="proj-tabs" id="pt-files">
+                  <label class="tab" for="pt-files">Files</label>
+
+                  <div class="tab-panel" id="pp-overview">
+                    <!-- Stat cards -->
+                    <div class="grid grid-4">
+                      <div class="card stat"><span class="stat-label">Open tasks</span><span class="stat-value">12</span><span class="stat-meta stat-delta-up">▲ 3 this week</span></div>
+                      <div class="card stat"><span class="stat-label">Completed</span><span class="stat-value">34</span><span class="stat-meta stat-delta-up">▲ 8%</span></div>
+                      <div class="card stat"><span class="stat-label">Members</span><span class="stat-value">6</span><span class="stat-meta">2 invited</span></div>
+                      <div class="card stat"><span class="stat-label">Progress</span><span class="stat-value">72%</span><span class="stat-meta"><progress class="progress" value="72" max="100" aria-label="Project progress 72 percent">72%</progress></span></div>
+                    </div>
+
+                    <!-- Alert -->
+                    <div class="alert alert-info" role="status">
+                      <span class="alert-icon" aria-hidden="true">i</span>
+                      <div class="alert-body">
+                        <p class="alert-title">Milestone due Friday</p>
+                        <p>The “Design review” milestone needs 3 more approvals before Friday 28 Nov.</p>
+                      </div>
+                    </div>
+
+                    <!-- Filter form -->
+                    <form class="card" action="#showcase-tasks" method="get" aria-label="Filter tasks">
+                      <div class="row-between" style="margin-bottom:var(--space-3)"><h4 style="margin:0">Tasks</h4></div>
+                      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr));gap:var(--space-3)">
+                        <div class="field" style="margin:0">
+                          <label for="filter-q">Search</label>
+                          <input class="control" id="filter-q" name="q" type="search" placeholder="Filter by keyword">
+                        </div>
+                        <div class="field" style="margin:0">
+                          <label for="filter-status">Status</label>
+                          <select class="control" id="filter-status" name="status">
+                            <option>All statuses</option>
+                            <option>To do</option>
+                            <option>In progress</option>
+                            <option>In review</option>
+                            <option>Done</option>
+                          </select>
+                        </div>
+                        <div class="field" style="margin:0">
+                          <label for="filter-owner">Owner</label>
+                          <select class="control" id="filter-owner" name="owner">
+                            <option>Anyone</option>
+                            <option>Ada Lovelace</option>
+                            <option>Grace Hopper</option>
+                            <option>Katherine Johnson</option>
+                            <option>Alan Turing</option>
+                          </select>
+                        </div>
+                        <div class="field" style="margin:0;justify-content:end">
+                          <button class="btn btn-primary" type="submit">Apply filters</button>
+                        </div>
+                      </div>
+                    </form>
+
+                    <!-- Data table -->
+                    <div class="table-wrap" id="showcase-tasks" tabindex="0" role="region" aria-label="Tasks table, scrollable">
+                      <table class="data striped">
+                        <caption>Tasks in Orion redesign, sorted by due date</caption>
+                        <thead>
+                          <tr>
+                            <th scope="col">Task</th>
+                            <th scope="col">Owner</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Priority</th>
+                            <th scope="col" class="num">Due</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td><a class="link-quiet font-medium" href="#showcase-tasks">Audit existing components</a></td>
+                            <td><span class="row" style="gap:var(--space-2)"><span class="avatar avatar-sm" aria-hidden="true">AL</span>Ada Lovelace</span></td>
+                            <td><span class="badge badge-success">Done</span></td>
+                            <td><span class="badge badge-neutral">Normal</span></td>
+                            <td class="num">18 Nov</td>
+                          </tr>
+                          <tr>
+                            <td><a class="link-quiet font-medium" href="#showcase-tasks">Define colour tokens</a></td>
+                            <td><span class="row" style="gap:var(--space-2)"><span class="avatar avatar-sm" aria-hidden="true">GH</span>Grace Hopper</span></td>
+                            <td><span class="badge badge-accent">In progress</span></td>
+                            <td><span class="badge badge-warning">High</span></td>
+                            <td class="num">22 Nov</td>
+                          </tr>
+                          <tr>
+                            <td><a class="link-quiet font-medium" href="#showcase-tasks">Design review</a></td>
+                            <td><span class="row" style="gap:var(--space-2)"><span class="avatar avatar-sm" aria-hidden="true">KJ</span>Katherine Johnson</span></td>
+                            <td><span class="badge badge-info">In review</span></td>
+                            <td><span class="badge badge-danger">Urgent</span></td>
+                            <td class="num">28 Nov</td>
+                          </tr>
+                          <tr>
+                            <td><a class="link-quiet font-medium" href="#showcase-tasks">Write component guidance</a></td>
+                            <td><span class="row" style="gap:var(--space-2)"><span class="avatar avatar-sm" aria-hidden="true">AT</span>Alan Turing</span></td>
+                            <td><span class="badge badge-neutral">To do</span></td>
+                            <td><span class="badge badge-neutral">Normal</span></td>
+                            <td class="num">2 Dec</td>
+                          </tr>
+                          <tr>
+                            <td><a class="link-quiet font-medium" href="#showcase-tasks">Ship v1 to the team</a></td>
+                            <td><span class="row" style="gap:var(--space-2)"><span class="avatar avatar-sm" aria-hidden="true">AL</span>Ada Lovelace</span></td>
+                            <td><span class="badge badge-neutral">To do</span></td>
+                            <td><span class="badge badge-warning">High</span></td>
+                            <td class="num">9 Dec</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <nav class="pagination" aria-label="Task pages">
+                      <span aria-disabled="true">‹ Previous</span>
+                      <a href="#showcase-tasks" aria-current="page">1</a>
+                      <a href="#showcase-tasks">2</a>
+                      <a href="#showcase-tasks">3</a>
+                      <a href="#showcase-tasks">Next ›</a>
+                    </nav>
+                  </div>
+
+                  <div class="tab-panel" id="pp-board">
+                    <div class="grid grid-3">
+                      <div class="panel"><h4>To do <span class="badge badge-neutral">3</span></h4>
+                        <ul class="choice-list" style="list-style:none;padding:0">
+                          <li class="card card-flat" style="padding:var(--space-3)"><span class="font-medium">Write component guidance</span><p class="text-xs text-muted" style="margin:0">Due 2 Dec · AT</p></li>
+                          <li class="card card-flat" style="padding:var(--space-3)"><span class="font-medium">Ship v1 to the team</span><p class="text-xs text-muted" style="margin:0">Due 9 Dec · AL</p></li>
+                        </ul>
+                      </div>
+                      <div class="panel"><h4>In progress <span class="badge badge-accent">1</span></h4>
+                        <div class="card card-flat" style="padding:var(--space-3)"><span class="font-medium">Define colour tokens</span><p class="text-xs text-muted" style="margin:0">Due 22 Nov · GH</p></div>
+                      </div>
+                      <div class="panel"><h4>Done <span class="badge badge-success">1</span></h4>
+                        <div class="card card-flat" style="padding:var(--space-3)"><span class="font-medium">Audit existing components</span><p class="text-xs text-muted" style="margin:0">Due 18 Nov · AL</p></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="tab-panel" id="pp-files">
+                    <ul class="choice-list" style="list-style:none;padding:0">
+                      <li class="card card-flat row-between" style="padding:var(--space-3)"><span>orion-brief.pdf</span><span class="text-xs text-muted">240 KB · 12 Nov</span></li>
+                      <li class="card card-flat row-between" style="padding:var(--space-3)"><span>tokens.css</span><span class="text-xs text-muted">8 KB · 14 Nov</span></li>
+                      <li class="card card-flat row-between" style="padding:var(--space-3)"><span>design-review-notes.md</span><span class="text-xs text-muted">3 KB · 21 Nov</span></li>
+                    </ul>
+                  </div>
+                </div>
+
+                <!-- Create task form (working, pure HTML + CSS) -->
+                <form class="card" id="showcase-create" action="#task-created" method="get" aria-labelledby="create-title">
+                  <h4 id="create-title" style="margin-bottom:var(--space-3)">Create a task</h4>
+                  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr));gap:var(--space-3)">
+                    <div class="field" style="margin:0">
+                      <label for="task-title" class="label-required">Title</label>
+                      <input class="control" id="task-title" name="title" type="text" required placeholder="e.g. Review empty states" maxlength="120">
+                    </div>
+                    <div class="field" style="margin:0">
+                      <label for="task-owner">Owner</label>
+                      <select class="control" id="task-owner" name="owner">
+                        <option>Unassigned</option>
+                        <option>Ada Lovelace</option>
+                        <option>Grace Hopper</option>
+                        <option>Katherine Johnson</option>
+                        <option>Alan Turing</option>
+                      </select>
+                    </div>
+                    <div class="field" style="margin:0">
+                      <label for="task-due">Due date</label>
+                      <input class="control" id="task-due" name="due" type="date">
+                    </div>
+                    <div class="field" style="margin:0">
+                      <label for="task-priority">Priority</label>
+                      <select class="control" id="task-priority" name="priority">
+                        <option>Normal</option>
+                        <option>High</option>
+                        <option>Urgent</option>
+                        <option>Low</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="field" style="margin-top:var(--space-3)">
+                    <label for="task-notes">Notes</label>
+                    <textarea class="control" id="task-notes" name="notes" placeholder="Add context, links, or acceptance criteria…"></textarea>
+                  </div>
+                  <div class="row-between" style="margin-top:var(--space-3)">
+                    <label class="check"><input type="checkbox" name="notify">Notify the team</label>
+                    <span class="row">
+                      <button class="btn" type="reset">Clear</button>
+                      <button class="btn btn-primary" type="submit">Create task</button>
+                    </span>
+                  </div>
+                </form>
+
+                <!-- CSS-only success on native form submit -->
+                <div class="alert alert-success form-success" id="task-created" role="status">
+                  <span class="alert-icon" aria-hidden="true">✓</span>
+                  <div class="alert-body"><p class="alert-title">Task created</p><p>Your new task was submitted. This is a static demo; nothing is sent to a server.</p></div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <aside class="note">
+          <strong>How this works without JavaScript.</strong> The app shell, tabs, hamburger menu, dialog,
+          dismissible alerts and form success are native HTML controls styled with CSS (checkbox/radio + <code>:checked</code>,
+          <code>:target</code>, <code>&lt;details&gt;</code>). Forms use native browser validation. Nothing here is a dead control.
+        </aside>
+      </div>
+    </section>
+
+    <!-- =============================== TOKENS ============================ -->
+    <section class="section" id="tokens" aria-labelledby="tokens-title">
+      <div class="container">
+        <div class="section-header">
+          <p class="eyebrow">Foundations</p>
+          <h2 id="tokens-title">Design tokens</h2>
+          <p class="text-muted">
+            Everything is driven by CSS custom properties. Raw <em>primitives</em> feed semantic tokens;
+            restyle by overriding semantic tokens, not by editing components. Tokens live in
+            <a href="assets/css/tokens.css">assets/css/tokens.css</a>.
+          </p>
+        </div>
+
+        <nav class="toc" aria-label="Token groups" style="margin-bottom:var(--space-8);max-width:var(--prose-max)">
+          <strong>On this page</strong>
+          <ul>
+            <li><a href="#tokens-color">Colour</a></li>
+            <li><a href="#tokens-type">Typography</a></li>
+            <li><a href="#tokens-space">Spacing</a></li>
+            <li><a href="#tokens-size">Sizing &amp; breakpoints</a></li>
+            <li><a href="#tokens-border">Borders &amp; radii</a></li>
+            <li><a href="#tokens-elevation">Elevation</a></li>
+            <li><a href="#tokens-motion">Motion</a></li>
+          </ul>
+        </nav>
+
+        <!-- Colour -->
+        <section id="tokens-color" class="component">
+          <h3>Colour</h3>
+          <p class="component-intro">Two layers: primitives (<code>--paper-*</code>, <code>--ink-*</code>, <code>--teal-*</code>, status hues) and semantic tokens (<code>--c-bg</code>, <code>--c-text</code>, <code>--c-accent</code>, <code>--c-danger</code>…). Semantic tokens remap automatically in dark mode (<code>prefers-color-scheme</code>). Always pair colour with text; never rely on hue alone.</p>
+
+          <h4>Semantic surfaces &amp; text</h4>
+          <ul class="swatch-grid">
+            <li class="swatch-item"><span class="swatch" style="background:var(--c-bg)"></span><span class="swatch-meta">Page<span class="font-medium" style="display:block">--c-bg</span></span></li>
+            <li class="swatch-item"><span class="swatch" style="background:var(--c-bg-raised)"></span><span class="swatch-meta">Raised<span class="font-medium" style="display:block">--c-bg-raised</span></span></li>
+            <li class="swatch-item"><span class="swatch" style="background:var(--c-bg-sunken)"></span><span class="swatch-meta">Sunken<span class="font-medium" style="display:block">--c-bg-sunken</span></span></li>
+            <li class="swatch-item"><span class="swatch" style="background:var(--c-text)"></span><span class="swatch-meta">Text<span class="font-medium" style="display:block;color:var(--c-bg)">--c-text</span></span></li>
+            <li class="swatch-item"><span class="swatch" style="background:var(--c-text-muted)"></span><span class="swatch-meta">Muted<span class="font-medium" style="display:block;color:var(--c-bg)">--c-text-muted</span></span></li>
+            <li class="swatch-item"><span class="swatch" style="background:var(--c-border-strong)"></span><span class="swatch-meta">Border<span class="font-medium" style="display:block">--c-border-strong</span></span></li>
+          </ul>
+
+          <h4>Accent</h4>
+          <ul class="swatch-grid">
+            <li class="swatch-item"><span class="swatch" style="background:var(--c-accent)"></span><span class="swatch-meta">Accent<span class="font-medium" style="display:block">--c-accent</span><code>--c-on-accent text</code></span></li>
+            <li class="swatch-item"><span class="swatch" style="background:var(--c-accent-hover)"></span><span class="swatch-meta">Hover<span class="font-medium" style="display:block">--c-accent-hover</span></span></li>
+            <li class="swatch-item"><span class="swatch" style="background:var(--c-accent-active)"></span><span class="swatch-meta">Active<span class="font-medium" style="display:block">--c-accent-active</span></span></li>
+            <li class="swatch-item"><span class="swatch" style="background:var(--c-accent-subtle)"></span><span class="swatch-meta">Subtle<span class="font-medium" style="display:block">--c-accent-subtle</span></span></li>
+            <li class="swatch-item"><span class="swatch" style="background:var(--c-accent-text)"></span><span class="swatch-meta">Text<span class="font-medium" style="display:block;color:var(--c-bg)">--c-accent-text</span></span></li>
+            <li class="swatch-item"><span class="swatch" style="background:var(--c-focus)"></span><span class="swatch-meta">Focus<span class="font-medium" style="display:block;color:var(--c-bg)">--c-focus</span></span></li>
+          </ul>
+
+          <h4>Status</h4>
+          <ul class="swatch-grid">
+            <li class="swatch-item"><span class="swatch" style="background:var(--c-success)"></span><span class="swatch-meta">Success<span class="font-medium" style="display:block">--c-success</span></span></li>
+            <li class="swatch-item"><span class="swatch" style="background:var(--c-warning)"></span><span class="swatch-meta">Warning<span class="font-medium" style="display:block">--c-warning</span></span></li>
+            <li class="swatch-item"><span class="swatch" style="background:var(--c-danger)"></span><span class="swatch-meta">Danger<span class="font-medium" style="display:block">--c-danger</span></span></li>
+            <li class="swatch-item"><span class="swatch" style="background:var(--c-info)"></span><span class="swatch-meta">Info<span class="font-medium" style="display:block">--c-info</span></span></li>
+            <li class="swatch-item"><span class="swatch" style="background:var(--c-danger-subtle)"></span><span class="swatch-meta">Danger subtle<span class="font-medium" style="display:block">--c-danger-subtle</span></span></li>
+            <li class="swatch-item"><span class="swatch" style="background:var(--c-success-subtle)"></span><span class="swatch-meta">Success subtle<span class="font-medium" style="display:block">--c-success-subtle</span></span></li>
+          </ul>
+        </section>
+
+        <!-- Typography -->
+        <section id="tokens-type" class="component">
+          <h3>Typography</h3>
+          <p class="component-intro">System font stacks — no webfonts, no downloads, works offline. <code>--font-sans</code>, <code>--font-serif</code>, <code>--font-mono</code>. Scale is a 1.25 ratio in <code>rem</code>; headings use <code>clamp()</code> for fluid responsive sizing; body leading <code>--leading-base</code> (1.55); <code>text-wrap: balance/pretty</code> where supported.</p>
+          <ul class="type-scale">
+            <li><span class="text-xs text-muted"><code>--text-5xl</code></span><span style="font-size:var(--text-5xl);font-weight:600;line-height:1.2">Display</span></li>
+            <li><span class="text-xs text-muted"><code>--text-4xl</code></span><span style="font-size:var(--text-4xl);font-weight:600;line-height:1.2">Heading 4xl</span></li>
+            <li><span class="text-xs text-muted"><code>--text-3xl</code></span><span style="font-size:var(--text-3xl);font-weight:600;line-height:1.2">Heading 3xl</span></li>
+            <li><span class="text-xs text-muted"><code>--text-2xl</code></span><span style="font-size:var(--text-2xl);font-weight:600;line-height:1.25">Heading 2xl</span></li>
+            <li><span class="text-xs text-muted"><code>--text-xl</code></span><span style="font-size:var(--text-xl);font-weight:600">Heading xl</span></li>
+            <li><span class="text-xs text-muted"><code>--text-lg</code></span><span style="font-size:var(--text-lg)">Lead paragraph</span></li>
+            <li><span class="text-xs text-muted"><code>--text-base</code></span><span style="font-size:var(--text-base)">Body — 16px base, 1.55 leading</span></li>
+            <li><span class="text-xs text-muted"><code>--text-sm</code></span><span style="font-size:var(--text-sm)">Small / UI text</span></li>
+            <li><span class="text-xs text-muted"><code>--text-xs</code></span><span style="font-size:var(--text-xs)">Caption / label</span></li>
+          </ul>
+          <p class="component-intro">Weights: <span style="font-weight:400">400 normal</span>, <span style="font-weight:500">500 medium</span>, <span style="font-weight:600">600 semibold</span>, <span style="font-weight:700">700 bold</span>. Mono for code. <span class="nums">Tabular numerals</span> for data (<code>.nums</code>).</p>
+        </section>
+
+        <!-- Spacing -->
+        <section id="tokens-space" class="component">
+          <h3>Spacing</h3>
+          <p class="component-intro">4px base scale in <code>rem</code>. Use semantic spacing; prefer the scale over arbitrary values.</p>
+          <ul class="space-scale">
+            <li><code>--space-1</code><span class="space-bar" style="width:var(--space-1)"></span></li>
+            <li><code>--space-2</code><span class="space-bar" style="width:var(--space-2)"></span></li>
+            <li><code>--space-3</code><span class="space-bar" style="width:var(--space-3)"></span></li>
+            <li><code>--space-4</code><span class="space-bar" style="width:var(--space-4)"></span></li>
+            <li><code>--space-5</code><span class="space-bar" style="width:var(--space-5)"></span></li>
+            <li><code>--space-6</code><span class="space-bar" style="width:var(--space-6)"></span></li>
+            <li><code>--space-8</code><span class="space-bar" style="width:var(--space-8)"></span></li>
+            <li><code>--space-10</code><span class="space-bar" style="width:var(--space-10)"></span></li>
+            <li><code>--space-12</code><span class="space-bar" style="width:var(--space-12)"></span></li>
+            <li><code>--space-16</code><span class="space-bar" style="width:var(--space-16)"></span></li>
+            <li><code>--space-20</code><span class="space-bar" style="width:var(--space-20)"></span></li>
+            <li><code>--space-24</code><span class="space-bar" style="width:var(--space-24)"></span></li>
+          </ul>
+        </section>
+
+        <!-- Sizing & breakpoints -->
+        <section id="tokens-size" class="component">
+          <h3>Sizing &amp; responsive breakpoints</h3>
+          <p class="component-intro">Control heights: <code>--control-height-sm</code> 32px, <code>--control-height</code> 40px, <code>--control-height-lg</code> 48px. Content widths: <code>--content-max</code> 1200px, <code>--prose-max</code> ~42rem, <code>--sidebar-width</code> 16rem. Layout is fluid first; media queries add structure.</p>
+          <div class="table-wrap" tabindex="0" role="region" aria-label="Breakpoints table">
+            <table class="data">
+              <caption>Responsive breakpoints</caption>
+              <thead><tr><th scope="col">Token</th><th scope="col">Value</th><th scope="col">Typical use</th></tr></thead>
+              <tbody>
+                <tr><td><code>--bp-sm</code></td><td>40rem / 640px</td><td>Single column → two-up grids; stacked forms go inline</td></tr>
+                <tr><td><code>--bp-md</code></td><td>48rem / 768px</td><td>App shell sidebar appears; hamburger nav → full nav</td></tr>
+                <tr><td><code>--bp-lg</code></td><td>64rem / 1024px</td><td>Wider content; 3–4 column grids</td></tr>
+                <tr><td><code>--bp-xl</code></td><td>80rem / 1280px</td><td>Max content width reached</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="usage"><strong>Responsive rules.</strong> No horizontal scrolling of the page; wide tables scroll inside <code>.table-wrap</code>; touch targets ≥ 40px; grids use <code>minmax(min(100%, …), 1fr)</code>; images are responsive; long text wraps.</p>
+        </section>
+
+        <!-- Borders & radii -->
+        <section id="tokens-border" class="component">
+          <h3>Borders &amp; radii</h3>
+          <p class="component-intro">Borders: <code>--border-width</code> 1px, <code>--border-width-strong</code> 2px, <code>--c-border</code>, <code>--c-border-strong</code>. Use borders before shadows for structure.</p>
+          <ul class="radius-grid">
+            <li class="radius-item" style="border-radius:var(--radius-sm)"><code>--radius-sm</code></li>
+            <li class="radius-item" style="border-radius:var(--radius-md)"><code>--radius-md</code></li>
+            <li class="radius-item" style="border-radius:var(--radius-lg)"><code>--radius-lg</code></li>
+            <li class="radius-item" style="border-radius:var(--radius-xl)"><code>--radius-xl</code></li>
+            <li class="radius-item" style="border-radius:var(--radius-full)"><code>--radius-full</code></li>
+          </ul>
+        </section>
+
+        <!-- Elevation -->
+        <section id="tokens-elevation" class="component">
+          <h3>Elevation</h3>
+          <p class="component-intro">Layered shadows, remapped for dark mode. <code>--elevation-raised</code>, <code>--elevation-overlay</code>. Focus uses a ring, not shadow.</p>
+          <ul class="elev-grid">
+            <li class="elev-item" style="box-shadow:var(--shadow-xs)"><code>--shadow-xs</code></li>
+            <li class="elev-item" style="box-shadow:var(--shadow-sm)"><code>--shadow-sm</code></li>
+            <li class="elev-item" style="box-shadow:var(--shadow-md)"><code>--shadow-md</code></li>
+            <li class="elev-item" style="box-shadow:var(--shadow-lg)"><code>--shadow-lg</code></li>
+            <li class="elev-item" style="box-shadow:var(--shadow-xl)"><code>--shadow-xl</code></li>
+          </ul>
+        </section>
+
+        <!-- Motion -->
+        <section id="tokens-motion" class="component">
+          <h3>Motion</h3>
+          <p class="component-intro">Fast, subtle, purposeful. <code>--duration-fast</code> 120ms, <code>--duration-base</code> 200ms, <code>--duration-slow</code> 320ms; easings <code>--ease-standard</code>, <code>--ease-out</code>, <code>--ease-in-out</code>. Hover the button to feel it. <strong>Reduced motion:</strong> <code>@media (prefers-reduced-motion: reduce)</code> disables animation/transition.</p>
+          <div class="specimen">
+            <button class="btn btn-primary" type="button">Hover me</button>
+            <span class="spinner" style="margin-inline-start:var(--space-4)" role="status" aria-label="Loading"></span>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- ============================= COMPONENTS ========================== -->
+    <section class="section" id="components" aria-labelledby="components-title">
+      <div class="container">
+        <div class="section-header">
+          <p class="eyebrow">Component library</p>
+          <h2 id="components-title">Components</h2>
+          <p class="text-muted">Each component: real semantic markup, variants, working states, and concise guidance. Class names are stable and reusable. Copy the pattern, keep the accessibility.</p>
+        </div>
+
+        <nav class="toc" aria-label="Components on this page" style="margin-bottom:var(--space-8);max-width:var(--prose-max)">
+          <strong>Jump to</strong>
+          <ul class="split" style="gap:0">
+            <li><a href="#c-buttons">Buttons</a></li><li><a href="#c-links">Links</a></li>
+            <li><a href="#c-inputs">Inputs</a></li><li><a href="#c-selects">Selects</a></li>
+            <li><a href="#c-checks">Checkboxes &amp; radios</a></li><li><a href="#c-switch">Switch</a></li>
+            <li><a href="#c-forms">Forms &amp; validation</a></li><li><a href="#c-search">Search</a></li>
+            <li><a href="#c-cards">Cards</a></li><li><a href="#c-nav">Navigation</a></li>
+            <li><a href="#c-tabs">Tabs</a></li><li><a href="#c-accordion">Accordion &amp; panels</a></li>
+            <li><a href="#c-alerts">Alerts</a></li><li><a href="#c-badges">Badges</a></li>
+            <li><a href="#c-dialog">Dialog</a></li><li><a href="#c-tables">Tables</a></li>
+            <li><a href="#c-data">Data displays</a></li><li><a href="#c-progress">Progress &amp; loading</a></li>
+            <li><a href="#c-states">State reference</a></li><li><a href="#c-tooltip">Tooltip</a></li>
+          </ul>
+        </nav>
+
+        <!-- ============================= BUTTONS ========================== -->
+        <section class="component" id="c-buttons" aria-labelledby="c-buttons-h">
+          <h3 id="c-buttons-h">Buttons</h3>
+          <p class="component-intro">Use <code>&lt;button&gt;</code> for actions, <code>&lt;a&gt;</code> for navigation. Never a <code>&lt;div&gt;</code>. Native <code>type="submit"</code>/<code>"reset"</code> in forms; <code>type="button"</code> otherwise.</p>
+
+          <span class="specimen-label">Variants</span>
+          <div class="specimen inline-specimens">
+            <button class="btn btn-primary" type="button">Primary</button>
+            <button class="btn btn-secondary" type="button">Secondary</button>
+            <button class="btn btn-outline" type="button">Outline</button>
+            <button class="btn btn-ghost" type="button">Ghost</button>
+            <button class="btn btn-quiet" type="button">Quiet</button>
+            <button class="btn btn-danger" type="button">Danger</button>
+            <a class="btn" href="#c-buttons">Link button</a>
+          </div>
+
+          <span class="specimen-label">Sizes</span>
+          <div class="specimen inline-specimens">
+            <button class="btn btn-primary btn-sm" type="button">Small</button>
+            <button class="btn btn-primary" type="button">Medium</button>
+            <button class="btn btn-primary btn-lg" type="button">Large</button>
+            <a class="btn btn-icon" href="#dialog-new-task" aria-label="New task"><span aria-hidden="true">+</span></a>
+          </div>
+
+          <span class="specimen-label">States — hover, focus, active, disabled, loading</span>
+          <div class="specimen inline-specimens">
+            <button class="btn btn-primary" type="button">Resting / hover me</button>
+            <button class="btn btn-primary" type="button" disabled>Disabled</button>
+            <button class="btn btn-primary is-loading" type="button" disabled aria-busy="true">Saving…</button>
+            <button class="btn btn-secondary" type="button" disabled>Disabled</button>
+            <span class="text-xs text-muted" style="flex-basis:100%">Focus: Tab to any control to see the visible focus ring. Active: press and hold.</span>
+          </div>
+
+          <span class="specimen-label">Group</span>
+          <div class="specimen">
+            <div class="btn-group" role="group" aria-label="Jump to sections">
+              <a class="btn" href="#c-buttons">Buttons</a>
+              <a class="btn" href="#c-links">Links</a>
+              <a class="btn" href="#c-inputs">Inputs</a>
+            </div>
+          </div>
+
+          <div class="usage">
+            <strong>Guidance.</strong>
+            <ul>
+              <li>One primary action per view. Keep labels verb-first (“Create task”, not “OK”).</li>
+              <li>Icon-only buttons need an accessible name (<code>aria-label</code>) and <code>aria-hidden</code> on the icon.</li>
+              <li>Loading buttons are <code>disabled</code> + <code>aria-busy="true"</code> with a “…” label; never trap keyboard users.</li>
+              <li>Disabled native buttons are inert; for links use <code>aria-disabled</code> + remove <code>href</code> target or use a <code>&lt;span&gt;</code>.</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- ============================== LINKS ========================== -->
+        <section class="component" id="c-links" aria-labelledby="c-links-h">
+          <h3 id="c-links-h">Links</h3>
+          <p class="component-intro">Real destinations only. Underline on hover/focus; colour plus underline so links don't rely on colour alone. <code>aria-current</code> for current location; <code>target="_blank"</code> always with <code>rel="noopener"</code> and a warning.</p>
+          <div class="specimen inline-specimens">
+            <a class="link" href="#c-links">Inline link</a>
+            <a class="link-quiet font-medium" href="#c-links">Quiet link</a>
+            <a class="link-muted" href="#c-links">Muted link</a>
+            <a class="link" href="#c-links" data-external>External style</a>
+            <a class="nav-link" href="#c-links" aria-current="page">Current page</a>
+            <a class="btn btn-sm" href="#c-links">Link button</a>
+          </div>
+          <p class="usage"><strong>No dead links.</strong> Every <code>href</code> here resolves to a real anchor on this page or a real local file. Skip link targets <code>#main</code>.</p>
+        </section>
+
+        <!-- ============================== INPUTS ========================= -->
+        <section class="component" id="c-inputs" aria-labelledby="c-inputs-h">
+          <h3 id="c-inputs-h">Inputs</h3>
+          <p class="component-intro">Native inputs, <code>&lt;label for&gt;</code> (never placeholder-as-label), <code>aria-describedby</code> for help/error, <code>aria-invalid</code>, <code>required</code>, <code>pattern</code>, <code>min/max</code>. Visible error + success. Sizes + disabled + readonly.</p>
+
+          <div class="split">
+            <div class="specimen">
+              <span class="specimen-label">Text &amp; types</span>
+              <div class="field">
+                <label for="in-text">Project name</label>
+                <input class="control" id="in-text" type="text" value="Orion redesign">
+              </div>
+              <div class="field">
+                <label for="in-email">Email address</label>
+                <input class="control" id="in-email" type="email" placeholder="name@studio.com" required aria-describedby="in-email-help">
+                <p class="field-help" id="in-email-help">We use this for project notifications.</p>
+              </div>
+              <div class="field">
+                <label for="in-pass">Password</label>
+                <input class="control" id="in-pass" type="password" value="correct horse battery" autocomplete="new-password">
+              </div>
+              <div class="field">
+                <label for="in-num">Seats</label>
+                <input class="control" id="in-num" type="number" value="4" min="1" max="100" step="1">
+              </div>
+              <div class="field">
+                <label for="in-date">Due date</label>
+                <input class="control" id="in-date" type="date" value="2026-12-02">
+              </div>
+              <div class="field">
+                <label for="in-area">Notes</label>
+                <textarea class="control" id="in-area" placeholder="Add detail…"></textarea>
+              </div>
+            </div>
+
+            <div class="specimen">
+              <span class="specimen-label">Validation · disabled · readonly · sizes</span>
+              <div class="field">
+                <label for="in-ok" class="label-required">Valid email</label>
+                <input class="control is-success" id="in-ok" type="email" value="ada@studio.com" aria-invalid="false" aria-describedby="in-ok-msg">
+                <p class="field-success" id="in-ok-msg">Looks good.</p>
+              </div>
+              <div class="field">
+                <label for="in-bad" class="label-required">Invalid email</label>
+                <input class="control is-invalid" id="in-bad" type="email" value="ada@" aria-invalid="true" aria-describedby="in-bad-msg">
+                <p class="field-error" id="in-bad-msg">Enter a valid email address.</p>
+              </div>
+              <div class="field">
+                <label for="in-dis">Disabled</label>
+                <input class="control" id="in-dis" type="text" value="Can't edit" disabled>
+              </div>
+              <div class="field">
+                <label for="in-ro">Read-only</label>
+                <input class="control" id="in-ro" type="text" value="Read-only value" readonly>
+              </div>
+              <div class="field">
+                <label for="in-sm">Small</label>
+                <input class="control control-sm" id="in-sm" type="text" value="Small">
+              </div>
+              <div class="field">
+                <label for="in-lg">Large</label>
+                <input class="control control-lg" id="in-lg" type="text" value="Large">
+              </div>
+              <div class="field">
+                <label for="in-pre">Amount</label>
+                <div class="input-group">
+                  <span class="input-addon">$</span>
+                  <input class="control" id="in-pre" type="number" value="1200" min="0">
+                  <span class="input-addon">USD</span>
+                </div>
+              </div>
+              <div class="field">
+                <label for="in-file">Attach file</label>
+                <input id="in-file" type="file">
+              </div>
+            </div>
+          </div>
+          <p class="usage"><strong>Validation.</strong> Native constraints + <code>:user-invalid</code>/<code>:user-valid</code> styling, plus explicit <code>.is-invalid</code>/<code>.is-success</code>. Errors are text, linked with <code>aria-describedby</code>, and <code>aria-invalid="true"</code>. <code>:user-invalid</code> shows errors only after interaction.</p>
+        </section>
+
+        <!-- ============================== SELECTS ======================== -->
+        <section class="component" id="c-selects" aria-labelledby="c-selects-h">
+          <h3 id="c-selects-h">Selects</h3>
+          <p class="component-intro">Native <code>&lt;select&gt;</code> with a label. Single, multiple, grouped (<code>&lt;optgroup&gt;</code>), disabled. Keyboard support is native.</p>
+          <div class="split">
+            <div class="specimen">
+              <div class="field">
+                <label for="sel-1">Status</label>
+                <select class="control" id="sel-1">
+                  <option>To do</option><option selected>In progress</option><option>In review</option><option>Done</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="sel-2">Assignee</label>
+                <select class="control" id="sel-2">
+                  <optgroup label="Design"><option>Ada Lovelace</option><option>Katherine Johnson</option></optgroup>
+                  <optgroup label="Engineering"><option>Grace Hopper</option><option>Alan Turing</option></optgroup>
+                  <optgroup label="Unassigned" disabled><option>—</option></optgroup>
+                </select>
+              </div>
+            </div>
+            <div class="specimen">
+              <div class="field">
+                <label for="sel-3">Labels (multiple)</label>
+                <select class="control" id="sel-3" multiple size="4">
+                  <option selected>design</option><option>accessibility</option><option>tokens</option><option>components</option><option>docs</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="sel-4">Disabled</label>
+                <select class="control" id="sel-4" disabled><option>Can't change</option></select>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== CHECKBOXES & RADIOS ===================== -->
+        <section class="component" id="c-checks" aria-labelledby="c-checks-h">
+          <h3 id="c-checks-h">Checkboxes &amp; radios</h3>
+          <p class="component-intro">Native <code>input[type=checkbox|radio]</code> with real <code>&lt;label&gt;</code>s, <code>accent-color</code>, native keyboard + group semantics. Radios share a <code>name</code>. <code>&lt;fieldset&gt;</code> + <code>&lt;legend&gt;</code> group related choices.</p>
+          <div class="split">
+            <div class="specimen">
+              <span class="specimen-label">Checkbox</span>
+              <div class="choice-list">
+                <label class="check"><input type="checkbox" checked>Notify the team</label>
+                <label class="check"><input type="checkbox">Add to milestone</label>
+                <label class="check"><input type="checkbox" disabled>Disabled option</label>
+              </div>
+              <fieldset class="fieldset" style="margin-top:var(--space-4)">
+                <legend>Indeterminate example (visual)</legend>
+                <label class="check"><input type="checkbox" checked>Child A</label>
+                <label class="check"><input type="checkbox">Child B</label>
+              </fieldset>
+            </div>
+            <div class="specimen">
+              <span class="specimen-label">Radio group</span>
+              <fieldset class="fieldset">
+                <legend>Priority</legend>
+                <div class="choice-list">
+                  <label class="choice"><input type="radio" name="prio" value="low" checked>Low</label>
+                  <label class="choice"><input type="radio" name="prio" value="normal">Normal</label>
+                  <label class="choice"><input type="radio" name="prio" value="high">High</label>
+                  <label class="choice"><input type="radio" name="prio" value="urgent">Urgent</label>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================== SWITCH ========================= -->
+        <section class="component" id="c-switch" aria-labelledby="c-switch-h">
+          <h3 id="c-switch-h">Switch</h3>
+          <p class="component-intro">Native checkbox + CSS, <code>role="switch"</code>. On/off with immediate effect; pair with a visible label. Use <code>aria-checked</code> where CSS can't reflect state… here <code>:checked</code> handles it.</p>
+          <div class="specimen">
+            <div class="choice-list">
+              <label class="check"><input type="checkbox" class="switch" role="switch" checked>Email notifications</label>
+              <label class="check"><input type="checkbox" class="switch" role="switch">Weekly digest</label>
+              <label class="check"><input type="checkbox" class="switch" role="switch" disabled>Beta features (disabled)</label>
+            </div>
+          </div>
+          <p class="usage"><strong>Note.</strong> Pure CSS reflects on/off visually; <code>role="switch"</code> + native checked state give screen readers the state. No JavaScript needed.</p>
+        </section>
+
+        <!-- ===================== FORMS & VALIDATION ===================== -->
+        <section class="component" id="c-forms" aria-labelledby="c-forms-h">
+          <h3 id="c-forms-h">Forms &amp; validation</h3>
+          <p class="component-intro">Semantic <code>&lt;form&gt;</code>, <code>&lt;fieldset&gt;</code>/<code>&lt;legend&gt;</code>, labels, help, error &amp; success. Native validation blocks submit when invalid. Submit/reset are real.</p>
+
+          <div class="specimen">
+            <form action="#form-saved" method="get" aria-labelledby="c-forms-h" style="max-width:32rem">
+              <fieldset class="fieldset">
+                <legend>Project details</legend>
+                <div class="field">
+                  <label for="f-name" class="label-required">Project name</label>
+                  <input class="control" id="f-name" name="name" type="text" required minlength="3" placeholder="e.g. Orion redesign" aria-describedby="f-name-help">
+                  <p class="field-help" id="f-name-help">At least 3 characters.</p>
+                </div>
+                <div class="field">
+                  <label for="f-email" class="label-required">Contact email</label>
+                  <input class="control" id="f-email" name="email" type="email" required placeholder="name@studio.com">
+                </div>
+                <div class="field">
+                  <label for="f-slug" class="label-required">Slug</label>
+                  <input class="control" id="f-slug" name="slug" type="text" required pattern="[a-z0-9]+(-[a-z0-9]+)*" placeholder="orion-redesign" aria-describedby="f-slug-help">
+                  <p class="field-help" id="f-slug-help">Lowercase letters, numbers and hyphens.</p>
+                </div>
+                <div class="field">
+                  <label for="f-cap">Capacity</label>
+                  <input class="control" id="f-cap" name="capacity" type="number" min="1" max="50" value="6">
+                </div>
+              </fieldset>
+
+              <fieldset class="fieldset" style="margin-top:var(--space-4)">
+                <legend>Notifications</legend>
+                <label class="check"><input type="checkbox" name="notify" checked>Email me on mentions</label>
+                <label class="check" style="margin-top:var(--space-2)"><input type="checkbox" name="digest">Weekly digest</label>
+              </fieldset>
+
+              <div class="row" style="margin-top:var(--space-4)">
+                <button class="btn btn-primary" type="submit">Save project</button>
+                <button class="btn" type="reset">Reset</button>
+              </div>
+            </form>
+
+            <div class="alert alert-success form-success" id="form-saved" role="status" style="margin-top:var(--space-4)">
+              <span class="alert-icon" aria-hidden="true">✓</span>
+              <div class="alert-body"><p class="alert-title">Saved</p><p>Submitted. This is a static demo; no data is sent anywhere.</p></div>
+            </div>
+          </div>
+          <p class="usage"><strong>States.</strong> <code>required</code>, <code>:user-invalid</code>/<code>:user-valid</code>, <code>.is-invalid</code> + <code>.field-error</code>, <code>.is-success</code> + <code>.field-success</code>, disabled, readonly, <code>aria-describedby</code>, <code>aria-invalid</code>. “Success” here is shown by a pure-CSS <code>:target</code> after a native GET submit; connect a backend for real persistence.</p>
+        </section>
+
+        <!-- ============================== SEARCH ========================= -->
+        <section class="component" id="c-search" aria-labelledby="c-search-h">
+          <h3 id="c-search-h">Search field</h3>
+          <p class="component-intro"><code>input[type=search]</code> inside <code>&lt;form role="search"&gt;</code>, labelled, with a real submit. Native suggestions via <code>&lt;datalist&gt;</code>. Full-text filtering would need a backend or JavaScript — noted honestly; nothing here pretends to filter.</p>
+          <div class="specimen">
+            <form class="search" role="search" action="#c-search" method="get" aria-label="Search components" style="max-width:32rem">
+              <label for="search-q" class="sr-only">Search components</label>
+              <input class="control" id="search-q" name="q" type="search" placeholder="Search components…" list="search-suggestions">
+              <datalist id="search-suggestions">
+                <option value="Buttons"></option><option value="Inputs"></option><option value="Tables"></option><option value="Alerts"></option><option value="Dialog"></option>
+              </datalist>
+              <button class="btn btn-primary" type="submit">Search</button>
+            </form>
+          </div>
+        </section>
+
+        <!-- =============================== CARDS ========================= -->
+        <section class="component" id="c-cards" aria-labelledby="c-cards-h">
+          <h3 id="c-cards-h">Cards</h3>
+          <p class="component-intro">Grouped content on a raised surface. <code>.card-header</code>/<code>.card-body</code>/<code>.card-footer</code>; variants <code>.card-flat</code>/<code>.card-sunken</code>/<code>.card-elevated</code>/<code>.card-accent</code>; <code>.card-link</code> for a whole-card real link; stat cards for metrics.</p>
+          <div class="grid grid-3">
+            <article class="card">
+              <div class="card-header"><h4 class="card-title" style="margin:0">Project</h4><span class="badge badge-success">On track</span></div>
+              <div class="card-body"><p class="text-sm text-muted">Orion redesign · 72% complete</p><progress class="progress" value="72" max="100" aria-label="72 percent">72%</progress></div>
+              <div class="card-footer"><a class="btn btn-sm" href="#c-cards">Open</a><span class="text-xs text-muted">Updated 2h ago</span></div>
+            </article>
+            <a class="card card-link" href="#c-cards">
+              <h4 class="card-title" style="margin-bottom:var(--space-2)">Interactive card</h4>
+              <p class="text-sm text-muted">This whole card is a real link. Hover and focus show it. Keyboard: Tab + Enter.</p>
+              <span class="btn btn-sm btn-quiet" style="margin-top:var(--space-3)">View details →</span>
+            </a>
+            <article class="card stat">
+              <span class="stat-label">Open tasks</span>
+              <span class="stat-value">12</span>
+              <span class="stat-meta stat-delta-up">▲ 3 this week</span>
+            </article>
+          </div>
+        </section>
+
+        <!-- ============================ NAVIGATION ======================= -->
+        <section class="component" id="c-nav" aria-labelledby="c-nav-h">
+          <h3 id="c-nav-h">Navigation</h3>
+          <p class="component-intro">Landmarks with <code>&lt;nav aria-label&gt;</code>, lists, <code>aria-current</code>. Real anchors. Responsive app nav + a CSS-only hamburger on the page header. Breadcrumbs + pagination below.</p>
+
+          <span class="specimen-label">Side navigation</span>
+          <div class="specimen" style="max-width:18rem">
+            <nav class="nav" aria-label="Example sections">
+              <ul class="nav-list">
+                <li><a class="nav-link" href="#c-nav">Dashboard</a></li>
+                <li><a class="nav-link" href="#c-nav" aria-current="page">Projects</a></li>
+                <li><a class="nav-link" href="#c-nav">My tasks</a></li>
+                <li><a class="nav-link" href="#c-nav">Team</a></li>
+                <li><a class="nav-link" href="#c-nav">Settings</a></li>
+              </ul>
+            </nav>
+          </div>
+
+          <span class="specimen-label">Breadcrumb</span>
+          <div class="specimen">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+              <ol>
+                <li><a href="#c-nav">Projects</a></li>
+                <li><a href="#c-nav">Orion redesign</a></li>
+                <li><a href="#c-nav">Tasks</a></li>
+                <li><span aria-current="page">Design review</span></li>
+              </ol>
+            </nav>
+          </div>
+
+          <span class="specimen-label">Pagination</span>
+          <div class="specimen">
+            <nav class="pagination" aria-label="Results pages">
+              <span aria-disabled="true">‹ Previous</span>
+              <a href="#c-nav" aria-current="page">1</a>
+              <a href="#c-nav">2</a>
+              <a href="#c-nav">3</a>
+              <span aria-hidden="true">…</span>
+              <a href="#c-nav">12</a>
+              <a href="#c-nav">Next ›</a>
+            </nav>
+          </div>
+          <p class="usage"><strong>Guidance.</strong> Keep link text meaningful. Provide “Previous/Next” + page numbers; mark current with <code>aria-current="page"</code>; disabled ends use <code>aria-disabled</code> (not a link to nowhere). Breadcrumb current item is not a link.</p>
+        </section>
+
+        <!-- ================================ TABS ========================= -->
+        <section class="component" id="c-tabs" aria-labelledby="c-tabs-h">
+          <h3 id="c-tabs-h">Tabs</h3>
+          <p class="component-intro">CSS-only tabs: a native radio group + <code>:checked</code> sibling selectors reveal panels. Keyboard operable (arrow keys + Space). Hidden but focusable inputs; visible focus on the active label.</p>
+
+          <div class="specimen">
+            <div class="tabs" role="group" aria-label="Account settings">
+              <input class="tab-input sr-only" type="radio" name="tab-x" id="tab-overview" checked>
+              <label class="tab" for="tab-overview">Overview</label>
+              <input class="tab-input sr-only" type="radio" name="tab-x" id="tab-activity">
+              <label class="tab" for="tab-activity">Activity</label>
+              <input class="tab-input sr-only" type="radio" name="tab-x" id="tab-files">
+              <label class="tab" for="tab-files">Files</label>
+
+              <div class="tab-panel" id="panel-overview">
+                <p><strong>Overview.</strong> Account summary, members, and plan. Real panel content — no placeholder.</p>
+              </div>
+              <div class="tab-panel" id="panel-activity">
+                <p><strong>Activity.</strong> Recent events: tokens updated, component added, review requested.</p>
+                <ul><li>Grace Hopper updated colour tokens · 22 Nov</li><li>Ada Lovelace requested review · 21 Nov</li></ul>
+              </div>
+              <div class="tab-panel" id="panel-files">
+                <p><strong>Files.</strong> <a class="link" href="assets/css/tokens.css">tokens.css</a> · project assets.</p>
+              </div>
+            </div>
+          </div>
+          <p class="usage"><strong>Honest note.</strong> Without JavaScript we can't toggle <code>aria-selected</code> dynamically, so panels aren't exposed as a strict ARIA <code>role="tablist"</code>. They're fully keyboard operable and announced as a labelled group. If full screen-reader tab semantics are required, add a tiny amount of JS to set <code>aria-selected</code>; the visual + keyboard behaviour here needs none.</p>
+        </section>
+
+        <!-- ===================== ACCORDION & PANELS ===================== -->
+        <section class="component" id="c-accordion" aria-labelledby="c-accordion-h">
+          <h3 id="c-accordion-h">Accordion &amp; panels</h3>
+          <p class="component-intro">Native <code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code> accordion — keyboard accessible, no JavaScript. <code>name</code> makes groups mutually exclusive where supported. Plus a simple panel.</p>
+          <div class="specimen" style="max-width:40rem">
+            <details class="accordion" name="faq" open>
+              <summary>What is Vireo?</summary>
+              <div class="accordion-body"><p>An imaginary calm team workspace for projects, notes, and decisions. This is its design system.</p></div>
+            </details>
+            <details class="accordion" name="faq">
+              <summary>Does it need JavaScript?</summary>
+              <div class="accordion-body"><p>No. Everything works in semantic HTML + CSS. Native disclosure, forms, and <code>:target</code> handle interaction.</p></div>
+            </details>
+            <details class="accordion" name="faq">
+              <summary>Is it accessible?</summary>
+              <div class="accordion-body"><p>Semantic landmarks, labels, visible focus, sufficient contrast, reduced-motion support, and keyboard operation throughout.</p></div>
+            </details>
+          </div>
+          <div class="panel" style="max-width:40rem;margin-top:var(--space-4)">
+            <h4 style="margin-bottom:var(--space-2)">Panel</h4>
+            <p class="text-sm text-muted" style="margin:0">A bordered container for grouped content. Compose freely inside.</p>
+          </div>
+        </section>
+
+        <!-- ============================== ALERTS ========================= -->
+        <section class="component" id="c-alerts" aria-labelledby="c-alerts-h">
+          <h3 id="c-alerts-h">Alerts</h3>
+          <p class="component-intro">Inline feedback. <code>role="status"</code> (polite) for success/info; <code>role="alert"</code> (assertive) for errors. Severity is icon + text + colour, never colour alone. CSS-only dismissible variant.</p>
+
+          <div class="stack" style="max-width:42rem">
+            <div class="alert alert-info" role="status"><span class="alert-icon" aria-hidden="true">i</span><div class="alert-body"><p class="alert-title">Heads up</p><p>A new version of the tokens is available.</p></div></div>
+            <div class="alert alert-success" role="status"><span class="alert-icon" aria-hidden="true">✓</span><div class="alert-body"><p class="alert-title">Saved</p><p>Your changes were applied.</p></div></div>
+            <div class="alert alert-warning" role="status"><span class="alert-icon" aria-hidden="true">!</span><div class="alert-body"><p class="alert-title">Check this</p><p>2 tasks are due today.</p></div></div>
+            <div class="alert alert-danger" role="alert"><span class="alert-icon" aria-hidden="true">!</span><div class="alert-body"><p class="alert-title">Something went wrong</p><p>We couldn't save. Your work is still here; try again.</p></div></div>
+
+            <!-- CSS-only dismissible -->
+            <div class="alert-wrap">
+              <input type="checkbox" id="alert-dismiss-demo" class="alert-dismiss-input sr-only">
+              <div class="alert alert-info" role="status">
+                <span class="alert-icon" aria-hidden="true">i</span>
+                <div class="alert-body"><p class="alert-title">Dismissible</p><p>Use the close control to dismiss. Pure CSS.</p></div>
+                <label class="alert-dismiss" for="alert-dismiss-demo"><span class="sr-only">Dismiss</span><span aria-hidden="true">×</span></label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================== BADGES ========================= -->
+        <section class="component" id="c-badges" aria-labelledby="c-badges-h">
+          <h3 id="c-badges-h">Badges &amp; tags</h3>
+          <p class="component-intro">Small status labels. Severity/status always has text, not colour alone. <code>.dot</code> for status dots paired with words. <code>.tag</code> for keywords (real links if navigable).</p>
+          <div class="specimen inline-specimens">
+            <span class="badge badge-neutral">Neutral</span>
+            <span class="badge badge-accent">Accent</span>
+            <span class="badge badge-success">Success</span>
+            <span class="badge badge-warning">Warning</span>
+            <span class="badge badge-danger">Danger</span>
+            <span class="badge badge-info">Info</span>
+            <span class="badge badge-outline">Outline</span>
+            <span class="badge badge-sm">Small</span>
+            <span class="badge badge-success"><span class="dot dot-success" aria-hidden="true"></span>On track</span>
+            <span class="badge badge-danger"><span class="dot dot-danger" aria-hidden="true"></span>Overdue</span>
+          </div>
+          <div class="specimen inline-specimens">
+            <span class="tag">design</span><span class="tag">accessibility</span><span class="tag">tokens</span>
+            <a class="tag" href="#c-badges">linked-tag</a>
+          </div>
+        </section>
+
+        <!-- ============================== DIALOG ========================= -->
+        <section class="component" id="c-dialog" aria-labelledby="c-dialog-h">
+          <h3 id="c-dialog-h">Dialog</h3>
+          <p class="component-intro">CSS-only dialog via <code>:target</code>, <code>role="dialog"</code> + <code>aria-modal="true"</code> + <code>aria-labelledby</code>. Real open/close links. Keyboard operable. (Native <code>&lt;dialog&gt;</code> offers built-in focus trapping but requires JavaScript to open.)</p>
+
+          <div class="specimen" id="dialog-section">
+            <p><a class="btn btn-primary" href="#dialog-demo">Open dialog</a></p>
+            <p class="text-sm text-muted" style="margin-top:var(--space-2)">Also see <a href="#c-accordion">native panels</a> as a simpler accessible alternative.</p>
+          </div>
+
+          <div class="dialog-backdrop" id="dialog-demo" role="dialog" aria-modal="true" aria-labelledby="dialog-demo-title">
+            <div class="dialog">
+              <div class="dialog-header">
+                <h4 class="dialog-title" id="dialog-demo-title">Delete project?</h4>
+                <a class="dialog-close" href="#dialog-section" aria-label="Close dialog"><span aria-hidden="true">×</span></a>
+              </div>
+              <div class="dialog-body">
+                <p>This will permanently remove <strong>Orion redesign</strong> and its tasks. This action can't be undone.</p>
+              </div>
+              <div class="dialog-footer">
+                <a class="btn" href="#dialog-section">Cancel</a>
+                <a class="btn btn-danger" href="#dialog-section">Delete project</a>
+              </div>
+            </div>
+          </div>
+
+          <p class="usage"><strong>Accessibility note (honest).</strong> Pure-CSS <code>:target</code> dialogs can't move or trap focus like native <code>&lt;dialog&gt;</code>. Provide a clear close, keep tab order sensible, label it, and consider native <code>&lt;dialog&gt;</code> + a few lines of JS if focus trapping is required. Here “Delete project” closes without performing an irreversible action.</p>
+        </section>
+
+        <!-- =============================== TABLES ======================== -->
+        <section class="component" id="c-tables" aria-labelledby="c-tables-h">
+          <h3 id="c-tables-h">Tables &amp; data displays</h3>
+          <p class="component-intro">Semantic <code>&lt;table&gt;</code>: <code>&lt;caption&gt;</code>, <code>&lt;thead&gt;</code>/<code>&lt;tbody&gt;</code>/<code>&lt;tfoot&gt;</code>, <code>&lt;th scope&gt;</code>, tabular numerals, striped variant, numeric alignment, responsive horizontal scroll inside a labelled region. Native <code>&lt;progress&gt;</code>/<code>&lt;meter&gt;</code>.</p>
+
+          <div class="table-wrap" tabindex="0" role="region" aria-label="Quarterly results, scrollable" style="max-width:48rem">
+            <table class="data striped sticky">
+              <caption>Quarterly results by region (example data)</caption>
+              <thead>
+                <tr><th scope="col">Region</th><th scope="col" class="num">Q1</th><th scope="col" class="num">Q2</th><th scope="col" class="num">Q3</th><th scope="col" class="num">Total</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">North</th><td class="num">1,240</td><td class="num">1,310</td><td class="num">1,180</td><td class="num">3,730</td></tr>
+                <tr><th scope="row">South</th><td class="num">980</td><td class="num">1,020</td><td class="num">1,150</td><td class="num">3,150</td></tr>
+                <tr><th scope="row">East</th><td class="num">1,510</td><td class="num">1,480</td><td class="num">1,620</td><td class="num">4,610</td></tr>
+                <tr><th scope="row">West</th><td class="num">1,120</td><td class="num">1,260</td><td class="num">1,340</td><td class="num">3,720</td></tr>
+              </tbody>
+              <tfoot><tr><th scope="row">All regions</th><td class="num">4,850</td><td class="num">5,070</td><td class="num">5,290</td><td class="num">15,210</td></tr></tfoot>
+            </table>
+          </div>
+          <p class="usage"><strong>Responsive.</strong> On narrow screens the table scrolls horizontally inside <code>.table-wrap</code> (keyboard-scrollable, <code>tabindex="0"</code>, <code>role="region"</code> with a label) — never shrinks text to unreadable. Keep header semantics. Numeric columns right-aligned with tabular numerals.</p>
+        </section>
+
+        <!-- ============================ DATA DISPLAYS ==================== -->
+        <section class="component" id="c-data" aria-labelledby="c-data-h">
+          <h3 id="c-data-h">Data displays</h3>
+          <p class="component-intro">Stat cards, key/value lists, timeline, empty state, avatar, <code>&lt;kbd&gt;</code>, code. Compose on cards.</p>
+
+          <div class="grid grid-3">
+            <article class="card stat"><span class="stat-label">Uptime</span><span class="stat-value">99.98%</span><span class="stat-meta">last 30 days</span></article>
+            <article class="card stat"><span class="stat-label">Response time</span><span class="stat-value">142<span style="font-size:var(--text-base)"> ms</span></span><span class="stat-meta stat-delta-up">▼ 12 ms</span></article>
+            <article class="card stat"><span class="stat-label">Open incidents</span><span class="stat-value">0</span><span class="stat-meta">All clear</span></article>
+          </div>
+
+          <div class="split" style="margin-top:var(--space-4)">
+            <div class="card">
+              <h4 style="margin-bottom:var(--space-3)">Project details</h4>
+              <dl class="kv">
+                <dt>Owner</dt><dd><span class="row" style="gap:var(--space-2)"><span class="avatar avatar-sm" aria-hidden="true">AL</span>Ada Lovelace</span></dd>
+                <dt>Status</dt><dd><span class="badge badge-accent">In progress</span></dd>
+                <dt>Created</dt><dd>12 Nov 2026</dd>
+                <dt>Members</dt><dd><span class="avatar-group"><span class="avatar avatar-sm" aria-hidden="true">AL</span><span class="avatar avatar-sm" aria-hidden="true">GH</span><span class="avatar avatar-sm" aria-hidden="true">KJ</span><span class="avatar avatar-sm" aria-hidden="true">AT</span></span></dd>
+                <dt>Shortcut</dt><dd><kbd>Ctrl</kbd> + <kbd>K</kbd></dd>
+                <dt>Token</dt><dd><code>--c-accent</code></dd>
+              </dl>
+            </div>
+            <div class="card">
+              <h4 style="margin-bottom:var(--space-3)">Activity</h4>
+              <ol class="timeline">
+                <li><p class="timeline-time">22 Nov · 14:02</p><p style="margin:0">Grace Hopper updated colour tokens.</p></li>
+                <li><p class="timeline-time">21 Nov · 09:15</p><p style="margin:0">Ada Lovelace requested review on “Design review”.</p></li>
+                <li><p class="timeline-time">18 Nov · 17:40</p><p style="margin:0">Audit existing components completed.</p></li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="card empty" style="margin-top:var(--space-4);max-width:32rem">
+            <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg>
+            <p class="empty-title">No tasks yet</p>
+            <p class="empty-text">Create your first task to get started.</p>
+            <a class="btn btn-primary" style="margin-top:var(--space-4)" href="#dialog-new-task">Create task</a>
+          </div>
+        </section>
+
+        <!-- ===================== PROGRESS & LOADING ===================== -->
+        <section class="component" id="c-progress" aria-labelledby="c-progress-h">
+          <h3 id="c-progress-h">Progress &amp; loading</h3>
+          <p class="component-intro">Native <code>&lt;progress&gt;</code> + <code>&lt;meter&gt;</code>, CSS progress bars, spinner, skeleton, <code>aria-busy</code>, <code>aria-live</code>. Loading is announced; reduced-motion respected.</p>
+
+          <div class="split">
+            <div class="specimen">
+              <span class="specimen-label">Progress</span>
+              <p class="text-sm">Uploading attachment…</p>
+              <progress class="progress" value="64" max="100" aria-label="Upload 64 percent">64%</progress>
+              <p class="text-sm" style="margin-top:var(--space-3)">Storage used</p>
+              <meter min="0" max="10" low="5" high="8" optimum="2" value="8" style="width:100%">8 of 10 GB</meter>
+              <div style="height:0.5rem;background:var(--c-bg-inset);border-radius:var(--radius-full);margin-top:var(--space-3);overflow:hidden" role="progressbar" aria-label="72 percent" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar" style="width:72%"></div></div>
+            </div>
+            <div class="specimen" aria-busy="true" aria-live="polite">
+              <span class="specimen-label">Loading</span>
+              <div class="row"><span class="spinner" role="status" aria-label="Loading"></span><span class="text-sm text-muted">Loading…</span></div>
+              <div style="margin-top:var(--space-4)" aria-hidden="true">
+                <div class="row"><span class="skeleton skeleton-circle" style="width:2rem;height:2rem"></span><span class="skeleton skeleton-text" style="flex:1"></span></div>
+                <div class="skeleton skeleton-text" style="width:80%"></div>
+                <div class="skeleton skeleton-text" style="width:60%"></div>
+              </div>
+              <button class="btn btn-primary is-loading" type="button" disabled aria-busy="true" style="margin-top:var(--space-4)">Saving…</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================== STATE REFERENCE =================== -->
+        <section class="component" id="c-states" aria-labelledby="c-states-h">
+          <h3 id="c-states-h">State reference</h3>
+          <p class="component-intro">Every interactive component supports the relevant states. Colour is never the only signal.</p>
+          <div class="table-wrap" tabindex="0" role="region" aria-label="State reference table">
+            <table class="data">
+              <caption>Interaction &amp; validation states across components</caption>
+              <thead><tr><th scope="col">State</th><th scope="col">How it appears</th><th scope="col">Applies to</th></tr></thead>
+              <tbody>
+                <tr><td><span class="font-medium">Default</span></td><td>Base styling</td><td>All</td></tr>
+                <tr><td><span class="font-medium">Hover</span></td><td><code>:hover</code> subtle background/border lift</td><td>Buttons, links, cards, rows</td></tr>
+                <tr><td><span class="font-medium">Focus</span></td><td>Visible <code>:focus-visible</code> 3px ring, <code>--c-focus</code></td><td>All interactive</td></tr>
+                <tr><td><span class="font-medium">Active / pressed</span></td><td><code>:active</code> darker + 0.5px nudge</td><td>Buttons, links</td></tr>
+                <tr><td><span class="font-medium">Disabled</span></td><td>Native <code>disabled</code>, reduced opacity, <code>not-allowed</code></td><td>Buttons, inputs, select, checkbox</td></tr>
+                <tr><td><span class="font-medium">Loading</span></td><td><code>.is-loading</code> + <code>aria-busy</code>, spinner, disabled</td><td>Buttons, regions</td></tr>
+                <tr><td><span class="font-medium">Selected / current</span></td><td><code>aria-current</code>, <code>:checked</code>, <code>aria-pressed</code></td><td>Nav, tabs, radio, pagination</td></tr>
+                <tr><td><span class="font-medium">Validation error</span></td><td><code>.is-invalid</code>/<code>:user-invalid</code>, <code>aria-invalid</code>, error text</td><td>Inputs, select, textarea</td></tr>
+                <tr><td><span class="font-medium">Success</span></td><td><code>.is-success</code>/<code>:user-valid</code>, success alert</td><td>Inputs, forms, alerts</td></tr>
+                <tr><td><span class="font-medium">Readonly</span></td><td><code>readonly</code>, sunken background</td><td>Inputs, textarea</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ============================== TOOLTIP ======================== -->
+        <section class="component" id="c-tooltip" aria-labelledby="c-tooltip-h">
+          <h3 id="c-tooltip-h">Tooltip</h3>
+          <p class="component-intro">CSS-only supplementary hint on hover + keyboard focus. <strong>Never</strong> put essential info only in a tooltip; the control still needs its own accessible name.</p>
+          <div class="specimen inline-specimens">
+            <span class="tooltip" data-tooltip="Shows extra detail on hover or keyboard focus"><a class="btn btn-icon" href="#c-tooltip" aria-label="Section link">?</a></span>
+            <span class="tooltip" data-tooltip="Tooltips supplement; they never replace the accessible name"><a class="btn" href="#c-tooltip">Focusable link</a></span>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- ============================ ACCESSIBILITY ======================== -->
+    <section class="section" id="accessibility" aria-labelledby="a11y-title">
+      <div class="container container-prose">
+        <div class="section-header">
+          <p class="eyebrow">Built in</p>
+          <h2 id="a11y-title">Accessibility</h2>
+          <p class="text-muted">Vireo targets WCAG 2.1 AA. It works with keyboard alone, assistive technology, dark mode, reduced motion, and no JavaScript.</p>
+        </div>
+
+        <h3>Semantic structure</h3>
+        <ul>
+          <li>One <code>&lt;h1&gt;</code>; ordered headings; landmarks <code>&lt;header&gt;</code>/<code>&lt;nav&gt;</code>/<code>&lt;main&gt;</code>/<code>&lt;aside&gt;</code>/<code>&lt;footer&gt;</code>/<code>&lt;section&gt;</code>.</li>
+          <li>Real controls (<code>&lt;button&gt;</code>, <code>&lt;a href&gt;</code>, <code>&lt;input&gt;</code>, <code>&lt;select&gt;</code>); no clickable <code>&lt;div&gt;</code>s; no dead links.</li>
+          <li>Lists for lists; <code>&lt;table&gt;</code> with caption + <code>&lt;th scope&gt;</code>; <code>&lt;dl&gt;</code> for key/value; <code>&lt;fieldset&gt;</code>/<code>&lt;legend&gt;</code>.</li>
+          <li>Skip link → <code>#main</code>; meaningful link text; <code>aria-label</code> for icon-only controls; <code>aria-current</code>, <code>aria-pressed</code>, <code>aria-busy</code>, <code>aria-invalid</code>, <code>aria-describedby</code>.</li>
+          <li><code>role="status"</code>/<code>role="alert"</code>/<code>role="dialog"</code>/<code>role="progressbar"</code> where native semantics don't cover it.</li>
+        </ul>
+
+        <h3>Keyboard</h3>
+        <ul>
+          <li>Everything interactive is reachable + operable with <kbd>Tab</kbd>, <kbd>Shift</kbd>+<kbd>Tab</kbd>, <kbd>Enter</kbd>, <kbd>Space</kbd>; radios/checks use native arrow keys; <code>&lt;details&gt;</code> native; tabs are a native radio group.</li>
+          <li><strong>Visible focus:</strong> 3px <code>--c-focus</code> ring, offset, never removed. <code>:focus-visible</code>.</li>
+          <li>Skip link appears on focus. Tables + scroll regions are keyboard-scrollable.</li>
+        </ul>
+        <div class="note key-cap-row" aria-label="Keyboard examples">
+          <span><kbd>Tab</kbd> move</span><span><kbd>Shift</kbd>+<kbd>Tab</kbd> back</span><span><kbd>Enter</kbd> activate link</span><span><kbd>Space</kbd> toggle</span><span><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> navigate</span><span><kbd>Esc</kbd> dismiss (native dialogs)</span>
+        </div>
+
+        <h3>Contrast &amp; colour</h3>
+        <ul>
+          <li>Body text ≥ 4.5:1, large text ≥ 3:1, UI/focus ≥ 3:1 in both light and dark themes.</li>
+          <li>Never colour alone: status = colour + icon + text; errors = text + icon + <code>aria-invalid</code>; links = colour + underline on hover.</li>
+          <li>Native <code>color-scheme</code> + form <code>accent-color</code>; automatic dark theme; honour <code>prefers-reduced-motion</code>; <code>@media print</code>.</li>
+        </ul>
+
+        <h3>Forms</h3>
+        <ul>
+          <li>Every input has a <code>&lt;label&gt;</code>; placeholders supplement, never replace.</li>
+          <li>Native validation + visible, linked error/success text; required marked (asterisk + <code>required</code>).</li>
+          <li>Helpful <code>autocomplete</code>, <code>inputmode</code>, <code>type</code>; error messages name the fix.</li>
+        </ul>
+
+        <h3>Honest limits (no JavaScript)</h3>
+        <ul>
+          <li>CSS-only tabs don't toggle <code>aria-selected</code>; CSS-only <code>:target</code> dialogs don't trap or move focus like native <code>&lt;dialog&gt;</code>. Keyboard use + clear close still work; add a few lines of JS if strict ARIA + focus management are required.</li>
+          <li>Search field submits a query; full-text filtering needs a backend or JS. Forms are fully interactive + natively validated but this static page sends nothing; a pure-CSS <code>:target</code> shows success.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===================== CSS-ONLY DIALOG (new task) ================= -->
+    <div class="dialog-backdrop" id="dialog-new-task" role="dialog" aria-modal="true" aria-labelledby="dialog-new-task-title">
+      <div class="dialog">
+        <div class="dialog-header">
+          <h4 class="dialog-title" id="dialog-new-task-title">New task</h4>
+          <a class="dialog-close" href="#showcase-projects" aria-label="Close dialog"><span aria-hidden="true">×</span></a>
+        </div>
+        <form method="get" action="#task-created">
+          <div class="field">
+            <label for="nt-title" class="label-required">Title</label>
+            <input class="control" id="nt-title" name="title" type="text" required placeholder="e.g. Review empty states">
+          </div>
+          <div class="field">
+            <label for="nt-owner">Owner</label>
+            <select class="control" id="nt-owner" name="owner"><option>Unassigned</option><option>Ada Lovelace</option><option>Grace Hopper</option></select>
+          </div>
+          <div class="dialog-footer">
+            <a class="btn" href="#showcase-projects">Cancel</a>
+            <button class="btn btn-primary" type="submit">Create task</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ============================== FOOTER ============================== -->
+  <footer class="app-footer">
+    <div class="container row-between">
+      <p style="margin:0"><strong>Vireo</strong> Design System · v1 · <a href="#main">Back to top</a></p>
+      <p style="margin:0">Semantic HTML + CSS only · No JavaScript · No build step</p>
+    </div>
+  </footer>
+</body>
+</html>

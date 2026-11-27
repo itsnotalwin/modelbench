@@ -1,0 +1,53 @@
+/* Vireo Design System — page-level styling for the demonstration page */
+
+@layer layout {
+
+  .hero { padding-block: var(--space-16) var(--space-12); }
+  .hero h1 { max-width: 18ch; margin-bottom: var(--space-4); }
+  .hero .lede { font-size: var(--text-lg); color: var(--c-text-muted); max-width: 52ch; }
+  .hero-actions { display: flex; gap: var(--space-3); flex-wrap: wrap; margin-top: var(--space-6); }
+
+  .example { margin-block: var(--space-4); }
+  .example > .caption { font-size: var(--text-sm); color: var(--c-text-muted); margin-bottom: var(--space-2); }
+
+  .kv { display: grid; grid-template-columns: max-content 1fr; gap: var(--space-1) var(--space-4); font-size: var(--text-sm); }
+  .kv dt { color: var(--c-text-muted); }
+  .kv dd { margin: 0; }
+
+  /* ---- CSS-only tabs (per-instance reveal) ---- */
+  /* Component specimen */
+  #tab-overview:checked ~ #panel-overview,
+  #tab-activity:checked ~ #panel-activity,
+  #tab-files:checked ~ #panel-files { display: block; }
+  /* In-app example */
+  #pt-overview:checked ~ #pp-overview,
+  #pt-board:checked ~ #pp-board,
+  #pt-files:checked ~ #pp-files { display: block; }
+  /* first panels default-visible fallback handled by :checked on input */
+
+  /* Dismissible alert needs the sibling input before .alert */
+  .alert-wrap { }
+  .alert-wrap > .alert-dismiss-input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+
+  /* Utility layout rows */
+  .row { display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center; }
+  .row-between { display: flex; gap: var(--space-3); justify-content: space-between; align-items: center; flex-wrap: wrap; }
+  .split { display: grid; gap: var(--space-4); grid-template-columns: 1fr; }
+  @media (min-width: 48rem) { .split { grid-template-columns: 1fr 1fr; } }
+
+  .inline-specimens { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+
+  /* Confirmation panel shown by pure-CSS form success */
+  .form-success { display: none; }
+  .form-success:target { display: block; }
+
+  /* On-this-page TOC */
+  .toc { border: var(--border-width) solid var(--c-border); border-radius: var(--radius-md); padding: var(--space-4); background: var(--c-bg-raised); font-size: var(--text-sm); }
+  .toc ul { list-style: none; padding-inline-start: var(--space-4); margin: var(--space-1) 0 0; }
+  .toc a { color: var(--c-text-muted); }
+  .toc a:hover { color: var(--c-accent); }
+
+  .key-cap-row { display: flex; flex-wrap: wrap; gap: var(--space-4); }
+
+  .swatch-grid-2 { display: grid; gap: var(--space-3); }
+}

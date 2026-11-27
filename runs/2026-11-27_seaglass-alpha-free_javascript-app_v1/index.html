@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-theme-pref="system">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Fieldwork — a local-first, vanilla-JavaScript research workspace. Organise projects, sources, excerpts and notes with no backend, no build step and no data leaving your browser.">
+  <meta name="color-scheme" content="light dark">
+  <title>Fieldwork · Local research workspace</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230e6e62'/%3E%3Cpath d='M9 8h14v4H9zM9 14h14v3H9zM9 19h10v3H9z' fill='%23fff'/%3E%3C/svg%3E">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header" role="banner">
+    <div class="site-header__inner">
+      <a class="brand" href="#/" aria-label="Fieldwork home">
+        <svg class="brand__mark" width="28" height="28" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <rect width="32" height="32" rx="7" fill="currentColor"></rect>
+          <path d="M9 8h14v4H9zM9 14h14v3H9zM9 19h10v3H9z" fill="var(--surface)"></path>
+        </svg>
+        <span class="brand__name">Fieldwork</span>
+      </a>
+
+      <button type="button" id="menu-toggle" class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="primary-nav">
+        <span aria-hidden="true">&#9776;</span>
+      </button>
+
+      <nav id="primary-nav" class="primary-nav" aria-label="Primary">
+        <a href="#/" data-nav="dashboard">Dashboard</a>
+        <a href="#/projects" data-nav="projects">Projects</a>
+        <a href="#/tags" data-nav="tags">Tags</a>
+        <a href="#/search" data-nav="search">Search</a>
+        <a href="#/settings" data-nav="settings">Settings</a>
+      </nav>
+    </div>
+  </header>
+
+  <noscript>
+    <div class="notice notice--warn" style="margin:1rem;padding:1rem;border:1px solid;">
+      Fieldwork needs JavaScript enabled to work. Your data is stored locally in your browser.
+    </div>
+  </noscript>
+
+  <main id="main" class="site-main" tabindex="-1" aria-label="Main content">
+    <div class="loading" role="status">Loading Fieldwork…</div>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <p>Fieldwork · vanilla JavaScript, no build step, no server. Everything is stored in this browser.</p>
+    <p class="muted">Local-only: nothing is sent over the network. Use <a href="#/settings">Settings → Export</a> to back up your data.</p>
+  </footer>
+
+  <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="false"></div>
+  <div id="sr-announce" class="visually-hidden" aria-live="polite" role="status"></div>
+
+  <!-- classic scripts, order matters; no build step; works from file:// -->
+  <script src="js/util.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/models.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/views/forms.js"></script>
+  <script src="js/views/dashboard.js"></script>
+  <script src="js/views/projects.js"></script>
+  <script src="js/views/project.js"></script>
+  <script src="js/views/sources.js"></script>
+  <script src="js/views/notes.js"></script>
+  <script src="js/views/tags.js"></script>
+  <script src="js/views/search.js"></script>
+  <script src="js/views/settings.js"></script>
+  <script src="js/views/notfound.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

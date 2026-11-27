@@ -1,0 +1,302 @@
+/*
+ * Vireo Design System — design tokens
+ * ---------------------------------------------------------------------------
+ * Semantic HTML + CSS only. No build step.
+ * Two layers: primitives (raw values) -> semantic tokens (intent).
+ * Theme: light by default; dark is applied automatically with
+ * `prefers-color-scheme: dark`. Colour scheme is declared so native controls
+ * (forms, scrollbars) match the active theme.
+ * ---------------------------------------------------------------------------
+ */
+
+@layer reset, tokens, base, components, layout, utilities;
+
+@layer tokens {
+
+  /* ============================= PRIMITIVES ============================= */
+
+  :root {
+    /* ---- Colour primitives (warm paper + ink, teal accent, semantic) ---- */
+    --paper-0:   #ffffff;
+    --paper-50:  #f8f6f1;
+    --paper-100: #f1eee7;
+    --paper-200: #e6e2d9;
+    --paper-300: #d6d1c5;
+
+    --ink-950: #15140f;
+    --ink-900: #1f1d18;
+    --ink-800: #2e2b24;
+    --ink-700: #3f3b33;
+    --ink-500: #6a655a;
+    --ink-400: #8a8478;
+    --ink-300: #a8a294;
+
+    /* Teal accent (Vireo) */
+    --teal-700: #0a5348;
+    --teal-600: #0f6e5e;
+    --teal-500: #1c8f7a;
+    --teal-200: #bfe3db;
+    --teal-100: #dcefeb;
+    --teal-50:  #edf7f4;
+
+    /* Semantic hue primitives */
+    --green-700: #1f6f43;
+    --green-600: #268552;
+    --green-100: #dcf2e3;
+    --green-50:  #eefaf2;
+
+    --amber-700: #8a5a00;
+    --amber-600: #a96c00;
+    --amber-100: #fbe6c2;
+    --amber-50:  #fdf4e3;
+
+    --red-700: #a0211f;
+    --red-600: #c62f2c;
+    --red-100: #fbdcd9;
+    --red-50:  #fdf0ee;
+
+    --blue-700: #1d4e89;
+    --blue-600: #245f9e;
+    --blue-100: #dbe7f7;
+    --blue-50:  #eef4fc;
+
+    /* ---- Typography primitives ---- */
+    --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-mono: ui-monospace, SFMono-Regular, "SF Mono", "Cascadia Code",
+      Menlo, Consolas, "Liberation Mono", monospace;
+
+    /* Type scale (1.25 modular, rem) */
+    --text-2xs: 0.6875rem; /* 11px */
+    --text-xs:  0.75rem;   /* 12px */
+    --text-sm:  0.875rem;  /* 14px */
+    --text-base: 1rem;     /* 16px */
+    --text-lg:  1.125rem;  /* 18px */
+    --text-xl:  1.25rem;   /* 20px */
+    --text-2xl: 1.5rem;    /* 24px */
+    --text-3xl: 1.875rem;  /* 30px */
+    --text-4xl: 2.25rem;   /* 36px */
+    --text-5xl: 3rem;      /* 48px */
+
+    --leading-none: 1;
+    --leading-tight: 1.2;
+    --leading-snug: 1.35;
+    --leading-base: 1.55;
+    --leading-relaxed: 1.7;
+
+    --tracking-tight: -0.015em;
+    --tracking-normal: 0;
+    --tracking-wide: 0.02em;
+    --tracking-caps: 0.06em;
+
+    --weight-normal: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
+
+    /* ---- Spacing scale (4px base, rem) ---- */
+    --space-0: 0;
+    --space-1: 0.25rem;   /* 4px */
+    --space-2: 0.5rem;    /* 8px */
+    --space-3: 0.75rem;   /* 12px */
+    --space-4: 1rem;      /* 16px */
+    --space-5: 1.25rem;   /* 20px */
+    --space-6: 1.5rem;    /* 24px */
+    --space-8: 2rem;      /* 32px */
+    --space-10: 2.5rem;   /* 40px */
+    --space-12: 3rem;     /* 48px */
+    --space-16: 4rem;     /* 64px */
+    --space-20: 5rem;     /* 80px */
+    --space-24: 6rem;     /* 96px */
+
+    /* ---- Sizing ---- */
+    --size-3: 0.75rem;
+    --size-4: 1rem;
+    --size-5: 1.25rem;
+    --size-6: 1.5rem;
+    --size-8: 2rem;
+    --size-10: 2.5rem;
+    --size-12: 3rem;
+    --size-16: 4rem;
+
+    --control-height-sm: 2rem;     /* 32px */
+    --control-height: 2.5rem;      /* 40px */
+    --control-height-lg: 3rem;     /* 48px */
+    --control-padding-x: 0.875rem; /* 14px */
+
+    --content-max: 75rem;   /* 1200px */
+    --prose-max: 42rem;     /* readable measure */
+    --sidebar-width: 16rem;
+
+    /* Responsive breakpoints (documented; media queries use these values) */
+    --bp-sm: 40rem;   /* 640px  — phone -> phablet */
+    --bp-md: 48rem;   /* 768px  — phablet -> tablet */
+    --bp-lg: 64rem;   /* 1024px — tablet -> laptop */
+    --bp-xl: 80rem;   /* 1280px — laptop -> desktop */
+
+    /* ---- Borders ---- */
+    --border-width: 1px;
+    --border-width-strong: 2px;
+    --border-style: solid;
+
+    /* ---- Radii ---- */
+    --radius-sm: 0.375rem;  /* 6px */
+    --radius-md: 0.625rem;  /* 10px */
+    --radius-lg: 0.875rem;  /* 14px */
+    --radius-xl: 1.25rem;   /* 20px */
+    --radius-full: 999px;
+
+    /* ---- Elevation ---- */
+    --shadow-xs: 0 1px 2px rgb(21 20 15 / 0.05);
+    --shadow-sm: 0 1px 3px rgb(21 20 15 / 0.07), 0 1px 2px rgb(21 20 15 / 0.04);
+    --shadow-md: 0 4px 12px rgb(21 20 15 / 0.08), 0 2px 4px rgb(21 20 15 / 0.04);
+    --shadow-lg: 0 12px 32px rgb(21 20 15 / 0.14), 0 4px 8px rgb(21 20 15 / 0.05);
+    --shadow-xl: 0 24px 56px rgb(21 20 15 / 0.18), 0 8px 16px rgb(21 20 15 / 0.06);
+    --elevation-raised: var(--shadow-sm);
+    --elevation-overlay: var(--shadow-lg);
+    --ring-focus: 0 0 0 3px rgb(15 110 94 / 0.35);
+
+    /* ---- Motion ---- */
+    --duration-instant: 0ms;
+    --duration-fast: 120ms;
+    --duration-base: 200ms;
+    --duration-slow: 320ms;
+    --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+
+    /* ============================= SEMANTIC ============================= */
+
+    color-scheme: light;
+
+    /* Surfaces */
+    --c-bg: var(--paper-50);
+    --c-bg-raised: var(--paper-0);
+    --c-bg-sunken: var(--paper-100);
+    --c-bg-inset: var(--paper-200);
+    --c-surface: var(--paper-0);
+    --c-overlay: rgb(21 20 15 / 0.55);
+
+    /* Text */
+    --c-text: var(--ink-900);
+    --c-text-strong: var(--ink-950);
+    --c-text-muted: var(--ink-500);
+    --c-text-faint: var(--ink-400);
+    --c-text-inverted: var(--paper-0);
+
+    /* Borders */
+    --c-border: var(--paper-200);
+    --c-border-strong: var(--paper-300);
+    --c-border-inverted: rgb(255 255 255 / 0.16);
+
+    /* Accent */
+    --c-accent: var(--teal-600);
+    --c-accent-hover: var(--teal-700);
+    --c-accent-active: #08463d;
+    --c-accent-subtle: var(--teal-50);
+    --c-accent-text: var(--teal-700);
+    --c-on-accent: var(--paper-0);
+
+    /* Focus */
+    --c-focus: var(--teal-600);
+    --focus-ring-width: 3px;
+    --focus-ring-offset: 2px;
+
+    /* Status */
+    --c-success: var(--green-600);
+    --c-success-strong: var(--green-700);
+    --c-success-subtle: var(--green-50);
+    --c-success-border: var(--green-100);
+    --c-success-text: var(--green-700);
+
+    --c-warning: var(--amber-600);
+    --c-warning-strong: var(--amber-700);
+    --c-warning-subtle: var(--amber-50);
+    --c-warning-border: var(--amber-100);
+    --c-warning-text: var(--amber-700);
+
+    --c-danger: var(--red-600);
+    --c-danger-strong: var(--red-700);
+    --c-danger-subtle: var(--red-50);
+    --c-danger-border: var(--red-100);
+    --c-danger-text: var(--red-700);
+
+    --c-info: var(--blue-600);
+    --c-info-strong: var(--blue-700);
+    --c-info-subtle: var(--blue-50);
+    --c-info-border: var(--blue-100);
+    --c-info-text: var(--blue-700);
+
+    /* Selection */
+    --c-selection-bg: var(--teal-200);
+    --c-selection-text: var(--ink-950);
+  }
+
+  /* ============================= DARK THEME ============================= */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+
+      --c-bg: #15140f;
+      --c-bg-raised: #1f1d18;
+      --c-bg-sunken: #0f0e0b;
+      --c-bg-inset: #2a2721;
+      --c-surface: #1f1d18;
+      --c-overlay: rgb(0 0 0 / 0.7);
+
+      --c-text: #efece5;
+      --c-text-strong: #f8f6f1;
+      --c-text-muted: #b8b2a4;
+      --c-text-faint: #8a8478;
+      --c-text-inverted: #15140f;
+
+      --c-border: #34302a;
+      --c-border-strong: #4a453b;
+      --c-border-inverted: rgb(255 255 255 / 0.18);
+
+      --c-accent: #34b39a;
+      --c-accent-hover: #4ecdb2;
+      --c-accent-active: #2a9882;
+      --c-accent-subtle: #14302a;
+      --c-accent-text: #6fd4bd;
+      --c-on-accent: #0c1a17;
+
+      --c-focus: #4ecdb2;
+      --ring-focus: 0 0 0 3px rgb(78 205 178 / 0.4);
+
+      --c-success: #4cae72;
+      --c-success-strong: #63c488;
+      --c-success-subtle: #132a1c;
+      --c-success-border: #1f4029;
+      --c-success-text: #7fd49c;
+
+      --c-warning: #d99a2b;
+      --c-warning-strong: #e8b352;
+      --c-warning-subtle: #2c2311;
+      --c-warning-border: #473619;
+      --c-warning-text: #e8c27a;
+
+      --c-danger: #e25551;
+      --c-danger-strong: #ef716c;
+      --c-danger-subtle: #2e1716;
+      --c-danger-border: #4c2422;
+      --c-danger-text: #f19592;
+
+      --c-info: #5b8fd6;
+      --c-info-strong: #7aa7e3;
+      --c-info-subtle: #152238;
+      --c-info-border: #243a5c;
+      --c-info-text: #9dbff0;
+
+      --c-selection-bg: #1f403a;
+      --c-selection-text: #f8f6f1;
+
+      --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.4);
+      --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.45), 0 1px 2px rgb(0 0 0 / 0.3);
+      --shadow-md: 0 4px 12px rgb(0 0 0 / 0.5), 0 2px 4px rgb(0 0 0 / 0.3);
+      --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.6), 0 4px 8px rgb(0 0 0 / 0.35);
+      --shadow-xl: 0 24px 56px rgb(0 0 0 / 0.7), 0 8px 16px rgb(0 0 0 / 0.4);
+    }
+  }
+}

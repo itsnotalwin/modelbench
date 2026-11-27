@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "seaglass-alpha-free",
+  "category": "generative-art",
+  "date": "2026-11-27",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "11",
+  "prompt_label": "Generative Art",
+  "notes": "NOCTURNE FIELD: a seeded, real-time evolving generative artwork in one self-contained HTML file, no external assets. Deterministic sfc32 PRNG + integer-hashed curl-noise flow, fixed timestep; seed in URL hash (#seed=...&t=...), reproducible. Four crossfaded movements. WebGL2 GLSL rendering with procedural FBM backdrop, ordered dithering, vignette, grain; Canvas2D fallback. Optional WebAudio synthesized soundscape (generated reverb, no assets). Fullscreen, high-resolution PNG export, adaptive resolution targeting 60 FPS, minimal fading UI, keyboard + touch, prefers-reduced-motion, tab-visibility handling, guarded storage. Tested in a current evergreen browser via Playwright: no console errors, interactions, sound toggle, PNG export, keyboard and reduced-motion verified, and seed determinism unit-checked. Known limitation: perfect pixel-identical reproduction assumes no viewer interaction, default speed, same viewport/aspect and reduced-motion setting; audio is not seeded.",
+  "slug": "2026-11-27_seaglass-alpha-free_generative-art_v1",
+  "path": "runs/2026-11-27_seaglass-alpha-free_generative-art_v1/index.html",
+  "source_file": "generative-art__seaglass-alpha-free__2026-11-27__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

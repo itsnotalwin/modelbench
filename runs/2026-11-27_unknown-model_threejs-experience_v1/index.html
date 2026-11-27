@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lumen Grove — an interactive 3D experience</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6' fill='%236fffd4'/%3E%3C/svg%3E">
+<meta name="description" content="Lumen Grove is an original abstract grove you can explore in 3D. Orbit, zoom and pan the camera, and send light pulses rippling through the foliage. Keyboard, mouse and touch friendly; built with pinned Three.js 0.160.0.">
+<link rel="stylesheet" href="styles.css">
+<!-- Exactly pinned Three.js 0.160.0 from a CDN. No other libraries. -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+</head>
+<body>
+<noscript>
+  <div class="noscript-message" role="alert">
+    <h1>Lumen Grove</h1>
+    <p>This interactive 3D experience needs JavaScript. Please enable JavaScript in your browser and reload the page.</p>
+  </div>
+</noscript>
+
+<div id="app" class="app">
+  <header class="app-header">
+    <h1 class="app-title">Lumen Grove</h1>
+    <p class="app-tagline">An original abstract grove. Orbit the camera, then send a pulse of light rippling through the foliage.</p>
+  </header>
+
+  <main class="stage-wrap" id="stage-wrap">
+    <div class="stage" id="stage">
+      <canvas
+        id="scene"
+        class="scene-canvas"
+        tabindex="0"
+        role="img"
+        aria-label="Three-dimensional view of Lumen Grove: a luminous procedural tree glowing in a night garden. Focus this area to control the camera with the keyboard."
+        aria-describedby="controls-help status"
+        aria-keyshortcuts="ArrowLeft ArrowRight ArrowUp ArrowDown W A S D + - R Space PageUp PageDown Home">
+      </canvas>
+
+      <div class="hud" role="group" aria-label="Scene controls">
+        <button type="button" id="btn-pulse" class="btn" aria-label="Send a pulse of light through the grove">Pulse</button>
+        <button type="button" id="btn-reset" class="btn" aria-label="Reset camera to the default view">Reset view</button>
+        <button type="button" id="btn-motion" class="btn" aria-pressed="false" aria-label="Pause ambient animation">Pause motion</button>
+        <label class="speed-control" for="speed">
+          <span class="speed-label">Motion speed</span>
+          <input type="range" id="speed" name="speed" min="0" max="200" step="5" value="100" aria-label="Ambient motion speed percent">
+          <span class="speed-value" id="speed-value" aria-hidden="true">100%</span>
+        </label>
+      </div>
+
+      <p id="status" class="visually-hidden" role="status" aria-live="polite"></p>
+
+      <div id="fallback" class="fallback" role="alert" hidden>
+        <h2 id="fallback-title">3D view unavailable</h2>
+        <p id="fallback-message">This experience needs WebGL, which is not available in your browser or device.</p>
+        <p>Try a modern browser with hardware acceleration enabled, or check that no other application is using the graphics device.</p>
+        <button type="button" id="btn-retry" class="btn">Retry</button>
+      </div>
+    </div>
+  </main>
+
+  <section class="controls-help" id="controls-help" aria-label="How to explore">
+    <h2>How to explore</h2>
+    <div class="help-grid">
+      <div class="help-block">
+        <h3>Camera — mouse</h3>
+        <ul>
+          <li>Drag to orbit around the grove.</li>
+          <li>Scroll wheel to zoom in and out.</li>
+          <li>Right-drag, or hold <kbd>Shift</kbd> while dragging, to pan.</li>
+          <li>Click a glowing leaf to send a pulse from that spot. (A click is not counted after dragging.)</li>
+        </ul>
+      </div>
+      <div class="help-block">
+        <h3>Camera — keyboard</h3>
+        <p>Focus the 3D view (click it or press <kbd>Tab</kbd>), then:</p>
+        <ul>
+          <li><kbd>←</kbd> <kbd>→</kbd> or <kbd>A</kbd> <kbd>D</kbd> — rotate left / right.</li>
+          <li><kbd>↑</kbd> <kbd>↓</kbd> or <kbd>W</kbd> <kbd>S</kbd> — tilt up / down.</li>
+          <li><kbd>+</kbd> / <kbd>−</kbd> — zoom in / out.</li>
+          <li><kbd>Shift</kbd> + arrow keys — pan the view.</li>
+          <li><kbd>PageUp</kbd> / <kbd>PageDown</kbd> — zoom in / out.</li>
+          <li><kbd>Home</kbd> or <kbd>R</kbd> — reset to the default view.</li>
+          <li><kbd>Space</kbd> or <kbd>P</kbd> — send a light pulse.</li>
+        </ul>
+      </div>
+      <div class="help-block">
+        <h3>Touch</h3>
+        <ul>
+          <li>One finger drag to orbit.</li>
+          <li>Pinch with two fingers to zoom.</li>
+          <li>Two-finger drag to pan.</li>
+          <li>Tap a glowing leaf to send a pulse from that spot.</li>
+        </ul>
+      </div>
+      <div class="help-block">
+        <h3>Controls &amp; motion</h3>
+        <ul>
+          <li><strong>Pulse</strong> sends a wave of light through every leaf.</li>
+          <li><strong>Reset view</strong> restores the default camera.</li>
+          <li><strong>Pause motion</strong> stops ambient animation; you can still explore and send pulses.</li>
+          <li><strong>Motion speed</strong> scales ambient animation; set it to 0 for a still grove.</li>
+          <li>If your system requests reduced motion, ambient animation starts off.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer class="app-footer">
+    <p>Built with pinned <a href="https://github.com/mrdoob/three.js" rel="noopener noreferrer">Three.js</a> 0.160.0. No build step, no extra libraries.</p>
+  </footer>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

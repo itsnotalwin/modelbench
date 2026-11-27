@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "seaglass-alpha-free",
+  "category": "javascript-app",
+  "date": "2026-11-27",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "07",
+  "prompt_label": "JavaScript Application",
+  "notes": "Fieldwork — a complete local-first research workspace in vanilla JavaScript (HTML + CSS + classic JS, no frameworks, no build step, zero runtime dependencies; works from file:// or any static server). Invented product 'Fieldwork' for researchers/students. Features: multiple views (dashboard, projects, project workspace with Sources/Notes tabs, source detail with excerpts, note detail, global tags, global search, settings); real workflows (create project → add sources → capture excerpts → write/link notes → tag → search → export); structured data model (Project/Source/Excerpt/Note) with referential-integrity cleanup; client-side validation with accessible inline errors; duplicate detection (project names, sources, tags); robust persistence in localStorage with safe in-memory fallback when storage is unavailable or full, corrupted-data recovery with backup, and cross-tab sync; JSON export/import backup with validation and duplicate-safe merge or replace plus replace confirmation; empty states; responsive + keyboard-accessible (semantic HTML, focus management, focus-trapped modal, skip link, ARIA live regions, Esc, '/' shortcut); light/dark/system theme; error boundaries. Local-only disclosure: no backend/server, no network, no real-time collaboration or sharing, no cloud sync; data lives in this browser and portability is via JSON file/clipboard. Honest testing: verified with automated checks; see test status in the task report. No known incomplete features; minor: note bodies are plain text (no rich text); import accepts Fieldwork JSON only.",
+  "slug": "2026-11-27_seaglass-alpha-free_javascript-app_v1",
+  "path": "runs/2026-11-27_seaglass-alpha-free_javascript-app_v1/index.html",
+  "source_file": "javascript-app__seaglass-alpha-free__2026-11-27__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

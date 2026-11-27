@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "seaglass-alpha-free",
+  "category": "design-system",
+  "date": "2026-11-27",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "06",
+  "prompt_label": "Design System",
+  "notes": "Complete reusable design system for an invented product, 'Vireo' (a calm team workspace for small studios/research teams). Semantic HTML + CSS only; no JavaScript, no frameworks, no build step. Considered token system in assets/css/tokens.css (colour primitives + semantic tokens, light + automatic dark via prefers-color-scheme; typography, spacing, sizing, borders, radii, elevation, motion; documented breakpoints). Component library: buttons, links, text inputs, textarea, select (single/multiple/grouped/disabled), checkboxes, radios, native switch, range, file, search + datalist, fieldsets/legends, validation (native + aria-invalid + error/success + :user-invalid/:user-valid + required/pattern/min/max + disabled/readonly + loading + reset + real native submit), cards, app-shell navigation, breadcrumb, pagination, CSS-only tabs (native radio), native accordion (details/summary + name), panels, CSS-only dismissible alerts, alerts (info/success/warning/danger + roles), badges, tags, CSS-only :target dialog + note, responsive semantic tables (caption/th scope/thead/tbody/tfoot/striped/sticky/numeric + scroll region), stat cards, key/value, timeline, empty state, avatars, kbd, progress/meter, CSS progress, spinner, skeleton, tooltip, hamburger nav; CSS-only success on native form GET submit; responsive breakpoints; print styles; reduced-motion. Polished realistic showcase (Vireo 'Orion redesign' project workspace) composing components, plus in-interface usage notes. Keyboard accessible, visible :focus-visible, skip link, sufficient contrast in both themes, no colour-only signalling. Honest limits: pure-CSS tabs can't toggle aria-selected; pure-CSS :target dialog can't trap/move focus like native <dialog>; search submits a query but full-text filtering needs a backend; forms are interactive + natively validated but this static page sends nothing (a pure-CSS :target shows success); variant-named specimen buttons are component examples, not wired actions; a 'Share' control uses mailto. All links are real (no dead links); no placeholder copy; no unfinished panels. Model slug taken from the runtime-exposed model identifier; run date from system date 2026-11-27; version 1.",
+  "slug": "2026-11-27_seaglass-alpha-free_design-system_v1",
+  "path": "runs/2026-11-27_seaglass-alpha-free_design-system_v1/index.html",
+  "source_file": "design-system__seaglass-alpha-free__2026-11-27__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

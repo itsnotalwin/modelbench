@@ -1,6 +1,6 @@
 {
   "generated_from": "runs/",
-  "count": 38,
+  "count": 43,
   "catalog": [
     {
       "no": "01",
@@ -168,6 +168,40 @@
       "slug": "2026-11-27_glm-5.3-flash_website_v1",
       "path": "runs/2026-11-27_glm-5.3-flash_website_v1/index.html",
       "source_file": "website__glm-5.3-flash__2026-11-27__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "files": [
+        "app.js",
+        "index.html",
+        "meta.json",
+        "styles.css"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "unknown-model",
+      "category": "threejs-experience",
+      "date": "2026-11-27",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "08",
+      "prompt_label": "Three.js 3D Experience",
+      "notes": "Original abstract grove 'Lumen Grove': procedurally generated luminous tree (seeded recursion), instanced branches/leaves, drifting motes, animated emissive core, gentle ambient motion; meaningful interaction = custom orbit/pan/zoom camera (mouse, keyboard, touch) plus clicking/tapping a leaf or core to send a pulse of light propagating across instanced leaves; Pulse/Reset/Pause/Pulse-speed controls; keyboard shortcuts; ARIA labels, instructions, aria-live status; responsive + ResizeObserver + devicePixelRatio cap 2; prefers-reduced-motion respected; WebGL/WebGLRenderer failure detection with deliberate fallback + retry; no build step, no extra libraries, no local assets. Three.js exactly pinned 0.160.0 from jsDelivr CDN; requires network access to the CDN and a WebGL-capable browser. MODEL_SLUG resolved as 'unknown-model': the active model identity is withheld per confidentiality policy and not disclosed in this submission; no identity is invented. Known limitations: pulse propagation is CPU-side per-instance color animation (fine for ~300 leaves); no persistence; single static scene.",
+      "slug": "2026-11-27_unknown-model_threejs-experience_v1",
+      "path": "runs/2026-11-27_unknown-model_threejs-experience_v1/index.html",
+      "source_file": "threejs-experience__unknown-model__2026-11-27__v1.zip",
       "scores": {
         "completeness": null,
         "robustness": null,
@@ -471,6 +505,56 @@
     },
     {
       "schema_version": 1,
+      "model": "seaglass-alpha-free",
+      "category": "javascript-app",
+      "date": "2026-11-27",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "07",
+      "prompt_label": "JavaScript Application",
+      "notes": "Fieldwork \u2014 a complete local-first research workspace in vanilla JavaScript (HTML + CSS + classic JS, no frameworks, no build step, zero runtime dependencies; works from file:// or any static server). Invented product 'Fieldwork' for researchers/students. Features: multiple views (dashboard, projects, project workspace with Sources/Notes tabs, source detail with excerpts, note detail, global tags, global search, settings); real workflows (create project \u2192 add sources \u2192 capture excerpts \u2192 write/link notes \u2192 tag \u2192 search \u2192 export); structured data model (Project/Source/Excerpt/Note) with referential-integrity cleanup; client-side validation with accessible inline errors; duplicate detection (project names, sources, tags); robust persistence in localStorage with safe in-memory fallback when storage is unavailable or full, corrupted-data recovery with backup, and cross-tab sync; JSON export/import backup with validation and duplicate-safe merge or replace plus replace confirmation; empty states; responsive + keyboard-accessible (semantic HTML, focus management, focus-trapped modal, skip link, ARIA live regions, Esc, '/' shortcut); light/dark/system theme; error boundaries. Local-only disclosure: no backend/server, no network, no real-time collaboration or sharing, no cloud sync; data lives in this browser and portability is via JSON file/clipboard. Honest testing: verified with automated checks; see test status in the task report. No known incomplete features; minor: note bodies are plain text (no rich text); import accepts Fieldwork JSON only.",
+      "slug": "2026-11-27_seaglass-alpha-free_javascript-app_v1",
+      "path": "runs/2026-11-27_seaglass-alpha-free_javascript-app_v1/index.html",
+      "source_file": "javascript-app__seaglass-alpha-free__2026-11-27__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "files": [
+        "css/styles.css",
+        "index.html",
+        "js/app.js",
+        "js/models.js",
+        "js/router.js",
+        "js/storage.js",
+        "js/store.js",
+        "js/ui.js",
+        "js/util.js",
+        "js/views/dashboard.js",
+        "js/views/forms.js",
+        "js/views/notes.js",
+        "js/views/notfound.js",
+        "js/views/project.js",
+        "js/views/projects.js",
+        "js/views/search.js",
+        "js/views/settings.js",
+        "js/views/sources.js",
+        "js/views/tags.js",
+        "meta.json"
+      ]
+    },
+    {
+      "schema_version": 1,
       "model": "glm-5.3-flash",
       "category": "javascript-app",
       "date": "2026-11-27",
@@ -511,6 +595,38 @@
         "js/views/settings.js",
         "js/views/shared.js",
         "js/views/transactions.js",
+        "meta.json"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "seaglass-alpha-free",
+      "category": "generative-art",
+      "date": "2026-11-27",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "11",
+      "prompt_label": "Generative Art",
+      "notes": "NOCTURNE FIELD: a seeded, real-time evolving generative artwork in one self-contained HTML file, no external assets. Deterministic sfc32 PRNG + integer-hashed curl-noise flow, fixed timestep; seed in URL hash (#seed=...&t=...), reproducible. Four crossfaded movements. WebGL2 GLSL rendering with procedural FBM backdrop, ordered dithering, vignette, grain; Canvas2D fallback. Optional WebAudio synthesized soundscape (generated reverb, no assets). Fullscreen, high-resolution PNG export, adaptive resolution targeting 60 FPS, minimal fading UI, keyboard + touch, prefers-reduced-motion, tab-visibility handling, guarded storage. Tested in a current evergreen browser via Playwright: no console errors, interactions, sound toggle, PNG export, keyboard and reduced-motion verified, and seed determinism unit-checked. Known limitation: perfect pixel-identical reproduction assumes no viewer interaction, default speed, same viewport/aspect and reduced-motion setting; audio is not seeded.",
+      "slug": "2026-11-27_seaglass-alpha-free_generative-art_v1",
+      "path": "runs/2026-11-27_seaglass-alpha-free_generative-art_v1/index.html",
+      "source_file": "generative-art__seaglass-alpha-free__2026-11-27__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "files": [
+        "index.html",
         "meta.json"
       ]
     },
@@ -659,6 +775,43 @@
     },
     {
       "schema_version": 1,
+      "model": "seaglass-alpha-free",
+      "category": "design-system",
+      "date": "2026-11-27",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "06",
+      "prompt_label": "Design System",
+      "notes": "Complete reusable design system for an invented product, 'Vireo' (a calm team workspace for small studios/research teams). Semantic HTML + CSS only; no JavaScript, no frameworks, no build step. Considered token system in assets/css/tokens.css (colour primitives + semantic tokens, light + automatic dark via prefers-color-scheme; typography, spacing, sizing, borders, radii, elevation, motion; documented breakpoints). Component library: buttons, links, text inputs, textarea, select (single/multiple/grouped/disabled), checkboxes, radios, native switch, range, file, search + datalist, fieldsets/legends, validation (native + aria-invalid + error/success + :user-invalid/:user-valid + required/pattern/min/max + disabled/readonly + loading + reset + real native submit), cards, app-shell navigation, breadcrumb, pagination, CSS-only tabs (native radio), native accordion (details/summary + name), panels, CSS-only dismissible alerts, alerts (info/success/warning/danger + roles), badges, tags, CSS-only :target dialog + note, responsive semantic tables (caption/th scope/thead/tbody/tfoot/striped/sticky/numeric + scroll region), stat cards, key/value, timeline, empty state, avatars, kbd, progress/meter, CSS progress, spinner, skeleton, tooltip, hamburger nav; CSS-only success on native form GET submit; responsive breakpoints; print styles; reduced-motion. Polished realistic showcase (Vireo 'Orion redesign' project workspace) composing components, plus in-interface usage notes. Keyboard accessible, visible :focus-visible, skip link, sufficient contrast in both themes, no colour-only signalling. Honest limits: pure-CSS tabs can't toggle aria-selected; pure-CSS :target dialog can't trap/move focus like native <dialog>; search submits a query but full-text filtering needs a backend; forms are interactive + natively validated but this static page sends nothing (a pure-CSS :target shows success); variant-named specimen buttons are component examples, not wired actions; a 'Share' control uses mailto. All links are real (no dead links); no placeholder copy; no unfinished panels. Model slug taken from the runtime-exposed model identifier; run date from system date 2026-11-27; version 1.",
+      "slug": "2026-11-27_seaglass-alpha-free_design-system_v1",
+      "path": "runs/2026-11-27_seaglass-alpha-free_design-system_v1/index.html",
+      "source_file": "design-system__seaglass-alpha-free__2026-11-27__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "files": [
+        "assets/css/base.css",
+        "assets/css/components.css",
+        "assets/css/layout.css",
+        "assets/css/showcase.css",
+        "assets/css/tokens.css",
+        "index.html",
+        "meta.json"
+      ]
+    },
+    {
+      "schema_version": 1,
       "model": "glm-5.3-flash",
       "category": "design-system",
       "date": "2026-11-27",
@@ -770,6 +923,38 @@
       "slug": "2026-11-27_glm-5.3-flash_css-experience_v1",
       "path": "runs/2026-11-27_glm-5.3-flash_css-experience_v1/index.html",
       "source_file": "css-experience__glm-5.3-flash__2026-11-27__v1.zip",
+      "scores": {
+        "completeness": null,
+        "robustness": null,
+        "craft": null,
+        "depth": null,
+        "originality": null,
+        "performance": null
+      },
+      "log": {
+        "ran_first_try": null,
+        "console_errors": null,
+        "fps": null,
+        "file_size_kb": null
+      },
+      "files": [
+        "index.html",
+        "meta.json"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "model": "seaglass-alpha-free",
+      "category": "creative-tool",
+      "date": "2026-11-27",
+      "version": 1,
+      "entry": "index.html",
+      "prompt": "10",
+      "prompt_label": "Creative Tool",
+      "notes": "Bitforge: a single-file, offline pixel-art studio. Layered non-destructive editing with exact integer alpha compositing and 8 blend modes, 10 tools (pencil/eraser/fill/line/rect/ellipse/marquee/move/eyedropper/hand), pixel-perfect pencil, symmetry, selection cut/copy/paste/flip/nudge, full undo/redo, canvas resize/scale, layer ops, GPU-cached smooth zoom/pan + pinch, devicePixelRatio rendering, generated sample art, opens real images & project JSON, drag-and-drop, exports PNG/SVG/JSON, autosave to guarded localStorage, synthesized Web Audio UI sounds, keyboard shortcuts, reduced-motion + touch support. Known limitation: blend-mode SVG export is approximate in some renderers.",
+      "slug": "2026-11-27_seaglass-alpha-free_creative-tool_v1",
+      "path": "runs/2026-11-27_seaglass-alpha-free_creative-tool_v1/index.html",
+      "source_file": "creative-tool__seaglass-alpha-free__2026-11-27__v1.zip",
       "scores": {
         "completeness": null,
         "robustness": null,
