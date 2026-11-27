@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="FATHOM · Tank 07 — a pocket-ocean aquarium kiosk built with HTML and CSS only. No JavaScript aboard.">
+<title>FATHOM · Tank 07 — a pocket ocean in pure CSS</title>
+<style>
+/* ============================================================
+   FATHOM · Tank 07
+   An interactive aquarium kiosk. HTML + CSS only.
+   All state lives in native radios / checkboxes / buttons and is
+   projected into the scene with body:has().
+   ============================================================ */
+
+:root{
+  --ink:#e9eff4;
+  --dim:#9fb2c1;
+  --faint:#6d8195;
+  --brass:#c9a15f;
+  --brass-2:#ecd096;
+  --brass-dk:#6e5122;
+  --line:#1f2b38;
+  --panel:#111820;
+  --cyan:#5fe6ff;
+  --coral:#ff8a5f;
+  --paper:#f3ecdd;
+  --serif:Georgia,'Iowan Old Style','Times New Roman',serif;
+  --sans:system-ui,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,'Cascadia Mono',Consolas,'SF Mono',Menlo,monospace;
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+
+html{ -webkit-text-size-adjust:100%; }
+@media (prefers-reduced-motion: no-preference){
+  html{ scroll-behavior:smooth; }
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:radial-gradient(120% 100% at 50% 0%, #0f151d 0%, #080c11 60%, #05080c 100%);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.5;
+}
+
+::selection{ background:rgba(95,230,255,.32); }
+
+:focus-visible{ outline:2px solid var(--brass-2); outline-offset:2px; border-radius:4px; }
+
+/* ---------- masthead ---------- */
+
+.mast{
+  display:flex;
+  flex-wrap:wrap;
+  gap:1em 2.5em;
+  align-items:flex-end;
+  justify-content:space-between;
+  padding:clamp(1.4rem,3vw,2.4rem) clamp(1.2rem,4vw,3rem) 1rem;
+}
+.brand{ display:flex; align-items:flex-start; gap:1em; }
+.brand-dot{
+  flex:none; width:.9em; height:.9em; margin-top:.55em; border-radius:50%;
+  background:radial-gradient(circle at 34% 30%, #ffe9b8, var(--brass) 55%, #6e5122);
+  box-shadow:0 0 1em rgba(201,161,95,.55);
+  font-size:clamp(1.2rem,2.4vw,1.8rem);
+}
+h1{
+  margin:0;
+  font:700 clamp(1.7rem,3.4vw,2.5rem)/1 var(--serif);
+  letter-spacing:.3em;
+  background:linear-gradient(100deg,#f2dc9f 0%,var(--brass) 55%,#8f6f37 100%);
+  -webkit-background-clip:text; background-clip:text;
+  color:transparent;
+}
+.tag{
+  margin:.45em 0 0;
+  color:var(--dim);
+  font-size:.72rem;
+  font-weight:600;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+}
+.mast-note{
+  margin:0; max-width:46ch;
+  color:var(--dim); font-size:.85rem; line-height:1.6;
+}
+.mast-note b{ color:var(--brass-2); font-weight:600; }
+
+/* ---------- page deck ---------- */
+
+.deck{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) clamp(300px,30vw,372px);
+  gap:clamp(1rem,2vw,1.75rem);
+  align-items:start;
+  padding:0 clamp(1rem,3.5vw,2.75rem) clamp(1rem,3vw,2rem);
+}
+@media (max-width:920px){
+  .deck{ grid-template-columns:1fr; }
+  .stage{ min-height:auto; }
+  .console{ position:static; }
+}
+
+/* ============================================================
+   THE STAGE — room + cabinet + tank
+   ============================================================ */
+
+.stage{
+  position:relative;
+  container-type:inline-size;
+  min-height:min(66vh,680px);
+  display:grid;
+  align-content:center;
+  overflow:hidden;
+  border-radius:1.2rem;
+  padding:clamp(.75rem,2vh,1.75rem) clamp(.75rem,2vw,2rem) clamp(.9rem,2vh,1.5rem);
+}
+
+/* --- the room around the tank --- */
+.room{ position:absolute; inset:0; overflow:hidden; border-radius:inherit; }
+
+.wall{ position:absolute; inset:0; opacity:0; transition:opacity .9s ease; }
+.wall-day{
+  opacity:1;
+  background:radial-gradient(130% 100% at 50% 0%, #2b3542 0%, #1a222c 45%, #10151c 100%);
+}
+.wall-dusk{ background:radial-gradient(130% 100% at 50% 8%, #3a2434 0%, #241826 48%, #120c14 100%); }
+.wall-night{ background:radial-gradient(130% 100% at 50% 0%, #0a1017 0%, #05080d 55%, #03050a 100%); }
+
+body:has(#l-dusk:checked)  .wall-day,
+body:has(#l-night:checked) .wall-day{ opacity:0; }
+body:has(#l-dusk:checked)  .wall-dusk{ opacity:1; }
+body:has(#l-night:checked) .wall-night{ opacity:1; }
+
+.floor{
+  position:absolute; inset-inline:0; bottom:0; height:16%;
+  background:linear-gradient(180deg,#10151c,#070a0f);
+  border-top:1px solid rgba(255,255,255,.05);
+  transition:filter .9s ease;
+}
+body:has(#l-dusk:checked)  .floor{ filter:brightness(.8); }
+body:has(#l-night:checked) .floor{ filter:brightness(.5); }
+
+.pool{
+  position:absolute; bottom:0; left:10%; right:10%; height:32%;
+  opacity:0; transition:opacity .9s ease;
+  filter:blur(16px); pointer-events:none;
+}
+.pool-day{ opacity:1; background:radial-gradient(50% 95% at 50% 100%, rgba(255,208,140,.14), transparent 72%); }
+.pool-dusk{ background:radial-gradient(50% 95% at 50% 100%, rgba(255,140,110,.13), transparent 72%); }
+.pool-night{ background:radial-gradient(55% 95% at 50% 100%, rgba(95,230,255,.16), transparent 74%); }
+
+body:has(#l-dusk:checked)  .pool-day,
+body:has(#l-night:checked) .pool-day{ opacity:0; }
+body:has(#l-dusk:checked)  .pool-dusk{ opacity:1; }
+body:has(#l-night:checked) .pool-night{ opacity:1; }
+
+.poster{
+  position:absolute; left:1%; top:5%;
+  width:8em; padding:.85em .7em .7em;
+  background:linear-gradient(180deg,#efe6cf,#e2d5b4);
+  color:#2a3340; border-radius:.2em;
+  box-shadow:0 .5em 1.4em rgba(0,0,0,.45), inset 0 0 0 .35em rgba(201,161,95,.55);
+  font:700 .45rem/1.6 var(--mono);
+  letter-spacing:.06em; text-transform:uppercase;
+  rotate:-2deg;
+  transition:opacity .9s ease;
+}
+.poster b{ display:block; font-size:1.25em; letter-spacing:.1em; margin-bottom:.3em; color:#1d2732; }
+body:has(#l-dusk:checked)  .poster{ opacity:.72; }
+body:has(#l-night:checked) .poster{ opacity:.12; }
+
+.plant{ position:absolute; right:.8%; bottom:2%; width:5.4em; height:7em; opacity:.85; transition:opacity .9s ease; }
+.plant i{ position:absolute; background:linear-gradient(160deg,#1d3a2c,#0e2019 75%); border-radius:50% 50% 8% 50%; transform-origin:50% 100%; box-shadow:inset 0 .3em .6em rgba(0,0,0,.4); }
+.plant .lf1{ left:8%;  bottom:6%; width:44%; height:74%; rotate:-26deg; }
+.plant .lf2{ left:38%; bottom:4%; width:46%; height:88%; rotate:4deg; }
+.plant .lf3{ left:58%; bottom:8%; width:38%; height:60%; rotate:34deg; border-radius:50% 50% 50% 8%; }
+.plant .stem{ left:52%; bottom:0; width:5%; height:34%; border-radius:.2em; rotate:6deg; background:linear-gradient(#23402f,#122419); }
+body:has(#l-night:checked) .plant{ opacity:.28; }
+
+/* --- tank wrap: font-size here scales the whole scene (em-based art) --- */
+.tank-wrap{
+  position:relative; z-index:2;
+  width:min(85%,950px,112vh);
+  margin-inline:auto;
+  font-size:clamp(9px,2.2cqi,19px);
+}
+
+/* ============================================================
+   THE TANK
+   ============================================================ */
+
+.tank{
+  position:relative;
+  container-type:size;
+  width:100%;
+  aspect-ratio:16/10;
+  overflow:hidden;
+  border-radius:1.6em;
+  background:#03202f;
+  box-shadow:
+    0 2.2em 4.5em -1.8em rgba(0,0,0,.85),
+    0 0 0 1px rgba(160,190,210,.12),
+    inset 0 0 0 1px rgba(255,255,255,.06);
+}
+@media (max-width:560px){
+  .tank{ aspect-ratio:4/3; }
+}
+
+/* water crossfade layers (one per biome) */
+.water{ position:absolute; inset:0; transition:filter .8s ease; }
+body:has(#l-night:checked) .water{ filter:brightness(.8) saturate(.92); }
+.wx{ position:absolute; inset:0; opacity:0; transition:opacity .9s ease; }
+.wx-reef{ opacity:1; background:linear-gradient(180deg,#39b8d8 0%,#178ab6 32%,#0a5c8c 62%,#063e63 100%); }
+.wx-twi { background:linear-gradient(180deg,#24507e 0%,#13325f 38%,#0b1d3e 70%,#050f24 100%); }
+.wx-aby { background:linear-gradient(180deg,#0e2134 0%,#081523 45%,#03080f 100%); }
+
+body:has(#b-twi:checked)  .wx-reef,
+body:has(#b-aby:checked)  .wx-reef{ opacity:0; }
+body:has(#b-twi:checked)  .wx-twi{ opacity:1; }
+body:has(#b-aby:checked)  .wx-aby{ opacity:1; }
+
+/* night veil: dims the water column (under the fauna, over the water) */
+.veil{
+  position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(9,24,46,.42), rgba(3,9,22,.5));
+  mix-blend-mode:multiply;
+  opacity:0; transition:opacity .8s ease;
+  pointer-events:none;
+}
+body:has(#l-night:checked) .veil{ opacity:.72; }
+
+/* --- everything alive / solid lives in .life (single filter rig) --- */
+.life{ position:absolute; inset:0; transition:filter .8s ease; }
+body:has(#l-dusk:checked)  .life{ filter:brightness(.9) saturate(1.05); }
+body:has(#l-night:checked) .life{ filter:brightness(.66) saturate(.92) contrast(1.04); }
+
+/* biome-set gating */
+.set{ position:absolute; inset:0; }
+.only-reef,.only-twi,.only-aby{ display:none; }
+body:has(#b-reef:checked) .only-reef{ display:block; }
+body:has(#b-twi:checked)  .only-twi{ display:block; }
+body:has(#b-aby:checked)  .only-aby{ display:block; }
+
+/* z utilities */
+.z0{ z-index:0 } .z1{ z-index:1 } .z2{ z-index:2 } .z3{ z-index:3 }
+.z4{ z-index:4 } .z5{ z-index:5 } .z6{ z-index:6 } .z7{ z-index:7 }
+.z8{ z-index:8 } .z9{ z-index:9 }
+
+/* --- sand --- */
+.sand{
+  position:absolute; left:-6%; right:-6%; bottom:-4%; height:15%; z-index:2;
+  background:var(--sand, linear-gradient(180deg,#e6d6a8,#c4a96f));
+  border-radius:46% 38% 0 0 / 100% 72% 0 0;
+  box-shadow:inset 0 .5em .8em rgba(255,255,255,.12), inset 0 -.6em 1em rgba(0,0,0,.18);
+  transition:opacity .9s ease;
+}
+body:has(#b-twi:checked) .sand{ --sand:linear-gradient(180deg,#31405f,#1d2942 78%); }
+body:has(#b-aby:checked) .sand{ --sand:linear-gradient(180deg,#141c2b,#0a0f19 78%); }
+
+/* --- reef decor --- */
+.rock{
+  position:absolute;
+  background:linear-gradient(160deg,#94867a,#665a50 62%,#463d35);
+  border-radius:46% 60% 40% 58% / 60% 50% 70% 44%;
+  box-shadow:inset 0 .4em .8em rgba(255,255,255,.09), 0 .6em 1.2em rgba(0,10,18,.35);
+}
+.rock-1{ left:6%;  bottom:9%; width:11em; height:5.4em; rotate:-2deg; }
+.rock-2{ left:24%; bottom:8%; width:7em;  height:3.6em; }
+.rock-3{ right:8%; bottom:9%; width:9em;  height:4.6em; rotate:3deg; }
+
+.coral-fan{
+  position:absolute;
+  background:repeating-conic-gradient(from 262deg at 50% 100%, var(--cf,#ff7a59) 0 4deg, rgba(255,122,89,.12) 4deg 9deg);
+  border-radius:50% 50% 6% 6% / 100% 100% 0 0;
+  -webkit-mask-image:radial-gradient(140% 105% at 50% 100%, #000 56%, transparent 74%);
+          mask-image:radial-gradient(140% 105% at 50% 100%, #000 56%, transparent 74%);
+}
+.cf1{ left:13%; bottom:12%; width:7.5em; height:6em;    --cf:#ff7a59; }
+.cf2{ right:16%; bottom:12%; width:6em;   height:5em;   --cf:#e060b8; }
+.cf3{ left:40%; bottom:11%; width:4.6em;  height:4em;   --cf:#7fd8c9; }
+
+.brain{
+  position:absolute; left:31%; bottom:10%; width:7.4em; height:4.4em; z-index:4;
+  border-radius:50% 60% 40% 44% / 92% 92% 30% 30%;
+  background:
+    repeating-radial-gradient(circle at 42% 18%, rgba(120,60,10,.28) 0 .3em, transparent .3em .85em),
+    radial-gradient(120% 95% at 40% 18%, #f2b263, #d9832f 62%, #ad5d1d);
+  box-shadow:0 .5em 1em rgba(0,10,18,.3), inset 0 .4em .6em rgba(255,255,255,.2);
+}
+.tubes{ position:absolute; right:28%; bottom:11%; display:flex; gap:.4em; align-items:flex-end; z-index:4; }
+.tubes i{
+  width:1.15em; height:3.6em; border-radius:.6em .6em .18em .18em;
+  background:linear-gradient(180deg,#7cd2c1,#3f9b8f 70%,#2f7c72);
+  box-shadow:inset 0 .55em .45em rgba(6,40,36,.6), inset -0.15em 0 .2em rgba(0,0,0,.2);
+}
+.tubes i:nth-child(2){ height:2.9em; }
+.tubes i:nth-child(3){ height:3.3em; }
+
+.kelp{
+  position:absolute; bottom:9%; width:.72em; height:var(--kh,11em);
+  border-radius:1em;
+  background:linear-gradient(180deg,#2f9a6d,#186349 68%,#0e4234);
+  transform-origin:50% 100%;
+  box-shadow:inset -.14em 0 .2em rgba(0,0,0,.3), inset .1em 0 .18em rgba(190,255,220,.22);
+}
+.k1{ left:9.5%;  --kh:12em; --sd:5.2s; --delay:-1s;  z-index:4; }
+.k2{ left:20%;   --kh:9.4em; --sd:4.6s; --delay:-2.6s; z-index:4; }
+.k3{ left:56%;   --kh:10.6em; --sd:5.6s; --delay:-.7s; z-index:4; }
+.k4{ left:74%;   --kh:13em;  --sd:6s;  --delay:-3.1s; z-index:4; }
+.k5{ right:4%;   --kh:9em;   --sd:4.2s; --delay:-1.8s; z-index:6; }
+.k6{ left:34%;   --kh:8.4em; --sd:4.9s; --delay:-2.2s; z-index:6; }
+
+/* --- twilight decor --- */
+.spire{
+  position:absolute; right:12%; bottom:9%; width:6.5em; height:16em; z-index:3;
+  background:linear-gradient(175deg,#2c3e66,#1a2647 60%,#101a33);
+  border-radius:50% 62% 12% 18% / 92% 96% 8% 8%;
+  box-shadow:inset -.3em 0 .6em rgba(0,0,0,.4), inset .25em 0 .5em rgba(140,180,230,.12);
+}
+.spire::after{
+  content:""; position:absolute; left:16%; bottom:0; width:3.4em; height:5.4em;
+  background:linear-gradient(170deg,#25355a,#141f3c);
+  border-radius:56% 44% 10% 12% / 88% 92% 8% 8%;
+}
+.ledge{
+  position:absolute; left:6%; bottom:9.5%; width:14em; height:3.2em; z-index:3;
+  background:linear-gradient(180deg,#2b3c60,#182442 70%);
+  border-radius:50% 44% 10% 14% / 96% 88% 10% 10%;
+  box-shadow:inset 0 .35em .5em rgba(150,190,240,.14);
+}
+.kelp-t{ background:linear-gradient(180deg,#2a7f83,#14525c 68%,#0c3b44); }
+.tk1{ left:16%; --kh:8.2em;  --sd:5s;   --delay:-1.4s; z-index:4; }
+.tk2{ left:22%; --kh:6.4em;  --sd:4.4s; --delay:-3s;   z-index:4; }
+.tk3{ left:64%; --kh:7.4em;  --sd:5.4s; --delay:-.9s;  z-index:4; }
+.tk4{ right:6%; --kh:6.8em;  --sd:4.8s; --delay:-2.1s; z-index:6; }
+
+/* --- abyss decor --- */
+.rock-d{ background:linear-gradient(160deg,#2b3140,#1a1f2c 60%,#12161f); box-shadow:inset 0 .4em .8em rgba(120,150,200,.06), 0 .6em 1.2em rgba(0,0,0,.5); }
+.dr1{ left:7%;  bottom:9%; width:12em; height:5em; rotate:-3deg; }
+.dr2{ right:10%; bottom:9%; width:8em; height:4.2em; rotate:2deg; }
+
+.vent{
+  position:absolute; left:38%; bottom:9.5%; width:7em; height:2.6em; z-index:3;
+  background:radial-gradient(60% 120% at 50% 100%, #3d4756, #232a36 70%, #171c26);
+  border-radius:50% 50% 8% 8% / 100% 100% 0 0;
+}
+.vent::before{ /* mouth */
+  content:""; position:absolute; left:38%; top:-12%; width:24%; height:50%;
+  border-radius:50%; background:#0a0d13;
+  box-shadow:0 0 .6em rgba(90,110,140,.35);
+}
+.plume{
+  position:absolute; left:40.5%; bottom:12%; width:4.4em; height:15em; z-index:3;
+  background:radial-gradient(46% 52% at 50% 100%, rgba(188,200,216,.17), rgba(188,200,216,0) 72%);
+  filter:blur(7px);
+  transform-origin:50% 100%;
+  animation:plume 7.5s ease-in-out infinite alternate;
+}
+@keyframes plume{
+  0%  { transform:translateX(-.6em) scaleY(.92); opacity:.65; }
+  50% { transform:translateX(.4em)  scaleY(1.06); opacity:.95; }
+  100%{ transform:translateX(-.2em) scaleY(.98); opacity:.7; }
+}
+
+.amphora{
+  position:absolute; left:18%; bottom:10%; width:4.4em; height:5em; z-index:6;
+  rotate:14deg;
+  background:linear-gradient(180deg,#7d6a4a,#4c3f2b 65%,#382e20);
+  border-radius:46% 46% 42% 42% / 58% 58% 40% 40%;
+  box-shadow:inset .3em 0 .5em rgba(255,240,200,.1), 0 .5em 1em rgba(0,0,0,.4);
+}
+.amphora::before{
+  content:""; position:absolute; left:32%; top:-1.2em; width:36%; height:1.6em;
+  background:linear-gradient(#6b5a3e,#453a28);
+  border-radius:.5em .5em 0 0;
+}
+.amphora::after{ /* broken lip shadow */
+  content:""; position:absolute; left:30%; top:-.2em; width:40%; height:.5em;
+  border-radius:50%; background:rgba(10,8,4,.5);
+}
+
+/* --- shared equipment: air stone + bubbles --- */
+.stone{
+  position:absolute; left:4%; bottom:11.5%; width:1.7em; height:.9em; z-index:8;
+  background:linear-gradient(180deg,#33505e,#1d313d);
+  border-radius:.3em .3em .2em .2em;
+  box-shadow:inset 0 .15em .2em rgba(160,220,240,.25);
+}
+.bub{
+  position:absolute; bottom:12.5%; left:5%;
+  width:var(--bw,.5em); aspect-ratio:1;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.85), rgba(190,230,250,.28) 58%, rgba(190,230,250,.06) 78%);
+  opacity:.75;
+  animation:bubr var(--bd,6.5s) linear infinite;
+  animation-delay:var(--bdel,0s);
+}
+@keyframes bubr{
+  0%  { transform:translate(0,0)        scale(.6);  opacity:0; }
+  10% { opacity:.8; }
+  55% { transform:translate(.8em,-44cqh)  scale(1); }
+  88% { transform:translate(.4em,-72cqh) scale(1.12); opacity:.5; }
+  100%{ transform:translate(.3em,-76cqh) scale(1.16); opacity:0; }
+}
+body:has(#pump:checked) .bub{ animation-duration:calc(var(--bd,6.5s) * .5); }
+body:has(.tap:active)   .bub{ animation-duration:calc(var(--bd,6.5s) * .34); }
+
+/* --- marine snow / plankton spark (tiling drift, seamless) --- */
+.snow,.spark{ position:absolute; left:0; right:0; top:9%; bottom:2%; opacity:.55; }
+.snow{
+  background-image:
+    radial-gradient(circle, rgba(214,232,246,.5) 0 .07em, transparent .13em),
+    radial-gradient(circle, rgba(214,232,246,.34) 0 .05em, transparent .1em);
+  background-size:3.7em 5.2em, 2.9em 6.4em;
+  background-position:0 0, 1.3em 0;
+  animation:snowdrift 16s linear infinite;
+}
+@keyframes snowdrift{ to{ background-position:0 5.2em, 1.3em 6.4em; } }
+.spark{
+  opacity:.5;
+  background-image:
+    radial-gradient(circle, rgba(150,240,255,.55) 0 .07em, transparent .13em),
+    radial-gradient(circle, rgba(150,240,255,.3) 0 .05em, transparent .1em);
+  background-size:4.3em 6.1em, 3.1em 5em;
+  background-position:1.6em 0, .4em 0;
+  animation:sparkdrift 22s linear infinite;
+}
+@keyframes sparkdrift{ to{ background-position:1.6em 6.1em, .4em 5em; } }
+
+/* --- light rigs --- */
+.ray{
+  position:absolute; inset-inline:0; top:8.5%; height:66%;
+  pointer-events:none; mix-blend-mode:screen;
+  -webkit-mask-image:linear-gradient(180deg,#000 6%, rgba(0,0,0,.5) 46%, transparent 88%);
+          mask-image:linear-gradient(180deg,#000 6%, rgba(0,0,0,.5) 46%, transparent 88%);
+}
+.ray-day{
+  background:repeating-linear-gradient(99deg, transparent 0 2.6em, rgba(215,240,255,.075) 2.6em 3.6em, transparent 3.6em 5.8em);
+  filter:blur(6px);
+  opacity:.9;
+  animation:raybreathe 8s ease-in-out infinite alternate;
+}
+@keyframes raybreathe{
+  from{ transform:skewX(1.6deg)  translateX(-.8em); }
+  to  { transform:skewX(-1.6deg) translateX(.8em); }
+}
+body:has(#l-dusk:checked) .ray-day{ opacity:.4; }
+body:has(#l-night:checked) .ray-day{ opacity:0; }
+.ray-moon{
+  background:repeating-linear-gradient(94deg, transparent 0 1.9em, rgba(160,205,255,.1) 1.9em 2.4em, transparent 2.4em 3.6em);
+  filter:blur(7px);
+  opacity:0;
+  animation:moonsway 11s ease-in-out infinite alternate;
+  transition:opacity .9s ease;
+}
+@keyframes moonsway{
+  from{ transform:skewX(1deg) translateX(-.5em); }
+  to  { transform:skewX(-1.4deg) translateX(.6em); }
+}
+body:has(#l-night:checked) .ray-moon{ opacity:.62; }
+
+.lampglow{
+  position:absolute; inset-inline:4%; top:9%; height:55%;
+  background:radial-gradient(64% 58% at 50% 0%, rgba(200,240,255,.3), rgba(200,240,255,.08) 55%, transparent 76%);
+  mix-blend-mode:screen;
+  opacity:.85; transition:opacity .7s ease;
+  pointer-events:none;
+}
+body:has(#l-dusk:checked)  .lampglow{ opacity:.5; }
+body:has(#l-night:checked) .lampglow{ opacity:0; }
+
+/* caustic shimmer on the floor */
+.caustics{
+  position:absolute; inset-inline:0; bottom:0; height:26%; z-index:6;
+  background:
+    repeating-linear-gradient(58deg, rgba(255,255,255,.11) 0 .5em, transparent .5em 1.15em),
+    repeating-linear-gradient(-58deg, rgba(255,255,255,.08) 0 .5em, transparent .5em 1.15em);
+  mix-blend-mode:soft-light;
+  opacity:.75;
+  -webkit-mask-image:linear-gradient(180deg, transparent, #000 46%);
+          mask-image:linear-gradient(180deg, transparent, #000 46%);
+  animation:shimmer 7s ease-in-out infinite alternate;
+  pointer-events:none;
+}
+@keyframes shimmer{
+  from{ transform:skewX(0) translateX(0);       opacity:.55; }
+  to  { transform:skewX(2.6deg) translateX(.7em); opacity:.85; }
+}
+body:has(#b-aby:checked) .caustics{ opacity:.3; }
+body:has(#pump:checked) .caustics{ animation-duration:3.4s; }
+
+/* waterline */
+.surface{ position:absolute; inset-inline:0; top:8.5%; height:1.1em; z-index:7; pointer-events:none; }
+.wave{
+  position:absolute; left:-2.4em; right:-2.4em; top:0; height:1.1em;
+  background-image:radial-gradient(circle at 1.2em 1.15em, transparent .44em, rgba(235,250,255,.32) .47em .53em, transparent .56em);
+  background-size:2.4em 1.1em;
+  background-repeat:repeat-x;
+  opacity:.6;
+  animation:wavex 6.5s linear infinite;
+}
+@keyframes wavex{ to{ transform:translateX(2.4em); } }
+.wave.w2{
+  top:.16em;
+  background-image:radial-gradient(circle at 1.2em 1.15em, transparent .5em, rgba(200,240,255,.2) .53em .6em, transparent .64em);
+  animation-duration:9.5s;
+  opacity:.45;
+}
+body:has(#pump:checked) .wave{ animation-duration:3.6s; }
+body:has(#pump:checked) .wave.w2{ animation-duration:5.2s; }
+
+/* feeding rings at the waterline */
+.feed-ripple{ position:absolute; left:28%; top:8%; width:6em; height:1em; z-index:8; opacity:0; transition:opacity .4s ease; }
+body:has(#feed:checked) .feed-ripple{ opacity:1; }
+.feed-ripple i{
+  position:absolute; inset-inline:0; top:0; height:100%;
+  border:1px solid rgba(230,250,255,.55); border-radius:50%;
+  animation:feedring 1.5s ease-out infinite;
+}
+.feed-ripple i:nth-child(2){ animation-delay:.5s; }
+@keyframes feedring{
+  from{ transform:scale(.25); opacity:.85; }
+  to  { transform:scale(1.05); opacity:0; }
+}
+
+/* tap ripple rings on the glass */
+.ripple{ position:absolute; left:40%; top:12%; width:7em; height:7em; z-index:9; opacity:0; transition:opacity .15s ease; pointer-events:none; }
+body:has(.tap:active) .ripple{ opacity:1; }
+.ripple i{
+  position:absolute; inset:0;
+  border:2px solid rgba(170,235,255,.5); border-radius:50%;
+  animation:ring 1.3s ease-out infinite;
+}
+.ripple i:nth-child(2){ animation-delay:.35s; }
+@keyframes ring{
+  from{ transform:scale(.25); opacity:.9; }
+  to  { transform:scale(1.5); opacity:0; }
+}
+
+/* glass shell */
+.glass{
+  position:absolute; inset:0; z-index:10;
+  border-radius:inherit;
+  pointer-events:none;
+  box-shadow:
+    inset 0 0 4.5em rgba(2,10,18,.5),
+    inset 0 .2em 0 rgba(255,255,255,.14),
+    inset 0 0 0 1px rgba(255,255,255,.1);
+  transition:filter .2s ease;
+}
+.glass::before{
+  content:""; position:absolute; inset:0; border-radius:inherit;
+  background:linear-gradient(112deg,
+    transparent 10%,
+    rgba(255,255,255,.05) 10% 19%,
+    transparent 19% 33%,
+    rgba(255,255,255,.08) 33% 36.5%,
+    transparent 36.5% 55%,
+    rgba(255,255,255,.045) 55% 60%,
+    transparent 60%);
+}
+body:has(.tap:active) .glass{ filter:brightness(1.22); }
+
+/* hood + lamp */
+.hood{
+  position:absolute; inset-inline:-1%; top:0; height:8.5%; z-index:11;
+  background:linear-gradient(180deg,#161e27,#0b1117 72%);
+  border-bottom:1px solid rgba(201,161,95,.4);
+  box-shadow:0 .4em .9em rgba(0,0,0,.4);
+  display:flex; align-items:center;
+  padding-inline:5%;
+}
+.lamp{
+  position:relative; width:72%; height:34%; margin-inline:auto;
+  border-radius:1em; background:#10161c;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.05);
+}
+.lamp::after{
+  content:""; position:absolute; inset:0; border-radius:inherit;
+  background:linear-gradient(180deg,#f0f9ff,#bcdce9 62%,#7fa6b8);
+  box-shadow:0 0 1.6em .3em rgba(190,235,255,.5);
+  opacity:1; transition:opacity .6s ease;
+}
+body:has(#l-dusk:checked)  .lamp::after{ opacity:.75; }
+body:has(#l-night:checked) .lamp::after{ opacity:.05; box-shadow:none; }
+
+/* cabinet */
+.cab{
+  position:relative; z-index:1;
+  width:min(88%,940px); margin:-2px auto 0;
+  height:5.6em; border-radius:0 0 .9em .9em;
+  background:linear-gradient(180deg,#1c242f,#111823 58%,#0a0f15);
+  border-top:1px solid rgba(201,161,95,.4);
+  box-shadow:0 1.6em 3.2em -1em rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.06);
+  background-image:
+    linear-gradient(90deg, transparent 0 calc(50% - 1px), rgba(255,255,255,.05) calc(50% - 1px) calc(50% + 1px), transparent calc(50% + 1px)),
+    linear-gradient(180deg,#1c242f,#111823 58%,#0a0f15);
+  display:flex; align-items:center; justify-content:center;
+}
+.cab::after{
+  content:""; position:absolute; inset-inline:0; bottom:0; height:.55em;
+  background:linear-gradient(180deg,#3a2f1c,#191307);
+  border-radius:0 0 .9em .9em;
+}
+.cab-tag{
+  font:600 .68rem/1 var(--mono);
+  letter-spacing:.26em; color:#54707f; text-transform:uppercase;
+  padding-bottom:.4em;
+}
+
+/* ============================================================
+   FAUNA — sprites (all em-sized, facing right)
+   ============================================================ */
+
+.fish{
+  position:absolute; left:0; width:100%; height:0;
+  top:var(--top,40%);
+  z-index:5;
+}
+.fish.far{ z-index:2; }
+.fish.near{ z-index:7; }
+
+.fish .lift{
+  position:absolute; left:0; top:0;
+  font-size:calc(1em * var(--size,1));
+  translate:0 0;
+  transition:translate .55s cubic-bezier(.34,1.3,.4,1);
+  animation:bob var(--bob-d,5.5s) ease-in-out infinite alternate;
+}
+@keyframes bob{
+  from{ transform:translateY(var(--bob-a,-.55em)); }
+  to  { transform:translateY(var(--bob-b,.7em)); }
+}
+.fish.far .lift{ scale:.68; filter:blur(1.1px) brightness(.88); opacity:.85; }
+.fish.near .lift{ scale:1.09; }
+
+/* routes */
+.hero{
+  animation:route var(--d,40s) ease-in-out infinite;
+  animation-delay:var(--delay,0s);
+}
+@keyframes route{
+  0%   { transform:translateX(-8%); opacity:0; }
+  5%,94% { opacity:1; }
+  42%  { transform:translateX(68%); }
+  50%  { transform:translateX(71%); }
+  58%  { transform:translateX(68%); }
+  100% { transform:translateX(-8%); opacity:0; }
+}
+.cruise{
+  animation:cruise var(--d,30s) linear infinite;
+  animation-delay:var(--delay,0s);
+}
+@keyframes cruise{
+  from{ transform:translateX(-14%); }
+  to  { transform:translateX(112%); }
+}
+.fish.lft{ animation-name:cruise-l; }
+@keyframes cruise-l{
+  from{ transform:translateX(112%); }
+  to  { transform:translateX(-14%); }
+}
+.hero .sprite{
+  animation:turn var(--d,40s) ease-in-out infinite;
+  animation-delay:var(--delay,0s);
+}
+@keyframes turn{
+  0%,42%  { transform:scaleX(1); }
+  50%,100%{ transform:scaleX(-1); }
+}
+
+/* body */
+.sprite{
+  position:relative; display:block;
+  width:var(--len,4.6em); aspect-ratio:100/56;
+  background:var(--grad,linear-gradient(180deg,#69c6e8,#2f7fb2));
+  border-radius:var(--shape,62% 76% 76% 60% / 60% 72% 72% 58%);
+  filter:drop-shadow(0 .15em .3em rgba(1,10,20,.42));
+}
+.sprite::after{ /* eye */
+  content:""; position:absolute; right:13%; top:35%;
+  width:11%; aspect-ratio:1; border-radius:50%;
+  background:radial-gradient(circle at 32% 32%, #fdfdfd 0 26%, #10202c 30% 72%, #06121c 74%);
+  box-shadow:0 0 0 .1em rgba(255,255,255,.26);
+}
+.sprite i{ position:absolute; }
+.tail{
+  left:-30%; top:50%; translate:0 -50%;
+  width:40%; height:64%;
+  background:var(--tail,#f5a623);
+  clip-path:polygon(100% 4%, 0% 50%, 100% 96%, 72% 50%);
+  transform-origin:100% 50%;
+  animation:wag var(--wag-d,.72s) ease-in-out infinite alternate;
+}
+@keyframes wag{
+  from{ rotate:-9deg; }
+  to  { rotate:11deg; }
+}
+.fin{
+  left:42%; top:52%; width:18%; height:24%;
+  background:var(--fin,rgba(255,255,255,.4));
+  clip-path:polygon(0 0, 100% 55%, 10% 100%);
+  transform-origin:20% 10%;
+  animation:finflick 1.1s ease-in-out infinite alternate;
+}
+@keyframes finflick{
+  from{ rotate:-14deg; }
+  to  { rotate:18deg; }
+}
+.lft .sprite{ scale:-1 1; }
+
+/* species */
+.s-surgeon{
+  --grad:linear-gradient(178deg,#4d8bff 0%,#2350d6 55%,#1a3aa8 100%);
+  --tail:#ffd34d; --fin:rgba(210,230,255,.55);
+}
+.s-surgeon .mark{
+  left:5%; top:32%; width:9%; height:36%;
+  background:rgba(12,30,70,.7);
+  clip-path:polygon(0 50%, 100% 8%, 100% 92%);
+}
+.s-clown{
+  --grad:linear-gradient(97deg,#f2622a 0 14%,#faf4e8 14% 26%,#f2622a 26% 46%,#faf4e8 46% 58%,#f2622a 58% 82%,#faf4e8 82% 92%,#f2622a 92%);
+  --tail:#f2622a; --fin:rgba(255,240,220,.5);
+  --shape:66% 72% 70% 62% / 64% 70% 66% 58%;
+}
+.s-tang{
+  --grad:linear-gradient(180deg,#ffd94f,#f2a71f 70%,#e08e12);
+  --tail:#f5b32a; --fin:rgba(255,235,180,.5);
+}
+.s-card{
+  --grad:linear-gradient(180deg,#ff7264 0 40%,#e04348 42% 70%,#f6c9c4 72%);
+  --tail:#e04348; --fin:rgba(255,220,215,.45);
+}
+.s-hatchet{
+  --grad:linear-gradient(180deg,#e6eef5 0 34%,#a9bccd 36% 58%,#dfe8ef 60%);
+  --tail:#a9bccd; --fin:rgba(255,255,255,.5);
+  --shape:70% 82% 82% 64% / 42% 44% 92% 56%;
+}
+.s-lantern{
+  --grad:linear-gradient(180deg,#33445a 0 52%,#1b2634 54%);
+  --tail:#1b2634; --fin:rgba(160,200,230,.3);
+}
+.s-lantern::before{ /* photophore row */
+  content:""; position:absolute; left:24%; bottom:14%; width:60%; height:30%;
+  background:
+    radial-gradient(circle at 8% 50%,  #9ff0ff 0 14%, transparent 17%),
+    radial-gradient(circle at 28% 50%, #9ff0ff 0 14%, transparent 17%),
+    radial-gradient(circle at 48% 50%, #9ff0ff 0 14%, transparent 17%),
+    radial-gradient(circle at 68% 50%, #9ff0ff 0 14%, transparent 17%),
+    radial-gradient(circle at 88% 50%, #9ff0ff 0 14%, transparent 17%);
+  filter:drop-shadow(0 0 .5em rgba(120,230,255,.85));
+  opacity:0; transition:opacity .7s ease;
+}
+body:has(#l-night:checked) .s-lantern::before{ opacity:1; }
+body:has(#l-dusk:checked)  .s-lantern::before{ opacity:.35; }
+.s-ghost{
+  --grad:linear-gradient(180deg, rgba(224,244,252,.42), rgba(168,208,224,.18));
+  --tail:rgba(224,244,252,.32); --fin:rgba(255,255,255,.22);
+}
+.s-angler{
+  --grad:linear-gradient(180deg,#4c3b58 0 46%,#2a1f36 70%,#1d1526);
+  --tail:#241b30; --fin:rgba(150,120,170,.3);
+  --shape:84% 56% 40% 62% / 88% 60% 52% 44%;
+  --len:5.8em;
+}
+.s-angler .jaw{
+  right:4%; bottom:5%; width:52%; height:36%;
+  background:linear-gradient(180deg,#160f1f,#221831);
+  border-radius:20% 30% 60% 70% / 20% 30% 100% 100%;
+}
+.s-angler .jaw::before{
+  content:""; position:absolute; left:8%; right:10%; top:-14%; height:36%;
+  background:repeating-linear-gradient(85deg,#e9e2d2 0 .14em, transparent .14em .36em);
+}
+.s-angler .lure{ right:16%; top:-52%; width:1em; height:1.9em; }
+.lure::before{
+  content:""; position:absolute; left:50%; bottom:32%;
+  width:.14em; height:1.15em;
+  background:#3d3147; rotate:20deg; border-radius:.1em;
+}
+.lure::after{
+  content:""; position:absolute; top:0; left:50%; translate:-50% 0;
+  width:.6em; height:.6em; border-radius:50%;
+  background:radial-gradient(circle at 40% 35%, #fff, #b8f3ff 45%, #59d7ff 72%, rgba(89,215,255,0) 78%);
+  box-shadow:0 0 1em .3em rgba(120,225,255,.55);
+  animation:glowpulse 2.6s ease-in-out infinite;
+  transition:box-shadow .7s ease;
+}
+@keyframes glowpulse{
+  0%,100%{ scale:1;    opacity:.95; }
+  50%    { scale:.82;  opacity:.65; }
+}
+body:has(#l-night:checked) .lure::after{ box-shadow:0 0 1.7em .5em rgba(140,230,255,.8); }
+
+/* jellyfish */
+.jelly{
+  position:absolute; top:var(--top,40%); left:var(--left,10%);
+  width:var(--jw,4.2em); aspect-ratio:1/1.45;
+  z-index:5;
+  translate:0 0;
+  transition:translate .55s cubic-bezier(.34,1.3,.4,1);
+  animation:jdrift var(--dd,56s) ease-in-out infinite alternate;
+  animation-delay:var(--delay,0s);
+}
+@keyframes jdrift{
+  from{ transform:translate(-1.4em,.5em); }
+  to  { transform:translate(1.6em,-.7em); }
+}
+.halo{
+  position:absolute; inset:-26%;
+  border-radius:50%;
+  background:radial-gradient(50% 50% at 50% 40%, rgba(150,220,255,.16), transparent 74%);
+  opacity:0; transition:opacity .9s ease;
+}
+body:has(#l-dusk:checked)  .halo{ opacity:.18; }
+body:has(#l-night:checked) .halo{ opacity:.55; }
+.bell{
+  position:absolute; inset:0 0 52% 0;
+  border-radius:50% 50% 44% 44% / 78% 78% 30% 30%;
+  background:radial-gradient(120% 100% at 50% 20%, rgba(214,242,255,.55), rgba(150,200,235,.24) 55%, rgba(120,180,220,.08) 76%);
+  box-shadow:inset 0 -.3em .6em rgba(160,220,255,.3);
+  transform-origin:50% 100%;
+  animation:bellp var(--belld,3.4s) ease-in-out infinite alternate;
+}
+@keyframes bellp{
+  from{ scale:1  .9; }
+  to  { scale:.92 1.07; }
+}
+.arms{ position:absolute; left:20%; right:20%; top:44%; bottom:0; }
+.arms i{
+  position:absolute; top:0; bottom:0; width:.18em; left:var(--x,20%);
+  background:linear-gradient(rgba(200,235,255,.42), rgba(200,235,255,0));
+  border-radius:1em;
+  transform-origin:50% 0;
+  animation:tentsway var(--td,4.2s) ease-in-out infinite alternate;
+}
+@keyframes tentsway{
+  from{ rotate:-10deg; }
+  to  { rotate:12deg; }
+}
+
+/* leviathan silhouette */
+.shadow-pass{
+  position:absolute; top:26%; left:-46%; width:44%; aspect-ratio:2.7/1;
+  z-index:0; opacity:0; pointer-events:none;
+  animation:levi 84s linear infinite;
+  animation-delay:22s;
+}
+@keyframes levi{
+  0%,55%  { transform:translateX(0);     opacity:0; }
+  58%     { opacity:.55; }
+  95%     { opacity:.55; }
+  97%,100%{ transform:translateX(330%); opacity:0; }
+}
+.levi{ position:absolute; inset:0; filter:blur(10px); }
+.levi::before{
+  content:""; position:absolute; inset:0 30% 0 12%;
+  background:radial-gradient(60% 46% at 52% 50%, rgba(9,20,34,.95) 55%, rgba(9,20,34,0) 74%);
+  border-radius:50%;
+}
+.levi::after{ /* tail fluke, head faces right */
+  content:""; position:absolute; left:0; top:26%; width:22%; height:48%;
+  background:rgba(9,20,34,.85);
+  clip-path:polygon(100% 12%, 0 50%, 100% 88%);
+  filter:blur(4px);
+}
+
+/* pellets */
+.pellets i{
+  position:absolute; top:9%; left:var(--px,50%);
+  width:.34em; height:.34em; border-radius:50%;
+  background:#dccd9e;
+  box-shadow:0 0 .4em rgba(230,215,160,.4);
+  opacity:0;
+  animation:pellet var(--pd,5.4s) linear infinite;
+  animation-delay:var(--pdel,0s);
+}
+@keyframes pellet{
+  0%  { transform:translate(0,0);        opacity:0; }
+  6%  { opacity:.95; }
+  55% { transform:translate(.5em,42cqh); }
+  84% { transform:translate(.9em,72cqh); opacity:.85; }
+  92%,100%{ transform:translate(1em,76cqh); opacity:0; }
+}
+
+/* feeding rise + startle scatter (individual `translate` channel) */
+body:has(#feed:checked) .fish .lift{ translate:0 var(--rise-y,-3.2em); }
+body:has(#feed:checked) .jelly{ translate:0 -1.6em; }
+body:has(.tap:active) .fish .lift{ translate:var(--flee-x,-170%) var(--flee-y,-1.8em); }
+body:has(.tap:active) .jelly{ translate:14% -2.6em; }
+
+/* spotted chip */
+.tagchip{
+  position:absolute; bottom:calc(100% + .5em); left:22%;
+  padding:.34em .55em; border-radius:.4em;
+  background:#0b1420; color:#8fe9ff;
+  border:1px solid rgba(143,233,255,.4);
+  font:600 .6em/1 var(--mono);
+  letter-spacing:.16em; white-space:nowrap;
+  opacity:0; translate:0 .4em;
+  transition:opacity .3s ease, translate .3s ease;
+  pointer-events:none;
+}
+
+/* ============================================================
+   CONSOLE (controls)
+   ============================================================ */
+
+.console{
+  container-type:inline-size;
+  position:sticky; top:1rem;
+  display:grid; gap:1.05rem;
+  padding:1.25rem;
+  background:linear-gradient(180deg,#121922,#0c1219);
+  border:1px solid var(--line);
+  border-radius:1.1rem;
+  box-shadow:0 24px 60px -30px rgba(0,0,0,.85), inset 0 1px 0 rgba(255,255,255,.05);
+}
+.console::before{
+  content:""; display:block; height:2px; margin:-.45rem -.75rem .35rem;
+  background:linear-gradient(90deg,transparent,rgba(201,161,95,.55) 18% 82%,transparent);
+  border-radius:2px;
+}
+
+/* readout */
+.readout{
+  display:grid; gap:.3rem;
+  padding:.7rem .8rem;
+  background:#05090d;
+  border:1px solid #14202b;
+  border-radius:.6rem;
+  font:600 .68rem/1.5 var(--mono);
+  letter-spacing:.14em;
+}
+.ro-line{ display:flex; gap:.7em; }
+.ro-k{ color:#54707f; flex:none; width:6.6em; padding-inline-end:.5em; }
+.ro-v{ color:#7de6a2; }
+.ro{ display:none; }
+body:has(#b-reef:checked) .ro-b-reef,
+body:has(#b-twi:checked)  .ro-b-twi,
+body:has(#b-aby:checked)  .ro-b-aby,
+body:has(#l-day:checked)  .ro-l-day,
+body:has(#l-dusk:checked) .ro-l-dusk,
+body:has(#l-night:checked) .ro-l-night,
+body:has(#feed:checked)   .ro-f-on,
+body:has(#feed:not(:checked)) .ro-f-off,
+body:has(#pump:checked)   .ro-p-on,
+body:has(#pump:not(:checked)) .ro-p-off{ display:inline; }
+.caret{ animation:caretblink 1.1s steps(1) infinite; color:#7de6a2; }
+@keyframes caretblink{ 50%{ opacity:0; } }
+
+/* fieldsets */
+.console fieldset{ border:0; padding:0; margin:0; min-inline-size:0; }
+.console legend{
+  padding:0 0 .55rem;
+  font:600 .66rem/1 var(--sans);
+  letter-spacing:.24em; text-transform:uppercase;
+  color:#7f93a5;
+}
+
+/* segmented control */
+.seg-row{ display:flex; gap:.45rem; }
+.seg{ position:relative; flex:1; display:block; cursor:pointer; }
+.seg input{
+  position:absolute; inset:0; width:100%; height:100%;
+  margin:0; opacity:0; appearance:none; cursor:pointer;
+}
+.face{
+  display:block; text-align:center;
+  padding:.62em .4em;
+  border:1px solid var(--line); border-radius:.65rem;
+  background:#0d141b; color:var(--dim);
+  font-weight:600; font-size:.82rem; letter-spacing:.05em;
+  transition:background .25s ease, color .25s ease, border-color .25s ease;
+  user-select:none;
+}
+.seg:hover .face{ color:var(--ink); border-color:#2c3d4e; }
+.seg input:checked + .face{
+  background:linear-gradient(180deg,var(--brass-2),var(--brass));
+  border-color:#e3c17c; color:#241603;
+  box-shadow:0 .3em .9em -0.3em rgba(201,161,95,.6);
+}
+.seg input:focus-visible + .face{ outline:2px solid var(--brass-2); outline-offset:2px; }
+
+/* switches */
+.switch{
+  position:relative;
+  display:flex; align-items:center; gap:.8rem;
+  padding:.5rem 0; cursor:pointer;
+}
+.switch input{
+  position:absolute; width:1px; height:1px; margin:0; opacity:0;
+}
+.track{
+  flex:none; position:relative;
+  width:3.3em; height:1.85em;
+  border-radius:2em;
+  background:#0a1118;
+  border:1px solid #223140;
+  transition:background .25s ease, border-color .25s ease;
+}
+.knob{
+  position:absolute; top:.16em; left:.16em;
+  width:1.38em; height:1.38em; border-radius:50%;
+  background:#42586b;
+  transition:translate .28s cubic-bezier(.4,0,.2,1), background .28s ease, box-shadow .28s ease;
+}
+.switch input:checked ~ .track{ background:#0e3a44; border-color:#1f6d7c; }
+.switch input:checked ~ .track .knob{
+  translate:1.42em 0; background:var(--cyan);
+  box-shadow:0 0 .6em rgba(95,230,255,.6);
+}
+.switch input:focus-visible ~ .track{ outline:2px solid var(--brass-2); outline-offset:2px; }
+.switch:hover .track{ border-color:#335061; }
+.sw-txt{ user-select:none; }
+.sw-txt b{ display:block; font-size:.85rem; font-weight:600; }
+.sw-txt small{ color:var(--dim); font-size:.72rem; }
+
+/* tap button */
+.tap{
+  display:flex; align-items:center; gap:.8rem;
+  width:100%; margin-top:.6rem;
+  padding:.7rem .8rem;
+  background:#0a1118; border:1px solid #223140; border-radius:.75rem;
+  color:var(--ink); font-family:var(--sans); text-align:left;
+  cursor:pointer;
+  transition:border-color .2s ease, background .2s ease, translate .1s ease;
+}
+.tap:hover{ border-color:#3a5266; background:#0d1620; }
+.tap:active{ translate:0 1px; background:#0d1c26; border-color:var(--cyan); }
+.tap-disc{
+  flex:none; position:relative;
+  width:2.4em; height:2.4em; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #2c4757, #14242f 72%);
+  border:1px solid rgba(51,80,97,.6);
+  transition:box-shadow .2s ease;
+}
+.tap-disc::after{
+  content:""; position:absolute; inset:38%;
+  border-radius:50%; background:rgba(95,230,255,.5);
+  transition:background .2s ease;
+}
+.tap:active .tap-disc{ box-shadow:0 0 1em rgba(95,230,255,.5); }
+.tap:active .tap-disc::after{ background:var(--cyan); }
+.tap-txt b{ display:block; font-size:.85rem; font-weight:600; }
+.tap-txt small{ color:var(--dim); font-size:.72rem; }
+
+/* field notes */
+.notes{
+  background:#0d141b;
+  border:1px solid var(--line);
+  border-radius:.75rem;
+}
+.notes summary{
+  list-style:none;
+  display:flex; align-items:center; gap:.6rem;
+  padding:.8rem .9rem;
+  cursor:pointer;
+  border-radius:.75rem;
+  user-select:none;
+}
+.notes summary::-webkit-details-marker{ display:none; }
+.notes summary b{ font-size:.85rem; }
+.notes summary small{ color:var(--dim); font-size:.72rem; }
+.chev{
+  margin-inline-start:auto; width:.6rem; height:.6rem; flex:none;
+  border-right:2px solid var(--brass); border-bottom:2px solid var(--brass);
+  rotate:45deg;
+  transition:rotate .25s ease;
+}
+.notes[open] .chev{ rotate:135deg; }
+.notes-hint{ margin:.2rem .9rem .6rem; color:var(--dim); font-size:.72rem; }
+.note-list{ list-style:none; margin:0; padding:0 .9rem .9rem; display:grid; gap:.45rem; }
+.notebtn{
+  display:flex; align-items:center; gap:.6rem;
+  width:100%; padding:.55rem .65rem;
+  background:transparent;
+  border:1px solid #1d2a36; border-radius:.6rem;
+  color:var(--ink); text-align:left; font-family:var(--sans);
+  cursor:pointer;
+  transition:background .2s ease, border-color .2s ease;
+}
+.notebtn:hover,.notebtn:focus-visible,.notebtn:active{ background:#122230; border-color:rgba(95,230,255,.55); }
+.dot{ flex:none; width:.7em; height:.7em; border-radius:50%; }
+.d-reef{ background:#3fc98f; box-shadow:0 0 .5em rgba(63,201,143,.6); }
+.d-twi{ background:#6f9fff; box-shadow:0 0 .5em rgba(111,159,255,.6); }
+.d-aby{ background:#b78fff; box-shadow:0 0 .5em rgba(183,143,255,.6); }
+.nb-txt b{ display:block; font-size:.8rem; font-weight:600; }
+.nb-txt small{ color:var(--dim); font-size:.7rem; }
+
+/* fish hover -> note highlight */
+body:has(#f-surgeon:hover) .n-surgeon,
+body:has(.n-surgeon:hover) .n-surgeon,
+body:has(.n-surgeon:focus-visible) .n-surgeon{ background:#122230; border-color:rgba(95,230,255,.55); }
+body:has(#f-clown-a:hover,#f-clown-b:hover) .n-clown,
+body:has(.n-clown:hover) .n-clown,
+body:has(.n-clown:focus-visible) .n-clown{ background:#122230; border-color:rgba(95,230,255,.55); }
+body:has(#f-tang-1:hover,#f-tang-2:hover,#f-tang-3:hover) .n-tang,
+body:has(.n-tang:hover) .n-tang,
+body:has(.n-tang:focus-visible) .n-tang{ background:#122230; border-color:rgba(95,230,255,.55); }
+body:has(#f-cardinal .fish:hover) .n-cardinal,
+body:has(.n-cardinal:hover) .n-cardinal,
+body:has(.n-cardinal:focus-visible) .n-cardinal{ background:#122230; border-color:rgba(95,230,255,.55); }
+body:has(#f-jellies .jelly:hover) .n-jelly,
+body:has(.n-jelly:hover) .n-jelly,
+body:has(.n-jelly:focus-visible) .n-jelly{ background:#122230; border-color:rgba(95,230,255,.55); }
+body:has(#f-lantern .fish:hover) .n-lantern,
+body:has(.n-lantern:hover) .n-lantern,
+body:has(.n-lantern:focus-visible) .n-lantern{ background:#122230; border-color:rgba(95,230,255,.55); }
+body:has(#f-hatchet .fish:hover) .n-hatchet,
+body:has(.n-hatchet:hover) .n-hatchet,
+body:has(.n-hatchet:focus-visible) .n-hatchet{ background:#122230; border-color:rgba(95,230,255,.55); }
+body:has(#f-angler:hover) .n-angler,
+body:has(.n-angler:hover) .n-angler,
+body:has(.n-angler:focus-visible) .n-angler{ background:#122230; border-color:rgba(95,230,255,.55); }
+
+/* note hover/focus -> fish spotlight */
+body:has(.n-surgeon:hover) #f-surgeon .sprite,
+body:has(.n-surgeon:focus-visible) #f-surgeon .sprite,
+body:has(#f-surgeon:hover) #f-surgeon .sprite{
+  filter:drop-shadow(0 0 .6em rgba(140,230,255,.85)) drop-shadow(0 .15em .3em rgba(1,10,20,.42)) brightness(1.18);
+}
+body:has(.n-surgeon:hover) #f-surgeon .tagchip,
+body:has(.n-surgeon:focus-visible) #f-surgeon .tagchip,
+body:has(#f-surgeon:hover) #f-surgeon .tagchip{ opacity:1; translate:0 0; }
+
+body:has(.n-clown:hover) :is(#f-clown-a,#f-clown-b) .sprite,
+body:has(.n-clown:focus-visible) :is(#f-clown-a,#f-clown-b) .sprite,
+body:has(#f-clown-a:hover,#f-clown-b:hover) :is(#f-clown-a,#f-clown-b) .sprite{
+  filter:drop-shadow(0 0 .6em rgba(140,230,255,.85)) drop-shadow(0 .15em .3em rgba(1,10,20,.42)) brightness(1.18);
+}
+body:has(.n-clown:hover) :is(#f-clown-a,#f-clown-b) .tagchip,
+body:has(.n-clown:focus-visible) :is(#f-clown-a,#f-clown-b) .tagchip,
+body:has(#f-clown-a:hover,#f-clown-b:hover) :is(#f-clown-a,#f-clown-b) .tagchip{ opacity:1; translate:0 0; }
+
+body:has(.n-tang:hover) :is(#f-tang-1,#f-tang-2,#f-tang-3) .sprite,
+body:has(.n-tang:focus-visible) :is(#f-tang-1,#f-tang-2,#f-tang-3) .sprite,
+body:has(#f-tang-1:hover,#f-tang-2:hover,#f-tang-3:hover) :is(#f-tang-1,#f-tang-2,#f-tang-3) .sprite{
+  filter:drop-shadow(0 0 .6em rgba(140,230,255,.85)) drop-shadow(0 .15em .3em rgba(1,10,20,.42)) brightness(1.18);
+}
+body:has(.n-tang:hover) :is(#f-tang-1,#f-tang-2,#f-tang-3) .tagchip,
+body:has(.n-tang:focus-visible) :is(#f-tang-1,#f-tang-2,#f-tang-3) .tagchip,
+body:has(#f-tang-1:hover,#f-tang-2:hover,#f-tang-3:hover) :is(#f-tang-1,#f-tang-2,#f-tang-3) .tagchip{ opacity:1; translate:0 0; }
+
+body:has(.n-cardinal:hover) #f-cardinal .sprite,
+body:has(.n-cardinal:focus-visible) #f-cardinal .sprite,
+body:has(#f-cardinal .fish:hover) #f-cardinal .sprite{
+  filter:drop-shadow(0 0 .6em rgba(140,230,255,.85)) drop-shadow(0 .15em .3em rgba(1,10,20,.42)) brightness(1.18);
+}
+body:has(.n-cardinal:hover) #f-cardinal .tagchip,
+body:has(.n-cardinal:focus-visible) #f-cardinal .tagchip,
+body:has(#f-cardinal .fish:hover) #f-cardinal .tagchip{ opacity:1; translate:0 0; }
+
+body:has(.n-jelly:hover) #f-jellies .bell,
+body:has(.n-jelly:focus-visible) #f-jellies .bell,
+body:has(#f-jellies .jelly:hover) #f-jellies .bell{
+  box-shadow:inset 0 -.3em .6em rgba(160,220,255,.3), 0 0 1.2em rgba(140,230,255,.75);
+}
+body:has(.n-jelly:hover) #f-jellies .tagchip,
+body:has(.n-jelly:focus-visible) #f-jellies .tagchip,
+body:has(#f-jellies .jelly:hover) #f-jellies .tagchip{ opacity:1; translate:0 0; }
+
+body:has(.n-lantern:hover) #f-lantern .sprite,
+body:has(.n-lantern:focus-visible) #f-lantern .sprite,
+body:has(#f-lantern .fish:hover) #f-lantern .sprite{
+  filter:drop-shadow(0 0 .6em rgba(140,230,255,.85)) drop-shadow(0 .15em .3em rgba(1,10,20,.42)) brightness(1.18);
+}
+body:has(.n-lantern:hover) #f-lantern .tagchip,
+body:has(.n-lantern:focus-visible) #f-lantern .tagchip,
+body:has(#f-lantern .fish:hover) #f-lantern .tagchip{ opacity:1; translate:0 0; }
+
+body:has(.n-hatchet:hover) #f-hatchet .sprite,
+body:has(.n-hatchet:focus-visible) #f-hatchet .sprite,
+body:has(#f-hatchet .fish:hover) #f-hatchet .sprite{
+  filter:drop-shadow(0 0 .6em rgba(140,230,255,.85)) drop-shadow(0 .15em .3em rgba(1,10,20,.42)) brightness(1.18);
+}
+body:has(.n-hatchet:hover) #f-hatchet .tagchip,
+body:has(.n-hatchet:focus-visible) #f-hatchet .tagchip,
+body:has(#f-hatchet .fish:hover) #f-hatchet .tagchip{ opacity:1; translate:0 0; }
+
+body:has(.n-angler:hover) #f-angler .sprite,
+body:has(.n-angler:focus-visible) #f-angler .sprite,
+body:has(#f-angler:hover) #f-angler .sprite{
+  filter:drop-shadow(0 0 .6em rgba(140,230,255,.85)) drop-shadow(0 .15em .3em rgba(1,10,20,.42)) brightness(1.18);
+}
+body:has(.n-angler:hover) #f-angler .tagchip,
+body:has(.n-angler:focus-visible) #f-angler .tagchip,
+body:has(#f-angler:hover) #f-angler .tagchip{ opacity:1; translate:0 0; }
+
+/* keeper block */
+.keeper-block{ display:grid; gap:.7rem; }
+.keeper-link{
+  display:flex; justify-content:space-between; align-items:center; gap:.8rem;
+  padding:.8rem .9rem;
+  border:1px dashed rgba(201,161,95,.5);
+  border-radius:.75rem;
+  color:var(--brass-2); text-decoration:none;
+  transition:background .25s ease, border-color .25s ease;
+}
+.keeper-link:hover,.keeper-link:focus-visible{ background:rgba(201,161,95,.08); border-color:var(--brass); }
+.keeper-link b{ font-size:.85rem; }
+.keeper-link small{ color:var(--dim); font-size:.72rem; }
+.kbd-hint{ margin:0; color:var(--faint); font:.68rem/1.7 var(--mono); letter-spacing:.04em; }
+
+/* wide console: two-column control grid */
+@container console (min-width:620px){
+  .console{ grid-template-columns:1fr 1fr; }
+  .readout,.notes,.keeper-block{ grid-column:1 / -1; }
+}
+
+/* ---------- footer ---------- */
+.foot{
+  padding:1.2rem clamp(1.2rem,4vw,3rem) 2rem;
+  text-align:center;
+  color:var(--faint);
+  font:.7rem/1.6 var(--mono);
+  letter-spacing:.08em;
+}
+
+/* ============================================================
+   KEEPER'S NOTES — :target overlay
+   ============================================================ */
+
+.overlay{
+  position:fixed; inset:0; z-index:50;
+  display:none;
+  place-items:center;
+  padding:1.5rem;
+  background:rgba(4,8,12,.66);
+  -webkit-backdrop-filter:blur(8px);
+          backdrop-filter:blur(8px);
+}
+.overlay:target{ display:grid; }
+.card{
+  position:relative;
+  max-width:37rem; max-height:min(86vh,44rem); overflow:auto;
+  background:linear-gradient(180deg,#f6f0e1,#eee5cf);
+  color:#1d2732;
+  border-radius:1.1rem;
+  padding:2rem 2.1rem 1.8rem;
+  box-shadow:0 2.5rem 5rem -1.5rem rgba(0,0,0,.9), inset 0 0 0 1px rgba(140,110,60,.25);
+  opacity:1; translate:0 0;
+  transition:opacity .35s ease, translate .35s ease;
+}
+@starting-style{
+  .overlay:target .card{ opacity:0; translate:0 16px; }
+}
+.card-head{ display:flex; align-items:baseline; gap:1rem; margin:0 0 .9rem; }
+.card h2{ margin:0; font:700 1.5rem/1.2 var(--serif); letter-spacing:.06em; }
+.x{
+  margin-inline-start:auto; flex:none;
+  padding:.35em .8em;
+  border:1px solid rgba(90,70,40,.45); border-radius:.6em;
+  color:#4a3a20; text-decoration:none;
+  font-weight:600; font-size:.8rem;
+  transition:background .2s ease;
+}
+.x:hover,.x:focus-visible{ background:rgba(90,70,40,.12); }
+.card p{ margin:.7rem 0; font-size:.9rem; line-height:1.65; color:#2a3644; }
+.card ul{ margin:.7rem 0; padding-inline-start:1.3rem; }
+.card li{ font-size:.85rem; line-height:1.7; color:#2a3644; }
+.card li::marker{ color:var(--brass-dk); }
+.card .fine{ color:#6a6152; font-size:.78rem; }
+
+/* ============================================================
+   MOTION SAFETY
+   ============================================================ */
+
+/* user-facing calm switch */
+body:has(#calm:checked) *{ animation-play-state:paused !important; }
+
+/* OS-level reduced motion: freeze ambient life, keep everything legible */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-play-state:paused !important;
+    transition-duration:1ms !important;
+    scroll-behavior:auto !important;
+  }
+}
+</style>
+</head>
+<body id="top">
+
+<header class="mast">
+  <div class="brand">
+    <span class="brand-dot" aria-hidden="true"></span>
+    <div>
+      <h1>FATHOM</h1>
+      <p class="tag">Tank 07 · The Pocket Ocean</p>
+    </div>
+  </div>
+  <p class="mast-note">A working aquarium kiosk in <b>HTML + CSS only</b> — three biomes, a lighting rig, a feeding station and a very startlable glass. No JavaScript aboard: every switch below is a native control styled by hand.</p>
+</header>
+
+<main class="deck">
+
+  <!-- ======================= STAGE ======================= -->
+  <section class="stage" aria-label="Aquarium stage">
+    <div class="room" aria-hidden="true">
+      <div class="wall wall-day"></div>
+      <div class="wall wall-dusk"></div>
+      <div class="wall wall-night"></div>
+      <div class="floor"></div>
+      <div class="pool pool-day"></div>
+      <div class="pool pool-dusk"></div>
+      <div class="pool pool-night"></div>
+      <div class="poster"><b>FATHOM</b>Tank 07<br>est. 1987<br>no tapping</div>
+      <div class="plant" aria-hidden="true"><i class="lf1"></i><i class="lf2"></i><i class="lf3"></i><i class="stem"></i></div>
+    </div>
+
+    <div class="tank-wrap" aria-hidden="true">
+      <div class="tank">
+
+        <!-- water column -->
+        <div class="water">
+          <div class="wx wx-reef"></div>
+          <div class="wx wx-twi"></div>
+          <div class="wx wx-aby"></div>
+        </div>
+        <div class="veil"></div>
+
+        <!-- living layer -->
+        <div class="life">
+
+          <!-- leviathan (twilight + abyss only) -->
+          <div class="shadow-pass only-twi only-aby"><i class="levi"></i></div>
+
+          <!-- marine snow / plankton -->
+          <div class="snow only-aby"></div>
+          <div class="spark only-twi"></div>
+
+          <!-- ~~~~~~~~~~ REEF EXHIBIT ~~~~~~~~~~ -->
+          <div class="set only-reef">
+            <i class="rock rock-1 z3"></i>
+            <i class="rock rock-2 z3"></i>
+            <i class="rock rock-3 z3"></i>
+            <i class="kelp k1" style="--sway:4deg"></i>
+            <i class="kelp k2" style="--sway:5deg"></i>
+            <i class="kelp k3" style="--sway:3deg"></i>
+            <i class="kelp k4" style="--sway:4.5deg"></i>
+            <i class="coral-fan cf1 z4"></i>
+            <i class="coral-fan cf2 z4"></i>
+            <i class="coral-fan cf3 z4"></i>
+            <i class="brain z4"></i>
+            <span class="tubes z4"><i></i><i></i><i></i></span>
+            <i class="kelp k5" style="--sway:5deg"></i>
+            <i class="kelp k6" style="--sway:3.5deg"></i>
+
+            <!-- blue surgeonfish (hero, U-turns) -->
+            <div class="fish hero near" id="f-surgeon" style="--top:30%; --size:1.35; --d:46s; --delay:-13s; --bob-d:6.4s; --flee-x:-180%;">
+              <span class="lift"><span class="sprite s-surgeon"><i class="mark"></i><i class="fin"></i><i class="tail"></i><span class="tagchip">SPOTTED</span></span></span>
+            </div>
+
+            <!-- clownfish pair (heroes) -->
+            <div class="fish hero" id="f-clown-a" style="--top:54%; --size:.95; --d:38s; --delay:-30s; --bob-d:5s; --flee-x:-200%; --flee-y:-2.2em;">
+              <span class="lift"><span class="sprite s-clown"><i class="fin"></i><i class="tail"></i><span class="tagchip">SPOTTED</span></span></span>
+            </div>
+            <div class="fish hero" id="f-clown-b" style="--top:47%; --size:.88; --d:44s; --delay:-7s; --bob-d:5.6s; --flee-x:220%; --flee-y:-2.4em;">
+              <span class="lift"><span class="sprite s-clown" style="--wag-d:.66s"><i class="fin"></i><i class="tail"></i><span class="tagchip">SPOTTED</span></span></span>
+            </div>
+
+            <!-- golden tangs (cruisers) -->
+            <div class="fish cruise" id="f-tang-1" style="--top:22%; --size:.8; --d:27s; --delay:-5s; --bob-d:4.6s;">
+              <span class="lift"><span class="sprite s-tang" style="--wag-d:.6s"><i class="fin"></i><i class="tail"></i><span class="tagchip">SPOTTED</span></span></span>
+            </div>
+            <div class="fish cruise far" id="f-tang-2" style="--top:66%; --size:.72; --d:31s; --delay:-16s; --bob-d:5.2s; --flee-x:-230%;">
+              <span class="lift"><span class="sprite s-tang" style="--wag-d:.58s"><i class="fin"></i><i class="tail"></i><span class="tagchip">SPOTTED</span></span></span>
+            </div>
+            <div class="fish cruise lft" id="f-tang-3" style="--top:40%; --size:.74; --d:34s; --delay:-24s; --bob-d:4.9s; --flee-x:210%;">
+              <span class="lift"><span class="sprite s-tang" style="--wag-d:.62s"><i class="fin"></i><i class="tail"></i><span class="tagchip">SPOTTED</span></span></span>
+            </div>
+
+            <!-- cardinalfish shoal -->
+            <div class="z5" id="f-cardinal">
+              <div class="fish cruise" style="--top:35%; --size:.46; --d:24s; --delay:-2s; --bob-d:3.8s; --flee-x:-260%;">
+                <span class="lift"><span class="sprite s-card" style="--wag-d:.5s"><i class="tail"></i><span class="tagchip">SPOTTED</span></span></span>
+              </div>
+              <div class="fish cruise" style="--top:38%; --size:.42; --d:24s; --delay:-3.4s; --bob-d:4.1s; --flee-x:-240%;">
+                <span class="lift"><span class="sprite s-card" style="--wag-d:.52s"><i class="tail"></i><span class="tagchip">SPOTTED</span></span></span>
+              </div>
+              <div class="fish cruise" style="--top:33%; --size:.44; --d:24s; --delay:-5.1s; --bob-d:3.6s; --flee-x:-280%;">
+                <span class="lift"><span class="sprite s-card" style="--wag-d:.48s"><i class="tail"></i><span class="tagchip">SPOTTED</span></span></span>
+              </div>
+              <div class="fish cruise" style="--top:40.5%; --size:.4; --d:24s; --delay:-6.8s; --bob-d:4.3s; --flee-x:-250%;">
+                <span class="lift"><span class="sprite s-card" style="--wag-d:.54s"><i class="tail"></i><span class="tagchip">SPOTTED</span></span></span>
+              </div>
+              <div class="fish cruise" style="--top:36.5%; --size:.47; --d:24s; --delay:-8.3s; --bob-d:3.9s; --flee-x:-270%;">
+                <span class="lift"><span class="sprite s-card" style="--wag-d:.5s"><i class="tail"></i><span class="tagchip">SPOTTED</span></span></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ~~~~~~~~~~ TWILIGHT EXHIBIT ~~~~~~~~~~ -->
+          <div class="set only-twi">
+            <i class="spire z3"></i>
+            <i class="ledge z3"></i>
+            <i class="kelp kelp-t tk1" style="--sway:4deg"></i>
+            <i class="kelp kelp-t tk2" style="--sway:5deg"></i>
+            <i class="kelp kelp-t tk3" style="--sway:3.5deg"></i>
+            <i class="kelp kelp-t tk4" style="--sway:4deg"></i>
+
+            <!-- moon jellies -->
+            <div id="f-jellies">
+              <div class="jelly" style="--top:20%; --left:12%; --jw:4.8em; --dd:64s; --delay:-9s; --belld:3.6s;">
+                <i class="halo"></i><i class="bell"></i>
+                <span class="arms"><i style="--x:8%; --td:4s"></i><i style="--x:32%; --td:4.6s"></i><i style="--x:60%; --td:3.8s"></i><i style="--x:86%; --td:4.4s"></i></span>
+                <span class="tagchip">SPOTTED</span>
+              </div>
+              <div class="jelly" style="--top:44%; --left:52%; --jw:3.4em; --dd:72s; --delay:-31s; --belld:4.2s;">
+                <i class="halo"></i><i class="bell"></i>
+                <span class="arms"><i style="--x:10%; --td:4.4s"></i><i style="--x:38%; --td:3.9s"></i><i style="--x:64%; --td:4.8s"></i><i style="--x:88%; --td:4.1s"></i></span>
+                <span class="tagchip">SPOTTED</span>
+              </div>
+              <div class="jelly" style="--top:12%; --left:74%; --jw:2.6em; --dd:58s; --delay:-44s; --belld:3s;">
+                <i class="halo"></i><i class="bell"></i>
+                <span class="arms"><i style="--x:12%; --td:3.8s"></i><i style="--x:40%; --td:4.5s"></i><i style="--x:68%; --td:3.6s"></i><i style="--x:90%; --td:4.2s"></i></span>
+                <span class="tagchip">SPOTTED</span>
+              </div>
+            </div>
+
+            <!-- lanternfish school (glows at night) -->
+            <div id="f-lantern">
+              <div class="fish cruise far" style="--top:30%; --size:.44; --d:30s; --delay:-4s; --bob-d:4s; --flee-x:-220%;">
+                <span class="lift"><span class="sprite s-lantern" style="--wag-d:.52s"><i class="tail"></i><span class="tagchip">SPOTTED</span></span></span>
+              </div>
+              <div class="fish cruise far" style="--top:34%; --size:.4; --d:30s; --delay:-5.6s; --bob-d:4.4s; --flee-x:-200%;">
+                <span class="lift"><span class="sprite s-lantern" style="--wag-d:.5s"><i class="tail"></i><span class="tagchip">SPOTTED</span></span></span>
+              </div>
+              <div class="fish cruise far" style="--top:27%; --size:.42; --d:30s; --delay:-7.8s; --bob-d:3.8s; --flee-x:-240%;">
+                <span class="lift"><span class="sprite s-lantern" style="--wag-d:.54s"><i class="tail"></i><span class="tagchip">SPOTTED</span></span></span>
+              </div>
+              <div class="fish cruise far lft" style="--top:38%; --size:.4; --d:33s; --delay:-12s; --bob-d:4.2s; --flee-x:210%;">
+                <span class="lift"><span class="sprite s-lantern" style="--wag-d:.5s"><i class="tail"></i><span class="tagchip">SPOTTED</span></span></span>
+              </div>
+              <div class="fish cruise far lft" style="--top:42%; --size:.43; --d:33s; --delay:-19s; --bob-d:3.9s; --flee-x:230%;">
+                <span class="lift"><span class="sprite s-lantern" style="--wag-d:.52s"><i class="tail"></i><span class="tagchip">SPOTTED</span></span></span>
+              </div>
+              <div class="fish cruise far" style="--top:47%; --size:.38; --d:36s; --delay:-25s; --bob-d:4.5s; --flee-x:-210%;">
+                <span class="lift"><span class="sprite s-lantern" style="--wag-d:.5s"><i class="tail"></i><span class="tagchip">SPOTTED</span></span></span>
+              </div>
+            </div>
+
+            <!-- hatchetfish pair -->
+            <div id="f-hatchet">
+              <div class="fish cruise" style="--top:58%; --size:.78; --d:29s; --delay:-9s; --bob-d:4.4s; --flee-y:-3em;">
+                <span class="lift"><span class="sprite s-hatchet" style="--wag-d:.58s"><i class="fin"></i><i class="tail"></i><span class="tagchip">SPOTTED</span></span></span>
+              </div>
+              <div class="fish cruise far" style="--top:64%; --size:.66; --d:33s; --delay:-21s; --bob-d:4.8s; --flee-y:-2.6em;">
+                <span class="lift"><span class="sprite s-hatchet" style="--wag-d:.6s"><i class="fin"></i><i class="tail"></i><span class="tagchip">SPOTTED</span></span></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ~~~~~~~~~~ ABYSS EXHIBIT ~~~~~~~~~~ -->
+          <div class="set only-aby">
+            <i class="rock rock-d dr1 z3"></i>
+            <i class="rock rock-d dr2 z3"></i>
+            <i class="vent z3"></i>
+            <i class="plume z3"></i>
+            <i class="amphora z6"></i>
+
+            <!-- humpback anglerfish (hero) -->
+            <div class="fish hero near" id="f-angler" style="--top:54%; --size:1.5; --d:88s; --delay:-31s; --bob-d:7.5s; --flee-x:-70%; --flee-y:-1em;">
+              <span class="lift"><span class="sprite s-angler"><i class="jaw"></i><i class="fin"></i><i class="tail"></i><i class="lure"></i><span class="tagchip">SPOTTED</span></span></span>
+            </div>
+
+            <!-- ghostfish -->
+            <div class="fish cruise far" style="--top:28%; --size:.9; --d:41s; --delay:-6s; --bob-d:6s; --flee-x:-140%;">
+              <span class="lift"><span class="sprite s-ghost" style="--wag-d:.8s"><i class="fin"></i><i class="tail"></i></span></span>
+            </div>
+            <div class="fish cruise far lft" style="--top:38%; --size:.78; --d:47s; --delay:-28s; --bob-d:6.6s; --flee-x:160%;">
+              <span class="lift"><span class="sprite s-ghost" style="--wag-d:.84s"><i class="fin"></i><i class="tail"></i></span></span>
+            </div>
+          </div>
+
+          <!-- shared equipment -->
+          <i class="stone z8"></i>
+          <i class="bub z8" style="left:4.9%;  --bd:6.2s; --bdel:-1.2s; --bw:.5em"></i>
+          <i class="bub z8" style="left:5.4%;  --bd:7.4s; --bdel:-3.8s; --bw:.38em"></i>
+          <i class="bub z8" style="left:5.9%;  --bd:5.6s; --bdel:-2.6s; --bw:.56em"></i>
+          <i class="bub z8" style="left:6.4%;  --bd:8.2s; --bdel:-5.1s; --bw:.34em"></i>
+          <i class="bub z8" style="left:5.1%;  --bd:6.8s; --bdel:-6.4s; --bw:.44em"></i>
+          <i class="bub z8" style="left:5.7%;  --bd:7.9s; --bdel:-.6s;  --bw:.4em"></i>
+          <i class="bub z8" style="left:6.1%;  --bd:6.5s; --bdel:-4.4s; --bw:.48em"></i>
+
+          <!-- pellets -->
+          <div class="pellets z8">
+            <i style="--px:14%; --pd:5.2s; --pdel:-.4s"></i>
+            <i style="--px:23%; --pd:6.1s; --pdel:-2.2s"></i>
+            <i style="--px:31%; --pd:4.8s; --pdel:-1.1s"></i>
+            <i style="--px:44%; --pd:5.7s; --pdel:-3.3s"></i>
+            <i style="--px:52%; --pd:5s;   --pdel:-.8s"></i>
+            <i style="--px:63%; --pd:6.4s; --pdel:-2.7s"></i>
+            <i style="--px:74%; --pd:5.4s; --pdel:-4.1s"></i>
+            <i style="--px:86%; --pd:5.9s; --pdel:-1.7s"></i>
+          </div>
+        </div>
+
+        <!-- light rigs -->
+        <div class="lampglow"></div>
+        <i class="ray ray-day"></i>
+        <i class="ray ray-moon"></i>
+
+        <!-- floor shimmer -->
+        <div class="caustics"></div>
+
+        <!-- waterline -->
+        <div class="surface">
+          <i class="wave w1"></i>
+          <i class="wave w2"></i>
+          <div class="feed-ripple"><i></i><i></i></div>
+        </div>
+
+        <!-- tap ripples -->
+        <div class="ripple"><i></i><i></i></div>
+
+        <!-- glass -->
+        <div class="glass"></div>
+
+        <!-- hood -->
+        <div class="hood"><i class="lamp"></i></div>
+      </div>
+
+      <div class="cab"><span class="cab-tag">Tank 07 · 4,700 L · filtered · do not knock</span></div>
+    </div>
+  </section>
+
+  <!-- ======================= CONSOLE ======================= -->
+  <aside class="console" aria-label="Tank controls">
+
+    <div class="readout" role="status" aria-live="polite">
+      <div class="ro-line"><span class="ro-k">EXHIBIT</span><span class="ro-v"><span class="ro ro-b-reef">TROPICAL REEF</span><span class="ro ro-b-twi">TWILIGHT MIDWATER</span><span class="ro ro-b-aby">ABYSSAL PLAIN</span> <span class="caret">&#9608;</span></span></div>
+      <div class="ro-line"><span class="ro-k">LIGHTING</span><span class="ro-v"><span class="ro ro-l-day">DAYLIGHT</span><span class="ro ro-l-dusk">DUSK</span><span class="ro ro-l-night">MOONLIGHT</span></span></div>
+      <div class="ro-line"><span class="ro-k">FEEDING</span><span class="ro-v"><span class="ro ro-f-off">STANDBY</span><span class="ro ro-f-on">ACTIVE — FISH RISING</span></span></div>
+      <div class="ro-line"><span class="ro-k">PUMP</span><span class="ro-v"><span class="ro ro-p-off">STANDBY</span><span class="ro ro-p-on">FLOWING — CURRENT ON</span></span></div>
+    </div>
+
+    <fieldset>
+      <legend>Exhibit</legend>
+      <div class="seg-row">
+        <label class="seg"><input type="radio" name="biome" id="b-reef" checked><span class="face">Reef</span></label>
+        <label class="seg"><input type="radio" name="biome" id="b-twi"><span class="face">Twilight</span></label>
+        <label class="seg"><input type="radio" name="biome" id="b-aby"><span class="face">Abyss</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Lighting</legend>
+      <div class="seg-row">
+        <label class="seg"><input type="radio" name="light" id="l-day" checked><span class="face">Day</span></label>
+        <label class="seg"><input type="radio" name="light" id="l-dusk"><span class="face">Dusk</span></label>
+        <label class="seg"><input type="radio" name="light" id="l-night"><span class="face">Night</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Care station</legend>
+      <label class="switch">
+        <input type="checkbox" id="feed">
+        <span class="track" aria-hidden="true"><span class="knob"></span></span>
+        <span class="sw-txt"><b>Feeding station</b><small>Sprinkle pellets across the surface</small></span>
+      </label>
+      <label class="switch">
+        <input type="checkbox" id="pump">
+        <span class="track" aria-hidden="true"><span class="knob"></span></span>
+        <span class="sw-txt"><b>Current pump</b><small>Stirs kelp, bubbles and shimmer</small></span>
+      </label>
+      <button class="tap" type="button">
+        <span class="tap-disc" aria-hidden="true"></span>
+        <span class="tap-txt"><b>Tap the glass</b><small>Press and hold — fish scatter</small></span>
+      </button>
+      <label class="switch">
+        <input type="checkbox" id="calm">
+        <span class="track" aria-hidden="true"><span class="knob"></span></span>
+        <span class="sw-txt"><b>Calm mode</b><small>Freeze all motion for a still exhibit</small></span>
+      </label>
+    </fieldset>
+
+    <details class="notes">
+      <summary><b>Field notes</b><small>hover / focus a species to spot it</small><i class="chev" aria-hidden="true"></i></summary>
+      <p class="notes-hint">Each species lives in one exhibit — the dot shows where. Hovering a fish in the tank lights up its card here too.</p>
+      <ul class="note-list">
+        <li><button class="notebtn n-surgeon" type="button"><span class="dot d-reef" aria-hidden="true"></span><span class="nb-txt"><b>Blue surgeonfish</b><small>Reef · grazer · turns on a scale-flip</small></span></button></li>
+        <li><button class="notebtn n-clown" type="button"><span class="dot d-reef" aria-hidden="true"></span><span class="nb-txt"><b>Ocellated clownfish</b><small>Reef · a pair, never far apart</small></span></button></li>
+        <li><button class="notebtn n-tang" type="button"><span class="dot d-reef" aria-hidden="true"></span><span class="nb-txt"><b>Golden tang</b><small>Reef · three cruisers, first to the pellets</small></span></button></li>
+        <li><button class="notebtn n-cardinal" type="button"><span class="dot d-reef" aria-hidden="true"></span><span class="nb-txt"><b>Cardinalfish</b><small>Reef · shoal of five, moves as one</small></span></button></li>
+        <li><button class="notebtn n-jelly" type="button"><span class="dot d-twi" aria-hidden="true"></span><span class="nb-txt"><b>Moon jelly</b><small>Twilight · pulses on the current, glows at night</small></span></button></li>
+        <li><button class="notebtn n-lantern" type="button"><span class="dot d-twi" aria-hidden="true"></span><span class="nb-txt"><b>Lanternfish</b><small>Twilight · photophore row, lights out at moonlight</small></span></button></li>
+        <li><button class="notebtn n-hatchet" type="button"><span class="dot d-twi" aria-hidden="true"></span><span class="nb-txt"><b>Crescent hatchetfish</b><small>Twilight · silver keel, darts upward when startled</small></span></button></li>
+        <li><button class="notebtn n-angler" type="button"><span class="dot d-aby" aria-hidden="true"></span><span class="nb-txt"><b>Humpback anglerfish</b><small>Abyss · lure always lit. Ignore the teeth.</small></span></button></li>
+      </ul>
+    </details>
+
+    <div class="keeper-block">
+      <a class="keeper-link" href="#keepers">
+        <span><b>Keeper's notes</b><br><small>what this tank is and how it works</small></span>
+        <span aria-hidden="true">&#8594;</span>
+      </a>
+      <p class="kbd-hint">Keyboard: Tab to travel · Space toggles · arrow keys switch exhibit or lighting · hold "tap the glass".</p>
+    </div>
+
+  </aside>
+</main>
+
+<footer class="foot">
+  FATHOM · Tank 07 — built with HTML &amp; CSS only. No scripts, no images, no network requests. Honours <code>prefers-reduced-motion</code>.
+</footer>
+
+<!-- ======================= KEEPER'S OVERLAY ======================= -->
+<div class="overlay" id="keepers" role="dialog" aria-label="Keeper's notes">
+  <div class="card">
+    <div class="card-head">
+      <h2>Keeper's notes</h2>
+      <a class="x" href="#top">Close</a>
+    </div>
+    <p><strong>Tank 07 is a self-contained exhibit.</strong> Three marine biomes, a day / dusk / night lighting rig, a feeding station, a current pump and a startle reflex — all driven by native HTML controls and CSS state. There is no JavaScript, no canvas and no video: every fish, jelly, bubble and light beam is styled DOM.</p>
+    <p><strong>How it works, briefly:</strong></p>
+    <ul>
+      <li>A <code>body:has()</code> state engine reads the radios and checkboxes and re-themes the whole scene.</li>
+      <li>Fish are composed from individual transform channels — route, bob, facing and scatter live on separate layers so they never fight.</li>
+      <li>The tank scales with container queries (<code>cqi</code> / <code>cqh</code>), so every creature keeps its proportions at any width.</li>
+      <li>Masks, blend modes, clip-paths and gradient art draw the coral, caustics, glass and light shafts.</li>
+      <li>The keeper's panel itself opens with <code>:target</code> and enters via <code>@starting-style</code>.</li>
+      <li>Ambient motion honours <code>prefers-reduced-motion</code>, and the Calm switch pauses it on demand.</li>
+    </ul>
+    <p><strong>Daily routine:</strong> pick an exhibit, set the lighting, switch the pump on for a livelier current, open the feeding station and watch the tank rise to the surface. If a fish annoys you, the glass is very tappable.</p>
+    <p class="fine">Keyboard: Tab to travel, Space toggles, arrow keys change exhibit or lighting. This panel is plain CSS — it can't trap focus and Escape won't close it, so use the Close link. Species spotlighting responds to hover and keyboard focus.</p>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "glm-5.3-flash",
+  "category": "svg-studio",
+  "date": "2026-11-27",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "09",
+  "prompt_label": "SVG Drawing Studio",
+  "notes": "Browser-based SVG drawing studio ('Vectra Studio'), single-page with no dependencies or build step; the editing surface is pure SVG DOM (no Canvas/WebGL except PNG rasterization at export). Tools: select/move/resize (8 handles, rotation-aware) and rotate, Bézier node editing (drag anchors and control handles, smooth/corner toggle, insert/delete points, convert rect/ellipse/line/polygon to paths), rectangle, ellipse, line, N-sided polygon, pen tool with curve dragging, freehand pencil; grouping/ungrouping (incl. double-click to enter groups), align/distribute, z-ordering, layers panel with visibility, lock, rename and reorder; fill/stroke/stroke width/dash/opacity controls; snapshot undo/redo (100 steps); wheel/pinch zoom, space/middle-finger pan, arrow-key nudge, full keyboard shortcuts, touch support via pointer events; SVG import (shapes, groups, transform matrices, common path commands incl. sampled arcs; gradients/patterns/text are skipped and reported), self-contained editable SVG export plus 2x PNG export; sample 'Harbor morning' artwork on first launch and localStorage autosave. Known limitations: group/multi resize scales rotated children in their local frames (slight approximation), rotate handle is single-selection only, gradient/pattern/text SVG content is not imported, fills are solid colors (no gradients), path model is one subpath per shape (multi-subpath imports are split into separate shapes).",
+  "slug": "2026-11-27_glm-5.3-flash_svg-studio_v1",
+  "path": "runs/2026-11-27_glm-5.3-flash_svg-studio_v1/index.html",
+  "source_file": "svg-studio__glm-5.3-flash__2026-11-27__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

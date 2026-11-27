@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "glm-5.3-flash",
+  "category": "restaurant",
+  "date": "2026-11-27",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "03",
+  "prompt_label": "Restaurant Website",
+  "notes": "Midnight Mamak — a single-file website for a fictional third-generation mamak eatery in Chow Kit, Kuala Lumpur, open 6 pm till 4 am. Everything is drawn or synthesized in code: a canvas night-skyline hero (stars, moon, lit windows, mosque silhouette, string lights, flickering neon, steam, meteor-shower easter egg on the moon), 39 hand-illustrated flat-vector SVG dish portraits across 7 menu categories with instant search plus category and dietary filters (vegetarian/vegan/gluten-free/nut-free/mild), a press-and-hold teh-tarik 'pull' simulation with foam meter and perfect-pull reward, a 14-day reservation flow with seeded slot availability, closed special dates and midnight-crossing service hours, a persistent pickup-basket flow with SST totals and validation, and an opt-in Web Audio ambience toggle (off by default). Live 'open now' status computed from the visitor's clock against per-weekday hours with special-date overrides. All storage access guarded with try/catch; prefers-reduced-motion respected; keyboard operable. No external assets beyond Google Fonts (with considered offline fallbacks). Known limitations: reservation and pickup availability are simulated client-side (seeded, deterministic per date/time/party); no backend; the teh-tarik interaction was verified by event dispatch and code review because the automated test browser pane throttled requestAnimationFrame (occluded-window throttling), while all DOM flows were exercised end-to-end with zero console errors.",
+  "slug": "2026-11-27_glm-5.3-flash_restaurant_v1",
+  "path": "runs/2026-11-27_glm-5.3-flash_restaurant_v1/index.html",
+  "source_file": "restaurant__glm-5.3-flash__2026-11-27__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "glm-5.3-flash",
+  "category": "generative-art",
+  "date": "2026-11-27",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "11",
+  "prompt_label": "Generative Art",
+  "notes": "The Quiet Country: a seeded generative contour survey that hangs like an engraved map plate. Terrain is built from domain-warped gradient noise plus ridged ranges, a carved river, an occasional lake and a seeded tilt; contours are extracted per frame with marching squares on 2D canvas (chosen deliberately for hairline path quality rather than WebGL). Three movements cycle automatically: Survey (contours draw themselves in with elevation labels, trail, summit and surveyor's furniture), Tide (a breathing water level with engraved bathymetric lines, vermilion shoreline and high-water mark), and Nocturne (indigo paper, twinkling seeded stars with a named constellation, cratered moon and slope shading biased by moonlight). The viewer collaborates: press-drag raises land, Shift/right-drag/two fingers carve, double-click plants benchmarks with real elevations, and the compass needle is magnetically disturbed by the cursor. Optional Web Audio soundscape: seeded pentatonic drone with delay space; contour crossings under the hand pluck notes, Tide adds a wash bed, Nocturne a night voice. Seed lives in the URL hash; adaptive quality governor holds 60 fps by trading grid density, contour count and backing-store scale; DPR-aware, resize/visibility handled, prefers-reduced-motion respected, keyboard accessible, localStorage guarded. Known limitations: pure canvas-2D path rendering is CPU-bound on very large/hiDPI screens (governor compensates); benchmark/interaction state is ephemeral and not part of the reproducible seed; export resolution is capped at ~14 MP.",
+  "slug": "2026-11-27_glm-5.3-flash_generative-art_v1",
+  "path": "runs/2026-11-27_glm-5.3-flash_generative-art_v1/index.html",
+  "source_file": "generative-art__glm-5.3-flash__2026-11-27__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

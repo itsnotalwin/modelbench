@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "unknown-model",
+  "category": "editorial-website",
+  "date": "2026-11-27",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "04",
+  "prompt_label": "Editorial Website",
+  "notes": "Palimpsest (fictional name): a complete self-contained editorial publication on writing, erasure, and recovered texts. Semantic HTML5 + CSS3; no JavaScript; no external assets; original artwork in inline SVG and pure CSS; system typefaces; responsive CSS-only navigation (<details>); skip link, landmarks, ordered headings, aria-current, visible focus; prefers-reduced-motion; no layout shifts; print stylesheet. Pages: homepage, two full-length original articles (The Undertext; Marginalia) with footnotes, figures, margin notes, pull quotes, related reading; Archive; About/Colophon. Run identity: MODEL_SLUG resolved as unknown-model — the active runtime model identifier is not disclosed under product confidentiality policy and no public model name is exposed in context, so the brief's unknown-model fallback is used and disclosed here; no identity was invented. RUN_DATE 2026-11-27 taken from runtime context; VERSION fixed integer 1. Known limitations: typography uses system font stacks rather than bundled webfonts, so exact rendering varies by platform; no JavaScript enhancements; no newsletter, comment, or contact channel (nothing fake); article bylines and authors are fictional; factual statements are written carefully with notes but are not independently re-verified against primary sources; no automated screen-reader test was run in this environment, verification was manual structural/link checking.",
+  "slug": "2026-11-27_unknown-model_editorial-website_v1",
+  "path": "runs/2026-11-27_unknown-model_editorial-website_v1/index.html",
+  "source_file": "editorial-website__seaglass-alpha-free__2026-11-27__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

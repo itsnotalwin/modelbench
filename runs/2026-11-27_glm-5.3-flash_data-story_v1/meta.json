@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "glm-5.3-flash",
+  "category": "data-story",
+  "date": "2026-11-27",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "13",
+  "prompt_label": "Data Story",
+  "notes": "Duck Season: a single-file scrollytelling data story about how rooftop solar reshaped a fictional city's electricity demand curve (the 'duck curve'). All data is synthetic, generated in-browser from a fixed seed via a physical model (sun position, AR(1) weather/cloud systems, demand shapes, EV charging); every statistic quoted in the prose is computed from the dataset at load time. Eight hand-drawn canvas visuals with linked brushing/filtering: average-day curve with annotations, scroll-driven 2010-2024 morph with scrubber and play, interactive duck anatomy, day-x-hour heatmap with date-range brushing and sunrise/sunset overlay, mobile tile calendar, temperature-vs-ramp scatter with quadratic fit and temperature filtering, monthly ridgeline, and a 15-minute-resolution day explorer with sortable data table and CSV export. Extras: tooltip sparklines, optional Web Audio sonification of the heatmap, keyboard shortcuts dialog, screen-reader live region, prefers-reduced-motion support, DPR-aware rendering, ResizeObserver redraws. Known limitations: data is fictional by design; Google Fonts loads from CDN with local fallback stacks.",
+  "slug": "2026-11-27_glm-5.3-flash_data-story_v1",
+  "path": "runs/2026-11-27_glm-5.3-flash_data-story_v1/index.html",
+  "source_file": "data-story__glm-5.3-flash__2026-11-27__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

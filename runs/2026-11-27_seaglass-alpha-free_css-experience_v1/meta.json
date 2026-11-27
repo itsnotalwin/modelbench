@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "seaglass-alpha-free",
+  "category": "css-experience",
+  "date": "2026-11-27",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "05",
+  "prompt_label": "CSS Interactive Experience",
+  "notes": "ORRERY: an original, complete interactive spatial instrument modelling a fictional star system, built with HTML and CSS only — no JavaScript, no external assets, no webfonts. Four working views (Instrument, Catalog, Field Notes, Workshop) driven by native radios/checkboxes plus :has(); a pure-CSS orbital train with selectable bodies, orbital-rate presets, a telescope mode, a reversible button-type=reset; CSS-only filtering/sorting in the catalog; :target-anchored notes with native details/summary; three themes; responsive grid/flex; container queries; logical properties; masks, gradients, filters; scroll-driven and entrance motion guarded by @supports; visible focus; keyboard and touch parity; prefers-reduced-motion honoured plus a manual Still control. Honest limits: no sound, no persistence, no computed output (controls reveal prepared states); enhanced transitions/scroll-driven timelines are progressive enhancements; requires a current browser supporting :has() and container queries; orbiting labels are a mouse convenience with an equivalent keyboard dial; fictional system data is internally consistent invention. No known broken controls or dead ends.",
+  "slug": "2026-11-27_seaglass-alpha-free_css-experience_v1",
+  "path": "runs/2026-11-27_seaglass-alpha-free_css-experience_v1/index.html",
+  "source_file": "css-experience__seaglass-alpha-free__2026-11-27__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

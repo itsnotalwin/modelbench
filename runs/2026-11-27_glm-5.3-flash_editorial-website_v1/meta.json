@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "glm-5.3-flash",
+  "category": "editorial-website",
+  "date": "2026-11-27",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "04",
+  "prompt_label": "Editorial Website",
+  "notes": "Meridian is an invented independent quarterly of cartography and territory (Issue 07, 'Uncertain Ground'), built as a static site: a homepage with masthead, original SVG cover chart, table of contents, editor's note and colophon, plus three full-length feature articles with standfirsts, margin notes, pull quotes, original SVG chart plates, footnotes and cross-linked related reading. Hand-written semantic HTML5 and CSS3 (grid layout, fluid type scale, spacing tokens); JavaScript is one small file used only for a reading-progress indicator and footnote quick-view popups, so every page remains fully readable and navigable without JS. All artwork is original inline SVG; there are no external requests, fonts, images or cookies. Article facts reference real events (Sandy Island 2012, the 1973/2022 Hans Island dispute, UNCLOS, Mandelbrot 1967, Seabed 2030) written from memory and deliberately hedged; bylines, editor and the publication itself are fictional. Verified in a real browser at desktop and mobile widths: navigation, anchors, skip link, focus styles and reduced-motion fallbacks checked; no console errors. Known limitations: display type relies on a system-font stack so letterforms vary slightly by platform; footnote popovers are a pointer/keyboard enhancement only and do not appear on touch. Model slug resolved from the runtime identifier 'account:zai-start-plan/GLM-5.3-Flash'; the environment also displayed another identifier (glm-5.4) and the final runtime value was used.",
+  "slug": "2026-11-27_glm-5.3-flash_editorial-website_v1",
+  "path": "runs/2026-11-27_glm-5.3-flash_editorial-website_v1/index.html",
+  "source_file": "editorial-website__glm-5.3-flash__2026-11-27__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

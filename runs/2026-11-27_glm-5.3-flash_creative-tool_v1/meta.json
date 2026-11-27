@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "glm-5.3-flash",
+  "category": "creative-tool",
+  "date": "2026-11-27",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "10",
+  "prompt_label": "Creative Tool",
+  "notes": "OXIDE — a single-file pixel-art & animation studio. Layers and frames (cel matrix) with per-frame durations, onion skin, tile preview, mirror painting, Bayer dither ink, pixel-perfect pencil, flood fill with tolerance, shift-snapped shapes, rectangular marquee with floating cut/paste/move, HSV picker, six curated palettes plus palette-from-art, rect-patched undo/redo (80 steps), autosave with session restore, project JSON save/open, PNG import (auto canvas growth), PNG frame / spritesheet / animated GIF export (hand-written GIF89a+LZW encoder, verified pixel-exact against an independent decoder). Ships with a procedurally generated 4-frame ember sprite on three layers. All art, icons, sounds (opt-in) and UI are code-generated; no external assets or libraries. Known limitations: GIF transparency is 1-bit (alpha>=128 threshold) with frequency-based color reduction above 255 colors; selection is rectangular only; no tablet pressure support; touch supports one-finger drawing and two-finger pan/pinch but no long-press menus.",
+  "slug": "2026-11-27_glm-5.3-flash_creative-tool_v1",
+  "path": "runs/2026-11-27_glm-5.3-flash_creative-tool_v1/index.html",
+  "source_file": "creative-tool__glm-5.3-flash__2026-11-27__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

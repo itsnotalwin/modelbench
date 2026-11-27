@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About Palimpsest — editorial point of view, voice, colophon</title>
+<meta name="description" content="What Palimpsest is, its editorial point of view and voice, how it is built (semantic HTML5, CSS3, no JavaScript, original artwork), accessibility, and contact policy.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23f8f4ec'/%3E%3Ctext x='50%25' y='62%25' text-anchor='middle' font-family='Georgia,serif' font-size='20' fill='%239a3412'%3EP%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site-header">
+  <div class="masthead">
+    <p class="dateline"><time datetime="2026-11-27">27 November 2026</time> &middot; Volume I &middot; London</p>
+    <p class="wordmark"><a href="index.html">Palimpsest</a></p>
+    <p class="tagline">A journal of writing, erasure, and what remains</p>
+    <p class="issue-line">Number 1 &middot; The Undertext issue</p>
+  </div>
+  <nav class="site-nav" aria-label="Primary">
+    <details class="nav-menu">
+      <summary>Menu</summary>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="undertext.html">Undertext</a></li>
+        <li><a href="marginalia.html">Marginalia</a></li>
+        <li><a href="archive.html">Archive</a></li>
+        <li><a href="about.html" aria-current="page">About</a></li>
+      </ul>
+    </details>
+  </nav>
+</header>
+
+<main id="main" class="page" tabindex="-1">
+
+  <div class="prose">
+    <p class="kicker">Journal</p>
+    <h1>About Palimpsest</h1>
+
+    <section aria-labelledby="what-h">
+      <h2 id="what-h">What this is</h2>
+      <p><strong>Palimpsest</strong> is an editorial journal about writing, erasure, and what remains. Its subject is the layered document: pages scraped and reused, texts recovered from underneath, remarks added at the edges, and the difference between what is visible and what is preserved. Volume I, Number 1, <em>The Undertext issue</em>, contains two full-length essays and this colophon. See the <a href="archive.html">archive</a> for contents.</p>
+      <p>Everything here is original. No article reproduces an existing publication&rsquo;s layout or voice; no copy is lifted from other sources; all artwork is original inline SVG or CSS; there are no photographs, no hotlinked images, and no external assets.</p>
+    </section>
+
+    <section aria-labelledby="pov-h">
+      <h2 id="pov-h">Editorial point of view</h2>
+      <p>We read documents as <strong>layered objects, not transparent windows</strong>. Every text carries an undertext: what was on the page before it, what was scraped away, what has been added around it, and what each reader leaves behind. Erasure is evidence, not absence. A margin is a conversation, not decoration. A reconstruction is a claim about what remains, not about what was meant.</p>
+      <p>This point of view has practical consequences. We prefer small verifiable claims to grand ones; we name what we are describing and say plainly when something is reconstructed, inferred, or unrecovered; we distinguish what a document <em>contains</em> from what a scholar <em>concludes</em>; and we treat both the object and its history with care. We do not pretend certainty we do not have.</p>
+    </section>
+
+    <section aria-labelledby="voice-h">
+      <h2 id="voice-h">Voice</h2>
+      <p>Our voice is <strong>scholarly but unhurried; precise but not cold</strong>. Sentences are clear and mostly short. Jargon is defined on first use (see <abbr title="for example">e.g.</abbr> <em>glossae</em>, <em>rasura</em>, <em>multispectral imaging</em> in the articles). We write in the first person plural when speaking for the journal (&ldquo;we&rdquo;) and keep article bylines for individual authors. We avoid hype, urgency, and rhetorical questions as filler. We say &ldquo;we don&rsquo;t know&rdquo; when we don&rsquo;t.</p>
+    </section>
+
+    <section aria-labelledby="structure-h">
+      <h2 id="structure-h">Structure</h2>
+      <p>Every article has a kicker, headline, standfirst, byline, publication date, reading time, section, issue, tags, a contents list, a body with named sections, figures with captions, margin notes, footnotes with back-links, and related reading. The homepage leads with the issue&rsquo;s feature, lists sections, and states the editorial point of view. The archive lists everything. Navigation is identical on every page.</p>
+    </section>
+
+    <section aria-labelledby="colophon-h" id="colophon">
+      <h2 id="colophon-h">Colophon</h2>
+      <p>Set in system serif typefaces (with Palatino/Iowan Old Style where available), system sans-serif for metadata and navigation, and monospace for code&mdash;no webfonts are loaded, so nothing shifts as the page renders. Body measure is capped near 65 characters; a wide-margin layout places reader-facing margin notes in a side column on large screens and inline on small ones. Spacing follows a half-rem rhythm with a fluid gutter. Original artwork is inline SVG and pure CSS.</p>
+      <ul>
+        <li><strong>Foundation:</strong> semantic HTML5 + CSS3. No React, Vue, Angular, or component frameworks.</li>
+        <li><strong>JavaScript:</strong> none. The publication is fully readable and navigable without it; the responsive menu is a native <code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code> disclosure.</li>
+        <li><strong>Motion:</strong> no animation; <code>prefers-reduced-motion</code> is respected and smooth scrolling is disabled for it.</li>
+        <li><strong>Layout shift:</strong> system fonts, sized inline SVG, stable spacing; nothing loads late.</li>
+        <li><strong>Print:</strong> a print stylesheet hides navigation and preserves article structure.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="a11y-h">
+      <h2 id="a11y-h">Accessibility</h2>
+      <p>Semantic landmarks (<code>header</code>, <code>nav</code>, <code>main</code>, <code>article</code>, <code>section</code>, <code>aside</code>, <code>footer</code>); a skip link first in tab order; one <code>h1</code> per page with ordered headings; visible <code>:focus-visible</code> outlines; keyboard-operable native controls; <code>aria-current</code> on the active page; <code>aria-label</code>s on navigation regions; <code>aria-labelledby</code> wiring; inline SVG figures with <code>title</code>/<code>desc</code> and <code>role="img"</code>; decorative elements hidden; descriptive <code>alt</code>-equivalent text; figure captions; footnote links that go both ways; <code>lang</code> attributes; sufficient color contrast; <code>prefers-reduced-motion</code>. The site is designed to work at 320px width, without JavaScript, and with keyboard only.</p>
+    </section>
+
+    <section aria-labelledby="contact-h">
+      <h2 id="contact-h">Contact &amp; letters</h2>
+      <p>Palimpsest is published as a self-contained static site. <strong>There is no newsletter, no comment system, no submission form, and no mailing address to offer</strong>&mdash;nothing here pretends to collect your data. Letters and corrections are not processed by this edition. If a factual claim in an article is wrong, the right recourse is to read the cited note and judge the evidence; every claim is meant to be checkable.</p>
+    </section>
+
+    <section aria-labelledby="provenance-h">
+      <h2 id="provenance-h">Provenance</h2>
+      <p>Published <time datetime="2026-11-27">27 November 2026</time>. Volume I, Number 1. &copy; 2026 Palimpsest. All content original; all rights reserved. No third-party code, fonts, images, or data.</p>
+    </section>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <p class="footer-name">Palimpsest</p>
+      <p>A journal of writing, erasure, and what remains. Volume I, Number 1, November 2026.</p>
+      <p>All content original. No tracking, no advertising, no external assets.</p>
+    </div>
+    <nav class="footer-nav" aria-label="Footer">
+      <p class="footer-title">Contents</p>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="undertext.html">Undertext</a></li>
+        <li><a href="marginalia.html">Marginalia</a></li>
+        <li><a href="archive.html">Archive</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+    </nav>
+    <div>
+      <p class="footer-title">Colophon</p>
+      <p>Semantic HTML5 &amp; CSS3. No JavaScript required. Responsive layout, visible focus, skip link. Original artwork in inline SVG and CSS. System typefaces.</p>
+    </div>
+  </div>
+  <p class="footer-base">
+    <span>&copy; 2026 Palimpsest. All rights reserved.</span>
+    <span><a href="about.html#colophon">Colophon</a> &middot; <a href="archive.html">Archive</a></span>
+  </p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "glm-5.3-flash",
+  "category": "css-experience",
+  "date": "2026-11-27",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "05",
+  "prompt_label": "CSS Interactive Experience",
+  "notes": "FATHOM · Tank 07 — an interactive aquarium-kiosk experience in a single HTML file with inline CSS only: no JavaScript, no images, no network requests. A body:has() state engine projects native radios/checkboxes onto the scene: three biomes (reef / twilight / abyss with distinct water, decor and fauna), three lighting rigs (day / dusk / night with lamp glow, moonbeams and bioluminescence), a feeding station (pellets fall, fish rise), a current pump (kelp sway, bubble speed, shimmer rate), a hold-to-startle glass tap, a calm-mode switch, hover/focus-linked species field notes (note cards and fish spotlight each other), a blinking status readout, and a :target keeper's panel entering via @starting-style. Layout uses Grid/Flexbox, container queries with cqi/cqh scene scaling, individual transform properties for composed motion, masks, blend modes, clip-paths, and logical properties; prefers-reduced-motion pauses ambient motion; all controls have :focus-visible rings and remain native (radios, checkboxes, button, details/summary, links). Known limitations: the keeper's overlay cannot trap focus or close on Escape without JS; species spotlighting is hover/focus based (no persistent toggle); with reduced motion the scene freezes as a composed still; verified in Chromium at desktop and mobile widths.",
+  "slug": "2026-11-27_glm-5.3-flash_css-experience_v1",
+  "path": "runs/2026-11-27_glm-5.3-flash_css-experience_v1/index.html",
+  "source_file": "css-experience__glm-5.3-flash__2026-11-27__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

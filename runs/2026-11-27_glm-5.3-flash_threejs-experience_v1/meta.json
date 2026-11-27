@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "glm-5.3-flash",
+  "category": "threejs-experience",
+  "date": "2026-11-27",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "08",
+  "prompt_label": "Three.js 3D Experience",
+  "notes": "Lumen Deep: a single-file interactive abyssal reef built on Three.js 0.160.0 loaded pinned from jsDelivr (no other libraries, no build step; serve the folder with any static server, or open index.html directly where file:// module imports are permitted - if that fails the built-in fallback explains it). The scene contains a procedurally displaced seafloor, instanced rocks/coral/glow pods, one merged CPU-waved kelp geometry, a 120-fish schooling simulation in a single InstancedMesh (seek + separation + soft bounds), six pulsing jellyfish with instanced tentacles, 500 drifting marine-snow particles and a pooled ring-pulse effect. Interactions: click/tap the water to release a lure of light that the school swirls around, click/tap a jellyfish to make it bloom, plus custom orbit/pan/zoom controls with mouse, multi-touch (one-finger look, pinch zoom, two-finger pan) and keyboard shortcuts (arrows, +/-, L, D, M, Space, H, Escape); a Help button documents everything and a polite aria-live region announces state for screen readers. Reduced-motion preference is honoured at load (slow currents, no drift, no dolly-in) and via the Motion toggle; WebGL absence, engine-load failure, runtime errors and context loss all surface a deliberate textual fallback panel describing the scene. Draw calls stay around 20; device pixel ratio is capped at 2; the render loop reuses preallocated vectors/objects with no per-frame allocations. Known limitations: glow is approximated with additive materials and sprites rather than post-processed bloom; fish steering is O(n^2) separation at n=120 (measured fine on desktop); mobile behaviour was checked via browser viewport emulation only, not physical devices; the pinned CDN requires one network fetch, so fully offline use shows the built-in fallback message.",
+  "slug": "2026-11-27_glm-5.3-flash_threejs-experience_v1",
+  "path": "runs/2026-11-27_glm-5.3-flash_threejs-experience_v1/index.html",
+  "source_file": "threejs-experience__glm-5.3-flash__2026-11-27__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Vectra Studio — SVG Drawing</title>
+<meta name="description" content="A browser-based vector drawing studio built on SVG.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%238b7cff'/%3E%3Cpath d='M6 16 C9 8 15 8 18 16' stroke='white' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Crect x='4.5' y='14.5' width='3.6' height='3.6' fill='white'/%3E%3Crect x='15.9' y='14.5' width='3.6' height='3.6' fill='white'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<noscript><p style="padding:20px">Vectra Studio requires JavaScript to run.</p></noscript>
+
+<header id="topbar">
+  <div class="brand">
+    <div class="logo" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M5 16 C8 8 16 8 19 16"/>
+        <rect x="3" y="14" width="4" height="4" fill="currentColor" stroke="none"/>
+        <rect x="17" y="14" width="4" height="4" fill="currentColor" stroke="none"/>
+      </svg>
+    </div>
+    <div class="name">Vectra <span>Studio</span></div>
+  </div>
+
+  <div class="tb-group" role="toolbar" aria-label="File">
+    <button id="btnNew" class="u-btn" title="New document" aria-label="New document"></button>
+    <button id="btnOpen" class="u-btn" title="Open SVG file (Ctrl+O)" aria-label="Open SVG file"></button>
+    <button id="btnSaveSvg" class="u-btn" title="Export SVG (Ctrl+S)" aria-label="Export SVG"></button>
+    <button id="btnExportPng" class="u-btn" title="Export PNG" aria-label="Export PNG"></button>
+  </div>
+
+  <div class="tb-group" role="toolbar" aria-label="History">
+    <button id="btnUndo" class="u-btn" title="Undo (Ctrl+Z)" aria-label="Undo"></button>
+    <button id="btnRedo" class="u-btn" title="Redo (Ctrl+Shift+Z)" aria-label="Redo"></button>
+  </div>
+
+  <div class="tb-spacer"></div>
+
+  <div class="tb-group" role="toolbar" aria-label="Zoom and view">
+    <button id="btnZoomOut" class="u-btn" title="Zoom out (Ctrl+-)" aria-label="Zoom out"></button>
+    <button id="btnZoomLvl" class="u-btn txt" title="Reset zoom to 100% (Ctrl+0)" aria-label="Reset zoom to 100 percent">100%</button>
+    <button id="btnZoomIn" class="u-btn" title="Zoom in (Ctrl+=)" aria-label="Zoom in"></button>
+    <button id="btnFitPage" class="u-btn txt" title="Fit artboard in view (Shift+1)" aria-label="Fit artboard in view">Fit</button>
+    <button id="btnGrid" class="u-btn" title="Toggle grid" aria-label="Toggle grid" aria-pressed="true"></button>
+  </div>
+
+  <div class="tb-spacer"></div>
+
+  <div class="tb-group" role="toolbar" aria-label="Workspace">
+    <button id="btnTogglePanel" class="u-btn" title="Toggle properties panel" aria-label="Toggle properties panel" aria-pressed="true"></button>
+    <button id="btnHelp" class="u-btn" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts">?</button>
+  </div>
+</header>
+
+<div id="main">
+  <nav id="toolrail" role="toolbar" aria-label="Tools" aria-orientation="vertical"></nav>
+
+  <div id="stageWrap">
+    <svg id="stage" tabindex="0" role="application"
+         aria-label="Drawing canvas. Arrow keys nudge the selection, Delete removes it, press question mark for all shortcuts.">
+      <defs>
+        <pattern id="gridPat" width="16" height="16" patternUnits="userSpaceOnUse">
+          <circle cx="1.2" cy="1.2" r="1.1" fill="rgba(30,41,59,0.14)"/>
+        </pattern>
+        <filter id="softBlur" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="10"/>
+        </filter>
+      </defs>
+      <g id="chrome" pointer-events="none">
+        <rect id="abShadow" fill="#000000" opacity="0.55" filter="url(#softBlur)"/>
+        <rect id="abBg"/>
+        <rect id="abGrid" fill="url(#gridPat)"/>
+      </g>
+      <g id="world"></g>
+      <g id="overlay"></g>
+    </svg>
+    <div id="dropHint" hidden>Drop an SVG file here to open it</div>
+  </div>
+
+  <aside id="sidepanel" aria-label="Properties and layers">
+    <section id="docPanel" class="panel-sec">
+      <h2>Document</h2>
+      <div class="frow"><label for="inTitle">Title</label><input id="inTitle" type="text" value="Untitled artwork" spellcheck="false" maxlength="60"></div>
+      <div class="grid2">
+        <div class="frow"><label for="inDocW">Width</label><input id="inDocW" type="number" min="16" max="8000" step="1"></div>
+        <div class="frow"><label for="inDocH">Height</label><input id="inDocH" type="number" min="16" max="8000" step="1"></div>
+      </div>
+      <div class="frow"><label for="inDocBg">Background</label>
+        <div class="colorline">
+          <input id="inDocBg" type="color" value="#ffffff" aria-label="Artboard background color">
+          <input id="inDocBgHex" type="text" spellcheck="false" aria-label="Background hex value">
+        </div>
+      </div>
+    </section>
+
+    <section id="shapePanel" class="panel-sec" hidden>
+      <h2>Properties</h2>
+      <div class="frow"><label for="inName">Name</label><input id="inName" type="text" spellcheck="false" maxlength="60"></div>
+      <div id="selType" class="typechip">Shape</div>
+
+      <div class="grid2">
+        <div class="frow"><label for="inX">X</label><input id="inX" type="number" step="0.5"></div>
+        <div class="frow"><label for="inY">Y</label><input id="inY" type="number" step="0.5"></div>
+        <div class="frow"><label for="inW">W</label><input id="inW" type="number" min="1" step="0.5"></div>
+        <div class="frow"><label for="inH">H</label><input id="inH" type="number" min="1" step="0.5"></div>
+      </div>
+      <div class="grid2">
+        <div class="frow" id="rowAngle"><label for="inAngle">Rotation°</label><input id="inAngle" type="number" step="1" min="-360" max="360"></div>
+        <div class="frow" id="rowRadius"><label for="inRadius">Corner</label><input id="inRadius" type="number" min="0" step="1"></div>
+        <div class="frow" id="rowSides" hidden><label for="inSides">Sides</label><input id="inSides" type="number" min="3" max="24" step="1"></div>
+      </div>
+
+      <h3>Style</h3>
+      <div class="frow" id="rowFill"><label for="fillColor">Fill</label>
+        <div class="colorline">
+          <input id="fillColor" type="color" aria-label="Fill color">
+          <input id="fillHex" type="text" spellcheck="false" aria-label="Fill hex value">
+          <button id="fillNone" class="chipbtn" aria-pressed="false" title="Remove fill">None</button>
+        </div>
+      </div>
+      <div class="frow" id="rowStroke"><label for="strokeColor">Stroke</label>
+        <div class="colorline">
+          <input id="strokeColor" type="color" aria-label="Stroke color">
+          <input id="strokeHex" type="text" spellcheck="false" aria-label="Stroke hex value">
+          <button id="strokeNone" class="chipbtn" aria-pressed="false" title="Remove stroke">None</button>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="frow" id="rowStrokeW"><label for="inStrokeW">Width</label><input id="inStrokeW" type="number" min="0" max="500" step="0.5"></div>
+        <div class="frow" id="rowDash"><label for="inDash">Dash</label>
+          <select id="inDash">
+            <option value="">Solid</option>
+            <option value="12 8">Dashed</option>
+            <option value="2 8">Dotted</option>
+            <option value="14 8 2 8">Dash-dot</option>
+          </select>
+        </div>
+      </div>
+      <div class="frow" id="rowOpacity"><label for="inOpacity">Opacity</label>
+        <div class="opline">
+          <input id="inOpacity" type="range" min="0" max="100" step="1" aria-label="Opacity percent">
+          <span id="inOpacityVal">100%</span>
+        </div>
+      </div>
+
+      <h3>Arrange &amp; align</h3>
+      <div class="btnrow" role="group" aria-label="Stacking order">
+        <button class="u-btn sm" data-z="front"   title="Bring to front (Shift+])" aria-label="Bring to front"></button>
+        <button class="u-btn sm" data-z="forward" title="Bring forward (])" aria-label="Bring forward"></button>
+        <button class="u-btn sm" data-z="backward" title="Send backward ([)" aria-label="Send backward"></button>
+        <button class="u-btn sm" data-z="back"    title="Send to back (Shift+[)" aria-label="Send to back"></button>
+      </div>
+      <div class="btnrow" role="group" aria-label="Align and distribute">
+        <button class="u-btn sm" data-align="l"  title="Align left" aria-label="Align left"></button>
+        <button class="u-btn sm" data-align="cx" title="Align horizontal centers" aria-label="Align horizontal centers"></button>
+        <button class="u-btn sm" data-align="r"  title="Align right" aria-label="Align right"></button>
+        <button class="u-btn sm" data-align="t"  title="Align top" aria-label="Align top"></button>
+        <button class="u-btn sm" data-align="cy" title="Align vertical centers" aria-label="Align vertical centers"></button>
+        <button class="u-btn sm" data-align="b"  title="Align bottom" aria-label="Align bottom"></button>
+        <div class="sep" aria-hidden="true"></div>
+        <button class="u-btn sm" data-dist="h" title="Distribute horizontally (3+ shapes)" aria-label="Distribute horizontally"></button>
+        <button class="u-btn sm" data-dist="v" title="Distribute vertically (3+ shapes)" aria-label="Distribute vertically"></button>
+      </div>
+      <p class="msub" style="margin:0 0 8px;color:var(--faint);font-size:11px" id="alignNote">With one shape selected, alignment uses the artboard.</p>
+
+      <h3>Path</h3>
+      <div class="btnrow" id="rowPath">
+        <button id="btnNodeEdit" class="txtbtn" title="Edit Bézier nodes (Enter)">Edit nodes</button>
+        <button id="btnToPath" class="txtbtn" title="Convert this shape into an editable path">Convert to path</button>
+        <button id="btnToggleClose" class="txtbtn" title="Open or close the path">Close path</button>
+      </div>
+
+      <h3>Actions</h3>
+      <div class="btnrow">
+        <button id="btnGroup" class="txtbtn" title="Group selection (Ctrl+G)">Group</button>
+        <button id="btnUngroup" class="txtbtn" title="Ungroup (Ctrl+Shift+G)">Ungroup</button>
+        <button id="btnDuplicate" class="txtbtn" title="Duplicate (Ctrl+D)">Duplicate</button>
+        <button id="btnDelete" class="txtbtn danger" title="Delete (Delete key)">Delete</button>
+      </div>
+    </section>
+
+    <section id="layersPanel" class="panel-sec">
+      <h2>Layers <span id="layerCount" class="count"></span></h2>
+      <div id="layersList" role="list" aria-label="Layers, topmost first"></div>
+    </section>
+  </aside>
+</div>
+
+<footer id="statusbar">
+  <div id="stHint">Welcome — pick a tool and start drawing.</div>
+  <div class="st-right">
+    <span id="stSel"></span>
+    <span id="stCoords">x 0 · y 0</span>
+    <button id="stZoom" title="Reset zoom to 100% (Ctrl+0)">100%</button>
+    <span id="stSize"></span>
+  </div>
+</footer>
+
+<div id="toasts" aria-live="polite"></div>
+<div id="modalRoot"></div>
+<div id="dropHintHost"></div>
+<input type="file" id="fileInput" accept=".svg,image/svg+xml" hidden>
+
+<script src="js/core.js" defer></script>
+<script src="js/state.js" defer></script>
+<script src="js/sample.js" defer></script>
+<script src="js/render.js" defer></script>
+<script src="js/nodeedit.js" defer></script>
+<script src="js/interact.js" defer></script>
+<script src="js/ui.js" defer></script>
+<script src="js/files.js" defer></script>
+<script src="js/main.js" defer></script>
+</body>
+</html>

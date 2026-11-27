@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en" data-theme="day">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A monochrome field guide to the 256 greys between black and white: a complete specimen census, the photographer’s Zone System, a working dither laboratory, and an honest WCAG contrast bench. No colour was used in the making of this website.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f0f0f" media="(prefers-color-scheme: dark)">
+<meta property="og:title" content="A Field Guide to Grey">
+<meta property="og:description" content="256 specimens, 11 zones, 4 dithering machines, one contrast bench — strictly black, white and everything honest in between.">
+<meta property="og:type" content="website">
+<title>A Field Guide to Grey — 256 specimens between black and white</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20fill='%23ffffff'/%3E%3Crect%20x='6'%20y='16'%20width='6'%20height='32'%20fill='%23000000'/%3E%3Crect%20x='14'%20y='16'%20width='6'%20height='32'%20fill='%23242424'/%3E%3Crect%20x='22'%20y='16'%20width='6'%20height='32'%20fill='%23494949'/%3E%3Crect%20x='30'%20y='16'%20width='6'%20height='32'%20fill='%236d6d6d'/%3E%3Crect%20x='38'%20y='16'%20width='6'%20height='32'%20fill='%23929292'/%3E%3Crect%20x='46'%20y='16'%20width='6'%20height='32'%20fill='%23b6b6b6'/%3E%3Crect%20x='54'%20y='16'%20width='6'%20height='32'%20fill='%23dedede'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+
+<header class="site-head">
+  <div class="wrap head-row">
+    <a class="brand" href="#top">A Field Guide to Grey</a>
+    <nav class="site-nav" aria-label="Chapters">
+      <ul>
+        <li><a href="#specimens" data-spy>Specimens</a></li>
+        <li><a href="#zones" data-spy>Zones</a></li>
+        <li><a href="#dither" data-spy>Dither</a></li>
+        <li><a href="#contrast" data-spy>Contrast</a></li>
+        <li><a href="#history" data-spy>History</a></li>
+        <li><a href="#colophon" data-spy>Colophon</a></li>
+      </ul>
+    </nav>
+    <button id="themeToggle" class="btn btn-ghost" type="button" aria-pressed="false" title="Switch to the night edition">
+      <svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2a8 8 0 0 1 0 16Z" fill="currentColor"/></svg>
+      <span class="btn-label">Night</span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <noscript><p class="noscript-note wrap">The plates and instruments on this page — the specimen census, the dither laboratory, the contrast bench — are drawn with JavaScript. The essays read perfectly well without it.</p></noscript>
+
+  <!-- ================= HERO ================= -->
+  <section class="hero wrap" id="top" aria-labelledby="heroTitle">
+    <div class="hero-copy">
+      <p class="kicker reveal">Field edition · November MMXXVI · One volume</p>
+      <h1 class="display" id="heroTitle">
+        <span class="reveal d1">A field</span>
+        <span class="reveal d2">guide</span>
+        <span class="reveal d3">to <em>grey</em></span>
+      </h1>
+      <p class="lede reveal d4">A complete, interactive census of the monochrome world: <strong>256 specimens</strong>, <strong>11 photographic zones</strong>, <strong>4 dithering machines</strong> and one <strong>contrast bench</strong>. Every pixel on this site is grey — by design, and by conviction.</p>
+      <p class="stat-row reveal d5"><span>Specimens 256</span><span aria-hidden="true">·</span><span>Zones 11</span><span aria-hidden="true">·</span><span>Machines 4</span><span aria-hidden="true">·</span><span>Colours used 0</span></p>
+      <p class="scroll-cue reveal d6"><a href="#intro">Begin the survey <span aria-hidden="true">↓</span></a></p>
+    </div>
+    <figure class="plate hero-plate reveal d3">
+      <div class="plate-frame">
+        <canvas id="heroCanvas" width="128" height="80" role="img" aria-label="Plate I: slowly evolving procedural weather, dithered into two greys."></canvas>
+      </div>
+      <figcaption>Plate I — “Weather, dithered.” Procedural noise cut into two tones. It redraws slowly, pauses when unseen, and holds still if you prefer stillness.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ================= 00 PRELIMINARY ================= -->
+  <section class="chapter wrap" id="intro" aria-labelledby="introTitle">
+    <div class="chapter-head reveal">
+      <p class="kicker">№ 00 — Preliminary</p>
+      <h2 id="introTitle">Read me first</h2>
+      <span class="chapter-index" aria-hidden="true">00</span>
+    </div>
+    <div class="prose-grid">
+      <div class="prose reveal">
+        <p class="dropcap">Grey is not the absence of colour. It is the presence of judgement. Every grey on this page is a measured quantity of light — one number between 0 and 255 — weighed, named and set down on purpose.</p>
+        <p>This is a field guide in the old, honest sense: a closed world, catalogued. Two hundred and fifty-six specimens live along the single narrow road that runs from absolute black to absolute white, and none of them strays. Nothing here is coloured — not the type, not the rules, not one shadow — because the subject forbids it, and so does the editor.</p>
+        <p>Ahead: a complete census of the ramp (<a href="#specimens">Chapter&nbsp;I</a>), the photographer’s tonal scale (<a href="#zones">II</a>), machines that fake grey out of black and white dots (<a href="#dither">III</a>), a bench for measuring legibility (<a href="#contrast">IV</a>), and a short natural history of the honest tone (<a href="#history">V</a>).</p>
+      </div>
+      <blockquote class="pullquote reveal d2">
+        <p>“Between black and white lie two hundred and fifty-five honest&nbsp;disagreements.”</p>
+        <cite>— the editor, in the introduction, meaning it</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <div class="ramp-strip wrap" aria-hidden="true"></div>
+
+  <!-- ================= I SPECIMENS ================= -->
+  <section class="chapter wrap" id="specimens" aria-labelledby="specimensTitle">
+    <div class="chapter-head reveal">
+      <p class="kicker">Chapter I — The census</p>
+      <h2 id="specimensTitle">The specimens</h2>
+      <span class="chapter-index" aria-hidden="true">I</span>
+    </div>
+    <p class="chapter-lede reveal">Two hundred and fifty-six greys, from <span class="mono">#000000</span> to <span class="mono">#FFFFFF</span> — each with a name, a luminance and a temperament. Click any cell, walk the ramp with your arrow keys, or let the plate draw a specimen for you.</p>
+
+    <div class="specimen-stage">
+      <div class="spec-panel reveal">
+        <div class="swatch regmarks" id="specSwatch" aria-hidden="true"></div>
+        <h3 class="spec-name" id="specName">Lead</h3>
+        <dl class="spec-meta mono">
+          <div><dt>Specimen</dt><dd id="specNo">№ 118 / 255</dd></div>
+          <div><dt>Hex</dt><dd id="specHex">#767676</dd></div>
+          <div><dt>RGB</dt><dd id="specRGB">118 · 118 · 118</dd></div>
+          <div><dt>L*</dt><dd id="specLstar">49.9</dd></div>
+          <div><dt>Rel. luminance</dt><dd id="specLum">18.1%</dd></div>
+          <div><dt>Vs #000000</dt><dd id="specVsBlack"></dd></div>
+          <div><dt>Vs #FFFFFF</dt><dd id="specVsWhite"></dd></div>
+        </dl>
+        <p class="band-note" id="specBand"></p>
+        <aside class="fieldnote" id="specNoteWrap" hidden>
+          <p class="kicker">Field note</p>
+          <p id="specNote"></p>
+        </aside>
+        <p class="visually-hidden" id="specStatus" aria-live="polite"></p>
+      </div>
+
+      <div class="spec-control reveal d2">
+        <div class="control-row">
+          <label class="control-label" for="rampSlider">Walk the ramp</label>
+          <input type="range" id="rampSlider" min="0" max="255" step="1" value="118" list="rampTicks" aria-describedby="rampHint">
+          <datalist id="rampTicks">
+            <option value="0" label="#000"></option>
+            <option value="51" label="#333"></option>
+            <option value="118" label="#767676"></option>
+            <option value="128" label="gray"></option>
+            <option value="255" label="#FFF"></option>
+          </datalist>
+          <p class="hint" id="rampHint">The plate below is one focusable listbox: focus it and use the arrow keys — ← → step, ↑ ↓ jump a row, Page&nbsp;Up / Page&nbsp;Down leap, Home and End for the ends.</p>
+        </div>
+        <p class="readout mono" id="specReadout" aria-hidden="true">№ 118 · #767676 · LEAD</p>
+        <div class="ramp" id="rampGrid" role="listbox" tabindex="0" aria-label="All 256 grey specimens, darkest to lightest">
+          <!-- 256 options injected by app.js -->
+        </div>
+        <div class="btn-row">
+          <button class="btn" type="button" id="randomBtn">Draw a random specimen</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ramp-strip wrap" aria-hidden="true"></div>
+
+  <!-- ================= II ZONES ================= -->
+  <section class="chapter wrap" id="zones" aria-labelledby="zonesTitle">
+    <div class="chapter-head reveal">
+      <p class="kicker">Chapter II — The photographer’s scale</p>
+      <h2 id="zonesTitle">The zones</h2>
+      <span class="chapter-index" aria-hidden="true">II</span>
+    </div>
+    <p class="chapter-lede reveal">Photographers sorted the printable world into eleven values, Zone&nbsp;0 to Zone&nbsp;X, and learned to place their shadows deliberately instead of hoping. The strip maps every zone to its grey; press one to read its description.</p>
+
+    <div class="zone-strip reveal" id="zoneStrip" role="radiogroup" aria-label="Zones 0 through X"></div>
+
+    <div class="zone-detail reveal">
+      <div class="zone-num-wrap">
+        <span class="zone-num" id="zoneNum">V</span>
+        <span class="zone-val mono" id="zoneVal">mapped value 118 · #767676</span>
+      </div>
+      <div class="zone-text">
+        <h3 id="zoneName">Middle grey</h3>
+        <p id="zoneBody"></p>
+        <p class="zone-ex" id="zoneEx"></p>
+      </div>
+    </div>
+    <p class="footnote">The zones are print-relative, defined by Ansel Adams and Fred Archer around 1940. The swatches map CIE&nbsp;L* 0–100 into sRGB — an honest approximation of values that live in a denser tonal space.</p>
+  </section>
+
+  <div class="ramp-strip wrap" aria-hidden="true"></div>
+
+  <!-- ================= III DITHER ================= -->
+  <section class="chapter wrap" id="dither" aria-labelledby="ditherTitle">
+    <div class="chapter-head reveal">
+      <p class="kicker">Chapter III — The machines</p>
+      <h2 id="ditherTitle">The dither laboratory</h2>
+      <span class="chapter-index" aria-hidden="true">III</span>
+    </div>
+    <p class="chapter-lede reveal">Ink can do two tones; photographs need a hundred. Presses, fax machines and the 512 × 342 screen of 1984 faked everything in between with patterns of pure black and pure white. The laboratory runs the four classic tricks, live, on plates this page draws itself.</p>
+
+    <div class="instrument">
+      <figure class="plate reveal">
+        <div class="plate-frame">
+          <canvas id="ditherCanvas" width="200" height="200" role="img" aria-label="Dither laboratory plate"></canvas>
+        </div>
+        <figcaption class="mono" id="ditherStats">200 × 200 px · 4 tones · Floyd–Steinberg</figcaption>
+      </figure>
+
+      <div class="instrument-controls reveal d2">
+        <fieldset>
+          <legend class="control-label">Subject</legend>
+          <div class="pills">
+            <label class="pill"><input type="radio" name="ditherSubject" value="sphere" checked><span>Sphere</span></label>
+            <label class="pill"><input type="radio" name="ditherSubject" value="dunes"><span>Dunes</span></label>
+            <label class="pill"><input type="radio" name="ditherSubject" value="rings"><span>Rings</span></label>
+            <label class="pill"><input type="radio" name="ditherSubject" value="clouds"><span>Clouds</span></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend class="control-label">Method</legend>
+          <div class="pills">
+            <label class="pill"><input type="radio" name="ditherMethod" value="threshold"><span>Threshold</span></label>
+            <label class="pill"><input type="radio" name="ditherMethod" value="bayer4"><span>Bayer 4 × 4</span></label>
+            <label class="pill"><input type="radio" name="ditherMethod" value="bayer8"><span>Bayer 8 × 8</span></label>
+            <label class="pill"><input type="radio" name="ditherMethod" value="fs" checked><span>Floyd–Steinberg</span></label>
+            <label class="pill"><input type="radio" name="ditherMethod" value="atkinson"><span>Atkinson</span></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend class="control-label">Tones</legend>
+          <div class="pills levels-row">
+            <input type="range" id="ditherLevels" min="2" max="16" step="1" value="4" aria-describedby="levelsOut">
+            <output id="levelsOut" for="ditherLevels">4 tones</output>
+          </div>
+        </fieldset>
+        <div class="btn-row">
+          <button class="btn" type="button" id="reseedBtn">Reseed the weather</button>
+        </div>
+
+        <aside class="bayer-aside">
+          <div class="bayer" id="bayerPlate" aria-hidden="true"></div>
+          <p class="hint">The Bayer 4 × 4 threshold matrix: every pixel on the plate compares itself against one of these sixteen values (scaled 0–1), tiled across the image like a weave.</p>
+        </aside>
+
+        <div class="method-notes">
+          <p><strong>Threshold</strong> rounds each pixel to the nearest available tone: fast, honest, and it eats detail into bands.</p>
+          <p><strong>Ordered dithering</strong> (Bayer) adds a fixed woven threshold pattern — detail survives, at the price of visible crosshatch.</p>
+          <p><strong>Error diffusion</strong> (Floyd–Steinberg, 1976) pushes each pixel’s rounding mistake into its neighbours until the pattern dissolves into grain. <strong>Atkinson</strong> spreads only three-quarters of the error, keeping highlights luminous — the house style of the early Macintosh screen.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ramp-strip wrap" aria-hidden="true"></div>
+
+  <!-- ================= IV CONTRAST ================= -->
+  <section class="chapter wrap" id="contrast" aria-labelledby="contrastTitle">
+    <div class="chapter-head reveal">
+      <p class="kicker">Chapter IV — The arithmetic of legibility</p>
+      <h2 id="contrastTitle">The contrast bench</h2>
+      <span class="chapter-index" aria-hidden="true">IV</span>
+    </div>
+    <p class="chapter-lede reveal">Grey text on grey paper is a decision with arithmetic attached. Slide the ink and the paper; the bench computes the WCAG&nbsp;2 contrast ratio, badges it, and sets the verdict in front of you.</p>
+
+    <div class="bench">
+      <div class="bench-col reveal">
+        <label class="control-label" for="inkRange">Ink (text) — <output id="inkOut" for="inkRange">#1A1A1A</output></label>
+        <input type="range" id="inkRange" min="0" max="255" step="1" value="26">
+        <div class="mini-swatch" id="inkSwatch" aria-hidden="true" style="background:#1a1a1a"></div>
+      </div>
+      <div class="bench-col reveal d1">
+        <label class="control-label" for="paperRange">Paper (background) — <output id="paperOut" for="paperRange">#FFFFFF</output></label>
+        <input type="range" id="paperRange" min="0" max="255" step="1" value="255">
+        <div class="mini-swatch" id="paperSwatch" aria-hidden="true" style="background:#ffffff"></div>
+      </div>
+      <div class="bench-read reveal d2">
+        <p class="ratio-big" id="ratioOut">17.40 : 1</p>
+        <div>
+          <ul class="badges mono" id="badges"></ul>
+          <p class="hint">ratio = (L<sub>1</sub> + 0.05) / (L<sub>2</sub> + 0.05), with relative luminance on the sRGB curve. AA body text needs 4.5 : 1; AAA needs 7 : 1; large text and UI need 3 : 1.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="preview-frame reveal">
+      <div class="bench-preview" id="benchPreview" style="background:#ffffff;color:#1a1a1a;--pv-ink:#1a1a1a">
+        <p class="pv-kicker mono">Live specimen · set in the ink and paper above</p>
+        <p class="pv-head">The uncoloured edition</p>
+        <p class="pv-body">Grey is not a compromise; it is a decision. This paragraph is set in whatever ink and paper you have chosen. If the bench above stamps it AA, you may ship body copy in it; if not, keep it for the large type it can still honestly hold.</p>
+        <p class="pv-actions"><span class="pv-btn">Continue reading</span><span class="pv-link">Chapter II →</span></p>
+      </div>
+    </div>
+
+    <div class="presets reveal">
+      <p class="control-label">Presets</p>
+      <div class="btn-row" id="presetRow">
+        <button class="btn" type="button" data-ink="0" data-paper="255">Letterpress · 21 : 1</button>
+        <button class="btn" type="button" data-ink="118" data-paper="255">Lightest AA · 4.54 : 1</button>
+        <button class="btn" type="button" data-ink="89" data-paper="255">Just past AAA · 7.0 : 1</button>
+        <button class="btn" type="button" data-ink="230" data-paper="17">Night page · 15.1 : 1</button>
+        <button class="btn" type="button" data-ink="128" data-paper="204">Grey on grey · fails</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="ramp-strip wrap" aria-hidden="true"></div>
+
+  <!-- ================= V HISTORY ================= -->
+  <section class="chapter wrap" id="history" aria-labelledby="historyTitle">
+    <div class="chapter-head reveal">
+      <p class="kicker">Chapter V — The record</p>
+      <h2 id="historyTitle">A natural history of grey</h2>
+      <span class="chapter-index" aria-hidden="true">V</span>
+    </div>
+    <p class="chapter-lede reveal">Ten exhibits from a very long file: humanity has been faking, fixing and loving the honest tone for far longer than it has had screens.</p>
+
+    <ol class="timeline">
+      <li class="tl-item reveal"><span class="tl-year mono">c. 32,000 BCE</span>
+        <div><h3>Charcoal</h3><p>At Chauvet, artists grind charred wood and bone into the first grey — whole herds and hunters drawn by firelight, an entire tonal world made of soot.</p></div></li>
+      <li class="tl-item reveal"><span class="tl-year mono">c. 1300–1500</span>
+        <div><h3>Grisaille</h3><p>Panel painters underpaint whole scenes in greys — grisaille — modelling pure value before any colour is permitted. Finished grisaille windows trick the eye into reading paint as carved stone.</p></div></li>
+      <li class="tl-item reveal"><span class="tl-year mono">c. 1450</span>
+        <div><h3>The engraved line</h3><p>Intaglio engravers put grey inside black ink: pure black lines bitten into copper, tone built entirely from the density of hatching. Dürer turns the hatch into a science.</p></div></li>
+      <li class="tl-item reveal"><span class="tl-year mono">1826–27</span>
+        <div><h3>Fixing a shadow</h3><p>Joseph Nicéphore Niépce exposes a pewter plate from his upstairs window at Le Gras for most of a day. The earliest surviving photograph is, of course, grey.</p></div></li>
+      <li class="tl-item reveal"><span class="tl-year mono">1880s</span>
+        <div><h3>The halftone dot</h3><p>Printers learn to break a photograph into dots — big where dark, small where light — and the eye obligingly blurs them back into tone. Newspapers become pictorial.</p></div></li>
+      <li class="tl-item reveal"><span class="tl-year mono">1976</span>
+        <div><h3>The error spreads</h3><p>Floyd and Steinberg publish a four-neighbour error-diffusion filter. It becomes the standard way to smuggle continuous tone through machines that can only say black or white.</p></div></li>
+      <li class="tl-item reveal"><span class="tl-year mono">1984</span>
+        <div><h3>One bit</h3><p>The Macintosh ships with a 512 × 342, one-bit-per-pixel screen — two tones, no compromise. Its icons and typography prove that a bitmap is a style, not a limitation.</p></div></li>
+      <li class="tl-item reveal"><span class="tl-year mono">1989</span>
+        <div><h3>Four shades, a pocket</h3><p>The Game Boy’s 160 × 144 LCD offers four grey levels. In the framebuffer they are honest greys; the plastic tints them green, and nobody minds.</p></div></li>
+      <li class="tl-item reveal"><span class="tl-year mono">1997–2007</span>
+        <div><h3>Paper that greys like paper</h3><p>E Ink spins out of MIT in 1997; its microcapsules shuffle black and white pigment under an electric field. The Librie (2004) and Kindle (2007) print whole libraries in grey, at a watt-hour a page.</p></div></li>
+      <li class="tl-item reveal"><span class="tl-year mono">Today</span>
+        <div><h3>The deliberate tone</h3><p>Every screen you own can show sixteen million colours. Photographers still print in silver gelatin, designers still reach for <span class="mono">#333</span>, and the ramp keeps all two hundred and fifty-six of its residents.</p></div></li>
+    </ol>
+
+    <figure class="plate fig-wide reveal">
+      <div class="fig-svg" id="figGrey"></div>
+      <figcaption>Fig. 40 — Three honest ways to fake a grey: hatching (the engraver), halftone (the press), dithering (the bit). Drawn by the page, as everything here is.</figcaption>
+    </figure>
+  </section>
+
+  <div class="ramp-strip wrap" aria-hidden="true"></div>
+
+  <!-- ================= VI COLOPHON ================= -->
+  <section class="chapter wrap" id="colophon" aria-labelledby="colophonTitle">
+    <div class="chapter-head reveal">
+      <p class="kicker">Chapter VI — The making</p>
+      <h2 id="colophonTitle">Colophon</h2>
+      <span class="chapter-index" aria-hidden="true">VI</span>
+    </div>
+    <div class="colophon-grid">
+      <div class="reveal">
+        <h3>The type</h3>
+        <p>Set entirely in the reader’s own typefaces — a high-contrast serif for display, a workhorse serif for prose, a monospace for data — because a field guide should look like it was printed somewhere, and a monograph has no business requesting forty weights of anything.</p>
+      </div>
+      <div class="reveal d1">
+        <h3>The machinery</h3>
+        <p>Three files: one HTML, one stylesheet, one script. No frameworks, no build step, nothing fetched over the network. Every plate is drawn by the page itself — canvas noise, SVG hatching, plain arithmetic — at the moment you arrive.</p>
+      </div>
+      <div class="reveal d2">
+        <h3>The discipline</h3>
+        <p>Landmarks, a skip link, a keyboard path through every instrument, and honour for <span class="mono">prefers-reduced-motion</span>. Press <kbd>G</kbd> anywhere for the night edition. The palette is enforced by conviction: black, white, and the two hundred and fifty-four steps between.</p>
+      </div>
+    </div>
+    <p class="credits reveal">Collected, typeset &amp; engineered by GLM · field edition, November 2026.<br>No pixels were coloured in the making of this website.</p>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="ramp-strip wrap" aria-hidden="true"></div>
+  <div class="wrap foot-row">
+    <p class="mono">A FIELD GUIDE TO GREY · MMXXVI</p>
+    <p class="hint mono">Arrows walk the ramp · G turns the lights out</p>
+    <a class="btn" href="#top">Back to the top ↑</a>
+  </div>
+</footer>
+</body>
+</html>

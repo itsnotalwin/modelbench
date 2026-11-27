@@ -1,0 +1,771 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<meta name="description" content="ORRERY — an original interactive model of the fictional Asteria system, rendered in HTML and CSS only. No JavaScript.">
+<title>ORRERY — a pure-CSS orrery of the Asteria system</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to the instrument</a>
+
+<!--
+  ORRERY
+  An original, complete interactive experience in HTML + CSS only.
+  No JavaScript. All state lives in native form controls and URL targets;
+  all motion is CSS. Selectable states are reversible; nothing is a dead end.
+-->
+
+<form class="app" id="app" method="dialog" action=".">
+
+  <!-- ============ GLOBAL CHROME ============ -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand__mark" aria-hidden="true"></span>
+      <span class="brand__name">ORRERY</span>
+      <span class="brand__sub">Vesper Works &middot; hand-finished instruments</span>
+    </div>
+
+    <!-- View switching: a segmented control of real radios -->
+    <nav class="views" aria-label="Sections">
+      <fieldset class="segmented segmented--views">
+        <legend class="sr-only">Choose a view</legend>
+
+        <input class="control-input" type="radio" name="view" id="view-instrument" value="instrument" checked>
+        <label class="segmented__item" for="view-instrument">
+          <span class="segmented__icon icon-instrument" aria-hidden="true"></span>
+          <span class="segmented__text">Instrument</span>
+        </label>
+
+        <input class="control-input" type="radio" name="view" id="view-catalog" value="catalog">
+        <label class="segmented__item" for="view-catalog">
+          <span class="segmented__icon icon-catalog" aria-hidden="true"></span>
+          <span class="segmented__text">Catalog</span>
+        </label>
+
+        <input class="control-input" type="radio" name="view" id="view-notes" value="notes">
+        <label class="segmented__item" for="view-notes">
+          <span class="segmented__icon icon-notes" aria-hidden="true"></span>
+          <span class="segmented__text">Field Notes</span>
+        </label>
+
+        <input class="control-input" type="radio" name="view" id="view-workshop" value="workshop">
+        <label class="segmented__item" for="view-workshop">
+          <span class="segmented__icon icon-workshop" aria-hidden="true"></span>
+          <span class="segmented__text">Workshop</span>
+        </label>
+      </fieldset>
+    </nav>
+
+    <!-- Theme: real radios, always available -->
+    <fieldset class="segmented segmented--theme">
+      <legend class="sr-only">Color theme</legend>
+
+      <input class="control-input" type="radio" name="theme" id="theme-night" value="night" checked>
+      <label class="segmented__item segmented__item--icon" for="theme-night" title="Night theme">
+        <span class="sr-only">Night theme</span>
+        <span class="theme-dot theme-dot--night" aria-hidden="true"></span>
+      </label>
+
+      <input class="control-input" type="radio" name="theme" id="theme-dusk" value="dusk">
+      <label class="segmented__item segmented__item--icon" for="theme-dusk" title="Dusk theme">
+        <span class="sr-only">Dusk theme</span>
+        <span class="theme-dot theme-dot--dusk" aria-hidden="true"></span>
+      </label>
+
+      <input class="control-input" type="radio" name="theme" id="theme-paper" value="paper">
+      <label class="segmented__item segmented__item--icon" for="theme-paper" title="Paper theme">
+        <span class="sr-only">Paper theme</span>
+        <span class="theme-dot theme-dot--paper" aria-hidden="true"></span>
+      </label>
+    </fieldset>
+  </header>
+
+  <main id="main" tabindex="-1">
+
+    <!-- ============================================================
+         VIEW 1 · THE INSTRUMENT
+         ============================================================ -->
+    <section class="view view-instrument" id="instrument" aria-labelledby="h-instrument">
+
+      <header class="view__header">
+        <p class="eyebrow">Model OO&#8209;1 &middot; Asteria system</p>
+        <h1 id="h-instrument">The Instrument</h1>
+        <p class="lede">
+          A working orrery of the <strong>Asteria</strong> system, clockwork rendered entirely in
+          CSS. Choose a body to read its plate, slow the train, or raise a telescope.
+          Everything here is reversible; nothing needs a script.
+        </p>
+      </header>
+
+      <div class="instrument-layout">
+
+        <!-- ------- spatial composition ------- -->
+        <div class="stage">
+          <div class="orrery" role="img"
+               aria-label="A spatial model of the Asteria system. The amber star Asteria sits at centre; rocky world Cinder, ocean world Maren, giant Kelvar, and icy dwarf Pall orbit it on concentric rings. The same bodies are listed as selectable controls in the body dial below.">
+            <div class="orrery__sky" aria-hidden="true"></div>
+            <div class="orrery__nebula" aria-hidden="true"></div>
+
+            <div class="orrery__system" aria-hidden="true">
+              <div class="orrery__star">
+                <span class="orrery__corona"></span>
+                <span class="orrery__star-core"></span>
+              </div>
+
+              <!-- Cinder -->
+              <div class="track track--cinder"></div>
+              <div class="orrery__body body--cinder kind-rocky">
+                <span class="orrery__disc disc--cinder"></span>
+                <label class="orrery__hit" for="body-cinder"><span>Cinder</span></label>
+              </div>
+
+              <!-- Maren -->
+              <div class="track track--maren"></div>
+              <div class="orrery__body body--maren kind-ocean">
+                <span class="orrery__disc disc--maren"></span>
+                <label class="orrery__hit" for="body-maren"><span>Maren</span></label>
+              </div>
+
+              <!-- Kelvar (ringed) -->
+              <div class="track track--kelvar"></div>
+              <div class="orrery__body body--kelvar kind-gaseous">
+                <span class="orrery__disc disc--kelvar"><span class="orrery__ring"></span></span>
+                <label class="orrery__hit" for="body-kelvar"><span>Kelvar</span></label>
+              </div>
+
+              <!-- Pall -->
+              <div class="track track--pall"></div>
+              <div class="orrery__body body--pall kind-icy">
+                <span class="orrery__disc disc--pall"></span>
+                <label class="orrery__hit" for="body-pall"><span>Pall</span></label>
+              </div>
+            </div>
+
+            <div class="orrery__vignette" aria-hidden="true"></div>
+            <p class="orrery__caption" aria-hidden="true">Concentric train &middot; 1 : 4000 &middot; brass &amp; jewels</p>
+          </div>
+
+          <!-- ------- instrument controls (real controls, no scripts) ------- -->
+          <div class="controls" aria-label="Instrument controls">
+
+            <fieldset class="panel-control">
+              <legend>Orbital rate</legend>
+              <div class="segmented segmented--inline">
+                <input class="control-input" type="radio" name="speed" id="speed-slow" value="slow">
+                <label class="segmented__item" for="speed-slow">Slow</label>
+
+                <input class="control-input" type="radio" name="speed" id="speed-normal" value="normal" checked>
+                <label class="segmented__item" for="speed-normal">Normal</label>
+
+                <input class="control-input" type="radio" name="speed" id="speed-still" value="still">
+                <label class="segmented__item" for="speed-still">Still</label>
+              </div>
+            </fieldset>
+
+            <label class="switch">
+              <input class="control-input" type="checkbox" id="telescope">
+              <span class="switch__track" aria-hidden="true"><span class="switch__thumb"></span></span>
+              <span class="switch__label">Telescope mode</span>
+            </label>
+
+            <button class="reset" type="reset">Reset instrument</button>
+          </div>
+        </div>
+
+        <!-- ------- body dial + readout ------- -->
+        <aside class="readout-column" aria-label="Body readout">
+
+          <fieldset class="dial">
+            <legend>Select a body</legend>
+            <div class="dial__grid">
+              <input class="control-input" type="radio" name="body" id="body-asteria" value="asteria" checked>
+              <label class="dial__item" for="body-asteria">
+                <span class="dial__swatch swatch--asteria" aria-hidden="true"></span>
+                <span class="dial__name">Asteria</span>
+                <span class="dial__kind">Star</span>
+              </label>
+
+              <input class="control-input" type="radio" name="body" id="body-cinder" value="cinder">
+              <label class="dial__item" for="body-cinder">
+                <span class="dial__swatch swatch--cinder" aria-hidden="true"></span>
+                <span class="dial__name">Cinder</span>
+                <span class="dial__kind">Rocky</span>
+              </label>
+
+              <input class="control-input" type="radio" name="body" id="body-maren" value="maren">
+              <label class="dial__item" for="body-maren">
+                <span class="dial__swatch swatch--maren" aria-hidden="true"></span>
+                <span class="dial__name">Maren</span>
+                <span class="dial__kind">Ocean</span>
+              </label>
+
+              <input class="control-input" type="radio" name="body" id="body-kelvar" value="kelvar">
+              <label class="dial__item" for="body-kelvar">
+                <span class="dial__swatch swatch--kelvar" aria-hidden="true"></span>
+                <span class="dial__name">Kelvar</span>
+                <span class="dial__kind">Gaseous</span>
+              </label>
+
+              <input class="control-input" type="radio" name="body" id="body-pall" value="pall">
+              <label class="dial__item" for="body-pall">
+                <span class="dial__swatch swatch--pall" aria-hidden="true"></span>
+                <span class="dial__name">Pall</span>
+                <span class="dial__kind">Icy</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="readout" aria-live="polite">
+
+            <!-- STAR -->
+            <article class="readout__panel panel-asteria" aria-labelledby="ro-asteria">
+              <header class="readout__head">
+                <span class="readout__sigil swatch--asteria" aria-hidden="true"></span>
+                <div>
+                  <p class="readout__kind">Star &middot; amber dwarf</p>
+                  <h2 id="ro-asteria">Asteria</h2>
+                </div>
+              </header>
+              <dl class="readout__data">
+                <div><dt>Class</dt><dd>G8 V</dd></div>
+                <div><dt>Surface temperature</dt><dd>5,180 K</dd></div>
+                <div><dt>Diameter</dt><dd>1.12 &times; Sol</dd></div>
+                <div><dt>Mass</dt><dd>1.04 &times; Sol</dd></div>
+                <div><dt>System age</dt><dd>~6.8 billion years</dd></div>
+              </dl>
+              <p class="readout__note">
+                A steady amber dwarf, marginally heavier than Sol and a little cooler.
+                Its long quiet main-sequence life is why the inner worlds kept their water.
+              </p>
+              <details class="readout__details">
+                <summary>Technical plate</summary>
+                <ul>
+                  <li>Luminosity 0.71 &times; Sol</li>
+                  <li>Single star; no close companion</li>
+                  <li>Slow 27-day surface rotation</li>
+                  <li>Low flare activity for its class</li>
+                </ul>
+              </details>
+            </article>
+
+            <!-- CINDER -->
+            <article class="readout__panel panel-cinder" aria-labelledby="ro-cinder">
+              <header class="readout__head">
+                <span class="readout__sigil swatch--cinder" aria-hidden="true"></span>
+                <div>
+                  <p class="readout__kind">Rocky &middot; inner world</p>
+                  <h2 id="ro-cinder">Cinder</h2>
+                </div>
+              </header>
+              <dl class="readout__data">
+                <div><dt>Orbital period</dt><dd>19 days</dd></div>
+                <div><dt>Distance</dt><dd>0.39 AU</dd></div>
+                <div><dt>Diameter</dt><dd>4,180 km</dd></div>
+                <div><dt>Atmosphere</dt><dd>None</dd></div>
+              </dl>
+              <p class="readout__note">
+                A scorched, synchronous world. The same face always turns toward Asteria;
+                twin impact basins, <em>Sila</em> and <em>Mora</em>, scar the day side.
+              </p>
+              <details class="readout__details">
+                <summary>Technical plate</summary>
+                <ul>
+                  <li>Surface temperature 430 &deg;C (day) / &minus;180 &deg;C (night)</li>
+                  <li>Circular orbit, 0.03 eccentricity</li>
+                  <li>Tidally locked; 19-day solar day on the night side</li>
+                  <li>Basaltic regolith over a small iron core</li>
+                </ul>
+              </details>
+            </article>
+
+            <!-- MAREN -->
+            <article class="readout__panel panel-maren" aria-labelledby="ro-maren">
+              <header class="readout__head">
+                <span class="readout__sigil swatch--maren" aria-hidden="true"></span>
+                <div>
+                  <p class="readout__kind">Ocean &middot; habitable zone</p>
+                  <h2 id="ro-maren">Maren</h2>
+                </div>
+              </header>
+              <dl class="readout__data">
+                <div><dt>Orbital period</dt><dd>184 days</dd></div>
+                <div><dt>Distance</dt><dd>1.07 AU</dd></div>
+                <div><dt>Diameter</dt><dd>11,300 km</dd></div>
+                <div><dt>Surface water</dt><dd>72%</dd></div>
+              </dl>
+              <p class="readout__note">
+                A teal ocean world threaded with kelp forests and coral atolls.
+                Thin clouds drift over a mild, stable climate; two fine shepherd rings orbit low.
+              </p>
+              <details class="readout__details">
+                <summary>Technical plate</summary>
+                <ul>
+                  <li>Mean surface temperature 14 &deg;C</li>
+                  <li>Nitrogen&ndash;oxygen atmosphere, 1.1 bar</li>
+                  <li>Two small inner moons: <em>Vesh</em>, <em>Ilex</em></li>
+                  <li>Strong planetary magnetic field</li>
+                </ul>
+              </details>
+            </article>
+
+            <!-- KELVAR -->
+            <article class="readout__panel panel-kelvar" aria-labelledby="ro-kelvar">
+              <header class="readout__head">
+                <span class="readout__sigil swatch--kelvar" aria-hidden="true"></span>
+                <div>
+                  <p class="readout__kind">Gaseous giant &middot; ringed</p>
+                  <h2 id="ro-kelvar">Kelvar</h2>
+                </div>
+              </header>
+              <dl class="readout__data">
+                <div><dt>Orbital period</dt><dd>1,960 days</dd></div>
+                <div><dt>Distance</dt><dd>5.6 AU</dd></div>
+                <div><dt>Diameter</dt><dd>96,800 km</dd></div>
+                <div><dt>Moons</dt><dd>14</dd></div>
+              </dl>
+              <p class="readout__note">
+                A banded amber giant circled by a broad icy ring. The great storm
+                <em>The Eye of Vesh</em> has churned in its southern band for centuries.
+              </p>
+              <details class="readout__details">
+                <summary>Technical plate</summary>
+                <ul>
+                  <li>Hydrogen&ndash;helium envelope over a dense core</li>
+                  <li>Ring system of ice and silicate grit, 60,000 km out</li>
+                  <li>Winds to 540 km/h in the jet streams</li>
+                  <li>14 moons; innermost <em>Crumb</em> inside the ring gap</li>
+                </ul>
+              </details>
+            </article>
+
+            <!-- PALL -->
+            <article class="readout__panel panel-pall" aria-labelledby="ro-pall">
+              <header class="readout__head">
+                <span class="readout__sigil swatch--pall" aria-hidden="true"></span>
+                <div>
+                  <p class="readout__kind">Icy dwarf &middot; outer reaches</p>
+                  <h2 id="ro-pall">Pall</h2>
+                </div>
+              </header>
+              <dl class="readout__data">
+                <div><dt>Orbital period</dt><dd>~12,400 days</dd></div>
+                <div><dt>Distance</dt><dd>23.4 AU</dd></div>
+                <div><dt>Diameter</dt><dd>2,240 km</dd></div>
+                <div><dt>Surface</dt><dd>Nitrogen ice</dd></div>
+              </dl>
+              <p class="readout__note">
+                A pale dwarf on a long, tilted orbit. A thin nitrogen ice cap glints at
+                its pole; faint plumes rise from fissures when it nears Asteria.
+              </p>
+              <details class="readout__details">
+                <summary>Technical plate</summary>
+                <ul>
+                  <li>Estimated surface temperature &minus;220 &deg;C</li>
+                  <li>17&deg; axial tilt; eccentricity 0.24</li>
+                  <li>Tenuous coma when active</li>
+                  <li>One small moonlet, <em>Splinter</em></li>
+                </ul>
+              </details>
+            </article>
+
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         VIEW 2 · CATALOG
+         ============================================================ -->
+    <section class="view view-catalog" id="catalog" aria-labelledby="h-catalog">
+
+      <header class="view__header">
+        <p class="eyebrow">Specimen ledger &middot; Vesper Works</p>
+        <h1 id="h-catalog">Catalog</h1>
+        <p class="lede">
+          Every body in the Asteria system, on a plate. Filter by nature and re-order the
+          ledger &mdash; the layout re-flows with no script. Cards respond to their own
+          width with container queries.
+        </p>
+      </header>
+
+      <div class="catalog-tools">
+        <fieldset class="segmented segmented--inline filters">
+          <legend class="sr-only">Filter by kind</legend>
+
+          <input class="control-input" type="radio" name="filter" id="filter-all" value="all" checked>
+          <label class="segmented__item" for="filter-all">All</label>
+
+          <input class="control-input" type="radio" name="filter" id="filter-rocky" value="rocky">
+          <label class="segmented__item" for="filter-rocky">Rocky</label>
+
+          <input class="control-input" type="radio" name="filter" id="filter-ocean" value="ocean">
+          <label class="segmented__item" for="filter-ocean">Ocean</label>
+
+          <input class="control-input" type="radio" name="filter" id="filter-gaseous" value="gaseous">
+          <label class="segmented__item" for="filter-gaseous">Gaseous</label>
+
+          <input class="control-input" type="radio" name="filter" id="filter-icy" value="icy">
+          <label class="segmented__item" for="filter-icy">Icy</label>
+        </fieldset>
+
+        <fieldset class="segmented segmented--inline sorts">
+          <legend class="sr-only">Sort order</legend>
+
+          <input class="control-input" type="radio" name="sort" id="sort-orbital" value="orbital" checked>
+          <label class="segmented__item" for="sort-orbital">Orbital</label>
+
+          <input class="control-input" type="radio" name="sort" id="sort-alpha" value="alpha">
+          <label class="segmented__item" for="sort-alpha">A&ndash;Z</label>
+
+          <input class="control-input" type="radio" name="sort" id="sort-size" value="size">
+          <label class="segmented__item" for="sort-size">Size</label>
+
+          <input class="control-input" type="radio" name="sort" id="sort-distance" value="distance">
+          <label class="segmented__item" for="sort-distance">Distance</label>
+        </fieldset>
+      </div>
+
+      <p class="catalog-count" aria-live="polite">5 bodies &middot; filter and sort above</p>
+
+      <div class="cat-grid">
+
+        <article class="card kind-star" data-kind="star"
+                 style="--o-orbital:0; --o-alpha:2; --o-size:5; --o-dist:0;">
+          <div class="card__media"><span class="card__disc swatch--asteria" aria-hidden="true"></span></div>
+          <div class="card__body">
+            <p class="card__kind">Star</p>
+            <h2 class="card__name">Asteria</h2>
+            <p class="card__tag">Amber dwarf at the centre; steady for billions of years.</p>
+            <dl class="card__data">
+              <div><dt>Period</dt><dd>&mdash;</dd></div>
+              <div><dt>Distance</dt><dd>0 AU</dd></div>
+              <div><dt>Diameter</dt><dd>1.12 &times;</dd></div>
+            </dl>
+          </div>
+          <footer class="card__foot"><span class="card__plate">Plate S&middot;00</span></footer>
+        </article>
+
+        <article class="card kind-rocky" data-kind="rocky"
+                 style="--o-orbital:1; --o-alpha:1; --o-size:1; --o-dist:1;">
+          <div class="card__media"><span class="card__disc swatch--cinder" aria-hidden="true"></span></div>
+          <div class="card__body">
+            <p class="card__kind">Rocky</p>
+            <h2 class="card__name">Cinder</h2>
+            <p class="card__tag">Scorched, synchronous inner world; twin impact basins.</p>
+            <dl class="card__data">
+              <div><dt>Period</dt><dd>19 d</dd></div>
+              <div><dt>Distance</dt><dd>0.39 AU</dd></div>
+              <div><dt>Diameter</dt><dd>4,180 km</dd></div>
+            </dl>
+          </div>
+          <footer class="card__foot"><span class="card__plate">Plate R&middot;01</span></footer>
+        </article>
+
+        <article class="card kind-ocean" data-kind="ocean"
+                 style="--o-orbital:2; --o-alpha:3; --o-size:2; --o-dist:2;">
+          <div class="card__media"><span class="card__disc swatch--maren" aria-hidden="true"></span></div>
+          <div class="card__body">
+            <p class="card__kind">Ocean</p>
+            <h2 class="card__name">Maren</h2>
+            <p class="card__tag">Teal ocean world in the habitable zone; kelp seas.</p>
+            <dl class="card__data">
+              <div><dt>Period</dt><dd>184 d</dd></div>
+              <div><dt>Distance</dt><dd>1.07 AU</dd></div>
+              <div><dt>Diameter</dt><dd>11,300 km</dd></div>
+            </dl>
+          </div>
+          <footer class="card__foot"><span class="card__plate">Plate O&middot;02</span></footer>
+        </article>
+
+        <article class="card kind-gaseous" data-kind="gaseous"
+                 style="--o-orbital:3; --o-alpha:0; --o-size:4; --o-dist:3;">
+          <div class="card__media"><span class="card__disc swatch--kelvar" aria-hidden="true"></span></div>
+          <div class="card__body">
+            <p class="card__kind">Gaseous</p>
+            <h2 class="card__name">Kelvar</h2>
+            <p class="card__tag">Banded amber giant with a broad icy ring and 14 moons.</p>
+            <dl class="card__data">
+              <div><dt>Period</dt><dd>1,960 d</dd></div>
+              <div><dt>Distance</dt><dd>5.6 AU</dd></div>
+              <div><dt>Diameter</dt><dd>96,800 km</dd></div>
+            </dl>
+          </div>
+          <footer class="card__foot"><span class="card__plate">Plate G&middot;03</span></footer>
+        </article>
+
+        <article class="card kind-icy" data-kind="icy"
+                 style="--o-orbital:4; --o-alpha:4; --o-size:3; --o-dist:4;">
+          <div class="card__media"><span class="card__disc swatch--pall" aria-hidden="true"></span></div>
+          <div class="card__body">
+            <p class="card__kind">Icy</p>
+            <h2 class="card__name">Pall</h2>
+            <p class="card__tag">Pale nitrogen-ice dwarf on a long, tilted outer orbit.</p>
+            <dl class="card__data">
+              <div><dt>Period</dt><dd>~12,400 d</dd></div>
+              <div><dt>Distance</dt><dd>23.4 AU</dd></div>
+              <div><dt>Diameter</dt><dd>2,240 km</dd></div>
+            </dl>
+          </div>
+          <footer class="card__foot"><span class="card__plate">Plate I&middot;04</span></footer>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ============================================================
+         VIEW 3 · FIELD NOTES
+         ============================================================ -->
+    <section class="view view-notes" id="notes" aria-labelledby="h-notes">
+
+      <header class="view__header">
+        <p class="eyebrow">Logbook &middot; kept by the makers</p>
+        <h1 id="h-notes">Field Notes</h1>
+        <p class="lede">
+          The story of the instrument and the system it models. Open any entry to read on;
+          jump between entries with the contents. Anchors are native &mdash; the back
+          button works.
+        </p>
+      </header>
+
+      <div class="notes-layout">
+        <nav class="contents" aria-label="Contents">
+          <p class="contents__title">Contents</p>
+          <ol class="contents__list">
+            <li><a class="contents__link" href="#note-1">On measuring the heavens</a></li>
+            <li><a class="contents__link" href="#note-2">Why a model at all</a></li>
+            <li><a class="contents__link" href="#note-3">The Asteria system</a></li>
+            <li><a class="contents__link" href="#note-4">Clockwork &amp; finish</a></li>
+            <li><a class="contents__link" href="#note-5">Reading the plates</a></li>
+          </ol>
+          <a class="contents__top" href="#h-notes">Back to top</a>
+        </nav>
+
+        <div class="notes">
+          <article class="note" id="note-1">
+            <details class="note__details" open>
+              <summary class="note__summary">
+                <span class="note__num">01</span>
+                <span class="note__title">On measuring the heavens</span>
+                <span class="note__chev" aria-hidden="true"></span>
+              </summary>
+              <div class="note__body">
+                <p>
+                  Before photography, before the telescope, people measured the sky by eye and
+                  by angle. An orrery is an answer to a simpler question: if we cannot visit
+                  these worlds, can we at least hold their arrangement in our hands?
+                </p>
+                <p>
+                  Every turning ring here keeps true time. The instrument is a argument in
+                  brass &mdash; that the heavens are orderly, and that order can be shown.
+                </p>
+              </div>
+            </details>
+          </article>
+
+          <article class="note" id="note-2">
+            <details class="note__details">
+              <summary class="note__summary">
+                <span class="note__num">02</span>
+                <span class="note__title">Why a model at all</span>
+                <span class="note__chev" aria-hidden="true"></span>
+              </summary>
+              <div class="note__body">
+                <p>
+                  A model is honest about being a model. ORRERY does not claim to be Asteria;
+                  it claims to show its proportions, its periods, its families. Where the
+                  record is uncertain, the plate says so.
+                </p>
+                <p>
+                  The proportions here are compressed for legibility &mdash; no orrery could
+                  turn Kelvar on the same scale as Cinder &mdash; but the order, the direction,
+                  and the nesting are true.
+                </p>
+              </div>
+            </details>
+          </article>
+
+          <article class="note" id="note-3">
+            <details class="note__details">
+              <summary class="note__summary">
+                <span class="note__num">03</span>
+                <span class="note__title">The Asteria system</span>
+                <span class="note__chev" aria-hidden="true"></span>
+              </summary>
+              <div class="note__body">
+                <p>
+                  Four worlds circle a single amber dwarf. Cinder, hot and bare, hugs the
+                  star. Maren, a teal ocean, sits in the temperate band. Kelvar, a ringed
+                  giant, dominates the outer reaches. Pall, a pale icy dwarf, trails on a
+                  wide tilted path.
+                </p>
+                <p>
+                  The details on each plate &mdash; periods, distances, temperatures &mdash; are
+                  consistent across the Instrument and Catalog views. The same numbers appear
+                  wherever a body is shown.
+                </p>
+              </div>
+            </details>
+          </article>
+
+          <article class="note" id="note-4">
+            <details class="note__details">
+              <summary class="note__summary">
+                <span class="note__num">04</span>
+                <span class="note__title">Clockwork &amp; finish</span>
+                <span class="note__chev" aria-hidden="true"></span>
+              </summary>
+              <div class="note__body">
+                <p>
+                  On a real orrery a concealed train of gears carries each world at its own
+                  rate. Here the train is a single CSS keyframe: one turn, smoothly, forever,
+                  each body at its own period and starting angle.
+                </p>
+                <p>
+                  Brass, jewelled pivots, and engraved plates are described &mdash; and then
+                  re-created &mdash; in CSS gradients, masks and shadows. No images, no fonts
+                  to download, no script. The whole instrument is a single document.
+                </p>
+              </div>
+            </details>
+          </article>
+
+          <article class="note" id="note-5">
+            <details class="note__details">
+              <summary class="note__summary">
+                <span class="note__num">05</span>
+                <span class="note__title">Reading the plates</span>
+                <span class="note__chev" aria-hidden="true"></span>
+              </summary>
+              <div class="note__body">
+                <p>
+                  Each body carries a plate. Figures are given to a sensible precision and
+                  rounded where the source tradition would round them; &ldquo;~&rdquo; marks an
+                  approximation. Asteria, the star, has no orbital period of its own and no
+                  parent body.
+                </p>
+                <p>
+                  Distances are mean orbital radii in astronomical units (1 AU = the
+                  Earth&ndash;Sun distance, here measured from Asteria). Diameters are
+                  equatorial. Temperatures are approximate surface values. All system data is
+                  invented for this instrument but kept internally consistent.
+                </p>
+              </div>
+            </details>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         VIEW 4 · WORKSHOP
+         ============================================================ -->
+    <section class="view view-workshop" id="workshop" aria-labelledby="h-workshop">
+
+      <header class="view__header">
+        <p class="eyebrow">Colophon &middot; access &amp; honesty</p>
+        <h1 id="h-workshop">Workshop</h1>
+        <p class="lede">
+          How this instrument is made, who can use it, and what it does not do.
+        </p>
+      </header>
+
+      <div class="workshop-grid">
+
+        <article class="panel-card">
+          <h2>Built with HTML &amp; CSS only</h2>
+          <p>
+            There is no JavaScript in this document &mdash; not for animation, not for
+            state, not for layout. Every interactive state is a native form control or a
+            URL target; every motion is a CSS transition or animation. The page works with
+            scripts disabled.
+          </p>
+          <ul class="feature-list">
+            <li><strong>Grid &amp; Flexbox</strong> for the app shell, ledger and readouts</li>
+            <li><strong>Custom properties</strong> for theming, per-body data and motion</li>
+            <li><strong>Container queries</strong> so cards adapt to their own width</li>
+            <li><strong>Logical properties</strong> for direction-independent spacing</li>
+            <li><strong>Masks, gradients, filters</strong> for glass, glow, vignette and planets</li>
+            <li><strong>Transforms</strong> for the orbital train and hover/focus motion</li>
+            <li><strong>Modern selectors</strong> <code>:has()</code>, <code>:is()</code>, <code>:where()</code>, <code>:not()</code>, <code>:nth-child()</code>, <code>:focus-within</code></li>
+            <li><strong>Native behaviour</strong> radio groups, checkboxes, <code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code>, anchors, <code>&lt;button type="reset"&gt;</code></li>
+          </ul>
+        </article>
+
+        <article class="panel-card">
+          <h2>Motion &amp; stillness</h2>
+          <p>
+            Orbits, glows, entrances and theme changes are a considered motion language on
+            shared easing and duration tokens. Two independent ways to calm it:
+          </p>
+          <ul class="feature-list">
+            <li>Your system <code>prefers-reduced-motion</code> setting is honoured automatically.</li>
+            <li>The <strong>Orbital rate → Still</strong> control pauses the train by hand.</li>
+          </ul>
+          <p class="note-line">Reduced motion keeps every state and control; it only removes movement.</p>
+        </article>
+
+        <article class="panel-card">
+          <h2>Keyboard &amp; touch</h2>
+          <p>Everything reachable by mouse is reachable by keyboard and touch.</p>
+          <ul class="feature-list">
+            <li><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd> move between controls</li>
+            <li><kbd>&larr;</kbd> <kbd>&uarr;</kbd> <kbd>&rarr;</kbd> <kbd>&darr;</kbd> move within a radio group; <kbd>Space</kbd> selects</li>
+            <li><kbd>Space</kbd> / <kbd>Enter</kbd> open <code>&lt;details&gt;</code> and follow links</li>
+            <li>Visible focus rings on every control; large touch targets; logical order</li>
+            <li>Orbiting bodies have equivalent, steady controls in the body dial; nothing depends on hover</li>
+          </ul>
+        </article>
+
+        <article class="panel-card">
+          <h2>State, reversibly</h2>
+          <p>No hidden state, no traps. Every choice can be undone.</p>
+          <ul class="feature-list">
+            <li>Views, theme, body, rate, telescope, filters and sort are all reversible</li>
+            <li><strong>Reset instrument</strong> (<code>&lt;button type="reset"&gt;</code>) restores defaults &mdash; no script</li>
+            <li>Field Notes anchors are real links; <kbd>Back</kbd> returns</li>
+            <li>Theme works independently of your OS setting</li>
+          </ul>
+        </article>
+
+        <article class="panel-card">
+          <h2>Honest limits</h2>
+          <ul class="feature-list">
+            <li>CSS-only: there is no sound, no persistence between visits, and no dynamic text output. Choosing a body reveals its prepared plate; it does not compute new data.</li>
+            <li>Richer transitions (<code>@starting-style</code>, discrete <code>display</code> transitions, scroll-driven timelines, <code>::details-content</code>) are progressive enhancements; the experience is complete without them.</li>
+            <li>Advanced selectors <code>:has()</code> and container queries require a current browser (2024+). No fallback is provided for very old engines.</li>
+            <li>Orbiting labels are a convenience; the steady body dial is the accessible path. Under reduced motion, bodies sit at their starting angles.</li>
+            <li>The Asteria system is fictional; its figures are internally consistent invention, not measurement.</li>
+          </ul>
+        </article>
+
+        <article class="panel-card panel-card--wide">
+          <h2>Credits &amp; reset</h2>
+          <p>
+            ORRERY is an original work. No external assets, no webfonts, no libraries.
+            Type uses your system stack; all ornament is drawn in CSS.
+          </p>
+          <div class="credits-actions">
+            <button class="reset reset--lg" type="reset">Reset instrument</button>
+            <label class="text-link" tabindex="0" for="view-instrument">Return to the instrument</label>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <span>ORRERY &middot; pure HTML &amp; CSS &middot; no JavaScript</span>
+    <span class="footer__sep" aria-hidden="true"></span>
+    <span>The Asteria system is fictional.</span>
+  </footer>
+
+</form>
+
+</body>
+</html>

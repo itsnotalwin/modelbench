@@ -1,0 +1,1452 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Duck Season — a synthetic-data story about how rooftop solar rewired a city's oldest rhythm: the electricity demand curve.">
+<meta name="theme-color" content="#0a0e14">
+<title>Duck Season — how solar rewired a city's oldest rhythm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0e14; --bg2:#0e141c; --bg3:#121a24;
+  --ink:#ece7db; --dim:#b3ada0; --mute:#8a92a0;
+  --hair:rgba(236,231,219,.09); --hair2:rgba(236,231,219,.22);
+  --amber:#f2a93b; --steel:#7fa8d9; --ember:#e4603a; --sage:#55ab8e; --sand:#d8cfb0;
+  --serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --disp:"Fraunces",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --maxw:1160px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} *{transition:none!important;animation:none!important} }
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--serif); font-size:17px; line-height:1.68;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+::selection{background:rgba(242,169,59,.32); color:#fff}
+img,canvas{max-width:100%}
+a{color:var(--amber); text-decoration:none; border-bottom:1px solid rgba(242,169,59,.35)}
+a:hover{border-bottom-color:var(--amber)}
+h1,h2,h3,h4{font-family:var(--disp); font-weight:560; line-height:1.08; margin:0; letter-spacing:-.015em}
+p{margin:0 0 1.1em}
+strong{font-weight:600; color:#fff}
+em{font-style:italic}
+sup{font-size:.68em; color:var(--amber)}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.skip{position:fixed;left:12px;top:-48px;z-index:200;background:var(--bg3);border:1px solid var(--amber);color:var(--amber);font:500 12px var(--mono);padding:8px 14px;border-radius:999px;transition:top .2s}
+.skip:focus{top:12px}
+button{font-family:var(--mono)}
+:focus-visible{outline:2px solid var(--amber);outline-offset:2px;border-radius:4px}
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 22px}
+.narrow{max-width:720px; margin:0 auto; padding:0 22px}
+
+/* ---------- progress + masthead ---------- */
+#progress{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--amber),var(--ember));z-index:120}
+.masthead{position:relative; min-height:94vh; display:flex; align-items:flex-end; overflow:hidden; border-bottom:1px solid var(--hair)}
+#heroCv{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; opacity:.95}
+.masthead .wrap{position:relative; z-index:2; padding-bottom:9vh; padding-top:12vh}
+.kicker-row{display:flex; flex-wrap:wrap; gap:10px 18px; align-items:baseline; margin-bottom:26px}
+.kicker{font:600 11px/1 var(--mono); letter-spacing:.22em; text-transform:uppercase; color:var(--amber)}
+.chip{font:500 10px/1 var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--dim); border:1px solid var(--hair2); border-radius:999px; padding:6px 11px; white-space:nowrap}
+.chip.hot{color:var(--amber); border-color:rgba(242,169,59,.5)}
+h1.title{font-size:clamp(3.1rem,9vw,6.8rem); font-weight:600; letter-spacing:-.025em; line-height:.98}
+h1.title .dot{color:var(--ember)}
+.deck{font-family:var(--serif); font-style:italic; font-weight:400; font-size:clamp(1.15rem,2.4vw,1.42rem); line-height:1.5; color:var(--dim); max-width:52ch; margin:26px 0 0}
+.byline{display:flex; flex-wrap:wrap; gap:6px 22px; margin-top:30px; font:400 11.5px/1.7 var(--mono); color:var(--mute); letter-spacing:.04em}
+.byline b{color:var(--dim); font-weight:500}
+.hero-actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:30px}
+.btn{appearance:none; background:transparent; border:1px solid var(--hair2); color:var(--dim); font:500 11px/1 var(--mono); letter-spacing:.14em; text-transform:uppercase; padding:10px 15px; border-radius:999px; cursor:pointer; transition:border-color .2s,background .2s,color .2s}
+.btn:hover{border-color:var(--amber); color:var(--amber); background:rgba(242,169,59,.06)}
+.btn[aria-pressed="true"]{border-color:rgba(242,169,59,.65); color:var(--amber); background:rgba(242,169,59,.1)}
+.btn.solid{background:var(--amber); border-color:var(--amber); color:#191204; font-weight:600}
+.btn.solid:hover{background:#ffbe55; color:#191204}
+.btn.ghost-amber{color:var(--amber); border-color:rgba(242,169,59,.45)}
+
+/* ---------- acts ---------- */
+.act{padding:9vh 0 4vh; border-top:1px solid var(--hair)}
+.act:first-of-type{border-top:0}
+.ch-head{display:flex; align-items:baseline; gap:16px; margin:0 0 8px}
+.ch-num{font:600 12px var(--mono); letter-spacing:.2em; color:var(--amber)}
+.ch-head h2{font-size:clamp(1.9rem,4.4vw,2.9rem)}
+.lede{font-size:1.14rem; color:var(--dim); max-width:62ch; margin:14px 0 6px}
+.lede b, .prose b{font-weight:600}
+.prose{max-width:62ch; color:var(--dim); font-size:1.02rem}
+.prose .num{font-family:var(--mono); font-size:.86em; color:var(--ink); background:rgba(236,231,219,.07); padding:1px 6px; border-radius:5px; white-space:nowrap}
+.rv{opacity:0; transform:translateY(16px); transition:opacity .8s ease,transform .8s ease}
+.rv.revealed{opacity:1; transform:none}
+@media (prefers-reduced-motion:reduce){ .rv{opacity:1;transform:none} }
+
+.panel{position:relative; background:var(--bg2); border:1px solid var(--hair); border-radius:14px; padding:14px 14px 10px; margin:26px 0 14px; user-select:none}
+.panel selecto{user-select:none}
+.chartbox{position:relative; width:100%}
+canvas{display:block; width:100%; touch-action:pan-y}
+.chartbox canvas{height:100%}
+canvas:focus-visible{outline:2px solid var(--amber); outline-offset:3px}
+.h-a1{height:400px} .h-morph{height:440px} .h-duck{height:400px} .h-heat{height:400px} .h-tiles{height:220px}
+.h-sel{height:220px} .h-scat{height:420px} .h-ridge{height:400px} .h-exp{height:360px}
+.panel-note{font:400 11px/1.7 var(--mono); color:var(--mute); letter-spacing:.03em; padding:6px 4px 2px; display:flex; flex-wrap:wrap; gap:4px 20px; user-select:text}
+.legend-bar{height:10px; border-radius:6px; margin:10px 2px 4px; background:linear-gradient(90deg,#11554e 0%,#3f9d82 18.2%,#a8a98f 31.8%,#c99a6b 45.5%,#e07043 63.6%,#ef8c55 81.8%,#f6a86b 100%)}
+.legend-ticks{display:flex; justify-content:space-between; font:400 10px var(--mono); color:var(--mute); padding:0 2px}
+
+.chips{display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 4px}
+.statgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:1px; background:var(--hair); border:1px solid var(--hair); border-radius:12px; overflow:hidden; margin:18px 0}
+.stat{background:var(--bg2); padding:13px 15px}
+.stat .k{font:500 9.5px var(--mono); letter-spacing:.16em; text-transform:uppercase; color:var(--mute); margin-bottom:7px}
+.stat .v{font-family:var(--disp); font-size:1.45rem; font-weight:560; color:var(--ink); line-height:1.05}
+.stat .v small{font-size:.62em; color:var(--dim); font-family:var(--mono); font-weight:400; letter-spacing:0}
+.stat .s{font:400 10.5px var(--mono); color:var(--mute); margin-top:5px}
+
+/* ---------- scrolly ---------- */
+.scrolly{display:grid; grid-template-columns:minmax(280px,390px) minmax(0,1fr); gap:44px; margin-top:8px}
+.scrolly-steps{padding-top:6vh}
+.step{min-height:62vh; padding:26px 0 26px 20px; border-left:1px solid var(--hair); opacity:.42; transition:opacity .5s,border-color .5s}
+.step.on{opacity:1; border-left-color:var(--amber)}
+.step .tag{font:600 10px var(--mono); letter-spacing:.2em; text-transform:uppercase; color:var(--amber); display:block; margin-bottom:12px}
+.step h3{font-size:1.5rem; margin-bottom:12px}
+.step p{color:var(--dim); font-size:.98rem}
+.sticky-wrap{position:sticky; top:clamp(48px,9vh,90px)}
+.scrub-row{display:flex; align-items:center; gap:14px; padding:12px 6px 4px; flex-wrap:wrap}
+.scrub-row input[type=range]{flex:1; min-width:140px; accent-color:var(--amber); height:22px}
+.yr-label{font:600 13px var(--mono); color:var(--amber); min-width:58px; text-align:right}
+
+/* ---------- duck anatomy ---------- */
+.part-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:2px}
+.part-card{border-left:2px solid var(--amber); padding:4px 0 4px 16px; margin-top:16px; min-height:74px}
+.part-card h4{font-size:1.15rem; margin-bottom:8px; color:var(--ink)}
+.part-card p{color:var(--dim); font-size:.98rem; margin:0}
+
+/* ---------- explorer ---------- */
+.exp-controls{display:flex; flex-wrap:wrap; gap:12px; align-items:center; padding:4px 2px 2px}
+.exp-controls input[type=range]{flex:1; min-width:160px; accent-color:var(--amber)}
+.exp-date{font:600 13px var(--mono); color:var(--amber); min-width:110px}
+.table-tools{display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between; margin:20px 0 10px}
+.table-wrap{border:1px solid var(--hair); border-radius:12px; overflow:auto; max-height:420px; background:var(--bg2); user-select:text}
+table.stats{border-collapse:collapse; width:100%; font:400 12px/1.5 var(--mono); color:var(--dim)}
+table.stats th{position:sticky; top:0; z-index:2; background:var(--bg3); color:var(--mute); font:500 10px var(--mono); letter-spacing:.12em; text-transform:uppercase; text-align:right; padding:10px 12px; cursor:pointer; border-bottom:1px solid var(--hair2); white-space:nowrap}
+table.stats th:hover{color:var(--amber)}
+table.stats th.l, table.stats td.l{text-align:left}
+table.stats td{padding:6px 12px; text-align:right; border-bottom:1px solid var(--hair); white-space:nowrap}
+table.stats tbody tr{cursor:pointer}
+table.stats tbody tr:hover{background:rgba(242,169,59,.07); color:var(--ink)}
+table.stats th[aria-sort="ascending"]::after{content:" ↑"; color:var(--amber)}
+table.stats th[aria-sort="descending"]::after{content:" ↓"; color:var(--amber)}
+
+/* ---------- tooltip / toast / dialog ---------- */
+#tip{position:fixed; z-index:150; pointer-events:none; background:rgba(13,18,26,.96); border:1px solid var(--hair2); border-radius:10px; padding:10px 12px; box-shadow:0 10px 34px rgba(0,0,0,.55); max-width:250px; opacity:0; transition:opacity .12s}
+#tip.on{opacity:1}
+#tip .tt{font:600 11px var(--mono); letter-spacing:.06em; color:var(--amber); margin-bottom:5px}
+#tip .tb{font:400 11.5px/1.65 var(--mono); color:var(--dim); white-space:pre-line}
+#tip canvas{margin-top:7px; width:150px; height:44px}
+#toast{position:fixed; left:50%; bottom:26px; transform:translate(-50%,16px); background:var(--bg3); border:1px solid var(--hair2); color:var(--ink); font:500 12px var(--mono); padding:11px 18px; border-radius:999px; opacity:0; pointer-events:none; transition:all .3s; z-index:180}
+#toast.on{opacity:1; transform:translate(-50%,0)}
+dialog{background:var(--bg2); color:var(--ink); border:1px solid var(--hair2); border-radius:16px; padding:26px 28px; max-width:420px; width:calc(100% - 40px)}
+dialog::backdrop{background:rgba(5,8,12,.7); backdrop-filter:blur(3px)}
+dialog h3{font-size:1.4rem; margin-bottom:14px}
+dialog dl{margin:0 0 18px; font:400 12.5px/2.1 var(--mono); color:var(--dim)}
+dialog dt{display:inline; color:var(--amber); font-weight:500}
+dialog dd{display:inline; margin:0}
+#live{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)}
+
+/* ---------- colophon / footer ---------- */
+.colophon ul{list-style:none; padding:0; margin:14px 0; color:var(--dim); font-size:.95rem}
+.colophon li{padding:10px 0 10px 0; border-bottom:1px solid var(--hair); display:flex; gap:14px}
+.colophon li b{font:500 10.5px/2.2 var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--amber); min-width:110px; flex-shrink:0}
+footer{border-top:1px solid var(--hair); margin-top:8vh; padding:5vh 0 7vh; color:var(--mute); font:400 11.5px/1.9 var(--mono); letter-spacing:.03em}
+footer .wrap{display:flex; flex-wrap:wrap; gap:8px 26px; justify-content:space-between}
+
+/* ---------- responsive ---------- */
+@media (max-width:880px){
+  body{font-size:16px}
+  .scrolly{display:flex; flex-direction:column; gap:0}
+  .scrolly-graphic{order:-1; position:sticky; top:10px; z-index:5}
+  .sticky-wrap{position:static}
+  .sticky-wrap .panel{background:rgba(14,20,28,.97); box-shadow:0 14px 40px rgba(0,0,0,.45)}
+  .step{min-height:58vh}
+  .h-morph{height:330px} .h-heat{height:300px} .h-scat{height:320px} .h-a1{height:330px} .h-duck{height:320px}
+  .masthead{min-height:88vh}
+}
+@media (max-width:640px){
+  .h-morph{height:280px} .h-heat{display:none}
+  .h-tiles{display:block} .h-scat{height:300px} .h-exp{height:280px} .h-a1{height:300px} .h-duck{height:300px}
+  .h-tiles{height:230px}
+  .statgrid{grid-template-columns:repeat(2,1fr)}
+  .step{padding-left:14px; min-height:52vh}
+  .chips .btn{padding:9px 12px}
+  table.stats th,table.stats td{padding:6px 8px}
+}
+@media (min-width:641px){ .h-tiles{display:none} }
+</style>
+</head>
+<body>
+<a class="skip" href="#act1">Skip to the story</a>
+<div id="progress" aria-hidden="true"></div>
+
+<!-- ================= MASTHEAD ================= -->
+<header class="masthead">
+  <canvas id="heroCv" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="kicker-row">
+      <span class="kicker">The Meridian Grid Observatory</span>
+      <span class="chip hot">Synthetic dataset · seed 1123581321</span>
+      <span class="chip">One file · no server · no cookies</span>
+    </div>
+    <h1 class="title">Duck Season<span class="dot">.</span></h1>
+    <p class="deck">For a century, this city’s electricity demand rose with the kettle and peaked at dusk. Then five gigawatts of solar arrived overhead — and quietly moved the grid’s hardest hour to just after sunset.</p>
+    <div class="byline">
+      <span><b>Reported from</b> <span id="cHours">—</span> hours of simulated meter data</span>
+      <span><b>Window</b> 2010 – 2024 · 15 years · one city</span>
+      <span><b>Charts</b> drawn by hand, in code</span>
+    </div>
+    <div class="hero-actions">
+      <button class="btn solid" id="btnBegin" type="button">Begin reading ↓</button>
+      <button class="btn" id="btnSound" type="button" aria-pressed="false">Sound: off</button>
+      <button class="btn" id="btnKeys" type="button">Keyboard shortcuts ?</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- ================= ACT 1 ================= -->
+<section class="act" id="act1">
+  <div class="wrap">
+    <div class="ch-head rv"><span class="ch-num">01</span><h2>The rhythm that never moved</h2></div>
+    <p class="lede rv">Every electricity grid keeps the same diary. Demand climbs as the city wakes, sags through the afternoon, and peaks when people come home and the lights come on. The quietest moment of the day used to be <strong>around 4&nbsp;a.m.</strong> — and grids were engineered around exactly that rhythm.</p>
+    <div class="panel rv">
+      <div class="chartbox h-a1"><canvas id="cvA1" tabindex="0" role="img" aria-label="Average day of electricity demand in Meridian, 2010, with the typical range shaded. Hover for hourly values."></canvas></div>
+      <div class="panel-note"><span>Mean hourly demand, all 366 days of 2010 · shaded band = middle 80% of days · steel = demand measured at the meter</span></div>
+    </div>
+    <p class="prose rv">This is the shape the whole system was built for: power stations sized to reach the evening head, plants idling through the tail. Nothing about a city’s day changes quickly. <strong>Nothing changed for a hundred years.</strong> Then, on the same meter that never moved, something started to.</p>
+  </div>
+</section>
+
+<!-- ================= ACT 2 · SCROLLY MORPH ================= -->
+<section class="act" id="act2">
+  <div class="wrap">
+    <div class="ch-head rv"><span class="ch-num">02</span><h2>Then the middle fell out</h2></div>
+    <p class="lede rv">Between 2010 and 2024, Meridian installed roughly five gigawatts of photovoltaics — a million rooftops, carports, and two utility fields. Every panel floods the grid at the same moment. Keep scrolling, or drag the scrubber yourself.</p>
+    <div class="scrolly" id="act2Sec">
+      <div class="scrolly-steps" id="sc2Track">
+        <div class="step" data-step="0">
+          <span class="tag">2010 · the baseline</span>
+          <h3>A century-old shape</h3>
+          <p>The amber sliver is solar — barely a rounding error. What the grid buys is what the city uses: a morning shoulder, an afternoon plateau, and an evening peak near <span class="num">19:00</span>. The night-time tail is the quietest part of the day.</p>
+        </div>
+        <div class="step" data-step="1">
+          <span class="tag">2014 · the leak begins</span>
+          <h3>Roofs start to leak sunshine</h3>
+          <p>Panels don’t ask permission: every clear noon, they simply <em>subtract</em> themselves from demand. Measured at the substation, the middle of the day begins to sag. The morning and evening shoulders barely move — the change is happening only <strong>where the sun is</strong>.</p>
+        </div>
+        <div class="step" data-step="2">
+          <span class="tag">2019 → 2024 · the belly</span>
+          <h3>Noon becomes the quietest hour</h3>
+          <p>By <span class="num" id="stCross">—</span>, something without precedent happened: the lowest point of the day was no longer the small hours of the night — <strong>it was noon, with the sun up</strong>. The curve had grown a belly. Grid operators gave the shape a name: the duck.</p>
+        </div>
+        <div class="step" data-step="3">
+          <span class="tag">2024 · the head</span>
+          <h3>The hard part moved to dusk</h3>
+          <p>When the sun clocks out, solar vanishes exactly as people come home — and now plug in <span class="num" id="stEV">—</span> of electric cars. On an average day the grid’s steepest hour-to-hour climb is <span class="num" id="stRamp24">—</span>, up from <span class="num" id="stRamp10">—</span> in 2010. The dashed line shows the world without EVs: even subtracted, the hill is steeper than anything 2010 knew.</p>
+        </div>
+      </div>
+      <div class="scrolly-graphic">
+        <div class="sticky-wrap">
+          <div class="panel">
+            <div class="chartbox h-morph"><canvas id="cvMorph" tabindex="0" role="img" aria-label="Average-day curves morphing from 2010 to 2024: demand, solar and net load. Use the scrubber or press P to play."></canvas></div>
+            <div class="scrub-row">
+              <button class="btn" id="playBtn" type="button" aria-pressed="false">▶ Play</button>
+              <input id="yearRange" type="range" min="2010" max="2024" step="0.05" value="2010" aria-label="Year scrubber, 2010 to 2024">
+              <span class="yr-label" id="yearLabel">2010.0</span>
+            </div>
+            <div class="panel-note"><span class="lg"><span style="color:var(--steel)">—</span> demand</span><span><span style="color:var(--amber)">—</span> solar</span><span><span style="color:var(--ember)">—</span> net load (demand − solar)</span><span><span style="color:var(--mute)">╌</span> net without EVs</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ACT 3 · ANATOMY ================= -->
+<section class="act" id="act3">
+  <div class="wrap">
+    <div class="ch-head rv"><span class="ch-num">03</span><h2>Anatomy of a duck</h2></div>
+    <p class="lede rv">By 2024 the average day has a tail, a back, a belly, a neck and a head. Hover the curve — or use the buttons — to explore each part. The geometry isn’t decoration: every part names a different <strong>engineering problem</strong>.</p>
+    <div class="panel rv">
+      <div class="chartbox h-duck"><canvas id="cvDuck" tabindex="0" role="img" aria-label="Average net-load day of 2024 with the duck parts labelled: tail, back, belly, neck, head. Hover or use the part buttons below."></canvas></div>
+      <div class="part-row" role="group" aria-label="Duck parts">
+        <button class="btn" type="button" data-part="tail" aria-pressed="false">Tail</button>
+        <button class="btn" type="button" data-part="back" aria-pressed="false">Back</button>
+        <button class="btn" type="button" data-part="belly" aria-pressed="true">Belly</button>
+        <button class="btn" type="button" data-part="neck" aria-pressed="false">Neck</button>
+        <button class="btn" type="button" data-part="head" aria-pressed="false">Head</button>
+      </div>
+      <div class="part-card" id="partCard" aria-live="polite"><h4>—</h4><p>—</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ACT 4 · HEATMAP ================= -->
+<section class="act" id="act4">
+  <div class="wrap">
+    <div class="ch-head rv"><span class="ch-num">04</span><h2>The duck is a spring creature</h2></div>
+    <p class="lede rv">Averaged over a year, the duck looks tame. Hour by hour, it is anything but. Below: every one of 2024’s <span class="num">8,784</span> hours at once — <strong>green cells are hours the city barely bought power</strong>; ember cells are hours it climbed hard. The thin curves trace sunrise and sunset, the solar window widening through spring.</p>
+    <div class="panel rv">
+      <div class="chartbox h-heat"><canvas id="cvHeat" tabindex="0" role="img" aria-label="Heatmap of hourly net load across 2024, days across, hours down. Drag to select a date range; arrow keys move the selection."></canvas></div>
+      <div class="chartbox h-tiles"><canvas id="cvTiles" tabindex="0" role="img" aria-label="Calendar of 2024 coloured by each day's deepest net-load dip. Tap a day to select it."></canvas></div>
+      <div class="legend-bar" aria-hidden="true"></div>
+      <div class="legend-ticks" aria-hidden="true"><span>−1.2 export</span><span>0.9</span><span>2</span><span>3</span><span>4</span><span>5.4 GW peak</span></div>
+      <div class="chips" role="group" aria-label="Preset selections">
+        <button class="btn" type="button" data-preset="full">Full year</button>
+        <button class="btn" type="button" data-preset="spring">Spring weekends</button>
+        <button class="btn" type="button" data-preset="deepest">Deepest day</button>
+        <button class="btn" type="button" data-preset="heat">July heat wave</button>
+        <button class="btn" type="button" data-preset="freeze">February freeze</button>
+      </div>
+      <div class="panel-note"><span>thin dashed curve = sunrise · solid = sunset</span><span id="selHint">Drag across the chart to select a date range — every other view follows.</span><span>on touch screens, tap a day</span></div>
+    </div>
+    <div class="statgrid rv" id="selStats" aria-live="polite">
+      <div class="stat"><div class="k">Selection</div><div class="v" id="ssRange" style="font-size:1.1rem">—</div><div class="s" id="ssDays">—</div></div>
+      <div class="stat"><div class="k">Avg deepest dip</div><div class="v" id="ssBelly">—</div><div class="s">mean daily minimum net load</div></div>
+      <div class="stat"><div class="k">Rooftop hours</div><div class="v" id="ssRoof">—</div><div class="s">net below 150 MW</div></div>
+      <div class="stat"><div class="k">Avg evening climb</div><div class="v" id="ssRamp">—</div><div class="s">steepest hour-to-hour rise, 14–22h</div></div>
+      <div class="stat"><div class="k">Avg max temp</div><div class="v" id="ssTmax">—</div><div class="s">mercury at the airport</div></div>
+      <div class="stat"><div class="k">Deepest day</div><div class="v" id="ssDeepest" style="font-size:1.1rem">—</div><div class="s" id="ssDeepestV">—</div></div>
+    </div>
+    <div class="panel rv">
+      <div class="chartbox h-sel"><canvas id="cvSel" tabindex="0" role="img" aria-label="Average day of your selection: net load, demand and solar."></canvas></div>
+      <div class="panel-note"><span>Your selection, averaged into a single day · ember = net · steel = demand · amber = solar</span></div>
+    </div>
+    <p class="prose rv">The belly is <strong>seasonal and weekly</strong>. It deepens in March–May — strong sun, mild air, and on weekends, offices gone quiet — and vanishes entirely in winter, when the sun is low and the panels are lucky to cover a fifth of the noon load. On <span class="num" id="pRoofDays">—</span> days of 2024, net demand fell below 150 MW for at least an hour: <span class="num" id="pRoofH">—</span> in total, <span class="num" id="pRoofPct">—</span> of them on weekends. On the deepest ones the city’s meters went <strong>negative</strong> — more power made than consumed, with nowhere to send it.</p>
+  </div>
+</section>
+
+<!-- ================= ACT 5 · SCATTER + RIDGE ================= -->
+<section class="act" id="act5">
+  <div class="wrap">
+    <div class="ch-head rv"><span class="ch-num">05</span><h2>Weather is the other author</h2></div>
+    <p class="lede rv">Solar decides <em>when</em> the duck breathes; weather decides <em>how hard</em>. Each point below is one day of 2024 — its hottest hour against its steepest evening climb. Heat buys climbs (<span class="num" id="scR">r = —</span>), but colour tells the deeper story: the deep-belly days sit exactly where the climbs are steepest. <strong>A duck that dives deepest climbs hardest</strong> (dip vs climb, <span class="num" id="scR2">r = —</span>).</p>
+    <div class="panel rv">
+      <div class="chartbox h-scat"><canvas id="cvScat" tabindex="0" role="img" aria-label="Scatter plot of daily maximum temperature versus steepest evening climb, one point per day of 2024. Drag horizontally to filter by temperature."></canvas></div>
+      <div class="chips" role="group" aria-label="Temperature filter">
+        <button class="btn" type="button" id="clearBand">Clear temperature filter</button>
+        <button class="btn" type="button" data-preset="comfort">Try: comfort band</button>
+      </div>
+      <div class="panel-note"><span>Drag horizontally to filter days by temperature — the heatmap, stats and table follow · colour = that day’s deepest dip (same scale as the heatmap) · dashed curve = mean climb per 2° bin</span></div>
+    </div>
+    <p class="prose rv">In the <strong>comfort band</strong> — roughly 17–23°C — almost nobody heats or cools, and on cloudless days the net load dives deepest. But what the sun gives at noon it takes at dusk: the deepest dives belong to the steepest climbs, because the belly is exactly the hole the sunset has to fill. The far right is summer — air conditioning racing the sunset. The gentle evenings are the dark ones — overcast, unremarkable days when solar never dug the hole in the first place. The duck, in other words, is carved by clear skies: <strong>the clearer the day, the deeper the dive and the harder the climb</strong>.</p>
+    <div class="panel rv">
+      <div class="chartbox h-ridge"><canvas id="cvRidge" tabindex="0" role="img" aria-label="Twelve small multiples, the average net-load day of each month in 2024, stacked in a ridgeline. Click a month to select it."></canvas></div>
+      <div class="panel-note"><span>The duck migrates — average day of each month, 2024 · click a month to select it in the calendar</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ACT 6 · EXPLORER ================= -->
+<section class="act" id="act6">
+  <div class="wrap">
+    <div class="ch-head rv"><span class="ch-num">06</span><h2>Fly any day</h2></div>
+    <p class="lede rv">The averages hide the characters. Here is the full <strong>15-minute resolution</strong> record for any day of 2024 — pick one, stack it against the year’s average, and see what a single evening of weather does to the duck.</p>
+    <div class="panel rv">
+      <div class="exp-controls">
+        <button class="btn" id="expPrev" type="button" aria-label="Previous day">←</button>
+        <input id="expSlider" type="range" min="0" max="365" step="1" value="0" aria-label="Explorer date, day of year 2024">
+        <button class="btn" id="expNext" type="button" aria-label="Next day">→</button>
+        <span class="exp-date" id="expDate">—</span>
+      </div>
+      <div class="chips" role="group" aria-label="Series">
+        <button class="btn tgl" type="button" data-ex="net" aria-pressed="true">Net load</button>
+        <button class="btn tgl" type="button" data-ex="gross" aria-pressed="false">Gross demand</button>
+        <button class="btn tgl" type="button" data-ex="solar" aria-pressed="false">Solar</button>
+        <button class="btn tgl" type="button" data-ex="noev" aria-pressed="false">Net w/o EVs</button>
+        <button class="btn tgl" type="button" data-ex="avg" aria-pressed="true">2024 avg day</button>
+        <button class="btn tgl" type="button" data-ex="band" aria-pressed="true">15-yr range</button>
+      </div>
+      <div class="chartbox h-exp"><canvas id="cvExp" tabindex="0" role="img" aria-label="15-minute net load for the selected day against the 2024 average day. Use left and right arrows to change day."></canvas></div>
+      <div class="statgrid" id="expStats" aria-live="polite">
+        <div class="stat"><div class="k">Peak net</div><div class="v" id="esPeak">—</div><div class="s" id="esPeakT">—</div></div>
+        <div class="stat"><div class="k">Deepest dip</div><div class="v" id="esBelly">—</div><div class="s" id="esBellyT">—</div></div>
+        <div class="stat"><div class="k">Steepest climb</div><div class="v" id="esRamp">—</div><div class="s">per hour, 14–22h</div></div>
+        <div class="stat"><div class="k">Rooftop hours</div><div class="v" id="esRoof">—</div><div class="s">net below 150 MW</div></div>
+        <div class="stat"><div class="k">Max temp</div><div class="v" id="esTmax">—</div><div class="s">at the airport</div></div>
+        <div class="stat"><div class="k">Energy</div><div class="v" id="esDem" style="font-size:1.2rem">—</div><div class="s" id="esSol">—</div></div>
+      </div>
+    </div>
+
+    <div class="table-tools rv">
+      <div style="font:500 11px var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--mute)">The ledger · <span id="tCount">—</span> days matching your filters · click a row to fly there · click headers to sort</div>
+      <button class="btn ghost-amber" id="btnCSV" type="button">↓ Export CSV</button>
+    </div>
+    <div class="table-wrap rv">
+      <table class="stats" id="statTable">
+        <caption class="sr-only">Daily statistics for the currently filtered days of 2024</caption>
+        <thead><tr>
+          <th class="l" data-key="d" aria-sort="ascending" scope="col">Date</th>
+          <th class="l" data-key="dow" scope="col">Day</th>
+          <th data-key="tmax" scope="col">Max °C</th>
+          <th data-key="belly" scope="col">Dip GW</th>
+          <th data-key="bellyT" scope="col">Dip at</th>
+          <th data-key="peak" scope="col">Peak GW</th>
+          <th data-key="peakT" scope="col">Peak at</th>
+          <th data-key="ramp" scope="col">Climb GW/h</th>
+          <th data-key="roof" scope="col">Roof h</th>
+          <th data-key="solar" scope="col">Solar GWh</th>
+        </tr></thead>
+        <tbody id="stBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= COLOPHON ================= -->
+<section class="act colophon" id="colophon">
+  <div class="wrap">
+    <div class="ch-head rv"><span class="ch-num">◆</span><h2>Method, honestly</h2></div>
+    <ul class="rv">
+      <li><b>The data</b><span>Everything here is <strong>synthetic</strong>, generated in your browser from seed <span class="num" id="cSeed">1123581321</span>: fifteen years (<span class="num" id="cDays">2010–2024</span>) at hourly resolution, at 15-minute resolution for 2024 — <span class="num" id="cHours2">—</span> observations per series. No real utility was harmed, consulted, or leaked.</span></li>
+      <li><b>The physics</b><span>Solar follows a real sun-position model (declination, hour angle, latitude 37.6°N) with clear-sky falloff, temperature derating, snow days, and an AR(1) cloud system with synoptic persistence. Temperature is a seasonal sinusoid plus diurnal cycle plus OU weather anomalies — with scripted events (the February freeze, the July heat wave, the April deep-duck weekend).</span></li>
+      <li><b>The demand</b><span>Hour-of-day shapes for weekdays and weekends, temperature response with a comfort band, holiday factors, winter-lighting term, hourly AR(1) noise — and, from 2018, an EV charging profile that peaks at 20:00. Net load = demand − solar, computed, never invented.</span></li>
+      <li><b>The numbers</b><span>Every figure quoted in the text — crossover year, rooftop hours, steepest climbs, the correlation coefficient — is <strong>computed from this dataset at load time</strong>, not hard-coded. Solar share of 2024 energy: <span class="num" id="cShare">—</span>. Installed capacity grows <span class="num" id="cCap">—</span> over the window.</span></li>
+      <li><b>The craft</b><span>All charts are hand-drawn on canvas at device-pixel resolution; one shared animation loop; delta-time animations; resize via ResizeObserver; pausable on tab-hide; keyboard-operable charts; a screen-reader live region for selections; sonified heatmap hover (toggle in the masthead); respects prefers-reduced-motion.</span></li>
+      <li><b>Disclosure</b><span>Meridian is a fictional mid-latitude coastal city of 2.1 million. The story is real physics on invented data — a demonstration of a shape, not a forecast.</span></li>
+    </ul>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>DUCK SEASON · a synthetic-data story · built with canvas, Web Audio and stubbornness</span>
+    <span>no trackers · no cookies · one file · runs offline</span>
+  </div>
+</footer>
+
+<div id="tip" aria-hidden="true"><div class="tt"></div><canvas width="300" height="88"></canvas><div class="tb"></div></div>
+<div id="toast" role="status"></div>
+<div id="live" role="status" aria-live="polite" class="sr-only"></div>
+<dialog id="keysDlg" aria-label="Keyboard shortcuts">
+  <h3>Keyboard shortcuts</h3>
+  <dl>
+    <dt>← →</dt><dd> — move explorer day / shift heatmap selection</dd><br>
+    <dt>Shift + ← →</dt><dd> — grow or shrink heatmap selection</dd><br>
+    <dt>↑ ↓</dt><dd> — widen or narrow the temperature filter</dd><br>
+    <dt>P</dt><dd> — play / pause the 2010→2024 morph</dd><br>
+    <dt>S</dt><dd> — toggle sound</dd><br>
+    <dt>?</dt><dd> — this dialog</dd>
+  </dl>
+  <button class="btn solid" id="dlgClose" type="button">Close</button>
+</dialog>
+
+<script>
+(()=>{ 'use strict';
+window.__errs=[]; window.addEventListener('error',e=>{ window.__errs.push(String(e.message)+' @'+(e.lineno||'?')); });
+/* ================================================================
+   1 · UTILITIES
+================================================================ */
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const clamp=(v,a,b)=>v<a?a:v>b?b:v;
+const lerp=(a,b,t)=>a+(b-a)*t;
+const smooth=t=>t*t*(3-2*t);
+const easeIO=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const RM=(typeof matchMedia==='function')&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+const COARSE=(typeof matchMedia==='function')&&matchMedia('(pointer: coarse)').matches;
+const PAD2=n=>String(n).padStart(2,'0');
+const MINUS='\u2212';
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const rnd=mulberry32(1123581321);
+let _sp=null;
+function gauss(){ if(_sp!==null){const v=_sp;_sp=null;return v}
+  let u=0,v=0; while(u===0)u=rnd(); while(v===0)v=rnd();
+  const m=Math.sqrt(-2*Math.log(u)),a=2*Math.PI*v; _sp=m*Math.sin(a); return m*Math.cos(a); }
+const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const WDAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const UTC0=Date.UTC(2024,0,1);
+const dateOf=d=>new Date(UTC0+d*864e5);
+const dowOf=(y,d)=>new Date(Date.UTC(y,0,1+d)).getUTCDay();
+const md=(m,dd)=>Math.round((Date.UTC(2024,m-1,dd)-UTC0)/864e5);
+const dstr=d=>{const t=dateOf(d);return MONTHS[t.getUTCMonth()]+' '+t.getUTCDate()};
+const dstrISO=d=>{const t=dateOf(d);return '2024-'+PAD2(t.getUTCMonth()+1)+'-'+PAD2(t.getUTCDate())};
+const dstrLong=d=>{const t=dateOf(d);return WDAYS[t.getUTCDay()]+' '+MONTHS[t.getUTCMonth()]+' '+t.getUTCDate()};
+const hourStr=h=>{const hh=Math.floor(h),mm=Math.round((h-hh)*60);return mm===60?(hh+1)+':00':hh+':'+PAD2(mm)};
+const fmtGW=v=>(v<0?MINUS:'')+Math.abs(v).toFixed(2)+' GW';
+const store={get(k){try{return window.localStorage.getItem(k)}catch(e){return null}},set(k,v){try{window.localStorage.setItem(k,v)}catch(e){}}};
+const live=$('#live');
+function announce(msg){ if(!live)return; live.textContent=''; setTimeout(()=>{live.textContent=msg},40); }
+function toastMsg(msg){ const t=$('#toast'); if(!t)return; t.textContent=msg; t.classList.add('on'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('on'),2600); }
+
+const F={mono:'"IBM Plex Mono",ui-monospace,Consolas,monospace',serif:'"Newsreader",Georgia,serif',disp:'"Fraunces",Georgia,serif'};
+const m10=`400 10px ${F.mono}`, m11=`500 11px ${F.mono}`, m12=`500 12px ${F.mono}`, m13=`600 13px ${F.mono}`, m26=`600 26px ${F.mono}`;
+const C={bg:'#0a0e14',bg2:'#0e141c',ink:'#ece7db',dim:'#b3ada0',mute:'#8a92a0',
+  hair:'rgba(236,231,219,.09)',hair2:'rgba(236,231,219,.22)',
+  steel:'#7fa8d9',amber:'#f2a93b',ember:'#e4603a',sage:'#55ab8e',sand:'#d8cfb0'};
+const RAMP=[[-1.2,'#11554e'],[0.0,'#3f9d82'],[0.9,'#a8a98f'],[1.8,'#c99a6b'],[3.0,'#e07043'],[4.2,'#ef8c55'],[5.4,'#f6a86b']];
+function hex2rgb(h){return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)]}
+function rampColor(v){ v=clamp(v,-1.2,5.4);
+  for(let i=0;i<RAMP.length-1;i++){ const [a,ca]=RAMP[i],[b,cb]=RAMP[i+1];
+    if(v<=b){ const t=(v-a)/(b-a||1),A=hex2rgb(ca),B=hex2rgb(cb);
+      return `rgb(${Math.round(lerp(A[0],B[0],t))},${Math.round(lerp(A[1],B[1],t))},${Math.round(lerp(A[2],B[2],t))})`; } }
+  return RAMP[RAMP.length-1][1]; }
+function ticks(min,max,n){ const span=max-min,raw=span/n,mag=Math.pow(10,Math.floor(Math.log10(raw||1)));
+  let step=mag; for(const s of [1,2,2.5,5,10]){ if(raw<=s*mag){step=s*mag;break} }
+  const out=[]; for(let v=Math.ceil(min/step)*step; v<=max+1e-9; v+=step) out.push(Math.abs(v)<1e-9?0:v); return out; }
+
+/* ================================================================
+   2 · CHART FRAMEWORK  (one rAF loop, DPR-aware, dirty flags)
+================================================================ */
+const charts=new Set(), anims=new Set();
+let raf=0, last=0;
+function kick(){ if(!raf) raf=requestAnimationFrame(tickFn); }
+function tickFn(ts){ raf=0;
+  if(anims.size){ for(const a of Array.from(anims)){ const t=Math.min(1,(ts-a.t0)/a.dur); a.fn(t); if(t>=1){ anims.delete(a); if(a.done)a.done(); } } }
+  if(heroOn && !RM) heroCh.dirty=true;
+  charts.forEach(ch=>{ if(ch.dirty && ch.rect.w>4){ ch.ctx.setTransform(ch.rect.dpr,0,0,ch.rect.dpr,0,0); try{ ch.draw(ch); }catch(err){ window.__errs.push('draw '+String(err)); } ch.dirty=false; } });
+  if(anims.size||heroOn) raf=requestAnimationFrame(tickFn);
+  last=ts;
+}
+let _aid=0;
+function animate(dur,fn,done){ if(RM){ fn(1); kick(); if(done)done(); return null; }
+  const a={id:++_aid,t0:performance.now(),dur,fn,done}; anims.add(a); kick(); return a; }
+function cancelAnim(a){ if(a) anims.delete(a); }
+function addChart(cv,draw,opts={}){ const ch={cv,ctx:cv.getContext('2d'),draw,opts,name:opts.name,dirty:true,rect:{w:0,h:0,dpr:1},pad:opts.pad||{l:44,r:16,t:18,b:30}};
+  cv.__ch=ch; charts.add(ch); resizeChart(ch); ro.observe(cv); return ch; }
+function resizeChart(ch){ const r=ch.cv.getBoundingClientRect(); if(r.width<2){ch.dirty=true;return}
+  const dpr=Math.min(window.devicePixelRatio||1,2), w=Math.round(r.width), h=Math.round(r.height);
+  if(ch.cv.width!==Math.round(w*dpr)||ch.cv.height!==Math.round(h*dpr)){ ch.cv.width=Math.round(w*dpr); ch.cv.height=Math.round(h*dpr); }
+  ch.rect={w,h,dpr}; ch.dirty=true; kick(); }
+const ro=new ResizeObserver(es=>{ for(const e of es){ const ch=e.target.__ch; if(ch) resizeChart(ch); } });
+function invalAll(){ charts.forEach(ch=>{ch.dirty=true}); kick(); }
+window.addEventListener('resize',()=>{ invalAll(); if(typeof checkReveals==='function')checkReveals(); });
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden){ last=0; invalAll(); } });
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>invalAll()).catch(()=>{});
+/* pointer + tooltip plumbing */
+const tip=$('#tip'), tipT=tip.querySelector('.tt'), tipB=tip.querySelector('.tb'), tipCv=tip.querySelector('canvas'), tipCx=tipCv.getContext('2d');
+function drawSpark(dayNet,day){ tipCx.setTransform(2,0,0,2,0,0); tipCx.clearRect(0,0,150,44);
+  tipCx.strokeStyle=C.hair; tipCx.lineWidth=1;
+  tipCx.strokeRect(.5,.5,149,43);
+  let mn=1e9,mx=-1e9; for(const v of dayNet){ if(v<mn)mn=v; if(v>mx)mx=v; }
+  const X=i=>3+i/23*144, Y=v=>40-((v-mn)/((mx-mn)||1))*34-3;
+  const roof=dayNet.some(v=>v<0.15);
+  if(roof){ tipCx.fillStyle='rgba(85,171,142,.18)'; tipCx.fillRect(1,1,148,42); }
+  tipCx.beginPath(); dayNet.forEach((v,i)=>i?tipCx.lineTo(X(i),Y(v)):tipCx.moveTo(X(i),Y(v)));
+  tipCx.strokeStyle=dayNet&&mx<0.6?C.sage:C.ember; tipCx.lineWidth=1.6; tipCx.stroke();
+  const mi=dayNet.indexOf(mn); tipCx.fillStyle=C.amber; tipCx.beginPath(); tipCx.arc(X(mi),Y(mn),2.4,0,7); tipCx.fill();
+  tipCx.fillStyle=C.mute; tipCx.font=m10; tipCx.textAlign='left'; tipCx.fillText('00h',4,9); tipCx.textAlign='right'; tipCx.fillText('24h',146,9);
+}
+function showTip(html,x,y,sparkDayNet){ tipT.innerHTML=tip._title||''; if(typeof html==='string') tipB.innerHTML=html; else tipB.textContent='';
+  if(sparkDayNet) drawSpark(sparkDayNet);
+  tipCv.style.display=sparkDayNet?'block':'none';
+  tip.classList.add('on'); tip.style.maxWidth='';
+  const w=tip.offsetWidth,h=tip.offsetHeight;
+  let L=clamp(x+16,8,window.innerWidth-w-8), T=y-h-16; if(T<8) T=y+20;
+  tip.style.left=L+'px'; tip.style.top=T+'px'; }
+function hideTip(){ tip.classList.remove('on'); tip._title=''; }
+function setTipTitle(s){ tip._title=s; }
+
+/* ================================================================
+   3 · SYNTHETIC DATA  (seeded, deterministic)
+================================================================ */
+const YEARS=[]; for(let y=2010;y<=2024;y++) YEARS.push(y);
+const leap=y=>(y%4===0&&y%100!==0)||y%400===0;
+const latR=37.6*Math.PI/180;
+const WK=[0.58,0.55,0.53,0.52,0.54,0.60,0.72,0.86,0.95,0.97,0.96,0.94,0.92,0.90,0.90,0.93,0.98,1.06,1.13,1.18,1.16,1.08,0.92,0.72];
+const WE=[0.62,0.59,0.57,0.55,0.56,0.60,0.68,0.78,0.86,0.90,0.92,0.92,0.90,0.88,0.88,0.90,0.94,1.00,1.06,1.10,1.10,1.04,0.90,0.74];
+const EVPROF=[0.30,0.22,0.16,0.12,0.10,0.10,0.10,0.12,0.15,0.18,0.22,0.26,0.30,0.33,0.36,0.40,0.52,0.72,0.95,1.12,1.15,1.06,0.78,0.48];
+const HOLS=new Map([[md(1,1),.70],[md(1,15),.82],[md(2,19),.85],[md(3,29),.85],[md(5,27),.85],[md(7,4),.86],[md(9,2),.86],[md(11,28),.72],[md(11,29),.85],[md(12,24),.85],[md(12,25),.66],[md(12,31),.80]]);
+function holF(y,d){ if(y===2024){ const f=HOLS.get(d); if(f)return f; if(d>=md(12,23)&&d<=md(12,30))return .9; } return 1; }
+function ov(anom,cld,d0,d1,ta,tc){ const n=anom.length;
+  for(let d=Math.max(0,d0-2);d<=Math.min(n-1,d1+2);d++){
+    const ed=Math.max(d0-d,d-d1,0); let w=clamp(1-ed/2.5,0,1); w=smooth(w);
+    anom[d]=lerp(anom[d],ta,w); cld[d]=clamp(lerp(cld[d],tc,w),.02,1); } }
+const DATA={}, AN24=new Float32Array(366), CL24=new Float32Array(366);
+const capOf=y=>0.06+5.0*Math.pow((y-2010)/14,2.6);
+function genYear(y){ const days=leap(y)?366:365, len=days*24;
+  const anom=new Float32Array(days), cld=new Float32Array(days);
+  let ap=0, cp=.55;
+  for(let d=0;d<days;d++){ const seasonM=.62+.16*Math.cos(2*Math.PI*(d-200)/365.25);
+    ap=clamp(ap*.87+gauss()*1.5,-16,16);
+    cp=clamp(cp+.30*(seasonM-cp)+gauss()*.13,.05,1);
+    anom[d]=ap; cld[d]=cp; }
+  if(y===2024){ ov(anom,cld,md(2,5),md(2,9),-9.5,.92); ov(anom,cld,md(7,13),md(7,21),8.8,.92);
+    ov(anom,cld,md(4,12),md(4,14),.6,.95); ov(anom,cld,md(10,29),md(10,31),-1,.12);
+    ov(anom,cld,md(12,24),md(12,26),-3.5,.85); ov(anom,cld,md(5,25),md(5,26),1.2,.95);
+    AN24.set(anom); CL24.set(cld); }
+  const cap=capOf(y), P=3.10*Math.pow(1.007,y-2010);
+  const evc=y<2018?0:0.62*Math.pow(Math.min(1,(y-2017)/7),1.3);
+  const D=new Float32Array(len),S=new Float32Array(len),T=new Float32Array(len),EV=new Float32Array(len),N=new Float32Array(len);
+  let ar=0, cu=cld[0], en=0;
+  for(let d=0;d<days;d++){
+    const cs=.5-.5*Math.cos(2*Math.PI*(d-200)/365.25);
+    const seas=14.8+9.8*Math.cos(2*Math.PI*(d-200)/365.25);
+    const A=3.0+3.8*cld[d];
+    const dow=dowOf(y,d), hol=holF(y,d);
+    const dec=23.44*Math.sin(2*Math.PI*(d+284)/365.25)*Math.PI/180;
+    const sinLat=Math.sin(latR)*Math.sin(dec), cosLat=Math.cos(latR)*Math.cos(dec);
+    for(let h=0;h<24;h++){ const i=d*24+h;
+      T[i]=clamp(seas+A*Math.cos(2*Math.PI*(h-14.6)/24)+anom[d]+.5*gauss(),-13,43);
+      cu=clamp(cu+.18*(cld[d]-cu)+gauss()*.045,.02,1);
+      const om=(h+.5-12)*15*Math.PI/180;
+      const cz=sinLat+cosLat*Math.cos(om);
+      let s=0;
+      if(cz>.015){ const poa=Math.pow(cz,1.18);
+        const eff=clamp(1-.0042*(T[i]+28*poa-25),.72,1.03);
+        const snow=(T[i]<.8&&cld[d]<.55&&(d<45||d>334))?.82:1;
+        s=cap*.96*poa*Math.pow(cu,1.35)*eff*snow; }
+      S[i]=Math.max(0,s);
+      const shape=(dow===0||dow===6)?(dow===0?WE[h]*.94:WE[h]):WK[h];
+      const tr=T[i]>=22?1+Math.min(.42,.020*(T[i]-22)):(T[i]<13?1+Math.min(.30,.011*Math.pow(13-T[i],1.15)):1);
+      const light=(h>=16&&h<=22)?1+.055*cs:1;
+      ar=ar*.92+gauss()*.012;
+      let dv=P*shape*tr*light*(1+ar+.018*gauss());
+      if(hol<1) dv*=hol;
+      en=en*.85+gauss()*.02;
+      const ev=evc*EVPROF[h]*(1+en);
+      EV[i]=ev; D[i]=Math.max(.3,dv+ev); N[i]=D[i]-S[i];
+    }
+  }
+  DATA[y]={D,S,T,EV,N,days,len,evc};
+}
+YEARS.forEach(genYear);
+/* --- 15-minute record, 2024 --- */
+const NM15=366*96;
+const D15=new Float32Array(NM15), S15=new Float32Array(NM15), N15=new Float32Array(NM15), T15=new Float32Array(NM15), E15=new Float32Array(NM15);
+{
+  const cap=capOf(2024), P=3.10*Math.pow(1.007,14), evc=DATA[2024].evc;
+  let ar=0, cu=CL24[0], en=0;
+  for(let d=0;d<366;d++){
+    const cs=.5-.5*Math.cos(2*Math.PI*(d-200)/365.25);
+    const seas=14.8+9.8*Math.cos(2*Math.PI*(d-200)/365.25);
+    const A=3.0+3.8*CL24[d];
+    const dow=dowOf(2024,d), hol=holF(2024,d);
+    const dec=23.44*Math.sin(2*Math.PI*(d+284)/365.25)*Math.PI/180;
+    const sinLat=Math.sin(latR)*Math.sin(dec), cosLat=Math.cos(latR)*Math.cos(dec);
+    for(let q=0;q<96;q++){ const i=d*96+q, hf=(q+0.5)/4;
+      const tv=seas+A*Math.cos(2*Math.PI*(hf-14.6)/24)+AN24[d]+.4*gauss();
+      T15[i]=clamp(tv,-13,43);
+      cu=clamp(cu+.09*(CL24[d]-cu)+gauss()*.02,.02,1);
+      const om=(hf+.5-12)*15*Math.PI/180;
+      const cz=sinLat+cosLat*Math.cos(om);
+      let s=0;
+      if(cz>.015){ const poa=Math.pow(cz,1.18);
+        const eff=clamp(1-.0042*(T15[i]+28*poa-25),.72,1.03);
+        const snow=(T15[i]<.8&&CL24[d]<.55&&(d<45||d>334))?.82:1;
+        s=cap*.96*poa*Math.pow(cu,1.35)*eff*snow; }
+      S15[i]=Math.max(0,s);
+      const k=Math.min(23,Math.floor(hf)), f=hf-k;
+      const wk2=WK[k]+(WK[Math.min(23,k+1)]-WK[k])*f, we2=WE[k]+(WE[Math.min(23,k+1)]-WE[k])*f;
+      const shape=(dow===0||dow===6)?(dow===0?we2*.94:we2):wk2;
+      const tr=T15[i]>=22?1+Math.min(.42,.020*(T15[i]-22)):(T15[i]<13?1+Math.min(.30,.011*Math.pow(13-T15[i],1.15)):1);
+      const light=(hf>=16&&hf<=22)?1+.055*cs:1;
+      ar=ar*.96+gauss()*.008;
+      let dv=P*shape*tr*light*(1+ar+.014*gauss());
+      if(hol<1) dv*=hol;
+      en=en*.92+gauss()*.012;
+      const ev=evc*(EVPROF[k]+(EVPROF[Math.min(23,k+1)]-EVPROF[k])*f)*(1+en);
+      E15[i]=ev; D15[i]=Math.max(.3,dv+ev); N15[i]=D15[i]-S15[i];
+    }
+  }
+}
+/* --- aggregates --- */
+const AVG={};
+for(const y of YEARS){ const {D,S,N,EV,len,days}=DATA[y];
+  const aD=new Float64Array(24),aS=new Float64Array(24),aN=new Float64Array(24),aNE=new Float64Array(24);
+  const cD=new Float64Array(24),cS=new Float64Array(24),cN=new Float64Array(24),cNE=new Float64Array(24);
+  for(let d=0;d<days;d++) for(let h=0;h<24;h++){ const i=d*24+h;
+    aD[h]+=D[i];cD[h]++; aS[h]+=S[i];cS[h]++; aN[h]+=N[i];cN[h]++; const ne=D[i]-EV[i]-S[i]; aNE[h]+=ne;cNE[h]++; }
+  for(let h=0;h<24;h++){ aD[h]/=cD[h];aS[h]/=cS[h];aN[h]/=cN[h];aNE[h]/=cNE[h]; }
+  AVG[y]={D:aD,S:aS,N:aN,NE:aNE};
+}
+/* bands for act1 (2010 demand p10/p90) */
+function band(y,key,pick){ const {D,S,N,len,days}=DATA[y]; const out=[];
+  for(let h=0;h<24;h++){ const arr=[]; for(let d=0;d<days;d++){ const i=d*24+h;
+    arr.push(key==='D'?D[i]:N[i]); } arr.sort((a,b)=>a-b);
+    out.push([arr[Math.floor(pick[0]*(arr.length-1))],arr[Math.floor(pick[1]*(arr.length-1))]]); }
+  return out; }
+const BAND10D=band(2010,'D',[.1,.9]);
+/* daily stats 2024 */
+const DAILY=[];
+for(let d=0;d<366;d++){ const N=DATA[2024].N,T=DATA[2024].T,S=DATA[2024].S,D=DATA[2024].D;
+  let tmax=-99, mn=1e9, mnH=0, mx=-1e9, mxH=0, roof=0, sol=0, dem=0;
+  for(let h=0;h<24;h++){ const i=d*24+h;
+    if(T[i]>tmax)tmax=T[i];
+    if(N[i]<mn){mn=N[i];mnH=h} if(N[i]>mx){mx=N[i];mxH=h}
+    if(N[i]<0.15)roof++; sol+=S[i]; dem+=D[i]; }
+  let ramp=-99, rampH=0;
+  for(let h=14;h<22;h++){ const dd=N[d*24+h+1]-N[d*24+h]; if(dd>ramp){ramp=dd;rampH=h} }
+  DAILY.push({d,tmax,minN:mn,mnH,maxN:mx,mxH,ramp,rampH,roof,sol,dem,dow:dowOf(2024,d)});
+}
+/* monthly avg net-day, 2024 */
+const MON=[];
+for(let m=0;m<12;m++){ const d0=md(m+1,1), d1=m<11?md(m+2,1)-1:365;
+  const arr=new Float64Array(24); let c=0;
+  for(let d=d0;d<=d1;d++){ for(let h=0;h<24;h++) arr[h]+=DATA[2024].N[d*24+h]; c++; }
+  for(let h=0;h<24;h++) arr[h]/=c;
+  MON.push({m,d0,d1,arr,n:c}); }
+/* sunrise / sunset 2024 */
+const SR=[],SS=[];
+for(let d=0;d<366;d++){ const dec=23.44*Math.sin(2*Math.PI*(d+284)/365.25)*Math.PI/180;
+  const x=clamp(-Math.tan(latR)*Math.tan(dec),-1,1); const w0=Math.acos(x)*12/Math.PI;
+  SR.push(12-w0); SS.push(12+w0); }
+/* headline stats (computed, never hard-coded) */
+function minYrRange(arr,h0,h1){ let m=1e9; for(let h=h0;h<=h1;h++)m=Math.min(m,arr[h]); return m; }
+let crossYr=2024; for(const y of YEARS){ const belly=minYrRange(AVG[y].N,10,16), valley=minYrRange(AVG[y].N,2,6);
+  if(belly<valley-.05){ crossYr=y; break; } }
+const roofHours=DAILY.reduce((a,r)=>a+r.roof,0);
+const roofDays=DAILY.filter(r=>r.roof>0).length;
+const weekendRoofPct=(DAILY.filter(r=>r.roof>0&&(r.dow===0||r.dow===6)).length/Math.max(1,roofDays)*100);
+const deepest=DAILY.reduce((a,r)=>r.minN<a.minN?r:a,DAILY[0]);
+const steepest=DAILY.reduce((a,r)=>r.ramp>a.ramp?r:a,DAILY[0]);
+function meanRamp(y){ const {N,days}=DATA[y]; let s=0;
+  for(let d=0;d<days;d++){ let r=-99; for(let h=14;h<22;h++){const dd=N[d*24+h+1]-N[d*24+h]; if(dd>r)r=dd} s+=r; } return s/days; }
+const ramp10=meanRamp(2010), ramp24=meanRamp(2024);
+const {D:S24d,S:S24s}=DATA[2024]; let totD=0,totS=0; for(let i=0;i<DATA[2024].len;i++){totD+=S24d[i];totS+=S24s[i]}
+const solarShare=totS/totD*100;
+let hoursTotal=0; YEARS.forEach(y=>hoursTotal+=DATA[y].len);
+/* pearson r + quadratic fit (2024: tmax vs ramp) */
+function pearson(xs,ys){ const n=xs.length; let sx=0,sy=0,sxx=0,syy=0,sxy=0;
+  for(let i=0;i<n;i++){sx+=xs[i];sy+=ys[i];sxx+=xs[i]*xs[i];syy+=ys[i]*ys[i];sxy+=xs[i]*ys[i]}
+  const cov=sxy/n-sx/n*(sy/n), dx=Math.sqrt(Math.max(0,sxx/n-(sx/n)**2)), dy=Math.sqrt(Math.max(0,syy/n-(sy/n)**2));
+  return dx&&dy?cov/(dx*dy):0; }
+const SC_X=DAILY.map(r=>r.tmax), SC_Y=DAILY.map(r=>r.ramp);
+const scatR=pearson(SC_X,SC_Y);
+const scatR2=pearson(DAILY.map(r=>r.minN),SC_Y);
+/* binned mean ramp per 2 °C of daily max temperature — a robust shape-of-the-smile */
+const SC_BINS=(()=>{ const mn=Math.min(...SC_X), nb=Math.ceil((Math.max(...SC_X)-mn)/2);
+  const s=[],c=[],n=[]; for(let i=0;i<nb;i++){s.push(0);c.push(0);n.push(0)}
+  SC_X.forEach((x,i)=>{ const b=clamp(Math.floor((x-mn)/2),0,nb-1); s[b]+=SC_Y[i]; n[b]++; c[b]=mn+b*2+1; });
+  const out=[]; for(let b=0;b<nb;b++) if(n[b]>=3) out.push([c[b],s[b]/n[b]]);
+  return out; })();
+/* fill computed numbers into prose */
+function set(id,v){ const el=document.getElementById(id); if(el)el.textContent=v; }
+set('cHours',hoursTotal.toLocaleString('en-US'));
+set('cHours2',hoursTotal.toLocaleString('en-US'));
+set('cDays','2010–2024');
+set('cSeed','1123581321');
+set('cShare',solarShare.toFixed(1)+' %');
+set('cCap',capOf(2010).toFixed(2)+' → '+capOf(2024).toFixed(2)+' GW');
+set('stCross',''+crossYr);
+set('stEV','up to '+(DATA[2024].evc*1.15).toFixed(2)+' GW');
+set('stRamp24',ramp24.toFixed(2)+' GW/h');
+set('stRamp10',ramp10.toFixed(2)+' GW/h');
+set('pRoofDays',''+roofDays);
+set('pRoofH',roofHours+' hours');
+set('pRoofPct',weekendRoofPct.toFixed(0)+' %');
+set('scR','r = '+scatR.toFixed(2));
+set('scR2','r = '+scatR2.toFixed(2));
+
+/* ================================================================
+   4 · STATE + LINKING
+================================================================ */
+const state={ sel0:0, sel1:365, band:null, year:2010, step:0, day:deepest.d, part:'belly',
+  ex:{net:1,gross:0,solar:0,noev:0,avg:1,band:1}, sort:{key:'d',dir:1} };
+const selListeners=[];
+function eachSelDay(fn){ for(let d=state.sel0;d<=state.sel1;d++){ if(state.band!==null&&(DAILY[d].tmax<state.band[0]||DAILY[d].tmax>state.band[1]))continue; fn(d); } }
+function selCount(){ let n=0; eachSelDay(()=>n++); return n; }
+function selChanged(opts={}){ const n=selCount();
+  const r0=dstr(state.sel0), r1=dstr(state.sel1);
+  set('ssRange', state.sel0===0&&state.sel1===365?'Full year 2024':(state.sel0===state.sel1?r0:r0+' – '+r1));
+  set('ssDays', n+' day'+(n===1?'':'s'));
+  if(n>0){ let sb=0,sr=0,st=0,roof=0,deep=null;
+    eachSelDay(d=>{ const r=DAILY[d]; sb+=r.minN; sr+=r.ramp; st+=r.tmax; roof+=r.roof; if(!deep||r.minN<deep.minN)deep=r; });
+    set('ssBelly',(sb/n).toFixed(2)+' GW');
+    set('ssRoof',''+roof);
+    set('ssRamp',(sr/n).toFixed(2)+' GW/h');
+    set('ssTmax',(st/n).toFixed(1)+' °C');
+    set('ssDeepest',dstrLong(deep.d));
+    set('ssDeepestV','dip '+fmtGW(deep.minN));
+  } else { ['ssBelly','ssRoof','ssRamp','ssTmax','ssDeepest','ssDeepestV'].forEach(id=>set(id,'—')); }
+  charts.forEach(ch=>{ if(['heat','tiles','scat','sel'].includes(ch.name)) ch.dirty=true; });
+  if(!opts.deferTable) buildTable();
+  if(!opts.quiet) announce(`Selection: ${state.sel0===state.sel1?dstrLong(state.sel0):dstr(state.sel0)+' to '+dstr(state.sel1)} — ${n} day${n===1?'':'s'}${state.band!==null?`, temperature ${state.band[0]} to ${state.band[1]} degrees`:''}`);
+  kick(); }
+const HINT_IDLE=COARSE?'Tap a day to select it — every other view follows.':'Drag across the chart to select a date range — every other view follows.';
+function bandChanged(quiet){ const a=state.band;
+  $('#selHint').textContent=a?`Filtering: max temp ${a[0]}–${a[1]} °C`:HINT_IDLE;
+  selChanged({quiet:true});
+  if(!quiet) announce(a?`Temperature filter ${a[0]} to ${a[1]} degrees`: 'Temperature filter cleared'); }
+
+/* ================================================================
+   5 · HERO
+================================================================ */
+const heroCh=addChart($('#heroCv'),ch=>{
+  const c=ch.ctx,W=ch.rect.w,H=ch.rect.h; c.clearRect(0,0,W,H);
+  const now=performance.now();
+  const drift=RM?0:Math.sin(now*.00022)*10;
+  const rowH=Math.min(34,H/14);
+  const base=H*.16, scale=Math.min(52,H*.075);
+  for(let yi=0;yi<15;yi++){ const y=YEARS[14-yi]; const A=AVG[y].N;
+    const t=yi/14, mix=[127,168,217], mix2=[228,96,58];
+    const col=`rgba(${Math.round(lerp(mix[0],mix2[0],t))},${Math.round(lerp(mix[1],mix2[1],t))},${Math.round(lerp(mix[2],mix2[2],t))},${.16+.5*t})`;
+    const off=drift*(0.4+0.6*t)*(yi%2?1:-1)*.6;
+    c.beginPath();
+    for(let h=0;h<24;h++){ const x=W*.06+(h/23)*W*.88+off, yy=base+yi*rowH+rowH-(A[h]/6.5)*scale;
+      h?c.lineTo(x,yy):c.moveTo(x,yy); }
+    c.strokeStyle=col; c.lineWidth=t>.75?1.6:1; c.stroke();
+  }
+},{pad:{l:0,r:0,t:0,b:0}});
+let heroOn=false;
+const ioHero=new IntersectionObserver(es=>{ es.forEach(en=>{ heroOn=en.isIntersecting; if(heroOn)kick(); }); },{threshold:.02});
+ioHero.observe($('#heroCv'));
+
+/* ================================================================
+   6 · ACT 1 — 2010 average day with band
+================================================================ */
+function annot(c,ax,ay,ex,ey,text,opts={}){ const col=opts.col||C.dim, dot=opts.dot||C.amber, align=opts.align||'left';
+  c.save(); c.strokeStyle='rgba(236,231,219,.35)'; c.lineWidth=1;
+  const sx2=ex+(align==='left'?10:-10);
+  c.beginPath(); c.moveTo(ax,ay); c.lineTo(ex,ey); c.lineTo(sx2,ey); c.stroke();
+  c.fillStyle=dot; c.beginPath(); c.arc(ax,ay,2.6,0,7); c.fill();
+  c.font=m11; c.fillStyle=col; c.textAlign=align; c.textBaseline=ey<ay?'bottom':'top';
+  c.fillText(text,ex+(align==='left'?14:-14),ey); c.restore(); }
+function axes(ch,X,Y,x0,x1,y0,y1,o={}){ const c=ch.ctx,W=ch.rect.w,H=ch.rect.h,p=ch.pad;
+  c.font=m10; c.fillStyle=C.mute;
+  (o.yt||ticks(y0,y1,4)).forEach(v=>{ const y=Y(v); if(y>p.t-6&&y<H-p.b+6){
+    c.strokeStyle=C.hair; c.beginPath(); c.moveTo(p.l,y); c.lineTo(W-p.r,y); c.stroke();
+    c.textAlign='right'; c.textBaseline='middle'; c.fillText(o.fy?o.fy(v):v,p.l-8,y); } });
+  (o.xt||ticks(x0,x1,6)).forEach(v=>{ const x=X(v);
+    c.textAlign='center'; c.textBaseline='top'; c.fillText(o.fx?o.fx(v):v,x,H-p.b+8); });
+  c.fillStyle=C.mute; c.font=m10;
+  c.textAlign='left'; c.textBaseline='middle'; c.fillText(o.yl||'GW', 8, p.t+2);
+  if(o.xl){ c.textAlign='right'; c.textBaseline='top'; c.fillText(o.xl, W-p.r, H-p.b+8+14); } }
+let a1prog=0;
+const a1ch=addChart($('#cvA1'),ch=>{
+  const c=ch.ctx,W=ch.rect.w,H=ch.rect.h,p=ch.pad; c.clearRect(0,0,W,H);
+  if(W<30)return;
+  const x0=0,x1=24,y0=0;
+  const A=AVG[2010].D;
+  let mx=0; for(let h=0;h<24;h++) mx=Math.max(mx,A[h],BAND10D[h][1]);
+  const y1=Math.max(4.4,mx*1.14);
+  const X=h=>p.l+(h-x0)/(x1-x0)*(W-p.l-p.r), Y=v=>H-p.b-(v-y0)/(y1-y0)*(H-p.t-p.b);
+  axes(ch,X,Y,x0,x1,y0,y1,{yt:ticks(y0,y1,4),xt:[0,3,6,9,12,15,18,21,24],xl:'hour of day'});
+  /* band */
+  c.save(); c.beginPath();
+  for(let h=0;h<24;h++){ const y=Y(BAND10D[h][1]); h?c.lineTo(X(h),y):c.moveTo(X(h),y); }
+  for(let h=23;h>=0;h--) c.lineTo(X(h),Y(BAND10D[h][0]));
+  c.closePath(); c.fillStyle='rgba(127,168,217,.10)'; c.fill(); c.restore();
+  /* line with draw-on */
+  const nCut=clamp(a1prog,0,1)*23;
+  c.beginPath();
+  for(let h=0;h<=Math.floor(nCut);h++){ const x=X(h),y=Y(A[h]); h?c.lineTo(x,y):c.moveTo(x,y); }
+  if(nCut<23){ const f=nCut-Math.floor(nCut), h=Math.floor(nCut);
+    c.lineTo(X(h)+f*(X(h+1)-X(h)), Y(A[h])+f*(Y(A[h+1])-Y(A[h]))); }
+  c.strokeStyle=C.steel; c.lineWidth=2.2; c.lineJoin='round'; c.stroke();
+  if(a1prog>=.98){ /* annotations computed from data */
+    let valley=0; for(let h=1;h<7;h++) if(A[h]<A[valley])valley=h;
+    let peak=16; for(let h=17;h<24;h++) if(A[h]>A[peak])peak=h;
+    let lift=4; for(let h=5;h<11;h++) if(A[h]>=.80*A[peak]&&A[h-1]<.80*A[peak]){lift=h;break}
+    annot(c,X(valley),Y(A[valley]),X(valley),Y(A[valley])-34,`valley ${hourStr(valley)} · ${A[valley].toFixed(2)} GW`,{align:'left',dot:C.steel});
+    annot(c,X(lift),Y(A[lift]),X(lift)+6,Y(A[lift])-42,`morning lift ${hourStr(lift)}`,{align:'left',dot:C.steel});
+    annot(c,X(peak),Y(A[peak]),X(peak),Y(A[peak])-40,`evening head ${hourStr(peak)} · ${A[peak].toFixed(2)} GW`,{align:'right',dot:C.steel});
+  }
+},{pad:{l:44,r:20,t:34,b:44},name:'a1'});
+function revealA1(){ animate(1400,t=>{ a1prog=easeIO(t); a1ch.dirty=true; kick(); }); }
+
+/* ================================================================
+   7 · ACT 2 — morph
+================================================================ */
+const STEPY=[0,.27,.55,.82];
+function yearSeries(yf){ const i=clamp(Math.floor(yf-2010),0,13), f=clamp(yf-2010-i,0,1);
+  const A=AVG[YEARS[i]], B=AVG[YEARS[Math.min(14,i+1)]];
+  const out={D:new Float64Array(24),S:new Float64Array(24),N:new Float64Array(24),NE:new Float64Array(24)};
+  for(let h=0;h<24;h++){ out.D[h]=lerp(A.D[h],B.D[h],f); out.S[h]=lerp(A.S[h],B.S[h],f);
+    out.N[h]=lerp(A.N[h],B.N[h],f); out.NE[h]=lerp(A.NE[h],B.NE[h],f); }
+  return out; }
+function duckPath(c,xa,ya,xb,yb,alpha){ /* side-profile duck, facing right, unit box y:0 top → .68 bottom */
+  const w=xb-xa, hh=(yb-ya)/0.68;
+  const mx=u=>xa+u*w, my=u=>ya+u*hh;
+  c.save(); c.globalAlpha*=alpha; c.strokeStyle=C.sand; c.lineWidth=1.5; c.beginPath();
+  c.moveTo(mx(.03),my(.10));
+  const Q=[[.25,.00,.52,.20],[.62,.24,.66,.09],[.71,.01,.80,.07],[.90,.10,.985,.16],[.95,.21,.86,.20],[.76,.24,.64,.42],[.55,.55,.42,.64],[.28,.70,.14,.56],[.02,.28,.03,.10]];
+  for(const q of Q) c.quadraticCurveTo(mx(q[0]),my(q[1]),mx(q[2]),my(q[3]));
+  c.closePath(); c.stroke(); c.restore(); }
+let morphProg=0; /* reveal */
+const morphCh=addChart($('#cvMorph'),ch=>{
+  const c=ch.ctx,W=ch.rect.w,H=ch.rect.h,p=ch.pad; c.clearRect(0,0,W,H);
+  if(W<30)return;
+  const yf=state.year, S=yearSeries(yf);
+  const x0=0,x1=24,y0=0;
+  const y1=Math.max(4.8,Math.max(...S.N,...S.D)*1.1);
+  const X=h=>p.l+(h-x0)/(x1-x0)*(W-p.l-p.r), Y=v=>H-p.b-(v-y0)/(y1-y0)*(H-p.t-p.b);
+  axes(ch,X,Y,x0,x1,y0,y1,{yt:ticks(y0,y1,4),xt:[0,6,12,18,24],xl:'hour of day'});
+  const emph=[{D:1,S:.32,N:.34,NE:0},{D:.55,S:1,N:.5,NE:0},{D:.45,S:.45,N:1,NE:0},{D:.4,S:.35,N:1,NE:.85}][state.step]||{D:1,S:.5,N:1,NE:0};
+  const cut=clamp(morphProg,0,1)*23;
+  const drawLine=(arr,col,w2,alpha,dash)=>{ if(alpha<=0.01)return; c.save(); c.globalAlpha=alpha;
+    c.beginPath();
+    const lim=Math.floor(cut);
+    for(let h=0;h<=lim;h++){ const x=X(h),y=Y(arr[h]); h?c.lineTo(x,y):c.moveTo(x,y); }
+    if(cut<23){ const f=cut-lim; c.lineTo(X(lim)+f*(X(lim+1)-X(lim)), Y(arr[lim])+f*(Y(arr[lim+1])-Y(arr[lim]))); }
+    c.strokeStyle=col; c.lineWidth=w2; c.lineJoin='round'; if(dash)c.setLineDash(dash); c.stroke(); c.restore(); };
+  /* solar area */
+  if(emph.S>.01){ c.save(); c.globalAlpha=.22*emph.S*morphProg; c.beginPath(); c.moveTo(X(0),Y(0));
+    for(let h=0;h<24;h++) c.lineTo(X(h),Y(S.S[h]*morphProg)); c.lineTo(X(23),Y(0)); c.closePath();
+    c.fillStyle=C.amber; c.fill(); c.restore(); }
+  drawLine(S.NE,C.mute,1.4,emph.NE*morphProg,[5,4]);
+  drawLine(S.D,C.steel,1.7,.9*emph.D);
+  drawLine(S.S,C.amber,1.5,.9*emph.S);
+  drawLine(S.N,C.ember,2.6,emph.N);
+  /* ramp bracket + annotation at late steps */
+  if(state.step>=3){ let rH=14,rV=-99; for(let h=14;h<22;h++){ const d=S.N[h+1]-S.N[h]; if(d>rV){rV=d;rH=h} }
+    c.save(); c.globalAlpha=.9; c.strokeStyle=C.ember; c.lineWidth=1.2;
+    const yb=Y(S.N[rH])-14;
+    c.beginPath(); c.moveTo(X(rH),yb); c.lineTo(X(rH+3),yb); c.stroke();
+    c.beginPath(); c.moveTo(X(rH),yb-4); c.lineTo(X(rH),yb+4); c.moveTo(X(rH+3),yb-4); c.lineTo(X(rH+3),yb+4); c.stroke();
+    c.font=m11; c.fillStyle=C.ember; c.textAlign='center'; c.textBaseline='bottom';
+    c.fillText(`steepest climb ≈ ${rV.toFixed(2)} GW/h`,X(rH+1.5),yb-5); c.restore();
+    duckPath(c,X(10.9),Y(3.9),X(14.6),Y(2.0),.3*Math.max(0,(state.year-2021.5)/2.5)*morphProg);
+  }
+  /* belly tag */
+  let bH=12,bV=1e9; for(let h=10;h<17;h++) if(S.N[h]<bV){bV=S.N[h];bH=h}
+  const v4=Math.min(S.N[2],S.N[3],S.N[4],S.N[5]);
+  if(bV<v4-.05&&state.step>=2){ annot(c,X(bH),Y(bV),X(bH),Y(bV)+30,'the belly',{col:C.sage,dot:C.sage}); }
+  /* year readout */
+  c.save(); c.font=m26; c.fillStyle='rgba(236,231,219,.9)'; c.textAlign='right'; c.textBaseline='top';
+  c.fillText(yf.toFixed(1),W-p.r-2,p.t-6); c.restore();
+},{pad:{l:44,r:20,t:40,b:44},name:'morph'});
+morphCh.cv.addEventListener('pointermove',e=>{
+  if(e.pointerType==='touch')return;
+  const r=morphCh.cv.getBoundingClientRect(), p=morphCh.pad;
+  const h=clamp((e.clientX-r.left-p.l)/(r.width-p.l-p.r)*24,0,24), hi=Math.round(h);
+  const S=yearSeries(state.year);
+  setTipTitle('average day · '+state.year.toFixed(1));
+  showTip(`${hourStr(hi)}\ndemand ${S.D[hi].toFixed(2)} · solar ${S.S[hi].toFixed(2)}\nnet ${S.N[hi].toFixed(2)} GW`,e.clientX,e.clientY);
+});
+morphCh.cv.addEventListener('pointerleave',hideTip);
+const yrRange=$('#yearRange'), yrLabel=$('#yearLabel'), playBtn=$('#playBtn');
+let playing=false, playAnim=null, manualUntil=0;
+function setYear(y,fromUser){ y=clamp(y,2010,2024); state.year=y;
+  yrRange.value=y; yrLabel.textContent=y.toFixed(1);
+  state.step=y<2010+14*STEPY[1]?0:y<2010+14*STEPY[2]?1:y<2010+14*STEPY[3]?2:3;
+  $$('#act2 .step').forEach(el=>el.classList.toggle('on',+el.dataset.step===state.step));
+  if(fromUser) morphProg=1;
+  morphCh.dirty=true; kick(); }
+yrRange.addEventListener('input',()=>{ stopPlay(); manualUntil=performance.now()+3500; setYear(+yrRange.value,true); });
+function stopPlay(){ if(playAnim)cancelAnim(playAnim); playAnim=null; playing=false;
+  playBtn.textContent='▶ Play'; playBtn.setAttribute('aria-pressed','false'); }
+playBtn.addEventListener('click',()=>{ if(playing){ stopPlay(); return; }
+  playing=true; playBtn.textContent='❚❚ Pause'; playBtn.setAttribute('aria-pressed','true');
+  manualUntil=Infinity; morphProg=1;
+  if(RM){ setYear(2024); stopPlay(); manualUntil=0; return; }
+  const from=state.year>=2023?2010:state.year, span=2024-from;
+  playAnim=animate(Math.max(2500,span/14*9000),t=>{ setYear(from+span*t); },()=>{ stopPlay(); manualUntil=0; });
+});
+
+/* ================================================================
+   8 · ACT 3 — duck anatomy
+================================================================ */
+const PARTS={
+  tail:{h:[1,7],copy:()=>`The tail sleeps through the small hours: fridges, servers, streetlights, the always-on hum. In 2024 it bottoms out at <span class="num">${minYrRange(AVG[2024].N,1,6).toFixed(2)} GW</span> — the number the grid once treated as its floor, and no longer is.`},
+  back:{h:[6,10],copy:()=>`The back is the morning shoulder — kettles, trains, offices powering up. It barely changed in fifteen years: same slope, same hour, <span class="num">${AVG[2024].N[8].toFixed(2)} GW</span> at 08:00. Solar doesn’t touch the morning yet; the sun is still climbing.`},
+  belly:{h:[10,16],copy:()=>`The belly is the whole story: at noon the city’s net demand sags to <span class="num">${minYrRange(AVG[2024].N,10,16).toFixed(2)} GW</span> on an average day — and to <span class="num">${fmtGW(deepest.minN)}</span> on ${dstrLong(deepest.d)}, below zero, with the meters running backwards.`},
+  neck:{h:[16,19],copy:()=>`The neck is the hour of reckoning. Between ${hourStr(16)} and ${hourStr(19)} the net load climbs by <span class="num">${(AVG[2024].N[19]-AVG[2024].N[16]).toFixed(2)} GW</span> on an average day — solar dying and dinner starting at the same time. In 2010 the same window rose ${(AVG[2010].N[19]-AVG[2010].N[16]).toFixed(2)} GW.`},
+  head:{h:[19,23],copy:()=>`The head is the peak that pays the bills: <span class="num">${Math.max(...AVG[2024].N).toFixed(2)} GW</span> around ${hourStr(AVG[2024].N.indexOf(Math.max(...AVG[2024].N)))}, now including up to <span class="num">${(DATA[2024].evc*1.15).toFixed(2)} GW</span> of cars charging. Solar helps the belly; it does nothing for the head.`}
+};
+const duckCh=addChart($('#cvDuck'),ch=>{
+  const c=ch.ctx,W=ch.rect.w,H=ch.rect.h,p=ch.pad; c.clearRect(0,0,W,H);
+  if(W<30)return;
+  const A=AVG[2024].N, x0=0,x1=24,y0=0,y1=5.2;
+  const X=h=>p.l+(h-x0)/(x1-x0)*(W-p.l-p.r), Y=v=>H-p.b-(v-y0)/(y1-y0)*(H-p.t-p.b);
+  axes(ch,X,Y,x0,x1,y0,y1,{yt:ticks(y0,y1,4),xt:[0,3,6,9,12,15,18,21,24],xl:'hour of day · 2024 average'});
+  const act=state.part;
+  c.save(); c.beginPath(); for(let h=0;h<24;h++){ const x=X(h),y=Y(A[h]); h?c.lineTo(x,y):c.moveTo(x,y); }
+  c.lineTo(X(24),Y(0)); c.lineTo(X(0),Y(0)); c.closePath();
+  c.fillStyle='rgba(228,96,58,.07)'; c.fill(); c.restore();
+  c.beginPath(); for(let h=0;h<24;h++){ const x=X(h),y=Y(A[h]); h?c.lineTo(x,y):c.moveTo(x,y); }
+  c.strokeStyle=C.ember; c.lineWidth=2.4; c.lineJoin='round'; c.stroke();
+  /* highlighted segment */
+  const seg=PARTS[act].h;
+  c.save(); c.beginPath();
+  for(let h=seg[0];h<=seg[1];h++){ const x=X(h),y=Y(A[h]); h===seg[0]?c.moveTo(x,y):c.lineTo(x,y); }
+  c.strokeStyle=C.amber; c.lineWidth=4; c.lineCap='round'; c.globalAlpha=.95; c.stroke(); c.restore();
+  const mid=seg[0]+(seg[1]-seg[0])/2, mv=A[Math.round(mid)];
+  c.fillStyle=C.amber; c.beginPath(); c.arc(X(mid),Y(mv),4,0,7); c.fill();
+  duckPath(c,X(10.9),Y(3.75),X(14.6),Y(2.0),.42);
+  /* part labels along curve */
+  const lab={tail:[3,-30],back:[8,-34],belly:[13,30],neck:[17.4,-40],head:[20,-40]};
+  for(const k in lab){ const [hh,dy]=lab[k]; c.font=m11;
+    c.fillStyle=k===act?C.amber:'rgba(179,173,160,.75)';
+    c.textAlign='center'; c.textBaseline=dy<0?'bottom':'top';
+    c.fillText(k,X(hh),Y(A[Math.round(hh)])+dy); }
+},{pad:{l:44,r:20,t:30,b:44},name:'duck'});
+function setPart(part,quiet){ state.part=part; duckCh.dirty=true;
+  $$('.part-row .btn').forEach(b=>b.setAttribute('aria-pressed',''+(b.dataset.part===part)));
+  const card=$('#partCard'); card.querySelector('h4').textContent='The '+part+' —';
+  card.querySelector('p').innerHTML=PARTS[part].copy();
+  if(!quiet)announce('Duck part: '+part); kick(); }
+$$('.part-row .btn').forEach(b=>b.addEventListener('click',()=>setPart(b.dataset.part)));
+duckCh.cv.addEventListener('pointermove',e=>{ const r=duckCh.cv.getBoundingClientRect();
+  const x=e.clientX-r.left, A=AVG[2024].N;
+  const p=duckCh.pad, h=clamp((x-p.l)/(r.width-p.l-p.r)*24,0,24);
+  let best=null,bd=1e9; for(const k in PARTS){ const s=PARTS[k].h, mid=s[0]+(s[1]-s[0])/2;
+    const d=Math.abs(h-mid); if(d<bd){bd=d;best=k} }
+  if(best&&bd<2.6&&best!==state.part) setPart(best,true);
+  if(e.pointerType!=='touch'){ const hi=clamp(Math.round(h),0,23);
+    setTipTitle('2024 average day'); showTip(
+      `${hourStr(hi)} · net ${A[hi].toFixed(2)} GW`, e.clientX, e.clientY); }
+  else hideTip(); });
+duckCh.cv.addEventListener('pointerleave',hideTip);
+
+/* ================================================================
+   9 · ACT 4 — heatmap + tiles + selection curve
+================================================================ */
+function heatDayAt(ch,x){ const p=ch.pad; return clamp(Math.floor((x-p.l)/((ch.rect.w-p.l-p.r)/366)),0,365); }
+function heatHourAt(ch,y){ const p=ch.pad; return clamp(Math.floor((y-p.t)/((ch.rect.h-p.t-p.b)/24)),0,23); }
+const heatCh=addChart($('#cvHeat'),ch=>{
+  const c=ch.ctx,W=ch.rect.w,H=ch.rect.h,p=ch.pad; c.clearRect(0,0,W,H);
+  if(W<30)return;
+  const N=DATA[2024].N, cw=(W-p.l-p.r)/366, chh=(H-p.t-p.b)/24;
+  for(let d=0;d<366;d++) for(let h=0;h<24;h++)
+    { c.fillStyle=rampColor(N[d*24+h]); c.fillRect(p.l+d*cw,p.t+h*chh,cw+.6,chh+.6); }
+  /* month grid + labels */
+  c.font=m10; c.textAlign='center'; c.textBaseline='top';
+  for(let m=0;m<12;m++){ const d0=md(m+1,1), d1=m<11?md(m+2,1)-1:366;
+    c.strokeStyle='rgba(236,231,219,.14)'; c.beginPath(); c.moveTo(p.l+d0*cw,p.t); c.lineTo(p.l+d0*cw,H-p.b); c.stroke();
+    c.fillStyle=C.mute; c.fillText(MONTHS[m],p.l+(d0+d1)/2*cw,H-p.b+6); }
+  /* hour labels */
+  c.textAlign='right'; c.textBaseline='middle';
+  for(const h of [0,6,12,18,23]){ c.fillStyle=C.mute; c.fillText(PAD2(h)+':00',p.l-6,p.t+(h+.5)*chh); }
+  /* sunrise / sunset overlay */
+  c.strokeStyle='rgba(236,231,219,.5)'; c.lineWidth=1; c.setLineDash([]);
+  c.beginPath(); SR.forEach((v,d)=>{const x=p.l+(d+.5)*cw,y=p.t+v*chh; d?c.lineTo(x,y):c.moveTo(x,y)}); c.stroke();
+  c.beginPath(); SS.forEach((v,d)=>{const x=p.l+(d+.5)*cw,y=p.t+v*chh; d?c.lineTo(x,y):c.moveTo(x,y)}); c.stroke();
+  c.setLineDash([2,3]); c.strokeStyle='rgba(236,231,219,.3)';
+  c.beginPath(); c.moveTo(p.l+2,p.t+SR[0]*chh-8); c.lineTo(p.l+14,p.t+SR[0]*chh-8); c.stroke(); c.setLineDash([]);
+  /* temp-band dimming (per day) */
+  if(state.band!==null){ c.fillStyle='rgba(10,14,20,.55)';
+    for(let d=0;d<366;d++){ const t=DAILY[d].tmax;
+      if(t<state.band[0]||t>state.band[1]) c.fillRect(p.l+d*cw,p.t,cw+.6,H-p.t-p.b); } }
+  /* selection dim + brackets */
+  if(state.sel0>0||state.sel1<365){ c.fillStyle='rgba(10,14,20,.62)';
+    if(state.sel0>0) c.fillRect(p.l,p.t,state.sel0*cw,H-p.t-p.b);
+    if(state.sel1<365) c.fillRect(p.l+(state.sel1+1)*cw,p.t,W-p.l-p.r-(state.sel1+1)*cw,H-p.t-p.b);
+    c.fillStyle=C.amber;
+    c.fillRect(p.l+state.sel0*cw-1,p.t-3,2,4); c.fillRect(p.l+(state.sel1+1)*cw-1,p.t-3,2,4);
+    c.strokeStyle='rgba(242,169,59,.85)'; c.lineWidth=1.2;
+    c.strokeRect(p.l+state.sel0*cw,p.t-3,(state.sel1-state.sel0+1)*cw,1); }
+  /* deepest-day marker */
+  { const d=deepest.d,h=deepest.mnH;
+    c.fillStyle=C.sand; c.beginPath(); c.arc(p.l+(d+.5)*cw,p.t+(h+.5)*chh,3,0,7); c.fill();
+    c.strokeStyle='rgba(216,207,176,.6)'; c.beginPath(); c.moveTo(p.l+(d+.5)*cw,p.t+(h+.5)*chh-6); c.lineTo(p.l+(d+.5)*cw,p.t+(h+.5)*chh-26); c.stroke();
+    c.font=m10; c.textAlign='left'; c.textBaseline='bottom'; c.fillStyle=C.sand;
+    c.fillText(`deepest dip ${dstr(deepest.d)} ${hourStr(h)}`,p.l+(d+.5)*cw+6,p.t+(h+.5)*chh-26); }
+  /* hover crosshair */
+  const hv=ch.hover;
+  if(hv){ c.strokeStyle='rgba(236,231,219,.9)'; c.lineWidth=1;
+    c.strokeRect(p.l+hv.d*cw,p.t+hv.h*chh,cw+.6,chh+.6); }
+},{pad:{l:40,r:14,t:34,b:26},name:'heat'});
+function grabPointer(cv,e){ try{ cv.setPointerCapture(e.pointerId); }catch(err){} }
+heatCh.cv.addEventListener('pointerdown',e=>{ if(e.button!==0&&e.pointerType==='mouse')return;
+  heatCh._drag=true; heatCh._moved=false; grabPointer(heatCh.cv,e);
+  const r=heatCh.cv.getBoundingClientRect(); const d=heatDayAt(heatCh,e.clientX-r.left);
+  heatCh._d0=d; state.sel0=d; state.sel1=d; selChanged({deferTable:true}); });
+heatCh.cv.addEventListener('pointermove',e=>{ const r=heatCh.cv.getBoundingClientRect();
+  const x=e.clientX-r.left,y=e.clientY-r.top;
+  if(heatCh._drag){ heatCh._moved=true; const d=heatDayAt(heatCh,x);
+    state.sel0=Math.min(heatCh._d0,d); state.sel1=Math.max(heatCh._d0,d); selChanged({deferTable:true,quiet:true}); }
+  else { const d=heatDayAt(heatCh,x),h=heatHourAt(heatCh,y);
+    if(!heatCh.hover||heatCh.hover.d!==d||heatCh.hover.h!==h){ heatCh.hover={d,h}; heatCh.dirty=true; kick();
+      if(soundOn&&d!==heatCh._lastD){ heatCh._lastD=d; blip(pentFor(DATA[2024].N[d*24+h])); } } }
+  const d=heatDayAt(heatCh,x),h=heatHourAt(heatCh,y);
+  if(e.pointerType!=='touch'){
+    setTipTitle(dstrLong(d)+' · '+hourStr(h));
+    const i=d*24+h;
+    showTip(`net ${fmtGW(DATA[2024].N[i])}\nsolar ${DATA[2024].S[i].toFixed(2)} · demand ${DATA[2024].D[i].toFixed(2)} GW`,
+      e.clientX,e.clientY, dayNet24(d)); }
+  else hideTip(); });
+function endHeatDrag(){ if(!heatCh._drag)return; heatCh._drag=false;
+  selChanged({}); toastMsg(`Selected ${dstr(state.sel0)} – ${dstr(state.sel1)}`); }
+heatCh.cv.addEventListener('pointerup',endHeatDrag);
+heatCh.cv.addEventListener('pointercancel',endHeatDrag);
+heatCh.cv.addEventListener('pointerleave',()=>{ heatCh.hover=null; heatCh.dirty=true; kick(); hideTip(); });
+heatCh.cv.addEventListener('click',e=>{ if(heatCh._moved){heatCh._moved=false;return;}
+  const r=heatCh.cv.getBoundingClientRect(); const d=heatDayAt(heatCh,e.clientX-r.left);
+  state.sel0=d; state.sel1=d; selChanged({}); });
+heatCh.cv.addEventListener('keydown',e=>{
+  const w=state.sel1-state.sel0;
+  if(e.key==='ArrowLeft'||e.key==='ArrowRight'){ const dir=e.key==='ArrowRight'?1:-1;
+    if(e.shiftKey){ state.sel1=clamp(state.sel1+dir,0,365); state.sel0=Math.min(state.sel0,state.sel1); }
+    else { state.sel0=clamp(state.sel0+dir,0,365-w); state.sel1=state.sel0+w; }
+    selChanged({}); e.preventDefault(); }
+  else if(e.key==='Home'){ state.sel0=0;state.sel1=365;selChanged({});e.preventDefault(); }
+  else if(e.key==='End'){ state.sel1=state.sel0; selChanged({}); e.preventDefault(); } });
+function dayNet24(d){ const out=new Array(24); for(let h=0;h<24;h++)out[h]=DATA[2024].N[d*24+h]; return out; }
+/* mobile tiles: 53 weeks × 7 days, colour = deepest dip */
+const tilesCh=addChart($('#cvTiles'),ch=>{
+  const c=ch.ctx,W=ch.rect.w,H=ch.rect.h,p=ch.pad; c.clearRect(0,0,W,H);
+  if(W<30)return;
+  const cw=(W-p.l-p.r)/53, chh=(H-p.t-p.b)/7;
+  c.font=m10; c.textAlign='left'; c.textBaseline='middle'; c.fillStyle=C.mute;
+  for(let r=0;r<7;r++) c.fillText(WDAYS[r][0],p.l-12,p.t+(r+.5)*chh);
+  for(let d=0;d<366;d++){ const dow=dowOf(2024,d), col=Math.floor((dowOf(2024,0)+d)/7);
+    const inSel=d>=state.sel0&&d<=state.sel1;
+    const inBand=state.band===null||(DAILY[d].tmax>=state.band[0]&&DAILY[d].tmax<=state.band[1]);
+    c.globalAlpha=(inSel&&inBand)?1:.22;
+    c.fillStyle=rampColor(DAILY[d].minN);
+    c.fillRect(p.l+col*cw,p.t+dow*chh,cw-1,chh-1); }
+  c.globalAlpha=1;
+  c.textAlign='left'; c.textBaseline='bottom'; c.fillStyle=C.mute; c.font=m10;
+  let lastLabelR=-1;
+  for(let m=0;m<12;m++){ const d=md(m+1,1), col=Math.floor((dowOf(2024,0)+d)/7);
+    const lx=p.l+col*cw, lw=c.measureText(MONTHS[m]).width;
+    if(lx<lastLabelR+3)continue;
+    c.fillText(MONTHS[m],lx,p.t-3); lastLabelR=lx+lw; }
+  const hv=ch.hover;
+  if(hv){ c.strokeStyle=C.amber; c.lineWidth=1.5;
+    c.strokeRect(p.l+hv.col*cw,p.t+hv.dow*chh,cw-1,chh-1); }
+},{pad:{l:22,r:10,t:18,b:10},name:'tiles'});
+tilesCh.cv.addEventListener('pointermove',e=>{ const r=tilesCh.cv.getBoundingClientRect();
+  const x=e.clientX-r.left,y=e.clientY-r.top, p=tilesCh.pad;
+  const cw=(r.width-p.l-p.r)/53, chh=(r.height-p.t-p.b)/7;
+  const col=Math.floor((x-p.l)/cw), dow=Math.floor((y-p.t)/chh);
+  if(col<0||col>52||dow<0||dow>6){ tilesCh.hover=null; tilesCh.dirty=true; kick(); hideTip(); return; }
+  const d0=Math.max(0,Math.min(365,col*7-dowOf(2024,0)));
+  const d=clamp(d0+dow-dowOf(2024,d0),0,365);
+  tilesCh.hover={col,dow:dowOf(2024,d)}; tilesCh.dirty=true; kick();
+  if(e.pointerType!=='touch'){ const R=DAILY[d];
+    setTipTitle(dstrLong(d)); showTip(`max ${R.tmax.toFixed(1)} °C\ndip ${fmtGW(R.minN)} at ${hourStr(R.mnH)}\nclimb ${R.ramp.toFixed(2)} GW/h · roof ${R.roof} h`,e.clientX,e.clientY,dayNet24(d)); }
+  else hideTip(); });
+tilesCh.cv.addEventListener('pointerleave',()=>{ tilesCh.hover=null; tilesCh.dirty=true; kick(); hideTip(); });
+tilesCh.cv.addEventListener('click',e=>{ const r=tilesCh.cv.getBoundingClientRect(), p=tilesCh.pad;
+  const cw=(r.width-p.l-p.r)/53, chh=(r.height-p.t-p.b)/7;
+  const col=Math.floor((e.clientX-r.left-p.l)/cw), dow=Math.floor((e.clientY-r.top-p.t)/chh);
+  if(col<0||col>52||dow<0||dow>6)return;
+  const d0=clamp(col*7-dowOf(2024,0),0,365);
+  const d=clamp(d0+dow-dowOf(2024,d0),0,365);
+  state.sel0=d; state.sel1=d; selChanged({}); });
+/* selection curve */
+const selCh=addChart($('#cvSel'),ch=>{
+  const c=ch.ctx,W=ch.rect.w,H=ch.rect.h,p=ch.pad; c.clearRect(0,0,W,H);
+  if(W<30)return;
+  const x0=0,x1=24,y0=0;
+  const n=selCount();
+  if(!n){ c.font=m12; c.fillStyle=C.mute; c.textAlign='center';
+    c.fillText('no days match the filters',W/2,H/2); return; }
+  const mD=new Float64Array(24),mS=new Float64Array(24),mN=new Float64Array(24);
+  eachSelDay(d=>{ for(let h=0;h<24;h++){ const i=d*24+h; mD[h]+=DATA[2024].D[i]; mS[h]+=DATA[2024].S[i]; mN[h]+=DATA[2024].N[i]; } });
+  for(let h=0;h<24;h++){ mD[h]/=n; mS[h]/=n; mN[h]/=n; }
+  let mx=0; for(let h=0;h<24;h++) mx=Math.max(mx,mD[h],mN[h]);
+  const y1=Math.max(3.8,mx*1.12);
+  const X=h=>p.l+(h-x0)/(x1-x0)*(W-p.l-p.r), Y=v=>H-p.b-(v-y0)/(y1-y0)*(H-p.t-p.b);
+  axes(ch,X,Y,x0,x1,y0,y1,{yt:ticks(y0,y1,3),xt:[0,6,12,18,24],xl:'hour'});
+  c.save(); c.beginPath(); c.moveTo(X(0),Y(0));
+  for(let h=0;h<24;h++)c.lineTo(X(h),Y(mS[h])); c.lineTo(X(23),Y(0)); c.closePath();
+  c.fillStyle='rgba(242,169,59,.2)'; c.fill(); c.restore();
+  const line=(arr,col,w2)=>{ c.beginPath(); for(let h=0;h<24;h++){const x=X(h),y=Y(arr[h]); h?c.lineTo(x,y):c.moveTo(x,y);}
+    c.strokeStyle=col; c.lineWidth=w2; c.lineJoin='round'; c.stroke(); };
+  line(mD,C.steel,1.5); line(mN,C.ember,2.4);
+  let bH=0,bV=1e9; for(let h=0;h<24;h++) if(mN[h]<bV){bV=mN[h];bH=h}
+  c.fillStyle=C.sage; c.beginPath(); c.arc(X(bH),Y(bV),3.5,0,7); c.fill();
+  c.font=m11; c.fillStyle=C.sage; c.textAlign='center'; c.textBaseline='top';
+  c.fillText(`dip ${fmtGW(bV)} · ${hourStr(bH)}`,clamp(X(bH),p.l+50,W-p.r-50),Y(bV)+8);
+},{pad:{l:40,r:14,t:16,b:32},name:'sel'});
+
+/* ================================================================
+   10 · ACT 5 — scatter + ridgeline
+================================================================ */
+const SCY1=Math.max(1.2,Math.max(...SC_Y)*1.12);
+const scatCh=addChart($('#cvScat'),ch=>{
+  const c=ch.ctx,W=ch.rect.w,H=ch.rect.h,p=ch.pad; c.clearRect(0,0,W,H);
+  if(W<30)return;
+  const x0=-10,x1=44,y0=0,y1=SCY1;
+  const X=v=>p.l+(v-x0)/(x1-x0)*(W-p.l-p.r), Y=v=>H-p.b-(v-y0)/(y1-y0)*(H-p.t-p.b);
+  axes(ch,X,Y,x0,x1,y0,y1,{yt:ticks(y0,y1,3),xt:[-10,0,10,20,30,40],fx:v=>v+'°',xl:'daily max temperature'});
+  /* comfort band */
+  c.fillStyle='rgba(85,171,142,.07)'; c.fillRect(X(17),p.t,X(23)-X(17),H-p.t-p.b);
+  c.font=m10; c.fillStyle='rgba(85,171,142,.9)'; c.textAlign='center'; c.textBaseline='top';
+  c.fillText('comfort band',X(20),p.t+2);
+  /* binned-mean shape */
+  if(SC_BINS.length>2){ c.save(); c.setLineDash([4,4]); c.strokeStyle='rgba(236,231,219,.55)'; c.lineWidth=1.5;
+    c.beginPath(); let started=false;
+    for(const [t,v] of SC_BINS){ if(v<-.1||v>SCY1+.05){started=false;continue}
+      const px=X(t),py=Y(v); started?c.lineTo(px,py):c.moveTo(px,py); started=true; }
+    c.stroke(); c.restore();
+    c.font=m10; c.fillStyle=C.mute; c.textAlign='right'; c.textBaseline='middle';
+    c.fillText('mean climb per 2° bin',W-p.r-2,p.t+14); }
+  /* points */
+  const R=COARSE?4:3.2;
+  DAILY.forEach(r=>{ const inSel=r.d>=state.sel0&&r.d<=state.sel1;
+    const inBand=state.band===null||(r.tmax>=state.band[0]&&r.tmax<=state.band[1]);
+    c.globalAlpha=inSel&&inBand?.95:.13;
+    c.fillStyle=rampColor(r.minN);
+    c.beginPath(); c.arc(X(r.tmax),Y(clamp(r.ramp,0,SCY1)),R,0,7); c.fill();
+    if(ch.hoverD===r.d){ c.strokeStyle=C.amber; c.lineWidth=1.6; c.stroke(); } });
+  c.globalAlpha=1;
+  if(state.band!==null){ c.strokeStyle=C.amber; c.lineWidth=1.2; c.setLineDash([3,3]);
+    c.strokeRect(X(state.band[0]),p.t,X(state.band[1])-X(state.band[0]),H-p.t-p.b); c.setLineDash([]); }
+},{pad:{l:46,r:18,t:20,b:40},name:'scat'});
+function scatTempAt(ch,x){ const p=ch.pad; return clamp((x-p.l)/(ch.rect.w-p.l-p.r)*(54)+(-10),-10,44); }
+scatCh.cv.addEventListener('pointerdown',e=>{ if(e.button!==0&&e.pointerType==='mouse')return;
+  const r=scatCh.cv.getBoundingClientRect(); const x=e.clientX-r.left;
+  scatCh._drag=true; scatCh._moved=false; scatCh._t0=scatTempAt(scatCh,x); grabPointer(scatCh.cv,e); });
+scatCh.cv.addEventListener('pointermove',e=>{ const r=scatCh.cv.getBoundingClientRect();
+  const x=e.clientX-r.left, y=e.clientY-r.top;
+  if(scatCh._drag){ scatCh._moved=true; const t=scatTempAt(scatCh,x);
+    state.band=[Math.round(Math.min(scatCh._t0,t)),Math.round(Math.max(scatCh._t0,t))];
+    bandChanged(true); scatCh.dirty=true; }
+  else { /* nearest point */
+    const p=scatCh.pad, X=v=>p.l+(v+10)/54*(r.width-p.l-p.r), Y=v=>r.height-p.b-(v)/SCY1*(r.height-p.t-p.b);
+    let best=null,bd=144; for(const R of DAILY){ const dx=X(R.tmax)-x,dy=Y(clamp(R.ramp,0,SCY1))-y,dd=dx*dx+dy*dy;
+      if(dd<bd){bd=dd;best=R} }
+    scatCh.hoverD=best?best.d:null; scatCh.dirty=true; kick();
+    if(best&&e.pointerType!=='touch'){ setTipTitle(dstrLong(best.d));
+      showTip(`max ${best.tmax.toFixed(1)} °C · climb ${best.ramp.toFixed(2)} GW/h\ndip ${fmtGW(best.minN)} · roof ${best.roof} h`,e.clientX,e.clientY,dayNet24(best.d));
+      if(soundOn&&best.d!==scatCh._lastD){scatCh._lastD=best.d;blip(pentFor(best.minN))} }
+    else hideTip(); } });
+scatCh.cv.addEventListener('pointerup',()=>{ if(!scatCh._drag)return; scatCh._drag=false;
+  bandChanged(false); toastMsg(`Temperature filter: ${state.band[0]}–${state.band[1]} °C`); });
+scatCh.cv.addEventListener('pointercancel',()=>{ scatCh._drag=false; });
+scatCh.cv.addEventListener('pointerleave',()=>{ scatCh.hoverD=null; scatCh.dirty=true; kick(); hideTip(); });
+scatCh.cv.addEventListener('click',()=>{ if(scatCh._moved){scatCh._moved=false;return;}
+  if(scatCh.hoverD!=null&&state.band===null){ flyTo(scatCh.hoverD); } });
+scatCh.cv.addEventListener('keydown',e=>{
+  if(e.key!=='ArrowLeft'&&e.key!=='ArrowRight')return;
+  const dir=e.key==='ArrowRight'?1:-1;
+  if(!state.band) state.band=[17,23];
+  const w=state.band[1]-state.band[0], cx2=(state.band[0]+state.band[1])/2+dir*(e.shiftKey?1:3);
+  const nw=e.shiftKey?clamp(w+dir,1,50):w;
+  state.band=[Math.round(clamp(cx2-nw/2,-10,43-nw)),Math.round(clamp(cx2+nw/2,-9,44))];
+  bandChanged(true); scatCh.dirty=true; e.preventDefault(); });
+$('#clearBand').addEventListener('click',()=>{ state.band=null; bandChanged(); scatCh.dirty=true; });
+/* ridgeline */
+const ridgeCh=addChart($('#cvRidge'),ch=>{
+  const c=ch.ctx,W=ch.rect.w,H=ch.rect.h,p=ch.pad; c.clearRect(0,0,W,H);
+  if(W<30)return;
+  const rows=12, rh=(H-p.t-p.b)/rows, scale=(rh-8)/5.6;
+  const X=h=>p.l+20+(h/23)*(W-p.l-p.r-30);
+  for(let m=11;m>=0;m--){ const row=MON[m], yb=p.t+m*rh+rh-3;
+    const hot=ch.hoverM===m;
+    c.save(); c.beginPath(); c.moveTo(X(0),yb);
+    for(let h=0;h<24;h++) c.lineTo(X(h),yb-row.arr[h]*scale);
+    c.lineTo(X(23),yb); c.closePath();
+    c.fillStyle=`rgba(228,96,58,${hot?.14:.06})`; c.fill(); c.restore();
+    c.beginPath(); for(let h=0;h<24;h++){ const x=X(h),y=yb-row.arr[h]*scale; h?c.lineTo(x,y):c.moveTo(x,y); }
+    c.strokeStyle=hot?C.amber:C.ember; c.lineWidth=hot?2:1.3; c.stroke();
+    c.font=m10; c.fillStyle=hot?C.amber:C.mute; c.textAlign='left'; c.textBaseline='middle';
+    c.fillText(MONTHS[m],p.l+2,yb-4); }
+  /* deepest-belly month annotation */
+  let deepM=0,dv=1e9; MON.forEach((row,m)=>{ const v=Math.min(...row.arr.slice(10,17)); if(v<dv){dv=v;deepM=m} });
+  const yb=p.t+deepM*rh+rh-3, hh=MON[deepM].arr.indexOf(Math.min(...MON[deepM].arr.slice(10,17)),10);
+  c.fillStyle=C.sage; c.beginPath(); c.arc(X(hh),yb-MON[deepM].arr[hh]*scale,3,0,7); c.fill();
+  c.font=m10;
+  const label=`deepest belly: ${MONTHS[deepM]} · ${dv.toFixed(2)} GW`;
+  const lx=X(hh)+8, lw=c.measureText(label).width;
+  c.fillStyle=C.sage; c.textBaseline='bottom';
+  if(lx+lw>W-p.r-2){ c.textAlign='right'; c.fillText(label,W-p.r-2,yb-MON[deepM].arr[hh]*scale+2); }
+  else { c.textAlign='left'; c.fillText(label,lx,yb-MON[deepM].arr[hh]*scale+2); }
+},{pad:{l:44,r:16,t:14,b:14},name:'ridge'});
+ridgeCh.cv.addEventListener('pointermove',e=>{ const r=ridgeCh.cv.getBoundingClientRect(), p=ridgeCh.pad;
+  const m=clamp(Math.floor((e.clientY-r.top-p.t)/((r.height-p.t-p.b)/12)),0,11);
+  if(ridgeCh.hoverM!==m){ ridgeCh.hoverM=m; ridgeCh.dirty=true; kick(); }
+  const row=MON[m];
+  if(e.pointerType!=='touch'){ setTipTitle(MONTHS[m]+' 2024 · '+row.n+' days');
+    showTip(`avg dip ${Math.min(...row.arr).toFixed(2)} GW\ntap to select this month`,e.clientX,e.clientY); }
+  else hideTip(); });
+ridgeCh.cv.addEventListener('pointerleave',()=>{ ridgeCh.hoverM=null; ridgeCh.dirty=true; kick(); hideTip(); });
+ridgeCh.cv.addEventListener('click',e=>{ const r=ridgeCh.cv.getBoundingClientRect(), p=ridgeCh.pad;
+  const m=clamp(Math.floor((e.clientY-r.top-p.t)/((r.height-p.t-p.b)/12)),0,11);
+  state.sel0=MON[m].d0; state.sel1=MON[m].d1; selChanged({});
+  toastMsg(`Selected ${MONTHS[m]} — ${MON[m].n} days`); });
+
+/* ================================================================
+   11 · ACT 6 — explorer + table + CSV
+================================================================ */
+const expCh=addChart($('#cvExp'),ch=>{
+  const c=ch.ctx,W=ch.rect.w,H=ch.rect.h,p=ch.pad; c.clearRect(0,0,W,H);
+  if(W<30)return;
+  const d=state.day, x0=0,x1=24,y0=0;
+  const d0=d*96;
+  let mx=0; for(let q=0;q<96;q++) mx=Math.max(mx,N15[d0+q],D15[d0+q]);
+  const y1=Math.max(4.5,mx*1.1);
+  const X=h=>p.l+(h-x0)/(x1-x0)*(W-p.l-p.r), Y=v=>H-p.b-(v-y0)/(y1-y0)*(H-p.t-p.b);
+  axes(ch,X,Y,x0,x1,y0,y1,{yt:ticks(y0,y1,4),xt:[0,3,6,9,12,15,18,21,24],xl:'hour of day'});
+  /* rooftop spans (net<0.15) */
+  let spans=[],st=null;
+  for(let q=0;q<96;q++){ const low=N15[d0+q]<0.15;
+    if(low&&st===null)st=q; if((!low||q===95)&&st!==null){ spans.push([st,low?q+1:q]); st=null; } }
+  if(spans.length){ c.fillStyle='rgba(85,171,142,.12)';
+    spans.forEach(s=>c.fillRect(X(s[0]/4),p.t,X(s[1]/4)-X(s[0]/4),H-p.t-p.b));
+    const dur=spans.reduce((a,s)=>a+(s[1]-s[0])/4,0);
+    c.font=m11; c.fillStyle=C.sage; c.textAlign='center'; c.textBaseline='top';
+    c.fillText(`rooftop hours ${Math.floor(dur)}h ${PAD2(Math.round((dur%1)*60))}m`,(X(spans[0][0]/4)+X(spans[spans.length-1][1]/4))/2,p.t+4); }
+  /* 15-year envelope */
+  if(state.ex.band){ c.save(); c.beginPath();
+    for(let h=0;h<24;h++){ let mn=1e9,mx=-1e9; for(const y of YEARS){ mn=Math.min(mn,AVG[y].N[h]); mx=Math.max(mx,AVG[y].N[h]); }
+      const x=X(h); h?c.lineTo(x,Y(mx)):c.moveTo(x,Y(mx)); }
+    for(let h=23;h>=0;h--){ let mn=1e9; for(const y of YEARS) mn=Math.min(mn,AVG[y].N[h]); c.lineTo(X(h),Y(mn)); }
+    c.closePath(); c.fillStyle='rgba(236,231,219,.06)'; c.fill(); c.restore(); }
+  if(state.ex.avg){ c.save(); c.setLineDash([5,4]); c.beginPath();
+    AVG[2024].N.forEach((v,h)=>{const x=X(h),y=Y(v); h?c.lineTo(x,y):c.moveTo(x,y)});
+    c.strokeStyle='rgba(236,231,219,.6)'; c.lineWidth=1.4; c.stroke(); c.restore(); }
+  const qline=(arr,col,w2,alpha=1,fill=null)=>{ c.save(); c.globalAlpha=alpha; c.beginPath();
+    for(let q=0;q<96;q++){ const x=X(q/4),y=Y(arr[d0+q]); q?c.lineTo(x,y):c.moveTo(x,y); }
+    if(fill){ c.lineTo(X(24),Y(0)); c.lineTo(X(0),Y(0)); c.closePath(); c.fillStyle=fill; c.fill(); }
+    else { c.strokeStyle=col; c.lineWidth=w2; c.lineJoin='round'; c.stroke(); } c.restore(); };
+  if(state.ex.solar) qline(S15,C.amber,1.5,.9,'rgba(242,169,59,.25)');
+  if(state.ex.noev){ c.save(); const arr=new Float32Array(96);
+    qline2(c,X,Y,d0,(q)=>N15[d0+q]-E15[d0+q],C.mute,1.4,[5,4]); c.restore(); }
+  if(state.ex.gross) qline(D15,C.steel,1.6,.85);
+  if(state.ex.net) qline(N15,C.ember,2.4,1);
+  /* hover crosshair */
+  if(ch.hoverQ!=null){ const q=ch.hoverQ, x=X(q/4);
+    c.strokeStyle='rgba(236,231,219,.4)'; c.lineWidth=1;
+    c.beginPath(); c.moveTo(x,p.t); c.lineTo(x,H-p.b); c.stroke();
+    c.fillStyle=C.ember; c.beginPath(); c.arc(x,Y(N15[d0+q]),3,0,7); c.fill(); }
+},{pad:{l:44,r:16,t:30,b:40},name:'exp'});
+function qline2(c,X,Y,d0,fn,col,w2,dash){ c.beginPath();
+  for(let q=0;q<96;q++){ const x=X(q/4),y=Y(fn(q)); q?c.lineTo(x,y):c.moveTo(x,y); }
+  c.strokeStyle=col; c.lineWidth=w2; if(dash)c.setLineDash(dash); c.stroke(); c.setLineDash([]); }
+function expSync(){ const d=state.day;
+  $('#expSlider').value=d; set('expDate',dstrLong(d)+' 2024');
+  const R=DAILY[d];
+  let roofQ=0; for(let q=0;q<96;q++) if(N15[d*96+q]<0.15) roofQ++;
+  set('esPeak',fmtGW(R.maxN)); set('esPeakT',hourStr(R.mxH));
+  set('esBelly',fmtGW(R.minN)); set('esBellyT',hourStr(R.mnH));
+  set('esRamp',R.ramp.toFixed(2)+' GW/h');
+  set('esRoof',(roofQ/4).toFixed(1)+' h');
+  set('esTmax',R.tmax.toFixed(1)+' °C');
+  set('esDem',R.dem.toFixed(1)+' GWh');
+  set('esSol',R.sol.toFixed(1)+' GWh solar');
+  expCh.dirty=true; kick(); }
+function flyTo(d){ state.day=clamp(d,0,365); expSync();
+  $('#act6').scrollIntoView({behavior:RM?'auto':'smooth'}); announce('Explorer: '+dstrLong(state.day)+' 2024'); }
+$('#expSlider').addEventListener('input',()=>{ state.day=+$('#expSlider').value; expSync(); });
+$('#expPrev').addEventListener('click',()=>{ state.day=clamp(state.day-1,0,365); expSync(); });
+$('#expNext').addEventListener('click',()=>{ state.day=clamp(state.day+1,0,365); expSync(); });
+expCh.cv.addEventListener('pointermove',e=>{ const r=expCh.cv.getBoundingClientRect(), p=expCh.pad;
+  const q=clamp(Math.round((e.clientX-r.left-p.l)/(r.width-p.l-p.r)*96),0,95);
+  expCh.hoverQ=q; expCh.dirty=true; kick();
+  if(e.pointerType!=='touch'){ const i=state.day*96+q;
+    setTipTitle(dstrLong(state.day)+' · '+hourStr(q/4));
+    showTip(`net ${fmtGW(N15[i])}\nsolar ${S15[i].toFixed(2)} · demand ${D15[i].toFixed(2)} GW`,e.clientX,e.clientY); }
+  else hideTip(); });
+expCh.cv.addEventListener('pointerleave',()=>{ expCh.hoverQ=null; expCh.dirty=true; kick(); hideTip(); });
+expCh.cv.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft'){ state.day=clamp(state.day-1,0,365); expSync(); e.preventDefault(); }
+  else if(e.key==='ArrowRight'){ state.day=clamp(state.day+1,0,365); expSync(); e.preventDefault(); }
+  else if(e.key==='PageUp'){ state.day=clamp(state.day-7,0,365); expSync(); e.preventDefault(); }
+  else if(e.key==='PageDown'){ state.day=clamp(state.day+7,0,365); expSync(); e.preventDefault(); } });
+$$('.tgl').forEach(b=>b.addEventListener('click',()=>{ const k=b.dataset.ex;
+  state.ex[k]=state.ex[k]?0:1; b.setAttribute('aria-pressed',''+(state.ex[k]?true:false)); expCh.dirty=true; kick(); }));
+/* table */
+const KEYS={d:r=>r.d,dow:r=>r.dow,tmax:r=>r.tmax,belly:r=>r.minN,bellyT:r=>r.mnH,peak:r=>r.maxN,peakT:r=>r.mxH,ramp:r=>r.ramp,roof:r=>r.roof,solar:r=>r.sol};
+function filteredRows(){ const out=[]; eachSelDay(d=>out.push(DAILY[d])); return out; }
+function buildTable(){ const rows=filteredRows(), k=state.sort.key, dir=state.sort.dir;
+  rows.sort((a,b)=>(KEYS[k](a)-KEYS[k](b))*dir);
+  set('tCount',''+rows.length);
+  $$('#statTable th').forEach(th=>{ th.removeAttribute('aria-sort');
+    if(th.dataset.key===k) th.setAttribute('aria-sort',dir===1?'ascending':'descending'); });
+  const tb=$('#stBody');
+  tb.innerHTML=rows.map(r=>`<tr data-d="${r.d}"><td class="l">${dstrISO(r.d)}</td><td class="l">${WDAYS[r.dow]}</td>`+
+    `<td>${r.tmax.toFixed(1)}</td><td>${r.minN.toFixed(2)}</td><td>${hourStr(r.mnH)}</td>`+
+    `<td>${r.maxN.toFixed(2)}</td><td>${hourStr(r.mxH)}</td><td>${r.ramp.toFixed(2)}</td>`+
+    `<td>${r.roof}</td><td>${r.sol.toFixed(1)}</td></tr>`).join('');
+}
+$('#statTable').addEventListener('click',e=>{ const th=e.target.closest('th');
+  if(th&&th.dataset.key){ if(state.sort.key===th.dataset.key) state.sort.dir*=-1;
+    else { state.sort.key=th.dataset.key; state.sort.dir=1; } buildTable(); return; }
+  const tr=e.target.closest('tr[data-d]'); if(tr) flyTo(+tr.dataset.d); });
+$('#btnCSV').addEventListener('click',()=>{ const rows=filteredRows();
+  const head='date,day_of_week,max_temp_c,belly_gw,belly_time,peak_net_gw,peak_time,steepest_climb_gw_per_h,rooftop_hours,solar_gwh';
+  const lines=rows.map(r=>[dstrISO(r.d),WDAYS[r.dow],r.tmax.toFixed(2),r.minN.toFixed(3),hourStr(r.mnH),
+    r.maxN.toFixed(3),hourStr(r.mxH),r.ramp.toFixed(3),r.roof,r.sol.toFixed(2)].join(','));
+  const csv='\uFEFF'+head+'\n'+lines.join('\n');
+  try{ const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+    a.download='meridian_daily_stats.csv'; document.body.appendChild(a); a.click();
+    setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove()},400);
+    toastMsg(`Exported ${rows.length} days → CSV`);
+  }catch(err){ toastMsg('Export blocked in this context — sorry.'); } });
+
+/* ================================================================
+   12 · PRESETS + SOUND + KEYS + SCROLLY
+================================================================ */
+$$('[data-preset]').forEach(b=>b.addEventListener('click',()=>{
+  const p=b.dataset.preset;
+  if(p==='full'){ state.sel0=0; state.sel1=365; }
+  else if(p==='spring'){ state.sel0=md(3,1); state.sel1=md(6,1)-1; }
+  else if(p==='deepest'){ state.sel0=deepest.d; state.sel1=deepest.d; flyQuiet(deepest.d); }
+  else if(p==='heat'){ state.sel0=md(7,13); state.sel1=md(7,21); }
+  else if(p==='freeze'){ state.sel0=md(2,5); state.sel1=md(2,9); }
+  else if(p==='comfort'){ state.band=[17,23]; bandChanged(); scatCh.dirty=true; toastMsg('Comfort band: 17–23 °C'); return; }
+  selChanged({}); }));
+function flyQuiet(d){ state.day=clamp(d,0,365); expSync(); }
+/* sound */
+let AC=null, master=null, soundOn=store.get('ds-sound')==='1';
+const PENT=[220,261.63,293.66,329.63,392,440,523.25,587.33,659.25,783.99];
+function pentFor(net){ return PENT[clamp(Math.round(9*(1-clamp(net,0,5.2)/5.2)),0,9)]; }
+function ensureAC(){ if(!AC){ try{ const Ctx=window.AudioContext||window.webkitAudioContext; if(!Ctx)return;
+  AC=new Ctx(); master=AC.createGain(); master.gain.value=.13; master.connect(AC.destination);}catch(e){AC=null;return} }
+  if(AC&&AC.state==='suspended') AC.resume().catch(()=>{}); }
+function blip(f,dur=0.22){ if(!soundOn||!AC||AC.state!=='running')return;
+  try{ const t=AC.currentTime,o=AC.createOscillator(),g=AC.createGain(),fl=AC.createBiquadFilter();
+    o.type='triangle'; o.frequency.value=f; fl.type='lowpass'; fl.frequency.value=f*4;
+    g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.85,t+.012);
+    g.gain.exponentialRampToValueAtTime(.001,t+dur);
+    o.connect(fl); fl.connect(g); g.connect(master); o.start(t); o.stop(t+dur+.05); }catch(e){} }
+const sndBtn=$('#btnSound');
+function syncSound(){ sndBtn.textContent='Sound: '+(soundOn?'on':'off'); sndBtn.setAttribute('aria-pressed',''+soundOn); }
+sndBtn.addEventListener('click',()=>{ soundOn=!soundOn; store.set('ds-sound',soundOn?'1':'0');
+  if(soundOn){ ensureAC(); blip(392,.3); } syncSound(); });
+if(soundOn) window.addEventListener('pointerdown',function once(){ ensureAC(); window.removeEventListener('pointerdown',once); },{once:true});
+syncSound();
+/* dialog */
+const dlg=$('#keysDlg');
+$('#btnKeys').addEventListener('click',()=>{ try{dlg.showModal()}catch(e){dlg.setAttribute('open','')} });
+$('#dlgClose').addEventListener('click',()=>{ try{dlg.close()}catch(e){dlg.removeAttribute('open')} });
+$('#btnBegin').addEventListener('click',()=>$('#act1').scrollIntoView({behavior:RM?'auto':'smooth'}));
+/* global keys */
+window.addEventListener('keydown',e=>{
+  const t=e.target, tag=t&&t.tagName;
+  if(dlg.open)return;
+  if(tag==='INPUT'||tag==='TEXTAREA'||(t&&t.isContentEditable))return;
+  if(e.key==='?'){ try{dlg.showModal()}catch(err){dlg.setAttribute('open','')} e.preventDefault(); }
+  else if(e.key==='p'||e.key==='P'){ playBtn.click(); }
+  else if(e.key==='s'||e.key==='S'){ sndBtn.click(); } });
+/* scrolly + progress */
+const sc2Sec=$('#act2Sec'), steps=$$('#act2 .step');
+let scQueued=false;
+function onScroll(){ scQueued=false;
+  const doc=document.documentElement;
+  const pr=clamp(window.scrollY/((doc.scrollHeight-window.innerHeight)||1),0,1);
+  $('#progress').style.width=(pr*100).toFixed(2)+'%';
+  const r=sc2Sec.getBoundingClientRect(), vh=window.innerHeight;
+  const p=clamp((vh*.72-r.top)/(r.height-vh*.72),0,1);
+  if(performance.now()>manualUntil&&!playing) setYear(2010+14*p);
+  else { const y=state.year;
+    $$('#act2 .step').forEach(el=>el.classList.toggle('on',+el.dataset.step===state.step)); }
+  morphProg=clamp((p-.02)/.12,0,1); morphCh.dirty=true;
+  checkReveals();
+  hideTip();
+}
+window.addEventListener('scroll',()=>{ if(!scQueued){ scQueued=true; requestAnimationFrame(onScroll); } },{passive:true});
+/* reveals — IntersectionObserver with a scroll/interval fallback (some embedded
+   browsers never dispatch IO callbacks; the fallback keeps the page functional) */
+const io=new IntersectionObserver(es=>{ es.forEach(en=>{ if(en.isIntersecting){
+  en.target.classList.add('revealed');
+  if(en.target.__reveal){ en.target.__reveal(); en.target.__reveal=null; }
+  io.unobserve(en.target); } }); },{rootMargin:'0px 0px -8% 0px',threshold:.15});
+$$('.rv').forEach(el=>io.observe(el));
+let a1Seen=false;
+function checkReveals(){ const vh=window.innerHeight;
+  $$('.rv:not(.revealed)').forEach(el=>{ const r=el.getBoundingClientRect();
+    if(r.top<vh*.92&&r.bottom>0){ el.classList.add('revealed'); if(el.__reveal){el.__reveal(); el.__reveal=null;} } });
+  if(!a1Seen){ const r=a1ch.cv.getBoundingClientRect(); if(r.top<vh*.92&&r.bottom>0){ a1Seen=true; revealA1(); } }
+  const hr=$('#heroCv').getBoundingClientRect(); if(hr.bottom>0) heroOn=true; }
+
+/* ================================================================
+   13 · INIT
+================================================================ */
+state.day=deepest.d;
+setPart('belly',true);
+setYear(2010);
+expSync();
+selChanged({quiet:true});
+buildTable();
+$('#selHint').textContent=HINT_IDLE;
+onScroll();
+setInterval(checkReveals,700);
+kick();
+})();
+</script>
+</body>
+</html>

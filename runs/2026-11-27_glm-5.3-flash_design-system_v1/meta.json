@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "glm-5.3-flash",
+  "category": "design-system",
+  "date": "2026-11-27",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "06",
+  "prompt_label": "Design System",
+  "notes": "Loam — a design system for a fictional field-records platform used by habitat restoration crews. Single-page documentation + showcase built with semantic HTML and a CSS custom-property token system (6 colour ramps with semantic aliases, type scale with system font stacks, 4px spacing grid, radii, 3-step elevation ladder + focus ring, motion tokens, 4 breakpoints). 11 documented component families (buttons, links, badges/tags, alerts, form controls incl. radio cards and switches, cards, data display, tables, navigation, dialog/toast overlays, feedback states) each with usage guidance, do/don't examples and state coverage (hover, focus-visible, active, disabled, loading, validation error/success). Two composed patterns: a validated 'create survey record' form (inline errors, aria-invalid/aria-describedby, focus to first invalid field, success alert) and a full site dashboard (stat cards, sortable/filterable/paginated table with row selection and bulk flagging, record detail dialog that mutates row status, species tab, key-value side cards, activity feed, progress, stepper). Minimal vanilla JS only (no frameworks, libraries or build step) powers tabs with arrow keys, native <dialog> (Esc, backdrop click, focus return), toasts via role=status, scrollspy, sidebar filter, mobile off-canvas nav, CSS-only tooltips and a live viewport indicator. Accessibility: skip link, single focus-ring token, keyboard-complete controls, contrast checked for AA on body/meta text. Known limitations: light theme only (dark theme deferred; tokens are layered to allow re-mapping), CSS-only tooltips do not reposition at viewport edges, no print styles, and 'View site' / notification-bell actions confirm via toast rather than navigating to pages outside the design-system scope.",
+  "slug": "2026-11-27_glm-5.3-flash_design-system_v1",
+  "path": "runs/2026-11-27_glm-5.3-flash_design-system_v1/index.html",
+  "source_file": "design-system__glm-5.3-flash__2026-11-27__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

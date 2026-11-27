@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "claude-sonnet-5-5",
+  "category": "editorial-website",
+  "date": "2026-11-27",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "04",
+  "prompt_label": "Editorial Website",
+  "notes": "Tidewrack, an invented quarterly of the shoreline: a homepage (lead story, second story, editor's letter and masthead) plus two long-form article pages with cross-linked related reading, one shared stylesheet, two original SVG illustrations and no JavaScript. System font stacks only; skip link, landmarks, visible focus, reduced-motion handling and fixed image dimensions are included. All people, places and findings are fictional. Known limitations: only two article pages, and the articles are short features rather than full-length pieces; no dark mode; checked only by a static link/asset script and markup review, not in a real browser or on real devices.",
+  "slug": "2026-11-27_claude-sonnet-5-5_editorial-website_v1",
+  "path": "runs/2026-11-27_claude-sonnet-5-5_editorial-website_v1/index.html",
+  "source_file": "editorial-website__claude-sonnet-5-5__2026-11-27__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Loam — a design system for a fictional habitat-restoration field platform. Tokens, components and applied patterns.">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#245241">
+<title>Loam Design System</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="stylesheet" href="styles/loam.css">
+<script src="scripts/app.js" defer></script>
+</head>
+<body>
+
+<!-- Icon sprite -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-logo" viewBox="0 0 32 32">
+    <rect width="32" height="32" rx="9" fill="#245241"/>
+    <g fill="none" stroke="#f3f0e9" stroke-width="2" stroke-linecap="round">
+      <path d="M7 21.5c4-2 7-2 10-4s6-5 8.5-6"/>
+      <path d="M7 25.5c5-1 9-3.5 12.5-6.5"/>
+      <path d="M11.5 11.5c3-3 7-4.5 13-4.5"/>
+    </g>
+    <circle cx="23.5" cy="23.5" r="2.5" fill="#d47f52"/>
+  </symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 13l4 4 10-10"/></symbol>
+  <symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 5-5.5"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.01"/></symbol>
+  <symbol id="i-warning" viewBox="0 0 24 24"><path d="M12 4L3 20h18L12 4z"/><path d="M12 10.5v3.5M12 17v.01"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></symbol>
+  <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+  <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></symbol>
+  <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+  <symbol id="i-arrow-up-right" viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></symbol>
+  <symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+  <symbol id="i-sprout" viewBox="0 0 24 24"><path d="M12 21v-8"/><path d="M12 13c0-4-3-6-7-6 0 4 3 6 7 6z"/><path d="M12 13c0-4 3-6 7-6 0 4-3 6-7 6z"/></symbol>
+  <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 4s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M6 21V4"/><path d="M6 4h11l-2.5 4L17 12H6"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 19a2.2 2.2 0 0 0 4 0"/></symbol>
+  <symbol id="i-clipboard" viewBox="0 0 24 24"><rect x="8" y="3" width="8" height="4" rx="1.5"/><path d="M8 5H6a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-2"/></symbol>
+  <symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
+  <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M4 20l1-4L16.5 4.5a2.1 2.1 0 0 1 3 3L8 19l-4 1z"/></symbol>
+</svg>
+
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="backdrop" aria-hidden="true"></div>
+
+<div class="app-shell">
+
+  <!-- ======================= SIDEBAR ======================= -->
+  <aside class="sidebar" id="sidebar" aria-label="Design system sections">
+    <div class="sidebar__brand">
+      <svg class="sidebar__logo" width="34" height="34" aria-hidden="true"><use href="#i-logo"/></svg>
+      <span class="sidebar__wordmark">Loam</span>
+      <span class="sidebar__version">v1.0</span>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Sections">
+      <div class="nav-group">
+        <p class="nav-group__label">Start</p>
+        <a class="nav-link" href="#overview" aria-current="true">Overview</a>
+      </div>
+
+      <div class="nav-group">
+        <p class="nav-group__label">Foundations <span class="nav-count">6</span></p>
+        <a class="nav-link" href="#color">Colour</a>
+        <a class="nav-link" href="#typography">Typography</a>
+        <a class="nav-link" href="#spacing">Spacing</a>
+        <a class="nav-link" href="#surface">Radius &amp; elevation</a>
+        <a class="nav-link" href="#motion">Motion</a>
+        <a class="nav-link" href="#breakpoints">Breakpoints</a>
+      </div>
+
+      <div class="nav-group">
+        <p class="nav-group__label">Components <span class="nav-count">11</span></p>
+        <a class="nav-link" href="#c-buttons">Buttons</a>
+        <a class="nav-link" href="#c-links">Links</a>
+        <a class="nav-link" href="#c-badges">Badges &amp; tags</a>
+        <a class="nav-link" href="#c-alerts">Alerts</a>
+        <a class="nav-link" href="#c-fields">Form controls</a>
+        <a class="nav-link" href="#c-cards">Cards</a>
+        <a class="nav-link" href="#c-data">Data display</a>
+        <a class="nav-link" href="#c-tables">Tables</a>
+        <a class="nav-link" href="#c-navigation">Navigation</a>
+        <a class="nav-link" href="#c-overlays">Overlays</a>
+        <a class="nav-link" href="#c-feedback">Feedback</a>
+      </div>
+
+      <div class="nav-group">
+        <p class="nav-group__label">Patterns <span class="nav-count">2</span></p>
+        <a class="nav-link" href="#p-form">Survey form</a>
+        <a class="nav-link" href="#p-dashboard">Site dashboard</a>
+      </div>
+
+      <div class="nav-group">
+        <p class="nav-group__label">Project</p>
+        <a class="nav-link" href="#a11y">Accessibility</a>
+        <a class="nav-link" href="#colophon">Colophon</a>
+      </div>
+
+      <p class="nav-empty" id="nav-empty" hidden>No sections match that filter.</p>
+    </nav>
+
+    <div class="sidebar__foot">
+      <strong>Loam</strong> is the design language of a fictional field-records platform for habitat restoration crews. Every specimen on this page is built from the tokens below.
+    </div>
+  </aside>
+
+  <!-- ======================= MAIN ======================= -->
+  <div class="main">
+    <header class="topbar">
+      <button type="button" class="btn btn--secondary btn--icon btn--sm topbar__menu" data-nav-toggle aria-label="Open navigation">
+        <svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>
+      </button>
+      <p class="topbar__crumb"><b>Loam</b> <span>/ design system / v1.0</span></p>
+      <div class="topbar__spacer"></div>
+      <div class="search">
+        <svg class="icon icon--sm" aria-hidden="true"><use href="#i-search"/></svg>
+        <input type="search" class="search__input" id="nav-search" placeholder="Filter sections…" aria-label="Filter sidebar sections">
+      </div>
+      <button type="button" class="btn btn--primary btn--sm" data-scroll-to="#p-form" data-focus-first>
+        <svg class="icon icon--sm" aria-hidden="true"><use href="#i-plus"/></svg>
+        New survey
+      </button>
+      <span class="avatar" role="img" aria-label="Signed in as Maya Okonkwo (demo account)">MO</span>
+    </header>
+
+    <main class="content" id="main">
+
+      <noscript>
+        <div class="note note--warn">JavaScript is disabled. The visual system renders fully, but interactive demos (tabs, dialogs, table sorting, form validation) are inert.</div>
+      </noscript>
+
+      <!-- ======================= OVERVIEW ======================= -->
+      <section class="section" id="overview" data-spy aria-labelledby="overview-title">
+        <div class="hero">
+          <svg class="hero__art" viewBox="0 0 380 240" aria-hidden="true">
+            <g fill="none" stroke="#b9d6c5" stroke-width="1.5">
+              <path d="M30 190c45-72 95-112 165-122s125 12 175-18"/>
+              <path d="M60 215c45-62 95-102 155-110s105 22 155-8"/>
+            </g>
+            <g fill="none" stroke="#8ebba2" stroke-width="1.5">
+              <path d="M100 240c35-45 75-78 125-84s85 26 135-2"/>
+            </g>
+            <circle cx="326" cy="48" r="7" fill="#d47f52"/>
+          </svg>
+          <p class="hero__kicker">Loam · design system · v1.0</p>
+          <h1 class="hero__title" id="overview-title">A field notebook for restoration teams.</h1>
+          <p class="hero__lede">Loam is the design language of a fictional field-records platform used by habitat restoration crews — survey logs, species checklists and planting seasons. It favours calm, legible interfaces that hold up outdoors: a paper-warm neutral base, deep pine for anything interactive, hairline structure, and data set in tabular monospace.</p>
+          <div class="hero__meta">
+            <span class="meta-chip"><span class="dot"></span><b>6</b> colour ramps</span>
+            <span class="meta-chip"><b>11</b> component families</span>
+            <span class="meta-chip"><b>2</b> applied patterns</span>
+            <span class="meta-chip"><b>0</b> dependencies</span>
+            <span class="meta-chip">WCAG 2.1 AA targets</span>
+          </div>
+        </div>
+
+        <div class="section" style="margin-top:64px">
+          <h2 class="section__title" style="font-size:var(--text-2xl)">Principles</h2>
+          <div class="principles" style="margin-top:24px">
+            <article class="principle">
+              <p class="principle__num">01</p>
+              <h3>Field-first legibility</h3>
+              <p>Body text never drops below 14&nbsp;px, and values are set in tabular monospace so columns align even on a sun-bleached tablet.</p>
+            </article>
+            <article class="principle">
+              <p class="principle__num">02</p>
+              <h3>Quiet structure</h3>
+              <p>Hairlines and surface shifts do the layout work. Shadows are reserved for things that genuinely float above the page.</p>
+            </article>
+            <article class="principle">
+              <p class="principle__num">03</p>
+              <h3>Earthy, not rustic</h3>
+              <p>Six tight colour ramps sit on a paper base. Pine means interactive, clay accents the story, and status colours stay strictly semantic.</p>
+            </article>
+            <article class="principle">
+              <p class="principle__num">04</p>
+              <h3>Honest interaction</h3>
+              <p>Every control on this page works — tabs switch, tables sort, forms validate, dialogs open. A design system with dead buttons is a mood board.</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="section" style="margin-top:64px">
+          <h2 class="section__title" style="font-size:var(--text-2xl)">What’s inside</h2>
+          <div class="index-cards" style="margin-top:24px">
+            <a class="index-card" href="#color">
+              <h3>Foundations</h3>
+              <p>Colour ramps, type scale, the 4&nbsp;px spacing grid, radii, elevation, motion and responsive rules.</p>
+              <span class="index-card__go">Browse foundations <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></span>
+            </a>
+            <a class="index-card" href="#c-buttons">
+              <h3>Components</h3>
+              <p>Eleven documented families from buttons to overlays, each with states, variants and usage guidance.</p>
+              <span class="index-card__go">Browse components <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></span>
+            </a>
+            <a class="index-card" href="#p-form">
+              <h3>Patterns</h3>
+              <p>Components composed into real product moments: a validated survey form and a full site dashboard.</p>
+              <span class="index-card__go">See patterns <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= COLOUR ======================= -->
+      <section class="section" id="color" data-spy aria-labelledby="color-title">
+        <p class="section__kicker">Foundations</p>
+        <h2 class="section__title" id="color-title">Colour</h2>
+        <p class="section__lede">Six ramps on a warm paper base. Screens never reference raw hex values — they use the semantic aliases below, so a future dark theme only re-maps one layer.</p>
+
+        <div class="spec">
+          <div class="note"><b>Rule —</b> components consume semantic tokens (<code class="inline">--color-accent</code>, <code class="inline">--status-danger-bg</code>…). Ramp tokens (<code class="inline">--pine-600</code>) are for the token layer and documentation only. Clay is the editorial accent: logo, kickers, sparklines — never a required state.</div>
+        </div>
+
+        <div class="spec">
+          <article class="ramp">
+            <header class="ramp__head"><h4>Pine</h4><p>Primary interactive — buttons, links, checked controls, success.</p></header>
+            <div class="ramp__row">
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--pine-50)"></span><span class="swatch__step">50</span><span class="swatch__hex">#F0F6F2</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--pine-100)"></span><span class="swatch__step">100</span><span class="swatch__hex">#DCEBE1</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--pine-200)"></span><span class="swatch__step">200</span><span class="swatch__hex">#B9D6C5</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--pine-300)"></span><span class="swatch__step">300</span><span class="swatch__hex">#8EBBA2</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--pine-400)"></span><span class="swatch__step">400</span><span class="swatch__hex">#5F9D7F</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--pine-500)"></span><span class="swatch__step">500</span><span class="swatch__hex">#3E8064</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--pine-600)"></span><span class="swatch__step">600</span><span class="swatch__hex">#2D6750</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--pine-700)"></span><span class="swatch__step">700</span><span class="swatch__hex">#245241</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--pine-800)"></span><span class="swatch__step">800</span><span class="swatch__hex">#1D4134</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--pine-900)"></span><span class="swatch__step">900</span><span class="swatch__hex">#152E25</span></div>
+            </div>
+          </article>
+
+          <article class="ramp">
+            <header class="ramp__head"><h4>Sand</h4><p>Neutrals — surfaces, ink, borders. Steps 0–900.</p></header>
+            <div class="ramp__row">
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--sand-0)"></span><span class="swatch__step">0</span><span class="swatch__hex">#FFFFFF</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--sand-50)"></span><span class="swatch__step">50</span><span class="swatch__hex">#FAF8F4</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--sand-100)"></span><span class="swatch__step">100</span><span class="swatch__hex">#F3F0E9</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--sand-200)"></span><span class="swatch__step">200</span><span class="swatch__hex">#E7E2D6</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--sand-300)"></span><span class="swatch__step">300</span><span class="swatch__hex">#D4CDBD</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--sand-400)"></span><span class="swatch__step">400</span><span class="swatch__hex">#AAA292</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--sand-500)"></span><span class="swatch__step">500</span><span class="swatch__hex">#857D6C</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--sand-600)"></span><span class="swatch__step">600</span><span class="swatch__hex">#68604F</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--sand-700)"></span><span class="swatch__step">700</span><span class="swatch__hex">#4E4839</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--sand-800)"></span><span class="swatch__step">800</span><span class="swatch__hex">#332F26</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--sand-900)"></span><span class="swatch__step">900</span><span class="swatch__hex">#1E1C16</span></div>
+            </div>
+          </article>
+
+          <article class="ramp">
+            <header class="ramp__head"><h4>Clay</h4><p>Editorial accent — logo mark, kickers, charts. Never a status.</p></header>
+            <div class="ramp__row">
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--clay-50)"></span><span class="swatch__step">50</span><span class="swatch__hex">#FCF5F0</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--clay-100)"></span><span class="swatch__step">100</span><span class="swatch__hex">#F8E7DB</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--clay-200)"></span><span class="swatch__step">200</span><span class="swatch__hex">#EFC9B1</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--clay-300)"></span><span class="swatch__step">300</span><span class="swatch__hex">#E3A481</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--clay-400)"></span><span class="swatch__step">400</span><span class="swatch__hex">#D47F52</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--clay-500)"></span><span class="swatch__step">500</span><span class="swatch__hex">#C2663A</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--clay-600)"></span><span class="swatch__step">600</span><span class="swatch__hex">#A1512C</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--clay-700)"></span><span class="swatch__step">700</span><span class="swatch__hex">#7F4023</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--clay-800)"></span><span class="swatch__step">800</span><span class="swatch__hex">#5F311C</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--clay-900)"></span><span class="swatch__step">900</span><span class="swatch__hex">#432316</span></div>
+            </div>
+          </article>
+
+          <article class="ramp">
+            <header class="ramp__head"><h4>Ochre</h4><p>Warning — thresholds, sensor downtime, cautionary copy.</p></header>
+            <div class="ramp__row">
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--ochre-50)"></span><span class="swatch__step">50</span><span class="swatch__hex">#FDF9EE</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--ochre-100)"></span><span class="swatch__step">100</span><span class="swatch__hex">#F9EFD3</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--ochre-200)"></span><span class="swatch__step">200</span><span class="swatch__hex">#F1DC9F</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--ochre-300)"></span><span class="swatch__step">300</span><span class="swatch__hex">#E7C266</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--ochre-400)"></span><span class="swatch__step">400</span><span class="swatch__hex">#D9A63C</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--ochre-500)"></span><span class="swatch__step">500</span><span class="swatch__hex">#BF8722</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--ochre-600)"></span><span class="swatch__step">600</span><span class="swatch__hex">#9D6D1C</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--ochre-700)"></span><span class="swatch__step">700</span><span class="swatch__hex">#7C5617</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--ochre-800)"></span><span class="swatch__step">800</span><span class="swatch__hex">#5F4212</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--ochre-900)"></span><span class="swatch__step">900</span><span class="swatch__hex">#45300E</span></div>
+            </div>
+          </article>
+
+          <article class="ramp">
+            <header class="ramp__head"><h4>Brick</h4><p>Danger — flagged records, destructive actions, validation errors.</p></header>
+            <div class="ramp__row">
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--brick-50)"></span><span class="swatch__step">50</span><span class="swatch__hex">#FCF3F1</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--brick-100)"></span><span class="swatch__step">100</span><span class="swatch__hex">#F9E1DC</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--brick-200)"></span><span class="swatch__step">200</span><span class="swatch__hex">#F3BFB4</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--brick-300)"></span><span class="swatch__step">300</span><span class="swatch__hex">#EA9687</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--brick-400)"></span><span class="swatch__step">400</span><span class="swatch__hex">#DE6A55</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--brick-500)"></span><span class="swatch__step">500</span><span class="swatch__hex">#C94830</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--brick-600)"></span><span class="swatch__step">600</span><span class="swatch__hex">#A83A25</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--brick-700)"></span><span class="swatch__step">700</span><span class="swatch__hex">#852F1E</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--brick-800)"></span><span class="swatch__step">800</span><span class="swatch__hex">#632418</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--brick-900)"></span><span class="swatch__step">900</span><span class="swatch__hex">#461A11</span></div>
+            </div>
+          </article>
+
+          <article class="ramp">
+            <header class="ramp__head"><h4>River</h4><p>Information — process states, “in review”, neutral notices.</p></header>
+            <div class="ramp__row">
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--river-50)"></span><span class="swatch__step">50</span><span class="swatch__hex">#F0F6F8</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--river-100)"></span><span class="swatch__step">100</span><span class="swatch__hex">#DFEEF2</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--river-200)"></span><span class="swatch__step">200</span><span class="swatch__hex">#BCDDE5</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--river-300)"></span><span class="swatch__step">300</span><span class="swatch__hex">#8CC2CF</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--river-400)"></span><span class="swatch__step">400</span><span class="swatch__hex">#57A1B3</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--river-500)"></span><span class="swatch__step">500</span><span class="swatch__hex">#37829A</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--river-600)"></span><span class="swatch__step">600</span><span class="swatch__hex">#2A687F</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--river-700)"></span><span class="swatch__step">700</span><span class="swatch__hex">#235366</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--river-800)"></span><span class="swatch__step">800</span><span class="swatch__hex">#1C4251</span></div>
+              <div class="swatch"><span class="swatch__chip" style="--sw: var(--river-900)"></span><span class="swatch__step">900</span><span class="swatch__hex">#14303C</span></div>
+            </div>
+          </article>
+        </div>
+
+        <div class="spec">
+          <h4 style="margin-bottom:12px">Semantic aliases</h4>
+          <div class="table-wrap card card--flat">
+            <table class="table token-table">
+              <thead>
+                <tr><th scope="col">Token</th><th scope="col">Value</th><th scope="col">Role</th></tr>
+              </thead>
+              <tbody>
+                <tr><td class="mono">--color-bg</td><td><span class="token-chip" style="--sw: var(--sand-50)"></span><span class="mono">sand-50</span></td><td>Page background</td></tr>
+                <tr><td class="mono">--color-surface</td><td><span class="token-chip" style="--sw: var(--sand-0)"></span><span class="mono">sand-0</span></td><td>Cards, inputs, stages</td></tr>
+                <tr><td class="mono">--color-surface-sunken</td><td><span class="token-chip" style="--sw: var(--sand-100)"></span><span class="mono">sand-100</span></td><td>Sidebar, wells, table heads</td></tr>
+                <tr><td class="mono">--color-ink</td><td><span class="token-chip" style="--sw: var(--sand-900)"></span><span class="mono">sand-900</span></td><td>Primary text</td></tr>
+                <tr><td class="mono">--color-ink-secondary</td><td><span class="token-chip" style="--sw: var(--sand-700)"></span><span class="mono">sand-700</span></td><td>Body and supporting text</td></tr>
+                <tr><td class="mono">--color-ink-muted</td><td><span class="token-chip" style="--sw: var(--sand-600)"></span><span class="mono">sand-600</span></td><td>Meta, hints (≥14&nbsp;px only)</td></tr>
+                <tr><td class="mono">--color-border</td><td><span class="token-chip" style="--sw: var(--sand-300)"></span><span class="mono">sand-300</span></td><td>Hairlines, dividers</td></tr>
+                <tr><td class="mono">--color-border-strong</td><td><span class="token-chip" style="--sw: var(--sand-400)"></span><span class="mono">sand-400</span></td><td>Secondary control borders</td></tr>
+                <tr><td class="mono">--color-input-border</td><td><span class="token-chip" style="--sw: var(--sand-500)"></span><span class="mono">sand-500</span></td><td>Input, checkbox, card-select borders</td></tr>
+                <tr><td class="mono">--color-accent</td><td><span class="token-chip" style="--sw: var(--pine-600)"></span><span class="mono">pine-600</span></td><td>Primary actions, checked state</td></tr>
+                <tr><td class="mono">--color-accent-strong</td><td><span class="token-chip" style="--sw: var(--pine-700)"></span><span class="mono">pine-700</span></td><td>Hover, links</td></tr>
+                <tr><td class="mono">--color-accent-soft</td><td><span class="token-chip" style="--sw: var(--pine-100)"></span><span class="mono">pine-100</span></td><td>Selection rows, soft fills</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="spec__caption">Status aliases follow the same pattern: --status-{success|warning|danger|info|neutral|accent}-{bg|ink|dot}.</p>
+        </div>
+
+        <div class="spec">
+          <div class="spec__row">
+            <span class="spec__row-label">In practice</span>
+            <span class="badge badge--success"><span class="badge__dot"></span>Verified</span>
+            <span class="badge badge--info"><span class="badge__dot"></span>In review</span>
+            <span class="badge badge--warning"><span class="badge__dot"></span>Sensor offline</span>
+            <span class="badge badge--danger"><span class="badge__dot"></span>Flagged</span>
+            <span class="badge badge--neutral"><span class="badge__dot"></span>Draft</span>
+            <span class="badge badge--accent"><span class="badge__dot"></span>Editorial</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= TYPOGRAPHY ======================= -->
+      <section class="section" id="typography" data-spy aria-labelledby="type-title">
+        <p class="section__kicker">Foundations</p>
+        <h2 class="section__title" id="type-title">Typography</h2>
+        <p class="section__lede">A serif display voice over a workmanlike UI sans, with monospace reserved for anything a crew member writes down or counts. System stacks only — the system renders identically offline.</p>
+
+        <div class="spec">
+          <div class="spec__grid">
+            <div class="font-card">
+              <p class="font-card__sample font-card__sample--serif">Aa</p>
+              <h4>Loam Serif · display</h4>
+              <p>Page titles, card titles, big numbers. A printed-notebook voice.</p>
+              <code>Georgia, "Times New Roman", "Palatino Linotype", serif</code>
+            </div>
+            <div class="font-card">
+              <p class="font-card__sample" style="font-family:var(--font-ui)">Aa</p>
+              <h4>Loam Sans · UI</h4>
+              <p>Everything interactive: labels, buttons, body copy, navigation.</p>
+              <code>system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif</code>
+            </div>
+            <div class="font-card">
+              <p class="font-card__sample font-card__sample--mono">Aa</p>
+              <h4>Loam Mono · data</h4>
+              <p>Record IDs, dates, measurements, token names. Always tabular.</p>
+              <code>ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace</code>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec">
+          <div class="card card--flat" style="padding:8px 24px">
+            <div class="type-row">
+              <div class="type-row__meta"><b>--text-display</b>clamp(38 → 52 px)<br>Serif 700 · lh 1.08</div>
+              <p class="t-display">Season 3 closes strong</p>
+            </div>
+            <div class="type-row">
+              <div class="type-row__meta"><b>--text-2xl</b>28 px<br>Serif 700 · lh 1.2</div>
+              <p class="t-2xl">Kestrel Creek floodplain</p>
+            </div>
+            <div class="type-row">
+              <div class="type-row__meta"><b>--text-xl</b>22 px<br>Serif 700 · lh 1.25</div>
+              <p class="t-xl">Survey records</p>
+            </div>
+            <div class="type-row">
+              <div class="type-row__meta"><b>--text-lg</b>18 px · Sans 600<br>lh 1.4</div>
+              <p class="t-lg">Native cover is trending up across planted plots</p>
+            </div>
+            <div class="type-row">
+              <div class="type-row__meta"><b>--text-md</b>16 px · Sans 400<br>lh 1.6</div>
+              <p class="t-md">Body copy carries procedural detail: methods, permits, follow-up actions. It stays at 16&nbsp;px with generous line height so notes stay readable on low-quality screens.</p>
+            </div>
+            <div class="type-row">
+              <div class="type-row__meta"><b>--text-sm</b>14 px · Sans 400<br>lh 1.55</div>
+              <p class="t-sm">The smallest size allowed in the product UI — used for hints, meta and dense table supporting text. Never for primary actions.</p>
+            </div>
+            <div class="type-row">
+              <div class="type-row__meta"><b>--text-xs</b>12 px · Mono<br>lh 1.5</div>
+              <p class="t-xs">LR-1042 · 2026-11-18 · 62% COVER · CAPTIONS &amp; KICKERS ONLY</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec">
+          <div class="note note--do"><b>Do</b> set measurements, IDs and dates in <code class="inline">--font-mono</code> with <code class="inline">font-variant-numeric: tabular-nums</code>. <b>Don’t</b> use the serif for interface labels — it’s a voice for titles, not controls.</div>
+        </div>
+      </section>
+
+      <!-- ======================= SPACING ======================= -->
+      <section class="section" id="spacing" data-spy aria-labelledby="spacing-title">
+        <p class="section__kicker">Foundations</p>
+        <h2 class="section__title" id="spacing-title">Spacing</h2>
+        <p class="section__lede">A 4&nbsp;px base grid. Control padding lives on the 12/16 steps, component gaps on the 16/24 steps, and section rhythm on 48/64.</p>
+
+        <div class="spec">
+          <div class="card card--flat" style="padding:16px 24px">
+            <div class="space-row"><span class="space-row__bar" style="width:4px"></span><span class="space-row__token">--space-1</span><span class="space-row__px">4 px · icon nudges</span></div>
+            <div class="space-row"><span class="space-row__bar" style="width:8px"></span><span class="space-row__token">--space-2</span><span class="space-row__px">8 px · icon gaps, tight stacks</span></div>
+            <div class="space-row"><span class="space-row__bar" style="width:12px"></span><span class="space-row__token">--space-3</span><span class="space-row__px">12 px · control padding, list rows</span></div>
+            <div class="space-row"><span class="space-row__bar" style="width:16px"></span><span class="space-row__token">--space-4</span><span class="space-row__px">16 px · card padding, grid gutters</span></div>
+            <div class="space-row"><span class="space-row__bar" style="width:24px"></span><span class="space-row__token">--space-6</span><span class="space-row__px">24 px · stage padding, group gaps</span></div>
+            <div class="space-row"><span class="space-row__bar" style="width:32px"></span><span class="space-row__token">--space-8</span><span class="space-row__px">32 px · intra-section rhythm</span></div>
+            <div class="space-row"><span class="space-row__bar" style="width:48px"></span><span class="space-row__token">--space-12</span><span class="space-row__px">48 px · between related sections</span></div>
+            <div class="space-row"><span class="space-row__bar" style="width:64px"></span><span class="space-row__token">--space-16</span><span class="space-row__px">64 px · between component families</span></div>
+            <div class="space-row"><span class="space-row__bar" style="width:96px"></span><span class="space-row__token">--space-24</span><span class="space-row__px">96 px · page-level rhythm</span></div>
+          </div>
+          <p class="spec__caption">Intermediate steps --space-5 (20), --space-10 (40) and --space-20 (80) exist for optical corrections.</p>
+        </div>
+      </section>
+
+      <!-- ======================= RADIUS & ELEVATION ======================= -->
+      <section class="section" id="surface" data-spy aria-labelledby="surface-title">
+        <p class="section__kicker">Foundations</p>
+        <h2 class="section__title" id="surface-title">Radius &amp; elevation</h2>
+        <p class="section__lede">Corners round gently (4–16 px, full for pills). Elevation is a three-step ladder plus the focus ring — the only moment a shadow is doing semantic work.</p>
+
+        <div class="spec">
+          <div class="radius-demo">
+            <div class="radius-demo__box" style="border-radius:var(--radius-sm)">--radius-sm · 4</div>
+            <div class="radius-demo__box" style="border-radius:var(--radius-md)">--radius-md · 8</div>
+            <div class="radius-demo__box" style="border-radius:var(--radius-lg)">--radius-lg · 12</div>
+            <div class="radius-demo__box" style="border-radius:var(--radius-xl)">--radius-xl · 16</div>
+            <div class="radius-demo__box" style="border-radius:var(--radius-full)">--radius-full</div>
+          </div>
+        </div>
+
+        <div class="spec">
+          <div class="elev-stage">
+            <div class="elev-card elev-card--0"><b>Flat</b>border only — wells, tables</div>
+            <div class="elev-card elev-card--1"><b>--shadow-1</b>resting cards</div>
+            <div class="elev-card elev-card--2"><b>--shadow-2</b>raised cards, hover lifts</div>
+            <div class="elev-card elev-card--3"><b>--shadow-3</b>dialogs, toasts, mobile nav</div>
+            <div class="elev-card elev-card--ring"><b>Focus ring</b>2 px accent outline, offset 2</div>
+          </div>
+          <p class="spec__caption">The ring shown on the last card is the real :focus-visible style applied across the system.</p>
+        </div>
+      </section>
+
+      <!-- ======================= MOTION ======================= -->
+      <section class="section" id="motion" data-spy aria-labelledby="motion-title">
+        <p class="section__kicker">Foundations</p>
+        <h2 class="section__title" id="motion-title">Motion</h2>
+        <p class="section__lede">Fast for feedback, slow for arrivals. One emphasized curve carries the personality; everything else is nearly invisible. All motion collapses under <code class="inline">prefers-reduced-motion</code>.</p>
+
+        <div class="spec">
+          <div class="table-wrap card card--flat">
+            <table class="table token-table">
+              <thead><tr><th scope="col">Token</th><th scope="col">Value</th><th scope="col">Used for</th></tr></thead>
+              <tbody>
+                <tr><td class="mono">--motion-fast</td><td class="mono">120ms</td><td>Hover, button feedback, colour changes</td></tr>
+                <tr><td class="mono">--motion-base</td><td class="mono">200ms</td><td>Cards, dialogs, toggles</td></tr>
+                <tr><td class="mono">--motion-slow</td><td class="mono">320ms</td><td>Progress fills, nav transitions</td></tr>
+                <tr><td class="mono">--ease-out</td><td class="mono">cubic-bezier(.2,.7,.3,1)</td><td>Default enter / exit</td></tr>
+                <tr><td class="mono">--ease-emphasized</td><td class="mono">cubic-bezier(.3,1.25,.5,1)</td><td>Switch knobs, toasts, playful fills</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="spec">
+          <div class="spec__grid">
+            <div class="motion-card">
+              <h4>Hover lift · 200 ms ease-out</h4>
+              <p>Hover this card — a 3&nbsp;px rise with shadow-2. Resting states never animate.</p>
+            </div>
+            <div class="motion-card">
+              <h4>Emphasized fill · 320 ms</h4>
+              <p>Hover to run the clay bar. Used for progress and toasts.</p>
+              <div class="motion-bar-demo" style="margin-top:12px"><div class="motion-bar-demo__fill"></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= BREAKPOINTS ======================= -->
+      <section class="section" id="breakpoints" data-spy aria-labelledby="bp-title">
+        <p class="section__kicker">Foundations</p>
+        <h2 class="section__title" id="bp-title">Breakpoints</h2>
+        <p class="section__lede">Four stops, content-first. The docs shell itself is the reference implementation — resize this window and watch the sidebar collapse at 1080&nbsp;px.</p>
+
+        <div class="spec">
+          <div class="table-wrap card card--flat">
+            <table class="table token-table">
+              <thead><tr><th scope="col">Token</th><th scope="col">Min-width</th><th scope="col">What changes</th></tr></thead>
+              <tbody>
+                <tr><td class="mono">--bp-sm</td><td class="mono">480 px</td><td>Forms and radio cards go single column; stat cards stack</td></tr>
+                <tr><td class="mono">--bp-md</td><td class="mono">768 px</td><td>Type specimens restack; content gutters tighten</td></tr>
+                <tr><td class="mono">--bp-lg</td><td class="mono">1080 px</td><td>Sidebar becomes an off-canvas menu; dashboard goes single column</td></tr>
+                <tr><td class="mono">--bp-xl</td><td class="mono">1440 px</td><td>Content caps at 1120 px and centres</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="spec__caption" style="margin-top:16px">You are here → <span class="bp-live"><span class="bp-dot"></span><span id="vp-live">—</span></span></p>
+        </div>
+      </section>
+
+      <!-- ======================= COMPONENTS INTRO ======================= -->
+      <section class="section" aria-labelledby="comp-intro-title">
+        <p class="section__kicker">Library</p>
+        <h2 class="section__title" id="comp-intro-title">Components</h2>
+        <p class="section__lede">Eleven families, one naming language: <code class="inline">.component</code>, <code class="inline">.component--variant</code>, <code class="inline">.component__part</code>. States are baked into every family — hover, focus-visible, active, disabled and loading come free with the class.</p>
+      </section>
+
+      <!-- ======================= BUTTONS ======================= -->
+      <section class="section" id="c-buttons" data-spy aria-labelledby="c-buttons-t">
+        <h3 class="comp-title" id="c-buttons-t">Buttons <code>&lt;button class="btn"&gt;</code></h3>
+        <div class="note"><b>Use</b> one primary button per view region. The hierarchy runs primary → secondary → ghost → quiet-danger; reserve <code class="inline">--danger</code> for irreversible actions like deleting a site.</div>
+
+        <div class="spec">
+          <div class="spec__stage spec__stage--grid">
+            <div class="spec__row">
+              <span class="spec__row-label">Variants</span>
+              <button type="button" class="btn btn--primary"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-plus"/></svg>New survey</button>
+              <button type="button" class="btn btn--secondary"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-download"/></svg>Export data</button>
+              <button type="button" class="btn btn--ghost">Cancel</button>
+              <button type="button" class="btn btn--danger"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg>Archive site</button>
+              <button type="button" class="btn btn--quiet-danger">Discard draft</button>
+            </div>
+            <div class="spec__row">
+              <span class="spec__row-label">Sizes</span>
+              <button type="button" class="btn btn--secondary btn--sm">Small · 34</button>
+              <button type="button" class="btn btn--secondary">Default · 40</button>
+              <button type="button" class="btn btn--primary btn--lg">Large · 46</button>
+              <button type="button" class="btn btn--secondary btn--icon btn--sm" aria-label="Filter records"><svg class="icon" aria-hidden="true"><use href="#i-filter"/></svg></button>
+              <span class="icon-count">
+                <button type="button" class="btn btn--secondary btn--icon" data-toast data-toast-type="info" data-toast-title="3 unread alerts" data-toast-msg="Two sensor warnings and one flagged record.">
+                  <svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg>
+                  <span class="vh">Notifications, 3 unread</span>
+                </button>
+                <span class="icon-count__badge" aria-hidden="true">3</span>
+              </span>
+            </div>
+            <div class="spec__row">
+              <span class="spec__row-label">States</span>
+              <button type="button" class="btn btn--primary" data-loading-demo>Sync records<span class="btn__spinner" aria-hidden="true"></span></button>
+              <span class="badge badge--neutral"><span class="badge__dot"></span>click to see loading</span>
+              <button type="button" class="btn btn--primary" disabled>Disabled</button>
+              <button type="button" class="btn btn--secondary" disabled>Disabled</button>
+              <button type="button" class="btn btn--ghost" disabled>Disabled</button>
+              <button type="button" class="btn btn--quiet-danger" disabled>Disabled</button>
+            </div>
+          </div>
+          <p class="spec__caption">Hover and keyboard-focus each button. “Sync records” runs its real loading state for 1.5&nbsp;s, then confirms with a toast.</p>
+        </div>
+
+        <div class="pair">
+          <div class="pair__item">
+            <p class="pair__tag pair__tag--do"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Do</p>
+            <div class="pair__body spec__stage--grid">
+              <button type="button" class="btn btn--primary">Save draft</button>
+              <button type="button" class="btn btn--secondary" style="margin-left:8px">Preview</button>
+              <p class="spec__caption" style="margin-top:16px">One clear primary; the escape route is quiet.</p>
+            </div>
+          </div>
+          <div class="pair__item">
+            <p class="pair__tag pair__tag--dont"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg>Don’t</p>
+            <div class="pair__body">
+              <button type="button" class="btn btn--primary" tabindex="-1" aria-hidden="true">Save draft</button>
+              <button type="button" class="btn btn--primary" tabindex="-1" aria-hidden="true" style="margin-left:8px">Preview</button>
+              <button type="button" class="btn btn--primary" tabindex="-1" aria-hidden="true" style="margin-left:8px">Publish</button>
+              <p class="spec__caption" style="margin-top:16px">Three competing primaries — no hierarchy, no action.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= LINKS ======================= -->
+      <section class="section" id="c-links" data-spy aria-labelledby="c-links-t">
+        <h3 class="comp-title" id="c-links-t">Links <code>&lt;a href&gt;</code></h3>
+        <div class="note"><b>Use</b> links for navigation, buttons for actions. Default links are pine-700 with an under-line that darkens on hover; quiet links trade the underline for weight in dense UI.</div>
+
+        <div class="spec">
+          <div class="spec__stage">
+            <p style="max-width:60ch; color:var(--color-ink-secondary)">Survey records feed the <a href="#p-dashboard">site dashboard</a>, where leads verify or flag them. The <a class="link--quiet" href="#overview" style="text-decoration:none;font-weight:500;color:var(--color-ink-secondary)">season summary stays quiet</a> in dense lists, and outbound patterns get an arrow: <a href="#colophon">read the colophon <svg class="icon icon--sm" style="display:inline;vertical-align:-3px" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></a>.</p>
+          </div>
+          <p class="spec__caption">Every link target on this page exists — nothing here is decorative.</p>
+        </div>
+      </section>
+
+      <!-- ======================= BADGES & TAGS ======================= -->
+      <section class="section" id="c-badges" data-spy aria-labelledby="c-badges-t">
+        <h3 class="comp-title" id="c-badges-t">Badges &amp; tags <code>.badge · .chip</code></h3>
+        <div class="note"><b>Use</b> badges for record status with the dot + label pairing (colour never carries meaning alone). Chips are removable filters the crew applies to tables.</div>
+
+        <div class="spec">
+          <div class="spec__stage">
+            <div class="spec__row">
+              <span class="spec__row-label">Status</span>
+              <span class="badge badge--success"><span class="badge__dot"></span>Verified</span>
+              <span class="badge badge--info"><span class="badge__dot"></span>In review</span>
+              <span class="badge badge--warning"><span class="badge__dot"></span>Threshold breach</span>
+              <span class="badge badge--danger"><span class="badge__dot"></span>Flagged</span>
+              <span class="badge badge--neutral"><span class="badge__dot"></span>Draft</span>
+            </div>
+            <div class="spec__row">
+              <span class="spec__row-label">Variants</span>
+              <span class="badge badge--outline badge--success">Native</span>
+              <span class="badge badge--outline">Unlisted</span>
+              <span class="badge badge--accent"><span class="badge__dot"></span>Featured transect</span>
+              <span class="badge badge--danger">Season 3</span>
+            </div>
+            <div class="spec__row">
+              <span class="spec__row-label">Chips</span>
+              <span class="chip">Plot C-04 <button type="button" class="chip__remove" data-chip-remove aria-label="Remove filter Plot C-04"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></span>
+              <span class="chip">Vegetation <button type="button" class="chip__remove" data-chip-remove aria-label="Remove filter Vegetation"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></span>
+              <span class="chip">This season <button type="button" class="chip__remove" data-chip-remove aria-label="Remove filter This season"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= ALERTS ======================= -->
+      <section class="section" id="c-alerts" data-spy aria-labelledby="c-alerts-t">
+        <h3 class="comp-title" id="c-alerts-t">Alerts <code>.alert</code></h3>
+        <div class="note"><b>Use</b> alerts for conditions the crew must see before acting — inline and persistent. Transient confirmations belong in toasts. Each alert pairs an icon with the message; colour is reinforcement, not the signal.</div>
+
+        <div class="spec">
+          <div class="spec__stack" style="max-width:640px">
+            <div class="alert alert--info" role="status">
+              <svg class="icon icon--lg alert__icon" aria-hidden="true"><use href="#i-info"/></svg>
+              <div class="alert__body">
+                <p class="alert__title">Export scheduled</p>
+                <p>The quarterly watershed summary will be generated on 1 Dec.</p>
+              </div>
+              <button type="button" class="alert__close" data-dismiss-alert aria-label="Dismiss alert"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg></button>
+            </div>
+            <div class="alert alert--success">
+              <svg class="icon icon--lg alert__icon" aria-hidden="true"><use href="#i-check-circle"/></svg>
+              <div class="alert__body">
+                <p class="alert__title">Season 3 planting verified</p>
+                <p>All 47,000 plugs planted; survival above the 80% threshold on 42 of 48 plots.</p>
+              </div>
+              <button type="button" class="alert__close" data-dismiss-alert aria-label="Dismiss alert"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg></button>
+            </div>
+            <div class="alert alert--warning">
+              <svg class="icon icon--lg alert__icon" aria-hidden="true"><use href="#i-warning"/></svg>
+              <div class="alert__body">
+                <p class="alert__title">Rain sensor offline at Plot D-07</p>
+                <p>No readings for 36 hours. Soil-moisture alerts are paused until it reconnects.</p>
+                <div class="alert__actions">
+                  <button type="button" class="btn btn--secondary btn--sm" data-scroll-to="#p-dashboard">Review flagged records</button>
+                </div>
+              </div>
+              <button type="button" class="alert__close" data-dismiss-alert aria-label="Dismiss alert"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg></button>
+            </div>
+            <div class="alert alert--danger">
+              <svg class="icon icon--lg alert__icon" aria-hidden="true"><use href="#i-alert"/></svg>
+              <div class="alert__body">
+                <p class="alert__title">3 records flagged for review</p>
+                <p>Survival estimates on LR-1038 and LR-1035 fall below the replant threshold.</p>
+              </div>
+              <button type="button" class="alert__close" data-dismiss-alert aria-label="Dismiss alert"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg></button>
+            </div>
+          </div>
+          <p class="spec__caption">All four are dismissible — the close buttons really remove them.</p>
+        </div>
+      </section>
+
+      <!-- ======================= FORM CONTROLS ======================= -->
+      <section class="section" id="c-fields" data-spy aria-labelledby="c-fields-t">
+        <h3 class="comp-title" id="c-fields-t">Form controls <code>.input · .check · .switch · .radio-card</code></h3>
+        <div class="note"><b>Use</b> explicit labels, hints under the control, and error text that says how to fix the problem — never colour alone. Invalid fields set <code class="inline">aria-invalid</code> and link their message with <code class="inline">aria-describedby</code>. See the <a href="#p-form">survey form pattern</a> for live validation.</div>
+
+        <div class="spec">
+          <div class="spec__grid">
+            <div class="field">
+              <label class="field__label" for="demo-text">Site name</label>
+              <input class="input" id="demo-text" type="text" placeholder="e.g. Kestrel Creek">
+              <p class="field__hint">Free text; the site code is assigned automatically.</p>
+            </div>
+            <div class="field field--invalid">
+              <label class="field__label" for="demo-error">Plot code</label>
+              <input class="input" id="demo-error" type="text" value="C4" aria-invalid="true" aria-describedby="demo-error-msg">
+              <p class="field__error" id="demo-error-msg"><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>Use the plot letter, a dash, then two digits — e.g. C-04.</p>
+            </div>
+            <div class="field field--valid">
+              <label class="field__label" for="demo-valid">Crew lead</label>
+              <input class="input" id="demo-valid" type="text" value="Maya Okonkwo" aria-describedby="demo-valid-msg">
+              <p class="field__hint" id="demo-valid-msg">On the crew list — ✓ verified member.</p>
+            </div>
+            <div class="field">
+              <label class="field__label" for="demo-disabled">Permit number</label>
+              <input class="input" id="demo-disabled" type="text" value="ACR-2024-118" disabled aria-describedby="demo-disabled-msg">
+              <p class="field__hint" id="demo-disabled-msg">Locked — issued by the watershed authority.</p>
+            </div>
+            <div class="field">
+              <label class="field__label" for="demo-select">Survey type</label>
+              <select class="input" id="demo-select">
+                <option>Vegetation survey</option>
+                <option>Water quality</option>
+                <option>Wildlife sighting</option>
+                <option>Photo transect</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="field__label" for="demo-textarea">Field notes</label>
+              <textarea class="input" id="demo-textarea" placeholder="What did you observe?"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec">
+          <div class="spec__stage spec__stage--grid">
+            <div class="spec__row" style="align-items:flex-start">
+              <span class="spec__row-label">Checkboxes</span>
+              <div class="check-stack">
+                <label class="check">
+                  <input class="check__input" id="plots-all" type="checkbox">
+                  <span class="check__box"><svg class="check__mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-6.5"/></svg></span>
+                  <span>All monitored plots</span>
+                </label>
+                <label class="check" style="margin-left:28px">
+                  <input class="check__input plot-check" type="checkbox" checked>
+                  <span class="check__box"><svg class="check__mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-6.5"/></svg></span>
+                  <span>Plot C-04 · floodplain</span>
+                </label>
+                <label class="check" style="margin-left:28px">
+                  <input class="check__input plot-check" type="checkbox" checked>
+                  <span class="check__box"><svg class="check__mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-6.5"/></svg></span>
+                  <span>Plot B-11 · riparian edge</span>
+                </label>
+                <label class="check" style="margin-left:28px">
+                  <input class="check__input plot-check" type="checkbox">
+                  <span class="check__box"><svg class="check__mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-6.5"/></svg></span>
+                  <span>Plot A-02 · terrace</span>
+                </label>
+                <label class="check">
+                  <input class="check__input" type="checkbox" disabled>
+                  <span class="check__box"><svg class="check__mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-6.5"/></svg></span>
+                  <span>Archived plots (read-only)</span>
+                </label>
+              </div>
+            </div>
+            <div class="spec__row" style="align-items:flex-start">
+              <span class="spec__row-label">Radios</span>
+              <div class="check-stack">
+                <label class="radio">
+                  <input class="radio__input" type="radio" name="demo-radio" checked>
+                  <span class="radio__box" aria-hidden="true"></span>
+                  <span>Metric units (°C, mm)</span>
+                </label>
+                <label class="radio">
+                  <input class="radio__input" type="radio" name="demo-radio">
+                  <span class="radio__box" aria-hidden="true"></span>
+                  <span>Imperial units (°F, in)</span>
+                </label>
+              </div>
+            </div>
+            <div class="spec__row" style="align-items:flex-start">
+              <span class="spec__row-label">Switches</span>
+              <div class="check-stack">
+                <label class="switch">
+                  <input class="switch__input" type="checkbox" checked>
+                  <span class="switch__track"><span class="switch__knob"></span></span>
+                  <span>Email me when a record is flagged</span>
+                </label>
+                <label class="switch">
+                  <input class="switch__input" type="checkbox">
+                  <span class="switch__track"><span class="switch__knob"></span></span>
+                  <span>Weekly season digest <small>Every Monday, 7:00</small></span>
+                </label>
+                <label class="switch">
+                  <input class="switch__input" type="checkbox" checked disabled>
+                  <span class="switch__track"><span class="switch__knob"></span></span>
+                  <span>Safety notices (managed by admin)</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <p class="spec__caption">The parent checkbox is genuinely tri-state — toggle the children. Every control here is keyboard-operable with a visible focus ring.</p>
+        </div>
+
+        <div class="spec">
+          <div class="spec__stage">
+            <div class="radio-cards" style="max-width:640px" role="radiogroup" aria-label="Survey type">
+              <label class="radio-card is-selected">
+                <input class="radio-card__input" type="radio" name="demo-card" checked>
+                <span class="radio-card__body">
+                  <span class="radio-card__title"><svg class="icon" aria-hidden="true"><use href="#i-sprout"/></svg>Vegetation survey</span>
+                  <span class="radio-card__desc">Canopy cover, natives vs. invasives, survival counts.</span>
+                </span>
+              </label>
+              <label class="radio-card">
+                <input class="radio-card__input" type="radio" name="demo-card">
+                <span class="radio-card__body">
+                  <span class="radio-card__title"><svg class="icon" aria-hidden="true"><use href="#i-drop"/></svg>Water quality</span>
+                  <span class="radio-card__desc">Temperature, turbidity and dissolved oxygen readings.</span>
+                </span>
+              </label>
+              <label class="radio-card">
+                <input class="radio-card__input" type="radio" name="demo-card">
+                <span class="radio-card__body">
+                  <span class="radio-card__title"><svg class="icon" aria-hidden="true"><use href="#i-map-pin"/></svg>Wildlife sighting</span>
+                  <span class="radio-card__desc">Species, count, location and habitat notes.</span>
+                </span>
+              </label>
+              <label class="radio-card">
+                <input class="radio-card__input" type="radio" name="demo-card">
+                <span class="radio-card__body">
+                  <span class="radio-card__title"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg>Photo transect</span>
+                  <span class="radio-card__desc">Fixed-point photos from a marked transect line.</span>
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= CARDS ======================= -->
+      <section class="section" id="c-cards" data-spy aria-labelledby="c-cards-t">
+        <h3 class="comp-title" id="c-cards-t">Cards <code>.card</code></h3>
+        <div class="note"><b>Use</b> resting shadow-1 by default, <code class="inline">card--raised</code> when a card is the primary surface on a busy page. Cards contain content; dialogs contain decisions.</div>
+
+        <div class="spec">
+          <div class="spec__grid">
+            <div class="card card--raised">
+              <div class="card__body">
+                <div class="stat">
+                  <p class="stat__label">Native cover · all plots</p>
+                  <div class="stat__value-row">
+                    <p class="stat__value">62%</p>
+                    <span class="stat__delta stat__delta--up"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-up"/></svg>5.2 pts</span>
+                  </div>
+                  <svg class="stat__spark stat__spark--clay" viewBox="0 0 96 28" width="96" height="28" aria-hidden="true"><polyline points="0,24 12,20 24,22 36,16 48,17 60,12 72,13 84,8 96,9"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card__header">
+                <h4 class="card__title">Alder Flats</h4>
+                <span class="badge badge--info"><span class="badge__dot"></span>Season 2</span>
+              </div>
+              <div class="card__body card__body--tight">
+                <div class="kv">
+                  <div class="kv__row"><span class="kv__key">Region</span><span class="kv__val">Lower Alder basin</span></div>
+                  <div class="kv__row"><span class="kv__key">Area</span><span class="kv__val num">21.0 ha</span></div>
+                  <div class="kv__row"><span class="kv__key">Lead</span><span class="kv__val">Jonas Petersen</span></div>
+                </div>
+              </div>
+              <div class="card__footer">
+                <span class="table-meta">Updated 14 Nov 2026</span>
+                <button type="button" class="btn btn--secondary btn--sm" data-toast data-toast-type="info" data-toast-title="Site pages" data-toast-msg="Individual site pages are outside this design-system demo — the dashboard pattern below shows the full composition.">View site</button>
+              </div>
+            </div>
+            <div class="card card--flat">
+              <div class="card__body">
+                <h4 style="margin-bottom:8px">Planting window</h4>
+                <p style="font-size:0.875rem;color:var(--color-ink-secondary)">Bare-root stock arrives the first week of December. The crew timeline and cold-storage checks live in this card until the window opens, then it converts to an alert.</p>
+                <div class="progress" style="margin-top:16px"><div class="progress__bar" style="width:78%"></div></div>
+                <p class="field__hint" style="margin-top:8px">78% of cold-storage capacity booked</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= DATA DISPLAY ======================= -->
+      <section class="section" id="c-data" data-spy aria-labelledby="c-data-t">
+        <h3 class="comp-title" id="c-data-t">Data display <code>.kv · .feed · .progress · .stepper</code></h3>
+        <div class="note"><b>Use</b> these for structured reads rather than editable data. Progress bars always carry their numbers as text — a bar alone is decoration.</div>
+
+        <div class="spec">
+          <div class="spec__grid">
+            <div class="card">
+              <div class="card__header"><h4 class="card__title--sans">Season progress</h4><span class="table-meta">Season 3 of 5</span></div>
+              <div class="card__body">
+                <div class="progress__meta"><span>Planted</span><b>62%</b></div>
+                <div class="progress"><div class="progress__bar" style="width:62%"></div></div>
+                <p class="field__hint" style="margin-top:10px">29,400 of 47,000 plugs in the ground</p>
+                <div class="progress__meta" style="margin-top:16px"><span>Survival threshold</span><b>84%</b></div>
+                <div class="progress progress--warning"><div class="progress__bar" style="width:84%"></div></div>
+                <p class="field__hint" style="margin-top:10px">Target: 80% at first-year census</p>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card__header"><h4 class="card__title--sans">Restoration phases</h4></div>
+              <div class="card__body">
+                <ol class="stepper">
+                  <li class="step step--done">
+                    <span class="step__dot"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>
+                    <span class="step__label">Survey</span>
+                    <span class="step__line"></span>
+                  </li>
+                  <li class="step step--done">
+                    <span class="step__dot"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>
+                    <span class="step__label">Prepare</span>
+                    <span class="step__line"></span>
+                  </li>
+                  <li class="step step--done">
+                    <span class="step__dot"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>
+                    <span class="step__label">Plant</span>
+                    <span class="step__line"></span>
+                  </li>
+                  <li class="step step--current">
+                    <span class="step__dot">4</span>
+                    <span class="step__label">Monitor</span>
+                    <span class="step__line"></span>
+                  </li>
+                  <li class="step">
+                    <span class="step__dot">5</span>
+                    <span class="step__label">Handoff</span>
+                  </li>
+                </ol>
+                <p class="field__hint" style="margin-top:16px">Monitoring runs through the second growing season before the site can be handed to the land trust.</p>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card__header"><h4 class="card__title--sans">Recent activity</h4></div>
+              <div class="card__body card__body--tight">
+                <div class="feed">
+                  <div class="feed__item">
+                    <span class="feed__dot feed__dot--danger"></span>
+                    <div><p class="feed__text"><b>T. Alvarez</b> flagged LR-1038 — survival below the replant threshold</p><p class="feed__time">2 h ago</p></div>
+                  </div>
+                  <div class="feed__item">
+                    <span class="feed__dot feed__dot--success"></span>
+                    <div><p class="feed__text"><b>M. Okonkwo</b> verified LR-1042 · vegetation survey at Plot C-04</p><p class="feed__time">5 h ago</p></div>
+                  </div>
+                  <div class="feed__item">
+                    <span class="feed__dot feed__dot--info"></span>
+                    <div><p class="feed__text">Rain sensor at Plot D-07 reported <b>36 h offline</b></p><p class="feed__time">Yesterday</p></div>
+                  </div>
+                  <div class="feed__item">
+                    <span class="feed__dot"></span>
+                    <div><p class="feed__text"><b>P. Raman</b> added 3 photos to the C-04 photo transect</p><p class="feed__time">15 Nov</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card__header"><h4 class="card__title--sans">Crew on site this week</h4></div>
+              <div class="card__body">
+                <div class="avatar-stack">
+                  <span class="avatar" data-tip="Maya Okonkwo · lead" tabindex="0">MO</span>
+                  <span class="avatar avatar--clay" data-tip="Jonas Petersen" tabindex="0">JP</span>
+                  <span class="avatar avatar--river" data-tip="Priya Raman" tabindex="0">PR</span>
+                  <span class="avatar avatar--ochre" data-tip="Tomás Alvarez" tabindex="0">TA</span>
+                  <span class="avatar avatar--brick" data-tip="Dea Krasniqi" tabindex="0">DK</span>
+                  <span class="avatar-stack__more">+2 more</span>
+                </div>
+                <p class="field__hint" style="margin-top:16px">Hover or focus an avatar for the tooltip. Rota opens Monday at 7:00.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= TABLES ======================= -->
+      <section class="section" id="c-tables" data-spy aria-labelledby="c-tables-t">
+        <h3 class="comp-title" id="c-tables-t">Tables <code>.table</code></h3>
+        <div class="note"><b>Use</b> real <code class="inline">&lt;table&gt;</code> markup with <code class="inline">scope="col"</code> headers. Sort buttons announce direction through <code class="inline">aria-sort</code>; numerals are right-aligned tabular mono. The dashboard pattern adds filtering, selection and pagination on top.</div>
+
+        <div class="spec">
+          <div class="table-wrap card card--flat">
+            <table class="table" data-sortable aria-label="Plot registry">
+              <thead>
+                <tr>
+                  <th scope="col"><button type="button" class="th-sort" data-sort-key="plot">Plot <svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg></button></th>
+                  <th scope="col" class="num"><button type="button" class="th-sort" data-sort-key="area" data-sort-type="num">Area <svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg></button></th>
+                  <th scope="col" class="num"><button type="button" class="th-sort" data-sort-key="survival" data-sort-type="num">Survival <svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg></button></th>
+                  <th scope="col"><button type="button" class="th-sort" data-sort-key="date">Last survey <svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg></button></th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-plot="C-04" data-area="9.8" data-survival="88" data-date="2026-11-18"><td class="table__primary mono">C-04</td><td class="num">9.8 ha</td><td class="num">88%</td><td class="mono">18 Nov 2026</td><td><span class="badge badge--success"><span class="badge__dot"></span>On target</span></td></tr>
+                <tr data-plot="B-11" data-area="6.2" data-survival="81" data-date="2026-11-17"><td class="table__primary mono">B-11</td><td class="num">6.2 ha</td><td class="num">81%</td><td class="mono">17 Nov 2026</td><td><span class="badge badge--success"><span class="badge__dot"></span>On target</span></td></tr>
+                <tr data-plot="A-02" data-area="4.1" data-survival="74" data-date="2026-11-16"><td class="table__primary mono">A-02</td><td class="num">4.1 ha</td><td class="num">74%</td><td class="mono">16 Nov 2026</td><td><span class="badge badge--info"><span class="badge__dot"></span>Watch</span></td></tr>
+                <tr data-plot="D-07" data-area="7.5" data-survival="68" data-date="2026-11-14"><td class="table__primary mono">D-07</td><td class="num">7.5 ha</td><td class="num">68%</td><td class="mono">14 Nov 2026</td><td><span class="badge badge--warning"><span class="badge__dot"></span>Below plan</span></td></tr>
+                <tr data-plot="E-01" data-area="3.3" data-survival="41" data-date="2026-11-08"><td class="table__primary mono">E-01</td><td class="num">3.3 ha</td><td class="num">41%</td><td class="mono">08 Nov 2026</td><td><span class="badge badge--danger"><span class="badge__dot"></span>Replant</span></td></tr>
+                <tr data-plot="F-03" data-area="5.6" data-survival="85" data-date="2026-11-02"><td class="table__primary mono">F-03</td><td class="num">5.6 ha</td><td class="num">85%</td><td class="mono">02 Nov 2026</td><td><span class="badge badge--success"><span class="badge__dot"></span>On target</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="spec__caption">Click any header to sort — ascending first, again to flip. Screen readers hear the direction via aria-sort.</p>
+        </div>
+
+        <div class="spec">
+          <div class="spec__stage spec__stage--sunken">
+            <div class="spec__row">
+              <span class="spec__row-label">Pagination</span>
+              <div class="pagination" id="pager-demo" aria-label="Pagination specimen">
+                <button type="button" class="page-btn" data-pager-prev aria-label="Previous page"><svg class="icon" aria-hidden="true"><use href="#i-chevron-left"/></svg></button>
+                <button type="button" class="page-btn" data-page="1" aria-label="Page 1">1</button>
+                <button type="button" class="page-btn" data-page="2" aria-label="Page 2">2</button>
+                <button type="button" class="page-btn" data-page="3" aria-label="Page 3">3</button>
+                <button type="button" class="page-btn" data-page="4" aria-label="Page 4">4</button>
+                <button type="button" class="page-btn" data-page="5" aria-label="Page 5">5</button>
+                <button type="button" class="page-btn" data-pager-next aria-label="Next page"><svg class="icon" aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+              </div>
+              <span class="table-meta" id="pager-demo-meta">Page 2 of 5</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= NAVIGATION ======================= -->
+      <section class="section" id="c-navigation" data-spy aria-labelledby="c-nav-t">
+        <h3 class="comp-title" id="c-nav-t">Navigation <code>.breadcrumb · .tabs</code></h3>
+        <div class="note"><b>Use</b> breadcrumbs for hierarchy, tabs for peer views of the same object. This page’s sidebar and topbar are live examples — the search field in the topbar really filters the sidebar, and the current section tracks the scroll.</div>
+
+        <div class="spec">
+          <div class="spec__stage">
+            <nav class="breadcrumb" aria-label="Breadcrumb specimen" style="margin-bottom:24px">
+              <a href="#overview">Sites</a>
+              <svg class="icon" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+              <a href="#p-dashboard">Kestrel Creek</a>
+              <svg class="icon" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+              <span aria-current="page">Survey records</span>
+            </nav>
+            <div data-tabs style="max-width:640px">
+              <div class="tabs" role="tablist" aria-label="Specimen tabs">
+                <button type="button" class="tab" role="tab" id="tab-plots" aria-controls="panel-plots" aria-selected="true">Plots</button>
+                <button type="button" class="tab" role="tab" id="tab-equipment" aria-controls="panel-equipment" aria-selected="false" tabindex="-1">Equipment</button>
+              </div>
+              <div class="tabpanel" id="panel-plots" role="tabpanel" aria-labelledby="tab-plots">
+                <p style="font-size:0.9375rem;color:var(--color-ink-secondary)">Six monitored plots across floodplain, riparian edge and terrace zones. Arrow keys move between tabs when the tab list has focus.</p>
+              </div>
+              <div class="tabpanel" id="panel-equipment" role="tabpanel" aria-labelledby="tab-equipment" hidden>
+                <p style="font-size:0.9375rem;color:var(--color-ink-secondary)">Two rain gauges, four soil probes and one weather station — D-07’s gauge is currently offline.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= OVERLAYS ======================= -->
+      <section class="section" id="c-overlays" data-spy aria-labelledby="c-overlays-t">
+        <h3 class="comp-title" id="c-overlays-t">Overlays <code>&lt;dialog&gt; · .toast</code></h3>
+        <div class="note"><b>Use</b> native <code class="inline">&lt;dialog&gt;</code> for decisions that need the user’s full attention — it traps focus, closes on <kbd>Esc</kbd> and returns focus to the trigger. Toasts confirm outcomes without interrupting; they use <code class="inline">role="status"</code> so screen readers announce them politely.</div>
+
+        <div class="spec">
+          <div class="spec__stage spec__stage--grid">
+            <div class="spec__row">
+              <span class="spec__row-label">Dialog</span>
+              <button type="button" class="btn btn--primary" data-open-dialog="export-dialog"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-download"/></svg>Open export dialog</button>
+            </div>
+            <div class="spec__row">
+              <span class="spec__row-label">Toasts</span>
+              <button type="button" class="btn btn--secondary btn--sm" data-toast data-toast-type="success" data-toast-title="Record verified" data-toast-msg="LR-1042 moved to Verified by M. Okonkwo.">Success</button>
+              <button type="button" class="btn btn--secondary btn--sm" data-toast data-toast-type="info" data-toast-title="Offline draft" data-toast-msg="Saved locally — it will sync when you’re back in coverage.">Info</button>
+              <button type="button" class="btn btn--secondary btn--sm" data-toast data-toast-type="warning" data-toast-title="Unsaved changes" data-toast-msg="Two fields were edited but the draft wasn’t saved.">Warning</button>
+              <button type="button" class="btn btn--secondary btn--sm" data-toast data-toast-type="danger" data-toast-title="Sync failed" data-toast-msg="Upload queued — the tower at Alder Pass is down again.">Danger</button>
+            </div>
+          </div>
+          <p class="spec__caption">Try the dialog with keyboard only: Tab reaches the form, Esc closes, focus returns here.</p>
+        </div>
+      </section>
+
+      <!-- ======================= FEEDBACK ======================= -->
+      <section class="section" id="c-feedback" data-spy aria-labelledby="c-feedback-t">
+        <h3 class="comp-title" id="c-feedback-t">Feedback states <code>.empty · [data-tip]</code></h3>
+        <div class="note"><b>Use</b> empty states to teach the way out, not just report the void — every empty state offers the action that fixes it. Loading and validation states are demonstrated inside <a href="#c-buttons">buttons</a> and the <a href="#p-form">form pattern</a>.</div>
+
+        <div class="spec">
+          <div class="spec__grid">
+            <div class="card card--flat">
+              <div class="card__body">
+                <div class="empty">
+                  <span class="empty__icon"><svg class="icon icon--lg" aria-hidden="true"><use href="#i-sprout"/></svg></span>
+                  <p class="empty__title">No records match “zzzz”</p>
+                  <p class="empty__text">Nothing in Season 3 matches that filter. Clear it, or try a plot code like C-04.</p>
+                  <div class="empty__actions">
+                    <button type="button" class="btn btn--secondary btn--sm" data-demo-empty>Force the empty state — see it live below</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card card--flat">
+              <div class="card__body">
+                <div class="spec__stack" style="align-items:center">
+                  <button type="button" class="btn btn--secondary" data-tip="Everything in Loam works offline in the field">Hover or focus me for a tooltip</button>
+                  <p class="spec__caption">Tooltips are CSS-only, appear on hover and keyboard focus, and never hold information that exists nowhere else.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= PATTERNS ======================= -->
+      <section class="section" aria-labelledby="patterns-title">
+        <p class="section__kicker">Patterns</p>
+        <h2 class="section__title" id="patterns-title">Patterns</h2>
+        <p class="section__lede">Components composed the way the product actually uses them — with states, data and behaviour wired up.</p>
+      </section>
+
+      <!-- ======================= PATTERN: SURVEY FORM ======================= -->
+      <section class="section" id="p-form" data-spy aria-labelledby="p-form-t">
+        <h3 class="comp-title" id="p-form-t">Pattern · Create a survey record</h3>
+        <div class="note"><b>Try it.</b> Submit empty to see the validation pass focus to the first invalid field. Fix the plot code format, pick a survey type, and save — errors clear as you type and a success alert confirms the draft.</div>
+
+        <div class="spec">
+          <div class="alert alert--success form-success" id="form-success" hidden role="status">
+            <svg class="icon icon--lg alert__icon" aria-hidden="true"><use href="#i-check-circle"/></svg>
+            <div class="alert__body">
+              <p class="alert__title">Draft saved</p>
+              <p id="form-success-summary">The survey draft was saved.</p>
+              <div class="alert__actions">
+                <button type="button" class="btn btn--secondary btn--sm" data-form-again>Start another</button>
+              </div>
+            </div>
+            <button type="button" class="alert__close" data-dismiss-alert aria-label="Dismiss confirmation"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg></button>
+          </div>
+
+          <form class="card card--raised form-card" id="survey-form" novalidate>
+            <div class="card__header">
+              <h4 class="card__title">New survey record</h4>
+              <span class="table-meta">Kestrel Creek · Season 3</span>
+            </div>
+            <div class="card__body">
+              <div class="form-grid">
+                <div class="field">
+                  <label class="field__label" for="f-site">Site <span class="req" aria-hidden="true">*</span><span class="vh">required</span></label>
+                  <select class="input" id="f-site" required aria-describedby="err-site">
+                    <option value="">Choose a site…</option>
+                    <option>Kestrel Creek</option>
+                    <option>Alder Flats</option>
+                    <option>Marram Point</option>
+                    <option>Hollis Basin</option>
+                  </select>
+                  <p class="field__error" id="err-site" hidden><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>Choose the site this survey belongs to.</p>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="f-date">Survey date <span class="req" aria-hidden="true">*</span><span class="vh">required</span></label>
+                  <input class="input" type="date" id="f-date" required aria-describedby="err-date">
+                  <p class="field__error" id="err-date" hidden><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>Pick the date the survey was carried out.</p>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="f-plot">Plot code <span class="req" aria-hidden="true">*</span><span class="vh">required</span></label>
+                  <input class="input" type="text" id="f-plot" placeholder="C-04" aria-describedby="f-plot-hint err-plot">
+                  <p class="field__hint" id="f-plot-hint">Plot letter, dash, two digits — e.g. C-04.</p>
+                  <p class="field__error" id="err-plot" hidden><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>Use the plot letter, a dash, then two digits — e.g. C-04.</p>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="f-cover">Native cover estimate (%) <span class="req" aria-hidden="true">*</span><span class="vh">required</span></label>
+                  <input class="input" type="number" id="f-cover" min="0" max="100" step="1" placeholder="0–100" aria-describedby="err-cover">
+                  <p class="field__error" id="err-cover" hidden><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>Enter a whole number between 0 and 100.</p>
+                </div>
+                <fieldset class="fieldset span-2" id="f-type">
+                  <legend>Survey type <span class="req" aria-hidden="true">*</span><span class="vh">required</span></legend>
+                  <div class="radio-cards" role="radiogroup" aria-label="Survey type">
+                    <label class="radio-card">
+                      <input class="radio-card__input" type="radio" name="stype" value="vegetation">
+                      <span class="radio-card__body">
+                        <span class="radio-card__title"><svg class="icon" aria-hidden="true"><use href="#i-sprout"/></svg>Vegetation survey</span>
+                        <span class="radio-card__desc">Cover, natives, survival counts.</span>
+                      </span>
+                    </label>
+                    <label class="radio-card">
+                      <input class="radio-card__input" type="radio" name="stype" value="water">
+                      <span class="radio-card__body">
+                        <span class="radio-card__title"><svg class="icon" aria-hidden="true"><use href="#i-drop"/></svg>Water quality</span>
+                        <span class="radio-card__desc">Temp, turbidity, dissolved oxygen.</span>
+                      </span>
+                    </label>
+                    <label class="radio-card">
+                      <input class="radio-card__input" type="radio" name="stype" value="wildlife">
+                      <span class="radio-card__body">
+                        <span class="radio-card__title"><svg class="icon" aria-hidden="true"><use href="#i-map-pin"/></svg>Wildlife sighting</span>
+                        <span class="radio-card__desc">Species, count, habitat notes.</span>
+                      </span>
+                    </label>
+                    <label class="radio-card">
+                      <input class="radio-card__input" type="radio" name="stype" value="photo">
+                      <span class="radio-card__body">
+                        <span class="radio-card__title"><svg class="icon" aria-hidden="true"><use href="#i-clipboard"/></svg>Photo transect</span>
+                        <span class="radio-card__desc">Fixed-point photos, marked line.</span>
+                      </span>
+                    </label>
+                  </div>
+                  <p class="field__error" id="err-type" hidden style="margin-top:10px"><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>Choose the kind of survey you carried out.</p>
+                </fieldset>
+                <div class="field span-2">
+                  <label class="field__label" for="f-notes">Field notes</label>
+                  <textarea class="input" id="f-notes" placeholder="Optional — anything the next crew should know"></textarea>
+                  <p class="field__hint">Synced to the crew log when coverage returns.</p>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn--primary">Save draft</button>
+                <button type="reset" class="btn btn--ghost">Reset</button>
+                <span class="form-actions__note">Drafts sync when you’re back in coverage. <span class="req">*</span> required</span>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ======================= PATTERN: SITE DASHBOARD ======================= -->
+      <section class="section" id="p-dashboard" data-spy aria-labelledby="p-dash-t">
+        <h3 class="comp-title" id="p-dash-t">Pattern · Site dashboard — Kestrel Creek</h3>
+        <div class="note"><b>The full library, composed.</b> Filter, sort and page the records table; select rows for bulk actions; open a record’s detail dialog; flag it and watch the row update. Tabs switch between records and the species checklist.</div>
+
+        <div class="spec">
+          <div class="page-head">
+            <div>
+              <nav class="breadcrumb" aria-label="Dashboard breadcrumb">
+                <a href="#overview">Sites</a>
+                <svg class="icon" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+                <span aria-current="page">Kestrel Creek</span>
+              </nav>
+              <h4 class="page-title">Kestrel Creek Floodplain Restoration <span class="badge badge--success"><span class="badge__dot"></span>Active</span></h4>
+              <p class="page-sub">Floodplain restoration · Season 3 · 38.5 ha · last survey 18 Nov 2026</p>
+            </div>
+            <div class="page-actions">
+              <button type="button" class="btn btn--secondary btn--sm" data-open-dialog="export-dialog"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-download"/></svg>Export data</button>
+              <button type="button" class="btn btn--primary btn--sm" data-scroll-to="#p-form" data-focus-first><svg class="icon icon--sm" aria-hidden="true"><use href="#i-plus"/></svg>New survey</button>
+            </div>
+          </div>
+
+          <div class="alert alert--warning" style="margin-bottom:8px">
+            <svg class="icon icon--lg alert__icon" aria-hidden="true"><use href="#i-warning"/></svg>
+            <div class="alert__body">
+              <p class="alert__title">Rain sensor offline at Plot D-07</p>
+              <p>No readings for 36 hours — soil-moisture alerts are paused for that plot until it reconnects.</p>
+            </div>
+            <button type="button" class="alert__close" data-dismiss-alert aria-label="Dismiss sensor alert"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg></button>
+          </div>
+
+          <div class="stat-grid">
+            <div class="card card--raised"><div class="card__body">
+              <div class="stat">
+                <p class="stat__label">Active plots</p>
+                <div class="stat__value-row"><p class="stat__value">48</p><span class="stat__delta stat__delta--up"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-up"/></svg>+4</span></div>
+                <svg class="stat__spark" viewBox="0 0 96 28" width="96" height="28" aria-hidden="true"><polyline points="0,22 12,19 24,20 36,14 48,16 60,10 72,11 84,6 96,7"/></svg>
+              </div>
+            </div></div>
+            <div class="card card--raised"><div class="card__body">
+              <div class="stat">
+                <p class="stat__label">Species logged</p>
+                <div class="stat__value-row"><p class="stat__value">132</p><span class="stat__delta stat__delta--up"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-up"/></svg>+9</span></div>
+                <svg class="stat__spark" viewBox="0 0 96 28" width="96" height="28" aria-hidden="true"><polyline points="0,20 12,21 24,17 36,18 48,13 60,14 72,9 84,10 96,5"/></svg>
+              </div>
+            </div></div>
+            <div class="card card--raised"><div class="card__body">
+              <div class="stat">
+                <p class="stat__label">Native cover</p>
+                <div class="stat__value-row"><p class="stat__value">62%</p><span class="stat__delta stat__delta--up"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-up"/></svg>5.2 pts</span></div>
+                <svg class="stat__spark stat__spark--clay" viewBox="0 0 96 28" width="96" height="28" aria-hidden="true"><polyline points="0,24 12,20 24,22 36,16 48,17 60,12 72,13 84,8 96,9"/></svg>
+              </div>
+            </div></div>
+            <div class="card card--raised"><div class="card__body">
+              <div class="stat">
+                <p class="stat__label">Open flags</p>
+                <div class="stat__value-row"><p class="stat__value">3</p><span class="stat__delta stat__delta--down"><svg class="icon icon--sm" style="transform:rotate(180deg)" aria-hidden="true"><use href="#i-arrow-up"/></svg>−2 since Oct</span></div>
+                <svg class="stat__spark" style="color:var(--brick-500)" viewBox="0 0 96 28" width="96" height="28" aria-hidden="true"><polyline points="0,8 12,10 24,7 36,12 48,10 60,16 72,14 84,19 96,17"/></svg>
+              </div>
+            </div></div>
+          </div>
+
+          <div class="dash-grid">
+            <div class="card card--raised">
+              <div data-tabs>
+                <div class="card__header" style="border-bottom:0;padding-bottom:0;gap:16px;flex-wrap:wrap">
+                  <div class="tabs" role="tablist" aria-label="Dashboard data">
+                    <button type="button" class="tab" role="tab" id="dash-tab-records" aria-controls="dash-panel-records" aria-selected="true">Survey records</button>
+                    <button type="button" class="tab" role="tab" id="dash-tab-species" aria-controls="dash-panel-species" aria-selected="false" tabindex="-1">Species checklist</button>
+                  </div>
+                  <div class="search">
+                    <svg class="icon icon--sm" aria-hidden="true"><use href="#i-search"/></svg>
+                    <input type="search" class="search__input" id="records-filter" placeholder="Filter records…" style="width:190px" aria-label="Filter survey records">
+                  </div>
+                </div>
+
+                <div class="tabpanel" id="dash-panel-records" role="tabpanel" aria-labelledby="dash-tab-records">
+                  <div class="toolbar" id="selection-toolbar" hidden>
+                    <span class="toolbar__count"><span id="selection-count">0 records selected</span></span>
+                    <span class="toolbar__spacer"></span>
+                    <button type="button" class="btn btn--quiet-danger btn--sm" data-bulk-flag><svg class="icon icon--sm" aria-hidden="true"><use href="#i-flag"/></svg>Flag selected</button>
+                    <button type="button" class="btn btn--ghost btn--sm" data-bulk-clear>Clear</button>
+                  </div>
+                  <div class="table-wrap">
+                    <table class="table" id="records-table" data-sortable aria-label="Survey records">
+                      <thead>
+                        <tr>
+                          <th scope="col" style="width:36px"><input type="checkbox" id="select-all" class="check__input" aria-label="Select all visible records"></th>
+                          <th scope="col"><button type="button" class="th-sort" data-sort-key="id">Record <svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg></button></th>
+                          <th scope="col"><button type="button" class="th-sort" data-sort-key="plot">Plot <svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg></button></th>
+                          <th scope="col">Surveyor</th>
+                          <th scope="col"><button type="button" class="th-sort" data-sort-key="date">Date <svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg></button></th>
+                          <th scope="col" class="num"><button type="button" class="th-sort" data-sort-key="cover" data-sort-type="num">Cover <svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg></button></th>
+                          <th scope="col">Status</th>
+                          <th scope="col"><span class="vh">Actions</span></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr data-record data-id="LR-1042" data-site="Kestrel Creek" data-plot="C-04" data-type="Vegetation survey" data-surveyor="Maya Okonkwo" data-date="2026-11-18" data-cover="74" data-status="Verified" data-note="Canopy closing well on the floodplain bench. Willows at 2.1 m mean height; mugwort receding.">
+                          <td><input type="checkbox" class="row-check check__input" aria-label="Select record LR-1042"></td>
+                          <td><span class="table__primary mono">LR-1042</span><span class="table__sub">Vegetation survey</span></td>
+                          <td class="mono">C-04</td>
+                          <td><span class="avatar" style="width:24px;height:24px;font-size:0.625rem;margin-right:8px;display:inline-grid;vertical-align:middle">MO</span>Maya Okonkwo</td>
+                          <td class="mono">2026-11-18</td>
+                          <td class="num">74%</td>
+                          <td><span class="badge badge--success js-status"><span class="badge__dot"></span>Verified</span></td>
+                          <td class="table__cell--actions"><button type="button" class="btn btn--ghost btn--sm" data-view-record>View</button></td>
+                        </tr>
+                        <tr data-record data-id="LR-1041" data-site="Kestrel Creek" data-plot="B-11" data-type="Water quality" data-surveyor="Jonas Petersen" data-date="2026-11-17" data-cover="" data-status="Verified" data-note="Turbidity back within seasonal range after the November freshet. DO 8.1 mg/L.">
+                          <td><input type="checkbox" class="row-check check__input" aria-label="Select record LR-1041"></td>
+                          <td><span class="table__primary mono">LR-1041</span><span class="table__sub">Water quality</span></td>
+                          <td class="mono">B-11</td>
+                          <td><span class="avatar avatar--clay" style="width:24px;height:24px;font-size:0.625rem;margin-right:8px;display:inline-grid;vertical-align:middle">JP</span>Jonas Petersen</td>
+                          <td class="mono">2026-11-17</td>
+                          <td class="num table__muted">—</td>
+                          <td><span class="badge badge--success js-status"><span class="badge__dot"></span>Verified</span></td>
+                          <td class="table__cell--actions"><button type="button" class="btn btn--ghost btn--sm" data-view-record>View</button></td>
+                        </tr>
+                        <tr data-record data-id="LR-1040" data-site="Kestrel Creek" data-plot="A-02" data-type="Wildlife sighting" data-surveyor="Priya Raman" data-date="2026-11-16" data-cover="" data-status="In review" data-note="Two red-legged frogs at the terrace pool; photos attached. Awaiting lead verification.">
+                          <td><input type="checkbox" class="row-check check__input" aria-label="Select record LR-1040"></td>
+                          <td><span class="table__primary mono">LR-1040</span><span class="table__sub">Wildlife sighting</span></td>
+                          <td class="mono">A-02</td>
+                          <td><span class="avatar avatar--river" style="width:24px;height:24px;font-size:0.625rem;margin-right:8px;display:inline-grid;vertical-align:middle">PR</span>Priya Raman</td>
+                          <td class="mono">2026-11-16</td>
+                          <td class="num table__muted">—</td>
+                          <td><span class="badge badge--info js-status"><span class="badge__dot"></span>In review</span></td>
+                          <td class="table__cell--actions"><button type="button" class="btn btn--ghost btn--sm" data-view-record>View</button></td>
+                        </tr>
+                        <tr data-record data-id="LR-1039" data-site="Kestrel Creek" data-plot="C-04" data-type="Photo transect" data-surveyor="Maya Okonkwo" data-date="2026-11-15" data-cover="68" data-status="In review" data-note="Fixed-point set 4 of 4 complete; October comparison queued.">
+                          <td><input type="checkbox" class="row-check check__input" aria-label="Select record LR-1039"></td>
+                          <td><span class="table__primary mono">LR-1039</span><span class="table__sub">Photo transect</span></td>
+                          <td class="mono">C-04</td>
+                          <td><span class="avatar" style="width:24px;height:24px;font-size:0.625rem;margin-right:8px;display:inline-grid;vertical-align:middle">MO</span>Maya Okonkwo</td>
+                          <td class="mono">2026-11-15</td>
+                          <td class="num">68%</td>
+                          <td><span class="badge badge--info js-status"><span class="badge__dot"></span>In review</span></td>
+                          <td class="table__cell--actions"><button type="button" class="btn btn--ghost btn--sm" data-view-record>View</button></td>
+                        </tr>
+                        <tr data-record data-id="LR-1038" data-site="Kestrel Creek" data-plot="D-07" data-type="Vegetation survey" data-surveyor="Tomás Alvarez" data-date="2026-11-14" data-cover="41" data-status="Flagged" data-note="Survival below the 80% threshold — Himalayan blackberry re-encroaching on the north berm.">
+                          <td><input type="checkbox" class="row-check check__input" aria-label="Select record LR-1038"></td>
+                          <td><span class="table__primary mono">LR-1038</span><span class="table__sub">Vegetation survey</span></td>
+                          <td class="mono">D-07</td>
+                          <td><span class="avatar avatar--ochre" style="width:24px;height:24px;font-size:0.625rem;margin-right:8px;display:inline-grid;vertical-align:middle">TA</span>Tomás Alvarez</td>
+                          <td class="mono">2026-11-14</td>
+                          <td class="num">41%</td>
+                          <td><span class="badge badge--danger js-status"><span class="badge__dot"></span>Flagged</span></td>
+                          <td class="table__cell--actions"><button type="button" class="btn btn--ghost btn--sm" data-view-record>View</button></td>
+                        </tr>
+                        <tr data-record data-id="LR-1037" data-site="Kestrel Creek" data-plot="B-11" data-type="Vegetation survey" data-surveyor="Priya Raman" data-date="2026-11-12" data-cover="55" data-status="Verified" data-note="Mulefat and mugwort establishing on the riparian edge.">
+                          <td><input type="checkbox" class="row-check check__input" aria-label="Select record LR-1037"></td>
+                          <td><span class="table__primary mono">LR-1037</span><span class="table__sub">Vegetation survey</span></td>
+                          <td class="mono">B-11</td>
+                          <td><span class="avatar avatar--river" style="width:24px;height:24px;font-size:0.625rem;margin-right:8px;display:inline-grid;vertical-align:middle">PR</span>Priya Raman</td>
+                          <td class="mono">2026-11-12</td>
+                          <td class="num">55%</td>
+                          <td><span class="badge badge--success js-status"><span class="badge__dot"></span>Verified</span></td>
+                          <td class="table__cell--actions"><button type="button" class="btn btn--ghost btn--sm" data-view-record>View</button></td>
+                        </tr>
+                        <tr data-record data-id="LR-1036" data-site="Kestrel Creek" data-plot="A-02" data-type="Water quality" data-surveyor="Jonas Petersen" data-date="2026-11-10" data-cover="" data-status="Verified" data-note="Routine monthly sampling; all parameters within range.">
+                          <td><input type="checkbox" class="row-check check__input" aria-label="Select record LR-1036"></td>
+                          <td><span class="table__primary mono">LR-1036</span><span class="table__sub">Water quality</span></td>
+                          <td class="mono">A-02</td>
+                          <td><span class="avatar avatar--clay" style="width:24px;height:24px;font-size:0.625rem;margin-right:8px;display:inline-grid;vertical-align:middle">JP</span>Jonas Petersen</td>
+                          <td class="mono">2026-11-10</td>
+                          <td class="num table__muted">—</td>
+                          <td><span class="badge badge--success js-status"><span class="badge__dot"></span>Verified</span></td>
+                          <td class="table__cell--actions"><button type="button" class="btn btn--ghost btn--sm" data-view-record>View</button></td>
+                        </tr>
+                        <tr data-record data-id="LR-1035" data-site="Kestrel Creek" data-plot="E-01" data-type="Vegetation survey" data-surveyor="Tomás Alvarez" data-date="2026-11-08" data-cover="12" data-status="Flagged" data-note="Replant zone — plug loss after the October heat event. Escalated to the restoration lead.">
+                          <td><input type="checkbox" class="row-check check__input" aria-label="Select record LR-1035"></td>
+                          <td><span class="table__primary mono">LR-1035</span><span class="table__sub">Vegetation survey</span></td>
+                          <td class="mono">E-01</td>
+                          <td><span class="avatar avatar--ochre" style="width:24px;height:24px;font-size:0.625rem;margin-right:8px;display:inline-grid;vertical-align:middle">TA</span>Tomás Alvarez</td>
+                          <td class="mono">2026-11-08</td>
+                          <td class="num">12%</td>
+                          <td><span class="badge badge--danger js-status"><span class="badge__dot"></span>Flagged</span></td>
+                          <td class="table__cell--actions"><button type="button" class="btn btn--ghost btn--sm" data-view-record>View</button></td>
+                        </tr>
+                        <tr data-record data-id="LR-1034" data-site="Kestrel Creek" data-plot="C-04" data-type="Wildlife sighting" data-surveyor="Priya Raman" data-date="2026-11-06" data-cover="" data-status="Draft" data-note="Least Bell’s vireo heard near the willow stand; needs audio clip before submission.">
+                          <td><input type="checkbox" class="row-check check__input" aria-label="Select record LR-1034"></td>
+                          <td><span class="table__primary mono">LR-1034</span><span class="table__sub">Wildlife sighting</span></td>
+                          <td class="mono">C-04</td>
+                          <td><span class="avatar avatar--river" style="width:24px;height:24px;font-size:0.625rem;margin-right:8px;display:inline-grid;vertical-align:middle">PR</span>Priya Raman</td>
+                          <td class="mono">2026-11-06</td>
+                          <td class="num table__muted">—</td>
+                          <td><span class="badge badge--neutral js-status"><span class="badge__dot"></span>Draft</span></td>
+                          <td class="table__cell--actions"><button type="button" class="btn btn--ghost btn--sm" data-view-record>View</button></td>
+                        </tr>
+                        <tr data-record data-id="LR-1033" data-site="Kestrel Creek" data-plot="D-07" data-type="Photo transect" data-surveyor="Maya Okonkwo" data-date="2026-11-04" data-cover="37" data-status="Draft" data-note="Point 2 retaken — first frame fogged.">
+                          <td><input type="checkbox" class="row-check check__input" aria-label="Select record LR-1033"></td>
+                          <td><span class="table__primary mono">LR-1033</span><span class="table__sub">Photo transect</span></td>
+                          <td class="mono">D-07</td>
+                          <td><span class="avatar" style="width:24px;height:24px;font-size:0.625rem;margin-right:8px;display:inline-grid;vertical-align:middle">MO</span>Maya Okonkwo</td>
+                          <td class="mono">2026-11-04</td>
+                          <td class="num">37%</td>
+                          <td><span class="badge badge--neutral js-status"><span class="badge__dot"></span>Draft</span></td>
+                          <td class="table__cell--actions"><button type="button" class="btn btn--ghost btn--sm" data-view-record>View</button></td>
+                        </tr>
+                        <tr data-record data-id="LR-1032" data-site="Kestrel Creek" data-plot="B-11" data-type="Vegetation survey" data-surveyor="Jonas Petersen" data-date="2026-11-02" data-cover="49" data-status="Verified" data-note="Steady gains on the south berm; blackberry resprouts treated.">
+                          <td><input type="checkbox" class="row-check check__input" aria-label="Select record LR-1032"></td>
+                          <td><span class="table__primary mono">LR-1032</span><span class="table__sub">Vegetation survey</span></td>
+                          <td class="mono">B-11</td>
+                          <td><span class="avatar avatar--clay" style="width:24px;height:24px;font-size:0.625rem;margin-right:8px;display:inline-grid;vertical-align:middle">JP</span>Jonas Petersen</td>
+                          <td class="mono">2026-11-02</td>
+                          <td class="num">49%</td>
+                          <td><span class="badge badge--success js-status"><span class="badge__dot"></span>Verified</span></td>
+                          <td class="table__cell--actions"><button type="button" class="btn btn--ghost btn--sm" data-view-record>View</button></td>
+                        </tr>
+                        <tr data-record data-id="LR-1031" data-site="Kestrel Creek" data-plot="A-02" data-type="Vegetation survey" data-surveyor="Tomás Alvarez" data-date="2026-10-30" data-cover="62" data-status="Verified" data-note="Terrace zone meeting Year-2 cover target ahead of schedule.">
+                          <td><input type="checkbox" class="row-check check__input" aria-label="Select record LR-1031"></td>
+                          <td><span class="table__primary mono">LR-1031</span><span class="table__sub">Vegetation survey</span></td>
+                          <td class="mono">A-02</td>
+                          <td><span class="avatar avatar--ochre" style="width:24px;height:24px;font-size:0.625rem;margin-right:8px;display:inline-grid;vertical-align:middle">TA</span>Tomás Alvarez</td>
+                          <td class="mono">2026-10-30</td>
+                          <td class="num">62%</td>
+                          <td><span class="badge badge--success js-status"><span class="badge__dot"></span>Verified</span></td>
+                          <td class="table__cell--actions"><button type="button" class="btn btn--ghost btn--sm" data-view-record>View</button></td>
+                        </tr>
+                      </tbody>
+                      <tfoot>
+                        <tr id="records-empty" hidden>
+                          <td colspan="8" class="table-empty-cell">
+                            <div class="empty">
+                              <span class="empty__icon"><svg class="icon icon--lg" aria-hidden="true"><use href="#i-sprout"/></svg></span>
+                              <p class="empty__title">No records match your filter</p>
+                              <p class="empty__text">Try a plot code like C-04, a surveyor’s name, or clear the filter to see all of Season 3.</p>
+                              <div class="empty__actions"><button type="button" class="btn btn--secondary btn--sm" data-clear-filter>Clear filter</button></div>
+                            </div>
+                          </td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                  <div class="table-foot">
+                    <p class="table-meta" id="records-meta">Showing 1–6 of 12 records</p>
+                    <nav class="pagination" aria-label="Records pagination">
+                      <button type="button" class="page-btn" data-page-prev aria-label="Previous page"><svg class="icon" aria-hidden="true"><use href="#i-chevron-left"/></svg></button>
+                      <div id="records-pages" style="display:flex;gap:4px"></div>
+                      <button type="button" class="page-btn" data-page-next aria-label="Next page"><svg class="icon" aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+                    </nav>
+                  </div>
+                </div>
+
+                <div class="tabpanel" id="dash-panel-species" role="tabpanel" aria-labelledby="dash-tab-species" hidden>
+                  <div class="table-wrap" style="border-top:1px solid var(--color-border)">
+                    <table class="table" data-sortable aria-label="Species checklist">
+                      <thead>
+                        <tr>
+                          <th scope="col"><button type="button" class="th-sort" data-sort-key="species">Species <svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg></button></th>
+                          <th scope="col"><button type="button" class="th-sort" data-sort-key="group">Group <svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg></button></th>
+                          <th scope="col"><button type="button" class="th-sort" data-sort-key="origin">Origin <svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg></button></th>
+                          <th scope="col"><button type="button" class="th-sort" data-sort-key="abundance">Abundance <svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg></button></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr data-species="Arroyo willow" data-group="Shrub" data-origin="Planted" data-abundance="High"><td><span class="table__primary">Arroyo willow</span><span class="table__sub italic">Salix lasiolepis</span></td><td>Shrub</td><td><span class="badge badge--info">Planted</span></td><td>High</td></tr>
+                        <tr data-species="Mulefat" data-group="Shrub" data-origin="Native" data-abundance="High"><td><span class="table__primary">Mulefat</span><span class="table__sub italic">Baccharis salicifolia</span></td><td>Shrub</td><td><span class="badge badge--outline badge--success">Native</span></td><td>High</td></tr>
+                        <tr data-species="California mugwort" data-group="Herb" data-origin="Native" data-abundance="Moderate"><td><span class="table__primary">California mugwort</span><span class="table__sub italic">Artemisia douglasiana</span></td><td>Herb</td><td><span class="badge badge--outline badge--success">Native</span></td><td>Moderate</td></tr>
+                        <tr data-species="Narrowleaf milkweed" data-group="Herb" data-origin="Planted" data-abundance="Moderate"><td><span class="table__primary">Narrowleaf milkweed</span><span class="table__sub italic">Asclepias fascicularis</span></td><td>Herb</td><td><span class="badge badge--info">Planted</span></td><td>Moderate</td></tr>
+                        <tr data-species="Western ragweed" data-group="Herb" data-origin="Native" data-abundance="Rare"><td><span class="table__primary">Western ragweed</span><span class="table__sub italic">Ambrosia psilostachya</span></td><td>Herb</td><td><span class="badge badge--outline badge--success">Native</span></td><td>Rare</td></tr>
+                        <tr data-species="California red-legged frog" data-group="Wildlife" data-origin="Native" data-abundance="Rare"><td><span class="table__primary">California red-legged frog</span><span class="table__sub italic">Rana draytonii</span></td><td>Wildlife</td><td><span class="badge badge--outline badge--success">Native</span></td><td>Rare</td></tr>
+                        <tr data-species="Least Bell’s vireo" data-group="Wildlife" data-origin="Native" data-abundance="Rare"><td><span class="table__primary">Least Bell’s vireo</span><span class="table__sub italic">Vireo bellii pusillus</span></td><td>Wildlife</td><td><span class="badge badge--outline badge--success">Native</span></td><td>Rare</td></tr>
+                        <tr data-species="Himalayan blackberry" data-group="Shrub" data-origin="Invasive" data-abundance="Moderate"><td><span class="table__primary">Himalayan blackberry</span><span class="table__sub italic">Rubus armeniacus</span></td><td>Shrub</td><td><span class="badge badge--danger">Invasive</span></td><td>Moderate</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="dash-grid__side">
+              <div class="card">
+                <div class="card__header"><h4 class="card__title--sans">Site details</h4></div>
+                <div class="card__body card__body--tight">
+                  <div class="kv">
+                    <div class="kv__row"><span class="kv__key">Region</span><span class="kv__val">Alder Creek watershed</span></div>
+                    <div class="kv__row"><span class="kv__key">Established</span><span class="kv__val">Spring 2024</span></div>
+                    <div class="kv__row"><span class="kv__key">Area</span><span class="kv__val num">38.5 ha</span></div>
+                    <div class="kv__row"><span class="kv__key">Lead</span><span class="kv__val">Maya Okonkwo</span></div>
+                    <div class="kv__row"><span class="kv__key">Permit</span><span class="kv__val mono">ACR-2024-118</span></div>
+                    <div class="kv__row"><span class="kv__key">Last rain</span><span class="kv__val">12 Nov 2026</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card__header"><h4 class="card__title--sans">Season 3 · planting</h4><span class="table-meta">of 5</span></div>
+                <div class="card__body">
+                  <div class="progress__meta"><span>Plugs in the ground</span><b>62%</b></div>
+                  <div class="progress"><div class="progress__bar" style="width:62%"></div></div>
+                  <p class="field__hint" style="margin-top:10px">29,400 of 47,000 plugs</p>
+                  <div class="progress__meta" style="margin-top:16px"><span>Crew rota filled</span><b>83%</b></div>
+                  <div class="progress progress--warning"><div class="progress__bar" style="width:83%"></div></div>
+                  <p class="field__hint" style="margin-top:10px">2 weekend slots open in December</p>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card__header"><h4 class="card__title--sans">Recent activity</h4></div>
+                <div class="card__body card__body--tight">
+                  <div class="feed">
+                    <div class="feed__item">
+                      <span class="feed__dot feed__dot--danger"></span>
+                      <div><p class="feed__text"><b>T. Alvarez</b> flagged LR-1038 — survival below threshold</p><p class="feed__time">2 h ago</p></div>
+                    </div>
+                    <div class="feed__item">
+                      <span class="feed__dot feed__dot--success"></span>
+                      <div><p class="feed__text"><b>M. Okonkwo</b> verified LR-1042 · vegetation survey</p><p class="feed__time">5 h ago</p></div>
+                    </div>
+                    <div class="feed__item">
+                      <span class="feed__dot feed__dot--info"></span>
+                      <div><p class="feed__text">Rain sensor at Plot D-07 offline for <b>36 h</b></p><p class="feed__time">Yesterday</p></div>
+                    </div>
+                    <div class="feed__item">
+                      <span class="feed__dot"></span>
+                      <div><p class="feed__text"><b>P. Raman</b> added 3 photos to transect C-04</p><p class="feed__time">15 Nov</p></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card__header"><h4 class="card__title--sans">Crew this week</h4></div>
+                <div class="card__body">
+                  <div class="avatar-stack">
+                    <span class="avatar" data-tip="Maya Okonkwo · lead" tabindex="0">MO</span>
+                    <span class="avatar avatar--clay" data-tip="Jonas Petersen" tabindex="0">JP</span>
+                    <span class="avatar avatar--river" data-tip="Priya Raman" tabindex="0">PR</span>
+                    <span class="avatar avatar--ochre" data-tip="Tomás Alvarez" tabindex="0">TA</span>
+                    <span class="avatar avatar--brick" data-tip="Dea Krasniqi" tabindex="0">DK</span>
+                    <span class="avatar-stack__more">+2 more</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= ACCESSIBILITY ======================= -->
+      <section class="section" id="a11y" data-spy aria-labelledby="a11y-t">
+        <p class="section__kicker">Project</p>
+        <h2 class="section__title" id="a11y-t">Accessibility</h2>
+        <p class="section__lede">Loam targets WCAG 2.1 AA. The commitments below are implemented on this page — try them with the keyboard alone.</p>
+
+        <div class="spec">
+          <div class="table-wrap card card--flat">
+            <table class="table token-table">
+              <thead><tr><th scope="col">Commitment</th><th scope="col">How Loam meets it</th></tr></thead>
+              <tbody>
+                <tr><td>Keyboard complete</td><td>Skip link, full tab order, arrow-key tabs, Esc closes dialogs and the mobile nav, focus returns to triggers</td></tr>
+                <tr><td>Visible focus</td><td>One focus ring token everywhere: 2&nbsp;px pine outline, 2&nbsp;px offset, on <code class="inline">:focus-visible</code> only</td></tr>
+                <tr><td>Contrast</td><td>Body text ≥ 5:1, muted meta ≥ 5:1, primary-button text ≈ 5.6:1; colour never the sole signal (badges pair dots with labels)</td></tr>
+                <tr><td>Forms</td><td>Explicit labels, hints, errors linked via <code class="inline">aria-describedby</code>, <code class="inline">aria-invalid</code>, focus moves to the first invalid field</td></tr>
+                <tr><td>Data tables</td><td><code class="inline">scope="col"</code> headers, <code class="inline">aria-sort</code> announcements, row checkboxes with per-row labels</td></tr>
+                <tr><td>Live regions</td><td>Toasts use <code class="inline">role="status"</code>; dialogs are native <code class="inline">&lt;dialog&gt;</code> with labelled titles</td></tr>
+                <tr><td>Motion</td><td>Everything collapses under <code class="inline">prefers-reduced-motion: reduce</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= COLOPHON ======================= -->
+      <section class="section" id="colophon" data-spy aria-labelledby="colophon-t">
+        <footer class="colophon">
+          <div>
+            <div class="colophon__brand" style="margin-bottom:16px">
+              <svg width="34" height="34" aria-hidden="true"><use href="#i-logo"/></svg>
+              <span class="sidebar__wordmark">Loam</span>
+              <span class="sidebar__version">v1.0</span>
+            </div>
+            <div class="colophon__text">
+              <p><strong>Loam is a fictional product,</strong> invented for this design exercise: a field-records platform for habitat restoration crews. All sites, species, people and records are imaginary.</p>
+              <p>Built with semantic HTML, hand-written CSS custom-property tokens, and a small vanilla script for behaviour — no frameworks, no libraries, no build step, no external fonts or requests. Type renders from system stacks.</p>
+            </div>
+          </div>
+          <div class="colophon__links">
+            <a href="#overview">Overview</a>
+            <a href="#c-buttons">Components</a>
+            <a href="#p-dashboard">Patterns</a>
+            <a href="#a11y">Accessibility</a>
+            <a href="#main">Back to top ↑</a>
+          </div>
+        </footer>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- ======================= EXPORT DIALOG ======================= -->
+<dialog class="dialog" id="export-dialog" aria-labelledby="export-dialog-title">
+  <div class="dialog__panel">
+    <div class="dialog__header">
+      <h2 class="dialog__title" id="export-dialog-title">Export survey data</h2>
+      <button type="button" class="alert__close" data-close-dialog aria-label="Close dialog"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+    <form id="export-form" method="dialog">
+      <div class="dialog__body">
+        <div class="field">
+          <label class="field__label" for="ex-format">Format</label>
+          <select class="input" id="ex-format">
+            <option>CSV</option>
+            <option>GeoJSON</option>
+            <option>PDF summary</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field__label" for="ex-range">Range</label>
+          <select class="input" id="ex-range">
+            <option value="season">Current season (Season 3)</option>
+            <option value="last30">Last 30 days</option>
+            <option value="all">All records</option>
+          </select>
+          <p class="field__hint">Exports <b id="ex-count">12</b> records for the selected range.</p>
+        </div>
+        <label class="check">
+          <input class="check__input" type="checkbox" id="ex-photos">
+          <span class="check__box"><svg class="check__mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-6.5"/></svg></span>
+          <span>Include photo attachments <small style="display:block;color:var(--color-ink-muted)">Adds roughly 180 MB per season</small></span>
+        </label>
+      </div>
+      <div class="dialog__footer">
+        <button type="button" class="btn btn--ghost" data-close-dialog>Cancel</button>
+        <button type="submit" class="btn btn--primary"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-download"/></svg>Queue export</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<!-- ======================= RECORD DIALOG ======================= -->
+<dialog class="dialog dialog--wide" id="record-dialog" aria-labelledby="rd-title">
+  <div class="dialog__panel">
+    <div class="dialog__header">
+      <h2 class="dialog__title" id="rd-title">Record</h2>
+      <button type="button" class="alert__close" data-close-dialog aria-label="Close dialog"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="dialog__body">
+      <div class="kv">
+        <div class="kv__row"><span class="kv__key">Site</span><span class="kv__val" id="rd-site">—</span></div>
+        <div class="kv__row"><span class="kv__key">Plot</span><span class="kv__val mono" id="rd-plot">—</span></div>
+        <div class="kv__row"><span class="kv__key">Survey type</span><span class="kv__val" id="rd-type">—</span></div>
+        <div class="kv__row"><span class="kv__key">Surveyor</span><span class="kv__val" id="rd-surveyor">—</span></div>
+        <div class="kv__row"><span class="kv__key">Date</span><span class="kv__val mono" id="rd-date">—</span></div>
+        <div class="kv__row"><span class="kv__key">Native cover</span><span class="kv__val" id="rd-cover">—</span></div>
+        <div class="kv__row"><span class="kv__key">Status</span><span class="kv__val"><span class="badge" id="rd-status">—</span></span></div>
+      </div>
+      <div class="field">
+        <p class="field__label">Field notes</p>
+        <p style="font-size:0.9375rem;color:var(--color-ink-secondary)" id="rd-note">—</p>
+      </div>
+    </div>
+    <div class="dialog__footer">
+      <button type="button" class="btn btn--ghost" data-close-dialog>Close</button>
+      <button type="button" class="btn btn--secondary" id="rd-flag"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-flag"/></svg>Flag for review</button>
+    </div>
+  </div>
+</dialog>
+
+<div class="toast-stack" id="toast-stack" aria-live="polite"></div>
+
+</body>
+</html>

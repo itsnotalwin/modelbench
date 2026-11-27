@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "glm-5.3-flash",
+  "category": "website",
+  "date": "2026-11-27",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "01",
+  "prompt_label": "Website",
+  "notes": "‘A Field Guide to Grey’ — a static, strictly monochrome editorial site cataloguing the 256-step greyscale: an interactive specimen census (ARIA listbox with arrow-key walking, CIE L*, relative luminance and WCAG chips per grey, curated field notes on canonical values), the Adams/Archer Zone System mapped from CIE L* into sRGB, a live dithering laboratory (threshold, Bayer 4×4/8×8, Floyd–Steinberg and Atkinson error diffusion over procedurally drawn subjects), a WCAG contrast bench with live preview and presets, a sourced natural-history timeline, and a generated SVG plate comparing hatching, halftone and dithering. Vanilla HTML/CSS/JS in three files, no dependencies, no build step, no network requests; all imagery generated at runtime via canvas and SVG; system font stacks; day/night ‘editions’ with a G keyboard shortcut and persisted preference; reduced-motion, keyboard and landmark support throughout; works from file:// and any subpath. Limitations: display and mono type rely on system fonts, so exact faces vary by platform; non-canonical specimen names are generated from 18 curated tonal bands; zone swatches are sRGB approximations of print-relative values.",
+  "slug": "2026-11-27_glm-5.3-flash_website_v1",
+  "path": "runs/2026-11-27_glm-5.3-flash_website_v1/index.html",
+  "source_file": "website__glm-5.3-flash__2026-11-27__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

@@ -1,0 +1,1402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Lumen Deep — an interactive bioluminescent reef built with Three.js 0.160.0.">
+<meta name="theme-color" content="#04121e">
+<title>Lumen Deep — an interactive abyssal reef</title>
+<link rel="icon" href="data:,">
+<style>
+  :root {
+    --ink: #cfeef2;
+    --ink-dim: #8fb6bd;
+    --accent: #6ff2df;
+    --accent-soft: rgba(111, 242, 223, 0.16);
+    --line: rgba(130, 226, 232, 0.22);
+    --card: rgba(5, 20, 30, 0.78);
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    overflow: hidden;
+    overscroll-behavior: none;
+    background:
+      radial-gradient(1200px 800px at 50% -10%, #0a2a3a, #030d14 72%);
+    color: var(--ink);
+    font: 15px/1.5 "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  #scene {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    touch-action: none;
+    cursor: grab;
+    outline: none;
+  }
+  #scene.dragging { cursor: grabbing; }
+
+  .ui { position: fixed; z-index: 5; }
+
+  .brand {
+    top: max(14px, env(safe-area-inset-top));
+    left: max(16px, env(safe-area-inset-left));
+    max-width: min(46ch, 62vw);
+    pointer-events: none;
+  }
+  .brand h1 {
+    margin: 0;
+    font-size: clamp(19px, 2.6vw, 27px);
+    letter-spacing: 0.32em;
+    font-weight: 600;
+    color: #e8ffff;
+    text-shadow: 0 0 18px rgba(94, 233, 214, 0.55), 0 0 2px rgba(94, 233, 214, 0.9);
+  }
+  .brand p {
+    margin: 6px 0 0;
+    font-size: 12.5px;
+    color: var(--ink-dim);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+  }
+
+  .controls {
+    top: max(14px, env(safe-area-inset-top));
+    right: max(14px, env(safe-area-inset-right));
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    max-width: 78vw;
+  }
+  button {
+    appearance: none;
+    font: inherit;
+    font-size: 13px;
+    color: var(--ink);
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 9px 15px;
+    min-height: 40px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease;
+  }
+  button:hover { border-color: rgba(111, 242, 223, 0.6); color: #eafffb; }
+  button:focus-visible,
+  a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  button[aria-pressed="true"], button[aria-expanded="true"] {
+    background: var(--accent-soft);
+    border-color: rgba(111, 242, 223, 0.75);
+    color: #eafffb;
+  }
+
+  .hint {
+    left: 50%;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    margin: 0;
+    padding: 8px 16px;
+    font-size: 12.5px;
+    color: var(--ink-dim);
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    text-align: center;
+    max-width: 92vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .hint b { color: var(--ink); font-weight: 600; }
+
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px 20px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  }
+  #help {
+    top: max(64px, calc(env(safe-area-inset-top) + 60px));
+    right: max(14px, env(safe-area-inset-right));
+    width: min(340px, calc(100vw - 28px));
+    max-height: calc(100vh - 130px);
+    overflow: auto;
+  }
+  #help h2 { margin: 0 0 4px; font-size: 16px; letter-spacing: 0.08em; color: #eafffb; }
+  #help h3 {
+    margin: 14px 0 4px;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+  }
+  #help p, #help li { font-size: 13px; color: var(--ink-dim); margin: 4px 0; }
+  #help ul { margin: 4px 0; padding-left: 18px; }
+  #help li b { color: var(--ink); font-weight: 600; }
+  #help kbd {
+    font: 11px/1.4 Consolas, monospace;
+    background: rgba(111, 242, 223, 0.12);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 1px 6px;
+    color: #dffcf6;
+    white-space: nowrap;
+  }
+  #help .close-row { margin-top: 12px; text-align: right; }
+
+  #fallback {
+    inset: 0;
+    margin: auto;
+    width: min(560px, calc(100vw - 40px));
+    height: fit-content;
+    z-index: 20;
+  }
+  #fallback h2 { margin: 0 0 8px; font-size: 18px; color: #eafffb; letter-spacing: 0.06em; }
+  #fallback p { color: var(--ink-dim); font-size: 13.5px; margin: 8px 0; }
+  #fallback .vision {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-left: 2px solid var(--accent);
+    color: var(--ink);
+    font-size: 13.5px;
+    background: rgba(111, 242, 223, 0.06);
+    border-radius: 0 10px 10px 0;
+  }
+
+  #loader {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 4;
+    color: var(--accent);
+    letter-spacing: 0.3em;
+    font-size: 13px;
+    text-transform: uppercase;
+    pointer-events: none;
+    animation: breathe 2.2s ease-in-out infinite;
+  }
+  @keyframes breathe { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+
+  body.no-scene .controls,
+  body.no-scene .hint,
+  body.no-scene #loader { display: none; }
+
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  #loader[hidden] { display: none; }
+
+  @media (max-width: 560px) {
+    .brand { max-width: 58vw; }
+    .brand p { display: none; }
+    button { font-size: 12px; padding: 8px 12px; }
+    .hint { font-size: 11.5px; white-space: normal; border-radius: 14px; }
+    #help { top: auto; bottom: 64px; right: 14px; left: 14px; width: auto; max-height: 60vh; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<canvas id="scene"
+  aria-label="Interactive 3D scene: a dark abyssal reef with glowing coral, a school of fish and drifting jellyfish. Drag to look around, scroll or pinch to glide closer, click or tap the water to release a lure of light, and tap a jellyfish to make it bloom. Keyboard shortcuts are listed under the Help button."></canvas>
+
+<div id="loader" role="status">Calling the deep</div>
+
+<header class="ui brand">
+  <h1>LUMEN DEEP</h1>
+  <p>A bioluminescent reef where light is the only weather. Release a lure — the deep will answer.</p>
+</header>
+
+<nav class="ui controls" aria-label="Scene controls">
+  <button id="btn-lure" type="button" title="Release a lure of light at the centre of the reef">Release lure</button>
+  <button id="btn-drift" type="button" aria-pressed="true" title="Slowly rotate the camera when idle">Drift: on</button>
+  <button id="btn-motion" type="button" aria-pressed="false" title="Reduce animation for comfort">Motion: full</button>
+  <button id="btn-help" type="button" aria-expanded="false" aria-controls="help" title="Controls and shortcuts">Help</button>
+</nav>
+
+<p class="ui hint"><b>Drag</b> to look · <b>scroll / pinch</b> to glide · <b>click / tap the water</b> to release a lure · <b>tap a jellyfish</b> to make it bloom</p>
+
+<section id="help" class="ui panel" role="dialog" aria-label="Controls and help" hidden>
+  <h2>How to explore</h2>
+  <h3>Mouse</h3>
+  <ul>
+    <li><b>Drag</b> — look around the reef</li>
+    <li><b>Right-drag</b> — slide the view</li>
+    <li><b>Wheel</b> — glide closer or farther</li>
+    <li><b>Click water</b> — release a lure of light; the school gathers and swirls around it</li>
+    <li><b>Click a jellyfish</b> — make it bloom</li>
+  </ul>
+  <h3>Touch</h3>
+  <ul>
+    <li><b>One finger</b> — look around</li>
+    <li><b>Two fingers</b> — pinch to glide, drag to slide the view</li>
+    <li><b>Tap</b> — lure or bloom, as above</li>
+  </ul>
+  <h3>Keyboard</h3>
+  <ul>
+    <li><kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd> — look</li>
+    <li><kbd>+</kbd> / <kbd>−</kbd> — glide closer / farther</li>
+    <li><kbd>L</kbd> — release a lure · <kbd>D</kbd> — drift · <kbd>M</kbd> or <kbd>Space</kbd> — motion · <kbd>H</kbd> — this panel</li>
+  </ul>
+  <p>If your system prefers reduced motion, the scene starts gentle: drift off and slow currents. You can always switch with <b>Motion</b>.</p>
+  <div class="close-row"><button id="btn-close-help" type="button">Close</button></div>
+</section>
+
+<section id="fallback" class="ui panel" hidden>
+  <h2 id="fallback-title">The reef needs WebGL</h2>
+  <p id="fallback-msg">Your browser or device has blocked or lacks WebGL, so the living reef cannot be rendered here.</p>
+  <div class="vision">
+    What you would see: a circle of dark dunes 40 paces wide, lit from above by a cold, weak sun. Branching
+    coral in muted rose and teal, beds of small lights that breathe in and out, kelp swaying to a current you
+    cannot feel, and marine snow drifting down like slow static. A school of a hundred-odd silver fish wheels
+    through the middle distance, and six jellyfish hang in the water, pulsing. Release a lure of light and the
+    school abandons its circuit to swirl around it.
+  </div>
+</section>
+
+<div id="live" class="sr-only" aria-live="polite"></div>
+
+<noscript>
+  <section class="ui panel" style="inset:0;margin:auto;width:min(560px,calc(100vw - 40px));height:fit-content;z-index:20;">
+    <h2 style="margin:0 0 8px;font-size:18px;">JavaScript is required</h2>
+    <p style="color:#8fb6bd;font-size:13.5px;">Lumen Deep is a live Three.js scene and needs JavaScript to render. Please enable it and reload.</p>
+  </section>
+</noscript>
+
+<script type="module">
+(async () => {
+  'use strict';
+
+  // ---------- DOM ----------
+  const $ = (id) => document.getElementById(id);
+  const canvas = $('scene');
+  const loader = $('loader');
+  const fallback = $('fallback');
+  const fallbackTitle = $('fallback-title');
+  const fallbackMsg = $('fallback-msg');
+  const live = $('live');
+  const btnLure = $('btn-lure');
+  const btnDrift = $('btn-drift');
+  const btnMotion = $('btn-motion');
+  const btnHelp = $('btn-help');
+  const btnCloseHelp = $('btn-close-help');
+  const helpPanel = $('help');
+
+  function announce(msg) {
+    live.textContent = '';
+    window.setTimeout(() => { live.textContent = msg; }, 40);
+  }
+
+  function showFallback(title, msg) {
+    fallbackTitle.textContent = title;
+    fallbackMsg.textContent = msg;
+    fallback.hidden = false;
+    loader.hidden = true;
+    document.body.classList.add('no-scene');
+  }
+
+  // ---------- WebGL capability check ----------
+  const hasWebGL = (() => {
+    try {
+      const c = document.createElement('canvas');
+      return !!(window.WebGLRenderingContext && (c.getContext('webgl2') || c.getContext('webgl')));
+    } catch (err) {
+      return false;
+    }
+  })();
+  if (!hasWebGL) {
+    showFallback('The reef needs WebGL',
+      'Your browser or device has blocked or lacks WebGL, so the living reef cannot be rendered here.');
+    return;
+  }
+
+  // ---------- Load the pinned engine ----------
+  let THREE;
+  try {
+    THREE = await import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js');
+  } catch (err) {
+    showFallback('Could not reach the 3D engine',
+      'Lumen Deep loads Three.js 0.160.0 from a CDN and needs a network connection for that one file. ' +
+      'Check the connection and reload. (' + (err && err.message ? err.message : 'import failed') + ')');
+    return;
+  }
+
+  // ---------- Small shared helpers (preallocated, reused every frame) ----------
+  const clamp = (v, a, b) => v < a ? a : (v > b ? b : v);
+  const _v1 = new THREE.Vector3();
+  const _v2 = new THREE.Vector3();
+  const _v3 = new THREE.Vector3();
+  const _c = new THREE.Color();
+  const dummy = new THREE.Object3D();
+
+  try {
+    start();
+  } catch (err) {
+    console.error(err);
+    showFallback('Something went wrong',
+      'The scene failed to start: ' + (err && err.message ? err.message : err));
+  }
+
+  function start() {
+
+    // ---------- Renderer / scene / camera ----------
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.28;
+
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x051826, 0.026);
+
+    const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 500);
+
+    canvas.addEventListener('webglcontextlost', (e) => {
+      e.preventDefault();
+      showFallback('The graphics context was lost',
+        'The GPU dropped this page\u2019s 3D context. Reload the page to restart the experience.');
+    });
+
+    function onResize() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setSize(w, h, false);
+    }
+    window.addEventListener('resize', onResize);
+    onResize();
+
+    // ---------- Lights ----------
+    scene.add(new THREE.AmbientLight(0x14313d, 0.72));
+    scene.add(new THREE.HemisphereLight(0x2a6478, 0x020a10, 1.1));
+    const moon = new THREE.DirectionalLight(0x9fd8e8, 0.75);
+    moon.position.set(18, 60, 9);
+    scene.add(moon);
+    const poolLight = new THREE.PointLight(0x2ecaff, 26, 38, 2);
+    poolLight.position.set(0, 15, 0);
+    scene.add(poolLight);
+
+    // ---------- Gradient dome (background) ----------
+    {
+      const geo = new THREE.SphereGeometry(230, 24, 14);
+      const pos = geo.attributes.position;
+      const colors = new Float32Array(pos.count * 3);
+      const c0 = new THREE.Color(0x020a11);
+      const c1 = new THREE.Color(0x10405a);
+      for (let i = 0; i < pos.count; i++) {
+        const t = Math.pow(clamp(pos.getY(i) / 230 * 0.5 + 0.5, 0, 1), 1.25);
+        _c.copy(c0).lerp(c1, t);
+        colors[i * 3] = _c.r; colors[i * 3 + 1] = _c.g; colors[i * 3 + 2] = _c.b;
+      }
+      geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+      const mat = new THREE.MeshBasicMaterial({
+        vertexColors: true, side: THREE.BackSide, fog: false, depthWrite: false
+      });
+      scene.add(new THREE.Mesh(geo, mat));
+    }
+
+    // ---------- Seafloor ----------
+    const WORLD_R = 46;
+    function duneH(x, z) {
+      return Math.sin(x * 0.11) * Math.cos(z * 0.13) * 1.1
+        + Math.sin(x * 0.27 + z * 0.31) * 0.45
+        + Math.cos(x * 0.05 - z * 0.07) * 1.4;
+    }
+    {
+      const geo = new THREE.CircleGeometry(62, 72);
+      geo.rotateX(-Math.PI / 2);
+      const pos = geo.attributes.position;
+      const colors = new Float32Array(pos.count * 3);
+      const cLow = new THREE.Color(0x052029);
+      const cHigh = new THREE.Color(0x0e4254);
+      for (let i = 0; i < pos.count; i++) {
+        const x = pos.getX(i), z = pos.getZ(i);
+        const h = duneH(x, z);
+        pos.setY(i, h);
+        _c.copy(cLow).lerp(cHigh, clamp(h / 3 + 0.5, 0, 1));
+        colors[i * 3] = _c.r; colors[i * 3 + 1] = _c.g; colors[i * 3 + 2] = _c.b;
+      }
+      geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+      geo.computeVertexNormals();
+      const mat = new THREE.MeshPhongMaterial({
+        vertexColors: true, shininess: 8, specular: 0x0d3038
+      });
+      scene.add(new THREE.Mesh(geo, mat));
+    }
+
+    // Deterministic-enough randomness for layout
+    let seed = 20261127;
+    function rnd() {
+      seed = (seed * 1664525 + 1013904223) >>> 0;
+      return seed / 4294967296;
+    }
+    function placeOnFloor(rMin, rMax) {
+      const a = rnd() * Math.PI * 2;
+      const r = rMin + Math.sqrt(rnd()) * (rMax - rMin);
+      return { x: Math.cos(a) * r, z: Math.sin(a) * r };
+    }
+
+    // ---------- Rocks ----------
+    {
+      const N = 54;
+      const mesh = new THREE.InstancedMesh(
+        new THREE.DodecahedronGeometry(1, 0),
+        new THREE.MeshPhongMaterial({ color: 0x1b465a, flatShading: true, shininess: 4 }),
+        N
+      );
+      for (let i = 0; i < N; i++) {
+        const big = i < 6;
+        const p = placeOnFloor(big ? 10 : 7, big ? 42 : 48);
+        const s = big ? 2.6 + rnd() * 2.6 : 0.5 + rnd() * 1.5;
+        dummy.position.set(p.x, duneH(p.x, p.z) - s * 0.35, p.z);
+        dummy.rotation.set(rnd() * Math.PI, rnd() * Math.PI, rnd() * Math.PI);
+        dummy.scale.set(s, s * (0.6 + rnd() * 0.5), s);
+        dummy.updateMatrix();
+        mesh.setMatrixAt(i, dummy.matrix);
+      }
+      mesh.instanceMatrix.needsUpdate = true;
+      mesh.computeBoundingSphere();
+      scene.add(mesh);
+    }
+
+    // ---------- Coral tube clusters ----------
+    {
+      const clusters = 14;
+      const per = 6;
+      const N = clusters * per;
+      const mesh = new THREE.InstancedMesh(
+        new THREE.CylinderGeometry(0.16, 0.3, 1, 6),
+        new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true, shininess: 14 }),
+        N
+      );
+      const hues = [0.48, 0.95, 0.08];
+      let i = 0;
+      for (let cl = 0; cl < clusters; cl++) {
+        const center = placeOnFloor(6, 40);
+        const hue = hues[(cl + (rnd() * 2 | 0)) % hues.length];
+        for (let k = 0; k < per && i < N; k++, i++) {
+          const x = center.x + (rnd() - 0.5) * 3.2;
+          const z = center.z + (rnd() - 0.5) * 3.2;
+          const h = 0.9 + rnd() * 2.6;
+          dummy.position.set(x, duneH(x, z) + h * 0.42, z);
+          dummy.rotation.set((rnd() - 0.5) * 0.34, rnd() * Math.PI, (rnd() - 0.5) * 0.34);
+          dummy.scale.set(0.7 + rnd() * 0.7, h, 0.7 + rnd() * 0.7);
+          dummy.updateMatrix();
+          mesh.setMatrixAt(i, dummy.matrix);
+          _c.setHSL(hue + (rnd() - 0.5) * 0.05, 0.34 + rnd() * 0.14, 0.34 + rnd() * 0.14);
+          mesh.setColorAt(i, _c);
+        }
+      }
+      mesh.instanceMatrix.needsUpdate = true;
+      if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+      mesh.computeBoundingSphere();
+      scene.add(mesh);
+    }
+
+    // ---------- Glow pods (breathing lights) ----------
+    const POD_N = 70;
+    const pods = new THREE.InstancedMesh(
+      new THREE.IcosahedronGeometry(0.24, 0),
+      new THREE.MeshBasicMaterial({ color: 0xffffff }),
+      POD_N
+    );
+    const podBase = [];
+    const podPhase = new Float32Array(POD_N);
+    const podSpeed = new Float32Array(POD_N);
+    {
+      for (let i = 0; i < POD_N; i++) {
+        const p = placeOnFloor(4, 44);
+        const y = duneH(p.x, p.z) + 0.25 + rnd() * 1.9;
+        dummy.position.set(p.x, y, p.z);
+        dummy.rotation.set(rnd() * Math.PI, rnd() * Math.PI, rnd() * Math.PI);
+        const s = 0.5 + rnd() * 1.1;
+        dummy.scale.setScalar(s);
+        dummy.updateMatrix();
+        pods.setMatrixAt(i, dummy.matrix);
+        const pal = [
+          [0.45, 0.9, 0.62],   // cyan
+          [0.72, 0.75, 0.6],   // violet
+          [0.09, 0.85, 0.6],   // amber
+          [0.52, 0.55, 0.68]   // aqua-green
+        ][i % 4];
+        _c.setHSL(pal[0], pal[1], pal[2]);
+        podBase.push(_c.clone());
+        podPhase[i] = rnd() * Math.PI * 2;
+        podSpeed[i] = 0.5 + rnd() * 1.4;
+        pods.setColorAt(i, _c);
+      }
+      pods.instanceMatrix.needsUpdate = true;
+      if (pods.instanceColor) pods.instanceColor.needsUpdate = true;
+      pods.computeBoundingSphere();
+      scene.add(pods);
+    }
+
+    // ---------- Kelp (one merged strip geometry, waved on the CPU) ----------
+    const KELP_N = 26;
+    const KELP_SEG = 6;
+    let kelpGeo, kelpBase, kelpPlant, kelpY, kelpPhase, kelpDirX, kelpDirZ;
+    {
+      const vertsPer = (KELP_SEG + 1) * 2;
+      const vCount = KELP_N * vertsPer;
+      const iCount = KELP_N * KELP_SEG * 6;
+      const pos = new Float32Array(vCount * 3);
+      kelpBase = new Float32Array(vCount * 3);
+      kelpPlant = new Uint8Array(vCount);
+      kelpY = new Float32Array(vCount);
+      kelpPhase = new Float32Array(KELP_N);
+      kelpDirX = new Float32Array(KELP_N);
+      kelpDirZ = new Float32Array(KELP_N);
+      const idx = new Uint16Array(iCount);
+
+      let vi = 0, ii = 0;
+      for (let p = 0; p < KELP_N; p++) {
+        const spot = placeOnFloor(5, 42);
+        const h = 4.5 + rnd() * 5.5;
+        const w = 0.5 + rnd() * 0.45;
+        const dirA = rnd() * Math.PI * 2;
+        const px = Math.cos(dirA), pz = Math.sin(dirA); // width direction
+        kelpPhase[p] = rnd() * Math.PI * 2;
+        kelpDirX[p] = Math.cos(dirA + Math.PI / 2) * (rnd() < 0.5 ? 1 : -1);
+        kelpDirZ[p] = Math.sin(dirA + Math.PI / 2) * (rnd() < 0.5 ? 1 : -1);
+        const y0 = duneH(spot.x, spot.z) - 0.2;
+        const vStart = vi;
+        for (let j = 0; j <= KELP_SEG; j++) {
+          const t = j / KELP_SEG;
+          const y = y0 + t * h;
+          const half = w * 0.5 * (1 - t * 0.55);
+          pos[vi * 3] = spot.x - px * half; pos[vi * 3 + 1] = y; pos[vi * 3 + 2] = spot.z - pz * half;
+          vi++;
+          pos[vi * 3] = spot.x + px * half; pos[vi * 3 + 1] = y; pos[vi * 3 + 2] = spot.z + pz * half;
+          vi++;
+          kelpPlant[vi - 2] = p; kelpY[vi - 2] = t;
+          kelpPlant[vi - 1] = p; kelpY[vi - 1] = t;
+        }
+        for (let j = 0; j < KELP_SEG; j++) {
+          const a = vStart + j * 2;
+          idx[ii++] = a; idx[ii++] = a + 1; idx[ii++] = a + 2;
+          idx[ii++] = a + 1; idx[ii++] = a + 3; idx[ii++] = a + 2;
+        }
+      }
+      kelpGeo = new THREE.BufferGeometry();
+      kelpGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3).setUsage(THREE.DynamicDrawUsage));
+      kelpGeo.setIndex(new THREE.BufferAttribute(idx, 1));
+      kelpBase.set(pos);
+      kelpGeo.computeVertexNormals();
+      const mesh = new THREE.Mesh(kelpGeo, new THREE.MeshPhongMaterial({
+        color: 0x14684d, emissive: 0x06281e, side: THREE.DoubleSide
+      }));
+      mesh.frustumCulled = false;
+      scene.add(mesh);
+    }
+
+    function updateKelp(simT) {
+      const arr = kelpGeo.attributes.position.array;
+      for (let i = 0, n = kelpPlant.length; i < n; i++) {
+        const p = kelpPlant[i];
+        const t = kelpY[i];
+        const i3 = i * 3;
+        const sway = Math.sin(simT * 0.75 + kelpPhase[p] + t * 2.4);
+        const amp = 0.45 * t * t * (0.7 + 0.3 * Math.sin(simT * 0.35 + kelpPhase[p] * 1.7));
+        const flutter = Math.sin(simT * 1.8 + kelpPhase[p] * 2.0 + t * 5.0) * 0.06 * t;
+        arr[i3] = kelpBase[i3] + kelpDirX[p] * sway * amp + kelpDirZ[p] * flutter;
+        arr[i3 + 2] = kelpBase[i3 + 2] + kelpDirZ[p] * sway * amp * 0.6 - kelpDirX[p] * flutter;
+      }
+      kelpGeo.attributes.position.needsUpdate = true;
+    }
+
+    // ---------- Fish school (one InstancedMesh, two-pass steering) ----------
+    const FISH_N = 120;
+    const fishGeo = (() => {
+      const body = new THREE.ConeGeometry(0.16, 0.55, 5);
+      body.rotateX(Math.PI / 2);            // nose -> +Z
+      body.scale(0.55, 1, 1);               // narrow sideways
+      const tail = new THREE.ConeGeometry(0.09, 0.3, 4);
+      tail.rotateX(-Math.PI / 2);           // tip -> -Z
+      tail.translate(0, 0, -0.36);
+      tail.scale(0.55, 1, 1);
+      const vTotal = body.attributes.position.count + tail.attributes.position.count;
+      const iTotal = body.index.count + tail.index.count;
+      const pos = new Float32Array(vTotal * 3);
+      const nor = new Float32Array(vTotal * 3);
+      const idx = new Uint16Array(iTotal);
+      let vo = 0, io = 0;
+      for (const g of [body, tail]) {
+        pos.set(g.attributes.position.array, vo * 3);
+        nor.set(g.attributes.normal.array, vo * 3);
+        const gi = g.index.array;
+        for (let k = 0; k < gi.length; k++) idx[io + k] = gi[k] + vo;
+        vo += g.attributes.position.count;
+        io += gi.length;
+      }
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      geo.setAttribute('normal', new THREE.BufferAttribute(nor, 3));
+      geo.setIndex(new THREE.BufferAttribute(idx, 1));
+      return geo;
+    })();
+
+    const fish = new THREE.InstancedMesh(
+      fishGeo,
+      new THREE.MeshPhongMaterial({ flatShading: true, shininess: 60, specular: 0x8adfff }),
+      FISH_N
+    );
+    fish.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    fish.frustumCulled = false;
+    scene.add(fish);
+
+    const fPos = new Float32Array(FISH_N * 3);
+    const fVel = new Float32Array(FISH_N * 3);
+    const fPhase = new Float32Array(FISH_N);
+    const fOffR = new Float32Array(FISH_N);
+    const fOffA = new Float32Array(FISH_N);
+    const fSpd = new Float32Array(FISH_N);
+    const fScl = new Float32Array(FISH_N);
+    {
+      const silver = new THREE.Color().setHSL(0.52, 0.26, 0.62);
+      const blue = new THREE.Color().setHSL(0.58, 0.42, 0.5);
+      const gold = new THREE.Color().setHSL(0.11, 0.8, 0.6);
+      for (let i = 0; i < FISH_N; i++) {
+        const a = rnd() * Math.PI * 2;
+        const r = 4 + Math.sqrt(rnd()) * 18;
+        fPos[i * 3] = Math.cos(a) * r;
+        fPos[i * 3 + 1] = 5 + rnd() * 12;
+        fPos[i * 3 + 2] = Math.sin(a) * r;
+        const va = rnd() * Math.PI * 2;
+        fVel[i * 3] = Math.cos(va) * 3;
+        fVel[i * 3 + 1] = 0;
+        fVel[i * 3 + 2] = Math.sin(va) * 3;
+        fPhase[i] = rnd() * Math.PI * 2;
+        fOffR[i] = 2.5 + rnd() * 8.5;
+        fOffA[i] = rnd() * Math.PI * 2;
+        fSpd[i] = 0.75 + rnd() * 0.6;
+        fScl[i] = 0.8 + rnd() * 0.7;
+        const roll = rnd();
+        fish.setColorAt(i, roll < 0.62 ? silver : roll < 0.9 ? blue : gold);
+      }
+      fish.instanceMatrix.needsUpdate = true;
+      if (fish.instanceColor) fish.instanceColor.needsUpdate = true;
+    }
+
+    // ---------- Jellyfish ----------
+    const bellGeo = new THREE.SphereGeometry(1.1, 18, 10, 0, Math.PI * 2, 0, Math.PI * 0.52);
+    const TENT_PER = 8;
+    const jellies = [];
+    const bells = [];
+    const bellHues = [0.5, 0.55, 0.72, 0.9, 0.09, 0.58];
+    for (let j = 0; j < 6; j++) {
+      const spot = placeOnFloor(10, 27);
+      const hue = bellHues[j];
+      const mat = new THREE.MeshPhongMaterial({
+        color: new THREE.Color().setHSL(hue, 0.6, 0.55),
+        emissive: new THREE.Color().setHSL(hue, 0.7, 0.4),
+        transparent: true, opacity: 0.4,
+        side: THREE.DoubleSide, depthWrite: false, shininess: 30
+      });
+      const bell = new THREE.Mesh(bellGeo, mat);
+      bell.userData.jellyIndex = j;
+      scene.add(bell);
+      bells.push(bell);
+      jellies.push({
+        bell, mat, hue,
+        rad: 9 + Math.sqrt(rnd()) * 18,
+        ang: rnd() * Math.PI * 2,
+        angSpd: (0.02 + rnd() * 0.03) * (rnd() < 0.5 ? 1 : -1),
+        y0: 8 + rnd() * 9,
+        phase: rnd() * Math.PI * 2,
+        pulseSpd: 1.1 + rnd() * 0.7,
+        burst: 0,
+        tentLen: 2.1 + rnd() * 1.6
+      });
+    }
+    const TENT_N = jellies.length * TENT_PER;
+    const tentacles = new THREE.InstancedMesh(
+      (() => {
+        const g = new THREE.CylinderGeometry(0.02, 0.05, 1, 4, 1, true);
+        g.translate(0, -0.5, 0);
+        return g;
+      })(),
+      new THREE.MeshBasicMaterial({
+        color: 0x6fd9ff, transparent: true, opacity: 0.5,
+        blending: THREE.AdditiveBlending, depthWrite: false
+      }),
+      TENT_N
+    );
+    tentacles.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    tentacles.frustumCulled = false;
+    scene.add(tentacles);
+
+    function updateJellies(simT, dtAnim, dt) {
+      for (let j = 0; j < jellies.length; j++) {
+        const J = jellies[j];
+        J.ang += J.angSpd * dtAnim;
+        const wx = Math.cos(J.ang) * J.rad;
+        const wz = Math.sin(J.ang) * J.rad;
+        const pulse = Math.sin(simT * J.pulseSpd + J.phase);
+        const y = J.y0 + Math.sin(simT * 0.4 + J.phase) * 1.4 + pulse * 0.35;
+        if (J.burst > 0) J.burst = Math.max(0, J.burst - dt * 0.9);
+        const b = J.burst;
+        const s = 1 + 0.14 * pulse + b * 0.45;
+        J.bell.position.set(wx, y, wz);
+        J.bell.scale.set(s, (1 - 0.16 * pulse) * (1 + b * 0.3), s);
+        J.bell.rotation.y = J.ang + Math.PI / 2;
+        J.mat.emissiveIntensity = 0.55 + 0.35 * Math.max(0, pulse) + b * 1.6;
+
+        const tint = 0.55 + 0.45 * Math.max(0, pulse) + b;
+        _c.setHSL(J.hue, 0.65, 0.5).multiplyScalar(tint);
+        for (let k = 0; k < TENT_PER; k++) {
+          const ti = j * TENT_PER + k;
+          const ka = (k / TENT_PER) * Math.PI * 2 + J.phase;
+          const swayX = Math.sin(simT * 1.2 + k + J.phase) * 0.13 + pulse * 0.1;
+          const swayZ = Math.cos(simT * 1.05 + k * 1.7 + J.phase) * 0.13;
+          dummy.position.set(
+            wx + Math.cos(ka) * 0.95 * s,
+            y - 0.08,
+            wz + Math.sin(ka) * 0.95 * s
+          );
+          dummy.rotation.set(swayX, 0, swayZ);
+          dummy.scale.set(1, J.tentLen * (1 + 0.08 * pulse), 1);
+          dummy.updateMatrix();
+          tentacles.setMatrixAt(ti, dummy.matrix);
+        }
+      }
+      tentacles.instanceMatrix.needsUpdate = true;
+    }
+
+    // ---------- Marine snow (Points) ----------
+    const SNOW_N = 500;
+    const snowGeo = new THREE.BufferGeometry();
+    {
+      const arr = new Float32Array(SNOW_N * 3);
+      for (let i = 0; i < SNOW_N; i++) {
+        arr[i * 3] = (rnd() - 0.5) * 100;
+        arr[i * 3 + 1] = rnd() * 34;
+        arr[i * 3 + 2] = (rnd() - 0.5) * 100;
+      }
+      snowGeo.setAttribute('position', new THREE.BufferAttribute(arr, 3).setUsage(THREE.DynamicDrawUsage));
+    }
+    const snow = new THREE.Points(snowGeo, new THREE.PointsMaterial({
+      color: 0x9fd4dd, size: 0.16, sizeAttenuation: true,
+      transparent: true, opacity: 0.45,
+      blending: THREE.AdditiveBlending, depthWrite: false
+    }));
+    snow.frustumCulled = false;
+    scene.add(snow);
+    const snowFall = new Float32Array(SNOW_N);
+    const snowPhase = new Float32Array(SNOW_N);
+    for (let i = 0; i < SNOW_N; i++) {
+      snowFall[i] = 0.25 + rnd() * 0.6;
+      snowPhase[i] = rnd() * Math.PI * 2;
+    }
+
+    function updateSnow(simT, dtAnim) {
+      const arr = snowGeo.attributes.position.array;
+      for (let i = 0; i < SNOW_N; i++) {
+        const i3 = i * 3;
+        arr[i3 + 1] -= snowFall[i] * dtAnim;
+        arr[i3] += (0.22 + Math.sin(simT * 0.5 + snowPhase[i]) * 0.2) * dtAnim;
+        if (arr[i3 + 1] < 0.2) arr[i3 + 1] += 34;
+        if (arr[i3] > 52) arr[i3] -= 104;
+      }
+      snowGeo.attributes.position.needsUpdate = true;
+    }
+
+    // ---------- Lure of light ----------
+    function makeGlowTexture() {
+      const c = document.createElement('canvas');
+      c.width = c.height = 128;
+      const g = c.getContext('2d');
+      const grad = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+      grad.addColorStop(0, 'rgba(255,255,255,1)');
+      grad.addColorStop(0.25, 'rgba(190,255,246,0.55)');
+      grad.addColorStop(0.6, 'rgba(90,220,205,0.16)');
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+      g.fillStyle = grad;
+      g.fillRect(0, 0, 128, 128);
+      const tex = new THREE.CanvasTexture(c);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      return tex;
+    }
+    const glowTex = makeGlowTexture();
+
+    const lureGroup = new THREE.Group();
+    const lureCore = new THREE.Mesh(
+      new THREE.SphereGeometry(0.22, 16, 12),
+      new THREE.MeshBasicMaterial({ color: 0xdaffff })
+    );
+    const lureHalo = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: glowTex, color: 0x7cf7e6, transparent: true,
+      blending: THREE.AdditiveBlending, depthWrite: false, fog: false
+    }));
+    lureHalo.scale.set(3.2, 3.2, 1);
+    const lureLight = new THREE.PointLight(0x74ffe9, 0, 32, 2);
+    lureGroup.add(lureCore, lureHalo, lureLight);
+    lureGroup.visible = false;
+    scene.add(lureGroup);
+
+    const lure = {
+      phase: 'idle', // idle | drop | hold | fade
+      t: 0, ringT: 0,
+      pos: new THREE.Vector3(),
+      from: new THREE.Vector3(),
+      target: new THREE.Vector3()
+    };
+
+    function releaseLure(x, y, z, silent) {
+      lure.phase = 'drop';
+      lure.t = 0;
+      lure.ringT = 0;
+      lure.from.set(x, y + 11, z);
+      lure.target.set(x, y, z);
+      lureGroup.visible = true;
+      if (!silent) announce('Lure of light released. The school is turning toward it.');
+    }
+
+    function updateLure(dt) {
+      if (lure.phase === 'idle') return;
+      if (lure.phase === 'drop') {
+        lure.t += dt / 0.9;
+        const k = 1 - Math.pow(1 - Math.min(lure.t, 1), 3);
+        lure.pos.lerpVectors(lure.from, lure.target, k);
+        lureLight.intensity = k * 12;
+        if (lure.t >= 1) {
+          lure.phase = 'hold';
+          lure.t = 0;
+          lure.ringT = 0;
+          excite = 1;
+          spawnRing(lure.pos.x, lure.pos.y, lure.pos.z);
+        }
+      } else if (lure.phase === 'hold') {
+        lure.t += dt;
+        lure.ringT += dt;
+        lure.pos.set(
+          lure.target.x + Math.sin(lure.t * 0.9) * 0.25,
+          lure.target.y + Math.sin(lure.t * 1.3) * 0.4,
+          lure.target.z + Math.cos(lure.t * 0.8) * 0.25
+        );
+        lureLight.intensity = 52 * (0.85 + 0.15 * Math.sin(lure.t * 3));
+        if (lure.ringT > 2.8 && !motionReduced) {
+          lure.ringT = 0;
+          spawnRing(lure.pos.x, lure.pos.y, lure.pos.z);
+        }
+        if (lure.t > 11) {
+          lure.phase = 'fade';
+          lure.t = 0;
+        }
+      } else if (lure.phase === 'fade') {
+        lure.t += dt / 2.2;
+        const k = 1 - lure.t;
+        lureLight.intensity = Math.max(0, k) * 40;
+        if (lure.t >= 1) {
+          lure.phase = 'idle';
+          lureGroup.visible = false;
+          lureLight.intensity = 0;
+        }
+      }
+      const pulseS = lure.phase === 'hold'
+        ? 3.2 + Math.sin(lure.t * 3.2) * 0.5
+        : 2.4 + Math.sin(lure.t * 6) * 0.4;
+      lureHalo.scale.set(pulseS, pulseS, 1);
+      lureGroup.position.copy(lure.pos);
+    }
+
+    // ---------- Ring pulses (pooled) ----------
+    const RING_N = 5;
+    const rings = [];
+    {
+      const geo = new THREE.RingGeometry(0.9, 1, 48);
+      geo.rotateX(-Math.PI / 2);
+      for (let i = 0; i < RING_N; i++) {
+        const mat = new THREE.MeshBasicMaterial({
+          color: 0x8ff2e4, transparent: true, opacity: 0,
+          blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide
+        });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.visible = false;
+        mesh.frustumCulled = false;
+        scene.add(mesh);
+        rings.push({ mesh, mat, t: -1 });
+      }
+    }
+    let ringIdx = 0;
+    function spawnRing(x, y, z) {
+      const R = rings[ringIdx];
+      ringIdx = (ringIdx + 1) % RING_N;
+      R.t = 0;
+      R.mesh.position.set(x, y, z);
+      R.mesh.visible = true;
+    }
+    function updateRings(dt) {
+      for (let i = 0; i < RING_N; i++) {
+        const R = rings[i];
+        if (R.t < 0) continue;
+        R.t += dt;
+        const k = R.t / 1.15;
+        if (k >= 1) {
+          R.t = -1;
+          R.mesh.visible = false;
+          R.mat.opacity = 0;
+          continue;
+        }
+        const s = 0.6 + k * 9;
+        R.mesh.scale.set(s, s, s);
+        R.mat.opacity = 0.75 * (1 - k) * (1 - k);
+      }
+    }
+
+    // ---------- Custom orbit / pan / zoom controls ----------
+    const keyLook = new Set();
+    const controls = {
+      target: new THREE.Vector3(0, 7.5, 0),
+      theta: 0.9,
+      phi: 1.18,
+      radius: 44,
+      targetRadius: 30,
+      vTheta: 0,
+      vPhi: 0,
+      pointers: new Map(),
+      panMode: false,
+      pinchDist: 0,
+      pinchMidX: 0,
+      pinchMidY: 0,
+      tap: null,
+      lastOrbit: null,
+      idle: 0,
+
+      orbit(dx, dy) {
+        const k = 0.0052;
+        this.theta -= dx * k;
+        this.phi -= dy * k;
+        this.phi = clamp(this.phi, 0.45, 1.52);
+        this.lastOrbit = { dT: -dx * k, dP: -dy * k, t: performance.now() };
+      },
+      pan(dx, dy) {
+        const f = this.radius * 0.0012;
+        _v1.setFromMatrixColumn(camera.matrix, 0);
+        _v2.setFromMatrixColumn(camera.matrix, 1);
+        this.target.addScaledVector(_v1, -dx * f).addScaledVector(_v2, dy * f);
+        const r = Math.hypot(this.target.x, this.target.z);
+        if (r > 30) {
+          const s = 30 / r;
+          this.target.x *= s;
+          this.target.z *= s;
+        }
+        this.target.y = clamp(this.target.y, 2.5, 18);
+      },
+      zoomBy(factor) {
+        this.targetRadius = clamp(this.targetRadius * factor, 10, 58);
+      },
+      resetInertia() {
+        this.vTheta = 0;
+        this.vPhi = 0;
+        this.idle = 0;
+      },
+
+      onDown(e) {
+        canvas.setPointerCapture(e.pointerId);
+        this.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        this.resetInertia();
+        canvas.classList.add('dragging');
+        if (this.pointers.size === 1) {
+          this.panMode = e.pointerType === 'mouse' && (e.button === 2 || e.button === 1);
+          this.tap = this.panMode ? null : { x: e.clientX, y: e.clientY, t: performance.now(), moved: 0 };
+        } else if (this.pointers.size === 2) {
+          this.tap = null;
+          const [a, b] = [...this.pointers.values()];
+          this.pinchDist = Math.hypot(a.x - b.x, a.y - b.y);
+          this.pinchMidX = (a.x + b.x) / 2;
+          this.pinchMidY = (a.y + b.y) / 2;
+        }
+      },
+      onMove(e) {
+        const p = this.pointers.get(e.pointerId);
+        if (!p) return;
+        const dx = e.clientX - p.x;
+        const dy = e.clientY - p.y;
+        p.x = e.clientX;
+        p.y = e.clientY;
+        this.idle = 0;
+        if (this.pointers.size === 1) {
+          if (this.tap) this.tap.moved += Math.abs(dx) + Math.abs(dy);
+          if (this.panMode) this.pan(dx, dy);
+          else this.orbit(dx, dy);
+        } else if (this.pointers.size === 2) {
+          const [a, b] = [...this.pointers.values()];
+          const dist = Math.hypot(a.x - b.x, a.y - b.y);
+          const midX = (a.x + b.x) / 2;
+          const midY = (a.y + b.y) / 2;
+          if (this.pinchDist > 0) {
+            this.zoomBy(this.pinchDist / Math.max(dist, 1));
+            this.pan(midX - this.pinchMidX, midY - this.pinchMidY);
+          }
+          this.pinchDist = dist;
+          this.pinchMidX = midX;
+          this.pinchMidY = midY;
+        }
+      },
+      onUp(e) {
+        if (!this.pointers.has(e.pointerId)) return;
+        this.pointers.delete(e.pointerId);
+        try { canvas.releasePointerCapture(e.pointerId); } catch (err) { /* already released */ }
+        if (this.pointers.size === 0) {
+          canvas.classList.remove('dragging');
+          if (this.tap && this.tap.moved < 9 && performance.now() - this.tap.t < 450 && !this.panMode) {
+            handleTap(this.tap.x, this.tap.y);
+          }
+          this.tap = null;
+        } else if (this.pointers.size === 1) {
+          this.pinchDist = 0;
+        }
+        if (this.lastOrbit && performance.now() - this.lastOrbit.t < 80) {
+          const dtMs = Math.max(performance.now() - this.lastOrbit.t, 8);
+          this.vTheta = clamp(this.lastOrbit.dT / dtMs * 1000 * 0.55, -3.2, 3.2);
+          this.vPhi = clamp(this.lastOrbit.dP / dtMs * 1000 * 0.55, -2.4, 2.4);
+        }
+        this.lastOrbit = null;
+      },
+
+      update(dt) {
+        if (keyLook.has('ArrowLeft')) this.theta += 1.7 * dt;
+        if (keyLook.has('ArrowRight')) this.theta -= 1.7 * dt;
+        if (keyLook.has('ArrowUp')) this.phi = clamp(this.phi - 1.1 * dt, 0.45, 1.52);
+        if (keyLook.has('ArrowDown')) this.phi = clamp(this.phi + 1.1 * dt, 0.45, 1.52);
+        if (keyLook.has('zoomIn')) this.zoomBy(1 / (1 + 1.6 * dt));
+        if (keyLook.has('zoomOut')) this.zoomBy(1 + 1.6 * dt);
+
+        this.theta += this.vTheta * dt;
+        this.phi = clamp(this.phi + this.vPhi * dt, 0.45, 1.52);
+        const dampF = Math.exp(-4.5 * dt);
+        this.vTheta *= dampF;
+        this.vPhi *= dampF;
+        this.radius += (this.targetRadius - this.radius) * Math.min(1, dt * 6);
+        this.idle += dt;
+
+        if (driftOn && !motionReduced && this.idle > 2.5 && this.pointers.size === 0) {
+          this.theta += dt * 0.045;
+        }
+
+        const sp = Math.sin(this.phi);
+        _v3.set(
+          this.target.x + this.radius * sp * Math.sin(this.theta),
+          this.target.y + this.radius * Math.cos(this.phi),
+          this.target.z + this.radius * sp * Math.cos(this.theta)
+        );
+        if (_v3.y < 1.6) _v3.y = 1.6;
+        camera.position.copy(_v3);
+        camera.lookAt(this.target);
+      }
+    };
+
+    canvas.addEventListener('pointerdown', (e) => controls.onDown(e));
+    canvas.addEventListener('pointermove', (e) => controls.onMove(e));
+    canvas.addEventListener('pointerup', (e) => controls.onUp(e));
+    canvas.addEventListener('pointercancel', (e) => controls.onUp(e));
+    canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+    canvas.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      controls.idle = 0;
+      const d = e.deltaY * (e.deltaMode === 1 ? 33 : e.deltaMode === 2 ? window.innerHeight : 1);
+      controls.zoomBy(Math.exp(d * 0.0011));
+    }, { passive: false });
+
+    // ---------- Tap / click -> lure or jellyfish bloom ----------
+    const raycaster = new THREE.Raycaster();
+    const lurePlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -7);
+
+    function handleTap(clientX, clientY) {
+      const rect = canvas.getBoundingClientRect();
+      const nx = ((clientX - rect.left) / rect.width) * 2 - 1;
+      const ny = -((clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(_v1.set(nx, ny, 0.5), camera);
+      const hit = raycaster.intersectObjects(bells, false)[0];
+      if (hit) {
+        const J = jellies[hit.object.userData.jellyIndex];
+        J.burst = 1;
+        excite = Math.max(excite, 0.7);
+        spawnRing(J.bell.position.x, J.bell.position.y, J.bell.position.z);
+        announce('A jellyfish blooms.');
+        return;
+      }
+      if (raycaster.ray.intersectPlane(lurePlane, _v2)) {
+        const r = Math.hypot(_v2.x, _v2.z);
+        if (r < 44) {
+          releaseLure(_v2.x, clamp(_v2.y, 3.5, 14), _v2.z);
+        }
+      }
+    }
+
+    // ---------- UI wiring ----------
+    let driftOn = true;
+    let motionReduced = false;
+    let motionScale = 1;
+    let userSetMotion = false;
+
+    const reduceQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    function applySystemMotion() {
+      if (userSetMotion) return;
+      setMotion(reduceQuery.matches);
+    }
+    if (typeof reduceQuery.addEventListener === 'function') {
+      reduceQuery.addEventListener('change', applySystemMotion);
+    }
+
+    function setMotion(reduced) {
+      motionReduced = reduced;
+      btnMotion.textContent = 'Motion: ' + (reduced ? 'reduced' : 'full');
+      btnMotion.setAttribute('aria-pressed', String(reduced));
+      if (reduced) {
+        controls.targetRadius = clamp(controls.targetRadius, 10, 58);
+      }
+      announce(reduced
+        ? 'Motion reduced. Drift paused and currents slowed.'
+        : 'Full motion restored.');
+    }
+    function setDrift(on) {
+      driftOn = on;
+      btnDrift.textContent = 'Drift: ' + (on ? 'on' : 'off');
+      btnDrift.setAttribute('aria-pressed', String(on));
+      announce('Camera drift ' + (on ? 'on' : 'off') + '.');
+    }
+
+    applySystemMotion();
+    motionScale = motionReduced ? 0.12 : 1;
+    if (motionReduced) controls.radius = 30; // skip the dolly-in
+
+    btnMotion.addEventListener('click', () => { userSetMotion = true; setMotion(!motionReduced); });
+    btnDrift.addEventListener('click', () => setDrift(!driftOn));
+    btnLure.addEventListener('click', () => releaseLure(0, 8.5, 0));
+    btnLure.addEventListener('click', () => controls.idle = 0);
+
+    function setHelp(open) {
+      helpPanel.hidden = !open;
+      btnHelp.setAttribute('aria-expanded', String(open));
+      if (open) {
+        announce('Help panel opened.');
+        btnCloseHelp.focus();
+      } else {
+        btnHelp.focus();
+      }
+    }
+    btnHelp.addEventListener('click', () => setHelp(helpPanel.hidden));
+    btnCloseHelp.addEventListener('click', () => setHelp(false));
+
+    // ---------- Keyboard ----------
+    window.addEventListener('keydown', (e) => {
+      const t = e.target;
+      const onTextEntry = t && t.closest && t.closest('input, textarea, select, [contenteditable]');
+      if (e.key === 'Escape' && !helpPanel.hidden) {
+        setHelp(false);
+        return;
+      }
+      if (onTextEntry) return;
+      // buttons may keep focus after clicks; let every shortcut through except
+      // Space, which must still activate the focused button itself
+      const onButton = t && t.closest && t.closest('button, a, [role="slider"]');
+      switch (e.key) {
+        case 'ArrowLeft': case 'ArrowRight': case 'ArrowUp': case 'ArrowDown':
+          keyLook.add(e.key);
+          controls.idle = 0;
+          e.preventDefault();
+          break;
+        case '+': case '=': keyLook.add('zoomIn'); controls.idle = 0; break;
+        case '-': case '_': keyLook.add('zoomOut'); controls.idle = 0; break;
+        case 'l': case 'L': releaseLure(0, 8.5, 0); break;
+        case 'd': case 'D': setDrift(!driftOn); break;
+        case 'm': case 'M':
+          if (!e.repeat) { userSetMotion = true; setMotion(!motionReduced); }
+          break;
+        case ' ':
+          if (onButton) break; // focused button handles its own activation
+          if (!e.repeat) { userSetMotion = true; setMotion(!motionReduced); }
+          e.preventDefault();
+          break;
+        case 'h': case 'H': case '?':
+          if (!e.repeat) setHelp(helpPanel.hidden);
+          break;
+      }
+    });
+    window.addEventListener('keyup', (e) => {
+      keyLook.delete(e.key);
+      keyLook.delete('zoomIn');
+      keyLook.delete('zoomOut');
+    });
+
+    // ---------- Simulation state ----------
+    let simT = 0;
+    let excite = 0;
+    let announced = false;
+    const clock = new THREE.Clock();
+
+    function updateFish(dtAnim) {
+      const anchorX = Math.cos(simT * 0.07) * 14;
+      const anchorZ = Math.sin(simT * 0.07) * 14;
+      const anchorY = 9.5 + Math.sin(simT * 0.13) * 2.5;
+      const lureActive = lure.phase === 'hold' || lure.phase === 'drop';
+      const cruise = 1 + excite * 0.5;
+      const SEP = 1.5;
+      const SEP2 = SEP * SEP;
+
+      // Pass 1: steering + separation
+      for (let i = 0; i < FISH_N; i++) {
+        const ix = i * 3;
+        const px = fPos[ix], py = fPos[ix + 1], pz = fPos[ix + 2];
+        const a = fOffA[i] + simT * (0.25 + fSpd[i] * 0.03);
+        let tx = anchorX + Math.cos(a) * fOffR[i];
+        let ty = anchorY + Math.sin(simT * 0.6 + fPhase[i]) * 1.6;
+        let tz = anchorZ + Math.sin(a) * fOffR[i];
+        if (lureActive) {
+          const ldx = px - lure.pos.x;
+          const ldy = py - lure.pos.y;
+          const ldz = pz - lure.pos.z;
+          if (ldx * ldx + ldy * ldy + ldz * ldz < 576) { // within 24 units
+            const la = fOffA[i] * 3 + simT * 1.4;
+            const lr = 1.6 + fOffR[i] * 0.22;
+            tx = lure.pos.x + Math.cos(la) * lr;
+            ty = lure.pos.y + Math.sin(simT * 0.9 + fPhase[i]) * 1.1;
+            tz = lure.pos.z + Math.sin(la) * lr;
+          }
+        }
+        let dx = tx - px, dy = ty - py, dz = tz - pz;
+        const dl = Math.sqrt(dx * dx + dy * dy + dz * dz) || 1;
+        const cruiseSpd = 3.2 * fSpd[i] * cruise;
+        dx = dx / dl * cruiseSpd;
+        dy = dy / dl * cruiseSpd;
+        dz = dz / dl * cruiseSpd;
+        let sx = dx - fVel[ix], sy = dy - fVel[ix + 1], sz = dz - fVel[ix + 2];
+        const sl = Math.sqrt(sx * sx + sy * sy + sz * sz);
+        const maxForce = 6;
+        if (sl > maxForce) {
+          const s = maxForce / sl;
+          sx *= s; sy *= s; sz *= s;
+        }
+        fVel[ix] += sx * dtAnim;
+        fVel[ix + 1] += sy * dtAnim;
+        fVel[ix + 2] += sz * dtAnim;
+
+        // soft bounds
+        const r2 = px * px + pz * pz;
+        if (r2 > 1600) { // 40^2
+          const inv = 1 / (Math.sqrt(r2) || 1);
+          fVel[ix] -= px * inv * 4 * dtAnim;
+          fVel[ix + 2] -= pz * inv * 4 * dtAnim;
+        }
+        if (py < 2.2) fVel[ix + 1] += (2.2 - py) * 2.4 * dtAnim;
+        if (py > 26) fVel[ix + 1] -= (py - 26) * 2.4 * dtAnim;
+
+        // separation (symmetric pairs)
+        for (let j = i + 1; j < FISH_N; j++) {
+          const jx = j * 3;
+          const ddx = px - fPos[jx];
+          const ddy = py - fPos[jx + 1];
+          const ddz = pz - fPos[jx + 2];
+          const d2 = ddx * ddx + ddy * ddy + ddz * ddz;
+          if (d2 < SEP2 && d2 > 1e-6) {
+            const d = Math.sqrt(d2);
+            const push = ((SEP - d) / SEP) * 5.0 * dtAnim / d;
+            const gx = ddx * push, gy = ddy * push, gz = ddz * push;
+            fVel[ix] += gx; fVel[ix + 1] += gy; fVel[ix + 2] += gz;
+            fVel[jx] -= gx; fVel[jx + 1] -= gy; fVel[jx + 2] -= gz;
+          }
+        }
+      }
+
+      // Pass 2: clamp, integrate, write matrices
+      const maxSpd = 6.8 * (1 + excite * 0.5);
+      const minSpd = 2.1;
+      for (let i = 0; i < FISH_N; i++) {
+        const ix = i * 3;
+        let vx = fVel[ix], vy = fVel[ix + 1], vz = fVel[ix + 2];
+        const spd = Math.sqrt(vx * vx + vy * vy + vz * vz);
+        if (spd > maxSpd) {
+          const s = maxSpd / spd;
+          vx *= s; vy *= s; vz *= s;
+          fVel[ix] = vx; fVel[ix + 1] = vy; fVel[ix + 2] = vz;
+        } else if (spd < minSpd && spd > 1e-5) {
+          const s = minSpd / spd;
+          vx *= s; vy *= s; vz *= s;
+          fVel[ix] = vx; fVel[ix + 1] = vy; fVel[ix + 2] = vz;
+        }
+        fPos[ix] += vx * dtAnim;
+        fPos[ix + 1] += vy * dtAnim;
+        fPos[ix + 2] += vz * dtAnim;
+
+        dummy.position.set(fPos[ix], fPos[ix + 1], fPos[ix + 2]);
+        _v1.set(fPos[ix] + vx, fPos[ix + 1] + vy, fPos[ix + 2] + vz);
+        dummy.lookAt(_v1);
+        dummy.scale.setScalar(fScl[i]);
+        dummy.updateMatrix();
+        fish.setMatrixAt(i, dummy.matrix);
+      }
+      fish.instanceMatrix.needsUpdate = true;
+    }
+
+    function updatePods() {
+      const boost = 1 + excite * 0.6;
+      for (let i = 0; i < POD_N; i++) {
+        const glow = 0.72 + 0.28 * Math.sin(simT * podSpeed[i] + podPhase[i]) * boost;
+        _c.copy(podBase[i]).multiplyScalar(glow);
+        pods.setColorAt(i, _c);
+      }
+      if (pods.instanceColor) pods.instanceColor.needsUpdate = true;
+    }
+
+    // ---------- Main loop ----------
+    renderer.setAnimationLoop(() => {
+      const dt = Math.min(clock.getDelta(), 0.05);
+
+      // ease global motion scale (reduced-motion comfort)
+      const msTarget = motionReduced ? 0.12 : 1;
+      motionScale += (msTarget - motionScale) * Math.min(1, dt * 3);
+      const dtAnim = dt * motionScale;
+      simT += dtAnim;
+
+      excite = Math.max(0, excite - dt * 0.15);
+      poolLight.intensity = 26 + excite * 14;
+
+      controls.update(dt);
+      updateFish(dtAnim);
+      updateJellies(simT, dtAnim, dt);
+      updateKelp(simT);
+      updateSnow(simT, dtAnim);
+      updatePods();
+      updateLure(dt);
+      updateRings(dt);
+
+      renderer.render(scene, camera);
+
+      if (!announced) {
+        announced = true;
+        loader.hidden = true;
+        announce('Lumen Deep is ready. Drag to look around, and tap the water to release a lure of light.');
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>

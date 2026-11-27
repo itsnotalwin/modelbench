@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "claude-sonnet-5-5",
+  "category": "site-refresh",
+  "date": "2026-11-25",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "02",
+  "prompt_label": "Production Site Refresh",
+  "notes": "Studied itsnotalwin/shutterhaus-site main @ 084a13b and the live home page; release.json was not fetchable, so the serving commit is unverified. REFRESH, not rebrand: the brand is the asset, so Bodoni Moda/Inter, white ground, monochrome work and 'Portraits worth keeping.' stay; the arc becomes structure (rules, markers, rotating plate corners, arc-wipe frames), with a 1.25 type scale, one 4/8/12 grid, plate captions and a fuller footer. Sessions page folded into Contact (real prices/terms). Photographs are the repo's own, converted to monochrome WebP. Invented/estimated: series names, plate titles, series statements, print wording and 'c.' plate years (only 18 Jul 2024 is evidenced by filenames); studio to confirm. Formspree removed (third party): enquiries open a mailto. NOT run in a browser: lightbox, scroll frames, LCP, CLS and contrast were checked by static scripts only.",
+  "slug": "2026-11-25_claude-sonnet-5-5_site-refresh_v1",
+  "path": "runs/2026-11-25_claude-sonnet-5-5_site-refresh_v1/index.html",
+  "source_file": "site-refresh__claude-sonnet-5-5__2026-11-25__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

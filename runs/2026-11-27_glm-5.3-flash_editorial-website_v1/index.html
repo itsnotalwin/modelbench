@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meridian — Issue 07 · Uncertain Ground</title>
+<meta name="description" content="Meridian is a quarterly journal of cartography, territory and the unmapped. Issue 07 — Uncertain Ground: an island that never existed, a defence of the blank spot, and lines drawn on water.">
+<meta name="theme-color" content="#f4efe5">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f4efe5'/%3E%3Ccircle cx='16' cy='16' r='11' fill='none' stroke='%231f1a12' stroke-width='2'/%3E%3Cpath d='M16 5l3.5 8L16 27l-3.5-14z' fill='%23a03d1c'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-inner wrap">
+    <a class="brand" href="index.html">Meridian<span class="brand-issue"> · N°07</span></a>
+    <nav class="topnav" aria-label="Primary">
+      <ul>
+        <li><a href="index.html" aria-current="page">Contents</a></li>
+        <li><a href="sandy-island.html">Phantom Isles</a></li>
+        <li><a href="blank-spots.html">Blank Spots</a></li>
+        <li><a href="drawing-lines.html">Lines on Water</a></li>
+        <li><a href="#colophon">Colophon</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <header class="masthead wrap">
+    <p class="masthead-micro">
+      <span>Vol. II · N° 07</span>
+      <span>Cartography · Territory · The Unmapped</span>
+      <span>November 2026 · Lisbon</span>
+    </p>
+    <h1 class="masthead-title">Meridian</h1>
+    <p class="masthead-tagline">A journal of cartography, territory &amp; the unmapped</p>
+    <p class="masthead-issue">Issue 07 — Uncertain Ground</p>
+  </header>
+
+  <section class="cover wrap" aria-label="Cover plate">
+    <svg class="plate-svg" viewBox="0 0 1200 760" role="img" aria-labelledby="cv-title cv-desc">
+      <title id="cv-title">Cover chart of the Coral Sea showing the charted position of Sandy Island</title>
+      <desc id="cv-desc">A hand-drawn nautical chart. A dashed outline marks Sandy Island between Australia and New Caledonia, with two ship tracks converging on it: the barque Velocity of 1876 and the research vessel Southern Surveyor of November 2012, which found no land, only open water about 1,400 metres deep.</desc>
+      <defs>
+        <pattern id="cv-hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <line x1="0" y1="0" x2="0" y2="7" stroke="#4d6b64" stroke-width="0.7" opacity="0.15"/>
+        </pattern>
+        <marker id="cv-arrow" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="9" markerHeight="9" orient="auto">
+          <path d="M0,0.5 L7,4 L0,7.5 Z" fill="#1f1a12"/>
+        </marker>
+      </defs>
+
+      <!-- frame -->
+      <rect x="14" y="14" width="1172" height="732" class="pl-frame" stroke-width="2"/>
+      <rect x="24" y="24" width="1152" height="712" class="pl-frame-thin"/>
+
+      <!-- sea -->
+      <rect x="24" y="24" width="1152" height="712" fill="url(#cv-hatch)"/>
+
+      <!-- graticule -->
+      <g class="pl-grid">
+        <line x1="90" y1="24" x2="90" y2="736"/><line x1="190" y1="24" x2="190" y2="736"/>
+        <line x1="290" y1="24" x2="290" y2="736"/><line x1="390" y1="24" x2="390" y2="736"/>
+        <line x1="490" y1="24" x2="490" y2="736"/><line x1="590" y1="24" x2="590" y2="736"/>
+        <line x1="690" y1="24" x2="690" y2="736"/><line x1="790" y1="24" x2="790" y2="736"/>
+        <line x1="890" y1="24" x2="890" y2="736"/><line x1="990" y1="24" x2="990" y2="736"/>
+        <line x1="1090" y1="24" x2="1090" y2="736"/>
+        <line x1="24" y1="84" x2="1176" y2="84"/><line x1="24" y1="184" x2="1176" y2="184"/>
+        <line x1="24" y1="284" x2="1176" y2="284"/><line x1="24" y1="384" x2="1176" y2="384"/>
+        <line x1="24" y1="484" x2="1176" y2="484"/><line x1="24" y1="584" x2="1176" y2="584"/>
+        <line x1="24" y1="684" x2="1176" y2="684"/>
+      </g>
+
+      <!-- graticule labels -->
+      <g class="pl-label pl-soft" font-size="8.5">
+        <text x="30" y="87">14°S</text><text x="30" y="187">16°S</text>
+        <text x="30" y="287">18°S</text><text x="30" y="387">20°S</text>
+        <text x="30" y="487">22°S</text><text x="30" y="587">24°S</text>
+        <text x="30" y="687">26°S</text>
+        <text x="90" y="729" text-anchor="middle">149°E</text>
+        <text x="190" y="729" text-anchor="middle">151°E</text>
+        <text x="290" y="729" text-anchor="middle">153°E</text>
+        <text x="390" y="729" text-anchor="middle">155°E</text>
+        <text x="490" y="729" text-anchor="middle">157°E</text>
+        <text x="590" y="729" text-anchor="middle">159°E</text>
+        <text x="690" y="729" text-anchor="middle">161°E</text>
+        <text x="790" y="729" text-anchor="middle">163°E</text>
+        <text x="890" y="729" text-anchor="middle">165°E</text>
+        <text x="990" y="729" text-anchor="middle">167°E</text>
+        <text x="1090" y="729" text-anchor="middle">169°E</text>
+      </g>
+
+      <!-- land -->
+      <path class="pl-land" d="M 24 545 C 70 552 118 568 158 606 C 196 642 240 668 300 684 C 330 692 360 706 372 736 L 24 736 Z"/>
+      <text class="pl-label" font-size="13" letter-spacing="0.3em" text-anchor="middle" transform="rotate(-7 160 668)" x="160" y="668">AUSTRALIA</text>
+
+      <path class="pl-land" d="M 966 588 C 992 580 1020 584 1046 596 C 1076 610 1104 612 1128 604 C 1146 598 1158 588 1164 576 L 1158 570 C 1140 582 1118 586 1094 578 C 1064 568 1036 566 1010 574 C 992 580 978 584 966 588 Z"/>
+      <text class="pl-label pl-soft" font-size="9" letter-spacing="0.18em" text-anchor="middle" x="1050" y="640">NOUVELLE-CALÉDONIE</text>
+
+      <g class="pl-land-soft">
+        <circle cx="438" cy="492" r="4"/><circle cx="458" cy="506" r="3"/>
+        <circle cx="424" cy="512" r="2.5"/><circle cx="470" cy="486" r="2"/>
+      </g>
+      <text class="pl-label pl-soft" font-size="8.5" letter-spacing="0.2em" text-anchor="middle" x="448" y="534">CHESTERFIELD IS.</text>
+
+      <!-- track: Velocity 1876 -->
+      <g class="pl-track">
+        <path d="M 240 168 C 320 208 420 252 520 296 C 550 310 572 318 590 326" class="pl-thin pl-dotted" stroke-width="1.4" marker-end="url(#cv-arrow)"/>
+        <text class="pl-label pl-soft" font-size="9" letter-spacing="0.18em" text-anchor="middle" transform="rotate(23 400 212)" x="400" y="212">BARQUE VELOCITY · 1876</text>
+      </g>
+
+      <!-- track: Southern Surveyor 2012 -->
+      <g class="pl-track">
+        <path d="M 288 700 C 350 628 420 560 470 500 C 515 448 556 392 592 348" stroke="#1f1a12" stroke-width="1.5" fill="none" stroke-dasharray="7 5" marker-end="url(#cv-arrow)"/>
+        <g stroke="#1f1a12" fill="#1f1a12">
+          <path d="M 461 500 L 479 500 L 475 506 L 465 506 Z"/>
+          <line x1="470" y1="500" x2="470" y2="488" stroke-width="1.2"/>
+          <path d="M 470 488 L 479 491 L 470 494 Z" fill="#a03d1c" stroke="none"/>
+        </g>
+        <text class="pl-label" font-size="9" letter-spacing="0.14em" text-anchor="middle" transform="rotate(-49 520 462)" x="520" y="462">R/V SOUTHERN SURVEYOR · NOV 2012</text>
+      </g>
+
+      <!-- Sandy Island (phantom) -->
+      <g class="pl-phantom">
+        <line x1="546" y1="330" x2="652" y2="330" class="pl-thin" stroke-dasharray="2 3" opacity="0.7"/>
+        <line x1="599" y1="312" x2="599" y2="348" class="pl-thin" stroke-dasharray="2 3" opacity="0.7"/>
+        <path d="M 556 328 C 566 320 590 316 616 320 C 636 323 648 328 642 334 C 630 342 596 344 570 340 C 560 338 552 334 556 328 Z" fill="none" stroke="#a03d1c" stroke-width="1.8" stroke-dasharray="6 4"/>
+        <text class="pl-label pl-accent" font-size="12" font-weight="700" letter-spacing="0.18em" text-anchor="middle" x="599" y="300">SANDY I.</text>
+        <text class="pl-label pl-soft" font-size="8" letter-spacing="0.18em" text-anchor="middle" x="599" y="358">(EXISTENCE DOUBTFUL)</text>
+        <polyline points="648,336 716,300 768,300" class="pl-thin" stroke-width="0.8"/>
+        <text class="pl-label pl-soft" font-size="8.5" letter-spacing="0.12em" x="772" y="296">CARRIED ON CHARTS</text>
+        <text class="pl-label pl-soft" font-size="8.5" letter-spacing="0.12em" x="772" y="308">1876 — 2012</text>
+      </g>
+
+      <!-- soundings -->
+      <g class="pl-sound" font-size="10" text-anchor="middle">
+        <text x="352" y="268">2905</text><text x="452" y="238">1748</text>
+        <text x="700" y="246">4013</text><text x="786" y="428">985</text>
+        <text x="858" y="332">2105</text><text x="508" y="414">1412</text>
+        <text x="338" y="452">386</text><text x="896" y="468">1620</text>
+        <text x="760" y="556">990</text><text x="688" y="470">1180</text>
+        <text x="540" y="236">860</text><text x="906" y="242">3341</text>
+        <text x="632" y="372" fill="#a03d1c" font-weight="700">1401</text>
+      </g>
+
+      <!-- compass rose -->
+      <g>
+        <circle cx="150" cy="150" r="44" class="pl-frame" stroke-width="1"/>
+        <line x1="150" y1="101" x2="150" y2="106" class="pl-frame" stroke-width="1"/>
+        <line x1="150" y1="194" x2="150" y2="199" class="pl-frame" stroke-width="1"/>
+        <line x1="199" y1="150" x2="204" y2="150" class="pl-frame" stroke-width="1"/>
+        <line x1="96" y1="150" x2="101" y2="150" class="pl-frame" stroke-width="1"/>
+        <path d="M 150 116 L 157 143 L 184 150 L 157 157 L 150 184 L 143 157 L 116 150 L 143 143 Z" fill="#f8f4ea" stroke="#1f1a12" stroke-width="1"/>
+        <path d="M 150 134 L 154 146 L 166 150 L 154 154 L 150 166 L 146 154 L 134 150 L 146 146 Z" fill="#a03d1c"/>
+        <g class="pl-label" font-size="10" text-anchor="middle">
+          <text x="150" y="97">N</text><text x="207" y="154">E</text>
+          <text x="150" y="209">S</text><text x="93" y="154">W</text>
+        </g>
+      </g>
+
+      <!-- scale bar -->
+      <g>
+        <rect x="940" y="58" width="25" height="5" fill="#1f1a12"/>
+        <rect x="990" y="58" width="25" height="5" fill="#1f1a12"/>
+        <rect x="1040" y="58" width="25" height="5" fill="#1f1a12"/>
+        <rect x="940" y="58" width="150" height="5" fill="none" stroke="#1f1a12" stroke-width="0.9"/>
+        <g class="pl-label pl-soft" font-size="8.5" text-anchor="middle">
+          <text x="940" y="76">0</text><text x="990" y="76">100</text>
+          <text x="1040" y="76">200 KM</text><text x="1090" y="76">300</text>
+        </g>
+      </g>
+
+      <!-- sheet title -->
+      <text class="pl-label pl-soft" font-size="9.5" letter-spacing="0.3em" text-anchor="middle" x="600" y="46">MERIDIAN · CARTOGRAPHIC SUPPLEMENT</text>
+
+      <!-- cartouche -->
+      <g>
+        <rect x="850" y="646" width="310" height="66" fill="#f8f4ea" stroke="#1f1a12" stroke-width="1.5"/>
+        <rect x="856" y="652" width="298" height="54" fill="none" stroke="#1f1a12" stroke-width="0.75"/>
+        <text x="1005" y="678" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="23" letter-spacing="0.12em" fill="#1f1a12">THE CORAL SEA</text>
+        <text class="pl-label pl-soft" font-size="8" letter-spacing="0.18em" text-anchor="middle" x="1005" y="693">SHEET N° 07-A · DRAWN FOR MERIDIAN</text>
+        <text class="pl-label pl-soft" font-size="8" letter-spacing="0.18em" text-anchor="middle" x="1005" y="704">ISSUE 07 · NOVEMBER 2026</text>
+      </g>
+    </svg>
+    <p class="cover-caption"><span class="cap-tag">COVER —</span> The Coral Sea, sheet 07-A. The dashed outline is Sandy Island, carried on charts from 1876 to 2012; both ship tracks are drawn after contemporaneous reports. The depth sounding in red — 1,401 metres — is what the R/V Southern Surveyor found where the island should have been.</p>
+  </section>
+
+  <section class="toc wrap" id="contents" aria-labelledby="toc-h">
+    <h2 class="section-label" id="toc-h">In this issue</h2>
+    <ol class="toc-list">
+      <li class="toc-item">
+        <span class="toc-num" aria-hidden="true">01</span>
+        <div>
+          <p class="kicker">Feature<span class="k-sep">·</span>Phantom Geography<span class="k-sep">·</span>10 min</p>
+          <h3 class="toc-title"><a href="sandy-island.html">The Island That Refused to Exist</a></h3>
+          <p class="toc-stand">For 136 years, Sandy Island sat neatly between Australia and New Caledonia — charted, named, carried from atlas to atlas, though nobody had ever stood on it. In November 2012, a research vessel steamed to its coordinates and found open water, fourteen hundred metres down.</p>
+          <p class="toc-meta">By Mara Whitford · First published 12 November 2026</p>
+        </div>
+      </li>
+      <li class="toc-item">
+        <span class="toc-num" aria-hidden="true">02</span>
+        <div>
+          <p class="kicker">Essay<span class="k-sep">·</span>Terra Incognita<span class="k-sep">·</span>8 min</p>
+          <h3 class="toc-title"><a href="blank-spots.html">In Praise of the Blank Spot</a></h3>
+          <p class="toc-stand">The blank spots are going extinct. A defence of the last places we have chosen not to know precisely — the deepest water, the highest unclimbed peak, the emptiest point in the ocean — and an argument that some ignorance is worth keeping.</p>
+          <p class="toc-meta">By Tomás Rebelo · First published 18 November 2026</p>
+        </div>
+      </li>
+      <li class="toc-item">
+        <span class="toc-num" aria-hidden="true">03</span>
+        <div>
+          <p class="kicker">Feature<span class="k-sep">·</span>Borders<span class="k-sep">·</span>9 min</p>
+          <h3 class="toc-title"><a href="drawing-lines.html">Drawing Lines on Water</a></h3>
+          <p class="toc-stand">The sea does not read treaties. A short tour of the world's most argumentative lines: the Arctic rock two countries spent half a century celebrating with whisky, the coastline that grows the harder you measure it, and the legal fiction that borders can be pinned to water.</p>
+          <p class="toc-meta">By Sigrid Halvorsen · First published 24 November 2026</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="editors-note wrap" id="editors-note" aria-labelledby="edn-h">
+    <h2 class="section-label" id="edn-h">From the editor</h2>
+    <div class="letter">
+      <p class="drop">Every map is an argument, and the argument is never finished. We chose the theme of this issue — uncertain ground — because the map has never been more confident, or less innocent. Satellites pass over the whole Earth every day; the device in your pocket locates you to within a few metres; the blank patches of the nineteenth century have been filled, coloured and priced. And yet the ground itself refuses to cooperate. Islands prove to have been paperwork all along. Coastlines move faster than the treaties that pin them. Whole mountains remain unmapped not because we cannot reach them, but because we have decided, for reasons we find it hard to state, not to go.</p>
+      <p>The three pieces in this issue trace that friction from different directions. Mara Whitford follows the most polite deletion in the history of geography: an island that spent 136 years on charts and then stopped existing. Tomás Rebelo defends the blank spot as a form of humility, from the emptiest point in the ocean to a mountain Bhutan has chosen to leave alone. Sigrid Halvorsen spends time with the people who draw borders on water — a job like carpentry, but for a material that will not hold still.</p>
+      <p>Uncertainty, we have come to think, is not the map's failure. It is the map's most honest feature, and the one we work hardest to hide.</p>
+      <p class="letter-sign">Teresa Almeida<span>Editor, Meridian</span></p>
+    </div>
+  </section>
+
+  <section class="notices wrap" aria-labelledby="not-h">
+    <h2 class="section-label" id="not-h">Notes from the archive</h2>
+    <ul class="notice-grid">
+      <li>
+        <p class="notice-date">12 November 1876</p>
+        <p>The barque <strong>Velocity</strong>, whaling out of Sydney, logs “Sandy I.” in the Coral Sea. The name will be copied from chart to chart for 136 years, through the age of steam, the age of satellites and the age of the pocket atlas, until somebody finally goes to look.</p>
+      </li>
+      <li>
+        <p class="notice-date">May 1967</p>
+        <p>Benoît Mandelbrot asks <strong>“How Long Is the Coast of Britain?”</strong> in the journal <em>Science</em>. The answer, he demonstrates, depends on the length of your ruler — and grows without limit as the ruler shrinks. Two reference works still disagree about the length of Portugal's coast by more than a hundred per cent.</p>
+      </li>
+      <li>
+        <p class="notice-date">In progress</p>
+        <p>The <strong>Seabed 2030</strong> project reports that barely a quarter of the ocean floor has been mapped to modern standards. The target — a complete, freely available chart of every ocean — falls due in 2030. Most of Earth, in other words, is still drawn from echoes.</p>
+      </li>
+    </ul>
+  </section>
+
+  <section class="colophon wrap" id="colophon" aria-labelledby="col-h">
+    <h2 class="section-label" id="col-h">Colophon</h2>
+    <div class="colophon-grid">
+      <div class="colophon-about">
+        <p><strong>Meridian</strong> is an independent quarterly about maps, territory and the people who argue about them. It is edited from Lisbon and published four times a year. Each issue takes one theme and stays with it until the theme gives in.</p>
+        <p>This edition is set on the open web with system serifs and monospaces — Charter and Cambria for text, Cascadia and Consolas for annotation — and every chart is drawn by hand as vector artwork for this issue. The site uses no frameworks, no cookies, no trackers and no third-party requests. Turn JavaScript off and it reads the same.</p>
+        <p>Correspondence, corrections and chart anomalies: letters@meridian.example</p>
+      </div>
+      <dl class="credits">
+        <dt>Editor</dt><dd>Teresa Almeida</dd>
+        <dt>Art direction</dt><dd>The editors</dd>
+        <dt>Cartography</dt><dd>Original SVG plates, drawn for Issue 07</dd>
+        <dt>Type</dt><dd>Charter · Cambria · Cascadia Mono</dd>
+        <dt>Web</dt><dd>Hand-built HTML &amp; CSS, enhancement JS under 3 KB</dd>
+        <dt>Correspondence</dt><dd>letters@meridian.example</dd>
+      </dl>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p class="footer-word" aria-hidden="true">Meridian</p>
+    <nav class="footer-nav" aria-label="Footer">
+      <ul>
+        <li><a href="index.html">Contents</a></li>
+        <li><a href="sandy-island.html">Phantom Isles</a></li>
+        <li><a href="blank-spots.html">Blank Spots</a></li>
+        <li><a href="drawing-lines.html">Lines on Water</a></li>
+        <li><a href="index.html#editors-note">From the editor</a></li>
+        <li><a href="index.html#colophon">Colophon</a></li>
+      </ul>
+    </nav>
+    <p class="footer-line">Issue 07 — Uncertain Ground · November 2026 · Lisbon</p>
+    <p class="footer-line small">© 2026 Meridian. All text, charts and artwork original to this publication. No cookies, no trackers, no third-party requests.</p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "claude-sonnet-5-5",
+  "category": "restaurant",
+  "date": "2026-11-25",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "03",
+  "prompt_label": "Restaurant Website",
+  "notes": "Ashfall, an invented live-fire restaurant in Johannesburg. Single index.html with 34-item menu (search, category and dietary filters), reservation flow with computed slots and confirmation, persistent basket and collection orders, open-now status with special hours, mobile nav, canvas ember field that reacts to pointer and press-and-hold, optional Web Audio fire sound, SVG wordmark and procedurally drawn dishes. Built under a compact size budget so scope is lean; JavaScript syntax-checked with node but not run in a real browser.",
+  "slug": "2026-11-25_claude-sonnet-5-5_restaurant_v1",
+  "path": "runs/2026-11-25_claude-sonnet-5-5_restaurant_v1/index.html",
+  "source_file": "restaurant__claude-sonnet-5-5__2026-11-25__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

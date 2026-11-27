@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "glm-5.3-flash",
+  "category": "javascript-app",
+  "date": "2026-11-27",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "07",
+  "prompt_label": "JavaScript Application",
+  "notes": "Fiscus — a local-first personal money ledger built with vanilla HTML/CSS/JS: no frameworks, no build step, zero runtime dependencies. Five hash-routed views (Dashboard, Transactions, Budgets, Reports, Settings) share one validated data store: transaction CRUD with inline form validation and undo for deletions, per-category monthly budgets with copy-forward, SVG trend/donut charts with screen-reader summaries, derived insights, and duplicate-name guards. Data portability via JSON backup export/import (merge or replace, fully validated with a preview step and per-record skip report) and CSV export. Persistence uses localStorage with probe detection, an in-memory session fallback with a visible banner, safe reset on corrupted data, and a storage-status panel. Accessibility: keyboard-navigable modals with focus trapping and restore, Escape handling, skip link, aria-live regions, focus management after actions, and a responsive layout with a bottom nav bar and 40px+ touch targets on coarse pointers. Strictly local-only by design and disclosed in-app: there is no backend, no sync, and no network calls; the currency selector changes formatting only (no conversion); deleting a category moves its transactions to Uncategorised. Verified by driving the app in a desktop Chromium browser over a local HTTP server (navigation, CRUD, budgets, reports, settings, reload persistence, empty states); the code uses classic scripts and no fetch, so opening index.html directly from disk should also work, but that mode was not verified here. Not audited in Safari/Firefox or on real touch hardware.",
+  "slug": "2026-11-27_glm-5.3-flash_javascript-app_v1",
+  "path": "runs/2026-11-27_glm-5.3-flash_javascript-app_v1/index.html",
+  "source_file": "javascript-app__glm-5.3-flash__2026-11-27__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}

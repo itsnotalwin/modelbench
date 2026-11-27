@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ashfall — live-fire kitchen, Johannesburg</title>
+<meta name="description" content="Ashfall cooks everything over wood and coal. Book a table or order for collection.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--lw:#d8d2c4;--soot:#211a16;--rust:#7d2a12;--em:#ff6a2b;--sf:#f0b13a;--mu:#6e6357;--f:'Fraunces',Georgia,'Times New Roman',serif;--m:'DM Mono',ui-monospace,Menlo,Consolas,monospace}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{background:var(--lw);color:var(--soot);font:400 17px/1.65 var(--f);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--sf);outline-offset:2px}
+header{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:18px;padding:10px 4vw;background:#d8d2c4ee;backdrop-filter:blur(8px);border-bottom:2px solid var(--soot)}
+.logo{margin-right:auto;display:block;color:var(--soot)}
+.fl{transform-origin:16px 28px;animation:fk 1.4s ease-in-out infinite alternate}
+@keyframes fk{to{transform:scale(.93,1.07) skewX(4deg)}}
+nav{display:flex;gap:24px;font-weight:700}
+nav a{text-decoration:none}nav a:hover{color:var(--rust);text-decoration:underline;text-underline-offset:5px}
+.pill{font:500 13px var(--m);padding:4px 12px;border:2px solid currentColor;border-radius:99px;white-space:nowrap;display:inline-block}
+.pill:before{content:'';display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--mu);margin-right:8px}
+.pill.o:before{background:#2f9e4f;box-shadow:0 0 8px #2f9e4f}
+.b{font:700 15px var(--f);padding:11px 20px;border:2px solid currentColor;background:none;color:inherit;cursor:pointer;text-decoration:none;display:inline-block;transition:transform .15s,background .15s}
+.b:hover{transform:translateY(-2px)}.b.p{background:var(--em);border-color:var(--em);color:var(--soot)}
+.b:disabled{opacity:.4;cursor:not-allowed;transform:none}
+#burger{display:none;padding:7px 12px}
+#cc{background:var(--soot);color:var(--lw);border-radius:99px;padding:0 8px;margin-left:6px;font:500 13px var(--m)}
+.hero{position:relative;min-height:88vh;background:var(--rust);color:var(--lw);display:flex;align-items:flex-end;overflow:hidden;touch-action:pan-y}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%}
+.hin{position:relative;padding:10vh 4vw 8vh;max-width:1100px;pointer-events:none}.hin a,.hin button{pointer-events:auto}
+h1{font:900 clamp(44px,9vw,128px)/.95 var(--f);letter-spacing:-.03em;font-variation-settings:'opsz' 144;margin-bottom:28px}
+h1 span{display:block;animation:rise .9s cubic-bezier(.2,.7,.2,1) both}h1 span:nth-child(2){animation-delay:.12s}h1 span:nth-child(3){animation-delay:.24s}
+@keyframes rise{from{opacity:0;transform:translateY(40px)}}
+.hin p{max-width:46ch;font-size:19px;margin-bottom:26px}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+section{padding:90px 4vw}
+h2{font:900 clamp(34px,5vw,60px)/1.05 var(--f);letter-spacing:-.02em;margin-bottom:22px}
+.story{display:grid;grid-template-columns:1.1fr 1fr;gap:6vw;max-width:1200px;margin:auto}
+.story p{margin-bottom:16px;max-width:60ch}
+blockquote{font:italic 400 28px/1.35 var(--f);border-left:6px solid var(--em);padding-left:24px;align-self:center}
+blockquote small{display:block;font:500 14px var(--m);margin-top:14px;font-style:normal}
+.ctl{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
+#q{flex:1 1 280px;font:400 17px var(--f);padding:12px 14px;border:2px solid var(--soot);background:#e6e1d5;color:inherit}
+.chip{font:500 14px var(--m);padding:7px 14px;border:2px solid var(--soot);border-radius:99px;background:none;cursor:pointer;color:inherit}
+.chip[aria-pressed=true]{background:var(--soot);color:var(--lw)}
+#cnt{font:500 14px var(--m);color:var(--mu);margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:26px 22px}
+.card{display:flex;flex-direction:column;border-top:3px solid var(--soot)}
+.art{background:var(--soot);margin:12px 0 10px}.art svg{display:block;width:100%;height:auto}
+.card h3{font:700 21px/1.2 var(--f);display:flex;justify-content:space-between;gap:10px}
+.card h3 b{font:500 16px var(--m);white-space:nowrap}
+.card p{color:var(--mu);margin:6px 0 10px;flex:1}
+.tg{display:flex;gap:6px;align-items:center;justify-content:space-between}
+.tg i{font:500 12px var(--m);border:1.5px solid var(--soot);border-radius:99px;padding:1px 8px;font-style:normal;margin-right:5px}
+.empty{padding:40px 0;font-size:22px}
+.dark{background:var(--soot);color:var(--lw)}
+.res{display:grid;grid-template-columns:1fr 1fr;gap:6vw;max-width:1200px;margin:auto}
+label,legend{display:block;font-weight:700;margin:16px 0 6px}
+input,select,textarea{font:400 17px var(--f);padding:11px 12px;width:100%;border:2px solid var(--lw);background:#2d241e;color:var(--lw)}
+.err{display:block;color:#ff9d7a;font:500 13px var(--m);min-height:18px;margin-top:4px}
+.slots{display:flex;flex-wrap:wrap;gap:8px}.slot{margin:0;position:relative}.slot input{position:absolute;opacity:0;width:1px}
+.slot span{display:block;font:500 14px var(--m);padding:8px 12px;border:2px solid var(--lw);cursor:pointer}
+.slot input:checked+span{background:var(--sf);border-color:var(--sf);color:var(--soot)}
+.slot input:disabled+span{opacity:.35;text-decoration:line-through;cursor:not-allowed}
+.slot input:focus-visible+span{outline:3px solid var(--em)}
+.ok{border:2px solid var(--sf);padding:28px}.ok h3{font:900 34px/1.1 var(--f);margin-bottom:10px}
+.hrs{border-collapse:collapse;width:100%;max-width:420px;font:500 15px var(--m)}
+.hrs td{padding:8px 0;border-bottom:1px solid #211a1633}.hrs tr.t{font-weight:500;color:var(--rust);font-weight:700}.hrs td:last-child{text-align:right}
+.vis{display:grid;grid-template-columns:1fr 1fr;gap:6vw;max-width:1200px;margin:auto}
+footer{padding:30px 4vw;background:var(--soot);color:var(--lw);font:400 14px var(--m);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+#dr{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--lw);z-index:50;padding:22px;overflow:auto;transform:translateX(105%);visibility:hidden;transition:transform .35s cubic-bezier(.2,.7,.2,1),visibility .35s;border-left:3px solid var(--soot)}
+#dr.on{transform:none;visibility:visible}
+#sc{position:fixed;inset:0;background:#211a1699;z-index:40;opacity:0;pointer-events:none;transition:opacity .3s}#sc.on{opacity:1;pointer-events:auto}
+.dh{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.dh h2{font-size:32px;margin:0}
+.ln{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:12px 0;border-bottom:1px solid #211a1644;align-items:center}
+.ln b{font:500 15px var(--m)}.qt{display:flex;align-items:center;gap:8px;font:500 15px var(--m)}
+.qt button{width:30px;height:30px;border:2px solid var(--soot);background:none;cursor:pointer;font:700 16px var(--m);color:inherit}
+#df input{background:#e6e1d5;color:var(--soot);border-color:var(--soot)}#df .err{color:#a1260a}
+.tot{display:flex;justify-content:space-between;font:700 22px var(--f);margin:18px 0 4px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,120px);background:var(--soot);color:var(--lw);padding:11px 20px;border:2px solid var(--sf);z-index:60;transition:transform .3s;font:500 14px var(--m)}#toast.on{transform:translate(-50%,0)}
+@media(max-width:820px){.story,.res,.vis{grid-template-columns:1fr}section{padding:64px 5vw}
+#burger{display:block}header .pill{display:none}
+nav{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:0;background:var(--lw);border-bottom:2px solid var(--soot)}nav.open{display:flex}nav a{padding:16px 5vw;border-top:1px solid #211a1633}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style></head><body>
+<header><a class="logo" href="#top" aria-label="Ashfall, back to top"><svg viewBox="0 0 150 34" height="30" role="img"><path class="fl" fill="#ff6a2b" d="M16 3c1 7 9 9 9 17a9 9 0 0 1-18 0c0-4 2-7 5-9 0 3 1 5 3 5-1-5-1-9 1-13z"/><path fill="#f0b13a" d="M16 18c0 3 3 4 3 7a3 3 0 0 1-6 0c0-2 3-4 3-7z"/><text x="31" y="26" font-family="Fraunces,Georgia,serif" font-weight="900" font-size="25" letter-spacing="-.5" fill="currentColor">ashfall</text></svg></a>
+<nav id="nav" aria-label="Main"><a href="#menu">Menu</a><a href="#reserve">Reserve</a><a href="#story">Our story</a><a href="#visit">Visit</a></nav>
+<span class="pill" data-st></span>
+<button class="b" id="cartBtn" aria-haspopup="dialog">Basket<span id="cc">0</span></button>
+<button class="b" id="burger" aria-label="Open navigation" aria-expanded="false" aria-controls="nav">Menu</button></header>
+<main id="top">
+<div class="hero" id="hero"><canvas id="fx" aria-hidden="true"></canvas><div class="hin">
+<h1><span>Everything</span><span>we serve has</span><span>met a fire first.</span></h1>
+<p>Ashfall is a wood-and-coal kitchen on Fox Street, Johannesburg. No gas, no shortcuts, a lot of smoke.</p>
+<div class="row"><a class="b p" href="#reserve">Book a table</a><a class="b" href="#menu">Order for collection</a><button class="b" id="snd" aria-pressed="false">Turn on fire sound</button><span class="pill" data-st></span></div></div></div>
+
+<section id="story"><div class="story"><div><h2>We cook the way our grandmothers did, on purpose.</h2>
+<p>Ashfall started as a Sunday braai that got out of hand. Nandi Khumalo, our chef, wanted a kitchen where the fire is the only seasoning you can’t buy: oak and sekelbos in the morning, coal by dinner, nothing sped up.</p>
+<p>Meat is dry-aged in-house. Vegetables get the same respect as the ribeye, and often more of the flame. Pap comes with everything it should.</p>
+<p>Come hungry. Stay for the second round of embers.</p></div>
+<blockquote>“If a dish doesn’t smell like the fire when it lands, we send it back. We have never once had to send back a dessert.”<small>Nandi Khumalo, chef and owner</small></blockquote></div></section>
+
+<section id="menu"><div style="max-width:1200px;margin:auto"><h2>The menu</h2>
+<p>Prices in rand. Orders are for collection, ready in about 30 minutes while the kitchen is open.</p>
+<div class="ctl"><input id="q" type="search" placeholder="Search: lamb, smoked, vegan, tahini" aria-label="Search the menu"></div>
+<div class="ctl" id="cats" role="group" aria-label="Categories"></div>
+<div class="ctl" id="diet" role="group" aria-label="Dietary filters"></div>
+<div id="cnt" aria-live="polite"></div><div class="grid" id="grid"></div></div></section>
+
+<section class="dark" id="reserve"><div class="res"><div><h2>Hold a table.</h2>
+<p>Last seating is 90 minutes before the kitchen closes. Tables are held for 15 minutes. For nine or more, phone us on 011 555 0142 and we’ll build a long table.</p><p style="margin-top:14px">Sunday lunch is the quiet one. Friday and Saturday fill first.</p></div>
+<div><div id="rc" hidden></div>
+<form id="rf" novalidate><label for="rd">Date</label><input type="date" id="rd" required><span class="err" id="e-d"></span>
+<label for="rp">Party size</label><select id="rp"></select>
+<fieldset style="border:0;padding:0"><legend>Time</legend><div class="slots" id="slots" role="radiogroup" aria-label="Available times"></div><span class="err" id="e-t"></span></fieldset>
+<label for="rn">Name</label><input id="rn" autocomplete="name"><span class="err" id="e-n"></span>
+<label for="rt">Phone</label><input id="rt" type="tel" autocomplete="tel" placeholder="011 555 0142"><span class="err" id="e-p"></span>
+<label for="ro">Anything we should know?</label><textarea id="ro" rows="2" placeholder="Allergies, birthdays, a quiet corner"></textarea>
+<button class="b p" style="margin-top:18px" id="rb">Hold my table</button></form></div></div></section>
+
+<section id="visit"><div class="vis"><div><h2>Find the fire.</h2><p>14 Fox Street, Maboneng, Johannesburg.<br>011 555 0142 · hello@ashfall.example</p><p style="margin-top:14px"><span class="pill" data-st></span></p><p id="spec" style="margin-top:12px;font-weight:700"></p></div>
+<div><table class="hrs" id="hrs"></table><p id="sp" style="margin-top:14px;font:500 13px var(--m);color:var(--mu)"></p></div></div></section></main>
+<footer><span>Ashfall. Cooked over wood and coal.</span><span>Please tell us about allergies when you order.</span></footer>
+<div id="sc"></div>
+<aside id="dr" role="dialog" aria-modal="true" aria-label="Basket" aria-hidden="true"><div class="dh"><h2>Basket</h2><button class="b" id="dx">Close</button></div><div id="dl"></div><div id="df"></div></aside>
+<div id="toast" role="status"></div>
+<script>
+"use strict";
+const $=s=>document.querySelector(s),pad=n=>String(n).padStart(2,'0'),R=n=>'R'+n;
+const S={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+const iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const fh=h=>pad(Math.floor(h)%24)+':'+pad(Math.round(h%1*60));
+const hs=s=>{let h=2166136261;for(const c of s)h=Math.imul(h^c.charCodeAt(0),16777619);return h>>>0};
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),2600)}
+/* hours */
+const WK={0:[12,17],1:null,2:[17,22.5],3:[17,22.5],4:[17,22.5],5:[12,23.5],6:[12,23.5]};
+const SP={'12-24':[12,16,'Christmas Eve: lunch only, closing at 16:00'],'12-25':[0,0,'Closed for Christmas Day'],'12-26':[0,0,'Closed: the coals are resting'],'12-31':[17,25,'New Year’s Eve: open late, until 01:00'],'01-01':[0,0,'Closed for New Year’s Day']};
+function hrs(d){const sp=SP[pad(d.getMonth()+1)+'-'+pad(d.getDate())];if(sp)return sp[0]==sp[1]?{n:sp[2]}:{o:sp[0],c:sp[1],n:sp[2]};const w=WK[d.getDay()];return w?{o:w[0],c:w[1]}:{n:'Closed on Mondays'}}
+function status(){const now=new Date(),h=now.getHours()+now.getMinutes()/60,y=new Date(now);y.setDate(y.getDate()-1);
+const hy=hrs(y),ht=hrs(now);
+if(hy.c>24&&h<hy.c-24)return{open:1,t:'Open now until '+fh(hy.c)};
+if(ht.o!=null&&h>=ht.o&&h<ht.c)return{open:1,t:'Open now until '+fh(ht.c)};
+if(ht.o!=null&&h<ht.o)return{open:0,t:'Closed, opens today at '+fh(ht.o)};
+for(let i=1;i<9;i++){const d=new Date(now);d.setDate(d.getDate()+i);const x=hrs(d);if(x.o!=null)return{open:0,t:'Closed, opens '+(i==1?'tomorrow':d.toLocaleDateString('en-ZA',{weekday:'long'}))+' at '+fh(x.o)}}
+return{open:0,t:'Closed'}}
+let ST=status();
+function paintStatus(){ST=status();document.querySelectorAll('[data-st]').forEach(e=>{e.textContent=ST.t;e.classList.toggle('o',!!ST.open)});const n=hrs(new Date()).n;$('#spec').textContent=n?'Today: '+n:'';
+const dn=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],ix=[1,2,3,4,5,6,0],td=new Date().getDay();
+$('#hrs').innerHTML=ix.map((k,j)=>`<tr class="${k==td?'t':''}"><td>${dn[j]}</td><td>${WK[k]?fh(WK[k][0])+' to '+fh(WK[k][1]):'Closed'}</td></tr>`).join('');
+$('#sp').textContent='Special hours: 24 Dec lunch only, 25 and 26 Dec closed, 31 Dec until 01:00, 1 Jan closed.';
+if(!$("#dr").classList.contains("on"))renderCart()}
+/* menu */
+const CATS={E:'Embers',C:'From the coals',G:'Garden',S:'Sweet',P:'Pours'};
+const M=`E|Blistered Padrón peppers|68|Sea salt, lemon and a smoked-paprika crumb. Order a second plate.|vg gf|110|0
+E|Coal-roasted bone marrow|115|Parsley and caper salsa, grilled sourdough for the spooning.||28|2
+E|Charred octopus|138|Crushed potato, chimichurri, ember oil.|gf|12|0
+E|Smoked beetroot tartare|84|Hazelnut, horseradish cream, rye crisps.|v|340|0
+E|Springbok carpaccio|126|Juniper, shaved pecorino, rocket, charcoal oil.|gf|355|0
+E|Ember-baked camembert|98|Thyme honey, burnt fig, warm flatbread.|v|38|0
+E|Grilled corn ribs|72|Chilli-lime butter, queso fresco, coriander.|v gf sp|48|2
+E|Smoked snoek pâté|79|Whipped butter, pickled onion, toasted seed loaf.||24|0
+C|Dry-aged ribeye, 350 g|345|Bone-marrow butter, charred shallot, flaky salt.|gf|8|2
+C|Karoo lamb rump|268|Rosemary smoke, smoked aubergine, mint salsa verde.|gf|14|2
+C|Kingklip on vine cuttings|252|Lemon butter, grilled leeks, capers.|gf|35|2
+C|Coal chicken, peri-peri|189|Half a bird, garlic, lemon, crunchy slaw.|gf sp|10|2
+C|Pork belly, burnt apple|215|Glass-hard crackling, fennel, apple char.||30|0
+C|Ash-roasted cauliflower steak|164|Black-garlic tahini, pomegranate, dukkah.|vg gf|42|0
+C|Wild mushroom skillet|158|Cast-iron barley, thyme, a slow egg yolk.|v|26|0
+C|Smash-fire burger|169|Dry-aged beef, smoked cheddar, pickles, brioche.||20|0
+C|Tomahawk for two, 900 g|780|Bone-marrow butter, beef-fat chips, two sauces.|gf|6|2
+G|Beef-fat potatoes|56|Rosemary, smoked salt, crisp edges.|gf|40|0
+G|Burnt-leek vinaigrette|62|Mustard dressing, toasted hazelnuts.|vg gf|105|0
+G|Hispi cabbage|64|Brown butter, lemon, capers.|v gf|95|0
+G|Charred broccolini|58|Chilli, garlic, almonds.|vg gf sp|100|0
+G|Pap and chakalaka|48|Wood-fired maize porridge, smoky tomato relish.|vg gf sp|18|0
+G|Heirloom tomato and onion|66|Burnt-onion dressing, basil oil.|vg gf|5|0
+S|Burnt basque cheesecake|92|Blackened top, rooibos-poached plums.|v|22|0
+S|Chocolate fondant|98|Ash salt, crème fraîche.|v|15|0
+S|Fire-roasted pineapple|82|Chilli sugar, coconut ice cream.|vg gf|45|0
+S|Ember-warmed malva pudding|88|Apricot jam, brandy custard.|v|32|0
+S|Smoked vanilla ice cream|64|Three scoops, cooled over cold coals.|v gf|50|0
+P|Ashfall old fashioned|125|Bourbon, burnt orange, smoke, bitters.|vg gf|28|3
+P|Charcoal negroni|118|Gin, bitter, vermouth, a drift of charcoal.|vg gf|2|3
+P|Karoo sour|112|Gin, prickly pear, lemon, egg white.|v gf|340|3
+P|Pinotage, 175 ml|78|Stellenbosch, dark fruit, a little campfire.|vg gf|350|3
+P|Ember spritz, no alcohol|62|Smoked pineapple, ginger, soda.|vg gf|42|3
+P|Cold brew, smoked salt|48|Slow-steeped, over ice.|vg gf|25|3`.split('\n').map((l,i)=>{const[c,n,p,d,t,h,k]=l.split('|');return{i,c,n,p:+p,d,t:t?t.split(' '):[],h:+h,k:+k}});
+const rnd=s=>()=>(s=Math.imul(s^s>>>15,s|1),s^=s+Math.imul(s^s>>>7,s|61),((s^s>>>14)>>>0)/4294967296);
+function art(m){const r=rnd(m.i*7919+11),h=m.h,col=(dl,l)=>`hsl(${h+dl},${62+r()*22|0}%,${l+r()*12|0}%)`;
+let s=`<svg viewBox="0 0 120 90" role="img" aria-label="Illustration of ${m.n}"><ellipse cx="60" cy="80" rx="40" ry="5" fill="#0006"/>`;
+if(m.k==3){s+=`<path d="M38 12h44l-6 62a16 6 0 0 1-32 0z" fill="#ffffff18" stroke="#d8d2c488"/><path d="M42 34h36l-3 40a14 5 0 0 1-30 0z" fill="${col(0,44)}"/><ellipse cx="60" cy="34" rx="18" ry="3.5" fill="${col(8,62)}"/><circle cx="${54+r()*14|0}" cy="21" r="7" fill="${col(40,55)}"/><path d="M74 6q6 8-2 16" stroke="#d8d2c455" fill="none"/>`}
+else{s+='<ellipse cx="60" cy="54" rx="52" ry="30" fill="#d8d2c4"/><ellipse cx="60" cy="54" rx="40" ry="22" fill="none" stroke="#211a1630"/>';
+if(m.k==2){for(let j=0;j<3;j++)s+=`<rect x="${22+j*4}" y="${36+j*9}" width="${76-j*8}" height="12" rx="6" fill="${col(j*7,36+j*4)}"/>`;for(let j=0;j<6;j++)s+=`<path d="M${30+j*12} ${36}l5 28" stroke="#211a16aa" stroke-width="2.2"/>`;s+=`<circle cx="92" cy="40" r="6" fill="${col(55,50)}"/>`}
+else for(let j=0;j<7;j++)s+=`<ellipse cx="${34+r()*52|0}" cy="${42+r()*22|0}" rx="${6+r()*10|0}" ry="${4+r()*6|0}" fill="${col(j*5-10,38+j*3)}"/>`;
+for(let j=0;j<10;j++)s+=`<circle cx="${28+r()*64|0}" cy="${36+r()*34|0}" r="1.6" fill="hsl(105,45%,${32+r()*22|0}%)"/>`}
+return s+`<path d="M${44+r()*30|0} 8q6 8 0 16" stroke="#d8d2c433" stroke-width="3" fill="none"/></svg>`}
+const F={q:'',c:'',d:new Set()},DT={v:'Vegetarian',vg:'Vegan',gf:'Gluten-free',sp:'Hot'};
+function chips(){$('#cats').innerHTML=['',...Object.keys(CATS)].map(k=>`<button class="chip" data-cat="${k}" aria-pressed="${F.c===k}">${k?CATS[k]:'All'}</button>`).join('');
+$('#diet').innerHTML=Object.keys(DT).map(k=>`<button class="chip" data-d="${k}" aria-pressed="${F.d.has(k)}">${DT[k]}</button>`).join('')}
+function ok(m){if(F.c&&m.c!==F.c)return 0;for(const k of F.d){if(k=='v'?!(m.t.includes('v')||m.t.includes('vg')):!m.t.includes(k))return 0}
+const hay=(m.n+' '+m.d+' '+CATS[m.c]+' '+m.t.map(t=>DT[t]).join(' ')).toLowerCase();return F.q.split(/\s+/).filter(Boolean).every(w=>hay.includes(w))}
+function renderMenu(){const L=M.filter(ok);$('#cnt').textContent=L.length+(L.length==1?' dish':' dishes')+' on the fire';
+$('#grid').innerHTML=L.length?L.map(m=>`<article class="card"><div class="art">${art(m)}</div><h3>${m.n}<b>${R(m.p)}</b></h3><p>${m.d}</p><div class="tg"><span>${m.t.map(t=>`<i title="${DT[t]}">${t.toUpperCase()}</i>`).join('')}</span><button class="b" data-a="add" data-i="${m.i}" aria-label="Add ${m.n} to basket">Add</button></div></article>`).join(''):'<p class="empty">Nothing on the fire matches that. Clear a filter or try “smoked”.</p>'}
+/* cart */
+let cart=S.get('af.cart',{});
+const cq=()=>Object.values(cart).reduce((a,b)=>a+b,0),ct=()=>Object.keys(cart).reduce((a,i)=>a+cart[i]*M[i].p,0);
+function renderCart(){$('#cc').textContent=cq();const ks=Object.keys(cart).filter(i=>M[i]&&cart[i]>0);
+$('#dl').innerHTML=ks.length?ks.map(i=>`<div class="ln"><span>${M[i].n}</span><b>${R(M[i].p*cart[i])}</b><span class="qt"><button data-a="dec" data-i="${i}" aria-label="Remove one ${M[i].n}">−</button>${cart[i]}<button data-a="inc" data-i="${i}" aria-label="Add one ${M[i].n}">+</button></span></div>`).join(''):'<p style="padding:20px 0">Your basket is empty. The menu is right behind this.</p>';
+$('#df').innerHTML=ks.length?`<div class="tot"><span>Total</span><span>${R(ct())}</span></div><p style="color:var(--mu);margin-bottom:6px">${ST.open?'Collect in about 30 minutes at the Fox Street door.':'The kitchen is closed. '+ST.t+'.'}</p><label for="on">Name for the order</label><input id="on" autocomplete="name"><span class="err" id="e-o"></span><button class="b p" id="po" style="margin-top:12px;width:100%" ${ST.open?'':'disabled'}>Place order for ${R(ct())}</button>`:''}
+function setQ(i,d){cart[i]=Math.max(0,(cart[i]||0)+d);if(!cart[i])delete cart[i];S.set('af.cart',cart);renderCart()}
+function drawer(on){$('#dr').classList.toggle('on',on);$('#sc').classList.toggle('on',on);$('#dr').setAttribute('aria-hidden',!on);if(on){renderCart();$('#dx').focus()}else $('#cartBtn').focus()}
+/* sound */
+let AC,NB,snd=0,hum,tm,hold=0;
+function ac(){if(!AC){AC=new(window.AudioContext||window.webkitAudioContext)();NB=AC.createBuffer(1,AC.sampleRate,AC.sampleRate);const d=NB.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1}return AC}
+function pop(v){if(!snd||!AC)return;const t=AC.currentTime,s=AC.createBufferSource(),f=AC.createBiquadFilter(),g=AC.createGain();s.buffer=NB;f.type='bandpass';f.frequency.value=700+Math.random()*3200;f.Q.value=2;g.gain.setValueAtTime(.28*v,t);g.gain.exponentialRampToValueAtTime(.001,t+.04+Math.random()*.07);s.connect(f);f.connect(g);g.connect(AC.destination);s.start(t);s.stop(t+.14)}
+function crack(){clearTimeout(tm);if(!snd)return;pop(.4+Math.random()*.6);tm=setTimeout(crack,50+Math.random()*(hold?150:800))}
+function toggleSnd(){const b=$('#snd');snd=!snd;b.setAttribute('aria-pressed',snd);b.textContent=snd?'Turn off fire sound':'Turn on fire sound';
+if(snd){const a=ac();a.resume();hum=a.createBufferSource();hum.buffer=NB;hum.loop=true;const f=a.createBiquadFilter(),g=a.createGain();f.type='lowpass';f.frequency.value=240;g.gain.value=.1;hum.connect(f);f.connect(g);g.connect(a.destination);hum.start();crack()}else{clearTimeout(tm);try{hum.stop()}catch(e){}}}
+/* embers */
+const hero=$('#hero'),cv=$('#fx'),cx=cv.getContext('2d'),RM=matchMedia('(prefers-reduced-motion: reduce)');
+let W=1,H=1,D=1,P=[],mx=-999,my=-999,raf=0,last=0,vis=true;
+function size(){D=Math.min(window.devicePixelRatio||1,2);const r=cv.getBoundingClientRect();W=Math.max(r.width,1);H=Math.max(r.height,1);cv.width=W*D;cv.height=H*D;cx.setTransform(D,0,0,D,0,0);if(RM.matches)still()}
+function spawn(x,y){if(P.length<420)P.push({x:x==null?Math.random()*W:x,y:y==null?H+6:y,vx:(Math.random()-.5)*30,vy:-(25+Math.random()*60),r:.7+Math.random()*2.2,l:0,m:4+Math.random()*5,ph:Math.random()*6.28})}
+function draw(p){const k=p.l/p.m,a=Math.max(0,1-k);cx.fillStyle=`hsla(${44-26*k},100%,${64-14*k}%,${a})`;cx.beginPath();cx.arc(p.x,p.y,p.r*(1-k*.4),0,6.283);cx.fill()}
+function still(){cx.clearRect(0,0,W,H);cx.globalCompositeOperation='lighter';for(let i=0;i<70;i++){const p={x:Math.random()*W,y:H*(.35+Math.random()*.65),r:.8+Math.random()*2,l:Math.random()*3,m:6};draw(p)}cx.globalCompositeOperation='source-over'}
+function frame(t){raf=requestAnimationFrame(frame);const dt=Math.min((t-last)/1000,.05);last=t;
+let n=(ST.open?70:16)*(1+hold*3)*dt*(W/900);while(n>0){if(n>=1||Math.random()<n)spawn();n--}
+cx.clearRect(0,0,W,H);cx.globalCompositeOperation='lighter';
+for(let i=P.length-1;i>=0;i--){const p=P[i];p.l+=dt;p.ph+=dt*2;p.vx+=Math.sin(p.ph)*18*dt;
+const dx=p.x-mx,dy=p.y-my,d2=dx*dx+dy*dy;if(d2<19600){const d=Math.sqrt(d2)+1,f=(1-d/140)*420*dt;p.vx+=dx/d*f;p.vy+=dy/d*f}
+p.vx*=1-.6*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;
+if(p.l>p.m||p.y<-12){P[i]=P[P.length-1];P.pop();continue}draw(p)}
+cx.globalCompositeOperation='source-over'}
+function go(){cancelAnimationFrame(raf);raf=0;if(RM.matches){still();return}if(vis&&!document.hidden){last=performance.now();raf=requestAnimationFrame(frame)}}
+new IntersectionObserver(e=>{vis=e[0].isIntersecting;go()}).observe(hero);
+new ResizeObserver(size).observe(cv);
+hero.addEventListener('pointermove',e=>{const r=cv.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top});
+hero.addEventListener('pointerleave',()=>{mx=my=-999;hold=0});
+hero.addEventListener('pointerdown',e=>{if(e.target.closest('a,button'))return;hold=1;const r=cv.getBoundingClientRect();for(let i=0;i<34;i++)spawn(e.clientX-r.left+(Math.random()-.5)*60,e.clientY-r.top);if(!snd&&AC)return;pop(1);pop(.8)});
+['pointerup','pointercancel'].forEach(t=>addEventListener(t,()=>hold=0));
+document.addEventListener('visibilitychange',()=>{document.title=document.hidden?'The coals are cooling…':'Ashfall — live-fire kitchen, Johannesburg';if(AC)document.hidden?AC.suspend():snd&&AC.resume();go()});
+/* reservations */
+const rd=$('#rd'),rp=$('#rp');
+rp.innerHTML=[1,2,3,4,5,6,7,8].map(n=>`<option value="${n}">${n} ${n==1?'guest':'guests'}</option>`).join('')+'<option value="9">9 or more</option>';rp.value='2';
+const nowH=()=>{const n=new Date();return n.getHours()+n.getMinutes()/60};
+function slots(){const box=$('#slots');box.innerHTML='';$('#e-t').textContent='';const d=new Date(rd.value+'T00:00:00');
+if(isNaN(d)){box.textContent='Pick a date to see times.';return}
+if(+rp.value>8){box.innerHTML='<p>For nine or more guests, phone us on 011 555 0142.</p>';return}
+const x=hrs(d);if(x.o==null){box.innerHTML=`<p>${x.n}. Pick another date.</p>`;return}
+const today=rd.value===iso(new Date()),big=+rp.value>4;let any=0,h='';
+for(let t=x.o;t<=x.c-1.5;t+=.5){const full=hs(rd.value+t)%(big?3:6)==0,past=today&&t<=nowH()+.5,off=full||past;if(!off)any=1;
+h+=`<label class="slot"><input type="radio" name="rt" value="${t}" ${off?'disabled':''}><span title="${full?'Fully booked':past?'Too soon':''}">${fh(t)}</span></label>`}
+box.innerHTML=h+(any?'':'<p>Fully booked or too late for this day. Try another date.</p>')}
+function initDate(){const n=new Date(),mx2=new Date(n);mx2.setDate(n.getDate()+60);rd.min=iso(n);rd.max=iso(mx2);
+for(let i=0;i<15;i++){const d=new Date(n);d.setDate(n.getDate()+i);const x=hrs(d);if(x.o!=null&&(i>0||nowH()<x.c-1.5)){rd.value=iso(d);break}}slots()}
+function showRes(b){const f=$('#rf'),c=$('#rc');if(!b){c.hidden=true;f.hidden=false;return}
+const d=new Date(b.date+'T00:00:00');f.hidden=true;c.hidden=false;
+c.innerHTML=`<div class="ok"><h3>Table held, ${b.name.split(' ')[0]}.</h3><p>${d.toLocaleDateString('en-ZA',{weekday:'long',day:'numeric',month:'long'})} at ${fh(b.t)}, for ${b.party}. Your reference is <b style="font-family:var(--m)">${b.ref}</b>. We’ll hold the table for 15 minutes.</p><p style="margin:10px 0 18px">${b.note?'Noted: '+b.note.replace(/[<>&]/g,'')+'.':'Running late? Phone 011 555 0142 and we’ll keep the fire going.'}</p><button class="b" id="rx">Cancel this booking</button></div>`}
+function submitRes(e){e.preventDefault();let bad=0;const E=(id,t)=>{$('#e-'+id).textContent=t;if(t)bad=1};
+const v=rd.value,n=new Date(),mxd=new Date(n);mxd.setDate(n.getDate()+60);
+E('d',!v||v<iso(n)||v>iso(mxd)?'Pick a date between today and the next 60 days.':hrs(new Date(v+'T00:00:00')).o==null?'We’re closed that day. Pick another.':'');
+const t=document.querySelector('input[name=rt]:checked');E('t',t?'':'Choose a time.');
+const nm=$('#rn').value.trim();E('n',nm.length<2?'Enter the name for the booking.':'');
+E('p',/^\+?[\d\s()-]{9,16}$/.test($('#rt').value.trim())?'':'Enter a phone number we can reach, like 011 555 0142.');
+if(+rp.value>8){bad=1;toast('For nine or more, please phone us')}
+if(bad)return;const b={ref:'AF-'+hs(v+t.value+nm).toString(36).slice(0,4).toUpperCase(),date:v,t:+t.value,party:+rp.value,name:nm,note:$('#ro').value.trim().slice(0,120)};
+S.set('af.res',b);showRes(b);toast('Table held. See you by the fire.')}
+/* wiring */
+document.addEventListener('click',e=>{const a=e.target.closest('[data-a]'),c=e.target.closest('[data-cat]'),d=e.target.closest('[data-d]');
+if(a){const i=+a.dataset.i;if(a.dataset.a=='add'){setQ(i,1);pop(1);toast(M[i].n+' added')}else setQ(i,a.dataset.a=='inc'?1:-1)}
+if(c){F.c=c.dataset.cat;chips();renderMenu()}
+if(d){const k=d.dataset.d;F.d.has(k)?F.d.delete(k):F.d.add(k);chips();renderMenu()}
+if(e.target.id=='rx'){S.del('af.res');showRes(null);slots();toast('Booking cancelled')}
+if(e.target.id=='po'){const nm=$('#on').value.trim();if(nm.length<2){$('#e-o').textContent='Enter a name so we can call it out.';return}
+if(!ST.open){return}const ref='AF-'+(1000+Math.floor(Math.random()*9000)),tot=ct();cart={};S.del('af.cart');
+$('#dl').innerHTML='';$('#df').innerHTML=`<div class="ok" style="border-color:var(--soot)"><h3>Order ${ref} is on the fire.</h3><p>${nm.split(' ')[0]}, pay ${R(tot)} at the door. It will be ready in about 30 minutes.</p></div>`;$('#cc').textContent=0}
+if(e.target.closest('#nav a')){$('#nav').classList.remove('open');$('#burger').setAttribute('aria-expanded',false)}});
+$('#q').addEventListener('input',e=>{F.q=e.target.value.toLowerCase().trim();renderMenu()});
+$('#cartBtn').onclick=()=>drawer(true);$('#dx').onclick=()=>drawer(false);$('#sc').onclick=()=>drawer(false);
+addEventListener('keydown',e=>{if(e.key=='Escape'){if($('#dr').classList.contains('on'))drawer(false);$('#nav').classList.remove('open');$('#burger').setAttribute('aria-expanded',false)}});
+$('#burger').onclick=()=>{const o=$('#nav').classList.toggle('open');$('#burger').setAttribute('aria-expanded',o)};
+$('#snd').onclick=toggleSnd;rd.onchange=slots;rp.onchange=slots;$('#rf').addEventListener('submit',submitRes);
+chips();renderMenu();paintStatus();renderCart();initDate();
+const sb=S.get('af.res',null);if(sb&&sb.date>=iso(new Date()))showRes(sb);else if(sb)S.del('af.res');
+setInterval(()=>{paintStatus();if(!$('#rf').hidden)slots()},60000);
+</script></body></html>

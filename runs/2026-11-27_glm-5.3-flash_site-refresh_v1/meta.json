@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": "glm-5.3-flash",
+  "category": "site-refresh",
+  "date": "2026-11-27",
+  "version": 1,
+  "entry": "index.html",
+  "prompt": "02",
+  "prompt_label": "Production Site Refresh",
+  "notes": "Refresh of Shutterhaus Visuals, commit 362ffb71d0da0a5022d8fe58aa26a0818cf3cfa2, verified deployed via /release.json. Chose REFRESH: the identity (wordmark, white editorial ground, monochrome plates, arc artwork, Portraits worth keeping.) is real equity; the execution moves to Bodoni Moda + Inter (already licensed in the repo), a fluid modular scale, a 12-column wall, arc rules as structure, captioned plates, current-page nav, and a footer with studio/sessions/print/licensing facts. All 33 photographs are the repo's own public/gallery derivatives, served locally; fonts are the repo's SIL-licensed WOFF2s. Series titles (Level Two; Wind, Winter Sea; Leather & Lace; Still Hours; Grounds) and all plate titles, years and print sizes are FICTIONAL framing, as is prints-made-to-order; contact details, packages, prices, add-ons, terms and About copy are factual from src/config.ts and src/pricing.json. No phone number, per the owner's documented decision in config.ts; contact works via mailto and WhatsApp. Sessions fold into portfolio#sessions per the five-page rule; Frames mode is a scroll-snap strip, the wall the grid. Shoot dates were unverifiable, so plate years are declared fiction.",
+  "slug": "2026-11-27_glm-5.3-flash_site-refresh_v1",
+  "path": "runs/2026-11-27_glm-5.3-flash_site-refresh_v1/index.html",
+  "source_file": "site-refresh__glm-5.3-flash__2026-11-27__v1.zip",
+  "scores": {
+    "completeness": null,
+    "robustness": null,
+    "craft": null,
+    "depth": null,
+    "originality": null,
+    "performance": null
+  },
+  "log": {
+    "ran_first_try": null,
+    "console_errors": null,
+    "fps": null,
+    "file_size_kb": null
+  }
+}
